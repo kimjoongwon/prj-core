@@ -5,7 +5,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-};
+}
 // const nextConfig = require('@next/bundle-analyzer')({
 //   reactStrictMode: true,
 //   swcMinify: true,
@@ -14,4 +14,4 @@ const nextConfig = {
 //   },
 // });
 
-module.exports = nextConfig;
+module.exports = nextConfig
