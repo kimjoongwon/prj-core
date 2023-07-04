@@ -2,14 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  webpack: config => {
-    config.externals = [...config.externals, { canvas: 'canvas' }];
-    return config;
-  },
   experimental: {
     appDir: true,
-    esmExternals: 'loose',
   },
 };
+// const nextConfig = require('@next/bundle-analyzer')({
+//   reactStrictMode: true,
+//   swcMinify: true,
+//   experimental: {
+//     appDir: true,
+//   },
+// });
 
 module.exports = nextConfig;

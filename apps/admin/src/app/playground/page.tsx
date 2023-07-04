@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const PlaygroundPage = () => {
-  return <div>page</div>;
-};
+export default function Playground() {
+  return <div>Playground--</div>;
+}

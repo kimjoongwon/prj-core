@@ -35,7 +35,7 @@ import { PrismaModule, loggingMiddleware } from 'nestjs-prisma';
         middlewares: [
           loggingMiddleware({
             logger: new Logger('PrismaMiddleware'),
-            logLevel: 'error',
+            logLevel: 'warn',
           }),
         ],
       },

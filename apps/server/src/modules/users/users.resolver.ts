@@ -32,7 +32,6 @@ export class UsersResolver {
   @Public()
   @Query(() => [User], { name: 'users' })
   findAll(@CurrentUser() user: User) {
-    console.log(user);
     return this.usersService.findAll();
   }
 
@@ -41,6 +40,7 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
+  @Public()
   @ResolveField(() => Profile, { name: 'profile' })
   getProfile(@Parent() parent: User) {
     const { id: userId } = parent;
