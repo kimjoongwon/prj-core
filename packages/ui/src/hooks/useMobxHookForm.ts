@@ -11,16 +11,16 @@ export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
   useEffect(() => {
     const setterDisposer = reaction(
       () => localState.value,
-      (value) => {
+      value => {
         setMobxValue(state, path, value);
-      }
+      },
     );
 
     const getterDisposer = reaction(
       () => getMobxValue(state, path),
-      (value) => {
+      value => {
         localState.value = value;
-      }
+      },
     );
 
     return () => {
