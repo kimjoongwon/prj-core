@@ -24,6 +24,12 @@
       "@links": ["app/shared/links/index.ts"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "./src/**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }

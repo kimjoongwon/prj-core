@@ -6,8 +6,8 @@ import { AuthResolver } from './auth.resolver';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PasswordService } from './providers/password.service';
 import { AuthService } from './auth.service';
-import { AuthConfig } from '@configs';
-import { GqlAuthGuard } from '@common';
+import { GqlAuthGuard } from '../../common/guards';
+import { AuthConfig } from '../../configs';
 
 @Module({
   imports: [

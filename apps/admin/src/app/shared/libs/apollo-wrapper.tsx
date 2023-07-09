@@ -1,39 +1,32 @@
-'use client';
+'use client'
 
-import { HttpLink, SuspenseCache, from } from '@apollo/client';
+import { SuspenseCache, from } from '@apollo/client'
 import {
   NextSSRApolloClient,
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
-  SSRMultipartLink,
-} from '@apollo/experimental-nextjs-app-support/ssr';
-import { isServer } from '../utils/isServer';
-import { errorLink } from '../links';
+} from '@apollo/experimental-nextjs-app-support/ssr'
+import { isServer } from '../utils/isServer'
+import { errorLink } from '../links'
+import { httpLink } from '../links/httpLink'
+import { ssrMultipartLink } from '../links/ssrMultipartLink'
+import { roundTripLink } from '../links/roundTripLink'
+import { retryLink } from '../links/retryLink'
 
 function makeClient() {
-  const httpLink = new HttpLink({
-    // https://studio.apollographql.com/public/spacex-l4uc6p/
-    uri: process.env.NEXT_PUBLIC_API_URL,
-  });
-
   return new NextSSRApolloClient({
+    connectToDevTools: true,
     cache: new NextSSRInMemoryCache(),
     link: from(
       isServer()
-        ? [
-            errorLink,
-            new SSRMultipartLink({
-              stripDefer: true,
-            }),
-            httpLink,
-          ]
-        : [errorLink, httpLink],
+        ? [errorLink, ssrMultipartLink, roundTripLink, httpLink]
+        : [errorLink, roundTripLink, httpLink],
     ),
-  });
+  })
 }
 
 function makeSuspenseCache() {
-  return new SuspenseCache();
+  return new SuspenseCache()
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
@@ -44,5 +37,5 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
     >
       {children}
     </ApolloNextAppProvider>
-  );
+  )
 }

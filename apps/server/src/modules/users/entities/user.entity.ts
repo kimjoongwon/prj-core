@@ -4,9 +4,12 @@ import { Profile } from '../../profiles/entities/profile.entity';
 
 @ObjectType()
 export class User extends BaseModel {
+  @Field()
   id: string;
+
+  @Field()
   email: string;
 
-  @Field(() => Profile)
+  @Field()
   profile: Profile;
 }

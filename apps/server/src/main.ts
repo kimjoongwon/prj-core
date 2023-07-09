@@ -2,8 +2,8 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppConfig, CorsConfig } from '@configs/config.type';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
+import { AppConfig, CorsConfig } from './configs/config.type';
 
 declare const module: any;
 
@@ -25,7 +25,9 @@ async function bootstrap() {
   // prismaClient 예외 필터
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalFilters(
+    new PrismaClientExceptionFilter(httpAdapter.getHttpServer()),
+  );
 
   // HMR
   if (module.hot) {
