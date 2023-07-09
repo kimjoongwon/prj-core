@@ -1,35 +1,34 @@
-'use client'
+import Link from 'next/link'
+import { isServer } from './shared/utils/isServer'
 
-import { gql } from '__generated__/gql'
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { useLocalObservable } from 'mobx-react-lite'
+// export const dynamic = 'force-dynamic'
 
-export const dynamic = 'force-dynamic'
-
-const GET_USERS = gql(/* GraphQL */ `
-  query Users {
-    users {
-      email
-      createdAt
-      profile {
-        phone
-      }
-    }
-  }
-`)
+// const GET_USERS = gql(`
+//     query Users {
+//       users {
+//         id
+//         email
+//         profile {
+//           nickname
+//           phone
+//         }
+//       }
+//     }
+//   `)
 
 export default function Page() {
-  const { data } = useSuspenseQuery(GET_USERS)
-  const user = useLocalObservable(() => ({ name: 'asasd' }))
-  const onClick = () => {
-    user.name = 'asdasd'
-  }
+  console.log('-----------------', isServer())
 
   return (
     <div>
+      <div>---------</div>
+      <Link href={'/dashboard'}>
+        <button>이동</button>
+      </Link>
+      {/* <div>rendering은 됩니다.</div>
       {data?.users?.map((user) => (
-        <div key={user.createdAt}>{user.email}</div>
-      ))}
+        <div key={user.id}>{dayjs(user.profile.nickname).valueOf()}</div>
+      ))} */}
     </div>
   )
 }

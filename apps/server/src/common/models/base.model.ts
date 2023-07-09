@@ -4,6 +4,10 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 export abstract class BaseModel {
   @Field(() => ID)
   id: string;
+
+  @Field()
   createdAt: Date;
+
+  @Field()
   updatedAt: Date;
 }

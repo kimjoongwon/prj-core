@@ -9,9 +9,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Token } from './models/token.model';
 import { SignupInput } from './dto/signup.input';
-import { AuthConfig } from '@configs';
 import { PasswordService } from './providers/password.service';
 import { PrismaService } from 'nestjs-prisma';
+import { AuthConfig } from '../../configs';
 
 @Injectable()
 export class AuthService {

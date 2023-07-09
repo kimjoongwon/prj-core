@@ -11,10 +11,9 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Profile } from '../profiles/entities/profile.entity';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser, Public } from '@decorators';
 import { UsersService } from './users.service';
-import { GqlAuthGuard } from '@common';
 import { PrismaService } from 'nestjs-prisma';
+import { GqlAuthGuard, CurrentUser, Public } from '../../common';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
@@ -40,7 +39,7 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  @Public()
+  // @Public()
   @ResolveField(() => Profile, { name: 'profile' })
   getProfile(@Parent() parent: User) {
     const { id: userId } = parent;
