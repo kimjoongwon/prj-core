@@ -11,7 +11,6 @@ import { errorLink } from '../links'
 import { httpLink } from '../links/httpLink'
 import { ssrMultipartLink } from '../links/ssrMultipartLink'
 import { roundTripLink } from '../links/roundTripLink'
-import { retryLink } from '../links/retryLink'
 
 function makeClient() {
   return new NextSSRApolloClient({

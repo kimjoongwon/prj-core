@@ -19,7 +19,9 @@ const GET_USERS = gql(`
   `)
 
 export default function Page() {
-  const { data } = useSuspenseQuery(GET_USERS)
+  const { data } = useSuspenseQuery(GET_USERS, {
+    errorPolicy: 'all',
+  })
 
   return (
     <div>

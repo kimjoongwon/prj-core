@@ -28,7 +28,6 @@ import corsConfig from './configs/cors.config';
         fileConfig,
         corsConfig,
       ],
-      envFilePath: ['.env'],
     }),
     PrismaModule.forRoot({
       isGlobal: true,

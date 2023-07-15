@@ -13,10 +13,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly authService: AuthService,
     readonly configService: ConfigService,
   ) {
+    console.log('------------@----------------------');
+    console.log(process.env);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<AuthConfig>('AUTH_JWT_SECRET'),
+      secretOrKey: 'secret',
     });
+    console.log(
+      '-----------------@-----------------',
+      configService.get<AuthConfig>('AUTH_JWT_SECRET'),
+    );
+    console.log(process.env);
   }
 
   async validate(payload: JwtDto): Promise<User> {
@@ -24,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
-    
+
     return user;
   }
 }

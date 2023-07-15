@@ -27,9 +27,9 @@ import { AuthConfig } from '../../configs';
     }),
   ],
   providers: [
+    JwtStrategy,
     AuthResolver,
     AuthService,
-    JwtStrategy,
     GqlAuthGuard,
     PasswordService,
   ],

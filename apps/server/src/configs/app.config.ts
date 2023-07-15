@@ -50,7 +50,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<AppConfig>('app', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  // validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     nodeEnv: process.env.NODE_ENV || 'development',

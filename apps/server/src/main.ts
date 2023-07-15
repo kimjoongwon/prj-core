@@ -22,6 +22,8 @@ async function bootstrap() {
   const corsConfig = configService.get<CorsConfig>('cors');
   const appConfig = configService.get<AppConfig>('app');
 
+  console.log('corsConfig', corsConfig);
+  console.log('appConfig', appConfig);
   // prismaClient 예외 필터
   const { httpAdapter } = app.get(HttpAdapterHost);
 

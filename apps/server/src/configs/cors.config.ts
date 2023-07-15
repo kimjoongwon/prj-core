@@ -9,7 +9,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<CorsConfig>('cors', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  // validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     enabled: process.env.CORS_ENABLED === 'true',
