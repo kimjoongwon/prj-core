@@ -1,11 +1,10 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule, ProfilesModule, UsersModule } from './modules';
 
-import { PrismaModule, loggingMiddleware } from 'nestjs-prisma';
 import { GqlConfigService } from './common';
 import {
   databaseConfig,
@@ -15,6 +14,11 @@ import {
   fileConfig,
 } from './configs';
 import corsConfig from './configs/cors.config';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
+import { LoggerModule } from './modules/logger/logger.module';
+import { LoggingInterceptor } from './common/interceptors';
 
 @Module({
   imports: [
@@ -29,25 +33,26 @@ import corsConfig from './configs/cors.config';
         corsConfig,
       ],
     }),
-    PrismaModule.forRoot({
-      isGlobal: true,
-      prismaServiceOptions: {
-        middlewares: [
-          loggingMiddleware({
-            logger: new Logger('PrismaMiddleware'),
-            logLevel: 'log',
-          }),
-        ],
-      },
-    }),
+    LoggerModule,
+    PrismaModule,
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useClass: GqlConfigService,
     }),
     HttpModule,
-    UsersModule,
     AuthModule,
+    UsersModule,
     ProfilesModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}

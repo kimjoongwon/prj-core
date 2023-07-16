@@ -10,7 +10,7 @@ type Auth {
 
   """JWT refresh token"""
   refreshToken: JWT!
-  user: User
+  user: User!
 }
 
 input CreateProfileInput {

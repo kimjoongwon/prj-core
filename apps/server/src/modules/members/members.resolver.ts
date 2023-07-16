@@ -9,7 +9,9 @@ export class MembersResolver {
   constructor(private readonly membersService: MembersService) {}
 
   @Mutation(() => Member)
-  createMember(@Args('createMemberInput') createMemberInput: CreateMemberInput) {
+  createMember(
+    @Args('createMemberInput') createMemberInput: CreateMemberInput,
+  ) {
     return this.membersService.create(createMemberInput);
   }
 
@@ -24,7 +26,9 @@ export class MembersResolver {
   }
 
   @Mutation(() => Member)
-  updateMember(@Args('updateMemberInput') updateMemberInput: UpdateMemberInput) {
+  updateMember(
+    @Args('updateMemberInput') updateMemberInput: UpdateMemberInput,
+  ) {
     return this.membersService.update(updateMemberInput.id, updateMemberInput);
   }
 

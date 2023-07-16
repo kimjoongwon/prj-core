@@ -1,6 +1,6 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth.service';
 import { JwtDto } from '../dto/jwt.dto';
@@ -12,25 +12,25 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly authService: AuthService,
     readonly configService: ConfigService,
+    private readonly logger: Logger,
   ) {
-    console.log('------------@----------------------');
-    console.log(process.env);
+    const authConfig = configService.get<AuthConfig>('auth');
+
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'secret',
+      ignoreExpiration: process.env.NODE_ENV != 'production',
+      secretOrKey: authConfig.secret,
     });
-    console.log(
-      '-----------------@-----------------',
-      configService.get<AuthConfig>('AUTH_JWT_SECRET'),
-    );
-    console.log(process.env);
   }
 
   async validate(payload: JwtDto): Promise<User> {
     const user = await this.authService.validateUser(payload.userId);
     if (!user) {
+      this.logger.log(`User ${user.email} not found`);
       throw new UnauthorizedException();
     }
+
+    this.logger.log(`User ${user.email} validated`);
 
     return user;
   }

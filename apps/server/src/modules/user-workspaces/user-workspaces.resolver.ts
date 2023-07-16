@@ -9,7 +9,10 @@ export class UserWorkspacesResolver {
   constructor(private readonly userWorkspacesService: UserWorkspacesService) {}
 
   @Mutation(() => UserWorkspace)
-  createUserWorkspace(@Args('createUserWorkspaceInput') createUserWorkspaceInput: CreateUserWorkspaceInput) {
+  createUserWorkspace(
+    @Args('createUserWorkspaceInput')
+    createUserWorkspaceInput: CreateUserWorkspaceInput,
+  ) {
     return this.userWorkspacesService.create(createUserWorkspaceInput);
   }
 
@@ -24,8 +27,14 @@ export class UserWorkspacesResolver {
   }
 
   @Mutation(() => UserWorkspace)
-  updateUserWorkspace(@Args('updateUserWorkspaceInput') updateUserWorkspaceInput: UpdateUserWorkspaceInput) {
-    return this.userWorkspacesService.update(updateUserWorkspaceInput.id, updateUserWorkspaceInput);
+  updateUserWorkspace(
+    @Args('updateUserWorkspaceInput')
+    updateUserWorkspaceInput: UpdateUserWorkspaceInput,
+  ) {
+    return this.userWorkspacesService.update(
+      updateUserWorkspaceInput.id,
+      updateUserWorkspaceInput,
+    );
   }
 
   @Mutation(() => UserWorkspace)

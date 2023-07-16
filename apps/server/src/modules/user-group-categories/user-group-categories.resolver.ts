@@ -6,10 +6,15 @@ import { UpdateUserGroupCategoryInput } from './dto/update-user-group-category.i
 
 @Resolver(() => UserGroupCategory)
 export class UserGroupCategoriesResolver {
-  constructor(private readonly userGroupCategoriesService: UserGroupCategoriesService) {}
+  constructor(
+    private readonly userGroupCategoriesService: UserGroupCategoriesService,
+  ) {}
 
   @Mutation(() => UserGroupCategory)
-  createUserGroupCategory(@Args('createUserGroupCategoryInput') createUserGroupCategoryInput: CreateUserGroupCategoryInput) {
+  createUserGroupCategory(
+    @Args('createUserGroupCategoryInput')
+    createUserGroupCategoryInput: CreateUserGroupCategoryInput,
+  ) {
     return this.userGroupCategoriesService.create(createUserGroupCategoryInput);
   }
 
@@ -24,8 +29,14 @@ export class UserGroupCategoriesResolver {
   }
 
   @Mutation(() => UserGroupCategory)
-  updateUserGroupCategory(@Args('updateUserGroupCategoryInput') updateUserGroupCategoryInput: UpdateUserGroupCategoryInput) {
-    return this.userGroupCategoriesService.update(updateUserGroupCategoryInput.id, updateUserGroupCategoryInput);
+  updateUserGroupCategory(
+    @Args('updateUserGroupCategoryInput')
+    updateUserGroupCategoryInput: UpdateUserGroupCategoryInput,
+  ) {
+    return this.userGroupCategoriesService.update(
+      updateUserGroupCategoryInput.id,
+      updateUserGroupCategoryInput,
+    );
   }
 
   @Mutation(() => UserGroupCategory)

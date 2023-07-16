@@ -16,7 +16,10 @@ export class UserGroupCategoriesService {
     return `This action returns a #${id} userGroupCategory`;
   }
 
-  update(id: number, updateUserGroupCategoryInput: UpdateUserGroupCategoryInput) {
+  update(
+    id: number,
+    updateUserGroupCategoryInput: UpdateUserGroupCategoryInput,
+  ) {
     return `This action updates a #${id} userGroupCategory`;
   }
 

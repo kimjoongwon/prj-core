@@ -9,7 +9,9 @@ export class UserGroupsResolver {
   constructor(private readonly userGroupsService: UserGroupsService) {}
 
   @Mutation(() => UserGroup)
-  createUserGroup(@Args('createUserGroupInput') createUserGroupInput: CreateUserGroupInput) {
+  createUserGroup(
+    @Args('createUserGroupInput') createUserGroupInput: CreateUserGroupInput,
+  ) {
     return this.userGroupsService.create(createUserGroupInput);
   }
 
@@ -24,8 +26,13 @@ export class UserGroupsResolver {
   }
 
   @Mutation(() => UserGroup)
-  updateUserGroup(@Args('updateUserGroupInput') updateUserGroupInput: UpdateUserGroupInput) {
-    return this.userGroupsService.update(updateUserGroupInput.id, updateUserGroupInput);
+  updateUserGroup(
+    @Args('updateUserGroupInput') updateUserGroupInput: UpdateUserGroupInput,
+  ) {
+    return this.userGroupsService.update(
+      updateUserGroupInput.id,
+      updateUserGroupInput,
+    );
   }
 
   @Mutation(() => UserGroup)

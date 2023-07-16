@@ -10,8 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Token } from './models/token.model';
 import { SignupInput } from './dto/signup.input';
 import { PasswordService } from './providers/password.service';
-import { PrismaService } from 'nestjs-prisma';
 import { AuthConfig } from '../../configs';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -86,8 +86,10 @@ export class AuthService {
   }
 
   private generateAccessToken(payload: { userId: string }): string {
+    const authConfig = this.configService.get<AuthConfig>('auth');
     return this.jwtService.sign(payload, {
-      secret: this.configService.get<AuthConfig>('auth').secret,
+      secret: authConfig.secret,
+      expiresIn: authConfig.expires,
     });
   }
 

@@ -11,10 +11,7 @@ import { AuthConfig } from '../../configs';
 
 @Module({
   imports: [
-    PassportModule.register({
-      global: true,
-      defaultStrategy: 'jwt',
-    }),
+    PassportModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
         const authConfig = configService.get<AuthConfig>('auth');
@@ -27,11 +24,12 @@ import { AuthConfig } from '../../configs';
     }),
   ],
   providers: [
-    JwtStrategy,
-    AuthResolver,
     AuthService,
+    JwtStrategy,
     GqlAuthGuard,
+    AuthResolver,
     PasswordService,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

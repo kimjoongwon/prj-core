@@ -19,6 +19,7 @@ export class GqlConfigService implements GqlOptionsFactory {
       transformSchema: schema => {
         return upperDirectiveTransformer(schema, 'upper');
       },
+      introspection: true,
       buildSchemaOptions: {
         directives: [
           new GraphQLDirective({
