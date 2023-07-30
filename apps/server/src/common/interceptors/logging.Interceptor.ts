@@ -5,7 +5,6 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
-// import { GqlExecutionContext } from '@nestjs/graphql';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

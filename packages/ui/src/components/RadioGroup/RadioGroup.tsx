@@ -1,49 +1,61 @@
-import React from 'react';
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup as MuiRadioGroup,
-} from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { getMobxValue } from '@kimjwally/utils';
 import { useMobxHookForm } from '../../hooks';
 import { MobxProps } from '../../types';
+import {
+  Radio,
+  RadioGroup as NextUIRadioGroup,
+  RadioGroupProps,
+} from '@nextui-org/react';
 
 interface RadioOption {
-  label: string;
+  text: string;
   value: any;
 }
-interface CocRadioGroupProps<T> extends MobxProps<T> {
-  options: RadioOption[];
+interface CocRadioGroupProps<T> extends MobxProps<T>, RadioGroupProps {
+  options?: RadioOption[];
 }
 
 function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
-  const { options, state, path = '', ...rest } = props;
+  const {
+    options = [
+      {
+        text: 'test',
+        value: 'test',
+      },
+      {
+        text: 'test2',
+        value: 'test2',
+      },
+    ],
+    state = {},
+    path = '',
+    ...rest
+  } = props;
 
   const initialValue =
-    options?.find((option) => option.value === getMobxValue(state, path))
+    options?.find(option => option.value === getMobxValue(state, path))
       ?.value || '';
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const onChange = action(
-    (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
-      localState.value = value;
-    }
-  );
+  const onChangeValue = action((checked: string) => {
+    localState.value = checked;
+  });
 
   return (
-    <MuiRadioGroup {...rest} value={localState.value} onChange={onChange}>
-      {options.map((option) => (
-        <FormControlLabel
-          key={option.value}
-          value={option.value}
-          control={<Radio {...rest} />}
-          label={option.label}
-        />
+    <NextUIRadioGroup
+      {...rest}
+      value={localState.value}
+      onValueChange={onChangeValue}
+    >
+      {options.map(option => (
+        <Radio key={option.value} value={option.value}>
+          {option.text}
+        </Radio>
       ))}
-    </MuiRadioGroup>
+    </NextUIRadioGroup>
   );
 }
 

@@ -1,34 +1,35 @@
-import {
-  Checkbox as MuiCheckbox,
-  CheckboxProps as MuiCheckboxProps,
-} from '@mui/material';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { getMobxValue } from '@kimjwally/utils';
 import { useMobxHookForm } from '../../hooks';
 import { MobxProps } from '../../types';
+import {
+  Checkbox as NextUICheckbox,
+  CheckboxProps as NextUICheckboxProps,
+} from '@nextui-org/react';
 
-export interface CheckboxProps<T> extends MobxProps<T>, MuiCheckboxProps {}
+export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 
 function _Checkbox<T extends object>(props: CheckboxProps<T>) {
-  const { path = '', state, inputProps, ...rest } = props;
+  const { path = '', state = {}, ...rest } = props;
 
   const { localState } = useMobxHookForm(
     getMobxValue(state, path),
     state,
-    path
+    path,
   );
 
-  const onChange = action((_: any, checked: boolean) => {
-    localState.value = checked;
-  });
+  const onChange: any = action(
+    (checked: React.ChangeEvent<HTMLInputElement>) => {
+      localState.value = checked;
+    },
+  );
 
   return (
-    <MuiCheckbox
+    <NextUICheckbox
       {...rest}
       onChange={onChange}
-      inputProps={inputProps}
-      value={localState.value}
+      isSelected={localState.value}
     />
   );
 }

@@ -1,12 +1,11 @@
 import {
   Table,
+  TableHeader,
   TableBody,
-  TableCell,
-  TableContainer,
-  TableFooter,
-  TableHead,
+  TableColumn,
   TableRow,
-} from '@mui/material';
+  TableCell,
+} from '@nextui-org/react';
 import {
   ColumnDef,
   flexRender,
@@ -14,7 +13,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
-import { Pagination } from './Pagination';
 
 interface DataGridProps<T> {
   data: T[];
@@ -31,37 +29,35 @@ function _DataGrid<T extends object>(props: DataGridProps<T>) {
   });
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          {table.getHeaderGroups()?.map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers?.map((header) => (
-                <TableCell key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody>
-          {table.getRowModel().rows?.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells()?.map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <table>
+      <th>
+        {table.getHeaderGroups()?.map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers?.map(header => (
+              <td key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </th>
+      <tbody>
+        {table.getRowModel().rows?.map(row => (
+          <tr key={row.id}>
+            {row.getVisibleCells()?.map(cell => (
+              <td key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

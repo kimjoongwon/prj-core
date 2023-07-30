@@ -3,7 +3,12 @@ import { HttpModule } from '@nestjs/axios';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule, ProfilesModule, UsersModule } from './modules';
+import {
+  AuthModule,
+  PrismaModule,
+  ProfilesModule,
+  UsersModule,
+} from './modules';
 
 import { GqlConfigService } from './common';
 import {
@@ -14,7 +19,7 @@ import {
   fileConfig,
 } from './configs';
 import corsConfig from './configs/cors.config';
-import { PrismaModule } from './modules/prisma/prisma.module';
+// import { PrismaModule } from './modules/prisma/prisma.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggerModule } from './modules/logger/logger.module';

@@ -13,15 +13,6 @@ type Auth {
   user: User!
 }
 
-input CreateProfileInput {
-  createdAt: DateTime
-  id: ID
-  nickname: String
-  phone: String
-  updatedAt: DateTime
-  userId: String
-}
-
 input CreateUserInput {
   email: String!
   password: String!
@@ -43,15 +34,10 @@ input LoginInput {
 }
 
 type Mutation {
-  createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
-  removeProfile(id: String!): Profile!
-  removeUser(id: String!): User!
   signup(data: SignupInput!): Auth!
-  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 type Profile {
@@ -87,21 +73,6 @@ type Token {
 
   """JWT refresh token"""
   refreshToken: JWT!
-}
-
-input UpdateProfileInput {
-  createdAt: DateTime
-  id: String!
-  nickname: String
-  phone: String
-  updatedAt: DateTime
-  userId: String
-}
-
-input UpdateUserInput {
-  email: String
-  id: String!
-  password: String
 }
 
 type User {

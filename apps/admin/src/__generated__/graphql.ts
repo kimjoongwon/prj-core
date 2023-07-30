@@ -29,15 +29,6 @@ export type Auth = {
   user: User;
 };
 
-export type CreateProfileInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  nickname?: InputMaybe<Scalars['String']['input']>;
-  phone?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -50,20 +41,12 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createProfile: Profile;
   createUser: User;
   login: Auth;
   refreshToken: Token;
-  removeProfile: Profile;
   removeUser: User;
   signup: Auth;
-  updateProfile: Profile;
   updateUser: User;
-};
-
-
-export type MutationCreateProfileArgs = {
-  createProfileInput: CreateProfileInput;
 };
 
 
@@ -82,11 +65,6 @@ export type MutationRefreshTokenArgs = {
 };
 
 
-export type MutationRemoveProfileArgs = {
-  id: Scalars['String']['input'];
-};
-
-
 export type MutationRemoveUserArgs = {
   id: Scalars['String']['input'];
 };
@@ -94,11 +72,6 @@ export type MutationRemoveUserArgs = {
 
 export type MutationSignupArgs = {
   data: SignupInput;
-};
-
-
-export type MutationUpdateProfileArgs = {
-  updateProfileInput: UpdateProfileInput;
 };
 
 
@@ -153,15 +126,6 @@ export type Token = {
   refreshToken: Scalars['JWT']['output'];
 };
 
-export type UpdateProfileInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id: Scalars['String']['input'];
-  nickname?: InputMaybe<Scalars['String']['input']>;
-  phone?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
@@ -180,7 +144,7 @@ export type User = {
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, profile: { __typename?: 'Profile', nickname: string, phone: string } }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string }> };
 
 
-export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;
+export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;

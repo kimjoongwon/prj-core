@@ -3,6 +3,7 @@ import authConfig from './auth.config';
 import databaseConfig from './database.config';
 import fileConfig from './file.config';
 import mailConfig from './mail.config';
+import corsConfig from './cors.config';
 import {
   AllConfigType,
   AppConfig,
@@ -16,6 +17,7 @@ import {
   TwitterConfig,
 } from './config.type';
 export {
+  corsConfig,
   appConfig,
   authConfig,
   databaseConfig,

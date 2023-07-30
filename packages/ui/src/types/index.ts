@@ -1,5 +1,3 @@
-import '@emotion/react';
-
 export type Join<K, P> = K extends string | number
   ? P extends string | number
     ? `${K}${'' extends P ? '' : '.'}${P}`
@@ -29,7 +27,7 @@ export type Prev = [
   18,
   19,
   20,
-  ...0[]
+  ...0[],
 ];
 
 export type Paths<T, D extends number = 10> = [D] extends [never]
@@ -56,14 +54,4 @@ export interface FormUnitProps<T> {
 export interface MobxProps<T> {
   path?: Leaves<T, 4>;
   state?: T;
-}
-
-export interface NavListItem {
-  title: string;
-  path: string;
-  children?: NavListItem[];
-}
-
-export interface NavConfig {
-  navListItems: NavListItem[];
 }

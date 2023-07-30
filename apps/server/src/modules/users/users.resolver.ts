@@ -10,9 +10,9 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Profile } from '../profiles/entities/profile.entity';
-import { Logger, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { GqlAuthGuard } from '../../common';
+import { GqlAuthGuard, Public } from '../../common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Resolver(() => User)
@@ -20,8 +20,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
-    private readonly prisma: PrismaService,
-    private readonly logger: Logger,
+    private readonly prisma: PrismaService, // private readonly logger: Logger,
   ) {}
 
   @Mutation(() => User)
@@ -29,6 +28,7 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
+  @Public()
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
@@ -49,13 +49,13 @@ export class UsersResolver {
     });
   }
 
-  @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
+  // @Mutation(() => User)
+  // updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+  //   return this.usersService.update(updateUserInput.id, updateUserInput);
+  // }
 
-  @Mutation(() => User)
-  removeUser(@Args('id') id: string) {
-    return this.usersService.remove(id);
-  }
+  // @Mutation(() => User)
+  // removeUser(@Args('id') id: string) {
+  //   return this.usersService.remove(id);
+  // }
 }

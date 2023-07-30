@@ -1,34 +1,42 @@
+'use client'
+
+import {
+  Button,
+  Checkbox,
+  DataGrid,
+  Input,
+  RadioGroup,
+  Switch,
+} from '@kimjwally/ui'
+import { Spacer } from '@nextui-org/react'
+import { useLocalObservable } from 'mobx-react-lite'
 import Link from 'next/link'
-import { isServer } from './shared/utils/isServer'
-
-// export const dynamic = 'force-dynamic'
-
-// const GET_USERS = gql(`
-//     query Users {
-//       users {
-//         id
-//         email
-//         profile {
-//           nickname
-//           phone
-//         }
-//       }
-//     }
-//   `)
-
 export default function Page() {
-  console.log('-----------------', isServer())
+  const state = useLocalObservable(() => ({
+    isChecked: false,
+  }))
 
   return (
     <div>
-      <div>---------</div>
+      <p className="text-xl">뭔데</p>
+      <Button color="primary">Button</Button>
+      <Spacer />
+      <Button color="secondary">Button</Button>
+      <Spacer />
+      <Button color="success">Button</Button>
+      <Spacer />
+      <Input />
+      <Spacer />
+      <DataGrid data={[]} columns={[]} />
+      <Spacer />
+      <Checkbox state={state} path="isChecked" />
+      <Spacer />
+      <Switch />
+      <Spacer />
+      <RadioGroup />
       <Link href={'/dashboard'}>
         <button>이동</button>
       </Link>
-      {/* <div>rendering은 됩니다.</div>
-      {data?.users?.map((user) => (
-        <div key={user.id}>{dayjs(user.profile.nickname).valueOf()}</div>
-      ))} */}
     </div>
   )
 }

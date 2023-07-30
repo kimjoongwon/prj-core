@@ -1,28 +1,27 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { action, reaction } from 'mobx';
 import { getMobxValue, setMobxValue } from '@kimjwally/utils';
 import { MobxProps } from '../../types';
 import {
-  Switch as NextUISwitch,
-  SwitchProps as NextUISwitchProps,
+  Input as NextUIInput,
+  InputProps as NextUIInputProps,
 } from '@nextui-org/react';
+export type InputProps<T> = MobxProps<T> & NextUIInputProps;
 
-export interface SwitchProps<T> extends NextUISwitchProps, MobxProps<T> {}
-
-function _Switch<T extends object>(props: SwitchProps<T>) {
+function _Input<T extends object>(props: InputProps<T>) {
   const { path = '', state = {}, ...rest } = props;
 
+  const initialValue = getMobxValue(state, path);
+
   const localState = useLocalObservable(() => ({
-    value: getMobxValue(state, path),
+    value: initialValue,
   }));
 
   useEffect(() => {
     const setterDisposer = reaction(
       () => localState.value,
-      value => {
-        setMobxValue(state, path, value);
-      },
+      value => setMobxValue(state, path, value),
     );
 
     const getterDisposer = reaction(
@@ -39,13 +38,11 @@ function _Switch<T extends object>(props: SwitchProps<T>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChange = action((isSelected: boolean) => {
-    localState.value = isSelected;
-  });
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    localState.value = e.target.value;
+  };
 
-  return (
-    <NextUISwitch {...rest} onValueChange={onChange} value={localState.value} />
-  );
+  return <NextUIInput {...rest} onChange={onChange} value={localState.value} />;
 }
 
-export const Switch = observer(_Switch);
+export const Input = observer(_Input);

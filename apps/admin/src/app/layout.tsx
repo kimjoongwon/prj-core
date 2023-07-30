@@ -1,13 +1,12 @@
-// import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
-// import { __DEV__ } from '@apollo/client/utilities/globals';
+import './globals.css'
+import { __DEV__ } from '@apollo/client/utilities/globals'
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
+import { Providers } from './providers'
 
-import { ApolloWrapper } from './shared/libs/apollo-wrapper'
-
-// if (__DEV__) {
-//   // Adds messages only in a dev environment
-//   loadDevMessages();
-//   loadErrorMessages();
-// }
+if (__DEV__) {
+  loadDevMessages()
+  loadErrorMessages()
+}
 
 export default function RootLayout({
   children,
@@ -15,15 +14,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <title>My page title</title>
       </head>
       <body>
-        <ApolloWrapper>
-          <div>app layout</div>
-          {children}
-        </ApolloWrapper>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
