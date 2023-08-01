@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start:dev": "next dev",
+    "start:dev": "graphql-codegen -w && next dev",
     "lint": "tsc --noEmit && eslint \"app/**/*.ts*\"",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",

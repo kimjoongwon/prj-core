@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsup';
 
-export default defineConfig((option) => ({
+export default defineConfig(option => ({
   entry: ['./index.ts'],
   format: ['esm', 'cjs'],
   outDir: './dist',
@@ -11,4 +11,5 @@ export default defineConfig((option) => ({
   },
   external: ['react', 'react-dom'],
   dts: true,
+  banner: {},
 }));

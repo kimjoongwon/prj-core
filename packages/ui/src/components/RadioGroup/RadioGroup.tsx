@@ -34,7 +34,7 @@ function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
     ...rest
   } = props;
 
-  const initialValue =
+  const initialValue: any =
     options?.find(option => option.value === getMobxValue(state, path))
       ?.value || '';
 

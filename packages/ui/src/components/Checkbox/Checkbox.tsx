@@ -19,11 +19,9 @@ function _Checkbox<T extends object>(props: CheckboxProps<T>) {
     path,
   );
 
-  const onChange: any = action(
-    (checked: React.ChangeEvent<HTMLInputElement>) => {
-      localState.value = checked;
-    },
-  );
+  const onChange: any = action((e: React.ChangeEvent<HTMLInputElement>) => {
+    localState.value = e.target.checked;
+  });
 
   return (
     <NextUICheckbox
