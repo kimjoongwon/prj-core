@@ -17,7 +17,9 @@
   "dependencies": {
     "@apollo/client": "3.8.0-beta.5",
     "@apollo/experimental-nextjs-app-support": "0.3.2",
-    "@nextui-org/react": "0.0.0-dev-v2-20230728152928",
+    "@kimjwally/ui": "workspace:*",
+    "@kimjwally/utils": "workspace:*",
+    "@nextui-org/react": "2.0.1",
     "@tanstack/react-table": "^8.9.3",
     "dayjs": "1.11.9",
     "file-saver": "2.0.5",
@@ -33,8 +35,7 @@
     "react-dom": "18.2.0",
     "server-only": "0.0.1",
     "tailwind-variants": "0.1.13",
-    "@kimjwally/utils": "workspace:*",
-    "@kimjwally/ui": "workspace:*"
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",

@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@kimjwally/utils": "workspace:*",
-    "@nextui-org/react": "0.0.0-dev-v2-20230728152928",
+    "@nextui-org/react": "2.0.1",
     "@tanstack/react-table": "^8.9.3",
     "framer-motion": "^10.15.0",
     "lodash-es": "4.17.21",
@@ -27,7 +27,8 @@
     "next-themes": "0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwind-variants": "0.1.13"
+    "tailwind-variants": "0.1.13",
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.195",

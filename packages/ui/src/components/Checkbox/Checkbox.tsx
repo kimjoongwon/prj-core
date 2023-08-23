@@ -10,7 +10,7 @@ import {
 
 export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 
-function _Checkbox<T extends object>(props: CheckboxProps<T>) {
+export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
   const { path = '', state = {}, ...rest } = props;
 
   const { localState } = useMobxHookForm(
@@ -31,5 +31,3 @@ function _Checkbox<T extends object>(props: CheckboxProps<T>) {
     />
   );
 }
-
-export const Checkbox = observer(_Checkbox);

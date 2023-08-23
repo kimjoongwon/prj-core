@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Table,
   TableHeader,
@@ -12,7 +14,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { observer } from 'mobx-react-lite';
 
 interface DataGridProps<T> {
   data: T[];
@@ -28,37 +29,33 @@ function _DataGrid<T extends object>(props: DataGridProps<T>) {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const firstHeaderGroup = table.getHeaderGroups()[0];
+  const firstHeaders = firstHeaderGroup.headers;
+
   return (
-    <table>
-      <th>
-        {table.getHeaderGroups()?.map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers?.map(header => (
-              <td key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </td>
-            ))}
-          </tr>
+    <Table>
+      <TableHeader>
+        {firstHeaders?.map(header => (
+          <TableColumn key={header.id} aria-label={header.id}>
+            {header.isPlaceholder
+              ? null
+              : flexRender(header.column.columnDef.header, header.getContext())}
+          </TableColumn>
         ))}
-      </th>
-      <tbody>
+      </TableHeader>
+      <TableBody>
         {table.getRowModel().rows?.map(row => (
-          <tr key={row.id}>
+          <TableRow key={row.id} aria-label={row.id}>
             {row.getVisibleCells()?.map(cell => (
-              <td key={cell.id}>
+              <TableCell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+              </TableCell>
             ))}
-          </tr>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }
 
-export const DataGrid = observer(_DataGrid);
+export const DataGrid = _DataGrid;

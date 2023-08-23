@@ -9,8 +9,7 @@ export function setMobxValue(obj: any, path: any, val: any) {
   const lastObj = keys.reduce(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (obj: any, key: any) => (obj[key] = obj?.[key] || {}),
-    obj
+    obj,
   );
-  console.log(lastObj, lastKey);
   lastObj[lastKey] = val;
 }

@@ -1,9 +1,14 @@
 'use client';
 
-import React, { useEffect, useId } from 'react';
-import { reaction } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { getMobxValue, setMobxValue } from '@kimjwally/utils';
+import {
+  ChangeEventHandler,
+  ForwardedRef,
+  RefObject,
+  forwardRef,
+  useEffect,
+  useRef,
+} from 'react';
+import { getMobxValue } from '@kimjwally/utils';
 import { MobxProps } from '../../types';
 import {
   Input as NextUIInput,
@@ -13,48 +18,28 @@ import { useMobxHookForm } from '../../hooks';
 
 export type InputProps<T> = MobxProps<T> & NextUIInputProps;
 
-function _Input<T extends object>(props: InputProps<T>) {
-  const { path = '', state = {}, ...rest } = props;
+export const BaseInput = <T extends any>(
+  props: InputProps<T>,
+  ref: ForwardedRef<HTMLInputElement>,
+) => {
+  const { path = '', state = {}, onChange, ...rest } = props;
 
   const initialValue = getMobxValue(state, path);
 
   const { localState } = useMobxHookForm(initialValue, state, path);
-  // const localState = useLocalObservable(() => ({
-  //   value: initialValue,
-  // }));
 
-  // useEffect(() => {
-  //   const setterDisposer = reaction(
-  //     () => localState.value,
-  //     value => setMobxValue(state, path, value),
-  //   );
-
-  //   const getterDisposer = reaction(
-  //     () => getMobxValue(state, path),
-  //     value => {
-  //       localState.value = value;
-  //     },
-  //   );
-
-  //   return () => {
-  //     setterDisposer();
-  //     getterDisposer();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = e => {
     localState.value = e.target.value;
+
+    onChange && onChange(e);
   };
 
   return (
     <NextUIInput
       {...rest}
-      id={useId()}
-      onChange={onChange}
+      ref={ref}
+      onChange={handleChange}
       value={localState.value}
     />
   );
-}
-
-export const Input = observer(_Input);
+};

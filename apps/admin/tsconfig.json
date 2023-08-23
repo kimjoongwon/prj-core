@@ -25,11 +25,12 @@
     }
   },
   "include": [
+    "./src/__generated__/**/*.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "./src/**/*.tsx"
+    "./src/**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

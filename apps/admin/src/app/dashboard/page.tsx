@@ -1,8 +1,6 @@
 'use client'
 
-import { useQuery } from '@apollo/client'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { Button, Input } from '@nextui-org/react'
 // import { useSuspenseQuery } from '@apollo/client'
 // import { useSuspenseQuery } from '@apollo/client'
 // import { useSuspenseQuery } from '@apollo/client/react/hooks/useSuspenseQuery'

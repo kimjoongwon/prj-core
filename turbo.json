@@ -16,10 +16,10 @@
       "dependsOn": []
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["build"]
     },
     "start:dev": {
-      "dependsOn": ["^build"],
+      // "dependsOn": ["^start:dev"],
       "cache": false,
       "persistent": true
     },
