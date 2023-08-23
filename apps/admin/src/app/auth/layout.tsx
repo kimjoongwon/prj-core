@@ -3,10 +3,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div>
-      <p>AuthLayout</p>
-      {children}
-    </div>
-  )
+  return <div>{children}</div>
 }

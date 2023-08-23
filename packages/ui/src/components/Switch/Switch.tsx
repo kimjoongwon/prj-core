@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';

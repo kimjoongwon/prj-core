@@ -14,8 +14,6 @@ export default function Error({
     console.error(error)
   }, [error])
 
-  // console.log('error component')
-
   return (
     <div>
       <h2>dashboard page</h2>
