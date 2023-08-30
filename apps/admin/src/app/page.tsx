@@ -1,8 +1,10 @@
 'use client'
 
 import { LoginForm } from '@kimjwally/ui'
+import { Button } from '@nextui-org/react'
 import { SignupInput } from '__generated__/graphql'
 import { useLocalObservable } from 'mobx-react-lite'
+import Link from 'next/link'
 
 export default function Page() {
   const signupInput = {
@@ -17,8 +19,8 @@ export default function Page() {
   const state: SignupInput = useLocalObservable(() => signupInput)
 
   return (
-    <div>
-      <LoginForm state={state} />
-    </div>
+    <Link href="auth/login">
+      <p>진입 경로입니다.</p>
+    </Link>
   )
 }
