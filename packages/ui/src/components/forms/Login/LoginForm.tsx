@@ -1,7 +1,7 @@
-import { Card, CardBody, InputProps, Spacer } from '@nextui-org/react';
+import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { Input } from '../../Input';
+import { FormControl } from '../../controls/Validation/ValidationControl';
 import { z } from 'zod';
-import { ValidationControl } from '../../controls/Validation/ValidationControl';
 
 export interface LoginFormProps {
   state: {
@@ -21,16 +21,15 @@ export function LoginForm(props: LoginFormProps) {
   const schema = z.object({
     email: z.string().email(),
     password: z.string().min(5),
+    profile: z.object({
+      nickname: z.string().email(),
+    }),
   });
-
-  const validation = schema.safeParse(state);
-
-  console.log('validation', validation);
 
   return (
     <Card>
       <CardBody>
-        <ValidationControl timings={['onChange']} validator={undefined}>
+        <FormControl timings={['onBlur']} schema={schema}>
           <Input
             state={state}
             path="email"
@@ -38,32 +37,19 @@ export function LoginForm(props: LoginFormProps) {
             label="이메일"
             type="email"
             variant="bordered"
-            validationState={
-              !validation.success &&
-              validation.error.format().email?._errors.join(',')
-                ? 'invalid'
-                : 'valid'
-            }
-            errorMessage={
-              !validation.success &&
-              validation.error.format().email?._errors.join(',')
-            }
           />
-        </ValidationControl>
+        </FormControl>
         <Spacer />
-        <Input
-          state={state}
-          path="password"
-          placeholder="패스워드를 입력해주세요."
-          label="패스워드"
-          variant="bordered"
-          validationState={validation.success ? 'valid' : 'invalid'}
-          errorMessage={
-            !validation.success &&
-            validation.error.format().password?._errors.join(',')
-          }
-          type="password"
-        />
+        <FormControl timings={['onBlur']} schema={schema}>
+          <Input
+            state={state}
+            path="password"
+            placeholder="패스워드를 입력해주세요."
+            label="패스워드"
+            variant="bordered"
+            type="password"
+          />
+        </FormControl>
       </CardBody>
     </Card>
   );

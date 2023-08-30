@@ -3,7 +3,7 @@
 import { LoginForm } from '@kimjwally/ui'
 import { SignupInput } from '__generated__/graphql'
 import { useLocalObservable } from 'mobx-react-lite'
-import { z } from 'zod'
+
 export default function Page() {
   const signupInput = {
     email: '',
