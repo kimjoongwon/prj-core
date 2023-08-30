@@ -24,7 +24,7 @@ export const useCoCRouter = <T extends object>() => {
   const router = useRouter()
 
   const getUrlWithParamsAndQueryString = (
-    url: string,
+    url: Paths,
     params?: T,
     queryString?: string,
   ) => {
