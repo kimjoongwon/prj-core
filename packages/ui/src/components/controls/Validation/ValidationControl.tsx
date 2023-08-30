@@ -1,49 +1,54 @@
-import React, { Children, ReactElement } from 'react';
+import { get, isUndefined } from 'lodash-es';
+import React, { Children, ReactElement, useRef, useState } from 'react';
+import { z } from 'zod';
 
-interface ValidationControlProps {
+interface FormControlProps {
   children: ReactElement;
   timings: string[];
-  validator: any;
+  schema: z.ZodObject<any>
 }
 
-export const ValidationControl = (props: ValidationControlProps) => {
-  const { children, timings, validator } = props;
+
+export interface ValidationState {
+  state: 'invalid' | 'valid', 
+  errorMessage: string, 
+  success: boolean
+}
+
+
+export const FormControl = (props: FormControlProps) => {
+  const { children, timings, schema } = props;
+
+  const [validation, setValidation] = useState<ValidationState>({
+    errorMessage: ' ',
+    state: 'valid',
+    success: true,
+  })
+
+
+  const ref = useRef<HTMLElement>()
 
   const child = Children.only(children);
 
-  console.log('?');
   const callbacks = timings.map(timing => {
-    console.log(child);
-    if (child.props && typeof child.props[timing] === 'function') {
-      console.log('child.props', child.props);
-      return {
-        callback: (...args: any[]) => {
-          console.log('안녕!');
-          child.props[timing](...args);
-        },
-      };
-    }
-  });
+    return ({
+      [timing]: () => {
 
-  console.log(callbacks);
-  return React.cloneElement(child, {
-    ...callbacks,
-  });
+        const result = schema.safeParse(child.props.state)
+        validation.success = result.success
+        
+        if (!result.success) {
+          const errorMessage = get(result?.error.format(), child.props.path)?._errors.join('-')
+          validation.errorMessage = errorMessage || '' 
+          validation.state = isUndefined(errorMessage) ? 'valid': 'invalid'
+        } 
+        
+        setValidation({...validation})
+      }
+    })
+  }) 
+  
+  const childProps = Object.assign({ref, validation},  ...callbacks)
+
+  return React.cloneElement(child, childProps)
 };
-
-// export function DebounceClick({ capture = 'onClick', options, children, wait }: Props) {
-//   const child = Children.only(children);
-//   const debouncedCallback = useDebounce(
-//     (...args: any[]) => {
-//       if (child.props && typeof child.props[capture] === 'function') {
-//         return child.props[capture](...args);
-//       }
-//     },
-//     wait,
-//     options
-//   );
-
-//   return cloneElement(child, {
-//     [capture]: debouncedCallback,
-//   });
-// }
