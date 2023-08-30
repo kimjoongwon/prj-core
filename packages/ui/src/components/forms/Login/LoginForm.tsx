@@ -1,13 +1,15 @@
-import { Card, CardBody, Spacer } from '@nextui-org/react';
+import { Button, Card, CardBody, Spacer } from '@nextui-org/react';
 import { Input } from '../../Input';
 import { FormControl } from '../../controls/Validation/ValidationControl';
 import { z } from 'zod';
+import { ReactNode } from 'react';
 
 export interface LoginFormProps {
   state: {
     email: string;
     password: string;
   };
+  buttons: ReactNode;
 }
 
 export function LoginForm(props: LoginFormProps) {
@@ -16,6 +18,7 @@ export function LoginForm(props: LoginFormProps) {
       email: '',
       password: '',
     },
+    buttons,
   } = props;
 
   const schema = z.object({
@@ -27,7 +30,7 @@ export function LoginForm(props: LoginFormProps) {
   });
 
   return (
-    <Card>
+    <Card fullWidth>
       <CardBody>
         <FormControl timings={['onBlur']} schema={schema}>
           <Input
@@ -50,6 +53,7 @@ export function LoginForm(props: LoginFormProps) {
             type="password"
           />
         </FormControl>
+        {buttons}
       </CardBody>
     </Card>
   );

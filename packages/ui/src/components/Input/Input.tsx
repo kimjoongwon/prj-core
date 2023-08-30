@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  ChangeEventHandler,
-  ForwardedRef,
-} from 'react';
+import { ChangeEventHandler, ForwardedRef } from 'react';
 import { getMobxValue } from '@kimjwally/utils';
 import { MobxProps } from '../../types';
 import {
@@ -14,28 +11,31 @@ import { useMobxHookForm } from '../../hooks';
 import { action } from 'mobx';
 import { ValidationState } from '../controls/Validation/ValidationControl';
 
-export type InputProps<T> = MobxProps<T> & NextUIInputProps & {
-  validation?: ValidationState
-};
+export type InputProps<T> = MobxProps<T> &
+  NextUIInputProps & {
+    validation?: ValidationState;
+  };
 
 export const BaseInput = <T extends any>(
   props: InputProps<T>,
   ref: ForwardedRef<HTMLInputElement>,
 ) => {
-  const { path = '', state = {}, onChange, validation , ...rest } = props;
+  const { path = '', state = {}, onChange, validation, ...rest } = props;
 
   // console.log('validation', validation)
   const initialValue = getMobxValue(state, path);
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action((e) => {
-    localState.value = e.target.value;
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
+    e => {
+      localState.value = e.target.value;
 
-    onChange && onChange(e);
-  });
+      onChange && onChange(e);
+    },
+  );
 
-  console.log('validation', validation)
+  console.log('validation', validation);
   return (
     <NextUIInput
       {...rest}
