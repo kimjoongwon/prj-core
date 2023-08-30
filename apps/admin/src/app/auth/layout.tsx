@@ -1,7 +1,14 @@
-export default function RootLayout({
+import { LoginForm } from '@kimjwally/ui'
+
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <div>{children}</div>
+  return (
+    <div>
+      AuthLayout
+      <div>{children}</div>
+    </div>
+  )
 }
