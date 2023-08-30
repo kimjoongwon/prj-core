@@ -11,12 +11,32 @@ export default function DashboardLayout({
 
   const items = [
     {
-      text: '회원관리',
-      href: getUrlWithParams(USER_PAGE_PATH, { userId: 'test' }),
+      text: '사용자관리 > 교육생목록(세부 유저 유형)',
+      href: getUrlWithParams('/admin/dashboard/users'),
     },
     {
-      text: '기능2',
-      href: 'login',
+      text: '사용자관리 > 강사목록(세부 유저 유형)',
+      href: getUrlWithParams('/admin/dashboard/users'),
+    },
+    {
+      text: '사용자관리 > 사원목록(세부 유저 유형)',
+      href: getUrlWithParams('/admin/dashboard/users'),
+    },
+    {
+      text: '사용자관리 > 유저목록(세부 유저 유형)',
+      href: getUrlWithParams('/admin/dashboard/users'),
+    },
+    {
+      text: '사용자그룹관리 > 유형목록(세부 유저 유형)',
+      href: getUrlWithParams('/admin/dashboard/users'),
+    },
+    {
+      text: '사용자그룹관리 > 사용자그룹목록',
+      href: getUrlWithParams('/admin/dashboard/users'),
+    },
+    {
+      text: '소속관리 > 소속 목록',
+      href: getUrlWithParams('/admin/dashboard/users'),
     },
   ]
 
