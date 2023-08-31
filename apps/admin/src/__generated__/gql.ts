@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
-    "\n    query Users {\n      users {\n        id\n        email\n        # profile {\n        #   nickname\n        #   phone\n        # }\n      }\n    }\n  ": types.UsersDocument,
+    "#graphql\n  query Users {\n    users {\n      id\n      email\n      profile {\n        phone\n      }\n    }\n  }\n": types.UsersDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query Users {\n      users {\n        id\n        email\n        # profile {\n        #   nickname\n        #   phone\n        # }\n      }\n    }\n  "): (typeof documents)["\n    query Users {\n      users {\n        id\n        email\n        # profile {\n        #   nickname\n        #   phone\n        # }\n      }\n    }\n  "];
+export function gql(source: "#graphql\n  query Users {\n    users {\n      id\n      email\n      profile {\n        phone\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query Users {\n    users {\n      id\n      email\n      profile {\n        phone\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
