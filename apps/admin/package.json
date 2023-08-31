@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start:dev": "graphql-codegen -w && next dev",
+    "start:dev": "next dev",
     "lint": "tsc --noEmit && eslint \"app/**/*.ts*\"",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
@@ -42,6 +42,7 @@
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/client-preset": "4.1.0",
     "@graphql-typed-document-node/core": "3.2.0",
+    "@parcel/watcher": "2.3.0",
     "@types/file-saver": "2.0.5",
     "@types/node": "20.5.7",
     "@types/react": "^18.2.21",
