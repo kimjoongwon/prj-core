@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { Button } from '@kimjwally/ui'
 import { gql } from '__generated__/gql'
 import { loginPage } from '../page'
-import { useRouter } from 'next/navigation'
+import { useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export const LOGIN = gql(`
   mutation Login($data: LoginInput!) {
@@ -16,9 +16,9 @@ export const LOGIN = gql(`
   }
 `)
 export default function LoginButton() {
-  const router = useRouter()
+  const router = useCoCRouter()
 
-  const [login, { data, loading, error }] = useMutation(LOGIN)
+  const [login, { loading }] = useMutation(LOGIN)
 
   const onClickLogin = () => {
     login({
@@ -27,7 +27,9 @@ export default function LoginButton() {
         localStorage.setItem('accessToken', data.login.accessToken)
         localStorage.setItem('accessToken', data.login.refreshToken)
 
-        router.push('/dashboard')
+        router.push({
+          url: '/admin/dashboard/users',
+        })
       },
     })
   }

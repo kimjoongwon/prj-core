@@ -4,17 +4,19 @@ import React from 'react'
 import { useSuspenseQuery } from '@apollo/client'
 import { DataGrid } from '@kimjwally/ui'
 import { gql } from '__generated__/gql'
-import { ColumnDef, RowData, createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { User } from '__generated__/graphql'
-import { useColumns } from 'app/shared/hooks/useColumns'
 
 export const GET_USERS = gql(`#graphql
-  query Users {
-    users {
-      id
-      email
-      profile {
-        phone
+  query GetUsers($email: String!) {
+    users(email: $email) {
+      totalCount
+      nodes {
+        email
+        id
+      }
+      edges {
+        cursor
       }
     }
   }
@@ -22,15 +24,25 @@ export const GET_USERS = gql(`#graphql
 
 export const Users = () => {
   const {
-    data: { users },
-  } = useSuspenseQuery(GET_USERS)
+    data: {
+      users: { totalCount, edges, nodes },
+    },
+  } = useSuspenseQuery(GET_USERS, {
+    variables: { email: '' },
+  })
 
   const columnHelper = createColumnHelper<User>()
-
+  console.log('nodes', nodes)
   const columns = [
-    columnHelper.accessor('email', {}),
-    columnHelper.accessor('profile.phone', {}),
+    columnHelper.accessor('email', {
+      id: '이메일',
+      header: '이메일',
+    }),
+    columnHelper.accessor('id', {
+      id: '아이디',
+      header: '아이디',
+    }),
   ]
 
-  return <DataGrid data={users} columns={columns} />
+  return <DataGrid data={nodes || []} columns={columns} />
 }

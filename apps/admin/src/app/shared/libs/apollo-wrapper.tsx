@@ -7,10 +7,13 @@ import {
   NextSSRInMemoryCache,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { isServer } from '../utils/isServer'
-import { errorLink } from '../links'
-import { httpLink } from '../links/httpLink'
-import { ssrMultipartLink } from '../links/ssrMultipartLink'
-import { roundTripLink } from '../links/roundTripLink'
+import {
+  authLink,
+  errorLink,
+  httpLink,
+  roundTripLink,
+  ssrMultipartLink,
+} from '@links'
 
 function makeClient() {
   return new NextSSRApolloClient({
@@ -18,22 +21,15 @@ function makeClient() {
     cache: new NextSSRInMemoryCache(),
     link: from(
       isServer()
-        ? [errorLink, ssrMultipartLink, roundTripLink, httpLink]
-        : [errorLink, roundTripLink, httpLink],
+        ? [errorLink, ssrMultipartLink, roundTripLink, authLink, httpLink]
+        : [errorLink, roundTripLink, authLink, httpLink],
     ),
   })
 }
 
-function makeSuspenseCache() {
-  return new SuspenseCache()
-}
-
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
-    <ApolloNextAppProvider
-      makeClient={makeClient}
-      makeSuspenseCache={makeSuspenseCache}
-    >
+    <ApolloNextAppProvider makeClient={makeClient}>
       {children}
     </ApolloNextAppProvider>
   )
