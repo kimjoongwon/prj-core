@@ -10,7 +10,9 @@ describe('UserGroupCategoriesResolver', () => {
       providers: [UserGroupCategoriesResolver, UserGroupCategoriesService],
     }).compile();
 
-    resolver = module.get<UserGroupCategoriesResolver>(UserGroupCategoriesResolver);
+    resolver = module.get<UserGroupCategoriesResolver>(
+      UserGroupCategoriesResolver,
+    );
   });
 
   it('should be defined', () => {

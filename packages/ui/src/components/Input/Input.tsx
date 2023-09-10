@@ -1,7 +1,6 @@
 'use client';
 
 import { ChangeEventHandler, ForwardedRef } from 'react';
-import { getMobxValue } from '@kimjwally/utils';
 import { MobxProps } from '../../types';
 import {
   Input as NextUIInput,
@@ -10,6 +9,7 @@ import {
 import { useMobxHookForm } from '../../hooks';
 import { action } from 'mobx';
 import { ValidationState } from '../controls/Validation/ValidationControl';
+import { get } from 'lodash-es';
 
 export type InputProps<T> = MobxProps<T> &
   NextUIInputProps & {
@@ -22,8 +22,7 @@ export const BaseInput = <T extends any>(
 ) => {
   const { path = '', state = {}, onChange, validation, ...rest } = props;
 
-  // console.log('validation', validation)
-  const initialValue = getMobxValue(state, path);
+  const initialValue = get(state, path);
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
@@ -35,7 +34,6 @@ export const BaseInput = <T extends any>(
     },
   );
 
-  console.log('validation', validation);
   return (
     <NextUIInput
       {...rest}

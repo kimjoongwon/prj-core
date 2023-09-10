@@ -23,6 +23,7 @@
   "dependencies": {
     "@apollo/server": "^4.7.5",
     "@graphql-tools/utils": "^10.0.3",
+    "@kimjwally/shared": "*",
     "@nestjs/apollo": "^12.0.7",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/cli": "^10.1.8",
@@ -52,6 +53,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pdfjs-dist": "^3.8.162",
+    "prisma-extension-pagination": "^0.5.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.0",

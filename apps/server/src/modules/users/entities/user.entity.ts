@@ -1,9 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseModel } from '../../../common/models/base.model';
 import { Profile } from '../../profiles/entities/profile.entity';
+import { BaseEntity, Paginated } from '@common';
 
 @ObjectType()
-export class User extends BaseModel {
+export class User extends BaseEntity {
   @Field()
   id: string;
 
@@ -13,3 +13,6 @@ export class User extends BaseModel {
   @Field()
   profile: Profile;
 }
+
+@ObjectType()
+export class PaginatedUser extends Paginated(User) {}

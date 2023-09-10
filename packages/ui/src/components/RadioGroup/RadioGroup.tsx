@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
-import { getMobxValue } from '@kimjwally/utils';
 import { useMobxHookForm } from '../../hooks';
 import { MobxProps } from '../../types';
 import {
@@ -8,6 +7,7 @@ import {
   RadioGroup as NextUIRadioGroup,
   RadioGroupProps,
 } from '@nextui-org/react';
+import { get } from 'lodash-es';
 
 interface RadioOption {
   text: string;
@@ -35,8 +35,7 @@ function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
   } = props;
 
   const initialValue: any =
-    options?.find(option => option.value === getMobxValue(state, path))
-      ?.value || '';
+    options?.find(option => option.value === get(state, path))?.value || '';
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 

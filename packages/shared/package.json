@@ -1,8 +1,8 @@
 {
-  "name": "@kimjwally/utils",
+  "name": "@kimjwally/shared",
   "version": "1.0.0",
   "description": "utility library",
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"

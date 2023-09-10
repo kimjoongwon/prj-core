@@ -22,9 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
-    if (exception instanceof HttpException) {
-      this.logger.error(exception);
-    }
+    this.logger.error(exception);
 
     const httpStatus =
       exception instanceof HttpException

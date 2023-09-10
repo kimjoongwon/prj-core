@@ -1,14 +1,11 @@
-import { Directive, Field, ObjectType } from '@nestjs/graphql';
-import { BaseModel } from '../../../common/models/base.model';
+import { BaseEntity } from '@common';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Profile extends BaseModel {
+export class Profile extends BaseEntity {
   @Field()
   phone: string;
 
   @Field()
   nickname: string;
-
-  @Field()
-  userId: string;
 }
