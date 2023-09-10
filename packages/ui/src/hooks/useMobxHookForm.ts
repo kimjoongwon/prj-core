@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { getMobxValue, setMobxValue } from '@kimjwally/utils';
 import { useLocalObservable } from 'mobx-react-lite';
 import { reaction } from 'mobx';
+import { get, set } from 'lodash-es';
 
 export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
   const localState = useLocalObservable(() => ({
@@ -12,12 +12,12 @@ export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
     const setterDisposer = reaction(
       () => localState.value,
       value => {
-        setMobxValue(state, path, value);
+        set(state, path, value);
       },
     );
 
     const getterDisposer = reaction(
-      () => getMobxValue(state, path),
+      () => get(state, path),
       value => {
         localState.value = value;
       },

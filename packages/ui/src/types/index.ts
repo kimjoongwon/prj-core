@@ -1,3 +1,5 @@
+import { HeaderContext } from '@tanstack/react-table';
+
 export type Join<K, P> = K extends string | number
   ? P extends string | number
     ? `${K}${'' extends P ? '' : '.'}${P}`
@@ -54,4 +56,8 @@ export interface FormUnitProps<T> {
 export interface MobxProps<T> {
   path?: Leaves<T, 4>;
   state?: T;
+}
+export interface HeaderCellProps<T, M> {
+  headerContext: HeaderContext<T, string>;
+  mobxProps: MobxProps<M>;
 }

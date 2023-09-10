@@ -13,9 +13,22 @@ type Auth {
   user: User!
 }
 
+input CreateProfileInput {
+  createdAt: DateTime
+  id: ID
+  nickname: String
+  phone: String
+  updatedAt: DateTime
+}
+
 input CreateUserInput {
   email: String!
   password: String!
+}
+
+input CreateUserWorkspaceInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 """
@@ -34,10 +47,23 @@ input LoginInput {
 }
 
 type Mutation {
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
+  createUserWorkspace(createUserWorkspaceInput: CreateUserWorkspaceInput!): UserWorkspace!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
+  removeProfile(id: String!): Profile!
+  removeUserWorkspace(id: Int!): UserWorkspace!
   signup(data: SignupInput!): Auth!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  updateUserWorkspace(updateUserWorkspaceInput: UpdateUserWorkspaceInput!): UserWorkspace!
+}
+
+type PaginatedUser {
+  edges: [UserEdge!]
+  hasNextPage: Boolean!
+  nodes: [User!]
+  totalCount: Int!
 }
 
 type Profile {
@@ -46,7 +72,6 @@ type Profile {
   nickname: String!
   phone: String!
   updatedAt: DateTime!
-  userId: String!
 }
 
 input ProfileInput {
@@ -55,10 +80,13 @@ input ProfileInput {
 }
 
 type Query {
+  findAllProfile: [Profile!]!
   profile(id: String!): Profile!
   profiles: [Profile!]!
   user(id: String!): User!
-  users: [User!]!
+  userWorkspace(id: Int!): UserWorkspace!
+  userWorkspaces: [UserWorkspace!]!
+  users(email: String! = "", limit: Int! = 10, offset: Int! = 0): PaginatedUser!
 }
 
 input SignupInput {
@@ -75,10 +103,34 @@ type Token {
   refreshToken: JWT!
 }
 
+input UpdateProfileInput {
+  createdAt: DateTime
+  id: String!
+  nickname: String
+  phone: String
+  updatedAt: DateTime
+}
+
+input UpdateUserWorkspaceInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 type User {
   createdAt: DateTime!
   email: String!
   id: String!
   profile: Profile!
   updatedAt: DateTime!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type UserWorkspace {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }

@@ -24,6 +24,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggerModule } from './modules/logger/logger.module';
 import { LoggingInterceptor } from './common/interceptors';
+import { UserWorkspacesModule } from './user-workspaces/user-workspaces.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { LoggingInterceptor } from './common/interceptors';
     AuthModule,
     UsersModule,
     ProfilesModule,
+    UserWorkspacesModule,
   ],
   providers: [
     {

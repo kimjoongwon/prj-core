@@ -1,6 +1,6 @@
 'use client'
 import { Navbar } from '@kimjwally/ui'
-import { USER_PAGE_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
+import { useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export default function DashboardLayout({
   children,

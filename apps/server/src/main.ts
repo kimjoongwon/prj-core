@@ -46,7 +46,10 @@ async function bootstrap() {
   // Cors
   if (corsConfig.enabled) {
     console.info('---------Cors Enabled!----------');
-    app.enableCors();
+    app.enableCors({
+      origin: '*',
+      credentials: true,
+    });
   }
 
   await app.listen(appConfig.port);

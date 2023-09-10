@@ -1,10 +1,10 @@
 'use client';
 
-import { HeaderCellProps } from '../@types/HeaderCellProps';
+import { HeaderCellProps } from '../@types';
 import { useMobxHookForm } from '../../../../hooks';
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
-import { getMobxValue } from '@kimjwally/utils';
+import { get } from 'lodash-es';
 
 interface OrderByCellProps<T, M> extends HeaderCellProps<T, M> {}
 
@@ -20,7 +20,7 @@ function _OrderByCell<T extends object, M extends object>(
     headerContext,
   } = props;
 
-  const initialValue = getMobxValue(state, path);
+  const initialValue = get(state, path);
   // const localState: LocalState = useLocalObservable(() => ({
   //   value: initialValue,
   // }));

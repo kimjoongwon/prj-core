@@ -18,7 +18,7 @@
     "@apollo/client": "3.8.1",
     "@apollo/experimental-nextjs-app-support": "0.4.1",
     "@kimjwally/ui": "workspace:*",
-    "@kimjwally/utils": "workspace:*",
+    "@kimjwally/shared": "workspace:*",
     "@nextui-org/react": "2.1.7",
     "@tanstack/react-table": "^8.9.3",
     "dayjs": "1.11.9",

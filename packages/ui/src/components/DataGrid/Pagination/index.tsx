@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react-lite';
-import { MobxProps } from '../../../types';
-import { useMobxHookForm } from '../../../hooks';
-import { getMobxValue } from '@kimjwally/utils';
 import {
   Pagination as NextUIPagination,
   PaginationProps as NextUIPaginationProps,
 } from '@nextui-org/react';
+import { useMobxHookForm } from '../../../hooks';
+import { MobxProps } from '../../../types';
+import { get } from 'lodash-es';
 
 interface CoCPaginationProps<T> extends NextUIPaginationProps, MobxProps<T> {}
 
 function CoCPagination<T extends object>(props: CoCPaginationProps<T>) {
   const { state = undefined, path = '', total = 18, ...rest } = props;
 
-  const initialValue = getMobxValue(state, path);
+  const initialValue = get(state, path);
   const { localState } = useMobxHookForm(initialValue, state, path);
 
   const onChangePage = (page: number) => {

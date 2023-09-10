@@ -6,14 +6,15 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { User } from './entities/user.entity';
+import { PaginatedUser, User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import { Profile } from '../profiles/entities/profile.entity';
 import { UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GqlAuthGuard, Public } from '../../common';
+import { GetUsersArgs } from './dto/get-users.args';
 import { PrismaService } from '../prisma/prisma.service';
+import { Ctx } from '@nestjs/microservices';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
@@ -29,16 +30,18 @@ export class UsersResolver {
   }
 
   @Public()
-  @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
+  @Query(() => PaginatedUser, { name: 'users' })
+  getUsers(@Args() getUsersArgs: GetUsersArgs) {
+    return this.usersService.findByArgs(getUsersArgs);
   }
 
+  @Public()
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id') id: string) {
+  getUser(@Args('id') id: string) {
     return this.usersService.findOne(id);
   }
 
+  @Public()
   @ResolveField(() => Profile, { name: 'profile' })
   getProfile(@Parent() parent: User) {
     const { id: userId } = parent;
@@ -48,14 +51,4 @@ export class UsersResolver {
       },
     });
   }
-
-  // @Mutation(() => User)
-  // updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-  //   return this.usersService.update(updateUserInput.id, updateUserInput);
-  // }
-
-  // @Mutation(() => User)
-  // removeUser(@Args('id') id: string) {
-  //   return this.usersService.remove(id);
-  // }
 }
