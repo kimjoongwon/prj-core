@@ -54,7 +54,7 @@ export interface FormUnitProps<T> {
 }
 
 export interface MobxProps<T> {
-  path?: Leaves<T, 4>;
+  path?: Leaves<T, 5>;
   state?: T;
 }
 export interface HeaderCellProps<T, M> {

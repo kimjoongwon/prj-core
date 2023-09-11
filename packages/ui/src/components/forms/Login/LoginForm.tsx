@@ -1,6 +1,6 @@
 import { Button, Card, CardBody, Spacer } from '@nextui-org/react';
 import { Input } from '../../Input';
-import { FormControl } from '../../controls/Validation/ValidationControl';
+import { FormControl } from '../../controls/Form';
 import { z } from 'zod';
 import { ReactNode } from 'react';
 

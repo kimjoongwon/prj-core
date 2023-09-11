@@ -8,5 +8,6 @@ export * from './Chip';
 export * from './forms';
 export * from './Navbar';
 export * from './Container';
+export * from './controls';
 
 export { CardHeader, CardBody, CardFooter, Card } from '@nextui-org/react';
