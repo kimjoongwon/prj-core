@@ -7,7 +7,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { gql } from '__generated__/gql'
 import { User } from '__generated__/graphql'
 import { DataGridButton } from '@kimjwally/ui'
-import { state } from '../../modals/test/TestModal'
+import { state } from '../../modals/Test'
 
 export const GET_USERS = gql(`#graphql
   query GetUsers($email: String!) {

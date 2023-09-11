@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Modal, ModalHeader } from '@nextui-org/react'
-import { state } from '../../modals/test/TestModal'
+import { state } from '../../modals/Test'
 import { observer } from 'mobx-react-lite'
 
 interface ModalProviderProps {

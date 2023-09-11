@@ -16,7 +16,7 @@ export const DataGridButtons = <T extends any>(
   return (
     <div className="flex flex-row">
       {buttons.map(button => (
-        <Link href={button.href} color="foreground" size="lg">
+        <Link key={v4()} href={button.href} color="foreground" size="lg">
           <Button
             {...button.props}
             key={v4()}
