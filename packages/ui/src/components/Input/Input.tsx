@@ -8,7 +8,7 @@ import {
 } from '@nextui-org/react';
 import { useMobxHookForm } from '../../hooks';
 import { action } from 'mobx';
-import { ValidationState } from '../controls/Validation/ValidationControl';
+import { ValidationState } from '../controls/Form';
 import { get } from 'lodash-es';
 
 export type InputProps<T> = MobxProps<T> &

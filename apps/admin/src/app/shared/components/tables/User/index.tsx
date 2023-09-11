@@ -8,6 +8,7 @@ import { gql } from '__generated__/gql'
 import { User } from '__generated__/graphql'
 import { DataGridButton } from '@kimjwally/ui'
 import { state } from '../../modals/Test'
+import { USER_EDIT_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export const GET_USERS = gql(`#graphql
   query GetUsers($email: String!) {
@@ -27,6 +28,8 @@ export const GET_USERS = gql(`#graphql
 `)
 
 export const UserTable = () => {
+  const router = useCoCRouter()
+
   const {
     data: { users },
   } = useSuspenseQuery(GET_USERS, {
@@ -45,14 +48,16 @@ export const UserTable = () => {
     }),
   ]
 
-  // console.log('users.edges', users)
-
   const leftButtons: DataGridButton<Partial<User>>[] = [
     {
       text: '생성',
-      onClick: () => {
-        console.log('state', state)
-        state.open = !state.open
+      onClick: (table) => {
+        router.push({
+          url: USER_EDIT_PATH,
+          params: {
+            userId: 'new',
+          },
+        })
       },
       props: { variant: 'solid', color: 'primary' },
     },
