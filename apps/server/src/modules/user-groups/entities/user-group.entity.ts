@@ -2,6 +2,6 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
 export class UserGroup {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => String, { description: '유저그룹명' })
+  name: string;
 }
