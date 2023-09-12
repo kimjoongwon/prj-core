@@ -25,6 +25,7 @@ import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggerModule } from './modules/logger/logger.module';
 import { LoggingInterceptor } from './common/interceptors';
 import { UserWorkspacesModule } from './user-workspaces/user-workspaces.module';
+import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { UserWorkspacesModule } from './user-workspaces/user-workspaces.module';
     UsersModule,
     ProfilesModule,
     UserWorkspacesModule,
+    WorkspacesModule,
   ],
   providers: [
     {
