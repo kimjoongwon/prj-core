@@ -3,12 +3,12 @@ import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
 export class Workspace extends BaseEntity {
-  @Field(() => String, { description: '소유주' })
+  @Field(() => String, { description: '작업공간명' })
   name: string;
 
-  @Field(() => String, { description: '소유주' })
+  @Field(() => String, { description: '작업공간 소유주' })
   userId: string[];
 
-  @Field(() => String, { description: '워크스페이스 오너' })
+  @Field(() => String, { description: '작업공간 전화번호' })
   phone: string;
 }

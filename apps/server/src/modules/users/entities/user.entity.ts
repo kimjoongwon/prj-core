@@ -13,6 +13,3 @@ export class User extends BaseEntity {
   @Field()
   profile: Profile;
 }
-
-@ObjectType()
-export class PaginatedUser extends Paginated(User) {}

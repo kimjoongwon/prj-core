@@ -8,12 +8,12 @@ import { UpdateWorkspaceInput } from './dto/update-workspace.input';
 export class WorkspacesResolver {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
-  // @Mutation(() => Workspace)
-  // createWorkspace(
-  //   @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
-  // ) {
-  //   return this.workspacesService.create(createWorkspaceInput);
-  // }
+  @Mutation(() => Workspace)
+  createWorkspace(
+    @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
+  ) {
+    return this.workspacesService.create(createWorkspaceInput);
+  }
 
   // @Query(() => [Workspace], { name: 'workspaces' })
   // findAll() {

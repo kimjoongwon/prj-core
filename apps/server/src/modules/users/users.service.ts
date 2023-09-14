@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { PrismaService } from '../prisma/prisma.service';
-import { GetUsersArgs } from './dto/get-users.args';
-import { PaginatedUser } from './entities/user.entity';
+import { GetPaginatedUsersArgs } from './dto/get-paginated-users.args';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
+  
   create(createUserInput: CreateUserInput) {
     return this.prisma.user.create({
       data: {
@@ -19,13 +19,21 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async findByArgs(args: GetUsersArgs) {
+  async findPaginatedUsers({
+    email,
+    skip,
+    take,
+    cursor,
+  }: GetPaginatedUsersArgs) {
     const query = {
-      take: args.limit,
-      skip: args.offset,
+      take,
+      skip,
+      cursor: {
+        id: cursor,
+      },
       where: {
         email: {
-          contains: args.email,
+          contains: email,
         },
       },
     };
@@ -45,12 +53,4 @@ export class UsersService {
       where: { id },
     });
   }
-
-  // update(id: string, updateUserInput: UpdateUserInput) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  // remove(id: string) {
-  //   return `This action removes a #${id} user`;
-  // }
 }

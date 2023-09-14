@@ -31,6 +31,19 @@ input CreateUserWorkspaceInput {
   exampleField: Int!
 }
 
+input CreateWorkspaceInput {
+  id: ID!
+
+  """작업공간명"""
+  name: String!
+
+  """작업공간 전화번호"""
+  phone: String!
+
+  """작업공간 소유주"""
+  userId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -50,6 +63,7 @@ type Mutation {
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   createUserWorkspace(createUserWorkspaceInput: CreateUserWorkspaceInput!): UserWorkspace!
+  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeProfile(id: String!): Profile!
@@ -59,7 +73,7 @@ type Mutation {
   updateUserWorkspace(updateUserWorkspaceInput: UpdateUserWorkspaceInput!): UserWorkspace!
 }
 
-type PaginatedUser {
+type PaginatedUsers {
   edges: [UserEdge!]
   hasNextPage: Boolean!
   nodes: [User!]
@@ -86,7 +100,7 @@ type Query {
   user(id: String!): User!
   userWorkspace(id: Int!): UserWorkspace!
   userWorkspaces: [UserWorkspace!]!
-  users(email: String! = "", limit: Int! = 10, offset: Int! = 0): PaginatedUser!
+  users(cursor: String!, email: String! = "", skip: Int! = 1, take: Int!): PaginatedUsers!
 }
 
 input SignupInput {
@@ -133,4 +147,19 @@ type UserEdge {
 type UserWorkspace {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+type Workspace {
+  createdAt: DateTime!
+  id: ID!
+
+  """작업공간명"""
+  name: String!
+
+  """작업공간 전화번호"""
+  phone: String!
+  updatedAt: DateTime!
+
+  """작업공간 소유주"""
+  userId: String!
 }

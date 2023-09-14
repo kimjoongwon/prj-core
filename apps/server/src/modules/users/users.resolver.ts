@@ -6,22 +6,22 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { PaginatedUser, User } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { Profile } from '../profiles/entities/profile.entity';
 import { UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GqlAuthGuard, Public } from '../../common';
-import { GetUsersArgs } from './dto/get-users.args';
+import { GetPaginatedUsersArgs } from './dto/get-paginated-users.args';
 import { PrismaService } from '../prisma/prisma.service';
-import { Ctx } from '@nestjs/microservices';
+import { PaginatedUsers } from './entities/paginated-users.entity';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
-    private readonly prisma: PrismaService, // private readonly logger: Logger,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Mutation(() => User)
@@ -30,9 +30,9 @@ export class UsersResolver {
   }
 
   @Public()
-  @Query(() => PaginatedUser, { name: 'users' })
-  getUsers(@Args() getUsersArgs: GetUsersArgs) {
-    return this.usersService.findByArgs(getUsersArgs);
+  @Query(() => PaginatedUsers, { name: 'users' })
+  getPaginatedUsers(@Args() getUsersArgs: GetPaginatedUsersArgs) {
+    return this.usersService.findPaginatedUsers(getUsersArgs);
   }
 
   @Public()
