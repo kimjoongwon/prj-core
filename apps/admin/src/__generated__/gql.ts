@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
-    "#graphql\n  query GetUsers($email: String!) {\n    users(email: $email) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n": types.GetUsersDocument,
+    "#graphql\n  query GetUsers($email: String!, $cursor: String!, $skip: Int, $take: Int  ) {\n    users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n": types.GetUsersDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetUsers($email: String!) {\n    users(email: $email) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers($email: String!) {\n    users(email: $email) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n"];
+export function gql(source: "#graphql\n  query GetUsers($email: String!, $cursor: String!, $skip: Int, $take: Int  ) {\n    users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers($email: String!, $cursor: String!, $skip: Int, $take: Int  ) {\n    users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {\n      totalCount\n      edges {\n        node {\n          email\n          id\n        }\n      }\n      nodes {\n        id\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
