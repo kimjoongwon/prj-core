@@ -9,6 +9,7 @@ import {
   TableRow,
   TableCell,
   ButtonProps,
+  Pagination,
 } from '@nextui-org/react';
 import {
   ColumnDef,
@@ -39,7 +40,7 @@ interface DataGridProps<T> {
 }
 
 function _DataGrid<T extends object | null | undefined>(
-  props: DataGridProps<T>,
+  props: DataGridProps<T>
 ) {
   const { data, columns, leftButtons, rightButtons } = props;
   const [columnPinning, setColumnPinning] = React.useState({});
@@ -87,6 +88,8 @@ function _DataGrid<T extends object | null | undefined>(
           ))}
         </TableBody>
       </Table>
+
+      <Pagination total={100} />
     </>
   );
 }

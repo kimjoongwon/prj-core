@@ -1,5 +1,5 @@
 export const queryBuilder = (
-  args: Record<string, any>,
+  args: Record<any, any>,
   filterKeys: string[] = [],
   // sortKeys: string[] = [],
 ) => {
@@ -15,7 +15,10 @@ export const queryBuilder = (
     if (filterKeys.includes(key)) {
       Object.assign(_args, {
         where: {
-          [key]: args[key],
+          ..._args?.['where'],
+          [key]: {
+            contains: args[key],
+          },
         },
       });
     }

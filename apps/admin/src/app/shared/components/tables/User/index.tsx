@@ -11,7 +11,7 @@ import { state } from '../../modals/Test'
 import { USER_EDIT_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export const GET_USERS = gql(`#graphql
-  query GetUsers($email: String!, $cursor: String!, $skip: Int, $take: Int  ) {
+  query GetUsers($email: String!, $cursor: String, $skip: Int, $take: Int  ) {
     users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {
       totalCount
       edges {
@@ -48,6 +48,7 @@ export const UserTable = () => {
     }),
   ]
 
+  console.log('users',users)
   const leftButtons: DataGridButton<Partial<User>>[] = [
     {
       text: '생성',

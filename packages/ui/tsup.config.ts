@@ -9,7 +9,6 @@ export default defineConfig(option => ({
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
-  // sourcemap: true,
   esbuildOptions: options => {
     options.banner = {
       js: '"use client"',
