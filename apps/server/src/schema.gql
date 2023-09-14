@@ -100,7 +100,7 @@ type Query {
   user(id: String!): User!
   userWorkspace(id: Int!): UserWorkspace!
   userWorkspaces: [UserWorkspace!]!
-  users(cursor: String!, email: String! = "", skip: Int! = 1, take: Int!): PaginatedUsers!
+  users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUsers!
 }
 
 input SignupInput {

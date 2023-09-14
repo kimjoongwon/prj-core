@@ -3,6 +3,6 @@ import { ArgsType, Field } from '@nestjs/graphql';
 
 @ArgsType()
 export class GetPaginatedUsersArgs extends CursorBasedPaginationArgs {
-  @Field({ defaultValue: '' })
-  email: string;
+  @Field(() => String, { nullable: true })
+  email?: string;
 }

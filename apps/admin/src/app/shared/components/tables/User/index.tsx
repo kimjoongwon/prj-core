@@ -11,8 +11,8 @@ import { state } from '../../modals/Test'
 import { USER_EDIT_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export const GET_USERS = gql(`#graphql
-  query GetUsers($email: String!) {
-    users(email: $email) {
+  query GetUsers($email: String!, $cursor: String!, $skip: Int, $take: Int  ) {
+    users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {
       totalCount
       edges {
         node {
@@ -33,7 +33,7 @@ export const UserTable = () => {
   const {
     data: { users },
   } = useSuspenseQuery(GET_USERS, {
-    variables: { email: '' },
+    variables: { email: '', take: 10 },
   })
 
   const columnHelper = createColumnHelper<User>()

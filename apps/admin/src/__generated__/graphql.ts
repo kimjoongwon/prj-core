@@ -47,6 +47,16 @@ export type CreateUserWorkspaceInput = {
   exampleField: Scalars['Int']['input'];
 };
 
+export type CreateWorkspaceInput = {
+  id: Scalars['ID']['input'];
+  /** 작업공간명 */
+  name: Scalars['String']['input'];
+  /** 작업공간 전화번호 */
+  phone: Scalars['String']['input'];
+  /** 작업공간 소유주 */
+  userId: Scalars['String']['input'];
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -57,6 +67,7 @@ export type Mutation = {
   createProfile: Profile;
   createUser: User;
   createUserWorkspace: UserWorkspace;
+  createWorkspace: Workspace;
   login: Auth;
   refreshToken: Token;
   removeProfile: Profile;
@@ -79,6 +90,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateUserWorkspaceArgs = {
   createUserWorkspaceInput: CreateUserWorkspaceInput;
+};
+
+
+export type MutationCreateWorkspaceArgs = {
+  createWorkspaceInput: CreateWorkspaceInput;
 };
 
 
@@ -116,8 +132,8 @@ export type MutationUpdateUserWorkspaceArgs = {
   updateUserWorkspaceInput: UpdateUserWorkspaceInput;
 };
 
-export type PaginatedUser = {
-  __typename?: 'PaginatedUser';
+export type PaginatedUsers = {
+  __typename?: 'PaginatedUsers';
   edges?: Maybe<Array<UserEdge>>;
   hasNextPage: Scalars['Boolean']['output'];
   nodes?: Maybe<Array<User>>;
@@ -146,7 +162,7 @@ export type Query = {
   user: User;
   userWorkspace: UserWorkspace;
   userWorkspaces: Array<UserWorkspace>;
-  users: PaginatedUser;
+  users: PaginatedUsers;
 };
 
 
@@ -166,9 +182,10 @@ export type QueryUserWorkspaceArgs = {
 
 
 export type QueryUsersArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
   email?: Scalars['String']['input'];
-  limit?: Scalars['Int']['input'];
-  offset?: Scalars['Int']['input'];
+  skip?: Scalars['Int']['input'];
+  take?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SignupInput = {
@@ -220,6 +237,19 @@ export type UserWorkspace = {
   exampleField: Scalars['Int']['output'];
 };
 
+export type Workspace = {
+  __typename?: 'Workspace';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** 작업공간명 */
+  name: Scalars['String']['output'];
+  /** 작업공간 전화번호 */
+  phone: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  /** 작업공간 소유주 */
+  userId: Scalars['String']['output'];
+};
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -229,11 +259,14 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Au
 
 export type GetUsersQueryVariables = Exact<{
   email: Scalars['String']['input'];
+  cursor: Scalars['String']['input'];
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', totalCount: number, edges?: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', email: string, id: string } }> | null, nodes?: Array<{ __typename?: 'User', id: string }> | null } };
+export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', totalCount: number, edges?: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', email: string, id: string } }> | null, nodes?: Array<{ __typename?: 'User', id: string }> | null } };
 
 
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
-export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;

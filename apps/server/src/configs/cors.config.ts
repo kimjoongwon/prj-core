@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { IsBoolean } from 'class-validator';
 import { CorsConfig } from './config.type';
-import validateConfig from '../utils/validate-config';
+import validateConfig from '../common/utils/validate-config';
 
 class EnvironmentVariablesValidator {
   @IsBoolean()

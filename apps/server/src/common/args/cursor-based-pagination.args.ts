@@ -2,12 +2,12 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 @ArgsType()
 export class CursorBasedPaginationArgs {
-  @Field(type => Int)
+  @Field(type => Int, { nullable: true })
   take?: number;
 
-  @Field(type => String)
-  cursor: string;
+  @Field(type => String, { nullable: true })
+  cursor?: string;
 
-  @Field(type => Int, { defaultValue: 1 })
+  @Field(type => Int, { defaultValue: 1, nullable: true })
   skip?: number;
 }
