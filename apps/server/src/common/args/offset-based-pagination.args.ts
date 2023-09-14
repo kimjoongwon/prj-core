@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 
 @ArgsType()
-export class PaginationArgs {
+export class OffsetBasedPaginationArgs {
   @Field(type => Int)
   offset: number = 0;
 

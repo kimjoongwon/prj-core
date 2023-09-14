@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  email     String      @unique
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
   profile   Profile?
+  Workspace Workspace[]
 
   @@map("users")
 }
@@ -72,6 +73,8 @@ model UserGroup {
 model Workspace {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
   name         String
+  userId       String      @db.ObjectId
+  user         User        @relation(fields: [userId], references: [id])
   createdAt    DateTime
   updatedAt    DateTime
   userGroupIds String[]    @db.ObjectId
