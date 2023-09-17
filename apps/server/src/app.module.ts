@@ -19,7 +19,6 @@ import {
   fileConfig,
 } from './configs';
 import corsConfig from './configs/cors.config';
-// import { PrismaModule } from './modules/prisma/prisma.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggerModule } from './modules/logger/logger.module';

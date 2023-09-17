@@ -10,7 +10,6 @@ interface ModalProviderProps {
 }
 
 export const ModalProvider = observer((props: ModalProviderProps) => {
-  console.log('???', state.open)
   return (
     <>
       <div>{props.children}</div>

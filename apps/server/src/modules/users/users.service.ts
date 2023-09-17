@@ -3,6 +3,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetPaginatedUsersArgs } from './dto/get-paginated-users.args';
 import { queryBuilder } from '@common';
+import { OffsetBasedPaginatedUser } from './entities/offset-paginated-user.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,17 +24,24 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async findPaginatedUsers(args: GetPaginatedUsersArgs) {
+  async findPaginatedUsers(
+    args: GetPaginatedUsersArgs,
+  ): Promise<OffsetBasedPaginatedUser> {
     const query = queryBuilder(args, ['email']);
-    console.log('query', query);
-    const users = await this.prisma.user.findMany(query);
-    const totalCount = await this.prisma.user.count(query);
-    this.logger.debug('users', query);
-    console.log('users', users);
+    const users = await this.prisma.user.findMany({
+      ...query,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    const totalCount = await this.prisma.user.count({});
+
     return {
-      edges: users?.map(user => ({ node: user, cursor: user.id })),
+      edges: users.map(user => ({ node: user })),
       nodes: users,
-      hasNextPage: true,
+      pageInfo: {
+        hasNextPage: !(users.length < args.take),
+      },
       totalCount,
     };
   }

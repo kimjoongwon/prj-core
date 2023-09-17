@@ -73,11 +73,15 @@ type Mutation {
   updateUserWorkspace(updateUserWorkspaceInput: UpdateUserWorkspaceInput!): UserWorkspace!
 }
 
-type PaginatedUsers {
+type OffsetBasedPaginatedUser {
   edges: [UserEdge!]
-  hasNextPage: Boolean!
   nodes: [User!]
+  pageInfo: PageInfo
   totalCount: Int!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
 }
 
 type Profile {
@@ -100,7 +104,7 @@ type Query {
   user(id: String!): User!
   userWorkspace(id: Int!): UserWorkspace!
   userWorkspaces: [UserWorkspace!]!
-  users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUsers!
+  users(email: String, skip: Int! = 0, take: Int! = 10): OffsetBasedPaginatedUser!
 }
 
 input SignupInput {
@@ -134,13 +138,12 @@ input UpdateUserWorkspaceInput {
 type User {
   createdAt: DateTime!
   email: String!
-  id: String!
+  id: ID!
   profile: Profile!
   updatedAt: DateTime!
 }
 
 type UserEdge {
-  cursor: String!
   node: User!
 }
 

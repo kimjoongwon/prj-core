@@ -6,14 +6,19 @@ export interface IEdgeType<T> {
   node: T;
 }
 
+export interface PageInfo {
+  hasNextPage: boolean;
+  endCursor: string;
+}
+
 export interface IPaginatedType<T> {
   edges: IEdgeType<T>[];
   nodes: T[];
   totalCount: number;
-  hasNextPage: boolean;
+  pageInfo: PageInfo;
 }
 
-export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
+export function CursorPaginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
   @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
     @Field(type => String)
@@ -21,6 +26,15 @@ export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
 
     @Field(type => classRef)
     node: T;
+  }
+
+  @ObjectType('PageInfo')
+  abstract class PageInfo {
+    @Field(type => Boolean)
+    hasNextPage: boolean;
+
+    @Field(type => String)
+    endCursor: string;
   }
 
   @ObjectType({ isAbstract: true })
@@ -34,8 +48,8 @@ export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
     @Field(type => Int)
     totalCount: number;
 
-    @Field()
-    hasNextPage: boolean;
+    @Field(() => PageInfo, { nullable: true })
+    pageInfo: PageInfo;
   }
   return PaginatedType as Type<IPaginatedType<T>>;
 }
