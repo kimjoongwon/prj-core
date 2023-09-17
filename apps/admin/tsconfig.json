@@ -21,7 +21,8 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "@links": ["app/shared/links/index.ts"]
+      "@links": ["app/shared/links/index.ts"],
+      "@components": ["app/shared/components/index.ts"]
     }
   },
   "include": [

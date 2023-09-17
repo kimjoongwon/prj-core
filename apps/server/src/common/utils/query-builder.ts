@@ -9,7 +9,11 @@ export const queryBuilder = (
       if (args[key] === undefined) {
         delete args[key];
       }
-      _args['cursor']['id'] = value;
+      Object.assign(_args, {
+        cursor: {
+          id: value,
+        },
+      });
     }
 
     if (filterKeys.includes(key)) {

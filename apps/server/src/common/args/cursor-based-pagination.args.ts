@@ -10,4 +10,7 @@ export class CursorBasedPaginationArgs {
 
   @Field(type => Int, { defaultValue: 1, nullable: true })
   skip?: number;
+
+  @Field(type => Int, { defaultValue: 1, nullable: true })
+  page?: number;
 }

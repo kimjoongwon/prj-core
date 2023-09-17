@@ -3,8 +3,8 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 @ArgsType()
 export class OffsetBasedPaginationArgs {
   @Field(type => Int)
-  offset: number = 0;
+  skip: number = 0;
 
   @Field(type => Int)
-  limit: number = 10;
+  take: number = 10;
 }

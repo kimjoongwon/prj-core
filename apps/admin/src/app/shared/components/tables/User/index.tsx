@@ -1,27 +1,27 @@
 'use client'
 
 import React from 'react'
-import { useSuspenseQuery } from '@apollo/client'
 import { DataGrid } from '@kimjwally/ui'
 import { createColumnHelper } from '@tanstack/react-table'
 import { gql } from '__generated__/gql'
 import { User } from '__generated__/graphql'
 import { DataGridButton } from '@kimjwally/ui'
-import { state } from '../../modals/Test'
 import { USER_EDIT_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
+import { Pagination } from '@nextui-org/react'
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 
 export const GET_USERS = gql(`#graphql
-  query GetUsers($email: String!, $cursor: String, $skip: Int, $take: Int  ) {
-    users(cursor: $cursor, email: $email , skip: $skip , take: $take ) {
-      totalCount
+  query GetUsers ($skip: Int, $take: Int) {
+    users(skip: $skip, take: $take ) {
       edges {
         node {
-          email
           id
+          email
         }
       }
-      nodes {
-        id
+      totalCount
+      pageInfo {
+        hasNextPage
       }
     }
   }
@@ -30,12 +30,10 @@ export const GET_USERS = gql(`#graphql
 export const UserTable = () => {
   const router = useCoCRouter()
 
-  const {
-    data: { users },
-  } = useSuspenseQuery(GET_USERS, {
-    variables: { email: '', take: 10 },
+  const { data, fetchMore } = useSuspenseQuery(GET_USERS, {
+    variables: { take: 10, skip: 0 },
   })
-
+  const users = data?.users
   const columnHelper = createColumnHelper<User>()
 
   const columns = [
@@ -48,7 +46,6 @@ export const UserTable = () => {
     }),
   ]
 
-  console.log('users',users)
   const leftButtons: DataGridButton<Partial<User>>[] = [
     {
       text: '생성',
@@ -63,12 +60,23 @@ export const UserTable = () => {
       props: { variant: 'solid', color: 'primary' },
     },
   ]
-
   return (
-    <DataGrid
-      leftButtons={leftButtons}
-      data={users.edges?.map((edge) => edge.node) || []}
-      columns={columns}
-    />
+    <>
+      <DataGrid
+        leftButtons={leftButtons}
+        data={users?.edges?.map((edge) => edge.node) || []}
+        columns={columns}
+      />
+      <Pagination
+        total={10}
+        onChange={(page) => {
+          fetchMore({
+            variables: {
+              skip: (page - 1) * 10,
+            },
+          })
+        }}
+      />
+    </>
   )
 }

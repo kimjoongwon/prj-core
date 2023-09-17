@@ -14,7 +14,7 @@ import { UsersService } from './users.service';
 import { GqlAuthGuard, Public } from '../../common';
 import { GetPaginatedUsersArgs } from './dto/get-paginated-users.args';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaginatedUsers } from './entities/paginated-users.entity';
+import { OffsetBasedPaginatedUser } from './entities/offset-paginated-user.entity';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
@@ -30,8 +30,8 @@ export class UsersResolver {
   }
 
   @Public()
-  @Query(() => PaginatedUsers, { name: 'users' })
-  getPaginatedUsers(@Args() getUsersArgs: GetPaginatedUsersArgs) {
+  @Query(() => OffsetBasedPaginatedUser, { name: 'users' })
+  getUsers(@Args() getUsersArgs: GetPaginatedUsersArgs) {
     return this.usersService.findPaginatedUsers(getUsersArgs);
   }
 
