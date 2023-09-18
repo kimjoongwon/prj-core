@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { DataGrid } from '@kimjwally/ui'
 import { createColumnHelper } from '@tanstack/react-table'
 import { gql } from '__generated__/gql'
@@ -29,9 +29,11 @@ export const GET_USERS = gql(`#graphql
 
 export const UserTable = () => {
   const router = useCoCRouter()
-
+  const [skip, setSkip] = useState(0)
+  const take = 10
   const { data, fetchMore } = useSuspenseQuery(GET_USERS, {
-    variables: { take: 10, skip: 0 },
+    variables: { take, skip },
+    fetchPolicy: 'cache-and-network',
   })
   const users = data?.users
   const columnHelper = createColumnHelper<User>()
@@ -70,11 +72,7 @@ export const UserTable = () => {
       <Pagination
         total={10}
         onChange={(page) => {
-          fetchMore({
-            variables: {
-              skip: (page - 1) * 10,
-            },
-          })
+          setSkip((page - 1) * take)
         }}
       />
     </>
