@@ -1,2 +1,2 @@
-export * from './User'
+export * from './User/UserTable'
 export * from './UserGroup'

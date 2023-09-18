@@ -7,6 +7,7 @@ import { SaveButton } from '../../buttons/save/SaveButton'
 import { useMutation } from '@apollo/client'
 import { gql } from '__generated__'
 import { useCoCRouter } from 'app/shared/hooks/useCoCRouter'
+import { GET_USERS } from '../../tables'
 
 export const SIGN_UP = gql(`#graphql
   mutation SignUp($signUpInput: SignupInput!) {
@@ -22,24 +23,23 @@ export const SIGN_UP = gql(`#graphql
 export function UserForm() {
   const router = useCoCRouter()
   const state = useLocalObservable(() => ({
-    email: 'email18@gmail.com',
+    email: 'email20@gmail.com',
     password: 'rkdmf12!@',
     profile: {
-      nickname: '닉네임18',
-      phone: '0101111118',
+      nickname: '닉네임20',
+      phone: '0101111120',
     },
   }))
 
-  const [mutate, { data, loading, error }] = useMutation(SIGN_UP, {
+  const [mutate, { loading, error }] = useMutation(SIGN_UP, {
     variables: {
       signUpInput: state,
     },
-    onCompleted: () => {
-      router.back()
-      // router.back({
-      //   url: '/admin/dashboard/users',
-      // })
-    },
+    refetchQueries: [GET_USERS, 'GetUsers'],
+    onCompleted: () =>
+      router.push({
+        url: '/admin/dashboard/users',
+      }),
   })
 
   const schema = z.object({
@@ -50,8 +50,6 @@ export function UserForm() {
       phone: z.string(),
     }),
   })
-
-  console.log('???')
 
   return (
     <div className="space-y-3 flex flex-1 flex-col">
