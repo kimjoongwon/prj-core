@@ -23,8 +23,8 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggerModule } from './modules/logger/logger.module';
 import { LoggingInterceptor } from './common/interceptors';
-import { UserWorkspacesModule } from './user-workspaces/user-workspaces.module';
 import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -49,8 +49,8 @@ import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
     AuthModule,
     UsersModule,
     ProfilesModule,
-    UserWorkspacesModule,
     WorkspacesModule,
+    RolesModule,
   ],
   providers: [
     {
