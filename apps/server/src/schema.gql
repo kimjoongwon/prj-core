@@ -21,14 +21,14 @@ input CreateProfileInput {
   updatedAt: DateTime
 }
 
+input CreateRoleInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
-}
-
-input CreateUserWorkspaceInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 input CreateWorkspaceInput {
@@ -61,16 +61,16 @@ input LoginInput {
 
 type Mutation {
   createProfile(createProfileInput: CreateProfileInput!): Profile!
+  createRole(createRoleInput: CreateRoleInput!): Role!
   createUser(createUserInput: CreateUserInput!): User!
-  createUserWorkspace(createUserWorkspaceInput: CreateUserWorkspaceInput!): UserWorkspace!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeProfile(id: String!): Profile!
-  removeUserWorkspace(id: Int!): UserWorkspace!
+  removeRole(id: Int!): Role!
   signup(data: SignupInput!): Auth!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  updateUserWorkspace(updateUserWorkspaceInput: UpdateUserWorkspaceInput!): UserWorkspace!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
 }
 
 type OffsetBasedPaginatedUser {
@@ -101,10 +101,25 @@ type Query {
   findAllProfile: [Profile!]!
   profile(id: String!): Profile!
   profiles: [Profile!]!
+  role(id: Int!): Role!
+  roles: [Role!]!
   user(id: String!): User!
-  userWorkspace(id: Int!): UserWorkspace!
-  userWorkspaces: [UserWorkspace!]!
   users(email: String, skip: Int! = 0, take: Int! = 10): OffsetBasedPaginatedUser!
+}
+
+type Role {
+  """해당 권한이 접근 가능한 페이지 리스트"""
+  accessPages: [String!]!
+
+  """Super, Educator, Learner, User"""
+  name: RoleNames!
+}
+
+enum RoleNames {
+  Educator
+  Learner
+  Super
+  User
 }
 
 input SignupInput {
@@ -129,7 +144,7 @@ input UpdateProfileInput {
   updatedAt: DateTime
 }
 
-input UpdateUserWorkspaceInput {
+input UpdateRoleInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
@@ -145,11 +160,6 @@ type User {
 
 type UserEdge {
   node: User!
-}
-
-type UserWorkspace {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 type Workspace {

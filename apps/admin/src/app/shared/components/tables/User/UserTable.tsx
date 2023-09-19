@@ -31,11 +31,13 @@ export const UserTable = () => {
   const router = useCoCRouter()
   const [skip, setSkip] = useState(0)
   const take = 10
-  const { data, fetchMore } = useSuspenseQuery(GET_USERS, {
+  const { data } = useSuspenseQuery(GET_USERS, {
     variables: { take, skip },
     fetchPolicy: 'cache-and-network',
   })
+
   const users = data?.users
+
   const columnHelper = createColumnHelper<User>()
 
   const columns = [
