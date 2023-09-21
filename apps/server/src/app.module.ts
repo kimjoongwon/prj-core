@@ -8,6 +8,8 @@ import {
   PrismaModule,
   ProfilesModule,
   UsersModule,
+  WorkspacesModule,
+  LoggerModule,
 } from './modules';
 
 import { GqlConfigService } from './common';
@@ -21,13 +23,15 @@ import {
 import corsConfig from './configs/cors.config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
-import { LoggerModule } from './modules/logger/logger.module';
 import { LoggingInterceptor } from './common/interceptors';
-import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
 import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      useClass: GqlConfigService,
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [
@@ -41,15 +45,11 @@ import { RolesModule } from './modules/roles/roles.module';
     }),
     LoggerModule,
     PrismaModule,
-    GraphQLModule.forRootAsync<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      useClass: GqlConfigService,
-    }),
+    UsersModule,
+    WorkspacesModule,
+    ProfilesModule,
     HttpModule,
     AuthModule,
-    UsersModule,
-    ProfilesModule,
-    WorkspacesModule,
     RolesModule,
   ],
   providers: [

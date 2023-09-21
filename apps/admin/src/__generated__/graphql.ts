@@ -37,14 +37,14 @@ export type CreateProfileInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type CreateRoleInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int']['input'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
-};
-
-export type CreateUserWorkspaceInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int']['input'];
 };
 
 export type CreateWorkspaceInput = {
@@ -65,16 +65,16 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createProfile: Profile;
+  createRole: Role;
   createUser: User;
-  createUserWorkspace: UserWorkspace;
   createWorkspace: Workspace;
   login: Auth;
   refreshToken: Token;
   removeProfile: Profile;
-  removeUserWorkspace: UserWorkspace;
+  removeRole: Role;
   signup: Auth;
   updateProfile: Profile;
-  updateUserWorkspace: UserWorkspace;
+  updateRole: Role;
 };
 
 
@@ -83,13 +83,13 @@ export type MutationCreateProfileArgs = {
 };
 
 
-export type MutationCreateUserArgs = {
-  createUserInput: CreateUserInput;
+export type MutationCreateRoleArgs = {
+  createRoleInput: CreateRoleInput;
 };
 
 
-export type MutationCreateUserWorkspaceArgs = {
-  createUserWorkspaceInput: CreateUserWorkspaceInput;
+export type MutationCreateUserArgs = {
+  createUserInput: CreateUserInput;
 };
 
 
@@ -113,7 +113,7 @@ export type MutationRemoveProfileArgs = {
 };
 
 
-export type MutationRemoveUserWorkspaceArgs = {
+export type MutationRemoveRoleArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -128,8 +128,8 @@ export type MutationUpdateProfileArgs = {
 };
 
 
-export type MutationUpdateUserWorkspaceArgs = {
-  updateUserWorkspaceInput: UpdateUserWorkspaceInput;
+export type MutationUpdateRoleArgs = {
+  updateRoleInput: UpdateRoleInput;
 };
 
 export type OffsetBasedPaginatedUser = {
@@ -164,9 +164,9 @@ export type Query = {
   findAllProfile: Array<Profile>;
   profile: Profile;
   profiles: Array<Profile>;
+  role: Role;
+  roles: Array<Role>;
   user: User;
-  userWorkspace: UserWorkspace;
-  userWorkspaces: Array<UserWorkspace>;
   users: OffsetBasedPaginatedUser;
 };
 
@@ -176,13 +176,13 @@ export type QueryProfileArgs = {
 };
 
 
-export type QueryUserArgs = {
-  id: Scalars['String']['input'];
+export type QueryRoleArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
-export type QueryUserWorkspaceArgs = {
-  id: Scalars['Int']['input'];
+export type QueryUserArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -191,6 +191,21 @@ export type QueryUsersArgs = {
   skip?: Scalars['Int']['input'];
   take?: Scalars['Int']['input'];
 };
+
+export type Role = {
+  __typename?: 'Role';
+  /** 해당 권한이 접근 가능한 페이지 리스트 */
+  accessPages: Array<Scalars['String']['output']>;
+  /** Super, Educator, Learner, User */
+  name: RoleNames;
+};
+
+export enum RoleNames {
+  Educator = 'Educator',
+  Learner = 'Learner',
+  Super = 'Super',
+  User = 'User'
+}
 
 export type SignupInput = {
   email: Scalars['String']['input'];
@@ -214,7 +229,7 @@ export type UpdateProfileInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
-export type UpdateUserWorkspaceInput = {
+export type UpdateRoleInput = {
   /** Example field (placeholder) */
   exampleField?: InputMaybe<Scalars['Int']['input']>;
   id: Scalars['Int']['input'];
@@ -232,12 +247,6 @@ export type User = {
 export type UserEdge = {
   __typename?: 'UserEdge';
   node: User;
-};
-
-export type UserWorkspace = {
-  __typename?: 'UserWorkspace';
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int']['output'];
 };
 
 export type Workspace = {
@@ -260,6 +269,14 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', signup: { __typename?: 'Auth', user: { __typename?: 'User', id: string } } };
 
+export type GetUsersQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'OffsetBasedPaginatedUser', totalCount: number, nodes?: Array<{ __typename?: 'User', email: string, profile: { __typename?: 'Profile', nickname: string, phone: string } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNextPage: boolean } | null } };
+
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
@@ -274,16 +291,8 @@ export type SignUpMutationVariables = Exact<{
 
 export type SignUpMutation = { __typename?: 'Mutation', signup: { __typename?: 'Auth', user: { __typename?: 'User', id: string, email: string } } };
 
-export type GetUsersQueryVariables = Exact<{
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  take?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'OffsetBasedPaginatedUser', totalCount: number, edges?: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', id: string, email: string } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNextPage: boolean } | null } };
-
 
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signUpInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignupInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signUpInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
 export const SignUpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignUp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signUpInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignupInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signUpInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>;
-export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}}]}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;

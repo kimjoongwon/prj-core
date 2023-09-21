@@ -14,9 +14,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "#graphql\n  mutation CreateUser($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n      }\n    }\n  }\n": types.CreateUserDocument,
+    "#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      nodes {\n        email\n        profile {\n          nickname\n          phone\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n": types.GetUsersDocument,
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
-    "#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      edges {\n        node {\n          id\n          email\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n": types.GetUsersDocument,
 };
 
 /**
@@ -40,15 +40,15 @@ export function gql(source: "#graphql\n  mutation CreateUser($signUpInput: Signu
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      nodes {\n        email\n        profile {\n          nickname\n          phone\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      nodes {\n        email\n        profile {\n          nickname\n          phone\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      edges {\n        node {\n          id\n          email\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers ($skip: Int, $take: Int) {\n    users(skip: $skip, take: $take ) {\n      edges {\n        node {\n          id\n          email\n        }\n      }\n      totalCount\n      pageInfo {\n        hasNextPage\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

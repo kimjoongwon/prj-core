@@ -22,7 +22,10 @@
     "baseUrl": "src",
     "paths": {
       "@links": ["app/shared/links/index.ts"],
-      "@components": ["app/shared/components/index.ts"]
+      "@components": ["app/shared/components/index.ts"],
+      "@hooks": ["app/shared/hooks/index.ts"],
+      "@constants": ["app/shared/constants/index.ts"],
+      "@utils": ["app/shared/utils/index.ts"]
     }
   },
   "include": [

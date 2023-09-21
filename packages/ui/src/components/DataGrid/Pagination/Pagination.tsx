@@ -6,40 +6,46 @@ import {
 import { useMobxHookForm } from '../../../hooks';
 import { MobxProps } from '../../../types';
 import { get, set } from 'lodash-es';
+import { useState } from 'react';
 
-interface PaginationProps<
-  T extends {
-    state: {
-      take: number;
-      skip: number;
-    };
-  },
-> extends NextUIPaginationProps,
-    MobxProps<T> {}
+interface PaginationProps<T>
+  extends Omit<NextUIPaginationProps, 'total'>,
+    MobxProps<T> {
+  totalCount: number;
+}
 
-export function Pagination<T extends object>(props: PaginationProps<T>) {
+export function Pagination<T extends { skip: number; take: number }>(
+  props: PaginationProps<T>,
+) {
   const {
-    state = { take: 0, skip: 0 },
+    state = {
+      take: 0,
+      skip: 0,
+    },
     path = '',
-    total = 18,
+    totalCount,
     ...rest
   } = props;
+  const [currentPage, setCurrentPage] = useState(0);
   const initialValue = get(state, path);
   const { localState } = useMobxHookForm(initialValue, state, path);
 
   const onChangePage = (page: number) => {
     const offset = page - 1;
+
     localState.value = offset;
+
+    setCurrentPage(page);
+
     set(state, path, offset * state.take);
   };
-
-  const page = localState.value + 1;
 
   return (
     <NextUIPagination
       {...rest}
+      total={totalCount / state.take}
       onChange={onChangePage}
-      page={page}
+      page={currentPage}
     />
   );
 }

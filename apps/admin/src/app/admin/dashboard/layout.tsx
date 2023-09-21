@@ -1,6 +1,6 @@
 'use client'
+import { useCoCRouter } from '@hooks'
 import { Navbar } from '@kimjwally/ui'
-import { useCoCRouter } from 'app/shared/hooks/useCoCRouter'
 
 export default function DashboardLayout({
   children,
@@ -36,7 +36,7 @@ export default function DashboardLayout({
     },
     {
       text: '소속관리 > 소속 목록',
-      href: getUrlWithParams('/admin/dashboard/users'),
+      href: getUrlWithParams('/admin/dashboard/workspaces'),
     },
   ]
 
