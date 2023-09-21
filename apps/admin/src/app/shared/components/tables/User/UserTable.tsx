@@ -1,14 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { DataGrid } from '@kimjwally/ui'
+import { DataGrid, DataGridButton, Pagination } from '@kimjwally/ui'
 import { createColumnHelper } from '@tanstack/react-table'
 import { gql } from '__generated__/gql'
 import { User } from '__generated__/graphql'
-import { DataGridButton } from '@kimjwally/ui'
 import { USER_EDIT_PATH, useCoCRouter } from 'app/shared/hooks/useCoCRouter'
-import { Pagination } from '@nextui-org/react'
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { observer, useLocalObservable } from 'mobx-react-lite'
 
 export const GET_USERS = gql(`#graphql
   query GetUsers ($skip: Int, $take: Int) {
@@ -27,14 +26,19 @@ export const GET_USERS = gql(`#graphql
   }
 `)
 
-export const UserTable = () => {
+export const UserTable = observer(() => {
   const router = useCoCRouter()
-  const [skip, setSkip] = useState(0)
-  const take = 10
+  const state = useLocalObservable(() => ({
+    skip: 0,
+    take: 10,
+  }))
+
   const { data } = useSuspenseQuery(GET_USERS, {
-    variables: { take, skip },
+    variables: { take: state.take, skip: state.skip },
     fetchPolicy: 'cache-and-network',
   })
+
+  console.log({ ...state })
 
   const users = data?.users
 
@@ -53,7 +57,7 @@ export const UserTable = () => {
   const leftButtons: DataGridButton<Partial<User>>[] = [
     {
       text: '생성',
-      onClick: (table) => {
+      onClick: () => {
         router.push({
           url: USER_EDIT_PATH,
           params: {
@@ -71,12 +75,7 @@ export const UserTable = () => {
         data={users?.edges?.map((edge) => edge.node) || []}
         columns={columns}
       />
-      <Pagination
-        total={10}
-        onChange={(page) => {
-          setSkip((page - 1) * take)
-        }}
-      />
+      <Pagination state={state} total={10} path="skip" />
     </>
   )
-}
+})

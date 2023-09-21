@@ -1,14 +1,11 @@
-import { BaseEntity } from '@common';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { User } from '@modules/users/entities/user.entity';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
-export class Workspace extends BaseEntity {
-  @Field(() => String, { description: '작업공간명' })
+export class Workspace {
+  @Field()
   name: string;
 
-  @Field(() => String, { description: '작업공간 소유주' })
-  userId: string[];
-
-  @Field(() => String, { description: '작업공간 전화번호' })
-  phone: string;
+  @Field(() => User, { description: 'Example field (placeholder)' })
+  owner: User;
 }

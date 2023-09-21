@@ -1,9 +1,7 @@
-import { InputType, Int, Field, PartialType, OmitType } from '@nestjs/graphql';
-import { Workspace } from '../entities/workspace.entity';
+import { InputType, Int, Field } from '@nestjs/graphql';
 
 @InputType()
-export class CreateWorkspaceInput extends OmitType(
-  Workspace,
-  ['updatedAt', 'createdAt'] as const,
-  InputType,
-) {}
+export class CreateWorkspaceInput {
+  @Field(() => Int, { description: 'Example field (placeholder)' })
+  exampleField: number;
+}

@@ -9,34 +9,27 @@ export class WorkspacesResolver {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
   @Mutation(() => Workspace)
-  createWorkspace(
-    @Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput,
-  ) {
+  createWorkspace(@Args('createWorkspaceInput') createWorkspaceInput: CreateWorkspaceInput) {
     return this.workspacesService.create(createWorkspaceInput);
   }
 
-  // @Query(() => [Workspace], { name: 'workspaces' })
-  // findAll() {
-  //   return this.workspacesService.findAll();
-  // }
+  @Query(() => [Workspace], { name: 'workspaces' })
+  findAll() {
+    return this.workspacesService.findAll();
+  }
 
-  // @Query(() => Workspace, { name: 'workspace' })
-  // findOne(@Args('id', { type: () => Int }) id: number) {
-  //   return this.workspacesService.findOne(id);
-  // }
+  @Query(() => Workspace, { name: 'workspace' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.workspacesService.findOne(id);
+  }
 
-  // @Mutation(() => Workspace)
-  // updateWorkspace(
-  //   @Args('updateWorkspaceInput') updateWorkspaceInput: UpdateWorkspaceInput,
-  // ) {
-  //   return this.workspacesService.update(
-  //     updateWorkspaceInput.id,
-  //     updateWorkspaceInput,
-  //   );
-  // }
+  @Mutation(() => Workspace)
+  updateWorkspace(@Args('updateWorkspaceInput') updateWorkspaceInput: UpdateWorkspaceInput) {
+    return this.workspacesService.update(updateWorkspaceInput.id, updateWorkspaceInput);
+  }
 
-  // @Mutation(() => Workspace)
-  // removeWorkspace(@Args('id', { type: () => Int }) id: number) {
-  //   return this.workspacesService.remove(id);
-  // }
+  @Mutation(() => Workspace)
+  removeWorkspace(@Args('id', { type: () => Int }) id: number) {
+    return this.workspacesService.remove(id);
+  }
 }

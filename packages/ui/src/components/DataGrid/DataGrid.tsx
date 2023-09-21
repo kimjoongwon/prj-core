@@ -38,7 +38,7 @@ interface DataGridProps<T> {
   inputs?: React.ReactNode;
 }
 
-function _DataGrid<T extends object | null | undefined>(
+export function DataGrid<T extends object | null | undefined>(
   props: DataGridProps<T>,
 ) {
   const { data, columns, leftButtons, rightButtons } = props;
@@ -90,5 +90,3 @@ function _DataGrid<T extends object | null | undefined>(
     </>
   );
 }
-
-export const DataGrid = _DataGrid;
