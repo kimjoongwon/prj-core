@@ -32,16 +32,8 @@ input CreateUserInput {
 }
 
 input CreateWorkspaceInput {
-  id: ID!
-
-  """작업공간명"""
-  name: String!
-
-  """작업공간 전화번호"""
-  phone: String!
-
-  """작업공간 소유주"""
-  userId: String!
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 """
@@ -68,9 +60,11 @@ type Mutation {
   refreshToken(token: JWT!): Token!
   removeProfile(id: String!): Profile!
   removeRole(id: Int!): Role!
+  removeWorkspace(id: Int!): Workspace!
   signup(data: SignupInput!): Auth!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
 type OffsetBasedPaginatedUser {
@@ -105,6 +99,8 @@ type Query {
   roles: [Role!]!
   user(id: String!): User!
   users(email: String, skip: Int! = 0, take: Int! = 10): OffsetBasedPaginatedUser!
+  workspace(id: Int!): Workspace!
+  workspaces: [Workspace!]!
 }
 
 type Role {
@@ -150,6 +146,12 @@ input UpdateRoleInput {
   id: Int!
 }
 
+input UpdateWorkspaceInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
 type User {
   createdAt: DateTime!
   email: String!
@@ -163,16 +165,8 @@ type UserEdge {
 }
 
 type Workspace {
-  createdAt: DateTime!
-  id: ID!
-
-  """작업공간명"""
   name: String!
 
-  """작업공간 전화번호"""
-  phone: String!
-  updatedAt: DateTime!
-
-  """작업공간 소유주"""
-  userId: String!
+  """Example field (placeholder)"""
+  owner: User!
 }

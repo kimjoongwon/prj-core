@@ -7,47 +7,24 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "baseUrl": "./"
+    "baseUrl": "./src",
+    "paths": {
+      "@guards": ["common/guards/index.ts"],
+      "@filters": ["common/filters/index.ts"],
+      "@providers": ["common/providers/index.ts"],
+      "@decorators": ["common/decorators/index.ts"],
+      "@interceptors": ["common/interceptors/index.ts"],
+      "@configs": ["configs/index.ts"],
+      "@modules": ["modules/index.ts"],
+      "@common": ["common/index.ts"],
+      "@providers/*": ["common/providers/*"],
+      "@guards/*": ["common/guards/*"],
+      "@filters/*": ["common/filters/*"],
+      "@decorators/*": ["common/decorators/*"],
+      "@interceptors/*": ["common/interceptors/*"],
+      "@configs/*": ["configs/*"],
+      "@modules/*": ["modules/*"]
+    }
   },
   "minify": false
 }
-
-// {
-//   "$schema": "https://json.schemastore.org/swcrc",
-//   "sourceMaps": true,
-//   "module": {
-//     "type": "commonjs"
-//   },
-//   "jsc": {
-//     "target": "es2017",
-//     "parser": {
-//       "syntax": "typescript",
-//       "decorators": true,
-//       "dynamicImport": true
-//     },
-//     "transform": {
-//       "legacyDecorator": true,
-//       "decoratorMetadata": true
-//     },
-//     "keepClassNames": true,
-//     "baseUrl": "./"
-//     // "paths": {
-//     //   "@providers": ["common/providers/index.ts"],
-//     //   "@providers/*": ["common/providers/*"],
-//     //   "@guards": ["common/guards/index.ts"],
-//     //   "@guards/*": ["common/guards/*"],
-//     //   "@filters": ["common/filters/index.ts"],
-//     //   "@filters/*": ["common/filters/*"],
-//     //   "@decorators": ["common/decorators/index.ts"],
-//     //   "@decorators/*": ["common/decorators/*"],
-//     //   "@interceptors": ["common/interceptors/index.ts"],
-//     //   "@interceptors/*": ["common/interceptors/*"],
-//     //   "@configs": ["configs/index.ts"],
-//     //   "@configs/*": ["configs/*"],
-//     //   "@common": ["common/index.ts"],
-//     //   "@modules": ["modules/index.ts"],
-//     //   "@modules/*": ["modules/*"]
-//     // }
-//   },
-//   "minify": false
-// }

@@ -3,7 +3,7 @@ module.exports = {
     tagName: '/',
     service: {
       name: 'CoC',
-      url: 'http://localhost:3003/graphql',
+      url: 'http://localhost:3006/graphql',
     },
   },
 }

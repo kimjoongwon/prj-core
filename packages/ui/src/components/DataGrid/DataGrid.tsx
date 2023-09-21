@@ -9,6 +9,7 @@ import {
   TableRow,
   TableCell,
   ButtonProps,
+  Spacer,
 } from '@nextui-org/react';
 import {
   ColumnDef,
@@ -29,7 +30,7 @@ export interface DataGridButton<T> {
 }
 
 interface DataGridProps<T> {
-  data: T[];
+  data: T[] | undefined | null;
   columns: ColumnDef<any, any>[];
   // 버튼은 생성과 수정을 담당합니다. 수정은 상태변경을 포함합니다. 삭제도 있네요..
   rightButtons?: DataGridButton<any>[];
@@ -38,14 +39,12 @@ interface DataGridProps<T> {
   inputs?: React.ReactNode;
 }
 
-export function DataGrid<T extends object | null | undefined>(
-  props: DataGridProps<T>,
-) {
+export function DataGrid<T extends any>(props: DataGridProps<T>) {
   const { data, columns, leftButtons, rightButtons } = props;
   const [columnPinning, setColumnPinning] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     getCoreRowModel: getCoreRowModel(),
     columns,
     state: {
@@ -63,6 +62,7 @@ export function DataGrid<T extends object | null | undefined>(
         <DataGridButtons buttons={leftButtons} table={table} />
         <DataGridButtons buttons={rightButtons} table={table} />
       </div>
+      <Spacer y={4} />
       <Table>
         <TableHeader>
           {headers?.map(header => (
