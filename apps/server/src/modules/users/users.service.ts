@@ -31,6 +31,9 @@ export class UsersService {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        profile: true,
+      },
     });
     const totalCount = await this.prisma.user.count({});
 

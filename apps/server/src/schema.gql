@@ -145,7 +145,7 @@ input UpdateRoleInput {
 
 input UpdateWorkspaceInput {
   createdAt: DateTime
-  id: String!
+  id: Int!
   name: String
   ownerId: String
   phone: String
@@ -173,8 +173,6 @@ type UserPageInfo {
 type Workspace {
   createdAt: DateTime!
   id: ID!
-
-  """작업공간명"""
   name: String!
 
   """작업공간 소유주"""

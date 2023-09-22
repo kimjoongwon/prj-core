@@ -1,12 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Profile } from '../../profiles/entities/profile.entity';
 import { BaseEntity } from '@common';
+import { Profile } from '@modules/profiles/entities/profile.entity';
 
 @ObjectType()
 export class User extends BaseEntity {
   @Field()
   email: string;
 
-  @Field()
+  @Field(() => Profile)
   profile?: Profile;
 }

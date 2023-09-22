@@ -1,18 +1,8 @@
+import { Paths } from '@constants'
 import { NavigateOptions } from 'next/dist/shared/lib/app-router-context'
 import { PrefetchOptions } from 'next/dist/shared/lib/router/router'
 import { useRouter } from 'next/navigation'
 import { Path } from 'path-parser'
-
-export const LOGIN_PAGE_PATH = '/auth/login' as const
-export const USERS_PAGE_PATH = '/admin/dashboard/users' as const
-export const USER_PAGE_PATH = '/admin/dashboard/users/:userId' as const
-export const USER_EDIT_PATH = '/admin/dashboard/users/:userId/edit' as const
-
-export type Paths =
-  | typeof LOGIN_PAGE_PATH
-  | typeof USERS_PAGE_PATH
-  | typeof USER_PAGE_PATH
-  | typeof USER_EDIT_PATH
 
 interface CoCRouterArgs<T> {
   url: Paths

@@ -53,32 +53,58 @@ model UserGroupCategory {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @default(now())
   UserGroup UserGroup[]
+  Group     Group[]
 
   @@map("userGroupCategories")
 }
 
+model GroupCategories {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
+  UserGroup UserGroup[]
+  Group     Group[]
+
+  @@map("groupCategories")
+}
+
 model UserGroup {
-  id           String            @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  category     UserGroupCategory @relation(fields: [categoryId], references: [id])
-  categoryId   String            @db.ObjectId
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @default(now())
-  workspaceIds String[]          @db.ObjectId
-  workspace    Workspace[]       @relation(fields: [workspaceIds], references: [id])
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  category          UserGroupCategory @relation(fields: [categoryId], references: [id])
+  categoryId        String            @db.ObjectId
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now())
+  workspaceIds      String[]          @db.ObjectId
+  GroupCategories   GroupCategories?  @relation(fields: [groupCategoriesId], references: [id])
+  groupCategoriesId String?           @db.ObjectId
 
   @@map("userGroups")
 }
 
+model Group {
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  category          UserGroupCategory @relation(fields: [categoryId], references: [id])
+  categoryId        String            @db.ObjectId
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now())
+  workspaceIds      String[]          @db.ObjectId
+  GroupCategories   GroupCategories?  @relation(fields: [groupCategoriesId], references: [id])
+  groupCategoriesId String?           @db.ObjectId
+
+  @@map("groups")
+}
+
 model Workspace {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  userId       String      @db.ObjectId
-  user         User        @relation(fields: [userId], references: [id])
+  ownerId      String   @db.ObjectId
+  owner        User     @relation(fields: [ownerId], references: [id])
+  userGroupIds String[] @db.ObjectId
   createdAt    DateTime
   updatedAt    DateTime
-  userGroupIds String[]    @db.ObjectId
-  userGroups   UserGroup[] @relation(fields: [userGroupIds], references: [id])
 
   @@map("workspaces")
 }
