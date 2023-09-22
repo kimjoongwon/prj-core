@@ -37,7 +37,6 @@ export const UserTable = () => {
   })
 
   const users = data?.users
-
   const columnHelper = createColumnHelper<User>()
 
   const columns = [

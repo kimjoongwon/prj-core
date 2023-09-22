@@ -32,16 +32,9 @@ input CreateUserInput {
 }
 
 input CreateWorkspaceInput {
-  id: ID!
-
-  """작업공간명"""
   name: String!
-
-  """작업공간 전화번호"""
+  ownerId: String!
   phone: String!
-
-  """작업공간 소유주"""
-  userId: String!
 }
 
 """
@@ -68,20 +61,18 @@ type Mutation {
   refreshToken(token: JWT!): Token!
   removeProfile(id: String!): Profile!
   removeRole(id: Int!): Role!
+  removeWorkspace(id: Int!): Workspace!
   signup(data: SignupInput!): Auth!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
-type OffsetBasedPaginatedUser {
+type PaginatedUser {
   edges: [UserEdge!]
   nodes: [User!]
-  pageInfo: PageInfo
+  pageInfo: UserPageInfo
   totalCount: Int!
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
 }
 
 type Profile {
@@ -104,7 +95,9 @@ type Query {
   role(id: Int!): Role!
   roles: [Role!]!
   user(id: String!): User!
-  users(email: String, skip: Int! = 0, take: Int! = 10): OffsetBasedPaginatedUser!
+  users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUser!
+  workspace(id: Int!): Workspace!
+  workspaces: [Workspace!]!
 }
 
 type Role {
@@ -150,6 +143,15 @@ input UpdateRoleInput {
   id: Int!
 }
 
+input UpdateWorkspaceInput {
+  createdAt: DateTime
+  id: String!
+  name: String
+  ownerId: String
+  phone: String
+  updatedAt: DateTime
+}
+
 type User {
   createdAt: DateTime!
   email: String!
@@ -159,7 +161,13 @@ type User {
 }
 
 type UserEdge {
+  cursor: String!
   node: User!
+}
+
+type UserPageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
 }
 
 type Workspace {
@@ -169,10 +177,10 @@ type Workspace {
   """작업공간명"""
   name: String!
 
+  """작업공간 소유주"""
+  owner: User!
+
   """작업공간 전화번호"""
   phone: String!
   updatedAt: DateTime!
-
-  """작업공간 소유주"""
-  userId: String!
 }

@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { PrismaService } from '../prisma/prisma.service';
-import { GetPaginatedUsersArgs } from './dto/get-paginated-users.args';
+import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { queryBuilder } from '@common';
-import { OffsetBasedPaginatedUser } from './entities/offset-paginated-user.entity';
+import { PaginatedUser } from './models/paginated-user.model';
 
 @Injectable()
 export class UsersService {
@@ -24,9 +24,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async findPaginatedUsers(
-    args: GetPaginatedUsersArgs,
-  ): Promise<OffsetBasedPaginatedUser> {
+  async findPaginatedUsers(args: GetPaginatedUserArgs): Promise<PaginatedUser> {
     const query = queryBuilder(args, ['email']);
     const users = await this.prisma.user.findMany({
       ...query,

@@ -1,38 +1,44 @@
 import { Field, ObjectType, Int } from '@nestjs/graphql';
 import { Type } from '@nestjs/common';
 
-export interface OffsetIEdgeType<T> {
+export interface IEdgeType<T> {
+  cursor?: string;
   node: T;
 }
 
-export interface OffsetPageInfo {
+export interface PageInfo {
   hasNextPage: boolean;
+  endCursor?: string;
 }
 
-export interface OffsetIPaginatedType<T> {
-  edges: OffsetIEdgeType<T>[];
+export interface IPaginatedType<T> {
+  edges: IEdgeType<T>[];
   nodes: T[];
   totalCount: number;
-  pageInfo: OffsetPageInfo;
+  pageInfo: PageInfo;
 }
 
-export function OffsetPaginated<T>(
-  classRef: Type<T>,
-): Type<OffsetIPaginatedType<T>> {
+export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
   @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
+    @Field(type => String)
+    cursor: string;
+
     @Field(type => classRef)
     node: T;
   }
 
-  @ObjectType('PageInfo')
+  @ObjectType(`${classRef.name}PageInfo`)
   abstract class PageInfo {
     @Field(type => Boolean)
     hasNextPage: boolean;
+
+    @Field(type => String)
+    endCursor: string;
   }
 
   @ObjectType({ isAbstract: true })
-  abstract class PaginatedType implements OffsetIPaginatedType<T> {
+  abstract class PaginatedType implements IPaginatedType<T> {
     @Field(type => [EdgeType], { nullable: true })
     edges: EdgeType[];
 
@@ -45,5 +51,5 @@ export function OffsetPaginated<T>(
     @Field(() => PageInfo, { nullable: true })
     pageInfo: PageInfo;
   }
-  return PaginatedType as Type<OffsetIPaginatedType<T>>;
+  return PaginatedType as Type<IPaginatedType<T>>;
 }
