@@ -48,13 +48,9 @@ export type CreateUserInput = {
 };
 
 export type CreateWorkspaceInput = {
-  id: Scalars['ID']['input'];
-  /** 작업공간명 */
   name: Scalars['String']['input'];
-  /** 작업공간 전화번호 */
+  ownerId: Scalars['String']['input'];
   phone: Scalars['String']['input'];
-  /** 작업공간 소유주 */
-  userId: Scalars['String']['input'];
 };
 
 export type LoginInput = {
@@ -72,9 +68,11 @@ export type Mutation = {
   refreshToken: Token;
   removeProfile: Profile;
   removeRole: Role;
+  removeWorkspace: Workspace;
   signup: Auth;
   updateProfile: Profile;
   updateRole: Role;
+  updateWorkspace: Workspace;
 };
 
 
@@ -118,6 +116,11 @@ export type MutationRemoveRoleArgs = {
 };
 
 
+export type MutationRemoveWorkspaceArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type MutationSignupArgs = {
   data: SignupInput;
 };
@@ -132,17 +135,17 @@ export type MutationUpdateRoleArgs = {
   updateRoleInput: UpdateRoleInput;
 };
 
-export type OffsetBasedPaginatedUser = {
-  __typename?: 'OffsetBasedPaginatedUser';
-  edges?: Maybe<Array<UserEdge>>;
-  nodes?: Maybe<Array<User>>;
-  pageInfo?: Maybe<PageInfo>;
-  totalCount: Scalars['Int']['output'];
+
+export type MutationUpdateWorkspaceArgs = {
+  updateWorkspaceInput: UpdateWorkspaceInput;
 };
 
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  hasNextPage: Scalars['Boolean']['output'];
+export type PaginatedUser = {
+  __typename?: 'PaginatedUser';
+  edges?: Maybe<Array<UserEdge>>;
+  nodes?: Maybe<Array<User>>;
+  pageInfo?: Maybe<UserPageInfo>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type Profile = {
@@ -167,7 +170,9 @@ export type Query = {
   role: Role;
   roles: Array<Role>;
   user: User;
-  users: OffsetBasedPaginatedUser;
+  users: PaginatedUser;
+  workspace: Workspace;
+  workspaces: Array<Workspace>;
 };
 
 
@@ -187,9 +192,23 @@ export type QueryUserArgs = {
 
 
 export type QueryUsersArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  skip?: Scalars['Int']['input'];
-  take?: Scalars['Int']['input'];
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryWorkspaceArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryWorkspacesArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Role = {
@@ -235,6 +254,15 @@ export type UpdateRoleInput = {
   id: Scalars['Int']['input'];
 };
 
+export type UpdateWorkspaceInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  ownerId?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime']['output'];
@@ -246,20 +274,26 @@ export type User = {
 
 export type UserEdge = {
   __typename?: 'UserEdge';
+  cursor: Scalars['String']['output'];
   node: User;
+};
+
+export type UserPageInfo = {
+  __typename?: 'UserPageInfo';
+  endCursor: Scalars['String']['output'];
+  hasNextPage: Scalars['Boolean']['output'];
 };
 
 export type Workspace = {
   __typename?: 'Workspace';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
-  /** 작업공간명 */
   name: Scalars['String']['output'];
+  /** 작업공간 소유주 */
+  owner: User;
   /** 작업공간 전화번호 */
   phone: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
-  /** 작업공간 소유주 */
-  userId: Scalars['String']['output'];
 };
 
 export type CreateUserMutationVariables = Exact<{
@@ -275,7 +309,7 @@ export type GetUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'OffsetBasedPaginatedUser', totalCount: number, nodes?: Array<{ __typename?: 'User', email: string, profile: { __typename?: 'Profile', nickname: string, phone: string } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNextPage: boolean } | null } };
+export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', totalCount: number, nodes?: Array<{ __typename?: 'User', email: string, profile: { __typename?: 'Profile', nickname: string, phone: string } }> | null, pageInfo?: { __typename?: 'UserPageInfo', hasNextPage: boolean } | null } };
 
 export type LoginMutationVariables = Exact<{
   data: LoginInput;

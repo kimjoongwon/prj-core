@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table';
 import { Button } from '../../Button';
-import { DataGridButton } from '../DataGrid';
+import { DataGridButton } from '../DataGridView';
 import { Link } from '@nextui-org/react';
 import { v4 } from 'uuid';
 

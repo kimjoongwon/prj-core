@@ -61,3 +61,7 @@ export interface HeaderCellProps<T, M> {
   headerContext: HeaderContext<T, string>;
   mobxProps: MobxProps<M>;
 }
+
+export interface ContainerProps {
+  children: React.ReactNode;
+}

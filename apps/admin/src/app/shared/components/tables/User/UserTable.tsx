@@ -1,28 +1,10 @@
-'use client'
-
 import React from 'react'
-import { DataGrid, Pagination } from '@kimjwally/ui'
-import { Spacer } from '@nextui-org/react'
+import { DataGrid } from '@kimjwally/ui'
 import { useColumns } from './hooks/useColumns'
-import { useLeftButtons } from './hooks/useLeftButtons'
-import { GetUsersQuery, User } from '__generated__/graphql'
+import { useDashboardUsersPage } from 'app/admin/dashboard/users/provider'
 
-interface UserTableProps {
-  users: GetUsersQuery['users']['nodes']
-  totalCount: number
-  state: any
-}
-
-export const UserTable = (props: UserTableProps) => {
-  const { users, state, totalCount } = props
+export const UserTable = () => {
+  const { data } = useDashboardUsersPage()
   const columns = useColumns()
-  const leftButtons = useLeftButtons()
-
-  return (
-    <div className="w-8/12">
-      <DataGrid leftButtons={leftButtons} data={users} columns={columns} />
-      <Spacer y={4} />
-      <Pagination state={state} totalCount={totalCount} path="skip" />
-    </div>
-  )
+  return <DataGrid data={data.users.nodes} columns={columns} />
 }

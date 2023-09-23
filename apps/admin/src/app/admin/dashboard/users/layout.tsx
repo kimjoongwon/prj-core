@@ -1,5 +1,3 @@
-import { Spacer } from '@nextui-org/react'
-
 export default function Layout(props: {
   children: React.ReactNode
   modal: React.ReactNode
