@@ -47,6 +47,6 @@ export class UsersResolver {
     const { id: userId } = parent;
     console.log('parent', parent);
     console.log('실행되니?');
-    return parent.profile
+    return parent.profile;
   }
 }

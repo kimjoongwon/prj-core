@@ -98,13 +98,13 @@ model Group {
 }
 
 model Workspace {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  ownerId      String   @db.ObjectId
-  owner        User     @relation(fields: [ownerId], references: [id])
-  userGroupIds String[] @db.ObjectId
-  createdAt    DateTime
-  updatedAt    DateTime
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  phone     String   @unique
+  ownerId   String   @db.ObjectId
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime
+  updatedAt DateTime
 
   @@map("workspaces")
 }

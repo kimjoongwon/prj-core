@@ -3,6 +3,7 @@ import { WorkspacesService } from './workspaces.service';
 import { Workspace } from './models/workspace.model';
 import { CreateWorkspaceInput } from './dto/create-workspace.input';
 import { UpdateWorkspaceInput } from './dto/update-workspace.input';
+import { GetPaginatedWorkspaceArgs } from './dto/get-paginated-workspace.args';
 
 @Resolver(() => Workspace)
 export class WorkspacesResolver {
@@ -16,13 +17,15 @@ export class WorkspacesResolver {
   }
 
   @Query(() => [Workspace], { name: 'workspaces' })
-  findAll() {
-    return this.workspacesService.findAll();
+  getWorkspaces(@Args() getPaginatedWorkspaceArgs: GetPaginatedWorkspaceArgs) {
+    return this.workspacesService.findPaginatedWorkspace(
+      getPaginatedWorkspaceArgs,
+    );
   }
 
   @Query(() => Workspace, { name: 'workspace' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.workspacesService.findOne(id);
+  getWorkspace(@Args('id', { type: () => String }) id: string) {
+    return this.workspacesService.findById(id);
   }
 
   @Mutation(() => Workspace)
