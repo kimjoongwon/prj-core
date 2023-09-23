@@ -7,7 +7,7 @@ import { SaveButton } from '../../buttons/save/SaveButton'
 import { useMutation } from '@apollo/client'
 import { gql } from '__generated__'
 import { useCoCRouter } from '@hooks'
-import { GET_USERS } from 'app/admin/dashboard/users/page'
+import { GET_USERS } from 'app/admin/(dashboard)/users/page'
 
 export const SIGN_UP = gql(`#graphql
   mutation SignUp($signUpInput: SignupInput!) {

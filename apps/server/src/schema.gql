@@ -96,8 +96,8 @@ type Query {
   roles: [Role!]!
   user(id: String!): User!
   users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUser!
-  workspace(id: Int!): Workspace!
-  workspaces: [Workspace!]!
+  workspace(id: String!): Workspace!
+  workspaces(cursor: String, email: String, skip: Int = 1, take: Int): [Workspace!]!
 }
 
 type Role {
@@ -145,7 +145,7 @@ input UpdateRoleInput {
 
 input UpdateWorkspaceInput {
   createdAt: DateTime
-  id: Int!
+  id: String!
   name: String
   ownerId: String
   phone: String
