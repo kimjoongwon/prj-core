@@ -1,18 +1,13 @@
 'use client'
 
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { useState } from '@hooks'
-import { gql } from '__generated__'
-import { UserTable } from 'app/shared/components/tables/User/UserTable'
-import { observer } from 'mobx-react-lite'
-import { Provider } from './provider'
+import { UsersDataGrid, UsersPagination } from '@components'
+import { UsersPageProviders } from '@providers'
 
-function Page() {
+export default function Page() {
   return (
-    <Provider>
-      <UserTable />
-    </Provider>
+    <UsersPageProviders>
+      <UsersDataGrid />
+      <UsersPagination />
+    </UsersPageProviders>
   )
 }
-
-export default Page

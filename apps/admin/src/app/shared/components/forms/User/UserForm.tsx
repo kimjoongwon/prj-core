@@ -2,23 +2,11 @@
 
 import { FormControl, FormGroupControl, Input } from '@kimjwally/ui'
 import { useLocalObservable } from 'mobx-react-lite'
-import { z } from 'zod'
 import { SaveButton } from '../../buttons/save/SaveButton'
 import { useMutation } from '@apollo/client'
-import { gql } from '__generated__'
 import { useCoCRouter } from '@hooks'
-import { GET_USERS } from 'app/admin/dashboard/users/page'
-
-export const SIGN_UP = gql(`#graphql
-  mutation SignUp($signUpInput: SignupInput!) {
-    signup(data: $signUpInput) {
-      user {
-        id
-        email
-      }
-    }
-  }
-`)
+import { GET_USERS, SIGN_UP } from '@gqls'
+import { z } from 'zod'
 
 export function UserForm() {
   const router = useCoCRouter()

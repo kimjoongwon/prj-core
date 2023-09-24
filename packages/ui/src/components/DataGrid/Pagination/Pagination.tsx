@@ -14,7 +14,7 @@ interface PaginationProps<T>
   totalCount: number;
 }
 
-export function Pagination<T extends { skip: number; take: number }>(
+export function Pagination<T extends { take: number; skip: number }>(
   props: PaginationProps<T>,
 ) {
   const {

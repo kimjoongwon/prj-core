@@ -1,5 +1,5 @@
 export * from './forms'
-export * from './providers'
 export * from './layouts'
 export * from './modals'
-export * from './tables'
+export * from './dataGrids'
+export * from './paginations'

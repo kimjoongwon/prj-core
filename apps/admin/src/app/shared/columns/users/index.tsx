@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { User } from '__generated__/graphql'
 
-export const useColumns = () => {
+export const useUsersColumns = () => {
   const columnHelper = createColumnHelper<User>()
 
   const columns = [

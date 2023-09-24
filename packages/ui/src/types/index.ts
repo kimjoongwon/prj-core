@@ -65,3 +65,10 @@ export interface HeaderCellProps<T, M> {
 export interface ContainerProps {
   children: React.ReactNode;
 }
+
+export interface PaginationState {
+  table: {
+    skip: number;
+    take: number;
+  };
+}

@@ -3,9 +3,7 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    appDir: true,
-  },
+  experimental: {},
 }
 
 module.exports = nextConfig
