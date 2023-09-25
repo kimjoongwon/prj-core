@@ -1,7 +1,7 @@
 'use client'
 
-import { WorkspaceTable } from '@components'
+import { WorkspacesDataGrid } from '@components'
 
 export default function WorkspacesPage() {
-  return <WorkspaceTable />
+  return <WorkspacesDataGrid />
 }

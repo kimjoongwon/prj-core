@@ -4,6 +4,7 @@ import { Workspace } from './models/workspace.model';
 import { CreateWorkspaceInput } from './dto/create-workspace.input';
 import { UpdateWorkspaceInput } from './dto/update-workspace.input';
 import { GetPaginatedWorkspaceArgs } from './dto/get-paginated-workspace.args';
+import { PaginatedWorkspace } from './models/paginated-workspace.model';
 
 @Resolver(() => Workspace)
 export class WorkspacesResolver {
@@ -16,7 +17,7 @@ export class WorkspacesResolver {
     return this.workspacesService.create(createWorkspaceInput);
   }
 
-  @Query(() => [Workspace], { name: 'workspaces' })
+  @Query(() => PaginatedWorkspace, { name: 'workspaces' })
   getWorkspaces(@Args() getPaginatedWorkspaceArgs: GetPaginatedWorkspaceArgs) {
     return this.workspacesService.findPaginatedWorkspace(
       getPaginatedWorkspaceArgs,

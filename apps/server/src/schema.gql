@@ -75,6 +75,13 @@ type PaginatedUser {
   totalCount: Int!
 }
 
+type PaginatedWorkspace {
+  edges: [WorkspaceEdge!]
+  nodes: [Workspace!]
+  pageInfo: WorkspacePageInfo
+  totalCount: Int!
+}
+
 type Profile {
   createdAt: DateTime!
   id: ID!
@@ -97,7 +104,7 @@ type Query {
   user(id: String!): User!
   users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUser!
   workspace(id: String!): Workspace!
-  workspaces(cursor: String, email: String, skip: Int = 1, take: Int): [Workspace!]!
+  workspaces(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedWorkspace!
 }
 
 type Role {
@@ -181,4 +188,14 @@ type Workspace {
   """작업공간 전화번호"""
   phone: String!
   updatedAt: DateTime!
+}
+
+type WorkspaceEdge {
+  cursor: String!
+  node: Workspace!
+}
+
+type WorkspacePageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
 }
