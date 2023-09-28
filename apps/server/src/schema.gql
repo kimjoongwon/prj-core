@@ -72,14 +72,12 @@ type PaginatedUser {
   edges: [UserEdge!]
   nodes: [User!]
   pageInfo: UserPageInfo
-  totalCount: Int!
 }
 
 type PaginatedWorkspace {
   edges: [WorkspaceEdge!]
   nodes: [Workspace!]
   pageInfo: WorkspacePageInfo
-  totalCount: Int!
 }
 
 type Profile {
@@ -175,6 +173,7 @@ type UserEdge {
 type UserPageInfo {
   endCursor: String!
   hasNextPage: Boolean!
+  totalCount: Int!
 }
 
 type Workspace {
@@ -198,4 +197,5 @@ type WorkspaceEdge {
 type WorkspacePageInfo {
   endCursor: String!
   hasNextPage: Boolean!
+  totalCount: Int!
 }

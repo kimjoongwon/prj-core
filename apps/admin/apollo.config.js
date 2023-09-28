@@ -1,6 +1,6 @@
 module.exports = {
   client: {
-    tagName: '/',
+    tagName: 'gql',
     service: {
       name: 'CoC',
       url: 'http://localhost:3006/graphql',

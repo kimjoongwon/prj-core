@@ -1,3 +1,4 @@
+import { ButtonProps, LinkProps } from '@nextui-org/react';
 import { HeaderContext } from '@tanstack/react-table';
 
 export type Join<K, P> = K extends string | number
@@ -71,4 +72,7 @@ export interface PaginationState {
     skip: number;
     take: number;
   };
+}
+export interface GroupButton extends ButtonProps {
+  href: LinkProps['href'];
 }

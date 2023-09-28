@@ -1,5 +1,5 @@
 import { Paths } from '@constants'
-import { NavigateOptions } from 'next/dist/shared/lib/app-router-context'
+import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { PrefetchOptions } from 'next/dist/shared/lib/router/router'
 import { useRouter } from 'next/navigation'
 import { Path } from 'path-parser'

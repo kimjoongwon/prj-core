@@ -17,6 +17,11 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "ts-graphql-plugin",
+        "schema": "src/__generated__/index.ts",
+        "tag": "gql"
       }
     ],
     "baseUrl": "src",
