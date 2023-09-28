@@ -9,6 +9,7 @@ export * from './forms';
 export * from './Navbar';
 export * from './controls';
 export * from './DataGrid/Pagination';
+export * from './ButtonGroup';
 export {
   CardHeader,
   CardBody,

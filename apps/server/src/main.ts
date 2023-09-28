@@ -52,6 +52,7 @@ async function bootstrap() {
     });
   }
 
+  console.info(appConfig.port, 'running');
   await app.listen(appConfig.port);
 }
 

@@ -41,9 +41,9 @@ export class UsersService {
       edges: users.map(user => ({ node: user })),
       nodes: users,
       pageInfo: {
+        totalCount,
         hasNextPage: !(users.length < args.take),
       },
-      totalCount,
     };
   }
 

@@ -14,11 +14,20 @@ import {
   roundTripLink,
   ssrMultipartLink,
 } from '@links'
+import { createFragmentRegistry } from '@apollo/client/cache'
+import { PAGE_INFO } from '@components'
 
 function makeClient() {
   return new NextSSRApolloClient({
     connectToDevTools: true,
-    cache: new NextSSRInMemoryCache(),
+    cache: new NextSSRInMemoryCache({
+      fragments: createFragmentRegistry(PAGE_INFO),
+      typePolicies: {
+        PaginatedUser: {
+          keyFields: [],
+        },
+      },
+    }),
     link: from(
       isServer()
         ? [errorLink, ssrMultipartLink, roundTripLink, authLink, httpLink]
