@@ -23,7 +23,7 @@ input CreateProfileInput {
 
 input CreateRoleInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 input CreateUserInput {
@@ -143,9 +143,10 @@ input UpdateProfileInput {
 }
 
 input UpdateRoleInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+
+  """Example field (placeholder)"""
+  name: String
 }
 
 input UpdateWorkspaceInput {

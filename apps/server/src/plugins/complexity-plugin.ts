@@ -1,21 +1,18 @@
 import { GraphQLSchemaHost } from '@nestjs/graphql';
 import { Plugin } from '@nestjs/apollo';
-import {
-  ApolloServerPlugin,
-  GraphQLRequestListener,
-} from 'apollo-server-plugin-base';
 import { GraphQLError } from 'graphql';
 import {
   fieldExtensionsEstimator,
   getComplexity,
   simpleEstimator,
 } from 'graphql-query-complexity';
+import { ApolloServerPlugin, GraphQLRequestListener } from '@apollo/server';
 
 @Plugin()
 export class ComplexityPlugin implements ApolloServerPlugin {
   constructor(private gqlSchemaHost: GraphQLSchemaHost) {}
 
-  async requestDidStart(): Promise<GraphQLRequestListener> {
+  async requestDidStart(): Promise<GraphQLRequestListener<ApolloServerPlugin>> {
     const maxComplexity = 20;
     const { schema } = this.gqlSchemaHost;
 

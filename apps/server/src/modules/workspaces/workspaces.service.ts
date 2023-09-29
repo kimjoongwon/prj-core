@@ -25,10 +25,10 @@ export class WorkspacesService {
     });
     const totalCount = await this.prisma.workspace.count(query);
     return {
-      totalCount,
       edges: [],
       nodes: workspaces,
       pageInfo: {
+        totalCount,
         hasNextPage: true,
       },
     };
