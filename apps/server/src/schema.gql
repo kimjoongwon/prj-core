@@ -100,7 +100,7 @@ type Query {
   role(id: Int!): Role!
   roles: [Role!]!
   user(id: String!): User!
-  users(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedUser!
+  users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedUser!
   workspace(id: String!): Workspace!
   workspaces(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedWorkspace!
 }

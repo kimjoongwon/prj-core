@@ -13,8 +13,8 @@ type Query = { data: GetUsersQuery }
 export const QueryContext = createContext<Query>({} as Query)
 
 const GET_USERS = gql(`
-  query GetUsers($skip: Int, $take: Int) {
-    users(skip: $skip, take: $take) {
+  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {
+    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {
       nodes {
         id
         email
@@ -33,6 +33,8 @@ export const QueryProvider = observer((props: ContainerProps) => {
   const state = useState()
   const query = useSuspenseQuery(GET_USERS, {
     variables: {
+      sortingKey: state.sortingKey,
+      sortingValue: state.sortingValue,
       take: state?.table.take,
       skip: state?.table.skip,
     },

@@ -1,4 +1,4 @@
-import { ButtonProps, LinkProps } from '@nextui-org/react';
+import { ButtonProps, LinkProps, TableProps } from '@nextui-org/react';
 import { HeaderContext } from '@tanstack/react-table';
 
 export type Join<K, P> = K extends string | number
@@ -73,6 +73,17 @@ export interface PaginationState {
     take: number;
   };
 }
+
+export interface TableSorting {
+  sortingKey?: string | null;
+  sortingValue?: 'asc' | 'desc' | null;
+}
+
+export interface TableState extends PaginationState, TableSorting {}
 export interface GroupButton extends ButtonProps {
   href: LinkProps['href'];
+}
+
+export interface ContainerProps {
+  children: React.ReactNode;
 }

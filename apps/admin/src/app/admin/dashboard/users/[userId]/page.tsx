@@ -1,5 +1,5 @@
-'use client'
+import { Input, Spacer } from '@kimjwally/ui'
 
 export default function Page() {
-  return <div>유저상세</div>
+  return <div>상세페이지는여기서 작업 정해진 규칙 없음.</div>
 }

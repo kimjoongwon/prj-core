@@ -1,9 +1,8 @@
 'use client'
 
 import { CoCPagination } from '@components'
-import { Button, ButtonGroup, DataGrid } from '@kimjwally/ui'
+import { ButtonGroup, DataGrid } from '@kimjwally/ui'
 import { usePage } from './hooks/usePage'
-import { observer } from 'mobx-react-lite'
 
 export default function Page() {
   const page = usePage()
@@ -14,7 +13,17 @@ export default function Page() {
         leftButtons={page.table.leftButtons}
         rightButtons={page.table.rightButtons}
       />
-      <DataGrid headers={page.table.headers} rows={page.table.rows} />
+      <DataGrid
+        headers={page.table.headers}
+        rows={page.table.rows}
+        onSortChange={(descriptor) => {
+          page.state.sortingKey = (descriptor.column as string)
+            .split('_')
+            .join('.')
+          page.state.sortingValue =
+            descriptor.direction === 'ascending' ? 'asc' : 'desc'
+        }}
+      />
       <CoCPagination state={page.state} fromTypename="PaginatedUser" />
     </div>
   )

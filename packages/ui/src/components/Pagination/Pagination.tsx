@@ -3,8 +3,8 @@ import {
   Pagination as NextUIPagination,
   PaginationProps as NextUIPaginationProps,
 } from '@nextui-org/react';
-import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '../../../types';
+import { useMobxHookForm } from '../../hooks';
+import { MobxProps } from '../../types';
 import { get, set } from 'lodash-es';
 import { useState } from 'react';
 

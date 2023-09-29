@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { queryBuilder } from '@common';
 import { PaginatedUser } from './models/paginated-user.model';
+import { set } from 'lodash';
 
 @Injectable()
 export class UsersService {
@@ -26,11 +27,10 @@ export class UsersService {
 
   async findPaginatedUsers(args: GetPaginatedUserArgs): Promise<PaginatedUser> {
     const query = queryBuilder(args, ['email']);
+    console.log('args', args);
     const users = await this.prisma.user.findMany({
       ...query,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: set({}, args.sortingKey, args.sortingValue),
       include: {
         profile: true,
       },

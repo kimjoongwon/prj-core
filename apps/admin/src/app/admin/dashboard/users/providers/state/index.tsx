@@ -1,14 +1,18 @@
 import { observer } from 'mobx-react-lite'
 import { useState } from '@hooks'
-import { ContainerProps, PaginationState } from '@kimjwally/ui'
+import { ContainerProps, PaginationState, TableState } from '@kimjwally/ui'
 import { createContext } from 'react'
 
-type State = PaginationState
+type State = TableState
 
 export const StateContext = createContext<State>({} as State)
 
 export const StateProvider = observer((props: ContainerProps) => {
-  const state = useState({ table: { skip: 0, take: 10 } })
+  const state = useState<State>({
+    table: { skip: 0, take: 10 },
+    sortingKey: undefined,
+    sortingValue: undefined,
+  })
 
   return (
     <StateContext.Provider value={state}>

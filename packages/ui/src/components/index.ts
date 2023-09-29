@@ -8,7 +8,7 @@ export * from './Chip';
 export * from './forms';
 export * from './Navbar';
 export * from './controls';
-export * from './DataGrid/Pagination';
+export * from './Pagination';
 export * from './ButtonGroup';
 export {
   CardHeader,
