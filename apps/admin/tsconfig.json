@@ -19,17 +19,18 @@
         "name": "next"
       }
     ],
-    "baseUrl": "src",
     "paths": {
-      "@links": ["app/shared/links/index.ts"],
-      "@components": ["app/shared/components/index.ts"],
-      "@hooks": ["app/shared/hooks/index.ts"],
-      "@constants": ["app/shared/constants/index.ts"],
-      "@utils": ["app/shared/utils/index.ts"],
-      "@contexts": ["app/shared/contexts/index.ts"],
-      "@columns": ["app/shared/columns/index.ts"],
-      "@gqls": ["app/shared/gqls/index.ts"],
-      "@providers": ["app/shared/providers/index.ts"]
+      "@__generated__": ["./src/__generated__"],
+      "@__generated__/graphql": ["./src/__generated__/graphql.ts"],
+      "@links": ["./src/app/shared/links/index.ts"],
+      "@components": ["./src/app/shared/components/index.ts"],
+      "@hooks": ["./src/app/shared/hooks/index.ts"],
+      "@constants": ["./src/app/shared/constants/index.ts"],
+      "@utils": ["./src/app/shared/utils/index.ts"],
+      "@contexts": ["./src/app/shared/contexts/index.ts"],
+      "@columns": ["./src/app/shared/columns/index.ts"],
+      "@gqls": ["./src/app/shared/gqls/index.ts"],
+      "@providers": ["./src/app/shared/providers/index.ts"]
     }
   },
   "include": [

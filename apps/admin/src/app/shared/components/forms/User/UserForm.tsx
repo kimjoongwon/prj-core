@@ -1,46 +1,20 @@
 'use client'
 
+import { SignupInput } from '@__generated__/graphql'
 import { FormControl, FormGroupControl, Input } from '@kimjwally/ui'
-import { useLocalObservable } from 'mobx-react-lite'
-import { SaveButton } from '../../buttons/save/SaveButton'
-import { useMutation } from '@apollo/client'
-import { useCoCRouter } from '@hooks'
-import { GET_USERS, SIGN_UP } from '@gqls'
-import { z } from 'zod'
+import { ZodSchema } from 'zod'
 
-export function UserForm() {
-  const router = useCoCRouter()
-  const state = useLocalObservable(() => ({
-    email: 'email20@gmail.com',
-    password: 'rkdmf12!@',
-    profile: {
-      nickname: '닉네임20',
-      phone: '0101111120',
-    },
-  }))
+interface UserFormProps<TSchema> {
+  state: SignupInput
+  schema: TSchema
+}
 
-  const [mutate, { loading, error }] = useMutation(SIGN_UP, {
-    variables: {
-      signUpInput: state,
-    },
-    refetchQueries: [GET_USERS, 'GetUsers'],
-    onCompleted: () =>
-      router.push({
-        url: '/admin/dashboard/users',
-      }),
-  })
-
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string().min(5),
-    profile: z.object({
-      nickname: z.string(),
-      phone: z.string(),
-    }),
-  })
-
+export function UserForm<TSchema extends ZodSchema>(
+  props: UserFormProps<TSchema>,
+) {
+  const { schema, state } = props
   return (
-    <div className="space-y-3 flex flex-1 flex-col">
+    <div className="space-y-2">
       <FormGroupControl direction="row">
         <FormControl timings={['onChange']} schema={schema}>
           <Input label="이메일" state={state} path="email" />
@@ -49,9 +23,7 @@ export function UserForm() {
       </FormGroupControl>
       <Input label="닉네임" state={state} path="profile.nickname" />
       <Input label="휴대폰" state={state} path="profile.phone" />
-      <div className="flex-row gap-4">
-        <SaveButton isLoading={loading} onClickSave={mutate} />
-      </div>
+      <Input label="휴대폰" state={state} path="profile.phone" />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import React from 'react'
 import { PaginationState, Pagination } from '@kimjwally/ui'
 import { observer } from 'mobx-react-lite'
 import { useFragment } from '@apollo/experimental-nextjs-app-support/ssr'
-import { gql } from '__generated__'
+import { gql } from '@__generated__'
 
 interface PaginationProps {
   state: PaginationState
@@ -29,7 +29,6 @@ export const CoCPagination = observer((props: PaginationProps) => {
     },
   })
 
-  console.log('fragment', fragment)
   return (
     <Pagination
       state={state}

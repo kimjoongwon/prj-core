@@ -3,9 +3,9 @@
 import React from 'react'
 import { useMutation } from '@apollo/client'
 import { Button } from '@kimjwally/ui'
-import { gql } from '__generated__/gql'
 import { loginPage } from '../page'
 import { useCoCRouter } from '@hooks'
+import { gql } from '@__generated__'
 
 export const LOGIN = gql(`
   mutation Login($data: LoginInput!) {

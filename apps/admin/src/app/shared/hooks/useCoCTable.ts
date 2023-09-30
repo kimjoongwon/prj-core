@@ -9,7 +9,7 @@ export const useCoCTable = <T>({
   columns,
 }: {
   data: any[]
-  columns: ColumnDef<T, string>[]
+  columns: any[]
 }) => {
   return useReactTable({
     data: data as T[],

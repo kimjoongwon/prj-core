@@ -1,54 +1,58 @@
 import { get, isUndefined } from 'lodash-es';
 import React, { Children, ReactElement, useRef, useState } from 'react';
-import { z } from 'zod';
+import { ZodSchema, z } from 'zod';
 
-interface FormControlProps {
+interface FormControlProps<TSchema> {
   children: ReactElement;
   timings: string[];
-  schema: z.ZodObject<any>
+  schema: TSchema;
 }
-
 
 export interface ValidationState {
-  state: 'invalid' | 'valid', 
-  errorMessage: string, 
-  success: boolean
+  state: 'invalid' | 'valid';
+  errorMessage: string;
+  success: boolean;
 }
 
-
-export const FormControl = (props: FormControlProps) => {
+export const FormControl = <TSchema extends ZodSchema>(
+  props: FormControlProps<TSchema>,
+) => {
   const { children, timings, schema } = props;
 
   const [validation, setValidation] = useState<ValidationState>({
     errorMessage: ' ',
     state: 'valid',
     success: true,
-  })
+  });
 
-
-  const ref = useRef<HTMLElement>()
+  const ref = useRef<HTMLElement>();
 
   const child = Children.only(children);
 
   const callbacks = timings.map(timing => {
-    return ({
+    return {
       [timing]: () => {
+        if (!child.props.state) {
+          return null;
+        }
+        const result = schema.safeParse(child.props.state);
+        validation.success = result.success;
 
-        const result = schema.safeParse(child.props.state)
-        validation.success = result.success
-        
         if (!result.success) {
-          const errorMessage = get(result?.error.format(), child.props.path)?._errors.join('-')
-          validation.errorMessage = errorMessage || '' 
-          validation.state = isUndefined(errorMessage) ? 'valid': 'invalid'
-        } 
-        
-        setValidation({...validation})
-      }
-    })
-  }) 
-  
-  const childProps = Object.assign({ref, validation},  ...callbacks)
+          const errorMessage = get(
+            result?.error.format(),
+            child.props.path,
+          )?._errors.join('-');
+          validation.errorMessage = errorMessage || '';
+          validation.state = isUndefined(errorMessage) ? 'valid' : 'invalid';
+        }
 
-  return React.cloneElement(child, childProps)
+        setValidation({ ...validation });
+      },
+    };
+  });
+
+  const childProps = Object.assign({ ref, validation }, ...callbacks);
+
+  return React.cloneElement(child, childProps);
 };

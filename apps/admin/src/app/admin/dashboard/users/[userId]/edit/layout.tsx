@@ -1,6 +1,15 @@
-import { Card } from '@kimjwally/ui'
-import { EditLayout } from 'app/shared/components'
+import { EditLayout } from '@components'
+import { FormProvider } from './providers/form'
+import { ContainerProps } from '@kimjwally/ui'
 
-export default function Layout(props: { children: React.ReactNode }) {
-  return <EditLayout>{props.children}</EditLayout>
+export interface UserEditPageProps extends ContainerProps {
+  params: { userId: string | 'new' }
+}
+
+export default function Layout(props: UserEditPageProps) {
+  return (
+    <EditLayout>
+      <FormProvider>{props.children}</FormProvider>
+    </EditLayout>
+  )
 }

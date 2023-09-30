@@ -1,6 +1,7 @@
 import { ButtonProps, Link, LinkProps } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '../Button';
+import { v4 } from 'uuid';
 interface GroupButton extends ButtonProps {
   href: LinkProps['href'];
 }
@@ -18,7 +19,7 @@ export const ButtonGroup = observer((props: ButtonGroupProps) => {
 
     if (href) {
       return (
-        <Link href={href}>
+        <Link key={v4()} href={href}>
           <Button color="primary" {...props}>
             {children}
           </Button>
@@ -27,7 +28,7 @@ export const ButtonGroup = observer((props: ButtonGroupProps) => {
     }
 
     return (
-      <Button color="primary" {...props}>
+      <Button key={v4()} color="primary" {...props}>
         {children}
       </Button>
     );

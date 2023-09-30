@@ -2,7 +2,7 @@
 
 import { CoCPagination } from '@components'
 import { ButtonGroup, DataGrid } from '@kimjwally/ui'
-import { usePage } from './hooks/usePage'
+import { usePage } from './providers/page/hooks/usePage'
 
 export default function Page() {
   const page = usePage()
