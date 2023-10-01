@@ -1,29 +1,35 @@
-'use client'
+'use client';
 
-import { SignupInput } from '@__generated__/graphql'
-import { FormControl, FormGroupControl, Input } from '@kimjwally/ui'
-import { ZodSchema } from 'zod'
+import { SignupInput } from '@__generated__/graphql';
+import { FormControl, FormGroupControl, Input } from '@kimjwally/ui';
+import { observer } from 'mobx-react-lite';
+import { ZodSchema } from 'zod';
 
 interface UserFormProps<TSchema> {
-  state: SignupInput
-  schema: TSchema
+  state: SignupInput;
+  schema: TSchema;
 }
 
-export function UserForm<TSchema extends ZodSchema>(
-  props: UserFormProps<TSchema>,
-) {
-  const { schema, state } = props
-  return (
-    <div className="space-y-2">
-      <FormGroupControl direction="row">
-        <FormControl timings={['onChange']} schema={schema}>
-          <Input label="이메일" state={state} path="email" />
-        </FormControl>
-        <Input type="password" label="비밀번호" state={state} path="password" />
-      </FormGroupControl>
-      <Input label="닉네임" state={state} path="profile.nickname" />
-      <Input label="휴대폰" state={state} path="profile.phone" />
-      <Input label="휴대폰" state={state} path="profile.phone" />
-    </div>
-  )
-}
+export const UserForm = observer(
+  <TSchema extends ZodSchema>(props: UserFormProps<TSchema>) => {
+    const { schema, state } = props;
+
+    return (
+      <div className="space-y-2">
+        <FormGroupControl direction="row">
+          <FormControl timings={['onChange']} schema={schema}>
+            <Input label="이메일" state={state} path="email" />
+          </FormControl>
+          <Input
+            type="password"
+            label="비밀번호"
+            state={state}
+            path="password"
+          />
+        </FormGroupControl>
+        <Input label="닉네임" state={state} path="profile.nickname" />
+        <Input label="휴대폰" state={state} path="profile.phone" />
+      </div>
+    );
+  },
+);

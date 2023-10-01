@@ -1,15 +1,10 @@
-'use client'
+'use client';
 
-import { UserForm } from '@components'
-import { usePage } from './providers/page/hooks/usePage'
-import { UserEditPageProps } from './layout'
+import { usePage } from './providers/page/hooks/usePage';
+import { UserForm } from '@components';
 
-export default function Page({ params: { userId } }: UserEditPageProps) {
-  const page = usePage()
+export default function Page() {
+  const page = usePage();
 
-  return (
-    <div className="w-unit-9xl">
-      <UserForm schema={page.form.schema} state={page.form.state} />
-    </div>
-  )
+  return <UserForm schema={page.form.schema} state={page.form.state} />;
 }

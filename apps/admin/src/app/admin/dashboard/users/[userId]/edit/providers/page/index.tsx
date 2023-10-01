@@ -1,9 +1,7 @@
-import { observer } from 'mobx-react-lite'
-import { FormProvider } from '../form'
-import { ContainerProps } from '@kimjwally/ui'
+import { FormProvider } from '../form';
+import { ContainerProps } from '@kimjwally/ui';
 
-export const PageProvider = observer((props: ContainerProps) => {
-  const { children } = props
-
-  return <FormProvider>{children}</FormProvider>
-})
+export const PageProvider = (props: ContainerProps) => {
+  const { children } = props;
+  return <FormProvider>{children}</FormProvider>;
+};

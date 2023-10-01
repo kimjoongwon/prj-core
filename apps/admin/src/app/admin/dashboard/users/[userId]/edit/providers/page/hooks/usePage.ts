@@ -1,9 +1,8 @@
-import { useForm } from '../../form/hooks/useForm'
+import { useForm } from '../../form/hooks/useForm';
 
 export const usePage = () => {
-  const form = useForm()
-
+  const form = useForm();
   return {
     form,
-  }
-}
+  };
+};

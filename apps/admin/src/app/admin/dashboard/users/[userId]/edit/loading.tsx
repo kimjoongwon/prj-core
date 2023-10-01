@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
-  return <div>dashboard loading...</div>
+  return <div>dashboard loading...</div>;
 }

@@ -12,21 +12,29 @@ import {
   Selection,
 } from '@nextui-org/react';
 
-import { Header, Row, flexRender } from '@tanstack/react-table';
+import { Header, Row, flexRender, sortingFns } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { Key } from 'react';
 
-interface DataGridProps<T> extends Omit<TableProps, 'onSelectionChange'> {
+interface DataGridProps<T>
+  extends Omit<TableProps, 'onSelectionChange' | 'onSortChange'> {
   headers: Header<T, any>[];
   rows: Row<T & { id: string }>[];
-  onSortChange?: TableProps['onSortChange'];
-  onSelectionChange?: (selectedRowIds: Key[]) => void;
+  onSortChange?: (sort: { key: string; value: 'asc' | 'desc' }) => void;
+  onSelectionChange?: (selectedRowIds: Key[] | Key) => void;
 }
 
 export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
-  const { rows, headers, onSortChange, onSelectionChange, ...rest } = props;
+  const {
+    selectionMode,
+    rows,
+    headers,
+    onSortChange,
+    onSelectionChange,
+    ...rest
+  } = props;
   const state: { sortDescriptor: SortDescriptor; selectedRowIds: Key[] } =
     useLocalObservable(() => ({
       selectedRowIds: [],
@@ -38,7 +46,11 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 
   const _onSortChange: TableProps['onSortChange'] = action(sortDescriptor => {
     state.sortDescriptor = sortDescriptor;
-    onSortChange && onSortChange(sortDescriptor);
+    onSortChange &&
+      onSortChange({
+        key: (sortDescriptor.column as string).split('_').join('.'),
+        value: sortDescriptor.direction === 'ascending' ? 'asc' : 'desc',
+      });
   });
 
   const _onSelectionChange = action((keys: Selection) => {
@@ -48,12 +60,16 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     if (keys === 'all') {
       state.selectedRowIds = rows.map(row => row.original.id);
     }
+    if (selectionMode) {
+      return onSelectionChange && onSelectionChange(state.selectedRowIds[0]);
+    }
     onSelectionChange && onSelectionChange(state.selectedRowIds);
   });
 
   return (
     <Table
       {...rest}
+      selectionMode={selectionMode}
       onSelectionChange={_onSelectionChange}
       selectedKeys={state.selectedRowIds}
       sortDescriptor={state.sortDescriptor}

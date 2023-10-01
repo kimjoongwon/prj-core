@@ -12,17 +12,13 @@ import { Profile } from '../profiles/entities/profile.entity';
 import { UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GqlAuthGuard, Public } from '../../common';
-import { PrismaService } from '../prisma/prisma.service';
 import { PaginatedUser } from './models/paginated-user.model';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
 export class UsersResolver {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -44,7 +40,6 @@ export class UsersResolver {
   @Public()
   @ResolveField(() => Profile, { name: 'profile' })
   getProfile(@Parent() parent: User) {
-    const { id: userId } = parent;
     return parent.profile;
   }
 }

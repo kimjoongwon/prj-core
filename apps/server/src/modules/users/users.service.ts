@@ -8,10 +8,7 @@ import { set } from 'lodash';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly logger: Logger,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   create(createUserInput: CreateUserInput) {
     return this.prisma.user.create({
@@ -27,7 +24,6 @@ export class UsersService {
 
   async findPaginatedUsers(args: GetPaginatedUserArgs): Promise<PaginatedUser> {
     const query = queryBuilder(args, ['email']);
-    console.log('args', args);
     const users = await this.prisma.user.findMany({
       ...query,
       orderBy: set({}, args.sortingKey, args.sortingValue),
@@ -48,8 +44,12 @@ export class UsersService {
   }
 
   findOne(id: string) {
+    console.log(id);
     return this.prisma.user.findUnique({
       where: { id },
+      include: {
+        profile: true,
+      },
     });
   }
 }

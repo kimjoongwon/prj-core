@@ -1,7 +1,9 @@
+import { PageProvider } from '../providers/page';
+
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <div>{children}</div>
+  return <PageProvider>{children}</PageProvider>;
 }
