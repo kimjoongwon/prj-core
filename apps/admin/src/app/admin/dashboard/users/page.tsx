@@ -3,11 +3,11 @@
 import React from 'react';
 import { CoCPagination } from '@components';
 import { ButtonGroup, DataGrid } from '@kimjwally/ui';
-import { useUsersPage } from './provider/hooks/useUsersPage';
+import { usePage } from './provider/hooks/usePage';
 import { observer } from 'mobx-react-lite';
 
 function Page() {
-  const page = useUsersPage();
+  const page = usePage();
 
   return (
     <div>

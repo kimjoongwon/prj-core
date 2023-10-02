@@ -18,14 +18,12 @@ const schema = z.object({
   }),
 });
 
-interface UserEditPageContextProps {
+interface PageContext {
   schema: typeof schema;
   state: SignupInput;
 }
 
-export const UserEditPageContext = createContext<UserEditPageContextProps>(
-  {} as UserEditPageContextProps,
-);
+export const PageContext = createContext<PageContext>({} as PageContext);
 
 export const userDefaultObject: SignupInput = {
   email: '',
@@ -36,27 +34,28 @@ export const userDefaultObject: SignupInput = {
   },
 };
 
-export const UserEditPageProvider = observer((props: ContainerProps) => {
+export const PageProvider = observer((props: ContainerProps) => {
   const { userId = '' } = useParams();
   const { data } = useUserQuery(userId as string);
 
   const user = defaultsDeep({ ...data?.user, password: '' }, userDefaultObject);
 
   const state = useState(user);
+
   const [signUp, { loading }] = useSignUp({ signUpInput: state });
 
   const onSubmit = () => signUp();
 
   return (
     <>
-      <UserEditPageContext.Provider
+      <PageContext.Provider
         value={{
           state,
           schema,
         }}
       >
         {props.children}
-      </UserEditPageContext.Provider>
+      </PageContext.Provider>
       <Button isLoading={loading} onClick={onSubmit}>
         Save
       </Button>

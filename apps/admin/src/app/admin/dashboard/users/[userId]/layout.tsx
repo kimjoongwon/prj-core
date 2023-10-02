@@ -1,9 +1,5 @@
-import { PageProvider } from './edit/components/providers/page';
+import { PageProvider } from './provider';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <PageProvider>{children}</PageProvider>;
 }

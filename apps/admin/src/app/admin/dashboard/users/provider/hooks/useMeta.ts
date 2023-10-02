@@ -39,9 +39,9 @@ export const useMeta = (state: UsersPageState) => {
   };
 
   const onSelectionChange = (rowId: Key | Key[]) => {
-    if (isArray(rowId)) {
+    if (!isArray(rowId)) {
       push({
-        url: '/admin/dashboard/users/:userId/edit',
+        url: '/admin/dashboard/users/:userId',
         params: {
           userId: rowId,
         },
