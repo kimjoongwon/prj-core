@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UsersPageContext } from '..';
 
-export const useUsersPage = () => {
+export const usePage = () => {
   return useContext(UsersPageContext);
 };

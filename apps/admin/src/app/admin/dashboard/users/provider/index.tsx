@@ -7,7 +7,6 @@ import { createContext } from 'react';
 import { useMeta } from './hooks/useMeta';
 import { Table } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
-import { cloneDeep } from 'lodash-es';
 import { useUsersColumns } from '@columns';
 
 export interface UsersPageState {
@@ -51,12 +50,10 @@ export const UsersPageProvider = observer((props: ContainerProps) => {
 
   const columns = useUsersColumns();
 
-  const table = cloneDeep(
-    useCoCTable<User>({
-      data: query.data?.users?.nodes || [],
-      columns,
-    }),
-  );
+  const table = useCoCTable<User>({
+    data: query.data?.users?.nodes || [],
+    columns,
+  });
 
   const meta = useMeta(state);
 
