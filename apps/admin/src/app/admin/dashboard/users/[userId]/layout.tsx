@@ -1,4 +1,4 @@
-import { PageProvider } from '../providers/page';
+import { PageProvider } from './edit/components/providers/page';
 
 export default function DashboardLayout({
   children,

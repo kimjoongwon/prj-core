@@ -14,15 +14,13 @@ interface PaginationProps<T>
   totalCount: number;
 }
 
-export function Pagination<T extends { table: { take: number; skip: number } }>(
+export function Pagination<T extends { take: number; skip: number }>(
   props: PaginationProps<T>,
 ) {
   const {
     state = {
-      table: {
-        take: 0,
-        skip: 0,
-      },
+      take: 0,
+      skip: 0,
     },
     path = '',
     totalCount,
@@ -39,13 +37,13 @@ export function Pagination<T extends { table: { take: number; skip: number } }>(
 
     setCurrentPage(page);
 
-    set(state, path, offset * state.table.take);
+    set(state, path, offset * state.take);
   };
 
   return (
     <NextUIPagination
       {...rest}
-      total={totalCount / state.table.take}
+      total={totalCount / state.take}
       onChange={onChangePage}
       page={currentPage}
     />
