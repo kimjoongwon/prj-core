@@ -68,18 +68,19 @@ export interface ContainerProps {
 }
 
 export interface PaginationState {
-  table: {
-    skip: number;
-    take: number;
-  };
+  skip: number;
+  take: number;
 }
 
-export interface TableSorting {
-  sortingKey?: string | null;
-  sortingValue?: 'asc' | 'desc' | null;
+export interface TableSortingState {
+  key?: string | null;
+  value?: 'asc' | 'desc' | null;
 }
 
-export interface TableState extends PaginationState, TableSorting {}
+export interface TableState {
+  pagination: PaginationState;
+  sorting: TableSortingState;
+}
 export interface GroupButton extends ButtonProps {
   href: LinkProps['href'];
 }

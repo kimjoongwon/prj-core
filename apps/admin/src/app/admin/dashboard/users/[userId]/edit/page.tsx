@@ -1,10 +1,10 @@
 'use client';
 
-import { usePage } from './providers/page/hooks/usePage';
 import { UserForm } from '@components';
+import { useUserEditPage } from './provider/hooks/useUserEditPage';
 
-export default function Page() {
-  const page = usePage();
+export default function UserEditPage() {
+  const userEditPage = useUserEditPage();
 
-  return <UserForm schema={page.form.schema} state={page.form.state} />;
+  return <UserForm schema={userEditPage.schema} state={userEditPage.state} />;
 }

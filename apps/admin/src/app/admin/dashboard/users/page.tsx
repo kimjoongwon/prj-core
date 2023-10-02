@@ -1,39 +1,33 @@
 'use client';
 
-import { CoCPagination } from '@components';
-import { useCoCRouter } from '@hooks';
-import { ButtonGroup, DataGrid } from '@kimjwally/ui';
-import { usePage } from './providers/page/hooks/usePage';
 import React from 'react';
+import { CoCPagination } from '@components';
+import { ButtonGroup, DataGrid } from '@kimjwally/ui';
+import { useUsersPage } from './provider/hooks/useUsersPage';
+import { observer } from 'mobx-react-lite';
 
-export default function Page() {
-  const router = useCoCRouter();
-  const page = usePage();
+function Page() {
+  const page = useUsersPage();
 
   return (
-    <React.Fragment>
+    <div>
       <ButtonGroup
-        leftButtons={page.table.leftButtons}
-        rightButtons={page.table.rightButtons}
+        leftButtons={page.meta.table.leftButtons}
+        rightButtons={page.meta.table.rightButtons}
       />
       <DataGrid
+        headers={page.table.getLeafHeaders()}
+        rows={page.table.getRowModel().rows}
         selectionMode="single"
-        headers={page.table.headers}
-        rows={page.table.rows}
-        onSortChange={sorting => {
-          page.state.sortingValue = sorting.value;
-          page.state.sortingKey = sorting.key;
-        }}
-        onSelectionChange={rowId => {
-          router.push({
-            url: '/admin/dashboard/users/:userId/edit',
-            params: {
-              userId: rowId,
-            },
-          });
-        }}
+        onSelectionChange={page.meta.table.onSelectionChange}
+        onSortChange={page.meta.table.onSortChange}
       />
-      <CoCPagination state={page.state} fromTypename="PaginatedUser" />
-    </React.Fragment>
+      <CoCPagination
+        state={page.state.table.pagination}
+        fromTypename="PaginatedUser"
+      />
+    </div>
   );
 }
+
+export default observer(Page);
