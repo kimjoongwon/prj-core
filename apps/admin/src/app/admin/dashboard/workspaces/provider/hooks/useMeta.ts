@@ -9,15 +9,8 @@ export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
     {
       children: '생성',
       color: 'primary',
-      href: getUrlWithParams('/admin/dashboard/users/:userId/edit', {
-        userId: 'new',
-      }),
-    },
-    {
-      children: '생성',
-      color: 'primary',
-      href: getUrlWithParams('/admin/dashboard/users/:userId/edit', {
-        userId: 'new',
+      href: getUrlWithParams('/admin/dashboard/workspaces/:workspaceId/edit', {
+        workspaceId: 'new',
       }),
     },
   ];
@@ -26,8 +19,8 @@ export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
     {
       children: '삭제',
       color: 'danger',
-      href: getUrlWithParams('/admin/dashboard/users/:userId/edit', {
-        userId: 'new',
+      href: getUrlWithParams('/admin/dashboard/workspaces/:workspaceId/edit', {
+        workspaceId: 'new',
       }),
     },
   ];

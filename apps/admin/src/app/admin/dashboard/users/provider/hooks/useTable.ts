@@ -3,9 +3,9 @@ import { useQueries } from './useQueries';
 import { useCoCTable } from '@hooks';
 import { useUserColumns } from '@columns';
 
-export const useTable = ({ userQuery }: ReturnType<typeof useQueries>) => {
+export const useTable = ({ usersQuery }: ReturnType<typeof useQueries>) => {
   const table = useCoCTable<User>({
-    data: userQuery.data?.users?.nodes || [],
+    data: usersQuery.data?.users?.nodes || [],
     columns: useUserColumns(),
   });
 

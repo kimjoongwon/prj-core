@@ -2,18 +2,16 @@
 to: src/app/admin/dashboard/<%= name %>/provider/hooks/useQueries.ts
 ---
 
-import { useUsersQuery } from '@hooks';
+import { use<%= Name %>Query } from '@hooks';
 import { useState } from './useState';
 
 export const useQueries = (state: ReturnType<typeof useState>) => {
-  const userQuery = useUsersQuery({
+  const <%= name %>Query = use<%= Name %>Query({
     skip: state.table.pagination.skip,
     take: state.table.pagination.take,
-    sortingKey: state.table.sorting.key,
-    sortingValue: state.table.sorting.value,
   });
 
   return {
-    userQuery,
+    <%= name %>Query,
   };
 };

@@ -1,12 +1,13 @@
-import { User } from '@__generated__/graphql';
+import { Workspace } from '@__generated__/graphql';
 import { useQueries } from './useQueries';
 import { useCoCTable } from '@hooks';
-import { useUserColumns } from '@columns';
+import { useWorkspaceColumns } from '@columns';
+
 
 export const useTable = ({ userQuery }: ReturnType<typeof useQueries>) => {
-  const table = useCoCTable<User>({
-    data: userQuery.data?.users?.nodes || [],
-    columns: useUserColumns(),
+  const table = useCoCTable<Workspace>({
+    data: userQuery.data?.workspaces?.nodes || [],
+    columns: useWorkspaceColumns(),
   });
 
   return table;

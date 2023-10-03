@@ -18,6 +18,7 @@ const documents = {
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "#graphql\n   query GetUser($id: String!) {\n    user(id: $id) {\n     email\n     profile {\n      nickname\n      phone\n     }\n    }\n   }\n": types.GetUserDocument,
     "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n": types.GetUsersDocument,
+    "#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n": types.GetWorkspaceDocument,
 };
 
 /**
@@ -54,6 +55,10 @@ export function gql(source: "#graphql\n   query GetUser($id: String!) {\n    use
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n"): (typeof documents)["\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

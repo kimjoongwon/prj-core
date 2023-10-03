@@ -14,9 +14,9 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const onClickRow = (rowId: Key | Key[]) => {
     if (!isArray(rowId)) {
       router.push({
-        url: '/admin/dashboard/users/:userId',
+        url: '/admin/dashboard/workspaces/:workspaceId',
         params: {
-          userId: rowId,
+         WorkspaceId: rowId,
         },
       });
     }

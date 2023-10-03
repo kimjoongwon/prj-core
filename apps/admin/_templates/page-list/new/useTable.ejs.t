@@ -2,15 +2,16 @@
 to: src/app/admin/dashboard/<%= name %>/provider/hooks/useTable.ts
 ---
 
-import { User } from '@__generated__/graphql';
+import { <%= h.inflection.singularize(Name) %> } from '@__generated__/graphql';
 import { useQueries } from './useQueries';
 import { useCoCTable } from '@hooks';
-import { useUserColumns } from '@columns';
+import { use<%= h.inflection.singularize(Name) %>Columns } from '@columns';
+
 
 export const useTable = ({ userQuery }: ReturnType<typeof useQueries>) => {
-  const table = useCoCTable<User>({
-    data: userQuery.data?.users?.nodes || [],
-    columns: useUserColumns(),
+  const table = useCoCTable<<%= h.inflection.singularize(Name) %>>({
+    data: userQuery.data?.<%= name %>?.nodes || [],
+    columns: use<%= h.inflection.singularize(Name) %>Columns(),
   });
 
   return table;
