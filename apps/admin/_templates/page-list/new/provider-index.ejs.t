@@ -5,7 +5,7 @@ unless_exists: true
 'use client';
 
 import { ContainerProps } from '@kimjwally/ui';
-import { User } from '@__generated__/graphql';
+import { <%= h.inflection.singularize(Name) %> } from '@__generated__/graphql';
 import { createContext } from 'react';
 import { Table } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
@@ -14,7 +14,7 @@ interface PageContext {
   data: ReturnType<typeof useQueries>;
   state: ReturnType<typeof useState>;
   meta: ReturnType<typeof useMeta>;
-  table: Table<User>;
+  table: Table<<%= h.inflection.singularize(Name) %>>;
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);

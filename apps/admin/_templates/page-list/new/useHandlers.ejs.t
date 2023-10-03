@@ -18,9 +18,9 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const onClickRow = (rowId: Key | Key[]) => {
     if (!isArray(rowId)) {
       router.push({
-        url: '/admin/dashboard/users/:userId',
+        url: '/admin/dashboard/<%= name %>/:<%= h.inflection.singularize(name) %>Id',
         params: {
-          userId: rowId,
+         <%= h.inflection.singularize(name) %>Id: rowId,
         },
       });
     }

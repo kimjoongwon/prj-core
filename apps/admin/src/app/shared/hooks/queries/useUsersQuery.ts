@@ -1,29 +1,10 @@
-import { gql } from '@__generated__';
 import { GetUsersQueryVariables } from '@__generated__/graphql';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { GET_USERS } from '@gqls';
 
-export const GET_USERS = gql(`
-  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {
-    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {
-      nodes {
-        id
-        email
-        profile {
-          id
-          nickname
-          phone
-        }
-      }
-      ...PageInfo @nonreactive
-    }
-  }
-`);
-
-export const useUsersQuery = (
-  getUsersQueryVariables: GetUsersQueryVariables,
-) => {
+export const useUsersQuery = (variables: GetUsersQueryVariables) => {
   return useSuspenseQuery(GET_USERS, {
-    variables: getUsersQueryVariables,
+    variables,
     fetchPolicy: 'cache-and-network',
   });
 };

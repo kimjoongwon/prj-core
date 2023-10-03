@@ -24,7 +24,7 @@ function Page() {
       />
       <CoCPagination
         state={page.state.table.pagination}
-        fromTypename="PaginatedUser"
+        fromTypename="PaginatedWorkspace"
       />
     </div>
   );

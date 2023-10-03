@@ -29,7 +29,7 @@ function Page() {
       />
       <CoCPagination
         state={page.state.table.pagination}
-        fromTypename="PaginatedUser"
+        fromTypename="Paginated<%= h.inflection.singularize(Name) %>"
       />
     </div>
   );
