@@ -1,64 +1,42 @@
 'use client';
 
 import { SignupInput } from '@__generated__/graphql';
-import { useSignUp, useState, useUserQuery } from '@hooks';
-import { Button, ContainerProps } from '@kimjwally/ui';
-import { defaultsDeep } from 'lodash-es';
+import { ContainerProps } from '@kimjwally/ui';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'next/navigation';
-import { createContext } from 'react';
-import { z } from 'zod';
-
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(5),
-  profile: z.object({
-    nickname: z.string(),
-    phone: z.string(),
-  }),
-});
+import { createContext, useMemo } from 'react';
+import {
+  useDefaultObjects,
+  useMeta,
+  useMutations,
+  useQueries,
+  useState,
+} from './hooks';
+import { UserSchema, userSchema } from '@schemas';
 
 interface PageContext {
-  schema: typeof schema;
+  schema: UserSchema;
   state: SignupInput;
+  meta: ReturnType<typeof useMeta>;
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
-export const userDefaultObject: SignupInput = {
-  email: '',
-  password: '',
-  profile: {
-    nickname: '',
-    phone: '',
-  },
-};
-
 export const PageProvider = observer((props: ContainerProps) => {
-  const { userId = '' } = useParams();
-  const { data } = useUserQuery(userId as string);
-
-  const user = defaultsDeep({ ...data?.user, password: '' }, userDefaultObject);
-
-  const state = useState(user);
-
-  const [signUp, { loading }] = useSignUp({ signUpInput: state });
-
-  const onSubmit = () => signUp();
+  const queries = useQueries();
+  const defaultObjects = useDefaultObjects();
+  const state = useState({ ...queries, ...defaultObjects });
+  const mutations = useMutations(state);
+  const meta = useMeta(mutations);
 
   return (
-    <>
-      <PageContext.Provider
-        value={{
-          state,
-          schema,
-        }}
-      >
-        {props.children}
-      </PageContext.Provider>
-      <Button isLoading={loading} onClick={onSubmit}>
-        Save
-      </Button>
-    </>
+    <PageContext.Provider
+      value={{
+        meta,
+        state,
+        schema: userSchema,
+      }}
+    >
+      {props.children}
+    </PageContext.Provider>
   );
 });

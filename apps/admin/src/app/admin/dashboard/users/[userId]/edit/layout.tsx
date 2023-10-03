@@ -1,6 +1,6 @@
 import { EditLayout } from '@components';
 import { ContainerProps } from '@kimjwally/ui';
-import { UserEditPageProvider } from './provider';
+import { PageProvider } from './provider';
 
 export interface UserEditPageProps extends ContainerProps {
   params: { userId: string | 'new' };
@@ -11,7 +11,7 @@ export default function Layout(props: UserEditPageProps) {
 
   return (
     <EditLayout>
-      <UserEditPageProvider>{children}</UserEditPageProvider>
+      <PageProvider>{children}</PageProvider>
     </EditLayout>
   );
 }

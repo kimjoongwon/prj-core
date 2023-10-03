@@ -1,3 +1,8 @@
+---
+to: src/app/admin/dashboard/<%= name %>/page.tsx
+unless_exists: true
+---
+
 'use client';
 
 import React from 'react';

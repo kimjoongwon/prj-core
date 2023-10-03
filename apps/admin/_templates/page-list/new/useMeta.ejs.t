@@ -1,3 +1,7 @@
+---
+to: src/app/admin/dashboard/<%= name %>/provider/hooks/useMeta.ts
+---
+
 import { useCoCRouter } from '@hooks';
 import { GroupButton } from '@kimjwally/ui';
 import { useHandlers } from './useHandlers';

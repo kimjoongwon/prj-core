@@ -20,6 +20,7 @@
       }
     ],
     "paths": {
+      "@schemas": ["./src/app/shared/schemas/index.ts"],
       "@__generated__": ["./src/__generated__"],
       "@__generated__/graphql": ["./src/__generated__/graphql.ts"],
       "@links": ["./src/app/shared/links/index.ts"],
