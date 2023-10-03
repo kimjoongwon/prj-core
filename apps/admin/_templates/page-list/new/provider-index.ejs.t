@@ -1,3 +1,7 @@
+---
+to: src/app/admin/dashboard/<%= name %>/provider/index.tsx
+unless_exists: true
+---
 'use client';
 
 import { ContainerProps } from '@kimjwally/ui';

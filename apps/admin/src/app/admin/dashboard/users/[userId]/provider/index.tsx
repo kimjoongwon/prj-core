@@ -1,30 +1,32 @@
 'use client';
 
-import { GetUserQuery } from '@__generated__/graphql';
-import { useUserQuery } from '@hooks';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'next/navigation';
 import { createContext } from 'react';
+import { useHandlers, useMeta, useQueries } from './hooks';
 
 interface PageProviderProps {
   children: React.ReactNode;
 }
 
 interface PageContext {
-  query: GetUserQuery | undefined;
+  meta: ReturnType<typeof useMeta>;
+  queries: ReturnType<typeof useQueries>;
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
 export const PageProvider = observer((props: PageProviderProps) => {
   const { children } = props;
-  const { userId = '' } = useParams();
-  const query = useUserQuery(userId as string);
+
+  const handlers = useHandlers();
+  const meta = useMeta(handlers);
+  const queries = useQueries();
 
   return (
     <PageContext.Provider
       value={{
-        query: query.data,
+        meta,
+        queries,
       }}
     >
       {children}
