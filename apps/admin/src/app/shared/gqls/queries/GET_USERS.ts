@@ -12,7 +12,9 @@ export const GET_USERS = gql(`
           phone
         }
       }
-      ...PageInfo @nonreactive
+      pageInfo {
+        totalCount
+      }
     }
   }
 `);

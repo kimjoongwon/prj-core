@@ -24,6 +24,7 @@ export class WorkspacesService {
       include: { owner: true },
     });
     const totalCount = await this.prisma.workspace.count(query);
+
     return {
       edges: [],
       nodes: workspaces,

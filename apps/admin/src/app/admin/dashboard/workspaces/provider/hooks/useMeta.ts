@@ -1,6 +1,7 @@
 import { useCoCRouter } from '@hooks';
 import { GroupButton } from '@kimjwally/ui';
 import { useHandlers } from './useHandlers';
+import { WORKSPACE_EDIT_PATH } from '../../../../../shared/constants/paths';
 
 export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
   const { getUrlWithParams } = useCoCRouter();
@@ -9,7 +10,7 @@ export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
     {
       children: '생성',
       color: 'primary',
-      href: getUrlWithParams('/admin/dashboard/workspaces/:workspaceId/edit', {
+      href: getUrlWithParams(WORKSPACE_EDIT_PATH, {
         workspaceId: 'new',
       }),
     },
@@ -19,7 +20,7 @@ export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
     {
       children: '삭제',
       color: 'danger',
-      href: getUrlWithParams('/admin/dashboard/workspaces/:workspaceId/edit', {
+      href: getUrlWithParams(WORKSPACE_EDIT_PATH, {
         workspaceId: 'new',
       }),
     },

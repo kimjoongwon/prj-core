@@ -3,10 +3,11 @@ import { useQueries } from './useQueries';
 import { useCoCTable } from '@hooks';
 import { useWorkspaceColumns } from '@columns';
 
-
-export const useTable = ({ userQuery }: ReturnType<typeof useQueries>) => {
+export const useTable = ({
+  workspacesQuery,
+}: ReturnType<typeof useQueries>) => {
   const table = useCoCTable<Workspace>({
-    data: userQuery.data?.workspaces?.nodes || [],
+    data: workspacesQuery.data?.workspaces?.nodes || [],
     columns: useWorkspaceColumns(),
   });
 

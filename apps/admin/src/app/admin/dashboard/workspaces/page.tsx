@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CoCPagination } from '@components';
-import { ButtonGroup, DataGrid } from '@kimjwally/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@kimjwally/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
@@ -22,9 +21,13 @@ function Page() {
         onSelectionChange={page.meta.table.onClickRow}
         onSortChange={page.meta.table.onClickSorting}
       />
-      <CoCPagination
+      <Pagination
         state={page.state.table.pagination}
-        fromTypename="PaginatedWorkspace"
+        path="skip"
+        totalCount={
+          page.queries.workspacesQuery.data.workspaces.pageInfo?.totalCount ||
+          10
+        }
       />
     </div>
   );

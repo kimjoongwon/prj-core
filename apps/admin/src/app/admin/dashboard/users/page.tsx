@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { CoCPagination } from '@components';
-import { ButtonGroup, DataGrid } from '@kimjwally/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@kimjwally/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
 function Page() {
   const page = usePage();
+  const users = page.queries.usersQuery.data.users;
 
   return (
     <div>
@@ -22,9 +22,10 @@ function Page() {
         onSelectionChange={page.meta.table.onClickRow}
         onSortChange={page.meta.table.onClickSorting}
       />
-      <CoCPagination
+      <Pagination
         state={page.state.table.pagination}
-        fromTypename="PaginatedUser"
+        path="skip"
+        totalCount={users.pageInfo?.totalCount || 0}
       />
     </div>
   );

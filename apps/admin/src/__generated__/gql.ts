@@ -14,11 +14,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
-    "\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }\n": types.PageInfoFragmentDoc,
+    "\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }": types.PageInfoFragmentDoc,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "#graphql\n   query GetUser($id: String!) {\n    user(id: $id) {\n     email\n     profile {\n      nickname\n      phone\n     }\n    }\n   }\n": types.GetUserDocument,
-    "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n": types.GetUsersDocument,
-    "#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n": types.GetWorkspaceDocument,
+    "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
+    "\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetWorkspaceDocument,
 };
 
 /**
@@ -42,7 +42,7 @@ export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }\n"): (typeof documents)["\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }\n"];
+export function gql(source: "\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }"): (typeof documents)["\n  fragment PageInfo on PaginatedUser {\n    pageInfo {\n      totalCount\n    }\n  }"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -54,11 +54,11 @@ export function gql(source: "#graphql\n   query GetUser($id: String!) {\n    use
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n"): (typeof documents)["\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      ...PageInfo @nonreactive\n    }\n  }\n"];
+export function gql(source: "\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUsers($skip: Int, $take: Int, $sortingKey: String, $sortingValue: String) {\n    users(skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspace($take: Int, $skip: Int) {\n    workspaces(take: $take, skip: $skip) {\n      nodes {\n        name\n        owner {\n          email\n        }\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

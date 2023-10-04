@@ -8,9 +8,9 @@ import { useCoCTable } from '@hooks';
 import { use<%= h.inflection.singularize(Name) %>Columns } from '@columns';
 
 
-export const useTable = ({ userQuery }: ReturnType<typeof useQueries>) => {
+export const useTable = ({ <$= name %>Query }: ReturnType<typeof useQueries>) => {
   const table = useCoCTable<<%= h.inflection.singularize(Name) %>>({
-    data: userQuery.data?.<%= name %>?.nodes || [],
+    data: <%= name %>Query.data?.<%= name %>?.nodes || [],
     columns: use<%= h.inflection.singularize(Name) %>Columns(),
   });
 

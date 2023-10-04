@@ -7,7 +7,7 @@ import { Table } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
 import { useHandlers, useMeta, useQueries, useState, useTable } from './hooks';
 interface PageContext {
-  data: ReturnType<typeof useQueries>;
+  queries: ReturnType<typeof useQueries>;
   state: ReturnType<typeof useState>;
   meta: ReturnType<typeof useMeta>;
   table: Table<Workspace>;
@@ -18,10 +18,10 @@ export const PageContext = createContext<PageContext>({} as PageContext);
 export const PageProvider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
-  const data = useQueries(state);
+  const queries = useQueries(state);
   const handlers = useHandlers(state);
   const meta = useMeta(handlers);
-  const table = useTable(data);
+  const table = useTable(queries);
 
   return (
     <PageContext.Provider
@@ -29,7 +29,7 @@ export const PageProvider = observer((props: ContainerProps) => {
         state,
         meta,
         table,
-        data,
+        queries,
       }}
     >
       {children}

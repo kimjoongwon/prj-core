@@ -1,27 +1,25 @@
-'use client'
+'use client';
 
-import { from } from '@apollo/client'
+import { from } from '@apollo/client';
 import {
   NextSSRApolloClient,
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
-} from '@apollo/experimental-nextjs-app-support/ssr'
-import { isServer } from '../utils/isServer'
+} from '@apollo/experimental-nextjs-app-support/ssr';
+import { isServer } from '../utils/isServer';
 import {
   authLink,
   errorLink,
   httpLink,
   roundTripLink,
   ssrMultipartLink,
-} from '@links'
-import { createFragmentRegistry } from '@apollo/client/cache'
-import { PAGE_INFO } from '@components'
+} from '@links';
+import { createFragmentRegistry } from '@apollo/client/cache';
 
 function makeClient() {
   return new NextSSRApolloClient({
     connectToDevTools: true,
     cache: new NextSSRInMemoryCache({
-      fragments: createFragmentRegistry(PAGE_INFO),
       typePolicies: {
         PaginatedUser: {
           keyFields: [],
@@ -33,7 +31,7 @@ function makeClient() {
         ? [errorLink, ssrMultipartLink, roundTripLink, authLink, httpLink]
         : [errorLink, roundTripLink, authLink, httpLink],
     ),
-  })
+  });
 }
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
@@ -41,5 +39,5 @@ export function ApolloWrapper({ children }: React.PropsWithChildren) {
     <ApolloNextAppProvider makeClient={makeClient}>
       {children}
     </ApolloNextAppProvider>
-  )
+  );
 }
