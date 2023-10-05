@@ -1,5 +1,4 @@
 {
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
