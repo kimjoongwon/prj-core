@@ -1,7 +1,7 @@
 import { useCoCRouter } from '@hooks';
 import { GroupButton } from '@coc/ui';
 import { useHandlers } from './useHandlers';
-import { WORKSPACE_EDIT_PATH } from '../../../../../shared/constants/paths';
+import { WORKSPACE_EDIT_PATH } from '@constants';
 
 export const useMeta = (handlers: ReturnType<typeof useHandlers>) => {
   const { getUrlWithParams } = useCoCRouter();

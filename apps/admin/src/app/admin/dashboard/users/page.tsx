@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
+import React, { Suspense } from 'react';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
@@ -11,6 +11,11 @@ function Page() {
 
   return (
     <div>
+      <Search
+        state={page.state.search}
+        queryState={page.state.query}
+        path="email"
+      />
       <ButtonGroup
         leftButtons={page.meta.table.leftButtons}
         rightButtons={page.meta.table.rightButtons}
@@ -23,7 +28,7 @@ function Page() {
         onSortChange={page.meta.table.onClickSorting}
       />
       <Pagination
-        state={page.state.table.pagination}
+        state={page.state.query}
         path="skip"
         totalCount={users.pageInfo?.totalCount || 0}
       />

@@ -16,7 +16,7 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
       router.push({
         url: '/admin/dashboard/workspaces/:workspaceId',
         params: {
-         WorkspaceId: rowId,
+          workspaceId: rowId,
         },
       });
     }

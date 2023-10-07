@@ -8,7 +8,7 @@ export const useUserQuery = (id: string) => {
     id === 'new'
       ? skipToken
       : {
-          variables: { id },
+          variables: { cuid: id },
         },
   );
 };

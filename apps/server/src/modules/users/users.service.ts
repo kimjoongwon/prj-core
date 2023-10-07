@@ -43,10 +43,9 @@ export class UsersService {
     };
   }
 
-  findOne(id: string) {
-    console.log(id);
+  findOne(cuid: string) {
     return this.prisma.user.findUnique({
-      where: { id },
+      where: { cuid },
       include: {
         profile: true,
       },

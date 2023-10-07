@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite';
 import {
   Pagination as NextUIPagination,
   PaginationProps as NextUIPaginationProps,
@@ -43,7 +42,7 @@ export function Pagination<T extends { take: number; skip: number }>(
   return (
     <NextUIPagination
       {...rest}
-      total={totalCount / state.take}
+      total={totalCount / state.take || 10}
       onChange={onChangePage}
       page={currentPage}
     />

@@ -76,13 +76,21 @@ export interface TableSortingState {
   key?: string | null;
   value?: 'asc' | 'desc' | null;
 }
+export interface SearchFilterState<T extends object> {
+  filter?: {
+    [key in keyof T]?: string;
+  };
+}
 
-export interface TableState {
+export interface TableState<T extends object> {
+  search: {
+    [key in keyof T]?: string;
+  };
   pagination: PaginationState;
   sorting: TableSortingState;
 }
 export interface GroupButton extends ButtonProps {
-  href: LinkProps['href'];
+  href?: LinkProps['href'];
 }
 
 export interface ContainerProps {

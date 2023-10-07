@@ -15,10 +15,12 @@ type Auth {
 
 input CreateProfileInput {
   createdAt: DateTime
-  id: ID
+  cuid: String
+  id: Int
   nickname: String
   phone: String
   updatedAt: DateTime
+  userId: Int
 }
 
 input CreateRoleInput {
@@ -82,10 +84,12 @@ type PaginatedWorkspace {
 
 type Profile {
   createdAt: DateTime!
-  id: ID!
+  cuid: String!
+  id: Int!
   nickname: String!
   phone: String!
   updatedAt: DateTime!
+  userId: Int!
 }
 
 input ProfileInput {
@@ -99,9 +103,9 @@ type Query {
   profiles: [Profile!]!
   role(id: Int!): Role!
   roles: [Role!]!
-  user(id: String!): User!
+  user(cuid: String!): User!
   users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedUser!
-  workspace(id: String!): Workspace!
+  workspace(cuid: String!): Workspace!
   workspaces(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedWorkspace!
 }
 
@@ -136,10 +140,12 @@ type Token {
 
 input UpdateProfileInput {
   createdAt: DateTime
+  cuid: String
   id: String!
   nickname: String
   phone: String
   updatedAt: DateTime
+  userId: Int
 }
 
 input UpdateRoleInput {
@@ -151,6 +157,7 @@ input UpdateRoleInput {
 
 input UpdateWorkspaceInput {
   createdAt: DateTime
+  cuid: String
   id: String!
   name: String
   ownerId: String
@@ -160,26 +167,28 @@ input UpdateWorkspaceInput {
 
 type User {
   createdAt: DateTime!
+  cuid: String!
   email: String!
-  id: ID!
+  id: Int!
   profile: Profile!
   updatedAt: DateTime!
 }
 
 type UserEdge {
-  cursor: String!
+  cursor: Int!
   node: User!
 }
 
 type UserPageInfo {
-  endCursor: String!
+  endCursor: Int!
   hasNextPage: Boolean!
   totalCount: Int!
 }
 
 type Workspace {
   createdAt: DateTime!
-  id: ID!
+  cuid: String!
+  id: Int!
   name: String!
 
   """작업공간 소유주"""
@@ -191,12 +200,12 @@ type Workspace {
 }
 
 type WorkspaceEdge {
-  cursor: String!
+  cursor: Int!
   node: Workspace!
 }
 
 type WorkspacePageInfo {
-  endCursor: String!
+  endCursor: Int!
   hasNextPage: Boolean!
   totalCount: Int!
 }

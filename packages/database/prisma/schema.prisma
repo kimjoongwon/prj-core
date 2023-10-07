@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id        Int         @id @default(autoincrement())
+  cuid      String      @unique @default(cuid())
   email     String      @unique
   password  String
   createdAt DateTime    @default(now())
@@ -22,6 +23,7 @@ model User {
 
 model Profile {
   id        Int      @id @default(autoincrement())
+  cuid      String   @unique @default(cuid())
   phone     String   @unique
   nickname  String
   userId    Int      @unique
@@ -37,6 +39,7 @@ enum Role {
 
 model Roles {
   id        Int      @id @default(autoincrement())
+  cuid      String   @unique @default(cuid())
   name      Role     @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -44,6 +47,7 @@ model Roles {
 
 model Workspace {
   id        Int      @id @default(autoincrement())
+  cuid      String   @unique @default(cuid())
   name      String   @unique
   phone     String   @unique
   ownerId   Int      @unique

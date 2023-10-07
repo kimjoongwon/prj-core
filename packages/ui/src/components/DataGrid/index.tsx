@@ -21,7 +21,7 @@ import { Key } from 'react';
 interface DataGridProps<T>
   extends Omit<TableProps, 'onSelectionChange' | 'onSortChange'> {
   headers: Header<T, any>[];
-  rows: Row<T & { id: string }>[];
+  rows: Row<T & { cuid: string }>[];
   onSortChange?: (sort: { key: string; value: 'asc' | 'desc' }) => void;
   onSelectionChange?: (selectedRowIds: Key[] | Key) => void;
 }
@@ -58,7 +58,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
       state.selectedRowIds = [...keys];
     }
     if (keys === 'all') {
-      state.selectedRowIds = rows.map(row => row.original.id);
+      state.selectedRowIds = rows.map(row => row.original.cuid);
     }
     if (selectionMode) {
       return onSelectionChange && onSelectionChange(state.selectedRowIds[0]);
@@ -88,7 +88,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
       </TableHeader>
       <TableBody>
         {rows?.map(row => (
-          <TableRow key={row.original.id}>
+          <TableRow key={row.original.cuid}>
             {row.getVisibleCells()?.map(cell => (
               <TableCell key={v4()}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}

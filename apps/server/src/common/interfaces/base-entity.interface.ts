@@ -1,9 +1,12 @@
-import { Field, ID, InterfaceType } from '@nestjs/graphql';
+import { Field, Int, InterfaceType } from '@nestjs/graphql';
 
 @InterfaceType()
 export class BaseEntity {
-  @Field(() => ID)
-  id: string;
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => String)
+  cuid: string;
 
   @Field()
   createdAt: Date;

@@ -5,7 +5,7 @@ export const USER_PAGE_PATH = `${DASHBOARD_PATH}/users/:userId` as const;
 export const USER_EDIT_PATH = `${DASHBOARD_PATH}/users/:userId/edit` as const;
 export const WORKSPACES_PATH = `${DASHBOARD_PATH}/workspaces` as const;
 export const WORKSPACE_PATH =
-  `${DASHBOARD_PATH}/workspace/:workspaceId` as const;
+  `${DASHBOARD_PATH}/workspaces/:workspaceId` as const;
 export const WORKSPACE_EDIT_PATH =
   `${DASHBOARD_PATH}/workspaces/:workspaceId/edit` as const;
 

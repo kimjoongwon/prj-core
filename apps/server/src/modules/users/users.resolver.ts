@@ -33,8 +33,8 @@ export class UsersResolver {
 
   @Public()
   @Query(() => User, { name: 'user' })
-  getUser(@Args('id') id: string) {
-    return this.usersService.findOne(id);
+  getUser(@Args('cuid') cuid: string) {
+    return this.usersService.findOne(cuid);
   }
 
   @Public()

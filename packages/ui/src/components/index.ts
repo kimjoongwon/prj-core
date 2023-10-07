@@ -10,6 +10,7 @@ export * from './Navbar';
 export * from './controls';
 export * from './Pagination';
 export * from './ButtonGroup';
+export * from './search';
 export {
   CardHeader,
   CardBody,
