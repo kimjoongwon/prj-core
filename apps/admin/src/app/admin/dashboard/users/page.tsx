@@ -1,7 +1,15 @@
 'use client';
 
 import React from 'react';
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
+import {
+  ButtonGroup,
+  Card,
+  CardBody,
+  DataGrid,
+  Pagination,
+  Search,
+  Spacer,
+} from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
@@ -10,12 +18,16 @@ function Page() {
   const users = page.queries.usersQuery.data.users;
 
   return (
-    <div>
-      <Search
-        state={page.state.search}
-        queryState={page.state.query}
-        path="email"
-      />
+    <>
+      <Card>
+        <CardBody>
+          <Search
+            state={page.state.search}
+            queryState={page.state.query}
+            path="email"
+          />
+        </CardBody>
+      </Card>
       <ButtonGroup
         leftButtons={page.meta.table.leftButtons}
         rightButtons={page.meta.table.rightButtons}
@@ -32,7 +44,7 @@ function Page() {
         path="skip"
         totalCount={users.pageInfo?.totalCount || 0}
       />
-    </div>
+    </>
   );
 }
 
