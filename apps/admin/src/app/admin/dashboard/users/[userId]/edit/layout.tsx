@@ -1,5 +1,5 @@
 import { EditLayout } from '@components';
-import { ContainerProps } from '@kimjwally/ui';
+import { ContainerProps } from '@coc/ui';
 import { PageProvider } from './provider';
 
 export interface UserEditPageProps extends ContainerProps {

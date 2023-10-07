@@ -10,7 +10,6 @@
       }
     ],
     "deleteOutDir": true,
-    "builder": "swc",
-    "typeCheck": false
+    "builder": "swc"
   }
 }

@@ -1,4 +1,4 @@
-import { ContainerProps } from '@kimjwally/ui';
+import { ContainerProps } from '@coc/ui';
 
 interface DetailLayoutProps extends ContainerProps {}
 export const DetailLayout = (props: DetailLayoutProps) => {

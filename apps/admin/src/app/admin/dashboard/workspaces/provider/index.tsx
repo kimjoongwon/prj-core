@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@kimjwally/ui';
+import { ContainerProps } from '@coc/ui';
 import { Workspace } from '@__generated__/graphql';
 import { createContext } from 'react';
 import { Table } from '@tanstack/react-table';

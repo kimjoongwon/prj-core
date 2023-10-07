@@ -1,9 +1,9 @@
-import { ContainerProps } from '@kimjwally/ui'
+import { ContainerProps } from '@coc/ui';
 
 interface FormContainerProps extends ContainerProps {}
 
 export const FormContainer = (props: FormContainerProps) => {
-  const { children } = props
+  const { children } = props;
 
-  return <div>{children}</div>
-}
+  return <div>{children}</div>;
+};

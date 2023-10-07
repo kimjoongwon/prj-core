@@ -1,5 +1,5 @@
 import { useCoCRouter } from '@hooks';
-import { GroupButton } from '@kimjwally/ui';
+import { GroupButton } from '@coc/ui';
 import { useHandlers } from './useHandlers';
 import { WORKSPACE_EDIT_PATH } from '../../../../../shared/constants/paths';
 

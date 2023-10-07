@@ -1,7 +1,7 @@
 'use client';
 
 import { SignupInput } from '@__generated__/graphql';
-import { ContainerProps } from '@kimjwally/ui';
+import { ContainerProps } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext, useMemo } from 'react';
 import {

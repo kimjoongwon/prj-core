@@ -1,5 +1,5 @@
 {
-  "name": "@kimjwally/ui",
+  "name": "@coc/ui",
   "version": "1.2.5",
   "description": "ui library",
   "publishConfig": {

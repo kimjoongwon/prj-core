@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ButtonGroup, DataGrid, Pagination } from '@kimjwally/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 

@@ -1,13 +1,13 @@
-'use client'
-import { useCoCRouter } from '@hooks'
-import { Navbar } from '@kimjwally/ui'
+'use client';
+import { useCoCRouter } from '@hooks';
+import { Navbar } from '@coc/ui';
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const { getUrlWithParams } = useCoCRouter()
+  const { getUrlWithParams } = useCoCRouter();
 
   const items = [
     {
@@ -38,12 +38,12 @@ export default function DashboardLayout({
       text: '소속관리 > 소속 목록',
       href: getUrlWithParams('/admin/dashboard/workspaces'),
     },
-  ]
+  ];
 
   return (
     <div>
       <Navbar navItems={items} navMenuItems={items} />
       {children}
     </div>
-  )
+  );
 }

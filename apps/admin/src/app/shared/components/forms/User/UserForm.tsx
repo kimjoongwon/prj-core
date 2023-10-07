@@ -1,7 +1,7 @@
 'use client';
 
 import { SignupInput } from '@__generated__/graphql';
-import { FormControl, FormGroupControl, Input } from '@kimjwally/ui';
+import { FormControl, FormGroupControl, Input } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { ZodSchema } from 'zod';
 

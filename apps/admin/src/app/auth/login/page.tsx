@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Container, LoginForm } from '@kimjwally/ui'
-import { observable } from 'mobx'
-import LoginButton from './button'
+import { Container, LoginForm } from '@coc/ui';
+import { observable } from 'mobx';
+import LoginButton from './button';
 
 export const loginPage = observable({
   login: {
@@ -11,7 +11,7 @@ export const loginPage = observable({
       password: '',
     },
   },
-})
+});
 
 export default function LoginPage() {
   return (
@@ -20,5 +20,5 @@ export default function LoginPage() {
         <LoginForm buttons={<LoginButton />} state={loginPage.login.form} />
       </Container>
     </div>
-  )
+  );
 }

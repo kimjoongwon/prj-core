@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@kimjwally/ui';
+import { Button } from '@coc/ui';
 import { usePage } from './provider/hooks/usePage';
 
 export default function Page() {

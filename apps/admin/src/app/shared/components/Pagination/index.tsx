@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PaginationState, Pagination } from '@kimjwally/ui';
+import { PaginationState, Pagination } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { useFragment } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql } from '@__generated__';

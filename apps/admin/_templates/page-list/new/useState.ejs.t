@@ -2,7 +2,7 @@
 to: src/app/admin/dashboard/<%= name %>/provider/hooks/useState.ts
 ---
 
-import { TableState } from '@kimjwally/ui';
+import { TableState } from '@coc/ui';
 import { useLocalObservable } from 'mobx-react-lite';
 
 interface State {

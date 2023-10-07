@@ -7,7 +7,7 @@ unless_exists: true
 
 import React from 'react';
 import { CoCPagination } from '@components';
-import { ButtonGroup, DataGrid } from '@kimjwally/ui';
+import { ButtonGroup, DataGrid } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
