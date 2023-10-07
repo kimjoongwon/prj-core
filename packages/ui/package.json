@@ -5,10 +5,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "type": "module",
   "scripts": {
-    "build": "tsup --config tsup.config.ts",
+    "build": "tsup --config tsup.config.ts --turbo",
     "start:dev": "tsup --config tsup.config.ts --watch",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",

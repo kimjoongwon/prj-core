@@ -39,10 +39,12 @@ export function Pagination<T extends { take: number; skip: number }>(
     set(state, path, offset * state.take);
   };
 
+  const total = totalCount / state.take;
+
   return (
     <NextUIPagination
       {...rest}
-      total={totalCount / state.take || 10}
+      total={totalCount / state.take < 1 ? 1 : total}
       onChange={onChangePage}
       page={currentPage}
     />

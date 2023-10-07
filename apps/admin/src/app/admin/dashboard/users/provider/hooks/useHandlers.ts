@@ -7,8 +7,8 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const router = useCoCRouter();
 
   const onClickSorting = (sorting: { key: string; value: 'asc' | 'desc' }) => {
-    state.table.sorting.key = sorting.key;
-    state.table.sorting.value = sorting.value;
+    state.query.sortingKey = sorting.key;
+    state.query.sortingValue = sorting.value;
   };
 
   const onClickRow = (rowId: Key | Key[]) => {

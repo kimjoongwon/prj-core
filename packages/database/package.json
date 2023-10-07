@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup --config tsup.config.ts",
-    "start:dev": "prisma generate",
+    "start:dev": "prisma generate & tsup --config tsup.config.ts",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

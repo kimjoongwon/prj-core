@@ -1,24 +1,22 @@
 'use client';
 
-import { Container, LoginForm } from '@coc/ui';
-import { observable } from 'mobx';
+import { LoginForm } from '@coc/ui';
 import LoginButton from './button';
+import { useLocalObservable } from 'mobx-react-lite';
 
-export const loginPage = observable({
-  login: {
-    form: {
-      email: '',
-      password: '',
+export default function Page() {
+  const loginPage = useLocalObservable(() => ({
+    login: {
+      form: {
+        email: '',
+        password: '',
+      },
     },
-  },
-});
+  }));
 
-export default function LoginPage() {
   return (
     <div className="flex flex-col items-center">
-      <Container style={{ width: 500 }}>
-        <LoginForm buttons={<LoginButton />} state={loginPage.login.form} />
-      </Container>
+      <LoginForm buttons={<LoginButton />} state={loginPage.login.form} />
     </div>
   );
 }

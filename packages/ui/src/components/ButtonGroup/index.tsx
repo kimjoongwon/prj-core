@@ -1,4 +1,4 @@
-import { ButtonProps, Link, LinkProps } from '@nextui-org/react';
+import { Link, LinkProps } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '../Button';
 import { v4 } from 'uuid';
@@ -11,7 +11,6 @@ interface ButtonGroupProps {
 
 export const ButtonGroup = observer((props: ButtonGroupProps) => {
   const { leftButtons, rightButtons } = props;
-  console.log('?????????');
   const renderButton = (props: GroupButton) => {
     const { children, href } = props;
 

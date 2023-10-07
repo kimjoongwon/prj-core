@@ -12,7 +12,7 @@ import {
   Selection,
 } from '@nextui-org/react';
 
-import { Header, Row, flexRender, sortingFns } from '@tanstack/react-table';
+import { Header, Row, flexRender } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
@@ -35,6 +35,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     onSelectionChange,
     ...rest
   } = props;
+
   const state: { sortDescriptor: SortDescriptor; selectedRowIds: Key[] } =
     useLocalObservable(() => ({
       selectedRowIds: [],
@@ -55,7 +56,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 
   const _onSelectionChange = action((keys: Selection) => {
     if (keys instanceof Set) {
-      state.selectedRowIds = [...keys];
+      state.selectedRowIds = Array.from(keys);
     }
     if (keys === 'all') {
       state.selectedRowIds = rows.map(row => row.original.cuid);

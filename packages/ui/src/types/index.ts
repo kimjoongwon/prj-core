@@ -1,5 +1,5 @@
-import { ButtonProps, LinkProps, TableProps } from '@nextui-org/react';
-import { HeaderContext } from '@tanstack/react-table';
+import { ButtonProps, LinkProps } from '@nextui-org/react';
+import { HeaderContext, SortingState } from '@tanstack/react-table';
 
 export type Join<K, P> = K extends string | number
   ? P extends string | number
@@ -72,9 +72,13 @@ export interface PaginationState {
   take: number;
 }
 
-export interface TableSortingState {
-  key?: string | null;
-  value?: 'asc' | 'desc' | null;
+export interface QuerySorting {
+  query: {
+    sortingKey?: string;
+    sortingValue?: 'asc' | 'desc';
+    skip: number;
+    take: number;
+  };
 }
 export interface SearchFilterState<T extends object> {
   filter?: {
@@ -86,8 +90,9 @@ export interface TableState<T extends object> {
   search: {
     [key in keyof T]?: string;
   };
-  pagination: PaginationState;
-  sorting: TableSortingState;
+  query: {
+    [key in keyof T]?: string;
+  };
 }
 export interface GroupButton extends ButtonProps {
   href?: LinkProps['href'];
