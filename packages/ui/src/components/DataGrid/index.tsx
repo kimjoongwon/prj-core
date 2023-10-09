@@ -16,7 +16,6 @@ import { Header, Row, flexRender } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
-import { Key } from 'react';
 
 interface DataGridProps<T>
   extends Omit<TableProps, 'onSelectionChange' | 'onSortChange'> {
@@ -88,7 +87,9 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
           </TableColumn>
         ))}
       </TableHeader>
-      <TableBody>
+      <TableBody
+        emptyContent={rows.length === 0 ? '데이터가 없습니다.' : undefined}
+      >
         {rows?.map(row => (
           <TableRow key={row.original.cuid}>
             {row.getVisibleCells()?.map(cell => (

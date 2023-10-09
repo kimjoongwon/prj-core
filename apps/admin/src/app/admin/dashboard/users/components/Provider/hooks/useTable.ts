@@ -14,7 +14,7 @@ export const useTable = ({
 
   return {
     instance: table,
-    data: usersQuery.data.users.nodes,
-    totalCount: usersQuery.data.users.pageInfo?.totalCount || 1,
+    data: usersQuery?.data?.users.nodes,
+    totalCount: usersQuery?.data?.users.pageInfo?.totalCount || 1,
   };
 };
