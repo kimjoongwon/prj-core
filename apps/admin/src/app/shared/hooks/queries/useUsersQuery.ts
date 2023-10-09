@@ -5,6 +5,5 @@ import { GET_USERS } from '@gqls';
 export const useUsersQuery = (variables: GetUsersQueryVariables) => {
   return useSuspenseQuery(GET_USERS, {
     variables,
-    fetchPolicy: 'cache-and-network',
   });
 };

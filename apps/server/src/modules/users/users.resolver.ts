@@ -14,6 +14,7 @@ import { UsersService } from './users.service';
 import { GqlAuthGuard, Public } from '../../common';
 import { PaginatedUser } from './models/paginated-user.model';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
@@ -28,6 +29,7 @@ export class UsersResolver {
   @Public()
   @Query(() => PaginatedUser, { name: 'users' })
   getUsers(@Args() getUsersArgs: GetPaginatedUserArgs) {
+    console.log('getUsers');
     return this.usersService.findPaginatedUsers(getUsersArgs);
   }
 
@@ -41,5 +43,11 @@ export class UsersResolver {
   @ResolveField(() => Profile, { name: 'profile' })
   getProfile(@Parent() parent: User) {
     return parent.profile;
+  }
+
+  @Public()
+  @Mutation(() => User)
+  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 }

@@ -14,12 +14,15 @@ import {
   roundTripLink,
   ssrMultipartLink,
 } from '@links';
-import { createFragmentRegistry } from '@apollo/client/cache';
+import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
+
+const removeTypenameLink = removeTypenameFromVariables();
 
 function makeClient() {
   return new NextSSRApolloClient({
     connectToDevTools: true,
     cache: new NextSSRInMemoryCache({
+      addTypename: false,
       typePolicies: {
         PaginatedUser: {
           keyFields: [],
@@ -28,8 +31,15 @@ function makeClient() {
     }),
     link: from(
       isServer()
-        ? [errorLink, ssrMultipartLink, roundTripLink, authLink, httpLink]
-        : [errorLink, roundTripLink, authLink, httpLink],
+        ? [
+            errorLink,
+            ssrMultipartLink,
+            roundTripLink,
+            authLink,
+            removeTypenameLink,
+            httpLink,
+          ]
+        : [errorLink, roundTripLink, authLink, removeTypenameLink, httpLink],
     ),
   });
 }

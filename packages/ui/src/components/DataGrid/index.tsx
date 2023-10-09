@@ -23,7 +23,7 @@ interface DataGridProps<T>
   headers: Header<T, any>[];
   rows: Row<T & { cuid: string }>[];
   onSortChange?: (sort: { key: string; value: 'asc' | 'desc' }) => void;
-  onSelectionChange?: (selectedRowIds: Key[] | Key) => void;
+  onSelectionChange?: (selectedRowIds: string[]) => void;
 }
 
 export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
@@ -36,7 +36,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     ...rest
   } = props;
 
-  const state: { sortDescriptor: SortDescriptor; selectedRowIds: Key[] } =
+  const state: { sortDescriptor: SortDescriptor; selectedRowIds: string[] } =
     useLocalObservable(() => ({
       selectedRowIds: [],
       sortDescriptor: {
@@ -56,13 +56,10 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
 
   const _onSelectionChange = action((keys: Selection) => {
     if (keys instanceof Set) {
-      state.selectedRowIds = Array.from(keys);
+      state.selectedRowIds = Array.from(keys) as string[];
     }
     if (keys === 'all') {
       state.selectedRowIds = rows.map(row => row.original.cuid);
-    }
-    if (selectionMode) {
-      return onSelectionChange && onSelectionChange(state.selectedRowIds[0]);
     }
     onSelectionChange && onSelectionChange(state.selectedRowIds);
   });
@@ -78,7 +75,11 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     >
       <TableHeader>
         {headers?.map(header => (
-          <TableColumn key={header.column.id} allowsSorting={!!onSortChange}>
+          <TableColumn
+            key={header.column.id}
+            className="text-center"
+            allowsSorting={!!onSortChange}
+          >
             {header.isPlaceholder ? (
               <></>
             ) : (

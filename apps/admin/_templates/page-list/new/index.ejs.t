@@ -1,5 +1,5 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/provider/hooks/index.ts
+to: src/app/admin/dashboard/<%= name %>s/provider/hooks/index.ts
 ---
 export * from './useHandlers';
 export * from './useMeta';

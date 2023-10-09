@@ -10,16 +10,16 @@ interface State {
 }
 
 export const useState = () => {
-  return useLocalObservable<State>(() => ({
-    table: {
-      pagination: {
-        skip: 0,
-        take: 10,
-      },
-      sorting: {
-        key: undefined,
-        value: undefined,
-      },
+  return useLocalObservable<TableState<<%= Name %>> & QuerySorting>(() => ({
+    search: {
+      email: '',
+    },
+    query: {
+      email: '',
+      skip: 0,
+      take: 10,
+      sortingKey: undefined,
+      sortingValue: undefined,
     },
   }));
 };

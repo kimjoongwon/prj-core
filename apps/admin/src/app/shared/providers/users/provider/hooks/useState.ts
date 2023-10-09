@@ -1,9 +1,7 @@
-import { User } from '@__generated__/graphql';
-import { QuerySorting, TableState } from '@coc/ui';
 import { useLocalObservable } from 'mobx-react-lite';
 
 export const useState = () => {
-  return useLocalObservable<TableState<User> & QuerySorting>(() => ({
+  return useLocalObservable(() => ({
     search: {
       email: '',
     },
@@ -13,6 +11,9 @@ export const useState = () => {
       take: 10,
       sortingKey: undefined,
       sortingValue: undefined,
+    },
+    table: {
+      selectedRowIds: [],
     },
   }));
 };

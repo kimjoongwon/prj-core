@@ -1,5 +1,5 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/layout.tsx
+to: src/app/admin/dashboard/<%= name %>s/layout.tsx
 unless_exists: true
 ---
 import { PageProvider } from './provider';

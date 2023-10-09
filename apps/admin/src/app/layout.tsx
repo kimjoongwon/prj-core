@@ -1,31 +1,20 @@
-'use client'
-
-import { useSelectedLayoutSegment } from 'next/navigation'
-import './globals.css'
-// import { __DEV__ } from '@apollo/client/utilities/globals'
-// import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
-import { Providers } from './providers'
-import { Modal, ModalBody, ModalContent } from '@nextui-org/react'
-
-// if (__DEV__) {
-//   loadDevMessages()
-//   loadErrorMessages()
-// }
+import './globals.css';
+import { Providers } from './providers';
 
 export default function RootLayout(props: {
-  children: React.ReactNode
-  modalMount: React.ReactNode
+  children: React.ReactNode;
+  modalMount: React.ReactNode;
 }) {
   return (
     <html lang="en" className="dark">
       <head>
-        <title>My page title</title>
+        <title>라프첼라</title>
       </head>
-      <body>
+      <body className="flex flex-col">
         <Providers>
-          <div>{props.children}</div>
+          <div className="flex flex-col">{props.children}</div>
         </Providers>
       </body>
     </html>
-  )
+  );
 }

@@ -1,21 +1,37 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/page.tsx
+to: src/app/admin/dashboard/<%= name %>s/page.tsx
 unless_exists: true
 ---
 
 'use client';
 
 import React from 'react';
-import { CoCPagination } from '@components';
-import { ButtonGroup, DataGrid } from '@coc/ui';
+import {
+  ButtonGroup,
+  Card,
+  CardBody,
+  DataGrid,
+  Pagination,
+  Search,
+} from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from './provider/hooks/usePage';
 
 function Page() {
   const page = usePage();
+  const users = page.queries.usersQuery.data.users;
 
   return (
-    <div>
+    <>
+      <Card>
+        <CardBody>
+          <Search
+            state={page.state.search}
+            queryState={page.state.query}
+            path="email"
+          />
+        </CardBody>
+      </Card>
       <ButtonGroup
         leftButtons={page.meta.table.leftButtons}
         rightButtons={page.meta.table.rightButtons}
@@ -27,9 +43,10 @@ function Page() {
         onSelectionChange={page.meta.table.onClickRow}
         onSortChange={page.meta.table.onClickSorting}
       />
-      <CoCPagination
-        state={page.state.table.pagination}
-        fromTypename="Paginated<%= h.inflection.singularize(Name) %>"
+      <Pagination
+        state={page.state.query}
+        path="skip"
+        totalCount={users.pageInfo?.totalCount || 0}
       />
     </div>
   );

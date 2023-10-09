@@ -1,7 +1,7 @@
-import { SignupInput } from '@__generated__/graphql';
+import { CreateUserInput, UpdateUserInput } from '@__generated__/graphql';
 
 export const useDefaultObjects = () => {
-  const userDefaultObject: SignupInput = {
+  const userDefaultObject: CreateUserInput = {
     email: '',
     password: '',
     profile: {

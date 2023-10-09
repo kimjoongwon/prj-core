@@ -4,4 +4,5 @@ export * from './modals';
 export * from './Pagination';
 export * from './forms';
 export * from './formContainer';
-export * from './TableContainer';
+export * from './layouts/TableLayout';
+export * from './TableActions';

@@ -3,7 +3,7 @@
 import { SignupInput } from '@__generated__/graphql';
 import { ContainerProps } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
-import { createContext, useMemo } from 'react';
+import { createContext } from 'react';
 import {
   useDefaultObjects,
   useMeta,

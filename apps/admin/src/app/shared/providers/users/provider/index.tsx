@@ -1,16 +1,17 @@
 'use client';
 
 import { ContainerProps } from '@coc/ui';
-import { User } from '@__generated__/graphql';
 import { createContext } from 'react';
-import { Table } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
-import { useHandlers, useMeta, useQueries, useState, useTable } from './hooks';
+import { useMeta, useQueries, useState, useTable } from './hooks';
+import { useHandlers } from './hooks/useHandlers';
+
 interface PageContext {
   queries: ReturnType<typeof useQueries>;
   state: ReturnType<typeof useState>;
   meta: ReturnType<typeof useMeta>;
-  table: Table<User>;
+  table: ReturnType<typeof useTable>;
+  handlers: ReturnType<typeof useHandlers>;
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);
@@ -20,12 +21,13 @@ export const PageProvider = observer((props: ContainerProps) => {
   const state = useState();
   const queries = useQueries(state);
   const handlers = useHandlers(state);
-  const meta = useMeta(handlers);
-  const table = useTable(queries);
+  const meta = useMeta();
+  const table = useTable({ ...queries, ...meta });
 
   return (
     <PageContext.Provider
       value={{
+        handlers,
         state,
         meta,
         table,

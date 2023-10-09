@@ -31,7 +31,8 @@
       "@contexts": ["./src/app/shared/contexts/index.ts"],
       "@columns": ["./src/app/shared/columns/index.ts"],
       "@gqls": ["./src/app/shared/gqls/index.ts"],
-      "@providers": ["./src/app/shared/providers/index.ts"]
+      "@providers": ["./src/app/shared/providers/index.ts"],
+      "@pages": ["./src/app/shared/pages/index.ts"]
     }
   },
   "include": [
