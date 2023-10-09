@@ -1,13 +1,11 @@
-'use client';
-
-import { UsersPage } from '@pages';
-import { PageProvider } from '@providers';
 import React from 'react';
+import { PageProvider } from './components/Provider';
+import { Users } from './components/Users';
 
 export default function Page() {
   return (
     <PageProvider>
-      <UsersPage />
+      <Users />
     </PageProvider>
   );
 }

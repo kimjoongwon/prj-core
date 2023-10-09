@@ -15,7 +15,7 @@ import { UserSchema, userSchema } from '@schemas';
 
 interface PageContext {
   schema: UserSchema;
-  state: SignupInput;
+  state: ReturnType<typeof useState>;
   meta: ReturnType<typeof useMeta>;
 }
 

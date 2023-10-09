@@ -1,4 +1,5 @@
 'use client';
+
 import {
   ButtonGroup,
   Card,
@@ -7,10 +8,11 @@ import {
   Pagination,
   Search,
 } from '@coc/ui';
-import { usePage } from '../../../../shared/providers/users/provider/hooks/usePage';
+import { usePage } from '../Provider/hooks/usePage';
 
-export const UsersPage = () => {
+export const Users = () => {
   const page = usePage();
+
   return (
     <>
       <Card>
