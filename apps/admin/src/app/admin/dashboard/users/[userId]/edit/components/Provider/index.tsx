@@ -1,6 +1,5 @@
 'use client';
 
-import { SignupInput } from '@__generated__/graphql';
 import { ContainerProps } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
@@ -21,7 +20,7 @@ interface PageContext {
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
-export const PageProvider = observer((props: ContainerProps) => {
+export const Provider = observer((props: ContainerProps) => {
   const queries = useQueries();
   const defaultObjects = useDefaultObjects();
   const state = useState({ ...queries, ...defaultObjects });

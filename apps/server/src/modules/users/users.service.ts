@@ -28,7 +28,7 @@ export class UsersService {
     const query = queryBuilder(args, ['email']);
     const users = await this.prisma.user.findMany({
       ...query,
-      orderBy: set({}, args.sortingKey, args.sortingValue),
+      orderBy: { ...set({}, args.sortingKey, args.sortingValue), id: 'desc' },
       include: {
         profile: true,
       },

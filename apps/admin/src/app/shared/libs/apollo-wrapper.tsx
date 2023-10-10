@@ -22,7 +22,6 @@ function makeClient() {
   return new NextSSRApolloClient({
     connectToDevTools: true,
     cache: new NextSSRInMemoryCache({
-      addTypename: false,
       typePolicies: {
         PaginatedUser: {
           keyFields: [],

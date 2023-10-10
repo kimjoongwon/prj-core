@@ -1,10 +1,13 @@
 'use client';
 
-import { UserForm } from '@components';
-import { usePage } from './provider/hooks/usePage';
-import { Button, Spacer } from '@coc/ui';
 import React from 'react';
+import { Provider } from './components/Provider';
+import UserEdit from './components/UserEdit';
 
 export default function UserEditPage() {
-  return <UserEditPage />;
+  return (
+    <Provider>
+      <UserEdit />
+    </Provider>
+  );
 }
