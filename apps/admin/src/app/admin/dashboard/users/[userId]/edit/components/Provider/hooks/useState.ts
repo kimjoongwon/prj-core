@@ -16,7 +16,7 @@ export const useState = (
   const user =
     userId === 'new' ? userDefaultObject : (data?.user as UpdateUserInput);
 
-  const state = useLocalObservable<SignupInput | UpdateUserInput>(() => user);
+  const state = useLocalObservable<SignupInput>(() => user as SignupInput);
 
   return state;
 };

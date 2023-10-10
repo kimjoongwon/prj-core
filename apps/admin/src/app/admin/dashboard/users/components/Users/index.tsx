@@ -12,7 +12,7 @@ import { usePage } from '../Provider/hooks/usePage';
 
 export const Users = () => {
   const page = usePage();
-
+  console.log(page.table.data, 'data');
   return (
     <>
       <Card>

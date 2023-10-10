@@ -3,7 +3,7 @@
 import { UserForm } from '@components';
 import { Button, Spacer } from '@coc/ui';
 import React from 'react';
-import { usePage } from '../provider/hooks/usePage';
+import { usePage } from '../Provider/hooks/usePage';
 
 export default function UserEditPage() {
   const page = usePage();

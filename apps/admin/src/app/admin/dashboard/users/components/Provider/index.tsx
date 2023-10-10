@@ -16,7 +16,7 @@ interface PageContext {
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
-export const PageProvider = observer((props: ContainerProps) => {
+export const Provider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
   const queries = useQueries(state);

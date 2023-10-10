@@ -5,12 +5,14 @@ import { useCoCRouter } from '@hooks';
 
 export const useSignUp = (variables: SignUpMutationVariables) => {
   const router = useCoCRouter();
+  console.log(GET_USERS);
   return useMutation(SIGN_UP, {
     variables,
-    refetchQueries: [GET_USERS, 'GetUsers'],
-    onCompleted: () =>
-      router.push({
+    // refetchQueries: [GET_USERS, 'GetUsers'],
+    onCompleted: () => {
+      router.replace({
         url: '/admin/dashboard/users',
-      }),
+      });
+    },
   });
 };
