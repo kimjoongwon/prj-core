@@ -18,6 +18,7 @@ export const PageContext = createContext<PageContext>({} as PageContext);
 
 export const Provider = observer((props: ContainerProps) => {
   const { children } = props;
+
   const state = useState();
   const queries = useQueries(state);
   const handlers = useHandlers(state);

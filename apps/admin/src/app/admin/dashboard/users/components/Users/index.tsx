@@ -9,10 +9,11 @@ import {
   Search,
 } from '@coc/ui';
 import { usePage } from '../Provider/hooks/usePage';
+import { observer } from 'mobx-react-lite';
 
-export const Users = () => {
+export const Users = observer(() => {
   const page = usePage();
-  console.log(page.table.data, 'data');
+  console.log('? render?')
   return (
     <>
       <Card>
@@ -42,4 +43,4 @@ export const Users = () => {
       />
     </>
   );
-};
+});
