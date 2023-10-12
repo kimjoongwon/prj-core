@@ -15,7 +15,7 @@ interface PageContext {
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
-export const PageProvider = observer((props: PageProviderProps) => {
+export const Provider = observer((props: PageProviderProps) => {
   const { children } = props;
   const handlers = useHandlers();
   const meta = useMeta(handlers);

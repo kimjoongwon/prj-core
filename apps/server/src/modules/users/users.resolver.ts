@@ -5,31 +5,23 @@ import {
   Args,
   ResolveField,
   Parent,
+  createUnionType,
 } from '@nestjs/graphql';
-import { User } from './models/user.model';
-import { CreateUserInput } from './dto/create-user.input';
-import { Profile } from '../profiles/entities/profile.entity';
-import { UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { GqlAuthGuard, Public } from '../../common';
-import { PaginatedUser } from './models/paginated-user.model';
-import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
-import { UpdateUserInput } from './dto/update-user.input';
+import { User, UserForm, Users } from './models';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard, Public } from '@common';
+import { GetPaginatedUserArgs, UpdateUserInput } from './dto';
+import { Profile } from '@modules/profiles/entities/profile.entity';
 
 @Resolver(() => User)
 @UseGuards(GqlAuthGuard)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
-  }
-
   @Public()
-  @Query(() => PaginatedUser, { name: 'users' })
+  @Query(() => Users, { name: 'users' })
   getUsers(@Args() getUsersArgs: GetPaginatedUserArgs) {
-    console.log('getUsers');
     return this.usersService.findPaginatedUsers(getUsersArgs);
   }
 
@@ -37,6 +29,12 @@ export class UsersResolver {
   @Query(() => User, { name: 'user' })
   getUser(@Args('cuid') cuid: string) {
     return this.usersService.findOne(cuid);
+  }
+
+  @Public()
+  @Query(() => UserForm, { name: 'userForm' })
+  getUserForm(@Args('cuid') cuid: string) {
+    return this.usersService.findForm(cuid);
   }
 
   @Public()

@@ -8,7 +8,6 @@ import { Users } from './components/Users';
 export default function Page() {
   return (
     <Provider>
-      <div>test</div>
       <Users />
     </Provider>
   );

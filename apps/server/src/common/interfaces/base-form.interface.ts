@@ -1,12 +1,9 @@
 import { Field, Int, GraphQLISODateTime, InterfaceType } from '@nestjs/graphql';
 
 @InterfaceType()
-export class BaseEntity {
-  @Field(type => Int)
-  id: number;
-
-  @Field(type => String)
-  cuid: string;
+export class BaseForm {
+  @Field(type => String, { nullable: true })
+  cuid?: string;
 
   @Field(type => GraphQLISODateTime)
   createdAt: Date;
