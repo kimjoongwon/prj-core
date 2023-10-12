@@ -3,8 +3,7 @@
 import { ContainerProps } from '@coc/ui';
 import { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useMeta, useQueries, useState } from './hooks';
-import { useHandlers } from './hooks/useHandlers';
+import { useHandlers, useMeta, useQueries, useState } from './hooks';
 
 interface PageContext {
   state: ReturnType<typeof useState>;
@@ -16,7 +15,6 @@ export const PageContext = createContext<PageContext>({} as PageContext);
 export const PageProvider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
-
   const queries = useQueries(state);
   const handlers = useHandlers(state);
 

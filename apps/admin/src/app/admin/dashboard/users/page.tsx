@@ -1,6 +1,4 @@
-import React from 'react';
-import { PageProvider } from './components/Provider';
-import { Users } from './components/Users';
+import { PageProvider, Users } from './components';
 
 export default function Page() {
   return (

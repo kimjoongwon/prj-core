@@ -2,18 +2,17 @@
 
 import {
   ButtonGroup,
-  Card,
-  CardBody,
   DataGrid,
   Pagination,
-  Search,
   SearchFilterContainer,
 } from '@coc/ui';
-import { usePage } from '../Provider/hooks/usePage';
 import { observer } from 'mobx-react-lite';
+import { usePage } from '../PageProvider/hooks';
+import { SearchFilters } from '../SearchFilters/SearchFilter';
 
 export const Users = observer(() => {
   const page = usePage();
+
   const {
     meta: { dataGrid, pagination, buttonGroup },
   } = page;
@@ -21,11 +20,7 @@ export const Users = observer(() => {
   return (
     <>
       <SearchFilterContainer>
-        <Search
-          state={page.state.search}
-          queryState={page.state.query}
-          path="email"
-        />
+        <SearchFilters />
       </SearchFilterContainer>
       <ButtonGroup
         leftButtons={buttonGroup.leftButtons}

@@ -10,7 +10,7 @@
   "types": "./dist/index.d.mts",
   "type": "module",
   "scripts": {
-    "build": "tsup --config tsup.config.ts --turbo",
+    "build": "tsup --config tsup.config.ts",
     "start:dev": "tsup --config tsup.config.ts --watch",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",

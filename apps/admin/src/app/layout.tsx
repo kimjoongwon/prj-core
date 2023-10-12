@@ -10,10 +10,8 @@ export default function RootLayout(props: {
       <head>
         <title>라프첼라</title>
       </head>
-      <body className="flex flex-col">
-        <Providers>
-          <div className="flex flex-col">{props.children}</div>
-        </Providers>
+      <body>
+        <Providers>{props.children}</Providers>
       </body>
     </html>
   );
