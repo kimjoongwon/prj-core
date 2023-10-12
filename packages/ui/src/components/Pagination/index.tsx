@@ -1,4 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { Pagination as BasePagination } from './Pagination';
+import { PaginationView } from './PaginationView';
 
-export const Pagination = observer(BasePagination);
+export const Pagination = observer(PaginationView);

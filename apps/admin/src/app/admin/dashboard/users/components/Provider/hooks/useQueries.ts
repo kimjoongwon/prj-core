@@ -1,12 +1,11 @@
 import { useUsersQuery } from '@hooks';
 import { useState } from './useState';
+import { useMemo } from 'react';
 
 export const useQueries = (state: ReturnType<typeof useState>) => {
   const usersQuery = useUsersQuery({ ...state.query });
-  console.log('usersQuery', usersQuery);
-  // console.log('test', error?.message);
 
   return {
-    usersQuery,
+    usersQuery: useMemo(() => usersQuery, [{ ...state.query }]),
   };
 };

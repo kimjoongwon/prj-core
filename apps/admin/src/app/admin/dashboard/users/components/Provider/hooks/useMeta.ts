@@ -1,9 +1,16 @@
-import { useCoCRouter } from '@hooks';
+import { useCoCRouter, useCoCTable } from '@hooks';
 import { GroupButton } from '@coc/ui';
 import { useActionColumns, useUserColumns } from '@columns';
 import { User } from '@__generated__/graphql';
+import { useMemo } from 'react';
+import { useQueries } from './useQueries';
+import { useHandlers } from './useHandlers';
 
-export const useMeta = () => {
+export const useMeta = ({
+  usersQuery,
+  onClickRow,
+  onClickSorting,
+}: ReturnType<typeof useQueries> & ReturnType<typeof useHandlers>) => {
   const router = useCoCRouter();
 
   const userColumns = useUserColumns();
@@ -56,9 +63,27 @@ export const useMeta = () => {
     },
   ];
 
-  return {
-    leftButtons,
-    rightButtons,
+  const table = useCoCTable<User>({
+    data: usersQuery.data?.users?.nodes || [],
     columns: [...userColumns, ...actionColumns],
+  });
+
+  return {
+    buttonGroup: {
+      leftButtons: useMemo(() => leftButtons, []),
+      rightButtons: useMemo(() => rightButtons, []),
+    },
+    dataGrid: {
+      instance: table,
+      data: usersQuery?.data?.users.nodes,
+      onClickRow,
+      onClickSorting,
+    },
+    pagination: {
+      totalCount: useMemo(
+        () => usersQuery?.data?.users.pageInfo?.totalCount || 1,
+        [],
+      ),
+    },
   };
 };

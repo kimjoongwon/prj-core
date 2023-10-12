@@ -7,39 +7,41 @@ import {
   DataGrid,
   Pagination,
   Search,
+  SearchFilterContainer,
 } from '@coc/ui';
 import { usePage } from '../Provider/hooks/usePage';
 import { observer } from 'mobx-react-lite';
 
 export const Users = observer(() => {
   const page = usePage();
-  console.log('? render?')
+  const {
+    meta: { dataGrid, pagination, buttonGroup },
+  } = page;
+
   return (
     <>
-      <Card>
-        <CardBody>
-          <Search
-            state={page.state.search}
-            queryState={page.state.query}
-            path="email"
-          />
-        </CardBody>
-      </Card>
+      <SearchFilterContainer>
+        <Search
+          state={page.state.search}
+          queryState={page.state.query}
+          path="email"
+        />
+      </SearchFilterContainer>
       <ButtonGroup
-        leftButtons={page.meta.leftButtons}
-        rightButtons={page.meta.rightButtons}
+        leftButtons={buttonGroup.leftButtons}
+        rightButtons={buttonGroup.rightButtons}
       />
       <DataGrid
         selectionMode="multiple"
-        headers={page.table.instance.getLeafHeaders()}
-        rows={page.table.instance.getRowModel().rows}
-        onSelectionChange={page.handlers.onClickRow}
-        onSortChange={page.handlers.onClickSorting}
+        headers={dataGrid.instance.getLeafHeaders()}
+        rows={dataGrid.instance.getRowModel().rows}
+        onSelectionChange={dataGrid.onClickRow}
+        onSortChange={dataGrid.onClickSorting}
       />
       <Pagination
         state={page.state.query}
         path="skip"
-        totalCount={page.table.totalCount}
+        totalCount={pagination.totalCount}
       />
     </>
   );

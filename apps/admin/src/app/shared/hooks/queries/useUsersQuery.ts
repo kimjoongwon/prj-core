@@ -3,6 +3,7 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_USERS } from '@gqls';
 
 export const useUsersQuery = (variables: GetUsersQueryVariables) => {
+  console.timeLog('variables', variables);
   return useSuspenseQuery(GET_USERS, {
     variables,
   });

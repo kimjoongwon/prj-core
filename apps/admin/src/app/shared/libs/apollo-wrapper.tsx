@@ -1,5 +1,6 @@
 'use client';
 
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { from } from '@apollo/client';
 import {
   NextSSRApolloClient,
@@ -15,6 +16,13 @@ import {
   ssrMultipartLink,
 } from '@links';
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
+import { __DEV__ } from '@apollo/client/utilities/globals';
+
+if (__DEV__) {
+  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 const removeTypenameLink = removeTypenameFromVariables();
 

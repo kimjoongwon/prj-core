@@ -8,7 +8,7 @@ export const useState = () => {
     query: {
       email: '',
       skip: 0,
-      take: 10,
+      take: 1,
       sortingKey: undefined,
       sortingValue: undefined,
     },

@@ -13,9 +13,10 @@ interface PaginationProps<T>
   totalCount: number;
 }
 
-export function Pagination<T extends { take: number; skip: number }>(
+export function PaginationView<T extends { take: number; skip: number }>(
   props: PaginationProps<T>,
 ) {
+  console.log('Pagination');
   const {
     state = {
       take: 0,
@@ -25,6 +26,7 @@ export function Pagination<T extends { take: number; skip: number }>(
     totalCount,
     ...rest
   } = props;
+
   const [currentPage, setCurrentPage] = useState(0);
   const initialValue = get(state, path);
   const { localState } = useMobxHookForm(initialValue, state, path);
