@@ -1,3 +1,3 @@
-export * from './TableLayout';
-export * from './Detail';
+export * from './Table';
 export * from './Edit';
+export * from './Detail';

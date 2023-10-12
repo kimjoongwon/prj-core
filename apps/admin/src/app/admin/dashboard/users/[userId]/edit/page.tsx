@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Provider } from './components/Provider';
 import { UserEdit } from './components/UserEdit';
