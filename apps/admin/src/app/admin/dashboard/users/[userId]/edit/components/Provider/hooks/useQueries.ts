@@ -1,12 +1,13 @@
-import { useUserQuery } from '@hooks';
+import { useUserFormQuery, useUserQuery } from '@hooks';
 import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
-  const { userId = '' } = useParams();
-  const userQuery = useUserQuery(userId as string);
+  const { userId = 'new' } = useParams();
+  const userFormQuery = useUserFormQuery({
+    cuid: userId as string,
+  });
 
-  console.log(userQuery);
   return {
-    userQuery,
+    userFormQuery,
   };
 };

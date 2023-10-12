@@ -28,12 +28,6 @@ input CreateRoleInput {
   name: String!
 }
 
-input CreateUserInput {
-  email: String!
-  password: String!
-  profile: ProfileInput!
-}
-
 input CreateWorkspaceInput {
   name: String!
   ownerId: String!
@@ -58,7 +52,6 @@ input LoginInput {
 type Mutation {
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createRole(createRoleInput: CreateRoleInput!): Role!
-  createUser(createUserInput: CreateUserInput!): User!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
@@ -70,12 +63,6 @@ type Mutation {
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
-}
-
-type PaginatedUser {
-  edges: [UserEdge!]
-  nodes: [User!]
-  pageInfo: UserPageInfo
 }
 
 type PaginatedWorkspace {
@@ -94,6 +81,11 @@ type Profile {
   userId: Int!
 }
 
+type ProfileForm {
+  nickname: String!
+  phone: String!
+}
+
 input ProfileInput {
   nickname: String!
   phone: String!
@@ -106,7 +98,8 @@ type Query {
   role(id: Int!): Role!
   roles: [Role!]!
   user(cuid: String!): User!
-  users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedUser!
+  userForm(cuid: String!): UserForm!
+  users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
   workspace(cuid: String!): Workspace!
   workspaces(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedWorkspace!
 }
@@ -188,10 +181,22 @@ type UserEdge {
   node: User!
 }
 
+type UserForm {
+  email: String!
+  password: String!
+  profile: ProfileForm!
+}
+
 type UserPageInfo {
   endCursor: Int!
   hasNextPage: Boolean!
   totalCount: Int!
+}
+
+type Users {
+  edges: [UserEdge!]
+  nodes: [User!]
+  pageInfo: UserPageInfo
 }
 
 type Workspace {

@@ -1,5 +1,5 @@
-import { EditLayout } from '@components';
 import { ContainerProps } from '@coc/ui';
+import { EditLayout } from '@components';
 
 export interface UserEditPageProps extends ContainerProps {
   params: { userId: string | 'new' };

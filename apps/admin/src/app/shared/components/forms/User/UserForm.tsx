@@ -1,12 +1,19 @@
 'use client';
 
-import { SignupInput } from '@__generated__/graphql';
+import { UserForm as _UserForm } from '@__generated__/graphql';
 import { FormControl, FormGroupControl, Input } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { ZodSchema } from 'zod';
 
 interface UserFormProps<TSchema> {
-  state: SignupInput;
+  state: {
+    email: string;
+    password: string;
+    profile: {
+      nickname: string;
+      phone: string;
+    };
+  };
   schema: TSchema;
 }
 

@@ -5,7 +5,7 @@ import { Button, Spacer } from '@coc/ui';
 import React from 'react';
 import { usePage } from '../Provider/hooks/usePage';
 
-export default function UserEditPage() {
+export function UserEdit() {
   const page = usePage();
 
   return (

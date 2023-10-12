@@ -23,7 +23,7 @@ function makeClient() {
     connectToDevTools: true,
     cache: new NextSSRInMemoryCache({
       typePolicies: {
-        PaginatedUser: {
+        Users: {
           keyFields: ['pageInfo', ['endCursor']],
         },
       },

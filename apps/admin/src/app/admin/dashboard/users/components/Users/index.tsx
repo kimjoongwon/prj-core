@@ -13,7 +13,6 @@ import { observer } from 'mobx-react-lite';
 
 export const Users = observer(() => {
   const page = usePage();
-  console.log('? render?')
   return (
     <>
       <Card>
