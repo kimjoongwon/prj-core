@@ -16,7 +16,6 @@ interface PaginationProps<T>
 export function PaginationView<T extends { take: number; skip: number }>(
   props: PaginationProps<T>,
 ) {
-  console.log('Pagination');
   const {
     state = {
       take: 0,

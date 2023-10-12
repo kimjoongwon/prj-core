@@ -11,7 +11,6 @@ interface SearchProps<T> extends MobxProps<T> {
 }
 
 export const Search = observer(<T extends object>(props: SearchProps<T>) => {
-  console.log('Search');
   const { state, path, queryState } = props;
   if (isUndefined(state) || isUndefined(path)) {
     return null;
