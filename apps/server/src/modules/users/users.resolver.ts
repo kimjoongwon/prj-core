@@ -5,7 +5,6 @@ import {
   Args,
   ResolveField,
   Parent,
-  createUnionType,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User, UserForm, Users } from './models';

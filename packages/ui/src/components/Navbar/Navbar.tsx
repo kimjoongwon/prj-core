@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Link,
   Navbar as NextUINavbar,

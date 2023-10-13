@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useQueries } from './useQueries';
 import { useHandlers } from './useHandlers';
 import { USER_EDIT_PAGE_PATH, USER_PAGE_PATH } from '@constants';
+import { toast } from 'react-toastify';
 
 export const useMeta = ({
   usersQuery,
@@ -61,6 +62,7 @@ export const useMeta = ({
     {
       children: '삭제',
       color: 'danger',
+      onClick: () => toast.error('삭제되었습니다.'),
     },
   ];
 
