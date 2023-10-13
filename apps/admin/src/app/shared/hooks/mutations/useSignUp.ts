@@ -2,6 +2,7 @@ import { SignUpMutationVariables } from '@__generated__/graphql';
 import { useMutation } from '@apollo/client';
 import { GET_USERS, SIGN_UP } from '@gqls';
 import { useCoCRouter } from '@hooks';
+import { USERS_PAGE_PATH } from '../../constants/paths';
 
 export const useSignUp = (variables: SignUpMutationVariables) => {
   const router = useCoCRouter();
@@ -11,7 +12,7 @@ export const useSignUp = (variables: SignUpMutationVariables) => {
     // refetchQueries: [GET_USERS, 'GetUsers'],
     onCompleted: () => {
       router.replace({
-        url: '/admin/dashboard/users',
+        url: USERS_PAGE_PATH,
       });
     },
   });

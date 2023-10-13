@@ -32,7 +32,9 @@
       "@columns": ["./src/app/shared/columns/index.ts"],
       "@gqls": ["./src/app/shared/gqls/index.ts"],
       "@providers": ["./src/app/shared/providers/index.ts"],
-      "@pages": ["./src/app/shared/pages/index.ts"]
+      "@pages": ["./src/app/shared/pages/index.ts"],
+      "@skeletons": ["./src/app/shared/skeletons/index.ts"],
+      "@containers": ["./src/app/shared/containers/index.ts"]
     }
   },
   "include": [

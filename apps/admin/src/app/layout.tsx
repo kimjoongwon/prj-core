@@ -10,7 +10,7 @@ export default function RootLayout(props: {
       <head>
         <title>라프첼라</title>
       </head>
-      <body className="">
+      <body>
         <Providers>{props.children}</Providers>
       </body>
     </html>

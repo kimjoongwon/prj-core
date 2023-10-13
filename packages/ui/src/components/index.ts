@@ -9,10 +9,9 @@ export * from './Navbar';
 export * from './Pagination';
 export * from './ButtonGroup';
 export * from './Search/Search';
-export * from './containers';
 export * from './forms';
 export * from './controls';
-export * from './Search';
+export * from './Skeleton';
 export {
   CardHeader,
   CardBody,
