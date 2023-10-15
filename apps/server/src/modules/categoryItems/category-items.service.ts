@@ -5,6 +5,7 @@ import { GetCategoryItemsArgs } from './dto/get-category-items.args';
 import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
 import { last } from 'lodash';
+import { categoryItemForm } from './model/category-form.model';
 
 @Injectable()
 export class CategoryItemsService {
@@ -14,6 +15,22 @@ export class CategoryItemsService {
     return this.prisma.categoryItem.create({
       data: createCategoryItemInput,
     });
+  }
+
+  async findForm(id: string) {
+    if (id === 'new') {
+      return categoryItemForm;
+    }
+
+    const categoryItem = await this.prisma.categoryItem.findUnique({
+      where: { id },
+    });
+
+    return {
+      id: categoryItem.id,
+      name: categoryItem.name,
+      parentId: categoryItem.parentId,
+    };
   }
 
   async findPaginatedCategoryItem(
@@ -34,7 +51,7 @@ export class CategoryItemsService {
       where: query?.where,
     });
 
-    const endCursor = last(categoryItems).id;
+    const endCursor = last(categoryItems)?.id;
 
     return {
       edges: categoryItems.map(category => ({ node: category })),

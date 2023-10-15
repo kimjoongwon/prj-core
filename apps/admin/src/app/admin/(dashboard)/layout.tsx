@@ -2,8 +2,11 @@
 
 import { useCoCRouter } from '@hooks';
 import { Navbar } from '@coc/ui';
-import { USERS_PAGE_PATH, WORKSPACES_PAGE_PATH } from '@constants';
-
+import {
+  CATEGORIES_PAGE_PATH,
+  CATEGORY_ITEMS_PAGE_PATH,
+  USERS_PAGE_PATH,
+} from '@constants';
 
 export default function DashboardLayout({
   children,
@@ -14,32 +17,16 @@ export default function DashboardLayout({
 
   const items = [
     {
-      text: '사용자관리 > 교육생목록(세부 유저 유형)',
+      text: '사용자목록',
       href: getUrlWithParams(USERS_PAGE_PATH),
     },
     {
-      text: '사용자관리 > 강사목록(세부 유저 유형)',
-      href: getUrlWithParams(USERS_PAGE_PATH),
+      text: '서비스분류',
+      href: getUrlWithParams(CATEGORIES_PAGE_PATH),
     },
     {
-      text: '사용자관리 > 사원목록(세부 유저 유형)',
-      href: getUrlWithParams(USERS_PAGE_PATH),
-    },
-    {
-      text: '사용자관리 > 유저목록(세부 유저 유형)',
-      href: getUrlWithParams(USERS_PAGE_PATH),
-    },
-    {
-      text: '사용자그룹관리 > 유형목록(세부 유저 유형)',
-      href: getUrlWithParams(USERS_PAGE_PATH),
-    },
-    {
-      text: '사용자그룹관리 > 사용자그룹목록',
-      href: getUrlWithParams(USERS_PAGE_PATH),
-    },
-    {
-      text: '소속관리 > 소속 목록',
-      href: getUrlWithParams(WORKSPACES_PAGE_PATH),
+      text: '카테고리관리',
+      href: getUrlWithParams(CATEGORY_ITEMS_PAGE_PATH),
     },
   ];
 

@@ -6,6 +6,7 @@ import { CreateCategoryItemInput } from './dto/create-category-item.input';
 import { CategoryItemsService } from './category-items.service';
 import { GetCategoryItemsArgs } from './dto/get-category-items.args';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
+import { CategoryItemForm } from './model/category-form.model';
 
 @Resolver(() => CategoryItem)
 @UseGuards(GqlAuthGuard)
@@ -22,8 +23,14 @@ export class CategoryItemsResolver {
   }
 
   @Public()
+  @Query(() => CategoryItemForm, { name: 'categoryForm' })
+  getCategoryForm(@Args('id') id: string) {
+    return this.categoryItemsService.findForm(id);
+  }
+
+  @Public()
   @Query(() => PaginatedCategoryItem, { name: 'categoryItems' })
-  getCategories(@Args() args: GetCategoryItemsArgs) {
+  getCategoryItems(@Args() args: GetCategoryItemsArgs) {
     return this.categoryItemsService.findPaginatedCategoryItem(args);
   }
 }

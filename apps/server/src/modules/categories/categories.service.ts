@@ -6,9 +6,8 @@ import { queryBuilder } from '@common';
 import { last } from 'lodash';
 import { PaginatedCategory } from './models/paginated-category.model';
 import { userForm } from '@modules/users/models';
-import { Mutation } from '@nestjs/graphql';
-import { Category } from './models/category.model';
 import { UpdateCategoryInput } from './dto/update-category.input';
+import { categoryForm } from './models/category-form.model';
 
 @Injectable()
 export class CategoriesService {
@@ -31,7 +30,7 @@ export class CategoriesService {
 
   async findForm(id: string) {
     if (id === 'new') {
-      return userForm;
+      return categoryForm;
     }
     const category = await this.prisma.category.findUnique({ where: { id } });
     return {

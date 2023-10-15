@@ -5,7 +5,6 @@ export const GET_USERS = gql(`#graphql
     users(email: $email, skip: $skip, take: $take, sortingKey: $sortingKey, sortingValue: $sortingValue) {
       nodes {
         id
-        id
         email
         profile {
           id
