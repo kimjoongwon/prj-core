@@ -1,17 +1,13 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/provider/hooks/useQueries.ts
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/components/PageProvider/hooks/useQueries.ts
 ---
-
-import { use<%= Name %>Query } from '@hooks';
+import { useUsersQuery } from '@hooks';
 import { useState } from './useState';
+import { useMemo } from 'react';
 
 export const useQueries = (state: ReturnType<typeof useState>) => {
-  const <%= name %>Query = use<%= Name %>Query({
-    skip: state.table.pagination.skip,
-    take: state.table.pagination.take,
-  });
-
+  const usersQuery = useUsersQuery({ ...state.query });
   return {
-    <%= name %>Query,
+    usersQuery: useMemo(() => usersQuery, [{ ...state.query }]),
   };
 };

@@ -1,8 +1,9 @@
 ---
-to: src/app/admin/dashboard/<%= name %>s/provider/hooks/index.ts
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/components/PageProvider/hooks/index.ts
 ---
-export * from './useHandlers';
+
 export * from './useMeta';
 export * from './useQueries';
 export * from './useState';
-export * from './useTable';
+export * from './usePage';
+export * from './useHandlers';

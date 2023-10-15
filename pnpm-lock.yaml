@@ -2217,7 +2217,7 @@ packages:
       js-yaml: 4.1.0
       json-stable-stringify: 1.0.2
       lodash: 4.17.21
-      scuid: 1.1.0
+      sid: 1.1.0
       tslib: 2.6.2
       yaml-ast-parser: 0.0.43
     transitivePeerDependencies:
@@ -11524,7 +11524,7 @@ packages:
       compute-scroll-into-view: 3.1.0
     dev: false
 
-  /scuid@1.1.0:
+  /sid@1.1.0:
     resolution: {integrity: sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==}
     dev: true
 

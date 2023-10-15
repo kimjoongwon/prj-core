@@ -1,9 +1,11 @@
 ---
-to: src/app/admin/dashboard/<%= name %>s/layout.tsx
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/layout.tsx
 unless_exists: true
 ---
-import { PageProvider } from './provider';
+
+import { TableLayout } from '@components';
 
 export default function Layout(props: { children: React.ReactNode }) {
-  return <PageProvider>{props.children}</PageProvider>;
+  const { children } = props;
+  return <TableLayout>{children}</TableLayout>;
 }

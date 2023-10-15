@@ -20,7 +20,7 @@ import { action } from 'mobx';
 interface DataGridProps<T>
   extends Omit<TableProps, 'onSelectionChange' | 'onSortChange'> {
   headers: Header<T, any>[];
-  rows: Row<T & { cuid: string }>[];
+  rows: Row<T & { id: string }>[];
   onSortChange?: (sort: { key: string; value: 'asc' | 'desc' }) => void;
   onSelectionChange?: (selectedRowIds: string[]) => void;
 }
@@ -58,7 +58,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
       state.selectedRowIds = Array.from(keys) as string[];
     }
     if (keys === 'all') {
-      state.selectedRowIds = rows.map(row => row.original.cuid);
+      state.selectedRowIds = rows.map(row => row.original.id);
     }
     onSelectionChange && onSelectionChange(state.selectedRowIds);
   });
@@ -66,6 +66,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
   return (
     <Table
       {...rest}
+      align="center"
       selectionMode={selectionMode}
       onSelectionChange={_onSelectionChange}
       selectedKeys={state.selectedRowIds}
@@ -74,11 +75,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     >
       <TableHeader>
         {headers?.map(header => (
-          <TableColumn
-            key={header.column.id}
-            className="text-center"
-            allowsSorting={!!onSortChange}
-          >
+          <TableColumn key={header.column.id} allowsSorting={!!onSortChange}>
             {header.isPlaceholder ? (
               <></>
             ) : (
@@ -91,7 +88,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
         emptyContent={rows.length === 0 ? '데이터가 없습니다.' : undefined}
       >
         {rows?.map(row => (
-          <TableRow key={row.original.cuid}>
+          <TableRow key={row.original.id}>
             {row.getVisibleCells()?.map(cell => (
               <TableCell key={v4()}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}

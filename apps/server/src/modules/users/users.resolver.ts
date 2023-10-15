@@ -26,14 +26,14 @@ export class UsersResolver {
 
   @Public()
   @Query(() => User, { name: 'user' })
-  getUser(@Args('cuid') cuid: string) {
-    return this.usersService.findOne(cuid);
+  getUser(@Args('id') id: string) {
+    return this.usersService.findOne(id);
   }
 
   @Public()
   @Query(() => UserForm, { name: 'userForm' })
-  getUserForm(@Args('cuid') cuid: string) {
-    return this.usersService.findForm(cuid);
+  getUserForm(@Args('id') id: string) {
+    return this.usersService.findForm(id);
   }
 
   @Public()

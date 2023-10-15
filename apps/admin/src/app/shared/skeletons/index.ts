@@ -1,2 +1,1 @@
-export * from './Users/UsersSkeleton';
-
+export * from './Dashboard/DashboardSkeleton';

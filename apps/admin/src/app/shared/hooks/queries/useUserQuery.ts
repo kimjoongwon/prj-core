@@ -3,6 +3,6 @@ import { GET_USER } from '@gqls';
 
 export const useUserQuery = (id: string) => {
   return useSuspenseQuery(GET_USER, {
-    variables: { cuid: id },
+    variables: { id: id },
   });
 };

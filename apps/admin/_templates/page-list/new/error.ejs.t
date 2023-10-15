@@ -1,5 +1,5 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/error.tsx
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/error.tsx
 unless_exists: true
 ---
 'use client' // Error components must be Client Components

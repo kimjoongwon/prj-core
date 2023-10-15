@@ -6,6 +6,7 @@ import { MobxProps } from '../../types';
 import { KeyboardEventHandler } from 'react';
 import { Input } from '../Input';
 import { FaSearch } from 'react-icons/fa';
+
 interface SearchProps<T> extends MobxProps<T> {
   queryState: any;
 }

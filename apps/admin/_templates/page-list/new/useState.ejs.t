@@ -1,16 +1,10 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/provider/hooks/useState.ts
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/components/PageProvider/hooks/useState.ts
 ---
-
-import { TableState } from '@coc/ui';
 import { useLocalObservable } from 'mobx-react-lite';
 
-interface State {
-  table: TableState;
-}
-
 export const useState = () => {
-  return useLocalObservable<TableState<<%= Name %>> & QuerySorting>(() => ({
+  return useLocalObservable(() => ({
     search: {
       email: '',
     },
@@ -20,6 +14,9 @@ export const useState = () => {
       take: 10,
       sortingKey: undefined,
       sortingValue: undefined,
+    },
+    table: {
+      selectedRowIds: [],
     },
   }));
 };

@@ -13,10 +13,65 @@ type Auth {
   user: User!
 }
 
+type Category {
+  categoryItemId: String
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type CategoryEdge {
+  cursor: String!
+  node: Category!
+}
+
+type CategoryForm {
+  categoryItemId: String
+  createdAt: DateTime
+  id: ID
+  name: String
+  updatedAt: DateTime
+}
+
+type CategoryItem {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  parentId: String!
+  updatedAt: DateTime!
+}
+
+type CategoryItemEdge {
+  cursor: String!
+  node: CategoryItem!
+}
+
+type CategoryItemPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  totalCount: Int!
+}
+
+type CategoryPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  totalCount: Int!
+}
+
+input CreateCategoryInput {
+  categoryItemId: String
+  name: String!
+}
+
+input CreateCategoryItemInput {
+  name: String!
+  parentId: String!
+}
+
 input CreateProfileInput {
   createdAt: DateTime
-  cuid: String
-  id: Int
+  id: ID
   nickname: String
   phone: String
   updatedAt: DateTime
@@ -50,6 +105,8 @@ input LoginInput {
 }
 
 type Mutation {
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createRole(createRoleInput: CreateRoleInput!): Role!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
@@ -59,22 +116,34 @@ type Mutation {
   removeRole(id: Int!): Role!
   removeWorkspace(id: Int!): Workspace!
   signup(data: SignupInput!): Auth!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
+type PaginatedCategory {
+  edges: [CategoryEdge!]
+  nodes: [Category!]
+  pageInfo: CategoryPageInfo!
+}
+
+type PaginatedCategoryItem {
+  edges: [CategoryItemEdge!]
+  nodes: [CategoryItem!]
+  pageInfo: CategoryItemPageInfo!
+}
+
 type PaginatedWorkspace {
   edges: [WorkspaceEdge!]
   nodes: [Workspace!]
-  pageInfo: WorkspacePageInfo
+  pageInfo: WorkspacePageInfo!
 }
 
 type Profile {
   createdAt: DateTime!
-  cuid: String!
-  id: Int!
+  id: ID!
   nickname: String!
   phone: String!
   updatedAt: DateTime!
@@ -92,16 +161,19 @@ input ProfileInput {
 }
 
 type Query {
+  categories(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategory!
+  categoryForm(id: String!): CategoryForm!
+  categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
   findAllProfile: [Profile!]!
   profile(id: String!): Profile!
   profiles: [Profile!]!
   role(id: Int!): Role!
   roles: [Role!]!
-  user(cuid: String!): User!
-  userForm(cuid: String!): UserForm!
+  user(id: String!): User!
+  userForm(id: String!): UserForm!
   users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
-  workspace(cuid: String!): Workspace!
-  workspaces(cursor: String, email: String, skip: Int = 1, take: Int): PaginatedWorkspace!
+  workspace(id: String!): Workspace!
+  workspaces(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedWorkspace!
 }
 
 type Role {
@@ -133,9 +205,16 @@ type Token {
   refreshToken: JWT!
 }
 
+input UpdateCategoryInput {
+  categoryItemId: String
+  createdAt: DateTime
+  id: String!
+  name: String
+  updatedAt: DateTime
+}
+
 input UpdateProfileInput {
   createdAt: DateTime
-  cuid: String
   id: String!
   nickname: String
   phone: String
@@ -152,14 +231,13 @@ input UpdateRoleInput {
 
 input UpdateUserInput {
   email: String
-  id: Int!
+  id: String!
   password: String
   profile: ProfileInput
 }
 
 input UpdateWorkspaceInput {
   createdAt: DateTime
-  cuid: String
   id: String!
   name: String
   ownerId: String
@@ -169,15 +247,14 @@ input UpdateWorkspaceInput {
 
 type User {
   createdAt: DateTime!
-  cuid: String!
   email: String!
-  id: Int!
+  id: ID!
   profile: Profile!
   updatedAt: DateTime!
 }
 
 type UserEdge {
-  cursor: Int!
+  cursor: String!
   node: User!
 }
 
@@ -188,7 +265,7 @@ type UserForm {
 }
 
 type UserPageInfo {
-  endCursor: Int!
+  endCursor: String
   hasNextPage: Boolean!
   totalCount: Int!
 }
@@ -196,13 +273,12 @@ type UserPageInfo {
 type Users {
   edges: [UserEdge!]
   nodes: [User!]
-  pageInfo: UserPageInfo
+  pageInfo: UserPageInfo!
 }
 
 type Workspace {
   createdAt: DateTime!
-  cuid: String!
-  id: Int!
+  id: ID!
   name: String!
 
   """작업공간 소유주"""
@@ -214,12 +290,12 @@ type Workspace {
 }
 
 type WorkspaceEdge {
-  cursor: Int!
+  cursor: String!
   node: Workspace!
 }
 
 type WorkspacePageInfo {
-  endCursor: Int!
+  endCursor: String
   hasNextPage: Boolean!
   totalCount: Int!
 }

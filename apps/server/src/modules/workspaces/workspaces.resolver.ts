@@ -25,8 +25,8 @@ export class WorkspacesResolver {
   }
 
   @Query(() => Workspace, { name: 'workspace' })
-  getWorkspace(@Args('cuid', { type: () => String }) cuid: string) {
-    return this.workspacesService.findById(cuid);
+  getWorkspace(@Args('id', { type: () => String }) id: string) {
+    return this.workspacesService.findById(id);
   }
 
   @Mutation(() => Workspace)

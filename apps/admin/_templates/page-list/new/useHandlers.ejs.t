@@ -1,5 +1,5 @@
 ---
-to: src/app/admin/dashboard/<%= name %>/provider/hooks/useHandlers.ts
+to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/components/PageProvider/hooks/useHandlers.ts
 ---
 
 import { isArray } from 'lodash-es';
@@ -8,22 +8,15 @@ import { useCoCRouter } from '@hooks';
 import { Key } from 'react';
 
 export const useHandlers = (state: ReturnType<typeof useState>) => {
-  const router = useCoCRouter();
-
-  const onClickSorting = (sorting: { key: string; value: 'asc' | 'desc' }) => {
-    state.table.sorting.key = sorting.key;
-    state.table.sorting.value = sorting.value;
+  const onClickSorting = (sorting: { key: any; value: any }) => {
+    state.query.sortingKey = sorting.key;
+    state.query.sortingValue = sorting.value;
   };
 
-  const onClickRow = (rowId: Key | Key[]) => {
-    if (!isArray(rowId)) {
-      router.push({
-        url: '/admin/dashboard/<%= name %>/:<%= h.inflection.singularize(name) %>Id',
-        params: {
-         <%= h.inflection.singularize(name) %>Id: rowId,
-        },
-      });
-    }
+  const onClickRow = (rowIds: string[]) => {
+    state.table.selectedRowIds = state.table.selectedRowIds.concat(
+      rowIds as never[],
+    );
   };
 
   return {

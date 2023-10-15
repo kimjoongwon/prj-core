@@ -10,4 +10,10 @@ export class PaginationArgs {
 
   @Field(type => String, { nullable: true })
   cursor?: string;
+
+  @Field({ nullable: true })
+  sortingKey?: string;
+
+  @Field({ nullable: true })
+  sortingValue?: string;
 }
