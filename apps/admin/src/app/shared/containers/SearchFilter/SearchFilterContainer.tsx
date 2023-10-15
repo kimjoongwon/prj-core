@@ -1,8 +1,10 @@
 import { Card, CardBody, ContainerProps } from '@coc/ui';
-
-export const SearchFilterContainer = (props: ContainerProps) => {
+interface SearchFilterContainerProps {
+  children?: React.ReactNode;
+}
+export const SearchFilterContainer = (props: SearchFilterContainerProps) => {
   return (
-    <Card className="h-40 rounded-2xl">
+    <Card className="min-h-unit-24 rounded-2xl">
       <CardBody>{props.children}</CardBody>
     </Card>
   );

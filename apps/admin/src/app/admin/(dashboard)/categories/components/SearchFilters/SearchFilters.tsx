@@ -1,5 +1,6 @@
 'use client';
-import { Search, SearchFilterContainer } from '@coc/ui';
+
+import { Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../PageProvider/hooks';
 

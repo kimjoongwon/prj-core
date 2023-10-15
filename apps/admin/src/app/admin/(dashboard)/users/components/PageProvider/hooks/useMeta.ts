@@ -26,7 +26,7 @@ export const useMeta = ({
             router.push({
               url: USER_EDIT_PAGE_PATH,
               params: {
-                userId: context.row.original.cuid,
+                userId: context.row.original.id,
               },
             }),
         },
@@ -36,7 +36,7 @@ export const useMeta = ({
             router.push({
               url: USER_PAGE_PATH,
               params: {
-                userId: context.row.original.cuid,
+                userId: context.row.original.id,
               },
             }),
         },

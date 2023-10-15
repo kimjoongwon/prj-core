@@ -1,5 +1,3 @@
-'use client';
-
 import { Skeleton } from '@coc/ui';
 import {
   ButtonGroupContainer,
@@ -8,11 +6,11 @@ import {
   SearchFilterContainer,
 } from '@containers';
 
-export const UsersSkeleton = () => {
+export const DashboardSkeleton = () => {
   return (
     <>
       <Skeleton>
-        <SearchFilterContainer children={undefined} />
+        <SearchFilterContainer />
       </Skeleton>
       <Skeleton>
         <ButtonGroupContainer />

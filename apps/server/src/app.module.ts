@@ -25,6 +25,8 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { LoggingInterceptor } from './common/interceptors';
 import { RolesModule } from './modules/roles/roles.module';
+import { CategoriesModule } from '@modules/categories/categories.module';
+import { CategoryItemsModule } from '@modules/categoryItems/category-items.module';
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { RolesModule } from './modules/roles/roles.module';
     HttpModule,
     AuthModule,
     RolesModule,
+    CategoriesModule,
+    CategoryItemsModule,
   ],
   providers: [
     {

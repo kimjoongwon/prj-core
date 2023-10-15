@@ -1,6 +1,6 @@
+import { USER_EDIT_PAGE_PATH } from '@constants';
 import { useCoCRouter } from '@hooks';
 import { useParams } from 'next/navigation';
-import { USER_EDIT_PATH } from '../../../../../../../shared/constants/paths';
 
 export const useHandlers = () => {
   const router = useCoCRouter();
@@ -10,7 +10,7 @@ export const useHandlers = () => {
   };
   const onClickEdit = () => {
     router.replace({
-      url: USER_EDIT_PATH,
+      url: USER_EDIT_PAGE_PATH,
       params: {
         userId,
       },

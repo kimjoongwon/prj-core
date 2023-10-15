@@ -3,7 +3,7 @@
 import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../PageProvider/hooks';
-import { SearchFilters } from '../SearchFilters/SearchFilter';
+import { SearchFilters } from '../SearchFilters/SearchFilters';
 import {
   ButtonGroupContainer,
   DataGridContainer,

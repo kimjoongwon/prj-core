@@ -42,22 +42,22 @@ export class UsersService {
     };
   }
 
-  findOne(cuid: string) {
+  findOne(id: string) {
     return this.prisma.user.findUnique({
-      where: { cuid },
+      where: { id },
       include: {
         profile: true,
       },
     });
   }
 
-  async findForm(cuid: string) {
-    if (cuid === 'new') {
+  async findForm(id: string) {
+    if (id === 'new') {
       return userForm;
     }
 
     const user = await this.prisma.user.findUnique({
-      where: { cuid },
+      where: { id },
       include: { profile: true },
     });
 
@@ -68,7 +68,7 @@ export class UsersService {
     };
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
+  update(id: string, updateUserInput: UpdateUserInput) {
     return this.prisma.user.update({
       where: { id },
       data: {

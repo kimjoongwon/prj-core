@@ -8,8 +8,8 @@ export const useUserColumns = () => {
     columnHelper.accessor('id', {
       header: '아이디',
     }),
-    columnHelper.accessor('cuid', {
-      header: 'cuid',
+    columnHelper.accessor('id', {
+      header: 'id',
     }),
     columnHelper.accessor('email', {
       header: '이메일',

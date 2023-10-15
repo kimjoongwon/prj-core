@@ -1,4 +1,4 @@
-import { Link, LinkProps } from '@nextui-org/react';
+import { Link } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '../Button';
 import { v4 } from 'uuid';
