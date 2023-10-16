@@ -23,7 +23,15 @@ export class CategoryItemsResolver {
   }
 
   @Public()
-  @Query(() => CategoryItemForm, { name: 'categoryForm' })
+  @Query(() => [[CategoryItem]], { name: 'categoryItemTrees' })
+  getCategoryTrees(
+    @Args('parentIds', { type: () => [String] }) parentIds: string[],
+  ) {
+    return this.categoryItemsService.findCategoryTrees(parentIds);
+  }
+
+  @Public()
+  @Query(() => CategoryItemForm, { name: 'categoryItemForm' })
   getCategoryForm(@Args('id') id: string) {
     return this.categoryItemsService.findForm(id);
   }

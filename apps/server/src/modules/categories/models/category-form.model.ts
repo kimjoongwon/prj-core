@@ -9,5 +9,5 @@ export class CategoryForm extends PartialType(
 
 export const categoryForm = {
   name: '',
-  categoryItem: null,
+  categoryItemId: '',
 };

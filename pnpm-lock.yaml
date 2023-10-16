@@ -138,6 +138,9 @@ importers:
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3
+      ts-transform-graphql-tag:
+        specifier: 0.2.1
+        version: 0.2.1(graphql-tag@2.12.6)(graphql@16.8.1)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1988,7 +1991,7 @@ packages:
     dependencies:
       graphql: 16.8.1
       lodash.sortby: 4.7.0
-      tslib: 2.5.3
+      tslib: 2.6.2
     dev: true
 
   /@graphql-tools/executor-graphql-ws@1.1.0(graphql@16.8.1):
@@ -2192,7 +2195,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.8.1
-      tslib: 2.5.3
+      tslib: 2.6.2
     dev: true
 
   /@graphql-tools/prisma-loader@8.0.1(@types/node@20.7.2)(graphql@16.8.1):
@@ -2217,6 +2220,7 @@ packages:
       js-yaml: 4.1.0
       json-stable-stringify: 1.0.2
       lodash: 4.17.21
+      scuid: 1.1.0
       sid: 1.1.0
       tslib: 2.6.2
       yaml-ast-parser: 0.0.43
@@ -2237,7 +2241,7 @@ packages:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.8.1)
       '@graphql-tools/utils': 10.0.6(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.5.3
+      tslib: 2.6.2
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -11524,7 +11528,7 @@ packages:
       compute-scroll-into-view: 3.1.0
     dev: false
 
-  /sid@1.1.0:
+  /scuid@1.1.0:
     resolution: {integrity: sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==}
     dev: true
 
@@ -11662,6 +11666,10 @@ packages:
       interpret: 1.4.0
       rechoir: 0.6.2
     dev: false
+
+  /sid@1.1.0:
+    resolution: {integrity: sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==}
+    dev: true
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -12310,6 +12318,16 @@ packages:
 
   /ts-log@2.2.5:
     resolution: {integrity: sha512-PGcnJoTBnVGy6yYNFxWVNkdcAuAMstvutN9MgDJIV6L0oG8fB+ZNNy1T+wJzah8RPGor1mZuPQkVfXNDpy9eHA==}
+    dev: true
+
+  /ts-transform-graphql-tag@0.2.1(graphql-tag@2.12.6)(graphql@16.8.1):
+    resolution: {integrity: sha512-gciNzCpVafccayI/VQKU2ROaol4gMpz0t5sAW/jzG/J/wnjPYCn06yKzlM4mkQ5tjCvPmFuZnLYF4i0tUiIiMQ==}
+    peerDependencies:
+      graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
+      graphql-tag: ^2.2.0
+    dependencies:
+      graphql: 16.8.1
+      graphql-tag: 2.12.6(graphql@16.8.1)
     dev: true
 
   /tsconfig-paths-webpack-plugin@4.1.0:

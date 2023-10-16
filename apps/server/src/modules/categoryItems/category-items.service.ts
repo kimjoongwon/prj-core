@@ -17,6 +17,16 @@ export class CategoryItemsService {
     });
   }
 
+  findCategoryTrees(ids: string[]) {
+    return this.prisma.categoryItem.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async findForm(id: string) {
     if (id === 'new') {
       return categoryItemForm;

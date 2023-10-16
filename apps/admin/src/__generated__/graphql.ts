@@ -68,6 +68,15 @@ export type CategoryItemEdge = {
   node: CategoryItem;
 };
 
+export type CategoryItemForm = {
+  __typename?: 'CategoryItemForm';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  parentId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type CategoryItemPageInfo = {
   __typename?: 'CategoryItemPageInfo';
   endCursor?: Maybe<Scalars['String']['output']>;
@@ -263,6 +272,8 @@ export type Query = {
   __typename?: 'Query';
   categories: PaginatedCategory;
   categoryForm: CategoryForm;
+  categoryItemForm: CategoryItemForm;
+  categoryItemTrees: Array<CategoryItem>;
   categoryItems: PaginatedCategoryItem;
   findAllProfile: Array<Profile>;
   profile: Profile;
@@ -288,6 +299,16 @@ export type QueryCategoriesArgs = {
 
 export type QueryCategoryFormArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryCategoryItemFormArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCategoryItemTreesArgs = {
+  parentIds: Array<Scalars['String']['input']>;
 };
 
 
