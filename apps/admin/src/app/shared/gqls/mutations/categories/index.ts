@@ -1,2 +1,2 @@
-export * from './SIGN_UP';
+export * from '../auth/SIGN_UP';
 export * from './CREATE_CATEGORY';
