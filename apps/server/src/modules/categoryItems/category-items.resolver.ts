@@ -23,11 +23,11 @@ export class CategoryItemsResolver {
   }
 
   @Public()
-  @Query(() => [[CategoryItem]], { name: 'categoryItemTrees' })
-  getCategoryTrees(
+  @Query(() => [CategoryItem], { name: 'categoryItemTrees' })
+  getCategoryItemTrees(
     @Args('parentIds', { type: () => [String] }) parentIds: string[],
   ) {
-    return this.categoryItemsService.findCategoryTrees(parentIds);
+    return this.categoryItemsService.findCategoryItemTrees(parentIds);
   }
 
   @Public()

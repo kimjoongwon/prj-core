@@ -9,7 +9,7 @@ import {
   DataGridContainer,
   PaginationContainer,
   SearchFilterContainer,
-} from '@containers';
+} from '../../../../../shared/components/containers';
 
 export const Page = observer(() => {
   const page = usePage();

@@ -1,22 +1,15 @@
-import { isArray } from 'lodash-es';
+import { useCreateCategoryItem } from '@hooks';
 import { useState } from './useState';
-import { useCoCRouter } from '@hooks';
-import { Key } from 'react';
 
 export const useHandlers = (state: ReturnType<typeof useState>) => {
-  const onClickSorting = (sorting: { key: any; value: any }) => {
-    state.query.sortingKey = sorting.key;
-    state.query.sortingValue = sorting.value;
-  };
-
-  const onClickRow = (rowIds: string[]) => {
-    state.table.selectedRowIds = state.table.selectedRowIds.concat(
-      rowIds as never[],
-    );
-  };
+  const [createCategoryItem] = useCreateCategoryItem({
+    createCategoryItemInput: state.form,
+  });
 
   return {
-    onClickRow,
-    onClickSorting,
+    onClickNew: (parentId: string) => {
+      state.form.parentId = parentId;
+      createCategoryItem();
+    },
   };
 };

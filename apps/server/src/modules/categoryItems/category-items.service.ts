@@ -4,7 +4,7 @@ import { CreateCategoryItemInput } from './dto/create-category-item.input';
 import { GetCategoryItemsArgs } from './dto/get-category-items.args';
 import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
-import { last } from 'lodash';
+import { groupBy, last } from 'lodash';
 import { categoryItemForm } from './model/category-form.model';
 
 @Injectable()
@@ -17,10 +17,10 @@ export class CategoryItemsService {
     });
   }
 
-  findCategoryTrees(ids: string[]) {
-    return this.prisma.categoryItem.findMany({
+  async findCategoryItemTrees(ids: string[]) {
+    return await this.prisma.categoryItem.findMany({
       where: {
-        id: {
+        parentId: {
           in: ids,
         },
       },

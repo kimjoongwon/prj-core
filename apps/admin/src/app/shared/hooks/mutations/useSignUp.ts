@@ -1,8 +1,8 @@
 import { SignUpMutationVariables } from '@__generated__/graphql';
 import { useMutation } from '@apollo/client';
+import { USERS_PAGE_PATH } from '@constants';
 import { GET_USERS, SIGN_UP } from '@gqls';
 import { useCoCRouter } from '@hooks';
-import { USERS_PAGE_PATH } from '../../constants/users';
 
 export const useSignUp = (variables: SignUpMutationVariables) => {
   const router = useCoCRouter();

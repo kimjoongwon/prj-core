@@ -172,7 +172,7 @@ type Query {
   categories(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategory!
   categoryForm(id: String!): CategoryForm!
   categoryItemForm(id: String!): CategoryItemForm!
-  categoryItemTrees(parentIds: [String!]!): [[CategoryItem!]!]!
+  categoryItemTrees(parentIds: [String!]!): [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
   findAllProfile: [Profile!]!
   profile(id: String!): Profile!

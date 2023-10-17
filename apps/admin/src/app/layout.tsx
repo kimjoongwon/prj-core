@@ -1,5 +1,7 @@
+import { ModalProvider } from '@providers';
 import './globals.css';
 import { Providers } from './providers';
+import { CoCModal } from './shared/components/ui/CoCModal';
 
 export default function RootLayout(props: {
   children: React.ReactNode;
@@ -11,7 +13,12 @@ export default function RootLayout(props: {
         <title>라프첼라</title>
       </head>
       <body>
-        <Providers>{props.children}</Providers>
+        <Providers>
+          <ModalProvider>
+            {props.children}
+            <CoCModal />
+          </ModalProvider>
+        </Providers>
       </body>
     </html>
   );

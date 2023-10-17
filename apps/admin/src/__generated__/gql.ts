@@ -16,9 +16,11 @@ const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "#graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!){\n      createCategory(createCategoryInput: $createCategoryInput) {\n        id\n      }\n    }\n": types.CreateCategoryDocument,
+    "\n  mutation CreateCategoryItem($createCategoryItemInput: CreateCategoryItemInput!) {\n    createCategoryItem(createCategoryItemInput: $createCategoryItemInput) {\n      id\n      name\n      parentId\n    }\n  }\n": types.CreateCategoryItemDocument,
     "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n": types.UpdateUserDocument,
     "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
     "#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n": types.GetCategoryFormDocument,
+    "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
     "\n  #graphql\n  query GetCategoryItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    categoryItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        name\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetCategoryItemsDocument,
     "#graphql\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
@@ -56,6 +58,10 @@ export function gql(source: "#graphql\n  mutation CreateCategory($createCategory
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation CreateCategoryItem($createCategoryItemInput: CreateCategoryItemInput!) {\n    createCategoryItem(createCategoryItemInput: $createCategoryItemInput) {\n      id\n      name\n      parentId\n    }\n  }\n"): (typeof documents)["\n  mutation CreateCategoryItem($createCategoryItemInput: CreateCategoryItemInput!) {\n    createCategoryItem(createCategoryItemInput: $createCategoryItemInput) {\n      id\n      name\n      parentId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n"): (typeof documents)["#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -65,6 +71,10 @@ export function gql(source: "#graphql\n  query GetCategories($take: Int, $skip: 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n"): (typeof documents)["#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

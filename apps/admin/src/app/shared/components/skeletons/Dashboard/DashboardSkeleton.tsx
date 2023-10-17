@@ -4,7 +4,7 @@ import {
   DataGridContainer,
   PaginationContainer,
   SearchFilterContainer,
-} from '@containers';
+} from '../../containers';
 
 export const DashboardSkeleton = () => {
   return (

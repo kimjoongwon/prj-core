@@ -33,8 +33,9 @@
       "@gqls": ["./src/app/shared/gqls/index.ts"],
       "@providers": ["./src/app/shared/providers/index.ts"],
       "@pages": ["./src/app/shared/pages/index.ts"],
-      "@skeletons": ["./src/app/shared/skeletons/index.ts"],
-      "@containers": ["./src/app/shared/containers/index.ts"]
+      "@skeletons": ["./src/app/shared/components/ui/skeletons/index.ts"],
+      "@containers": ["./src/app/shared/components/ui/containers/index.ts"],
+      "@types": ["./src/app/shared/types/index.ts"]
     }
   },
   "include": [
