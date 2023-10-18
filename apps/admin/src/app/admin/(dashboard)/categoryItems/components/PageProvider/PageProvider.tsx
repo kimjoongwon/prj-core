@@ -18,6 +18,7 @@ export const PageProvider = observer((props: ContainerProps) => {
   const handlers = useHandlers(state);
   const queries = useQueries(state);
   const meta = useMeta({ ...queries, ...handlers });
+
   return (
     <PageContext.Provider
       value={{

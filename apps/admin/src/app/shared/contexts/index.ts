@@ -1,3 +1,5 @@
+'use client';
+
 import { CoCModalProps } from '@types';
 import { createContext } from 'react';
 

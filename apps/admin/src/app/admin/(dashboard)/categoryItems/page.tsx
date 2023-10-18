@@ -1,9 +1,34 @@
-import { PageProvider, Page } from './components';
+'use client';
+import { Button, Card } from '@coc/ui';
+import {
+  CategoryItemList,
+  CategoryItems,
+  PageProvider,
+} from './components';
+import { usePage } from './components/PageProvider/hooks';
+import { FaPlus } from 'react-icons/fa';
 
-export default function categoryItemsPage() {
+export default function Page() {
+  // const {
+  //   meta: {
+  //     section: { categoryItemTrees },
+  //   },
+  // } = usePage();
+
   return (
     <PageProvider>
-      <Page />
+      <Card>
+        {/* {categoryItemTrees.map((categoryItemTree, index) => {
+          return (
+            <CategoryItemList key={index}>
+              <Button variant="ghost" startContent={<FaPlus />}>
+                New Category
+              </Button>
+              <CategoryItems categoryItems={categoryItemTree} />
+            </CategoryItemList>
+          );
+        })} */}
+      </Card>
     </PageProvider>
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { usePage } from '../../PageProvider/hooks';
+import { usePage } from '../PageProvider/hooks';
 
 interface SectionProps {
   children?: React.ReactNode;
 }
-export const CategorySection = observer((props: SectionProps) => {
+export const CategoryItemList = observer((props: SectionProps) => {
   const { children } = props;
   const page = usePage();
 
