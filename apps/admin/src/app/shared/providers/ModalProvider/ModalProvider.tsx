@@ -7,10 +7,9 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 export const ModalProvider = observer((props: ModalProviderProps) => {
   const modal = useLocalObservable<CoCModalProps>(() => {
     return {
-      children: null,
       isOpen: false,
       header: null,
-      content: null,
+      content: <div>18</div>,
       footer: null,
       open: function () {
         this.isOpen = true;

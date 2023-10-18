@@ -11,9 +11,7 @@ export const useMeta = (
     section: {
       header: {
         name: '카테고리',
-        button: {
-          onClickNew,
-        },
+        onClickNew,
       },
       categoryItemTrees,
     },

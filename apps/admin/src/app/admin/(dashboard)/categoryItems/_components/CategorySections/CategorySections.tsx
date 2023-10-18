@@ -8,8 +8,12 @@ import { FaPlus } from 'react-icons/fa';
 
 export const CategorySections = () => {
   const {
+    state,
     meta: {
-      section: { categoryItemTrees },
+      section: {
+        categoryItemTrees,
+        header: { onClickNew },
+      },
     },
   } = usePage();
 
@@ -18,7 +22,11 @@ export const CategorySections = () => {
       {categoryItemTrees.map((categoryItemTree, index) => {
         return (
           <CategoryItemList key={index}>
-            <Button variant="ghost" startContent={<FaPlus />}>
+            <Button
+              variant="ghost"
+              startContent={<FaPlus />}
+              onClick={() => onClickNew(state.parentIds[index])}
+            >
               New Category
             </Button>
             <CategoryItems categoryItems={categoryItemTree} />
