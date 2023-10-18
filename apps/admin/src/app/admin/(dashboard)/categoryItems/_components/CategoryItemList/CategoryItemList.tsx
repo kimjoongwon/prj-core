@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { usePage } from '../PageProvider/hooks';
+import { usePage } from '../../_hooks';
 
 interface SectionProps {
   children?: React.ReactNode;

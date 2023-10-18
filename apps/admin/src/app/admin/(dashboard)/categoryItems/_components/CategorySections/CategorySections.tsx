@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, Card } from '@coc/ui';
-import { usePage } from '../PageProvider/hooks';
+import { usePage } from '../../_hooks';
 import { CategoryItemList } from '../CategoryItemList/CategoryItemList';
 import { CategoryItems } from '../CategoryItems/CategoryItems';
 import { FaPlus } from 'react-icons/fa';
