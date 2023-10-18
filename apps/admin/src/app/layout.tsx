@@ -1,6 +1,6 @@
 import './globals.css';
 import { Providers } from './providers';
-import { CoCModal } from './shared/components/ui/CoCModal';
+import { CoCModal } from './shared/components/ui/CoCModal/CoCModal';
 import { ModalProvider } from '@providers';
 
 export default function RootLayout(props: {
