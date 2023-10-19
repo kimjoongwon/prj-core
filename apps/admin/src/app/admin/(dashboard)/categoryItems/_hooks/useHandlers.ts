@@ -1,6 +1,6 @@
+import React from 'react';
 import { useCreateCategoryItem, useModal } from '@hooks';
 import { useState } from './useState';
-import React from 'react';
 import { CategoryItemEditModalContent } from '@components';
 
 export const useHandlers = (state: ReturnType<typeof useState>) => {
@@ -9,6 +9,11 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const [createCategoryItem] = useCreateCategoryItem({
     createCategoryItemInput: state.form,
   });
+
+  const onClickCategoryItem = (id: string) => {
+    state.parentIds.push(id);
+    state.form.parentId = id;
+  };
 
   const onClickNew = (parentId: string) => {
     state.form.parentId = parentId;
@@ -20,6 +25,9 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
     modal.buttons = [
       {
         children: 'Cancel',
+        onClick: () => {
+          modal.close();
+        },
       },
       {
         children: 'Create',
@@ -32,5 +40,6 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
 
   return {
     onClickNew,
+    onClickCategoryItem,
   };
 };
