@@ -17,8 +17,9 @@ export class CategoryItemsService {
     });
   }
 
-  async findCategoryItemTrees(ids: string[]) {
-    return await this.prisma.categoryItem.findMany({
+  findCategoryItemTrees(ids: string[]) {
+    console.log(ids, 'ids--------------------------------');
+    return this.prisma.categoryItem.findMany({
       where: {
         parentId: {
           in: ids,

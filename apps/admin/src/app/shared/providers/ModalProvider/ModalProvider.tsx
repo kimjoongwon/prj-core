@@ -9,7 +9,7 @@ export const ModalProvider = observer((props: ModalProviderProps) => {
     return {
       isOpen: false,
       header: null,
-      content: <div>18</div>,
+      content: 'CategoryItemEditModal',
       footer: null,
       open: function () {
         this.isOpen = true;
