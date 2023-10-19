@@ -1,15 +1,16 @@
 'use client';
 
-import { Button, Card } from '@coc/ui';
-import { CategoryItemList, CategoryItems } from './_components';
+import { Button } from '@coc/ui';
 import { usePage } from './_hooks';
 import { FaFolder, FaPlus } from 'react-icons/fa';
+import { Listbox, ListboxItem } from '@nextui-org/react';
 
 export default function Page() {
   const {
     state: { parentIds },
     meta: {
       section: {
+        categoryItem: { onClickCategoryItem },
         categoryItemTrees,
         header: { onClickNew },
       },
@@ -17,11 +18,12 @@ export default function Page() {
   } = usePage();
 
   return (
-    <Card>
+    <div className="flex flex-1">
       {categoryItemTrees.map((categoryItemTree, index) => {
         return (
-          <CategoryItemList key={index}>
+          <div className="flex flex-1 flex-col">
             <Button
+              fullWidth
               variant="ghost"
               startContent={<FaPlus />}
               onClick={() => onClickNew(parentIds[index])}
@@ -29,10 +31,21 @@ export default function Page() {
             >
               New Category
             </Button>
-            <CategoryItems categoryItems={categoryItemTree} />
-          </CategoryItemList>
+            <Listbox>
+              {categoryItemTree.map(categoryItem => {
+                return (
+                  <ListboxItem
+                    onClick={() => onClickCategoryItem(categoryItem.id)}
+                    key={categoryItem.id}
+                  >
+                    {categoryItem.name}
+                  </ListboxItem>
+                );
+              })}
+            </Listbox>
+          </div>
         );
       })}
-    </Card>
+    </div>
   );
 }
