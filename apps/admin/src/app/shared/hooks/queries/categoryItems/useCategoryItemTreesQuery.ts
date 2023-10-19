@@ -6,6 +6,6 @@ export const useCategoryItemTreesQuery = (parentIds: string[]) => {
     variables: {
       parentIds,
     },
-    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
   });
 };

@@ -15,7 +15,7 @@ export const CoCModal = observer(() => {
   const modal = useModal();
 
   return (
-    <Modal isOpen={modal.isOpen}>
+    <Modal isOpen={modal.isOpen} onClose={() => modal.close()}>
       <ModalContent>
         <ModalHeader>{modal.header}</ModalHeader>
         <ModalBody>{modal.content}</ModalBody>
