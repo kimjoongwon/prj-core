@@ -1,19 +1,20 @@
-import { LOGIN_PAGE_PATH } from './auth';
 import {
   CATEGORIES_PAGE_PATH,
   CATEGORY_EDIT_PAGE_PATH,
-  CATEGORY_PAGE_PATH,
-} from './categories';
-import {
   CATEGORY_ITEMS_PAGE_PATH,
   CATEGORY_ITEM_EDIT_PAGE_PATH,
-} from './categoryItems';
-import { USERS_PAGE_PATH, USER_EDIT_PAGE_PATH, USER_PAGE_PATH } from './users';
-import {
+  CATEGORY_PAGE_PATH,
+  LOGIN_PAGE_PATH,
+  SERVICES_PAGE_PATH,
+  SERVICE_EDIT_PAGE_PATH,
+  SERVICE_PAGE_PATH,
+  USERS_PAGE_PATH,
+  USER_EDIT_PAGE_PATH,
+  USER_PAGE_PATH,
   WORKSPACES_PAGE_PATH,
   WORKSPACE_EDIT_PAGE_PATH,
   WORKSPACE_PAGE_PATH,
-} from './workspaces';
+} from '@constants';
 
 export const DASHBOARD_PATH = '/admin' as const;
 
@@ -29,4 +30,7 @@ export type Paths =
   | typeof CATEGORY_PAGE_PATH
   | typeof CATEGORIES_PAGE_PATH
   | typeof CATEGORY_ITEMS_PAGE_PATH
-  | typeof CATEGORY_ITEM_EDIT_PAGE_PATH;
+  | typeof CATEGORY_ITEM_EDIT_PAGE_PATH
+  | typeof SERVICES_PAGE_PATH
+  | typeof SERVICE_PAGE_PATH
+  | typeof SERVICE_EDIT_PAGE_PATH;

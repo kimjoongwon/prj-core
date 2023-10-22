@@ -39,8 +39,8 @@ function makeClient() {
     link: from(
       isServer()
         ? [
-            errorLink,
             ssrMultipartLink,
+            errorLink,
             roundTripLink,
             authLink,
             removeTypenameLink,

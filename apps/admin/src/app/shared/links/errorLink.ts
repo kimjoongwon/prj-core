@@ -2,7 +2,7 @@ import { onError } from '@apollo/client/link/error';
 
 export const errorLink = onError(
   ({ graphQLErrors, networkError, response }) => {
-    console.log('response', response);
+    console.log('response', JSON.stringify(response));
     console.log('graphQLErrors', graphQLErrors);
     if (graphQLErrors)
       graphQLErrors?.forEach(({ message, locations, path }) =>

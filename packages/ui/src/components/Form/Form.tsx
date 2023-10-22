@@ -1,0 +1,49 @@
+import { observer } from 'mobx-react-lite';
+import { FormHTMLAttributes } from 'react';
+import { CardBody, Card, CardHeader, CardFooter } from '@nextui-org/react';
+import { Button } from '../Button';
+import { toJS } from 'mobx';
+
+interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
+  state: T;
+  schema: any;
+  children: React.ReactNode;
+  title: string;
+  onClickSave: () => void;
+  onClickCancel?: () => void;
+}
+
+export const Form = observer(<T extends object>(porps: FormProps<T>) => {
+  const {
+    children,
+    onClickSave,
+    onClickCancel,
+    schema,
+    state,
+    title,
+    ...rest
+  } = porps;
+  console.log(toJS(state));
+  return (
+    <form {...rest}>
+      <Card fullWidth>
+        <CardHeader>
+          <p className="text-large">{title}</p>
+        </CardHeader>
+        <CardBody>{children}</CardBody>
+        <CardFooter className="space-x-2">
+          <Button
+            isDisabled={!schema.safeParse(state).success}
+            onClick={onClickSave}
+            color="primary"
+          >
+            저장
+          </Button>
+          <Button color="danger" onClick={onClickCancel}>
+            취소
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
+  );
+});

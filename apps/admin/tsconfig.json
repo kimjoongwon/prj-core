@@ -39,10 +39,9 @@
     }
   },
   "include": [
+    "./src/**/*.ts",
     "./src/__generated__/**/*.ts",
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
     "./src/**/*.tsx",
     ".next/types/**/*.ts"
   ],

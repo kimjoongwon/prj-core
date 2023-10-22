@@ -10,6 +10,7 @@ import {
   UsersModule,
   WorkspacesModule,
   LoggerModule,
+  ServicesModule,
 } from './modules';
 
 import { GqlConfigService } from './common';
@@ -55,6 +56,7 @@ import { CategoryItemsModule } from '@modules/categoryItems/category-items.modul
     RolesModule,
     CategoriesModule,
     CategoryItemsModule,
+    ServicesModule,
   ],
   providers: [
     {

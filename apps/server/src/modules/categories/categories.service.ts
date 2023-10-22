@@ -23,8 +23,15 @@ export class CategoriesService {
       where: {
         id: updateCategoryInput.id,
       },
-      data: updateCategoryInput,
+      data: {
+        name: updateCategoryInput.name,
+        categoryItemId: updateCategoryInput.categoryItemId,
+      },
     });
+  }
+
+  findById(id: string) {
+    return this.prisma.category.findUnique({ where: { id } });
   }
 
   async findForm(id: string) {
@@ -32,6 +39,7 @@ export class CategoriesService {
       return categoryForm;
     }
     const category = await this.prisma.category.findUnique({ where: { id } });
+
     return {
       id: category.id,
       name: category.name,
@@ -65,7 +73,17 @@ export class CategoriesService {
       },
     };
 
-    console.log('result', result);
     return result;
+  }
+
+  delete(id: string) {
+    return this.prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        deleted: true,
+      },
+    });
   }
 }

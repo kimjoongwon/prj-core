@@ -6,5 +6,8 @@ export class CreateCategoryInput {
   name: string;
 
   @Field(type => String, { nullable: true })
-  categoryItemId?: string;
+  categoryItemId: string;
+
+  @Field(type => String, { nullable: true })
+  serviceId: string;
 }

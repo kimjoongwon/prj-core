@@ -1,11 +1,14 @@
 'use client';
 
 import { ModalContext } from '@contexts';
-import { CoCModalProps, ModalProviderProps } from '@types';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
+export interface ModalProviderProps {
+  children: React.ReactNode;
+}
+
 export const ModalProvider = observer((props: ModalProviderProps) => {
-  const modal = useLocalObservable<CoCModalProps>(() => {
+  const modal = useLocalObservable(() => {
     return {
       isOpen: false,
       header: null,
@@ -17,6 +20,14 @@ export const ModalProvider = observer((props: ModalProviderProps) => {
       close: function () {
         this.isOpen = false;
       },
+      buttons: [
+        {
+          children: 'Close',
+          onClick: function () {
+            modal.close();
+          },
+        },
+      ],
     };
   });
 

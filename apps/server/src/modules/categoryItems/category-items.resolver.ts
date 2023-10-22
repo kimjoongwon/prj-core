@@ -27,7 +27,6 @@ export class CategoryItemsResolver {
   getCategoryItemTrees(
     @Args('parentIds', { type: () => [String] }) parentIds: string[],
   ) {
-    console.log('-----------adadasdasndahsdouahsdou')
     return this.categoryItemsService.findCategoryItemTrees(parentIds);
   }
 

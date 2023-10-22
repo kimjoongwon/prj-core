@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { queryBuilder } from '@common';
-import { last, set } from 'lodash';
+import { last } from 'lodash';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Users } from './models/paginated-user.model';
 import { userForm } from './models';
@@ -29,7 +29,7 @@ export class UsersService {
       where: query?.where,
     });
 
-    const endCursor = last(users).id;
+    const endCursor = last(users)?.id;
 
     return {
       edges: users.map(user => ({ node: user })),

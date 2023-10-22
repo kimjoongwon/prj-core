@@ -1,0 +1,13 @@
+import { useUserFormQuery } from '@hooks';
+import { useParams } from 'next/navigation';
+
+export const useQueries = () => {
+  const { userId = 'new' } = useParams();
+  const userFormQuery = useUserFormQuery({
+    id: userId as string,
+  });
+
+  return {
+    userFormQuery,
+  };
+};

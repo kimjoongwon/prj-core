@@ -12,15 +12,23 @@ import {
   Selection,
 } from '@nextui-org/react';
 
-import { Header, Row, flexRender } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  Header,
+  Row,
+  RowModel,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
 
-interface DataGridProps<T>
-  extends Omit<TableProps, 'onSelectionChange' | 'onSortChange'> {
-  headers: Header<T, any>[];
-  rows: Row<T & { id: string }>[];
+interface DataGridProps<T> {
+  selectionMode: TableProps['selectionMode'];
+  data: any[];
+  columns: any[];
   onSortChange?: (sort: { key: string; value: 'asc' | 'desc' }) => void;
   onSelectionChange?: (selectedRowIds: string[]) => void;
 }
@@ -28,12 +36,21 @@ interface DataGridProps<T>
 export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
   const {
     selectionMode,
-    rows,
-    headers,
+    data,
+    columns,
     onSortChange,
     onSelectionChange,
     ...rest
   } = props;
+
+  const table = useReactTable({
+    data: data as T[],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  const rows = table.getRowModel().rows as Row<T & { id: string }>[];
+  const headers = table.getLeafHeaders()
 
   const state: { sortDescriptor: SortDescriptor; selectedRowIds: string[] } =
     useLocalObservable(() => ({

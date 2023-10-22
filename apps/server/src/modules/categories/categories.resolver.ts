@@ -37,8 +37,20 @@ export class CategoriesResolver {
   }
 
   @Public()
+  @Query(() => Category, { name: 'category' })
+  getCategory(@Args('id') id: string) {
+    return this.categoriesService.findById(id);
+  }
+
+  @Public()
   @Query(() => PaginatedCategory, { name: 'categories' })
   getCategories(@Args() args: GetCategoriesArgs) {
     return this.categoriesService.findPaginatedCategory(args);
+  }
+
+  @Public()
+  @Mutation(() => Category)
+  deleteCategory(@Args('id') id: string) {
+    return this.categoriesService.delete(id);
   }
 }

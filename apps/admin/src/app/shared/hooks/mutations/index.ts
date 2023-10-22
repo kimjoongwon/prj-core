@@ -1,4 +1,4 @@
-export * from './useSignUp';
-export * from './useUpdateUser';
-export * from './useCreateCategory';
+export * from './auth/useSignUp';
+export * from './users/useUpdateUser';
+export * from './categories';
 export * from './categoryItems';

@@ -12,10 +12,13 @@ export * from './Search';
 export * from './forms';
 export * from './controls';
 export * from './Skeleton';
+export * from './Form';
 export {
   CardHeader,
   CardBody,
   CardFooter,
   Card,
   Spacer,
+  Modal,
+  ModalContent,
 } from '@nextui-org/react';
