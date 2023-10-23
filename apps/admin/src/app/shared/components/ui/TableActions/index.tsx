@@ -8,7 +8,7 @@ export const TableActions = <T extends object>(
   const meta = context.column.columnDef.meta as ColumnMeta<T>;
 
   return (
-    <div className="space-x-2 flex xs:flex-col">
+    <div className="space-x-2 flex flex-1 xs:flex-col">
       {meta.buttons.map((button, index) => {
         const { onClick, ...rest } = button;
         return (

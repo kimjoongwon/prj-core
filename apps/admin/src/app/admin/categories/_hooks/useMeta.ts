@@ -4,12 +4,7 @@ import { useActionColumns, useCategoryColumns } from '@columns';
 import { useMemo } from 'react';
 import { useQueries } from './useQueries';
 import { useHandlers } from './useHandlers';
-import {
-  CATEGORY_EDIT_PAGE_PATH,
-  CATEGORY_PAGE_PATH,
-  USER_EDIT_PAGE_PATH,
-  USER_PAGE_PATH,
-} from '@constants';
+import { CATEGORY_EDIT_PAGE_PATH, CATEGORY_PAGE_PATH } from '@constants';
 import { toast } from 'react-toastify';
 import { Category } from '@__generated__/graphql';
 import { useMutations } from './useMutations';
@@ -42,7 +37,11 @@ export const useMeta = ({
         {
           children: '삭제',
           onClick: context => {
-            deleteCategory();
+            deleteCategory({
+              variables: {
+                id: context.row.original.id,
+              },
+            });
           },
         },
 

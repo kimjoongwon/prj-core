@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { CREATE_CATEGORY } from '@gqls';
+import { CREATE_CATEGORY, GET_CATEGORIES } from '@gqls';
 import { CreateCategoryMutationVariables } from '@__generated__/graphql';
 import { MutationOptions } from '../types';
 
@@ -9,6 +9,7 @@ export const useCreateCategory = (
 ) => {
   return useMutation(CREATE_CATEGORY, {
     variables,
+    refetchQueries: [GET_CATEGORIES, 'categories'],
     onCompleted: () => {
       options.onCompleted && options.onCompleted();
     },
