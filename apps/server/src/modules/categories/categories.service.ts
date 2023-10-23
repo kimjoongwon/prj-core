@@ -76,13 +76,23 @@ export class CategoriesService {
     return result;
   }
 
-  delete(id: string) {
+  remove(id: string) {
     return this.prisma.category.update({
       where: {
         id,
       },
       data: {
         deleted: true,
+      },
+    });
+  }
+
+  deleteMany(ids: string[]) {
+    return this.prisma.category.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
       },
     });
   }

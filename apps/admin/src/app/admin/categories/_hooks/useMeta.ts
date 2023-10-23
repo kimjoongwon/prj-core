@@ -8,17 +8,20 @@ import { CATEGORY_EDIT_PAGE_PATH, CATEGORY_PAGE_PATH } from '@constants';
 import { toast } from 'react-toastify';
 import { Category } from '@__generated__/graphql';
 import { useMutations } from './useMutations';
+import { useStates } from './useStates';
 
 export const useMeta = ({
   onClickRow,
   onClickSorting,
   categoriesQuery,
-  deleteCategory,
+  removeCategory,
+  deleteCategories,
+  table,
 }: ReturnType<typeof useQueries> &
   ReturnType<typeof useMutations> &
-  ReturnType<typeof useHandlers>) => {
+  ReturnType<typeof useHandlers> &
+  ReturnType<typeof useStates>) => {
   const router = useCoCRouter();
-
   const categoryColumns = useCategoryColumns();
 
   const actionColumns = useActionColumns<Category>({
@@ -37,7 +40,7 @@ export const useMeta = ({
         {
           children: '삭제',
           onClick: context => {
-            deleteCategory({
+            removeCategory({
               variables: {
                 id: context.row.original.id,
               },
@@ -77,7 +80,15 @@ export const useMeta = ({
     {
       children: '삭제',
       color: 'danger',
-      onClick: () => toast.error('삭제되었습니다.'),
+      onClick: () => {
+        console.log(table.selectedRowIds);
+        deleteCategories({
+          variables: {
+            ids: table.selectedRowIds,
+          },
+        });
+        toast.error('삭제되었습니다.');
+      },
     },
   ];
 

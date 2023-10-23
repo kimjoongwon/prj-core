@@ -1,10 +1,10 @@
-import { useCoCRouter, useDeleteCategory } from '@hooks';
+import { useDeleteCategories, useRemoveCategory } from '@hooks';
 
 export const useMutations = () => {
-  const router = useCoCRouter();
-  const [deleteCategory] = useDeleteCategory();
-
+  const [deleteCategories] = useDeleteCategories();
+  const [removeCategory] = useRemoveCategory();
   return {
-    deleteCategory,
+    deleteCategories,
+    removeCategory,
   };
 };

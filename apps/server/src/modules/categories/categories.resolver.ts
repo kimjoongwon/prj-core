@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Int } from '@nestjs/graphql';
 import { Category } from './models/category.model';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard, Public } from '@common';
@@ -50,7 +50,13 @@ export class CategoriesResolver {
 
   @Public()
   @Mutation(() => Category)
-  deleteCategory(@Args('id') id: string) {
-    return this.categoriesService.delete(id);
+  deleteCategories(@Args('ids', { type: () => [String] }) ids: string[]) {
+    return this.categoriesService.deleteMany(ids);
+  }
+
+  @Public()
+  @Mutation(() => Category)
+  removeCategory(@Args('id') id: string) {
+    return this.categoriesService.remove(id);
   }
 }

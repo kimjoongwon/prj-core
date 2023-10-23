@@ -129,9 +129,10 @@ type Mutation {
   createRole(createRoleInput: CreateRoleInput!): Role!
   createService(createServiceInput: CreateServiceInput!): Service!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
-  deleteCategory(id: String!): Category!
+  deleteCategories(ids: [String!]!): Category!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
+  removeCategory(id: String!): Category!
   removeProfile(id: String!): Profile!
   removeRole(id: Int!): Role!
   removeWorkspace(id: Int!): Workspace!

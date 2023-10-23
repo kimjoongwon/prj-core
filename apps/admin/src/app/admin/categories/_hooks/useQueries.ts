@@ -1,8 +1,8 @@
 import { useCategoriesQuery } from '@hooks';
-import { useState } from './useState';
+import { useStates } from './useStates';
 import { useMemo } from 'react';
 
-export const useQueries = (state: ReturnType<typeof useState>) => {
+export const useQueries = (state: ReturnType<typeof useStates>) => {
   const categoriesQuery = useCategoriesQuery({ ...state.query });
   return {
     categoriesQuery: useMemo(() => categoriesQuery, [{ ...state.query }]),

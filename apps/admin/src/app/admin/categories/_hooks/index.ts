@@ -1,6 +1,6 @@
 export * from './useMeta';
 export * from './useQueries';
-export * from './useState';
+export * from './useStates';
 export * from './usePage';
 export * from './useHandlers';
 export * from './useMutations';

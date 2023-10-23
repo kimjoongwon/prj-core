@@ -8,11 +8,11 @@ import {
   useMeta,
   useMutations,
   useQueries,
-  useState,
+  useStates,
 } from './_hooks';
 
 interface PageContext {
-  state: ReturnType<typeof useState>;
+  state: ReturnType<typeof useStates>;
   meta: ReturnType<typeof useMeta>;
 }
 
@@ -20,12 +20,17 @@ export const PageContext = createContext<PageContext>({} as PageContext);
 
 export const Provider = observer((props: ContainerProps) => {
   const { children } = props;
-  const state = useState();
+  const state = useStates();
   const queries = useQueries(state);
   const handlers = useHandlers(state);
   const mutations = useMutations();
 
-  const meta = useMeta({ ...queries, ...handlers, ...mutations });
+  const meta = useMeta({
+    ...queries,
+    ...handlers,
+    ...mutations,
+    ...state,
+  });
 
   return (
     <PageContext.Provider

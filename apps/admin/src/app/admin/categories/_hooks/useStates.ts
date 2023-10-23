@@ -1,6 +1,6 @@
 import { useLocalObservable } from 'mobx-react-lite';
 
-export const useState = () => {
+export const useStates = () => {
   return useLocalObservable(() => ({
     search: {
       email: '',
