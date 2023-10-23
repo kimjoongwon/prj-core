@@ -5,5 +5,6 @@ import { GET_CATEGORIES } from '@gqls';
 export const useCategoriesQuery = (variables: GetCategoriesQueryVariables) => {
   return useSuspenseQuery(GET_CATEGORIES, {
     variables,
+    fetchPolicy: 'cache-and-network',
   });
 };

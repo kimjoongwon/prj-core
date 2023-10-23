@@ -16,11 +16,11 @@ const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "#graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!){\n      createCategory(createCategoryInput: $createCategoryInput) {\n        id\n      }\n    }\n": types.CreateCategoryDocument,
-    "\n  mutation deleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n": types.DeleteCategoryDocument,
+    "\n  mutation DeleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n": types.DeleteCategoryDocument,
     "\n  mutation updateCategory($updateCategoryInput: UpdateCategoryInput!) {\n    updateCategory(updateCategoryInput: $updateCategoryInput) {\n      id\n    }\n  }\n": types.UpdateCategoryDocument,
     "\n  mutation CreateCategoryItem($createCategoryItemInput: CreateCategoryItemInput!) {\n    createCategoryItem(createCategoryItemInput: $createCategoryItemInput) {\n      id\n      name\n      parentId\n    }\n  }\n": types.CreateCategoryItemDocument,
     "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n": types.UpdateUserDocument,
-    "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
+    "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deleted\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
     "\n  query GetCategory($id: String!) {\n    category(id: $id) {\n      id\n      name\n      categoryItemId\n    }\n  }\n": types.GetCategoryDocument,
     "#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n": types.GetCategoryFormDocument,
     "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
@@ -61,7 +61,7 @@ export function gql(source: "#graphql\n  mutation CreateCategory($createCategory
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation deleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation deleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n"];
+export function gql(source: "\n  mutation DeleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteCategory($id: String!) {\n    deleteCategory(id: $id) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -77,7 +77,7 @@ export function gql(source: "#graphql\n  mutation UpdateUser ($updateUserInput: 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n"];
+export function gql(source: "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deleted\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deleted\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

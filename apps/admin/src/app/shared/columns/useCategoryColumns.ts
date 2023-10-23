@@ -11,6 +11,10 @@ export const useCategoryColumns = () => {
     columnHelper.accessor('name', {
       header: '이름',
     }),
+    columnHelper.accessor('deleted', {
+      header: '삭제 여부',
+      cell: cellProps => (cellProps.row.original.deleted ? '삭제' : '-'),
+    }),
   ];
   return columns;
 };
