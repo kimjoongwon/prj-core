@@ -2,11 +2,12 @@ import {
   useCoCRouter,
   useCreateCategoryItem,
   useDeleteCategoryItem,
+  useUpdateCategoryItem,
 } from '@hooks';
 
 export const useMutations = () => {
   const router = useCoCRouter();
-  const [updateCategoryItem] = useCreateCategoryItem({
+  const [updateCategoryItem] = useUpdateCategoryItem({
     onCompleted: () => router.back(),
   });
   const [deleteCategoryItem] = useDeleteCategoryItem({

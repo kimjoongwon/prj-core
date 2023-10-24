@@ -50,12 +50,8 @@ type CategoryItemEdge {
 }
 
 type CategoryItemForm {
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: ID
-  name: String
-  parentId: String
-  updatedAt: DateTime
+  name: String!
+  parentId: String!
 }
 
 type CategoryItemPageInfo {
@@ -195,7 +191,7 @@ type Query {
   category(id: String!): Category!
   categoryForm(id: String!): CategoryForm!
   categoryItem(id: String!): CategoryItem!
-  categoryItemForm(id: String!): CategoryItemForm!
+  categoryItemForm: CategoryItemForm!
   categoryItemTrees(parentIds: [String!]!): [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
   findAllProfile: [Profile!]!

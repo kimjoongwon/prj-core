@@ -33,8 +33,8 @@ export class CategoryItemsResolver {
 
   @Public()
   @Query(() => CategoryItemForm, { name: 'categoryItemForm' })
-  getCategoryForm(@Args('id') id: string) {
-    return this.categoryItemsService.findForm(id);
+  getCategoryForm() {
+    return this.categoryItemsService.findForm();
   }
 
   @Public()

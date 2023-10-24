@@ -1,33 +1,32 @@
-import { Paths } from '@constants'
-import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { PrefetchOptions } from 'next/dist/shared/lib/router/router'
-import { useRouter } from 'next/navigation'
-import { Path } from 'path-parser'
+import { Paths } from '@constants';
+import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { PrefetchOptions } from 'next/dist/shared/lib/router/router';
+import { useRouter } from 'next/navigation';
+import { Path } from 'path-parser';
 
 interface CoCRouterArgs<T> {
-  url: Paths
-  params?: T
-  queryString?: string
-  options?: NavigateOptions
-  prefetchOptions?: PrefetchOptions | undefined
+  url: Paths;
+  params?: T;
+  queryString?: string;
+  options?: NavigateOptions;
+  prefetchOptions?: PrefetchOptions | undefined;
 }
 
 export const useCoCRouter = <T extends object>() => {
-  const router = useRouter()
+  const router = useRouter();
 
   const getUrlWithParamsAndQueryString = (
     url: Paths,
     params?: T,
     queryString?: string,
   ) => {
-    const path = new Path(url)
-    let pathWithParams = path.build(params)
+    const path = new Path(url);
+    let pathWithParams = path.build(params);
     if (queryString) {
-      pathWithParams + '?' + queryString
+      pathWithParams = pathWithParams + '?' + queryString;
     }
-
-    return pathWithParams
-  }
+    return pathWithParams;
+  };
 
   return {
     /**
@@ -36,38 +35,40 @@ export const useCoCRouter = <T extends object>() => {
      */
     getUrlWithParams: getUrlWithParamsAndQueryString,
     push: (cocRouterArgs: CoCRouterArgs<T>) => {
-      const { params, url, queryString, options } = cocRouterArgs
-
+      const { params, url, queryString, options } = cocRouterArgs;
+      console.log(queryString);
       const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
         url,
         params,
         queryString,
-      )
+      );
 
-      router.push(urlWithParamsAndQueryString, options)
+      console.log(urlWithParamsAndQueryString);
+
+      router.push(urlWithParamsAndQueryString, options);
     },
     replace: (cocRouterArgs: CoCRouterArgs<T>) => {
-      const { params, url, queryString, options } = cocRouterArgs
+      const { params, url, queryString, options } = cocRouterArgs;
 
       const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
         url,
         params,
         queryString,
-      )
+      );
 
-      router.replace(urlWithParamsAndQueryString, options)
+      router.replace(urlWithParamsAndQueryString, options);
     },
     back: () => router.back(),
     forward: () => router.forward(),
     prefetch: (cocRouterArgs: CoCRouterArgs<T>) => {
-      const { params, url, queryString } = cocRouterArgs
+      const { params, url, queryString } = cocRouterArgs;
 
       const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
         url,
         params,
         queryString,
-      )
-      router.prefetch(urlWithParamsAndQueryString)
+      );
+      router.prefetch(urlWithParamsAndQueryString);
     },
-  }
-}
+  };
+};

@@ -7,6 +7,8 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const router = useCoCRouter();
 
   const onClickCategoryItem = (categoryItem: CategoryItem) => {
+    state.currentSelectedParentId = categoryItem.id;
+
     if (categoryItem.parentId === 'root') {
       state.parentIds.clear();
       state.parentIds.add('root');
@@ -32,11 +34,15 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   };
 
   const onClickNew = () => {
+    const searchParams = new URLSearchParams();
+    searchParams.set('parentId', state.currentSelectedParentId);
+    searchParams.toString();
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,
       params: {
         id: 'new',
       },
+      queryString: searchParams.toString(),
     });
   };
 

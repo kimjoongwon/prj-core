@@ -1,13 +1,15 @@
-import { ObjectType, PartialType } from '@nestjs/graphql';
-import { UpdateCategoryItemInput } from '../dto/update-category-item.input';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class CategoryItemForm extends PartialType(
-  UpdateCategoryItemInput,
-  ObjectType,
-) {}
+export class CategoryItemForm {
+  @Field(() => String)
+  name: string;
+
+  @Field(() => String)
+  parentId: string;
+}
 
 export const categoryItemForm = {
   name: '',
-  parentId: '',
+  parentId: 'root',
 };
