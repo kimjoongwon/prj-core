@@ -16,7 +16,7 @@ model User {
   profileId String
   profile   Profile    @relation(fields: [profileId], references: [id])
   workspace Workspace?
-  deleted   Boolean    @default(false)
+  deletedAt DateTime?  @db.Timestamptz(6)
 }
 
 model Category {
@@ -28,17 +28,17 @@ model Category {
   categoryItem   CategoryItem? @relation(fields: [categoryItemId], references: [id])
   createdAt      DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt      DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
-  deleted        Boolean       @default(false)
+  deletedAt      DateTime?     @db.Timestamptz(6)
 }
 
 model CategoryItem {
   id        String     @id @default(cuid())
-  name      String     @unique
+  name      String
   parentId  String?
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
   category  Category[]
-  deleted   Boolean    @default(false)
+  deletedAt DateTime?  @db.Timestamptz(6)
 }
 
 model Service {
@@ -48,35 +48,37 @@ model Service {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @default(now()) @updatedAt
   category   Category[]
-  deleted    Boolean    @default(false)
+  deletedAt  DateTime?  @db.Timestamptz(6)
 }
 
 model Profile {
-  id        String   @id @default(cuid())
-  phone     String   @unique
+  id        String    @id @default(cuid())
+  phone     String    @unique
   nickname  String
-  userId    String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  userId    String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   user      User[]
-  deleted   Boolean  @default(false)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 model Roles {
-  id        String   @id @default(cuid())
-  name      Role     @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id        String    @id @default(cuid())
+  name      Role      @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 model Workspace {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  phone     String   @unique
-  ownerId   String   @unique
+  id        String    @id @default(cuid())
+  name      String    @unique
+  phone     String    @unique
+  ownerId   String    @unique
   createdAt DateTime
   updatedAt DateTime
-  owner     User     @relation(fields: [ownerId], references: [id])
+  owner     User      @relation(fields: [ownerId], references: [id])
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 enum Role {

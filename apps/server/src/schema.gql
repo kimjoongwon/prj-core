@@ -16,7 +16,7 @@ type Auth {
 type Category {
   categoryItemId: String
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   id: ID!
   name: String!
   serviceId: String
@@ -37,7 +37,7 @@ type CategoryForm {
 
 type CategoryItem {
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   id: ID!
   name: String!
   parentId: String!
@@ -51,7 +51,7 @@ type CategoryItemEdge {
 
 type CategoryItemForm {
   createdAt: DateTime
-  deleted: Boolean
+  deletedAt: DateTime
   id: ID
   name: String
   parentId: String
@@ -83,7 +83,7 @@ input CreateCategoryItemInput {
 
 input CreateProfileInput {
   createdAt: DateTime
-  deleted: Boolean = false
+  deletedAt: DateTime
   id: ID
   nickname: String
   phone: String
@@ -130,6 +130,7 @@ type Mutation {
   createService(createServiceInput: CreateServiceInput!): Service!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   deleteCategories(ids: [String!]!): Category!
+  deleteCategoryItem(id: String!): CategoryItem!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeCategory(id: String!): Category!
@@ -138,6 +139,7 @@ type Mutation {
   removeWorkspace(id: Int!): Workspace!
   signup(data: SignupInput!): Auth!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -170,7 +172,7 @@ type PaginatedWorkspace {
 
 type Profile {
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   id: ID!
   nickname: String!
   phone: String!
@@ -227,7 +229,7 @@ enum RoleNames {
 type Service {
   categoryId: String!
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   id: ID!
   name: String!
   updatedAt: DateTime!
@@ -241,7 +243,7 @@ type ServiceEdge {
 type ServiceForm {
   categoryId: String
   createdAt: DateTime
-  deleted: Boolean
+  deletedAt: DateTime
   id: ID
   name: String
   updatedAt: DateTime
@@ -274,9 +276,18 @@ input UpdateCategoryInput {
   serviceId: String
 }
 
+input UpdateCategoryItemInput {
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: String
+  name: String
+  parentId: String
+  updatedAt: DateTime
+}
+
 input UpdateProfileInput {
   createdAt: DateTime
-  deleted: Boolean = false
+  deletedAt: DateTime
   id: String!
   nickname: String
   phone: String
@@ -300,7 +311,7 @@ input UpdateUserInput {
 
 input UpdateWorkspaceInput {
   createdAt: DateTime
-  deleted: Boolean = false
+  deletedAt: DateTime
   id: String!
   name: String
   ownerId: String
@@ -310,7 +321,7 @@ input UpdateWorkspaceInput {
 
 type User {
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   email: String!
   id: ID!
   profile: Profile!
@@ -342,7 +353,7 @@ type Users {
 
 type Workspace {
   createdAt: DateTime!
-  deleted: Boolean!
+  deletedAt: DateTime
   id: ID!
   name: String!
 

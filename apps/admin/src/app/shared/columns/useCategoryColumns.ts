@@ -1,5 +1,6 @@
 import { Category } from '@__generated__/graphql';
 import { createColumnHelper } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
 export const useCategoryColumns = () => {
   const columnHelper = createColumnHelper<Category>();
@@ -11,9 +12,14 @@ export const useCategoryColumns = () => {
     columnHelper.accessor('name', {
       header: '이름',
     }),
-    columnHelper.accessor('deleted', {
+    columnHelper.accessor('deletedAt', {
       header: '삭제 여부',
-      cell: cellProps => (cellProps.row.original.deleted ? '삭제' : '-'),
+      cell: cellProps =>
+        cellProps.row.original.deletedAt
+          ? dayjs(cellProps.row.original.deletedAt).format(
+              'YYYY-MM-DD HH:mm:ss',
+            )
+          : '-',
     }),
   ];
   return columns;

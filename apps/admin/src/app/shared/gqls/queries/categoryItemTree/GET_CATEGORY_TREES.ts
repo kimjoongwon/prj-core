@@ -8,6 +8,7 @@ export const GET_CATEGORY_ITEM_TREES = gql(`#graphql
       parentId
       createdAt
       updatedAt
+      deletedAt
     }
   }
 `);

@@ -1,17 +1,10 @@
-import React from 'react';
-import { useCreateCategoryItem, useModal } from '@hooks';
+import { useCoCRouter } from '@hooks';
 import { useState } from './useState';
-// import { CategoryItemEditModalContent } from '@components';
-import { toJS } from 'mobx';
 import { CategoryItem } from '@__generated__/graphql';
-import { isServer } from '../../../shared/utils/isServer';
+import { CATEGORY_ITEM_EDIT_PAGE_PATH } from '@constants';
 
 export const useHandlers = (state: ReturnType<typeof useState>) => {
-  const modal = useModal();
-
-  const [createCategoryItem] = useCreateCategoryItem({
-    createCategoryItemInput: state.form,
-  });
+  const router = useCoCRouter();
 
   const onClickCategoryItem = (categoryItem: CategoryItem) => {
     if (categoryItem.parentId === 'root') {
@@ -39,27 +32,12 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   };
 
   const onClickNew = () => {
-    if (!isServer()) {
-      // modal.content = React.createElement(CategoryItemEditModalContent, {
-      //   state: state.form,
-      // });
-      // modal.header = '카테고리 추가';
-      // modal.open();
-      // modal.buttons = [
-      //   {
-      //     children: 'Cancel',
-      //     onClick: () => {
-      //       modal.close();
-      //     },
-      //   },
-      //   {
-      //     children: 'Create',
-      //     onClick: () => {
-      //       createCategoryItem();
-      //     },
-      //   },
-      // ];
-    }
+    router.push({
+      url: CATEGORY_ITEM_EDIT_PAGE_PATH,
+      params: {
+        id: 'new',
+      },
+    });
   };
 
   return {
