@@ -1,3 +1,18 @@
+'use client';
+import { CategoryItemForm } from '@components';
+import { usePage } from './_hooks';
+
 export default function CategoryEditPage() {
-  return 
+  const {
+    meta: { isEditMode, form },
+  } = usePage();
+  return (
+    <CategoryItemForm
+      state={
+        isEditMode
+          ? form.state.updateCategoryItemInput
+          : form.state.createCategoryItemInput
+      }
+    />
+  );
 }

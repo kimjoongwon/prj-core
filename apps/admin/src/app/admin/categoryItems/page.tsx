@@ -4,7 +4,6 @@ import { Button } from '@coc/ui';
 import { usePage } from './_hooks';
 import { FaFolder, FaPlus, FaTrash } from 'react-icons/fa';
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import Link from 'next/link';
 
 export default function Page() {
   const {

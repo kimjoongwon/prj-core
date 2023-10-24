@@ -34,20 +34,8 @@ export class CategoryItemsService {
     });
   }
 
-  async findForm(id: string) {
-    if (id === 'new') {
-      return categoryItemForm;
-    }
-
-    const categoryItem = await this.prisma.categoryItem.findUnique({
-      where: { id },
-    });
-
-    return {
-      id: categoryItem.id,
-      name: categoryItem.name,
-      parentId: categoryItem.parentId,
-    };
+  async findForm() {
+    return categoryItemForm;
   }
 
   async findPaginatedCategoryItem(
