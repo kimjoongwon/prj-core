@@ -6,6 +6,7 @@ import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
 import { groupBy, last } from 'lodash';
 import { categoryItemForm } from './model/category-form.model';
+import { UpdateCategoryItemInput } from './dto/update-category-item.input';
 
 @Injectable()
 export class CategoryItemsService {
@@ -18,7 +19,6 @@ export class CategoryItemsService {
   }
 
   findCategoryItemTrees(ids: string[]) {
-    console.log(ids, 'ids--------------------------------');
     return this.prisma.categoryItem.findMany({
       where: {
         parentId: {
@@ -73,5 +73,21 @@ export class CategoryItemsService {
         hasNextPage: !(categoryItems.length < args.take),
       },
     };
+  }
+
+  update(updateCategoryItemInput: UpdateCategoryItemInput) {
+    const { id, ...data } = updateCategoryItemInput;
+    return this.prisma.categoryItem.update({
+      where: { id },
+      data,
+    });
+  }
+  delete(id: string) {
+    return this.prisma.categoryItem.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }

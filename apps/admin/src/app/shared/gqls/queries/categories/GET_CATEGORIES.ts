@@ -6,7 +6,7 @@ export const GET_CATEGORIES = gql(`#graphql
       nodes {
         id 
         name
-        deleted
+        deletedAt
       }
       pageInfo {
         endCursor 

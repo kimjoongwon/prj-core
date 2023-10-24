@@ -82,7 +82,7 @@ export class CategoriesService {
         id,
       },
       data: {
-        deleted: true,
+        deletedAt: new Date(),
       },
     });
   }

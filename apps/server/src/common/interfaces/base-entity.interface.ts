@@ -11,6 +11,6 @@ export class BaseEntity {
   @Field()
   updatedAt: Date;
 
-  @Field(() => Boolean, { defaultValue: false })
-  deleted: boolean;
+  @Field({ nullable: true })
+  deletedAt: Date;
 }

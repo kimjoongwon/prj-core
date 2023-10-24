@@ -19,7 +19,6 @@ export default function Page() {
 
   return (
     <div className="flex flex-1 space-x-4">
-      <Link href={'/admin/users'}>가즈아</Link>
       {categoryItemTrees.map((categoryItemTree, index) => {
         const isLast = index >= 2;
         return (
