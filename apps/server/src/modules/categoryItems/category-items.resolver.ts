@@ -38,6 +38,12 @@ export class CategoryItemsResolver {
   }
 
   @Public()
+  @Query(() => CategoryItem, { name: 'categoryItem' })
+  getCategoryItem(@Args('id') id: string) {
+    return this.categoryItemsService.findOne(id);
+  }
+
+  @Public()
   @Query(() => PaginatedCategoryItem, { name: 'categoryItems' })
   getCategoryItems(@Args() args: GetCategoryItemsArgs) {
     return this.categoryItemsService.findPaginatedCategoryItem(args);

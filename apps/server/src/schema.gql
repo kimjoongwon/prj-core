@@ -18,7 +18,7 @@ type Category {
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
-  name: String!
+  name: ID!
   serviceId: String
   updatedAt: DateTime!
 }
@@ -194,6 +194,7 @@ type Query {
   categories(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategory!
   category(id: String!): Category!
   categoryForm(id: String!): CategoryForm!
+  categoryItem(id: String!): CategoryItem!
   categoryItemForm(id: String!): CategoryItemForm!
   categoryItemTrees(parentIds: [String!]!): [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!

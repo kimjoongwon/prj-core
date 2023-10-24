@@ -18,6 +18,12 @@ export class CategoryItemsService {
     });
   }
 
+  findOne(id: string) {
+    return this.prisma.categoryItem.findUnique({
+      where: { id },
+    });
+  }
+
   findCategoryItemTrees(ids: string[]) {
     return this.prisma.categoryItem.findMany({
       where: {
