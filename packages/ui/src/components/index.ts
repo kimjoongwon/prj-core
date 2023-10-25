@@ -19,6 +19,5 @@ export {
   CardFooter,
   Card,
   Spacer,
-  Modal,
-  ModalContent,
 } from '@nextui-org/react';
+export * from './CoCModal';
