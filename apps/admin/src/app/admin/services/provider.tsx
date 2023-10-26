@@ -3,7 +3,7 @@
 import { ContainerProps } from '@coc/ui';
 import { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useHandlers, useMeta, useQueries, useState } from './hooks';
+import { useHandlers, useMeta, useQueries, useState } from './_hooks';
 
 interface PageContext {
   state: ReturnType<typeof useState>;

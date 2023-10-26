@@ -2,8 +2,8 @@ import { useState } from './useState';
 import { useMemo } from 'react';
 
 export const useQueries = (state: ReturnType<typeof useState>) => {
+  useServices
   return {
-    // usersQuery: useMemo(() => usersQuery, [{ ...state.query }]),
-    usersQuery: [],
+    servicesQuery: useMemo(() => servicesQuery, [{ ...state.query }]),
   };
 };
