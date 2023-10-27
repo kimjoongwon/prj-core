@@ -127,6 +127,7 @@ type Mutation {
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   deleteCategories(ids: [String!]!): Category!
   deleteCategoryItem(id: String!): CategoryItem!
+  deleteService(id: String!): Service!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeCategory(id: String!): Category!
@@ -138,6 +139,7 @@ type Mutation {
   updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  updateService(updateServiceInput: UpdateServiceInput!): Service!
   updateUser(updateUserInput: UpdateUserInput!): User!
   updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
@@ -199,6 +201,7 @@ type Query {
   profiles: [Profile!]!
   role(id: Int!): Role!
   roles: [Role!]!
+  service(id: String!): Service!
   serviceForm(id: String!): ServiceForm!
   services(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedService!
   user(id: String!): User!
@@ -297,6 +300,15 @@ input UpdateRoleInput {
 
   """Example field (placeholder)"""
   name: String
+}
+
+input UpdateServiceInput {
+  categoryId: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: String
+  name: String
+  updatedAt: DateTime
 }
 
 input UpdateUserInput {

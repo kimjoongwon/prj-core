@@ -37,13 +37,13 @@ function Page() {
         />
       </ButtonGroupContainer>
       <DataGridContainer>
-        <DataGrid
+        {/* <DataGrid
           columns={}
           data={data}
           selectionMode="multiple"
           onSelectionChange={dataGrid.onClickRow}
           onSortChange={dataGrid.onClickSorting}
-        />
+        /> */}
       </DataGridContainer>
       <PaginationContainer>
         <Pagination
