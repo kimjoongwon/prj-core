@@ -15,7 +15,7 @@ function Page() {
 
   const {
     meta: {
-      dataGrid: { data },
+      dataGrid: { data, columns, onClickRow, onClickSorting },
       pagination,
       buttonGroup,
     },
@@ -37,13 +37,13 @@ function Page() {
         />
       </ButtonGroupContainer>
       <DataGridContainer>
-        {/* <DataGrid
-          columns={}
+        <DataGrid
+          columns={columns}
           data={data}
           selectionMode="multiple"
-          onSelectionChange={dataGrid.onClickRow}
-          onSortChange={dataGrid.onClickSorting}
-        /> */}
+          onSelectionChange={onClickRow}
+          onSortChange={onClickSorting}
+        />
       </DataGridContainer>
       <PaginationContainer>
         <Pagination

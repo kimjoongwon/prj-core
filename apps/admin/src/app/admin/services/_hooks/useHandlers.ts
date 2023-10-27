@@ -1,7 +1,4 @@
-import { isArray } from 'lodash-es';
 import { useState } from './useState';
-import { useCoCRouter } from '@hooks';
-import { Key } from 'react';
 
 export const useHandlers = (state: ReturnType<typeof useState>) => {
   const onClickSorting = (sorting: { key: any; value: any }) => {

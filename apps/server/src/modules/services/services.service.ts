@@ -38,11 +38,6 @@ export class ServicesService {
 
     const services = await this.prisma.service.findMany({
       ...query,
-      include: {
-        category: true,
-        nextService: true,
-        prevService: true,
-      },
     });
 
     const totalCount = await this.prisma.service.count({
