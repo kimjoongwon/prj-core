@@ -7,15 +7,15 @@ import { useQueries } from './useQueries';
 import { useHandlers } from './useHandlers';
 import { USER_EDIT_PAGE_PATH, USER_PAGE_PATH } from '@constants';
 import { toast } from 'react-toastify';
+import { useServiceColumns } from '../../../shared/columns/useServiceColumns';
 
 export const useMeta = ({
-  usersQuery,
   onClickRow,
   onClickSorting,
+  servicesQuery,
 }: ReturnType<typeof useQueries> & ReturnType<typeof useHandlers>) => {
   const router = useCoCRouter();
-
-  const userColumns = useUserColumns();
+  const serviceColumns = useServiceColumns();
 
   const actionColumns = useActionColumns<User>({
     meta: {
@@ -66,28 +66,22 @@ export const useMeta = ({
     },
   ];
 
-  const table = useCoCTable<User>({
-    data: usersQuery.data?.users?.nodes || [],
-    columns: [...userColumns, ...actionColumns],
-  });
-
   return {
     buttonGroup: {
       leftButtons: useMemo(() => leftButtons, []),
       rightButtons: useMemo(() => rightButtons, []),
     },
     dataGrid: {
-      instance: table,
-      data: usersQuery?.data?.users.nodes,
+      columns: [...serviceColumns, ...actionColumns],
+      data: servicesQuery?.data?.services.nodes,
       onClickRow,
       onClickSorting,
     },
     pagination: {
       totalCount: useMemo(
-        () => usersQuery?.data?.users.pageInfo?.totalCount || 1,
+        () => servicesQuery?.data?.services.pageInfo?.totalCount || 1,
         [],
       ),
     },
   };
 };
-

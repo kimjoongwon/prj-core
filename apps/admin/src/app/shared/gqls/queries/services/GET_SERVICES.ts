@@ -1,6 +1,7 @@
 import { gql } from '@__generated__';
 
 export const GET_SERVICES = gql(`
+  #graphql
   query GetServices(
     $skip: Int
     $take: Int
@@ -17,6 +18,9 @@ export const GET_SERVICES = gql(`
         id
         createdAt
         name
+      }
+      pageInfo {
+        totalCount
       }
     }
   }

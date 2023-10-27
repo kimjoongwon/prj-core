@@ -1,3 +1,3 @@
-export * from './useCreateServiceInput';
-export * from './useDeleteServiceInput';
-export * from './useUpdateServiceInput';
+export * from './useCreateService';
+export * from './useDeleteService';
+export * from './useUpdateService';
