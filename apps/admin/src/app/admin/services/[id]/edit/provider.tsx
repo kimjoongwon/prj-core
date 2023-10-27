@@ -1,0 +1,53 @@
+'use client';
+
+import { Form } from '@coc/ui';
+import { observer } from 'mobx-react-lite';
+import { createContext } from 'react';
+import {
+  useHandlers,
+  useMeta,
+  useMutations,
+  useQueries,
+  useState,
+} from './_hooks';
+import { useSchemas } from './_hooks/useSchema';
+interface CategoryEditProviderProps {
+  children: React.ReactNode;
+}
+
+interface ServiceEditPageContext {
+  meta: ReturnType<typeof useMeta>;
+}
+
+export const ServiceEditPageContext = createContext<ServiceEditPageContext>(
+  {} as ServiceEditPageContext,
+);
+
+export const ServiceEditPageProvider = observer(
+  (props: CategoryEditProviderProps) => {
+    const queries = useQueries();
+    const mutations = useMutations();
+    const state = useState({ ...queries });
+    const schemas = useSchemas();
+    const handlers = useHandlers({ ...mutations, ...state });
+    const meta = useMeta({ ...state, ...handlers, ...schemas });
+    const { form, isEditMode } = meta;
+
+    return (
+      <ServiceEditPageContext.Provider
+        value={{
+          meta,
+        }}
+      >
+        <Form
+          state={form.state}
+          schema={form.schema}
+          title={'서비스'}
+          onClickSave={form.buttons.onClickSave}
+        >
+          {props.children}
+        </Form>
+      </ServiceEditPageContext.Provider>
+    );
+  },
+);

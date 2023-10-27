@@ -8,10 +8,10 @@ import {
   PaginationContainer,
   SearchFilterContainer,
 } from '@containers';
-import { usePage } from './_hooks';
+import { useServicesPage } from './_hooks';
 
 function Page() {
-  const page = usePage();
+  const page = useServicesPage();
 
   const {
     meta: {

@@ -202,7 +202,7 @@ type Query {
   role(id: Int!): Role!
   roles: [Role!]!
   service(id: String!): Service!
-  serviceForm(id: String!): ServiceForm!
+  serviceForm: ServiceForm!
   services(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedService!
   user(id: String!): User!
   userForm(id: String!): UserForm!

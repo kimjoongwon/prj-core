@@ -46,8 +46,8 @@ export class ServicesResolver {
 
   @Public()
   @Query(() => ServiceForm, { name: 'serviceForm' })
-  getCategoryForm(@Args('id') id: string) {
-    return this.servicesService.findForm(id);
+  getCategoryForm() {
+    return this.servicesService.findForm();
   }
 
   @Public()

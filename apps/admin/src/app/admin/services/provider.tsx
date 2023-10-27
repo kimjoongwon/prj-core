@@ -10,9 +10,11 @@ interface PageContext {
   meta: ReturnType<typeof useMeta>;
 }
 
-export const PageContext = createContext<PageContext>({} as PageContext);
+export const ServicesPageContext = createContext<PageContext>(
+  {} as PageContext,
+);
 
-export const PageProvider = observer((props: ContainerProps) => {
+export const ServicesPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
   const queries = useQueries(state);
@@ -21,13 +23,13 @@ export const PageProvider = observer((props: ContainerProps) => {
   const meta = useMeta({ ...queries, ...handlers });
 
   return (
-    <PageContext.Provider
+    <ServicesPageContext.Provider
       value={{
         state,
         meta,
       }}
     >
       {children}
-    </PageContext.Provider>
+    </ServicesPageContext.Provider>
   );
 });

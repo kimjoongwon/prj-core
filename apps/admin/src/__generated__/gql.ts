@@ -35,7 +35,7 @@ const documents = {
     "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
     "\n  query GetService($id: String!) {\n    service(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetServiceDocument,
     "\n  #graphql\n  query GetServices(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    services(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetServicesDocument,
-    "\n  query GetServiceForm($id: String!) {\n    serviceForm(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetServiceFormDocument,
+    "\n  query GetServiceForm {\n    serviceForm {\n      id\n      name\n    }\n  }\n": types.GetServiceFormDocument,
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserFormDocument,
@@ -148,7 +148,7 @@ export function gql(source: "\n  #graphql\n  query GetServices(\n    $skip: Int\
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetServiceForm($id: String!) {\n    serviceForm(id: $id) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetServiceForm($id: String!) {\n    serviceForm(id: $id) {\n      id\n      name\n    }\n  }\n"];
+export function gql(source: "\n  query GetServiceForm {\n    serviceForm {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetServiceForm {\n    serviceForm {\n      id\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

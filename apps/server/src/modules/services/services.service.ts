@@ -18,18 +18,10 @@ export class ServicesService {
     });
   }
 
-  async findForm(id: string) {
-    if (id === 'new') {
-      return serviceForm;
-    }
-
-    const service = await this.prisma.service.findUnique({
-      where: { id },
-    });
-
+  async findForm() {
     return {
-      id: service.id,
-      name: service.name,
+      id: '',
+      name: '',
     };
   }
 
@@ -67,9 +59,6 @@ export class ServicesService {
   findOne(id: string) {
     return this.prisma.service.findUnique({
       where: { id },
-      include: {
-        category: true,
-      },
     });
   }
 
