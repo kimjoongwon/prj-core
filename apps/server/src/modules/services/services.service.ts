@@ -6,6 +6,7 @@ import { queryBuilder } from '@common';
 import { PaginatedService } from './model/paginated-service.model';
 import { last } from 'lodash';
 import { serviceForm } from './model/service-form.model';
+import { UpdateServiceInput } from './dto/update-service.input';
 
 @Injectable()
 export class ServicesService {
@@ -59,5 +60,28 @@ export class ServicesService {
         hasNextPage: !(services.length < args.take),
       },
     };
+  }
+
+  delete(id: string) {
+    return this.prisma.service.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
+
+  findOne(id: string) {
+    return this.prisma.service.findUnique({
+      where: { id },
+      include: {
+        category: true,
+      },
+    });
+  }
+
+  update(updateCategoryInput: UpdateServiceInput) {
+    return this.prisma.service.update({
+      where: { id: updateCategoryInput.id },
+      data: updateCategoryInput,
+    });
   }
 }

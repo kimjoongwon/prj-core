@@ -7,6 +7,7 @@ import { GetServicesArgs } from './dto/get-service.args';
 import { PaginatedService } from './model/paginated-service.model';
 import { ServiceForm } from './model/service-form.model';
 import { CreateServiceInput } from './dto/create-service.input';
+import { UpdateServiceInput } from './dto/update-service.input';
 
 @Resolver(() => Service)
 @UseGuards(GqlAuthGuard)
@@ -20,6 +21,27 @@ export class ServicesResolver {
     createCategoryInput: CreateServiceInput,
   ) {
     return this.servicesService.create(createCategoryInput);
+  }
+
+  @Public()
+  @Mutation(() => Service)
+  updateService(
+    @Args('updateServiceInput')
+    updateCategoryInput: UpdateServiceInput,
+  ) {
+    return this.servicesService.update(updateCategoryInput);
+  }
+
+  @Public()
+  @Mutation(() => Service)
+  deleteService(@Args('id') id: string) {
+    return this.servicesService.delete(id);
+  }
+
+  @Public()
+  @Query(() => Service, { name: 'service' })
+  getService(@Args('id') id: string) {
+    return this.servicesService.findOne(id);
   }
 
   @Public()
