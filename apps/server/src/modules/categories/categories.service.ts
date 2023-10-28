@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { GetCategoriesArgs } from './dto/get-categories.args';
 import { queryBuilder } from '@common';

@@ -1,8 +1,8 @@
-import { BaseEntity } from '@common';
+import { Base } from '@common';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Category extends BaseEntity {
+export class Category extends Base {
   @Field(type => ID)
   name: string;
 

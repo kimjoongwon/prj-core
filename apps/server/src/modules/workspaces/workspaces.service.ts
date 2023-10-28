@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkspaceInput } from './dto/create-workspace.input';
 import { UpdateWorkspaceInput } from './dto/update-workspace.input';
-import { PrismaService } from '@modules/prisma/prisma.service';
+import { PrismaService } from '@modules/global/prisma/prisma.service';
 import { GetPaginatedWorkspaceArgs } from './dto/get-paginated-workspace.args';
 import { queryBuilder } from '@common';
 import { PaginatedWorkspace } from './models/paginated-workspace.model';

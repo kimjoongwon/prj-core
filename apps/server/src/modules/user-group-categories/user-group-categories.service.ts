@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserGroupCategoryInput } from './dto/create-user-group-category.input';
 import { UpdateUserGroupCategoryInput } from './dto/update-user-group-category.input';
-import { PrismaService } from '@modules/prisma/prisma.service';
+import { PrismaService } from '@modules/global/prisma/prisma.service';
 
 @Injectable()
 export class UserGroupCategoriesService {

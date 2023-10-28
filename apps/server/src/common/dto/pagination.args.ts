@@ -3,17 +3,17 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 @ArgsType()
 export class PaginationArgs {
   @Field(type => Int, { nullable: true })
-  take?: number;
+  take: number;
 
   @Field(type => Int, { defaultValue: 1, nullable: true })
-  skip?: number;
+  skip: number;
 
   @Field(type => String, { nullable: true })
-  cursor?: string;
+  cursor: string;
 
   @Field({ nullable: true })
-  sortingKey?: string;
+  sortingKey: string;
 
   @Field({ nullable: true })
-  sortingValue?: string;
+  sortingValue: string;
 }

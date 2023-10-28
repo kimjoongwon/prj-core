@@ -3,13 +3,10 @@ import { ProfilesService } from './profiles.service';
 import { Profile } from './entities/profile.entity';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { CreateProfileInput } from './dto/create-profile.input';
-import { BaseResolver } from '@common';
 
 @Resolver(() => Profile)
-export class ProfilesResolver extends BaseResolver(Profile) {
-  constructor(private readonly profilesService: ProfilesService) {
-    super();
-  }
+export class ProfilesResolver {
+  constructor(private readonly profilesService: ProfilesService) {}
 
   @Mutation(() => Profile)
   createProfile(

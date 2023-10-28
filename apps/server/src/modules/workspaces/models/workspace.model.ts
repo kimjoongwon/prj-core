@@ -1,9 +1,9 @@
 import { User } from '@modules/users/models/user.model';
-import { BaseEntity } from '@common';
+import { Base } from '@common';
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class Workspace extends BaseEntity {
+export class Workspace extends Base {
   @Field()
   name: string;
 

@@ -1,4 +1,4 @@
-import { BaseEntity } from '@common';
+import { Base } from '@common';
 import {
   InputType,
   Int,
@@ -10,7 +10,7 @@ import {
 
 @InputType()
 export class CreateWorkspaceInput extends OmitType(
-  BaseEntity,
+  Base,
   ['id'],
   ObjectType,
 ) {

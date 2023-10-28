@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
-    "#graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!){\n      createCategory(createCategoryInput: $createCategoryInput) {\n        id\n      }\n    }\n": types.CreateCategoryDocument,
+    "\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n": types.CreateCategoryDocument,
     "\n  #graphql\n  mutation DeleteCategories($ids: [String!]!) {\n    deleteCategories(ids: $ids) {\n      name\n    }\n  }\n": types.DeleteCategoriesDocument,
     "\n  mutation RemoveCategory($id: String!) {\n    removeCategory(id: $id) {\n      id\n    }\n  }\n": types.RemoveCategoryDocument,
     "\n  mutation updateCategory($updateCategoryInput: UpdateCategoryInput!) {\n    updateCategory(updateCategoryInput: $updateCategoryInput) {\n      id\n    }\n  }\n": types.UpdateCategoryDocument,
@@ -68,7 +68,7 @@ export function gql(source: "#graphql\n  mutation SignUp($signUpInput: SignupInp
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!){\n      createCategory(createCategoryInput: $createCategoryInput) {\n        id\n      }\n    }\n"): (typeof documents)["#graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!){\n      createCategory(createCategoryInput: $createCategoryInput) {\n        id\n      }\n    }\n"];
+export function gql(source: "\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

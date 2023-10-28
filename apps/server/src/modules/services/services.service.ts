@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateServiceInput } from './dto/create-service.input';
-import { GetServicesArgs } from './dto/get-service.args';
-import { queryBuilder } from '@common';
-import { PaginatedService } from './model/paginated-service.model';
 import { last } from 'lodash';
-import { serviceForm } from './model/service-form.model';
-import { UpdateServiceInput } from './dto/update-service.input';
+import { queryBuilder } from '@common';
+import { PaginatedService, ServiceForm } from './models';
+import { CreateServiceInput, GetServicesArgs, UpdateServiceInput } from './dto';
+import { PrismaService } from '@modules/global/prisma/prisma.service';
 
 @Injectable()
 export class ServicesService {
@@ -18,7 +15,7 @@ export class ServicesService {
     });
   }
 
-  async findForm() {
+  findForm(): ServiceForm {
     return {
       id: '',
       name: '',

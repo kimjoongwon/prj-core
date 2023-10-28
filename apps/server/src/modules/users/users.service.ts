@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { queryBuilder } from '@common';
 import { last } from 'lodash';

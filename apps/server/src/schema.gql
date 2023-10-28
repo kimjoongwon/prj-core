@@ -20,7 +20,7 @@ type Category {
   id: ID!
   name: ID!
   serviceId: String
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type CategoryEdge {
@@ -41,7 +41,7 @@ type CategoryItem {
   id: ID!
   name: String!
   parentId: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type CategoryItemEdge {
@@ -174,7 +174,7 @@ type Profile {
   id: ID!
   nickname: String!
   phone: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
   userId: Int!
 }
 
@@ -196,14 +196,13 @@ type Query {
   categoryItemForm: CategoryItemForm!
   categoryItemTrees(parentIds: [String!]!): [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
-  findAllProfile: [Profile!]!
   profile(id: String!): Profile!
   profiles: [Profile!]!
   role(id: Int!): Role!
   roles: [Role!]!
   service(id: String!): Service!
   serviceForm: ServiceForm!
-  services(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedService!
+  services(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedService!
   user(id: String!): User!
   userForm(id: String!): UserForm!
   users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
@@ -232,7 +231,7 @@ type Service {
   deletedAt: DateTime
   id: ID!
   name: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type ServiceEdge {
@@ -334,7 +333,7 @@ type User {
   email: String!
   id: ID!
   profile: Profile!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type UserEdge {
@@ -371,7 +370,7 @@ type Workspace {
 
   """작업공간 전화번호"""
   phone: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 type WorkspaceEdge {
