@@ -10,4 +10,4 @@ export const UPDATE_<%= h.inflection.singularize(name).toUpperCase() %> = gql(`
       id
     }
   }
-
+`);

@@ -88,19 +88,13 @@ input CreateProfileInput {
 }
 
 input CreateRoleInput {
-  """Example field (placeholder)"""
-  name: String!
+  accessPages: [String!]! = []
+  name: RoleNames!
 }
 
 input CreateServiceInput {
   categoryId: String!
   name: String!
-}
-
-input CreateWorkspaceInput {
-  name: String!
-  ownerId: String!
-  phone: String!
 }
 
 """
@@ -124,16 +118,14 @@ type Mutation {
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createRole(createRoleInput: CreateRoleInput!): Role!
   createService(createServiceInput: CreateServiceInput!): Service!
-  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   deleteCategories(ids: [String!]!): Category!
   deleteCategoryItem(id: String!): CategoryItem!
+  deleteRole(id: String!): Role!
   deleteService(id: String!): Service!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeCategory(id: String!): Category!
   removeProfile(id: String!): Profile!
-  removeRole(id: Int!): Role!
-  removeWorkspace(id: Int!): Workspace!
   signup(data: SignupInput!): Auth!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
@@ -141,7 +133,6 @@ type Mutation {
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
 type PaginatedCategory {
@@ -156,16 +147,16 @@ type PaginatedCategoryItem {
   pageInfo: CategoryItemPageInfo!
 }
 
+type PaginatedRole {
+  edges: [RoleEdge!]!
+  nodes: [Role!]!
+  pageInfo: RolePageInfo!
+}
+
 type PaginatedService {
   edges: [ServiceEdge!]!
   nodes: [Service!]!
   pageInfo: ServicePageInfo!
-}
-
-type PaginatedWorkspace {
-  edges: [WorkspaceEdge!]!
-  nodes: [Workspace!]!
-  pageInfo: WorkspacePageInfo!
 }
 
 type Profile {
@@ -198,24 +189,37 @@ type Query {
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
   profile(id: String!): Profile!
   profiles: [Profile!]!
-  role(id: Int!): Role!
-  roles: [Role!]!
+  role(id: String!): Role!
+  roleForm: RoleForm!
+  roles(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedRole!
   service(id: String!): Service!
   serviceForm: ServiceForm!
   services(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedService!
   user(id: String!): User!
   userForm(id: String!): UserForm!
   users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
-  workspace(id: String!): Workspace!
-  workspaces(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedWorkspace!
 }
 
 type Role {
   """해당 권한이 접근 가능한 페이지 리스트"""
   accessPages: [String!]!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: ID!
 
   """Super, Educator, Learner, User"""
   name: RoleNames!
+  updatedAt: DateTime
+}
+
+type RoleEdge {
+  cursor: String!
+  node: Role!
+}
+
+type RoleForm {
+  accessPages: [String!]
+  name: RoleNames
 }
 
 enum RoleNames {
@@ -223,6 +227,12 @@ enum RoleNames {
   Learner
   Super
   User
+}
+
+type RolePageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  totalCount: Int!
 }
 
 type Service {
@@ -241,11 +251,7 @@ type ServiceEdge {
 
 type ServiceForm {
   categoryId: String
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: ID
   name: String
-  updatedAt: DateTime
 }
 
 type ServicePageInfo {
@@ -295,10 +301,15 @@ input UpdateProfileInput {
 }
 
 input UpdateRoleInput {
-  id: Int!
+  """해당 권한이 접근 가능한 페이지 리스트"""
+  accessPages: [String!]
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: String
 
-  """Example field (placeholder)"""
-  name: String
+  """Super, Educator, Learner, User"""
+  name: RoleNames
+  updatedAt: DateTime
 }
 
 input UpdateServiceInput {
@@ -315,16 +326,6 @@ input UpdateUserInput {
   id: String!
   password: String
   profile: ProfileInput
-}
-
-input UpdateWorkspaceInput {
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: String!
-  name: String
-  ownerId: String
-  phone: String
-  updatedAt: DateTime
 }
 
 type User {
@@ -357,29 +358,4 @@ type Users {
   edges: [UserEdge!]!
   nodes: [User!]!
   pageInfo: UserPageInfo!
-}
-
-type Workspace {
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: ID!
-  name: String!
-
-  """작업공간 소유주"""
-  owner: User!
-
-  """작업공간 전화번호"""
-  phone: String!
-  updatedAt: DateTime
-}
-
-type WorkspaceEdge {
-  cursor: String!
-  node: Workspace!
-}
-
-type WorkspacePageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
 }

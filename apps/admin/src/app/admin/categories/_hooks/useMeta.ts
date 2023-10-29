@@ -81,7 +81,6 @@ export const useMeta = ({
       children: '삭제',
       color: 'danger',
       onClick: () => {
-        console.log(table.selectedRowIds);
         deleteCategories({
           variables: {
             ids: table.selectedRowIds,

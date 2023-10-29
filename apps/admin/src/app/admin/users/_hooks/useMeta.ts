@@ -66,19 +66,14 @@ export const useMeta = ({
     },
   ];
 
-  const table = useCoCTable<User>({
-    data: usersQuery.data?.users?.nodes || [],
-    columns: [...userColumns, ...actionColumns],
-  });
-
   return {
     buttonGroup: {
       leftButtons: useMemo(() => leftButtons, []),
       rightButtons: useMemo(() => rightButtons, []),
     },
     dataGrid: {
-      instance: table,
       data: usersQuery?.data?.users.nodes,
+      columns:[...userColumns, ...actionColumns], 
       onClickRow,
       onClickSorting,
     },

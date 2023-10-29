@@ -4,6 +4,6 @@ export * from './categories';
 export * from './users';
 export * from './categoryItems';
 export * from './services';
-export * from './emails';
+export * from './roles';
 
 

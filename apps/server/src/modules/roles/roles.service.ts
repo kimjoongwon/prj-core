@@ -1,26 +1,68 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoleInput } from './dto/create-role.input';
-import { UpdateRoleInput } from './dto/update-role.input';
+import { last } from 'lodash';
+import { queryBuilder } from '@common';
+import { PaginatedRole, RoleForm } from './models';
+import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
+import { PrismaService } from '@modules/global/prisma/prisma.service';
 
 @Injectable()
 export class RolesService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createRoleInput: CreateRoleInput) {
-    return 'This action adds a new role';
+    return this.prisma.role.create({
+      data: createRoleInput,
+    });
   }
 
-  findAll() {
-    return `This action returns all roles`;
+  findForm(): RoleForm {
+    return {
+      name: 'USER',
+      accessPages: [],
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  async findPaginatedRole(args: GetRolesArgs): Promise<PaginatedRole> {
+    const query = queryBuilder(args, []);
+
+    const roles = await this.prisma.role.findMany({
+      ...query,
+    });
+
+    const totalCount = await this.prisma.role.count({
+      where: query?.where,
+    });
+
+    const endCursor = last(roles)?.id;
+
+    return {
+      edges: roles.map(role => ({ node: role })),
+      nodes: roles,
+      pageInfo: {
+        totalCount,
+        endCursor,
+        hasNextPage: !(roles.length < args.take),
+      },
+    };
   }
 
-  update(id: number, updateRoleInput: UpdateRoleInput) {
-    return `This action updates a #${id} role`;
+  delete(id: string) {
+    return this.prisma.role.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  findOne(id: string) {
+    return this.prisma.role.findUnique({
+      where: { id },
+    });
+  }
+
+  update(updateCategoryInput: UpdateRoleInput) {
+    return this.prisma.role.update({
+      where: { id: updateCategoryInput.id },
+      data: updateCategoryInput,
+    });
   }
 }

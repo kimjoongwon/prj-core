@@ -31,8 +31,8 @@ export default function Page() {
       <DataGridContainer>
         <DataGrid
           selectionMode="multiple"
-          headers={dataGrid.instance.getLeafHeaders()}
-          rows={dataGrid.instance.getRowModel().rows}
+          data={dataGrid.data}
+          columns={dataGrid.columns}
           onSelectionChange={dataGrid.onClickRow}
           onSortChange={dataGrid.onClickSorting}
         />

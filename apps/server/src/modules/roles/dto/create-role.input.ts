@@ -1,7 +1,12 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { $Enums } from '@coc/db';
+import { Field, InputType } from '@nestjs/graphql';
+import { Roles } from '../models';
 
 @InputType()
 export class CreateRoleInput {
-  @Field(() => String, { description: 'Example field (placeholder)' })
-  name: string;
+  @Field(type => Roles)
+  name: $Enums.Roles;
+
+  @Field(type => [String], { defaultValue: [] })
+  accessPages: string[];
 }

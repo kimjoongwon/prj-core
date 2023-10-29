@@ -1,6 +1,11 @@
 'use client';
 
 import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Link,
   Navbar as NextUINavbar,
   NavbarBrand,
@@ -11,10 +16,16 @@ import {
   NavbarMenuToggle,
 } from '@nextui-org/react';
 import { useState } from 'react';
+import { FaChevronDown, FaUser } from 'react-icons/fa';
+import { v4 } from 'uuid';
+import NextLink from 'next/link';
+import { observer } from 'mobx-react-lite';
 
-interface NavItem {
+export interface NavItem {
   text: string;
   href: string;
+  children?: NavItem[];
+  active: boolean;
 }
 
 interface navMenuItem extends NavItem {}
@@ -26,41 +37,64 @@ interface NavbarProps {
   leftContents?: React.ReactNode;
 }
 
-export function Navbar(props: NavbarProps) {
+export const CoCNavbar = observer((props: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { rightContents = <div>left</div>, leftContents = <div>right</div> } =
     props;
-  const {
-    navItems = [
-      {
-        text: '1',
-        href: '1',
-      },
-      {
-        text: '2',
-        href: '2',
-      },
-    ],
-    navMenuItems = [
-      {
-        text: '1',
-        href: '1',
-      },
-      {
-        text: '2',
-        href: '2',
-      },
-    ],
-  } = props;
+  const { navItems = [], navMenuItems = [] } = props;
+  const renderNavItem = (item: NavItem) => {
+    if (!item.children) {
+      return (
+        <NavbarItem key={v4()} isActive={item.active}>
+          <Link
+            href={item.href}
+            color={item.active ? undefined : 'foreground'}
+            size="lg"
+            as={NextLink}
+          >
+            {item.text}
+          </Link>
+        </NavbarItem>
+      );
+    }
 
-  const renderNavItem = (item: NavItem) => (
-    <NavbarItem key={item.text}>
-      <Link href={item.href} color="foreground" size="lg">
-        {item.text}
-      </Link>
-    </NavbarItem>
-  );
+    return (
+      <Dropdown key={v4()}>
+        <NavbarItem>
+          <DropdownTrigger>
+            <Button
+              size="lg"
+              disableRipple
+              className="text-large p-0 bg-transparent data-[hover=true]:bg-transparent"
+              endContent={<FaChevronDown />}
+            >
+              {item.text}
+            </Button>
+          </DropdownTrigger>
+        </NavbarItem>
+        <DropdownMenu
+          aria-label="ACME features"
+          className="w-[340px]"
+          itemClasses={{
+            base: 'gap-4',
+          }}
+        >
+          {(item.children || []).map(child => (
+            <DropdownItem
+              key={v4()}
+              description="Overcome any challenge with a supporting team ready to respond."
+              startContent={<FaUser />}
+              href={child.href}
+              as={NextLink}
+            >
+              {child.text}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    );
+  };
 
   const renderNavMenuItem = (item: navMenuItem) => (
     <NavbarMenuItem key={item.text}>
@@ -71,35 +105,28 @@ export function Navbar(props: NavbarProps) {
   );
 
   return (
-    <>
-      <NextUINavbar
-        isBordered
-        isMenuOpen={isMenuOpen}
-        onMenuOpenChange={setIsMenuOpen}
-      >
-        <NavbarContent className="sm:hidden" justify="start">
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          />
-        </NavbarContent>
+    <NextUINavbar
+      maxWidth="2xl"
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    >
+      <NavbarContent>
+        <NavbarMenuToggle
+          className="sm:hidden"
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        />
+        <NavbarBrand>
+          <p className="font-bold text-large">프로미스</p>
+        </NavbarBrand>
+      </NavbarContent>
 
-        <NavbarContent className="sm:hidden pr-3" justify="center">
-          <NavbarBrand>
-            LOGO
-            <p className="font-bold text-inherit">BRAND</p>
-          </NavbarBrand>
-        </NavbarContent>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        {navItems.map(renderNavItem)}
+      </NavbarContent>
 
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          {navItems.map(renderNavItem)}
-        </NavbarContent>
+      <NavbarContent justify="end">{rightContents}</NavbarContent>
 
-        <NavbarContent justify="end">{rightContents}</NavbarContent>
-
-        <NavbarMenu>
-          <NavbarMenuItem>{navMenuItems.map(renderNavMenuItem)}</NavbarMenuItem>
-        </NavbarMenu>
-      </NextUINavbar>
-    </>
+      <NavbarMenu>{navMenuItems.map(renderNavMenuItem)}</NavbarMenu>
+    </NextUINavbar>
   );
-}
+});

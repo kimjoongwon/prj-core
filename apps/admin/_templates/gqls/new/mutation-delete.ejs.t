@@ -10,4 +10,4 @@ export const DELETE_<%= h.inflection.singularize(name).toUpperCase() %> = gql(`
       id
     }
   }
-
+`);

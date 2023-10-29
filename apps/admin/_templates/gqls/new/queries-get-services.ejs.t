@@ -5,13 +5,13 @@ import { gql } from '@__generated__';
 
 export const GET_<%= h.inflection.pluralize(name).toUpperCase() %> = gql(`
   #graphql
-  query Get<%= Name %>(
+  query Get<%= Name %>s(
     $skip: Int
     $take: Int
     $sortingKey: String
     $sortingValue: String
   ) {
-    <%= name %>(
+    <%= name %>s(
       skip: $skip
       take: $take
       sortingKey: $sortingKey

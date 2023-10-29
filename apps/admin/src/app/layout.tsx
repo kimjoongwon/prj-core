@@ -6,7 +6,7 @@ export default function RootLayout(props: {
   modal: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="light">
       <head>
         <title>라프첼라</title>
       </head>
