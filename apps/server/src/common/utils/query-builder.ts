@@ -42,6 +42,5 @@ export const queryBuilder = (
       });
     }
   });
-  console.log('_args', _args);
   return _args;
 };

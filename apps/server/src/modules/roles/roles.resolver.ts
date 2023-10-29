@@ -1,35 +1,54 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard, Public } from '@common';
 import { RolesService } from './roles.service';
-import { Role } from './entities/role.entity';
-import { CreateRoleInput } from './dto/create-role.input';
-import { UpdateRoleInput } from './dto/update-role.input';
+import { PaginatedRole, Role, RoleForm } from './models';
+import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
 
 @Resolver(() => Role)
+@UseGuards(GqlAuthGuard)
 export class RolesResolver {
   constructor(private readonly rolesService: RolesService) {}
 
+  @Public()
   @Mutation(() => Role)
-  createRole(@Args('createRoleInput') createRoleInput: CreateRoleInput) {
+  createRole(
+    @Args('createRoleInput')
+    createRoleInput: CreateRoleInput,
+  ) {
     return this.rolesService.create(createRoleInput);
   }
 
-  @Query(() => [Role], { name: 'roles' })
-  findAll() {
-    return this.rolesService.findAll();
+  @Public()
+  @Mutation(() => Role)
+  updateRole(
+    @Args('updateRoleInput')
+    updateRoleInput: UpdateRoleInput,
+  ) {
+    return this.rolesService.update(updateRoleInput);
   }
 
+  @Public()
+  @Mutation(() => Role)
+  deleteRole(@Args('id') id: string) {
+    return this.rolesService.delete(id);
+  }
+
+  @Public()
   @Query(() => Role, { name: 'role' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  getRole(@Args('id') id: string) {
     return this.rolesService.findOne(id);
   }
 
-  @Mutation(() => Role)
-  updateRole(@Args('updateRoleInput') updateRoleInput: UpdateRoleInput) {
-    return this.rolesService.update(updateRoleInput.id, updateRoleInput);
+  @Public()
+  @Query(() => RoleForm, { name: 'roleForm' })
+  getRoleForm() {
+    return this.rolesService.findForm();
   }
 
-  @Mutation(() => Role)
-  removeRole(@Args('id', { type: () => Int }) id: number) {
-    return this.rolesService.remove(id);
+  @Public()
+  @Query(() => PaginatedRole, { name: 'roles' })
+  getRoles(@Args() args: GetRolesArgs) {
+    return this.rolesService.findPaginatedRole(args);
   }
 }

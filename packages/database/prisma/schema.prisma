@@ -62,12 +62,13 @@ model Profile {
   deletedAt DateTime? @db.Timestamptz(6)
 }
 
-model Roles {
-  id        String    @id @default(cuid())
-  name      Role      @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime? @db.Timestamptz(6)
+model Role {
+  id          String    @id @default(cuid())
+  name        Roles     @default(USER)
+  accessPages String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  deletedAt   DateTime? @db.Timestamptz(6)
 }
 
 model Workspace {
@@ -81,7 +82,7 @@ model Workspace {
   deletedAt DateTime? @db.Timestamptz(6)
 }
 
-enum Role {
+enum Roles {
   USER
   SUPER_ADMIN
 }

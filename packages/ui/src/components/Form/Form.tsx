@@ -23,7 +23,6 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
     title,
     ...rest
   } = porps;
-  console.log(toJS(state));
   return (
     <form {...rest}>
       <Card fullWidth>

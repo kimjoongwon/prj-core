@@ -36,14 +36,11 @@ export const useCoCRouter = <T extends object>() => {
     getUrlWithParams: getUrlWithParamsAndQueryString,
     push: (cocRouterArgs: CoCRouterArgs<T>) => {
       const { params, url, queryString, options } = cocRouterArgs;
-      console.log(queryString);
       const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
         url,
         params,
         queryString,
       );
-
-      console.log(urlWithParamsAndQueryString);
 
       router.push(urlWithParamsAndQueryString, options);
     },

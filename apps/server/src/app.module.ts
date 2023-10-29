@@ -8,7 +8,6 @@ import {
   PrismaModule,
   ProfilesModule,
   UsersModule,
-  WorkspacesModule,
   LoggerModule,
   ServicesModule,
 } from './modules';
@@ -49,7 +48,6 @@ import { CategoryItemsModule } from '@modules/category-items/category-items.modu
     LoggerModule,
     PrismaModule,
     UsersModule,
-    WorkspacesModule,
     ProfilesModule,
     HttpModule,
     AuthModule,
@@ -57,6 +55,7 @@ import { CategoryItemsModule } from '@modules/category-items/category-items.modu
     CategoriesModule,
     CategoryItemsModule,
     ServicesModule,
+    RolesModule,
   ],
   providers: [
     {

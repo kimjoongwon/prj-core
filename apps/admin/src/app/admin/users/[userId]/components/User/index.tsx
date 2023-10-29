@@ -3,7 +3,6 @@ import { usePage } from '../Provider/hooks/usePage';
 
 export const User = () => {
   const page = usePage();
-  console.log('다국적 서비스를 만드는 방법?');
     
   return (
     <>

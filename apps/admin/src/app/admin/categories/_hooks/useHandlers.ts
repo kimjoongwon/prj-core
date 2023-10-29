@@ -7,11 +7,9 @@ export const useHandlers = (state: ReturnType<typeof useStates>) => {
   };
 
   const onClickRow = (rowIds: string[]) => {
-    console.log(rowIds);
     state.table.selectedRowIds = state.table.selectedRowIds.concat(
       rowIds as never[],
     );
-    console.log(state.table.selectedRowIds);
   };
 
   return {
