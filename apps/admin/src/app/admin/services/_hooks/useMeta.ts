@@ -8,8 +8,6 @@ import { useHandlers } from './useHandlers';
 import {
   SERVICE_EDIT_PAGE_PATH,
   SERVICE_PAGE_PATH,
-  USER_EDIT_PAGE_PATH,
-  USER_PAGE_PATH,
 } from '@constants';
 import { toast } from 'react-toastify';
 
@@ -30,7 +28,7 @@ export const useMeta = ({
             router.push({
               url: SERVICE_EDIT_PAGE_PATH,
               params: {
-                id: context.row.original.id,
+                serviceId: context.row.original.id,
               },
             }),
         },
@@ -40,7 +38,7 @@ export const useMeta = ({
             router.push({
               url: SERVICE_PAGE_PATH,
               params: {
-                id: context.row.original.id,
+                serviceId: context.row.original.id,
               },
             }),
         },
@@ -56,7 +54,7 @@ export const useMeta = ({
         router.push({
           url: SERVICE_EDIT_PAGE_PATH,
           params: {
-            id: 'new',
+            serviceId: 'new',
           },
         }),
     },

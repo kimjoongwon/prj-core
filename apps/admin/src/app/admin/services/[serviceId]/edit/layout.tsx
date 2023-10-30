@@ -2,7 +2,7 @@ import { ContainerProps } from '@coc/ui';
 import { ServiceEditPageProvider } from './provider';
 
 export interface UserEditPageProps extends ContainerProps {
-  params: { id: string | 'new' };
+  params: { serviceId: string | 'new' };
 }
 
 export default function Layout(props: UserEditPageProps) {

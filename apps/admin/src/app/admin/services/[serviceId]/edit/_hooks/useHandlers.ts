@@ -12,11 +12,11 @@ export const useHandlers = (
     createServiceInput,
     updateServiceInput,
   } = context;
-  const { id } = useParams();
+  const { serviceId } = useParams();
   const router = useCoCRouter();
 
   const onClickSave = async () => {
-    if (id === 'new') {
+    if (serviceId === 'new') {
       return await createService({
         variables: {
           createServiceInput,

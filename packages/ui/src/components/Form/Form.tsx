@@ -1,8 +1,9 @@
+'use client';
+
 import { observer } from 'mobx-react-lite';
 import { FormHTMLAttributes } from 'react';
 import { CardBody, Card, CardHeader, CardFooter } from '@nextui-org/react';
 import { Button } from '../Button';
-import { toJS } from 'mobx';
 
 interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
   state: T;
@@ -23,6 +24,7 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
     title,
     ...rest
   } = porps;
+
   return (
     <form {...rest}>
       <Card fullWidth>

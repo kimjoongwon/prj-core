@@ -18,7 +18,6 @@ export class ComplexityPlugin implements ApolloServerPlugin {
 
     return {
       async didResolveOperation({ request, document }) {
-        console.log('Running complexity analysis...');
         const complexity = getComplexity({
           schema,
           operationName: request.operationName,

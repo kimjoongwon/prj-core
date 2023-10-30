@@ -5,7 +5,4 @@ import { Field, ObjectType } from '@nestjs/graphql';
 export class Service extends Base {
   @Field(type => String)
   name: string;
-
-  @Field(type => String)
-  categoryId: string;
 }

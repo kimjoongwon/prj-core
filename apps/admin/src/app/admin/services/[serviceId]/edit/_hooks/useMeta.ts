@@ -15,17 +15,14 @@ export const useMeta = (
     onClickSave,
     updateServiceInput,
   } = context;
-  const { id } = useParams();
-  const isEditMode = id !== 'new';
+  const { serviceId } = useParams();
+  const isEditMode = serviceId !== 'new';
 
   return {
     isEditMode,
     form: {
       schema: serviceSchema,
-      state: {
-        createServiceInput,
-        updateServiceInput,
-      },
+      state: isEditMode ? updateServiceInput : createServiceInput,
       buttons: {
         onClickSave,
         onClickCancel,

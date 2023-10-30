@@ -17,7 +17,6 @@ export class ServicesService {
 
   findForm(): ServiceForm {
     return {
-      id: '',
       name: '',
     };
   }

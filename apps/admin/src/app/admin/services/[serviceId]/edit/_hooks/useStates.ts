@@ -1,11 +1,10 @@
 import { CreateServiceInput, UpdateServiceInput } from '@__generated__/graphql';
 import { useLocalObservable } from 'mobx-react-lite';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useQueries } from './useQueries';
 
 export const useState = (context: ReturnType<typeof useQueries>) => {
-  const { id = 'new' } = useParams();
-  const searchParams = useSearchParams();
+  const { serviceId = 'new' } = useParams();
 
   const {
     serviceQuery: { data },
@@ -15,12 +14,11 @@ export const useState = (context: ReturnType<typeof useQueries>) => {
   } = context;
 
   const createServiceInput = useLocalObservable<CreateServiceInput>(() => ({
-    categoryId: '',
-    name: '',
+    name: serviceForm.name || '',
   }));
 
   const updateServiceInput = useLocalObservable<UpdateServiceInput>(() => ({
-    id: id as string,
+    id: serviceId as string,
     name: data?.service.name,
   }));
 

@@ -33,9 +33,11 @@ export const FormControl = <T extends any>(props: FormControlProps<T>) => {
         if (!child.props.state) {
           return null;
         }
-        const result = (schema as ZodSchema).safeParse(child.props.state);
-        validation.success = result.success;
 
+        const result = (schema as ZodSchema).safeParse(child.props.state);
+        validation.errorMessage = '';
+        validation.state = 'valid';
+        validation.success = result.success;
         if (!result.success) {
           const errorMessage = get(
             result?.error.format(),

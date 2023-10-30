@@ -93,7 +93,6 @@ input CreateRoleInput {
 }
 
 input CreateServiceInput {
-  categoryId: String!
   name: String!
 }
 
@@ -236,7 +235,6 @@ type RolePageInfo {
 }
 
 type Service {
-  categoryId: String!
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
@@ -250,7 +248,6 @@ type ServiceEdge {
 }
 
 type ServiceForm {
-  categoryId: String
   name: String
 }
 
@@ -313,7 +310,6 @@ input UpdateRoleInput {
 }
 
 input UpdateServiceInput {
-  categoryId: String
   createdAt: DateTime
   deletedAt: DateTime
   id: String
