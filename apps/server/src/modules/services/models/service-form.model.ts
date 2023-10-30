@@ -6,5 +6,4 @@ export class ServiceForm extends PartialType(CreateServiceInput, ObjectType) {}
 
 export const serviceForm = {
   name: '',
-  categoryId: '',
 };

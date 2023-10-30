@@ -117,7 +117,6 @@ export type CreateRoleInput = {
 };
 
 export type CreateServiceInput = {
-  categoryId: Scalars['String']['input'];
   name: Scalars['String']['input'];
 };
 
@@ -459,7 +458,6 @@ export type RolePageInfo = {
 
 export type Service = {
   __typename?: 'Service';
-  categoryId: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -475,7 +473,6 @@ export type ServiceEdge = {
 
 export type ServiceForm = {
   __typename?: 'ServiceForm';
-  categoryId?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -538,7 +535,6 @@ export type UpdateRoleInput = {
 };
 
 export type UpdateServiceInput = {
-  categoryId?: InputMaybe<Scalars['String']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;

@@ -31,7 +31,7 @@ export const ServiceEditPageProvider = observer(
     const schemas = useSchemas();
     const handlers = useHandlers({ ...mutations, ...state });
     const meta = useMeta({ ...state, ...handlers, ...schemas });
-    const { form, isEditMode } = meta;
+    const { form } = meta;
 
     return (
       <ServiceEditPageContext.Provider
@@ -44,6 +44,7 @@ export const ServiceEditPageProvider = observer(
           schema={form.schema}
           title={'서비스'}
           onClickSave={form.buttons.onClickSave}
+          onClickCancel={form.buttons.onClickCancel}
         >
           {props.children}
         </Form>

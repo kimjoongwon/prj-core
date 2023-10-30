@@ -1,5 +1,5 @@
-import { ServiceEditPageProvider } from '@adminPages';
 import { CoCModal } from '@coc/ui';
+import { ServiceEditPageProvider } from '../../../../../admin/services/[serviceId]/edit/provider';
 interface LayoutProps {
   children: React.ReactNode;
 }
