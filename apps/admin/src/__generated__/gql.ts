@@ -24,13 +24,14 @@ const documents = {
     "\n  #graphql\n  mutation UpdateCategoryItem($updateCategoryItemInput: UpdateCategoryItemInput!) {\n    updateCategoryItem(updateCategoryItemInput: $updateCategoryItemInput) {\n      id\n      name\n      deletedAt\n    }\n  }\n": types.UpdateCategoryItemDocument,
     "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      name\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteRole($id: String!) {\n    deleteRole(id: $id) {\n      id\n    }\n  }\n": types.DeleteRoleDocument,
+    "\n  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {\n    updateRole(updateRoleInput: $updateRoleInput) {\n      id\n    }\n  }\n": types.UpdateRoleDocument,
     "\n  mutation CreateService($createServiceInput: CreateServiceInput!) {\n    createService(createServiceInput: $createServiceInput) {\n      id\n      name\n    }\n  }\n": types.CreateServiceDocument,
     "\n  mutation DeleteService($id: String!) {\n    deleteService(id: $id) {\n      id\n    }\n  }\n": types.DeleteServiceDocument,
     "\n  mutation UpdateService($updateServiceInput: UpdateServiceInput!) {\n    updateService(updateServiceInput: $updateServiceInput) {\n      id\n      name\n    }\n  }\n": types.UpdateServiceDocument,
     "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n": types.UpdateUserDocument,
     "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deletedAt\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
     "\n  query GetCategory($id: String!) {\n    category(id: $id) {\n      id\n      name\n      categoryItemId\n    }\n  }\n": types.GetCategoryDocument,
-    "#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n": types.GetCategoryFormDocument,
+    "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      categoryItemId\n      serviceId\n      categoryItemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetCategoryFormDocument,
     "\n  #graphql\n  query GetCategoryItem ($id: String!){\n    categoryItem (id: $id) {\n      id\n      name\n      parentId\n    }\n  }\n": types.GetCategoryItemDocument,
     "\n  #graphql\n  query GetCategoryItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    categoryItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        name\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetCategoryItemsDocument,
     "\n  #graphql\n  query GetCategoryItemForm {\n    categoryItemForm {\n      name\n      parentId\n    }\n  }\n": types.GetCategoryItemFormDocument,
@@ -107,6 +108,10 @@ export function gql(source: "\n  mutation DeleteRole($id: String!) {\n    delete
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {\n    updateRole(updateRoleInput: $updateRoleInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {\n    updateRole(updateRoleInput: $updateRoleInput) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation CreateService($createServiceInput: CreateServiceInput!) {\n    createService(createServiceInput: $createServiceInput) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateService($createServiceInput: CreateServiceInput!) {\n    createService(createServiceInput: $createServiceInput) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -131,7 +136,7 @@ export function gql(source: "\n  query GetCategory($id: String!) {\n    category
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n"): (typeof documents)["#graphql\n    query GetCategoryForm($id: String!) {\n      categoryForm(id: $id) {\n        name\n        categoryItemId\n      } \n    }\n"];
+export function gql(source: "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      categoryItemId\n      serviceId\n      categoryItemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      categoryItemId\n      serviceId\n      categoryItemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

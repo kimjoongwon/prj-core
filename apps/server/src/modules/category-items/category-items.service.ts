@@ -4,7 +4,7 @@ import { CreateCategoryItemInput } from './dto/create-category-item.input';
 import { GetCategoryItemsArgs } from './dto/get-category-items.args';
 import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
-import { groupBy, last } from 'lodash';
+import { last } from 'lodash';
 import { categoryItemForm } from './model/category-form.model';
 import { UpdateCategoryItemInput } from './dto/update-category-item.input';
 
@@ -36,6 +36,19 @@ export class CategoryItemsService {
 
   async findForm() {
     return categoryItemForm;
+  }
+
+  async findRootCategoryItemOptions() {
+    const categoryItems = await this.prisma.categoryItem.findMany({
+      where: {
+        parentId: 'root',
+      },
+    });
+
+    return categoryItems.map(categoryItem => ({
+      name: categoryItem.name,
+      value: categoryItem.id,
+    }));
   }
 
   async findPaginatedCategoryItem(

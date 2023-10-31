@@ -6,11 +6,16 @@ import { queryBuilder } from '@common';
 import { last } from 'lodash';
 import { PaginatedCategory } from './models/paginated-category.model';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import { categoryForm } from './models/category-form.model';
+import { ServicesService } from '@modules/services/services.service';
+import { CategoryItemsService } from '@modules/category-items/category-items.service';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly servicesService: ServicesService,
+    private readonly categoryItemsService: CategoryItemsService,
+  ) {}
 
   create(createCategoryInput: CreateCategoryInput) {
     return this.prisma.category.create({
@@ -35,15 +40,33 @@ export class CategoriesService {
   }
 
   async findForm(id: string) {
+    const serviceOptions = await this.servicesService.findAllServiceOptions();
+    const categoryItemOptions =
+      await this.categoryItemsService.findRootCategoryItemOptions();
+    console.log('findForm');
     if (id === 'new') {
-      return categoryForm;
+      console.log('new', serviceOptions, categoryItemOptions);
+      return {
+        name: '',
+        categoryItemId: '',
+        serviceId: '',
+        serviceOptions,
+        categoryItemOptions,
+      };
     }
-    const category = await this.prisma.category.findUnique({ where: { id } });
+
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id,
+      },
+    });
 
     return {
-      id: category.id,
       name: category.name,
       categoryItemId: category.categoryItemId,
+      serviceId: category.serviceId,
+      serviceOptions,
+      categoryItemOptions,
     };
   }
 

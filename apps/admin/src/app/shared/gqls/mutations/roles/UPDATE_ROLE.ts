@@ -1,8 +1,8 @@
 import { gql } from '@__generated__';
 
 export const UPDATE_ROLE = gql(`
-  mutation DeleteRole($id: String!) {
-    deleteRole(id: $id) {
+  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {
+    updateRole(updateRoleInput: $updateRoleInput) {
       id
     }
   }

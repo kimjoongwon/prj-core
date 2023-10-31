@@ -1,12 +1,12 @@
-import { GetCategoryFormQueryVariables } from '@__generated__/graphql';
-import { skipToken, useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/client';
 import { GET_CATEGORY_FORM } from '@gqls';
+import { GetCategoryFormQueryVariables } from '@__generated__/graphql';
 
 export const useCategoryFormQuery = (
   variables: GetCategoryFormQueryVariables,
 ) => {
-  return useSuspenseQuery(
-    GET_CATEGORY_FORM,
-    variables.id === 'new' ? { variables } : skipToken,
-  );
+  return useSuspenseQuery(GET_CATEGORY_FORM, {
+    variables,
+    fetchPolicy: 'cache-and-network',
+  });
 };

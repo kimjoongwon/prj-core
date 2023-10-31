@@ -15,10 +15,18 @@ export class ServicesService {
     });
   }
 
-  findForm(): ServiceForm {
+  async findForm(): Promise<ServiceForm> {
     return {
       name: '',
     };
+  }
+
+  async findAllServiceOptions() {
+    const services = await this.prisma.service.findMany();
+    return services.map(service => ({
+      name: service.name,
+      value: service.id,
+    }));
   }
 
   async findPaginatedService(args: GetServicesArgs): Promise<PaginatedService> {

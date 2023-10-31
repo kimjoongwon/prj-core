@@ -29,10 +29,11 @@ type CategoryEdge {
 }
 
 type CategoryForm {
-  categoryItemId: String
-  id: String
+  categoryItemId: String!
+  categoryItemOptions: [Option!]!
   name: String!
-  serviceId: String
+  serviceId: String!
+  serviceOptions: [Option!]!
 }
 
 type CategoryItem {
@@ -132,6 +133,11 @@ type Mutation {
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
   updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Option {
+  name: String!
+  value: String!
 }
 
 type PaginatedCategory {

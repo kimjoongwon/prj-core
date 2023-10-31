@@ -36,6 +36,7 @@ export const BaseInput = <T extends any>(
 
   return (
     <NextUIInput
+      variant="bordered"
       {...rest}
       ref={ref}
       onChange={handleChange}

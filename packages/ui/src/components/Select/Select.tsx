@@ -13,16 +13,15 @@ import { get, set } from 'lodash-es';
 interface SelectProps<T>
   extends Omit<NextUISelectProps, 'children'>,
     MobxProps<T> {
-  selectItems?: SelectItemProps[];
+  options?: any[];
 }
 
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
-  const { state = {}, path = '', selectItems = [] } = props;
+  const { state = {}, path = '', options = [], ...rest } = props;
 
   const localState = useLocalObservable<{ value: SelectItemProps['value'] }>(
     () => ({
-      value: selectItems.find(option => option.value === get(state, path))
-        ?.value,
+      value: options?.find(option => option.value === get(state, path))?.value,
     }),
   );
 
@@ -54,6 +53,8 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 
   return (
     <NextSelect
+      variant="bordered"
+      {...rest}
       onSelectionChange={keys => {
         if (typeof keys === 'string') {
           localState.value = keys;
@@ -62,11 +63,12 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
           localState.value = Array.from(keys)[0] as string;
         }
       }}
+      value={localState.value}
     >
-      {selectItems.map(selectItem => {
+      {options.map(option => {
         return (
-          <SelectItem key={selectItem.key} value={selectItem.value}>
-            {selectItem.title}
+          <SelectItem key={option.value} value={option.value}>
+            {option.name}
           </SelectItem>
         );
       })}

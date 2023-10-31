@@ -1,23 +1,20 @@
-import { Field, ObjectType, PartialType } from '@nestjs/graphql';
-import { UpdateCategoryInput } from '../dto/update-category.input';
+import { Option } from '@common';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class CategoryForm {
-  @Field(type => String, { nullable: true })
-  id: string;
-
   @Field(type => String)
   name: string;
 
-  @Field(type => String, { nullable: true })
+  @Field(type => String)
   categoryItemId: string;
 
-  @Field(type => String, { nullable: true })
+  @Field(type => String)
   serviceId: string;
-}
 
-export const categoryForm = {
-  name: '',
-  categoryItemId: null,
-  serviceId: null,
-};
+  @Field(type => [Option])
+  categoryItemOptions: Option[];
+
+  @Field(type => [Option])
+  serviceOptions: Option[];
+}

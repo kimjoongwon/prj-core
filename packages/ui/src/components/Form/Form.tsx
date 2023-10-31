@@ -26,7 +26,7 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
   } = porps;
 
   return (
-    <form {...rest}>
+    <form {...rest} className="w-full">
       <Card fullWidth>
         <CardHeader>
           <p className="text-large">{title}</p>
