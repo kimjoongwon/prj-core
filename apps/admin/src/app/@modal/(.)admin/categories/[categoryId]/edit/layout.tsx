@@ -1,5 +1,5 @@
 import { CoCModal } from '@coc/ui';
-import { Provider } from '../../../../../admin/categories/[id]/edit/provider';
+import { Provider } from '../../../../../admin/categories/[categoryId]/edit/provider';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;

@@ -7,8 +7,11 @@ import { useStates } from './useStates';
 export const useMeta = () => {
   const queries = useQueries();
   const states = useStates(queries);
-  const mutations = useMutations(states);
-  const { onClickCancel, onClickSave } = useHandlers(mutations);
+  const mutations = useMutations();
+  const { onClickCancel, onClickSave } = useHandlers({
+    ...mutations,
+    ...states,
+  });
   const { formState } = states;
 
   return {

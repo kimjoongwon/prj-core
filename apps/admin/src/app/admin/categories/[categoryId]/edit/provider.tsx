@@ -21,7 +21,7 @@ export const Provider = observer((props: ContainerProps) => {
   return (
     <PageContext.Provider value={{ ...meta }}>
       <Form
-        title='카테고리'
+        title="카테고리"
         state={state}
         schema={schema}
         onClickSave={onClickSave}
