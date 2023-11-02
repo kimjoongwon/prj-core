@@ -16,32 +16,36 @@ model User {
   deletedAt DateTime? @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  member    Member[]
 }
 
 model Category {
-  id             String        @id @default(cuid())
-  name           String        @unique
-  serviceId      String?
-  service        Service?      @relation(fields: [serviceId], references: [id])
-  categoryItemId String?
-  categoryItem   CategoryItem? @relation(fields: [categoryItemId], references: [id])
-  createdAt      DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
-  deletedAt      DateTime?     @db.Timestamptz(6)
-  workspace      Workspace?
-  Group          Group?        @relation(fields: [groupId], references: [id])
-  groupId        String?
+  id        String       @id @default(cuid())
+  name      String       @unique
+  serviceId String
+  service   Service      @relation(fields: [serviceId], references: [id])
+  itemId    String
+  item      CategoryItem @relation(fields: [itemId], references: [id])
+  createdAt DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?    @db.Timestamptz(6)
+  workspace Workspace?
 }
 
 model CategoryItem {
-  id        String     @id @default(cuid())
-  name      String
-  tag       String     @unique
-  parentId  String?
-  createdAt DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
-  category  Category[]
-  deletedAt DateTime?  @db.Timestamptz(6)
+  id          String         @id @default(cuid())
+  name        String
+  tag         String         @unique
+  ancestorIds String[]
+  ancestors   CategoryItem[] @relation("Ancestor")
+  ancestor    CategoryItem?  @relation("Ancestor", fields: [ancestorIds], references: [id])
+  parentId    String?
+  parent      CategoryItem?  @relation("Parent", fields: [parentId], references: [id])
+  parents     CategoryItem[] @relation("Parent")
+  createdAt   DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?      @db.Timestamptz(6)
+  category    Category[]
 }
 
 model Service {
@@ -49,9 +53,10 @@ model Service {
   name      String     @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
-  category  Category[]
   deletedAt DateTime?  @db.Timestamptz(6)
-  Group     Group[]
+  category  Category[]
+  group     Group[]
+  member    Member[]
 }
 
 model Profile {
@@ -59,8 +64,7 @@ model Profile {
   phone     String    @unique
   nickname  String
   userId    String    @unique
-  roleId    String    @unique
-  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
@@ -68,23 +72,26 @@ model Profile {
 }
 
 model Role {
-  id            String          @id @default(cuid())
-  name          Roles           @default(USER)
-  accessPages   String[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime?       @updatedAt @db.Timestamptz(6)
-  deletedAt     DateTime?       @db.Timestamptz(6)
-  userWorkspace UserWorkspace[]
-  profile       Profile[]
+  id          String    @id @default(cuid())
+  name        Roles     @default(USER)
+  accessPages String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime? @db.Timestamptz(6)
+  member      Member[]
 }
 
-model UserWorkspace {
+model Member {
   id          String    @id @default(cuid())
+  serviceId   String
+  service     Service   @relation(fields: [serviceId], references: [id])
   userId      String
+  user        User      @relation(fields: [userId], references: [id])
   workspaceId String
-  role        Role      @relation(fields: [roleId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   roleId      String
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  role        Role      @relation(fields: [roleId], references: [id])
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime? @db.Timestamptz(6)
 }
@@ -92,26 +99,26 @@ model UserWorkspace {
 model Workspace {
   id             String    @id @default(cuid())
   name           String    @unique
-  phone          String
+  phone          String    @db.Char(11)
   address        String
-  businessNumber String
+  businessNumber String    @db.Char(10)
   categoryId     String    @unique
   category       Category  @relation(fields: [categoryId], references: [id])
   createdAt      DateTime  @db.Timestamptz(6)
   updatedAt      DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt      DateTime? @db.Timestamptz(6)
+  member         Member[]
 }
 
 model Group {
-  id          String     @id @default(cuid())
-  name        String     @unique
+  id          String    @id @default(cuid())
+  name        String
   serviceId   String
-  service     Service    @relation(fields: [serviceId], references: [id])
+  service     Service   @relation(fields: [serviceId], references: [id])
   categoryIds String[]
-  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?  @db.Timestamptz(6)
-  category    Category[]
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime? @db.Timestamptz(6)
 }
 
 enum Roles {
