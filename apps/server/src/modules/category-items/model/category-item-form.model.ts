@@ -1,7 +1,7 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
-@InputType()
-export class CreateCategoryItemInput {
+@ObjectType()
+export class CategoryItemForm {
   @Field(type => String)
   name: string;
 
@@ -11,6 +11,6 @@ export class CreateCategoryItemInput {
   @Field(type => [String])
   ancestorIds: string[];
 
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   parentId: string;
 }

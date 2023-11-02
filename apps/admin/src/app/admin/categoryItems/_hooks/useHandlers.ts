@@ -35,7 +35,7 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
 
   const onClickNew = () => {
     const searchParams = new URLSearchParams();
-    searchParams.set('parentId', state.currentSelectedParentId);
+    searchParams.set('parentId', state.currentSelectedParentId || '');
     searchParams.toString();
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,

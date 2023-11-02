@@ -34,8 +34,8 @@ const documents = {
     "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      categoryItemId\n      serviceId\n      categoryItemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetCategoryFormDocument,
     "\n  #graphql\n  query GetCategoryItem ($id: String!){\n    categoryItem (id: $id) {\n      id\n      name\n      parentId\n    }\n  }\n": types.GetCategoryItemDocument,
     "\n  #graphql\n  query GetCategoryItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    categoryItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        name\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetCategoryItemsDocument,
-    "\n  #graphql\n  query GetCategoryItemForm {\n    categoryItemForm {\n      name\n      parentId\n    }\n  }\n": types.GetCategoryItemFormDocument,
-    "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
+    "\n  #graphql\n  query GetCategoryItemForm($id: String!) {\n    categoryItemForm(id: $id) {\n      name\n      ancestorIds\n      parentId\n      tag\n    }\n  }\n": types.GetCategoryItemFormDocument,
+    "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
     "\n  query GetRole($id: String!){\n    role(id: $id) {\n      id\n    }\n  }\n": types.GetRoleDocument,
     "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetRolesDocument,
     "\n  query GetRoleForm {\n    roleForm {\n      name\n    }\n  }\n": types.GetRoleFormDocument,
@@ -148,11 +148,11 @@ export function gql(source: "\n  #graphql\n  query GetCategoryItems(\n    $skip:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  #graphql\n  query GetCategoryItemForm {\n    categoryItemForm {\n      name\n      parentId\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetCategoryItemForm {\n    categoryItemForm {\n      name\n      parentId\n    }\n  }\n"];
+export function gql(source: "\n  #graphql\n  query GetCategoryItemForm($id: String!) {\n    categoryItemForm(id: $id) {\n      name\n      ancestorIds\n      parentId\n      tag\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetCategoryItemForm($id: String!) {\n    categoryItemForm(id: $id) {\n      name\n      ancestorIds\n      parentId\n      tag\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategoryItemTrees($parentIds: [String!]!) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"];
+export function gql(source: "#graphql\n  query GetCategoryItemTrees($parentIds: [String!]) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategoryItemTrees($parentIds: [String!]) {\n    categoryItemTrees(parentIds: $parentIds) {\n      id\n      name\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

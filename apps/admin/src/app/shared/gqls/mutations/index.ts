@@ -5,8 +5,3 @@ export * from './users';
 export * from './categoryItems';
 export * from './services';
 export * from './roles';
-
-
-export * from './workspaces';
-
-

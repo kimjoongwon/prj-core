@@ -7,6 +7,7 @@ import { PaginatedCategoryItem } from './model/paginated-category.model';
 import { last } from 'lodash';
 import { categoryItemForm } from './model/category-form.model';
 import { UpdateCategoryItemInput } from './dto/update-category-item.input';
+import { CategoryItemForm } from './model';
 
 @Injectable()
 export class CategoryItemsService {
@@ -34,8 +35,26 @@ export class CategoryItemsService {
     });
   }
 
-  async findForm() {
-    return categoryItemForm;
+  async findForm(id: string): Promise<CategoryItemForm> {
+    if (id === 'new') {
+      return {
+        ancestorIds: [],
+        name: '',
+        parentId: null,
+        tag: '',
+      };
+    }
+
+    const categoryItem = await this.prisma.categoryItem.findUnique({
+      where: { id },
+    });
+
+    return {
+      ancestorIds: categoryItem.ancestorIds,
+      name: categoryItem.name,
+      parentId: categoryItem.parentId,
+      tag: categoryItem.tag,
+    };
   }
 
   async findRootCategoryItemOptions() {
