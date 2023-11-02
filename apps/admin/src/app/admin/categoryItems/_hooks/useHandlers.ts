@@ -9,9 +9,9 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const onClickCategoryItem = (categoryItem: CategoryItem) => {
     state.currentSelectedParentId = categoryItem.id;
 
-    if (categoryItem.parentId === 'root') {
+    if (categoryItem.parentId === '') {
       state.parentIds.clear();
-      state.parentIds.add('root');
+      state.parentIds.add('');
       state.parentIds.add(categoryItem.id);
       return;
     }
@@ -36,6 +36,7 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
   const onClickNew = () => {
     const searchParams = new URLSearchParams();
     searchParams.set('parentId', state.currentSelectedParentId || '');
+
     searchParams.toString();
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,
