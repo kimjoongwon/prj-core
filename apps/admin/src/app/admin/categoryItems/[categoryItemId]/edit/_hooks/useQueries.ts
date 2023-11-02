@@ -2,9 +2,9 @@ import { useCategoryItemFormQuery, useCategoryItemQuery } from '@hooks';
 import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
-  const { id = 'new' } = useParams();
+  const { categoryItemId = 'new' } = useParams();
   const categoryItemFormQuery = useCategoryItemFormQuery({
-    id: id as string,
+    id: categoryItemId as string,
   });
 
   return {

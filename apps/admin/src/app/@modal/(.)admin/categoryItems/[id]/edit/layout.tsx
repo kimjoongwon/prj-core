@@ -1,5 +1,5 @@
 import { CoCModal } from '@coc/ui';
-import { Provider } from '../../../../../admin/categoryItems/[id]/edit/provider';
+import { Provider } from '../../../../../admin/categoryItems/[categoryItemId]/edit/provider';
 interface LayoutProps {
   children: React.ReactNode;
 }

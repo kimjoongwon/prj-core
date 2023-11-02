@@ -40,7 +40,7 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,
       params: {
-        id: 'new',
+        categoryItemId: 'new',
       },
       queryString: searchParams.toString(),
     });

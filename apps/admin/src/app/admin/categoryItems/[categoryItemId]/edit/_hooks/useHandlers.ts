@@ -7,11 +7,11 @@ export const useHandlers = (
   context: ReturnType<typeof useMutations> & ReturnType<typeof useStates>,
 ) => {
   const { createCategoryItem, updateCategoryItem, formState } = context;
-  const { id } = useParams();
+  const { categoryItemId } = useParams();
   const router = useCoCRouter();
 
   const onClickSave = async () => {
-    if (id === 'new') {
+    if (categoryItemId === 'new') {
       return await createCategoryItem({
         variables: {
           createCategoryItemInput: {
@@ -26,7 +26,7 @@ export const useHandlers = (
     return await updateCategoryItem({
       variables: {
         updateCategoryItemInput: {
-          id: id as string,
+          id: categoryItemId as string,
           ancestorIds: formState.ancestorIds || [],
           name: formState.name,
           parentId: formState.parentId || '',
