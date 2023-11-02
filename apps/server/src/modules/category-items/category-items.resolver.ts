@@ -1,13 +1,13 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { CategoryItem } from './model/category-item.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard, Public } from '@common';
-import { CreateCategoryItemInput } from './dto/create-category-item.input';
+import { CategoryItem, CategoryItemForm, PaginatedCategoryItem } from './model';
 import { CategoryItemsService } from './category-items.service';
-import { GetCategoryItemsArgs } from './dto/get-category-items.args';
-import { PaginatedCategoryItem } from './model/paginated-category.model';
-import { CategoryItemForm } from './model/category-form.model';
-import { UpdateCategoryItemInput } from './dto/update-category-item.input';
+import {
+  CreateCategoryItemInput,
+  GetCategoryItemsArgs,
+  UpdateCategoryItemInput,
+} from './dto';
 
 @Resolver(() => CategoryItem)
 @UseGuards(GqlAuthGuard)
@@ -26,15 +26,20 @@ export class CategoryItemsResolver {
   @Public()
   @Query(() => [CategoryItem], { name: 'categoryItemTrees' })
   getCategoryItemTrees(
-    @Args('parentIds', { type: () => [String] }) parentIds: string[],
+    @Args('parentIds', {
+      type: () => [String],
+      nullable: true,
+      defaultValue: [null],
+    })
+    parentIds: (string | null)[],
   ) {
     return this.categoryItemsService.findCategoryItemTrees(parentIds);
   }
 
   @Public()
   @Query(() => CategoryItemForm, { name: 'categoryItemForm' })
-  getCategoryForm() {
-    return this.categoryItemsService.findForm();
+  getCategoryForm(@Args('id') id: string) {
+    return this.categoryItemsService.findForm(id);
   }
 
   @Public()

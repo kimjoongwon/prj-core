@@ -37,11 +37,13 @@ type CategoryForm {
 }
 
 type CategoryItem {
+  ancestorIds: [String!]!
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
   name: String!
-  parentId: String!
+  parentId: String
+  tag: String!
   updatedAt: DateTime
 }
 
@@ -51,8 +53,10 @@ type CategoryItemEdge {
 }
 
 type CategoryItemForm {
+  ancestorIds: [String!]!
   name: String!
-  parentId: String!
+  parentId: String
+  tag: String!
 }
 
 type CategoryItemPageInfo {
@@ -74,8 +78,10 @@ input CreateCategoryInput {
 }
 
 input CreateCategoryItemInput {
+  ancestorIds: [String!]!
   name: String!
   parentId: String!
+  tag: String!
 }
 
 input CreateProfileInput {
@@ -189,8 +195,8 @@ type Query {
   category(id: String!): Category!
   categoryForm(id: String!): CategoryForm!
   categoryItem(id: String!): CategoryItem!
-  categoryItemForm: CategoryItemForm!
-  categoryItemTrees(parentIds: [String!]!): [CategoryItem!]!
+  categoryItemForm(id: String!): CategoryItemForm!
+  categoryItemTrees(parentIds: [String!] = []): [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
   profile(id: String!): Profile!
   profiles: [Profile!]!
@@ -285,11 +291,13 @@ input UpdateCategoryInput {
 }
 
 input UpdateCategoryItemInput {
+  ancestorIds: [String!]
   createdAt: DateTime
   deletedAt: DateTime
-  id: String
+  id: String!
   name: String
   parentId: String
+  tag: String
   updatedAt: DateTime
 }
 

@@ -3,7 +3,11 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard, Public } from '@common';
 import { WorkspacesService } from './workspaces.service';
 import { PaginatedWorkspace, Workspace, WorkspaceForm } from './models';
-import { CreateWorkspaceInput, GetWorkspacesArgs, UpdateWorkspaceInput } from './dto';
+import {
+  CreateWorkspaceInput,
+  GetWorkspacesArgs,
+  UpdateWorkspaceInput,
+} from './dto';
 
 @Resolver(() => Workspace)
 @UseGuards(GqlAuthGuard)

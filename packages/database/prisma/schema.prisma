@@ -27,32 +27,28 @@ model Category {
   itemId    String
   item      CategoryItem @relation(fields: [itemId], references: [id])
   createdAt DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  updatedAt DateTime?    @updatedAt @db.Timestamptz(6)
   deletedAt DateTime?    @db.Timestamptz(6)
   workspace Workspace?
 }
 
 model CategoryItem {
-  id          String         @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
-  tag         String         @unique
+  tag         String
   ancestorIds String[]
-  ancestors   CategoryItem[] @relation("Ancestor")
-  ancestor    CategoryItem?  @relation("Ancestor", fields: [ancestorIds], references: [id])
   parentId    String?
-  parent      CategoryItem?  @relation("Parent", fields: [parentId], references: [id])
-  parents     CategoryItem[] @relation("Parent")
-  createdAt   DateTime       @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?      @db.Timestamptz(6)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?  @db.Timestamptz(6)
   category    Category[]
 }
 
 model Service {
   id        String     @id @default(cuid())
   name      String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt DateTime?  @db.Timestamptz(6)
   category  Category[]
   group     Group[]

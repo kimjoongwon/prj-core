@@ -7,5 +7,11 @@ export class CategoryItem extends Base {
   name: string;
 
   @Field(type => String)
+  tag: string;
+
+  @Field(type => [String])
+  ancestorIds: string[];
+
+  @Field(type => String, { nullable: true })
   parentId: string;
 }

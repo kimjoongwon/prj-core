@@ -3,11 +3,11 @@ import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
   const { id = 'new' } = useParams();
-  const categoryItemQuery = useCategoryItemQuery({ id: id as string });
-  const categoryItemFormQuery = useCategoryItemFormQuery();
+  const categoryItemFormQuery = useCategoryItemFormQuery({
+    id: id as string,
+  });
 
   return {
     categoryItemFormQuery,
-    categoryItemQuery,
   };
 };

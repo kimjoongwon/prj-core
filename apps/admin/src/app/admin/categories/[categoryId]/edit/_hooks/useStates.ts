@@ -7,6 +7,5 @@ export const useStates = (context: ReturnType<typeof useQueries>) => {
   const categoryForm = categoryFormQuery?.data?.categoryForm;
 
   const formState = useLocalObservable<CategoryForm>(() => categoryForm);
-
   return { formState };
 };

@@ -4,10 +4,10 @@ import { groupBy } from 'lodash-es';
 
 export const useQueries = (state: ReturnType<typeof useState>) => {
   const parentIds = Array.from(state.parentIds as Set<string>);
-
-  const categoryItemTreesQuery = useCategoryItemTreesQuery(
-    Array.from(parentIds),
-  );
+  console.log('parentIds', parentIds);
+  const categoryItemTreesQuery = useCategoryItemTreesQuery({
+    parentIds,
+  });
 
   let categoryItemsGroupedByParentId = groupBy(
     categoryItemTreesQuery.data?.categoryItemTrees,

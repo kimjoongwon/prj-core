@@ -6,17 +6,10 @@ import { usePage } from '../../../../../admin/categoryItems/[id]/edit/_hooks';
 function Page() {
   const {
     meta: {
-      isEditMode,
-      form: {
-        state: { createCategoryItemInput, updateCategoryItemInput },
-      },
+      form: { state },
     },
   } = usePage();
-  return (
-    <CategoryItemForm
-      state={isEditMode ? updateCategoryItemInput : createCategoryItemInput}
-    />
-  );
+  return <CategoryItemForm state={state} />;
 }
 
 export default observer(Page);

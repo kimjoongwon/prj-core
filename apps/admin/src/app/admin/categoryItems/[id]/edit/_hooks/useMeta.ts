@@ -1,25 +1,13 @@
-import { useParams } from 'next/navigation';
 import { useHandlers } from './useHandlers';
-import { useState } from './useStates';
+import { useStates } from './useStates';
 
 export const useMeta = (
-  context: ReturnType<typeof useState> & ReturnType<typeof useHandlers>,
+  context: ReturnType<typeof useStates> & ReturnType<typeof useHandlers>,
 ) => {
-  const {
-    createCategoryItemInput,
-    onClickCancel,
-    onClickSave,
-    updateCategoryItemInput,
-  } = context;
-  const { id } = useParams();
-  const isEditMode = id !== 'new';
+  const { formState, onClickCancel, onClickSave } = context;
   return {
-    isEditMode,
     form: {
-      state: {
-        createCategoryItemInput,
-        updateCategoryItemInput,
-      },
+      state: formState,
       buttons: {
         onClickSave,
         onClickCancel,
