@@ -16,7 +16,6 @@ export const useState = (context: ReturnType<typeof useQueries>) => {
 
   const createServiceInput = useLocalObservable<CreateServiceInput>(() => ({
     name: serviceForm.name || '',
-    createdAt: dayjs().startOf('d').valueOf(),
   }));
 
   const updateServiceInput = useLocalObservable<UpdateServiceInput>(() => ({
