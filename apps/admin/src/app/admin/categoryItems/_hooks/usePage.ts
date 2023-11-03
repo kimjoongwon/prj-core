@@ -1,7 +1,6 @@
 import { useContext } from 'react';
-import { PageContext } from '../_components/PageProvider/PageProvider';
+import { PageContext } from '../provider';
 
 export const usePage = () => {
   return useContext(PageContext);
 };
-

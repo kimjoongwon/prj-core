@@ -1,5 +1,5 @@
 import { useCoCRouter } from '@hooks';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useMutations } from './useMutations';
 import { useStates } from './useStates';
 
@@ -8,21 +8,26 @@ export const useHandlers = (
 ) => {
   const { createCategoryItem, updateCategoryItem, formState } = context;
   const { categoryItemId } = useParams();
+  const searchParams = useSearchParams();
   const router = useCoCRouter();
 
   const onClickSave = async () => {
+    const parentIds = JSON.parse(searchParams.get('parentIds') || '') || [];
+    const parentId = categoryItemId as string;
+
     if (categoryItemId === 'new') {
       return await createCategoryItem({
         variables: {
           createCategoryItemInput: {
-            ancestorIds: formState.ancestorIds,
+            ancestorIds: parentIds,
             name: formState.name,
-            parentId: formState.parentId || '',
+            parentId: parentId,
             tag: formState.tag,
           },
         },
       });
     }
+
     return await updateCategoryItem({
       variables: {
         updateCategoryItemInput: {

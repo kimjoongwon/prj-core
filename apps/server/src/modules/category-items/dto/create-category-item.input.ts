@@ -11,6 +11,6 @@ export class CreateCategoryItemInput {
   @Field(type => [String])
   ancestorIds: string[];
 
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   parentId: string;
 }

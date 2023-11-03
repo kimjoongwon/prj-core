@@ -25,15 +25,8 @@ export class CategoryItemsResolver {
 
   @Public()
   @Query(() => [CategoryItem], { name: 'categoryItemTrees' })
-  getCategoryItemTrees(
-    @Args('parentIds', {
-      type: () => [String],
-      nullable: true,
-      defaultValue: [null],
-    })
-    parentIds: (string | null)[],
-  ) {
-    return this.categoryItemsService.findCategoryItemTrees(parentIds);
+  getCategoryItemTrees() {
+    return this.categoryItemsService.findCategoryItemTrees();
   }
 
   @Public()

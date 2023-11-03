@@ -24,14 +24,8 @@ export class CategoryItemsService {
     });
   }
 
-  findCategoryItemTrees(ids: string[]) {
-    return this.prisma.categoryItem.findMany({
-      where: {
-        parentId: {
-          in: ids,
-        },
-      },
-    });
+  findCategoryItemTrees() {
+    return this.prisma.categoryItem.findMany({});
   }
 
   async findForm(id: string): Promise<CategoryItemForm> {

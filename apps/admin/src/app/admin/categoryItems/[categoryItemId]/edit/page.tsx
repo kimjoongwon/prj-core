@@ -7,7 +7,5 @@ export default function CategoryEditPage() {
   const {
     meta: { form },
   } = usePage();
-  
   return <CategoryItemForm state={form.state} />;
 }
-

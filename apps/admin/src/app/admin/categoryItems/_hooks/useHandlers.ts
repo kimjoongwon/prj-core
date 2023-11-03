@@ -1,13 +1,13 @@
 import { useCoCRouter } from '@hooks';
-import { useState } from './useState';
+import { useStates } from './useStates';
 import { CategoryItem } from '@__generated__/graphql';
 import { CATEGORY_ITEM_EDIT_PAGE_PATH } from '@constants';
 
-export const useHandlers = (state: ReturnType<typeof useState>) => {
+export const useHandlers = (state: ReturnType<typeof useStates>) => {
   const router = useCoCRouter();
 
   const onClickCategoryItem = (categoryItem: CategoryItem) => {
-    state.currentSelectedParentId = categoryItem.id;
+    state.selectedParentId = categoryItem.id;
 
     if (categoryItem.parentId === '') {
       state.parentIds.clear();
@@ -35,8 +35,8 @@ export const useHandlers = (state: ReturnType<typeof useState>) => {
 
   const onClickNew = () => {
     const searchParams = new URLSearchParams();
-    searchParams.set('parentId', state.currentSelectedParentId || '');
-
+    searchParams.set('parentId', state.selectedParentId || '');
+    searchParams.set('parentIds', JSON.stringify(state.parentIds) || '');
     searchParams.toString();
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,

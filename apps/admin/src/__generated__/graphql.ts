@@ -57,7 +57,7 @@ export type CategoryForm = {
 
 export type CategoryItem = {
   __typename?: 'CategoryItem';
-  ancestorIds: Array<Scalars['String']['output']>;
+  ancestorIds: Array<Maybe<Scalars['String']['output']>>;
   createdAt: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -104,7 +104,7 @@ export type CreateCategoryInput = {
 export type CreateCategoryItemInput = {
   ancestorIds: Array<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  parentId: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['String']['input']>;
   tag: Scalars['String']['input'];
 };
 
@@ -124,6 +124,7 @@ export type CreateRoleInput = {
 };
 
 export type CreateServiceInput = {
+  createdAt: Scalars['Float']['input'];
   name: Scalars['String']['input'];
 };
 
@@ -364,11 +365,6 @@ export type QueryCategoryItemFormArgs = {
 };
 
 
-export type QueryCategoryItemTreesArgs = {
-  parentIds?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-
 export type QueryCategoryItemsArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -491,6 +487,7 @@ export type ServiceEdge = {
 
 export type ServiceForm = {
   __typename?: 'ServiceForm';
+  createdAt?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -517,7 +514,7 @@ export type Token = {
 
 export type UpdateCategoryInput = {
   categoryItemId?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   serviceId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -526,7 +523,7 @@ export type UpdateCategoryItemInput = {
   ancestorIds?: InputMaybe<Array<Scalars['String']['input']>>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
   tag?: InputMaybe<Scalars['String']['input']>;
@@ -536,7 +533,7 @@ export type UpdateCategoryItemInput = {
 export type UpdateProfileInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   nickname?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -548,7 +545,7 @@ export type UpdateRoleInput = {
   accessPages?: InputMaybe<Array<Scalars['String']['input']>>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
   /** Super, Educator, Learner, User */
   name?: InputMaybe<RoleNames>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -557,14 +554,14 @@ export type UpdateRoleInput = {
 export type UpdateServiceInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type UpdateUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   password?: InputMaybe<Scalars['String']['input']>;
   profile?: InputMaybe<ProfileInput>;
 };
@@ -764,12 +761,10 @@ export type GetCategoryItemFormQueryVariables = Exact<{
 
 export type GetCategoryItemFormQuery = { __typename?: 'Query', categoryItemForm: { __typename?: 'CategoryItemForm', name: string, ancestorIds: Array<string>, parentId?: string | null, tag: string } };
 
-export type GetCategoryItemTreesQueryVariables = Exact<{
-  parentIds?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
+export type GetCategoryItemTreesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoryItemTreesQuery = { __typename?: 'Query', categoryItemTrees: Array<{ __typename?: 'CategoryItem', id: string, name: string, parentId?: string | null, createdAt: any, updatedAt?: any | null, deletedAt?: any | null }> };
+export type GetCategoryItemTreesQuery = { __typename?: 'Query', categoryItemTrees: Array<{ __typename?: 'CategoryItem', id: string, name: string, tag: string, ancestorIds: Array<string | null>, parentId?: string | null, createdAt: any, updatedAt?: any | null, deletedAt?: any | null }> };
 
 export type GetRoleQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -863,7 +858,7 @@ export const GetCategoryFormDocument = {"kind":"Document","definitions":[{"kind"
 export const GetCategoryItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categoryItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}}]}}]}}]} as unknown as DocumentNode<GetCategoryItemQuery, GetCategoryItemQueryVariables>;
 export const GetCategoryItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categoryItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingKey"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingValue"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetCategoryItemsQuery, GetCategoryItemsQueryVariables>;
 export const GetCategoryItemFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryItemForm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categoryItemForm"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"ancestorIds"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"tag"}}]}}]}}]} as unknown as DocumentNode<GetCategoryItemFormQuery, GetCategoryItemFormQueryVariables>;
-export const GetCategoryItemTreesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryItemTrees"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"parentIds"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categoryItemTrees"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"parentIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"parentIds"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]}}]} as unknown as DocumentNode<GetCategoryItemTreesQuery, GetCategoryItemTreesQueryVariables>;
+export const GetCategoryItemTreesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategoryItemTrees"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categoryItemTrees"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"tag"}},{"kind":"Field","name":{"kind":"Name","value":"ancestorIds"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]}}]} as unknown as DocumentNode<GetCategoryItemTreesQuery, GetCategoryItemTreesQueryVariables>;
 export const GetRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"role"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetRoleQuery, GetRoleQueryVariables>;
 export const GetRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoles"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingKey"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingValue"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetRolesQuery, GetRolesQueryVariables>;
 export const GetRoleFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoleForm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roleForm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetRoleFormQuery, GetRoleFormQueryVariables>;

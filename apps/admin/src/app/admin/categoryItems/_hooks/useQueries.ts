@@ -1,23 +1,21 @@
 import { useCategoryItemTreesQuery } from '@hooks';
-import { useState } from './useState';
+import { useStates } from './useStates';
 import { groupBy } from 'lodash-es';
 
-export const useQueries = (state: ReturnType<typeof useState>) => {
-  const parentIds = Array.from(state.parentIds as Set<string>);
-  console.log('parentIds', parentIds);
-  const categoryItemTreesQuery = useCategoryItemTreesQuery({
-    parentIds,
-  });
+export const useQueries = (states: ReturnType<typeof useStates>) => {
+  const { parentIds } = states;
+  const categoryItemTreesQuery = useCategoryItemTreesQuery();
 
   let categoryItemsGroupedByParentId = groupBy(
     categoryItemTreesQuery.data?.categoryItemTrees,
     'parentId',
   );
-  const categoryItemTrees = parentIds.map(parentId => {
-    if (categoryItemsGroupedByParentId[parentId] === undefined) {
+
+  const categoryItemTrees = Array.from(parentIds)?.map(parentId => {
+    if (categoryItemsGroupedByParentId[parentId || 'null'] === undefined) {
       return [];
     }
-    return categoryItemsGroupedByParentId[parentId];
+    return categoryItemsGroupedByParentId[parentId || 'null'];
   });
 
   return {
