@@ -12,10 +12,10 @@ export const useQueries = (states: ReturnType<typeof useStates>) => {
   );
 
   const categoryItemTrees = Array.from(parentIds)?.map(parentId => {
-    if (categoryItemsGroupedByParentId[parentId || 'null'] === undefined) {
+    if (categoryItemsGroupedByParentId[String(parentId)] === undefined) {
       return [];
     }
-    return categoryItemsGroupedByParentId[parentId || 'null'];
+    return categoryItemsGroupedByParentId[String(parentId)];
   });
 
   return {
