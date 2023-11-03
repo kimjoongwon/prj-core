@@ -100,6 +100,7 @@ input CreateRoleInput {
 }
 
 input CreateServiceInput {
+  createdAt: Float!
   name: String!
 }
 
@@ -260,6 +261,7 @@ type ServiceEdge {
 }
 
 type ServiceForm {
+  createdAt: Float
   name: String
 }
 
@@ -285,7 +287,7 @@ type Token {
 
 input UpdateCategoryInput {
   categoryItemId: String
-  id: String!
+  id: ID!
   name: String
   serviceId: String
 }
@@ -294,7 +296,7 @@ input UpdateCategoryItemInput {
   ancestorIds: [String!]
   createdAt: DateTime
   deletedAt: DateTime
-  id: String!
+  id: ID!
   name: String
   parentId: String
   tag: String
@@ -304,7 +306,7 @@ input UpdateCategoryItemInput {
 input UpdateProfileInput {
   createdAt: DateTime
   deletedAt: DateTime
-  id: String!
+  id: ID!
   nickname: String
   phone: String
   updatedAt: DateTime
@@ -316,7 +318,7 @@ input UpdateRoleInput {
   accessPages: [String!]
   createdAt: DateTime
   deletedAt: DateTime
-  id: String
+  id: ID!
 
   """Super, Educator, Learner, User"""
   name: RoleNames
@@ -326,14 +328,14 @@ input UpdateRoleInput {
 input UpdateServiceInput {
   createdAt: DateTime
   deletedAt: DateTime
-  id: String
+  id: ID!
   name: String
   updatedAt: DateTime
 }
 
 input UpdateUserInput {
   email: String
-  id: String!
+  id: ID!
   password: String
   profile: ProfileInput
 }

@@ -5,7 +5,6 @@ import { GetCategoryItemsArgs } from './dto/get-category-items.args';
 import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
 import { last } from 'lodash';
-import { categoryItemForm } from './model/category-form.model';
 import { UpdateCategoryItemInput } from './dto/update-category-item.input';
 import { CategoryItemForm } from './model';
 

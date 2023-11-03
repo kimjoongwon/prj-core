@@ -2,6 +2,7 @@ import { CreateServiceInput, UpdateServiceInput } from '@__generated__/graphql';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
 import { useQueries } from './useQueries';
+import dayjs from 'dayjs';
 
 export const useState = (context: ReturnType<typeof useQueries>) => {
   const { serviceId = 'new' } = useParams();
@@ -15,6 +16,7 @@ export const useState = (context: ReturnType<typeof useQueries>) => {
 
   const createServiceInput = useLocalObservable<CreateServiceInput>(() => ({
     name: serviceForm.name || '',
+    createdAt: dayjs().startOf('d').valueOf(),
   }));
 
   const updateServiceInput = useLocalObservable<UpdateServiceInput>(() => ({

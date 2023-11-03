@@ -10,6 +10,6 @@ export class Update<%= h.changeCase.pascal(name) %>Input extends PartialType(
   <%= h.changeCase.pascal(name) %>,
   InputType,
 ) {
-  @Field(type => String, { nullable: true })
+  @Field(type => ID!, { nullable: true })
   id: string;
 }

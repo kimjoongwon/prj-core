@@ -8,9 +8,9 @@ export class Base {
   @Field()
   createdAt: Date;
 
-  @Field({ nullable: true })
+  @Field(type => Date, { nullable: true })
   updatedAt: Date;
 
-  @Field({ nullable: true })
+  @Field(type => Date, { nullable: true })
   deletedAt: Date;
 }

@@ -18,6 +18,10 @@ export class UsersService {
   async findPaginatedUsers(args: GetPaginatedUserArgs): Promise<Users> {
     const query = queryBuilder(args, ['email']);
 
+    this.prisma.user.findMany({
+      where: {},
+    });
+
     const users = await this.prisma.user.findMany({
       ...query,
       include: {
