@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import { FormControl, Input, Select } from '@coc/ui';
 import { CategoryForm as CategoryFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
-import { toJS } from 'mobx';
 
 interface FormProps {
   formState: CategoryFormType;
@@ -13,7 +12,7 @@ interface FormProps {
 
 export const CategoryForm = observer((props: FormProps) => {
   const { formState, schema } = props;
-  console.log('formState', toJS(formState));
+
   return (
     <div className="space-y-4">
       <FormControl schema={schema} timings={['onBlur']}>
@@ -22,9 +21,9 @@ export const CategoryForm = observer((props: FormProps) => {
       <Select
         label="카테고리 선택"
         placeholder="Select an Category"
-        options={formState.categoryItemOptions}
+        options={formState.itemOptions}
         state={formState}
-        path="categoryItemId"
+        path="itemId"
       />
       <Select
         label="서비스 선택"

@@ -12,9 +12,9 @@ export const CategoryItemForm = observer((props: CategoryItemFormProps) => {
   const { state } = props;
 
   return (
-    <Card>
+    <Card fullWidth>
       <CardBody>
-        <Input state={state} path="name" />
+        <Input label='카테고리 항목명' state={state} path="name" />
       </CardBody>
     </Card>
   );

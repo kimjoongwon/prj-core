@@ -7,11 +7,10 @@ import {
   SERVICES_PAGE_PATH,
   USERS_PAGE_PATH,
 } from '@constants';
-import { CoCNavbar, NavItem } from '@coc/ui';
+import { CoCModal, CoCNavbar, NavItem } from '@coc/ui';
 import { User } from '@nextui-org/react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
-import { toJS } from 'mobx';
 import { useMemo } from 'react';
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {

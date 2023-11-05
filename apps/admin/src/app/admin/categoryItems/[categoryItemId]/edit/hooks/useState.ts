@@ -1,8 +1,10 @@
 import { CategoryItemForm } from '@__generated__/graphql';
+import { reaction } from 'mobx';
 import { useLocalObservable } from 'mobx-react-lite';
+import { useEffect } from 'react';
 import { useQueries } from './useQueries';
 
-export const useStates = (context: ReturnType<typeof useQueries>) => {
+export const useState = (context: ReturnType<typeof useQueries>) => {
   const {
     categoryItemFormQuery: {
       data: { categoryItemForm },

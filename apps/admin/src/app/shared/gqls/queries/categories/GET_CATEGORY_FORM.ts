@@ -5,9 +5,9 @@ export const GET_CATEGORY_FORM = gql(`
   query GetCategoryForm($id: String!) {
     categoryForm(id: $id) {
       name
-      categoryItemId
+      itemId
       serviceId
-      categoryItemOptions {
+      itemOptions {
         name
         value
       }

@@ -3,47 +3,58 @@
 import { Form } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
-import {
-  useHandlers,
-  useMeta,
-  useMutations,
-  useQueries,
-  useStates,
-} from './_hooks';
-import { useSchemas } from './_hooks/useSchema';
+import { useCategoryItemsPage } from '../../hooks';
+import { useHandlers, useMutations, useQueries, useState } from './hooks';
+import { useSchemas } from './hooks/useSchemas';
 interface CategoryEditProviderProps {
   children: React.ReactNode;
 }
 
 interface PageContext {
-  meta: ReturnType<typeof useMeta>;
+  context: {
+    categoryItemsPage: ReturnType<typeof useCategoryItemsPage>;
+  };
+  form: {
+    state: ReturnType<typeof useState>['formState'];
+    schema: ReturnType<typeof useSchemas>['categoryItemSchema'];
+    buttons: {
+      onClickSave: ReturnType<typeof useHandlers>['onClickSave'];
+      onClickCancel: ReturnType<typeof useHandlers>['onClickCancel'];
+    };
+  };
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
 export const Provider = observer((props: CategoryEditProviderProps) => {
+  const categoryItemsPage = useCategoryItemsPage();
   const queries = useQueries();
   const mutations = useMutations();
-  const state = useStates({ ...queries });
-  const handlers = useHandlers({ ...mutations, ...state });
-  const meta = useMeta({ ...state, ...handlers });
+  const state = useState({ ...queries });
   const schemas = useSchemas();
-  const { form } = meta;
+  const handlers = useHandlers({
+    mutations,
+    state,
+    categoryItemsPage,
+  });
+
   return (
     <PageContext.Provider
       value={{
-        meta,
+        context: {
+          categoryItemsPage,
+        },
+        form: {
+          state: state.formState,
+          schema: schemas.categoryItemSchema,
+          buttons: {
+            onClickSave: handlers.onClickSave,
+            onClickCancel: handlers.onClickCancel,
+          },
+        },
       }}
     >
-      <Form
-        state={form.state}
-        schema={schemas.categoryItemSchema}
-        title={'카테고리 아이템 생성'}
-        onClickSave={form.buttons.onClickSave}
-        onClickCancel={form.buttons.onClickCancel}
-      >
-        {props.children}
-      </Form>
+      {props.children}
     </PageContext.Provider>
   );
 });

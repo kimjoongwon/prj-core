@@ -1,11 +1,26 @@
 'use client';
 
-import { CategoryItemForm } from '@components';
-import { usePage } from './_hooks';
+import { Form } from '@coc/ui';
+import { CategoryItemForm, FormContainer } from '@components';
+import { observer } from 'mobx-react-lite';
+import { useCategoryItemEditPage } from './hooks';
 
-export default function CategoryEditPage() {
-  const {
-    meta: { form },
-  } = usePage();
-  return <CategoryItemForm state={form.state} />;
+function CategoryItemEditPage() {
+  const { form } = useCategoryItemEditPage();
+
+  return (
+    <FormContainer>
+      <Form
+        state={form.state}
+        schema={form.schema}
+        title={'카테고리 항목 생성'}
+        onClickSave={form.buttons.onClickSave}
+        onClickCancel={form.buttons.onClickCancel}
+      >
+        <CategoryItemForm state={form.state} />
+      </Form>
+    </FormContainer>
+  );
 }
+
+export default observer(CategoryItemEditPage);

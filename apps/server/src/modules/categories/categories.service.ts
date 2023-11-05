@@ -30,7 +30,7 @@ export class CategoriesService {
       },
       data: {
         name: updateCategoryInput.name,
-        categoryItemId: updateCategoryInput.categoryItemId,
+        itemId: updateCategoryInput.itemId,
       },
     });
   }
@@ -42,16 +42,15 @@ export class CategoriesService {
   async findForm(id: string) {
     const serviceOptions = await this.servicesService.findAllServiceOptions();
     const categoryItemOptions =
-      await this.categoryItemsService.findRootCategoryItemOptions();
-    console.log('findForm');
+      await this.categoryItemsService.findLeafCategoryItemOptions();
+
     if (id === 'new') {
-      console.log('new', serviceOptions, categoryItemOptions);
       return {
         name: '',
-        categoryItemId: '',
+        itemId: '',
         serviceId: '',
         serviceOptions,
-        categoryItemOptions,
+        itemOptions: categoryItemOptions,
       };
     }
 
@@ -63,7 +62,7 @@ export class CategoriesService {
 
     return {
       name: category.name,
-      categoryItemId: category.categoryItemId,
+      categoryItemId: category,
       serviceId: category.serviceId,
       serviceOptions,
       categoryItemOptions,

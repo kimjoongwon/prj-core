@@ -1,5 +1,4 @@
 export * from './useQueries';
-export * from './useStates';
+export * from './useState';
 export * from './useCategoryItemsPage';
 export * from './useHandlers';
-export * from './useMeta';

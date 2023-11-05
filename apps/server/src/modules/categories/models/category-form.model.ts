@@ -7,13 +7,13 @@ export class CategoryForm {
   name: string;
 
   @Field(type => String)
-  categoryItemId: string;
+  itemId: string;
 
   @Field(type => String)
   serviceId: string;
 
   @Field(type => [Option])
-  categoryItemOptions: Option[];
+  itemOptions: Option[];
 
   @Field(type => [Option])
   serviceOptions: Option[];

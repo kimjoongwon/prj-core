@@ -1,3 +1,4 @@
+import { CoCModal } from '@coc/ui';
 import './globals.css';
 import { Providers } from './providers';
 

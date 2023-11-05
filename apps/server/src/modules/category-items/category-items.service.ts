@@ -25,7 +25,13 @@ export class CategoryItemsService {
   }
 
   findCategoryItemTrees() {
-    return this.prisma.categoryItem.findMany({});
+    return this.prisma.categoryItem.findMany({
+      where: {
+        deletedAt: {
+          equals: null,
+        },
+      },
+    });
   }
 
   async findForm(id: string): Promise<CategoryItemForm> {
@@ -43,17 +49,68 @@ export class CategoryItemsService {
     });
 
     return {
-      ancestorIds: categoryItem.ancestorIds,
-      name: categoryItem.name,
-      parentId: categoryItem.parentId,
-      tag: categoryItem.tag,
+      ancestorIds: categoryItem?.ancestorIds,
+      name: categoryItem?.name,
+      parentId: categoryItem?.parentId,
+      tag: categoryItem?.tag,
     };
+  }
+
+  async findCategoryItemsByAncestorIds(ids: string[]) {
+    const categoryItemsFindedByAncestorIds =
+      await this.prisma.categoryItem.findMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+
+    return categoryItemsFindedByAncestorIds;
+  }
+
+  async findLeafCategoryItemOptions() {
+    const leafCategoryItems = await this.findLeafCategoryItems();
+
+    const categoryItemGroupsByAncestorIds = await Promise.all(
+      leafCategoryItems?.map(leafCategoryItem =>
+        this.findCategoryItemsByAncestorIds([
+          ...leafCategoryItem.ancestorIds,
+          leafCategoryItem.id,
+        ]),
+      ),
+    );
+
+    const leafCategoryItemOptions = categoryItemGroupsByAncestorIds.map(
+      categoryItemGroupByAncestorIds => {
+        return {
+          name: categoryItemGroupByAncestorIds
+            .map(categoryItem => categoryItem.name)
+            .join(' > '),
+          value: last(categoryItemGroupByAncestorIds)?.id,
+        };
+      },
+    );
+    console.log('leafCategoryItemOptions', leafCategoryItemOptions);
+    return leafCategoryItemOptions;
+  }
+
+  async findLeafCategoryItems() {
+    const categoryItems = await this.prisma.categoryItem.findMany({});
+
+    const parentIds = categoryItems.map(categoryItem => categoryItem.parentId);
+
+    const leafCategoryItems = categoryItems.filter(
+      categoryItem => !parentIds.includes(categoryItem.id),
+    );
+
+    return leafCategoryItems;
   }
 
   async findRootCategoryItemOptions() {
     const categoryItems = await this.prisma.categoryItem.findMany({
       where: {
-        parentId: 'root',
+        parentId: null,
       },
     });
 
@@ -101,6 +158,7 @@ export class CategoryItemsService {
       data,
     });
   }
+
   delete(id: string) {
     return this.prisma.categoryItem.update({
       where: { id },

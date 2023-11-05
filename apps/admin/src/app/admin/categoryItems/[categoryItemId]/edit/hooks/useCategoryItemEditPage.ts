@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { PageContext } from '../provider';
 
-export const usePage = () => {
+export const useCategoryItemEditPage = () => {
   return useContext(PageContext);
 };

@@ -14,10 +14,10 @@ type Auth {
 }
 
 type Category {
-  categoryItemId: String
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
+  itemId: String
   name: ID!
   serviceId: String
   updatedAt: DateTime
@@ -29,15 +29,15 @@ type CategoryEdge {
 }
 
 type CategoryForm {
-  categoryItemId: String!
-  categoryItemOptions: [Option!]!
+  itemId: String!
+  itemOptions: [Option!]!
   name: String!
   serviceId: String!
   serviceOptions: [Option!]!
 }
 
 type CategoryItem {
-  ancestorIds: [String]!
+  ancestorIds: [String!]!
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
@@ -72,7 +72,7 @@ type CategoryPageInfo {
 }
 
 input CreateCategoryInput {
-  categoryItemId: String
+  itemId: String
   name: String!
   serviceId: String
 }
@@ -100,7 +100,6 @@ input CreateRoleInput {
 }
 
 input CreateServiceInput {
-  createdAt: Float!
   name: String!
 }
 
@@ -261,7 +260,6 @@ type ServiceEdge {
 }
 
 type ServiceForm {
-  createdAt: Float
   name: String
 }
 
@@ -286,14 +284,14 @@ type Token {
 }
 
 input UpdateCategoryInput {
-  categoryItemId: String
   id: ID!
+  itemId: String
   name: String
   serviceId: String
 }
 
 input UpdateCategoryItemInput {
-  ancestorIds: [String!]
+  ancestorIds: [String!] = []
   createdAt: DateTime
   deletedAt: DateTime
   id: ID!

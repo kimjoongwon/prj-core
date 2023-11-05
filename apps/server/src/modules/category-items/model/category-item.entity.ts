@@ -9,7 +9,7 @@ export class CategoryItem extends Base {
   @Field(type => String)
   tag: string;
 
-  @Field(type => [String], { nullable: 'items' })
+  @Field(type => [String], { defaultValue: [] })
   ancestorIds: string[];
 
   @Field(type => String, { nullable: true })

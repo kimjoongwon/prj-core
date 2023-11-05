@@ -1,11 +1,16 @@
 import { TableLayout } from '@components';
 import { PageProvider } from './provider';
 
-export default function Layout(props: { children: React.ReactNode }) {
-  const { children } = props;
+export default function Layout(props: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
+  const { children, modal } = props;
+  console.log('categoryItems');
   return (
     <PageProvider>
       <TableLayout>{children}</TableLayout>
+      <div>{modal}</div>
     </PageProvider>
   );
 }

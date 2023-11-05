@@ -4,7 +4,4 @@ import { Field, Float, InputType } from '@nestjs/graphql';
 export class CreateServiceInput {
   @Field(type => String)
   name: string;
-
-  @Field(type => Float)
-  createdAt: number;
 }

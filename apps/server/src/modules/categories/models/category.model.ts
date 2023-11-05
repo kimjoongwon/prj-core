@@ -7,7 +7,7 @@ export class Category extends Base {
   name: string;
 
   @Field(type => String, { nullable: true })
-  categoryItemId: string;
+  itemId: string;
 
   @Field(type => String, { nullable: true })
   serviceId: string;
