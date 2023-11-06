@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
 import { queryBuilder } from '@common';
 import { PaginatedWorkspace, WorkspaceForm } from './models';
-import { CreateWorkspaceInput, GetWorkspacesArgs, UpdateWorkspaceInput } from './dto';
+import {
+  CreateWorkspaceInput,
+  GetWorkspacesArgs,
+  UpdateWorkspaceInput,
+} from './dto';
 import { PrismaService } from '@modules/global/prisma/prisma.service';
 
 @Injectable()
@@ -19,11 +23,12 @@ export class WorkspacesService {
     return {
       id: '',
       name: '',
-      name: '',
     };
   }
 
-  async findPaginatedWorkspace(args: GetWorkspacesArgs): Promise<PaginatedWorkspace> {
+  async findPaginatedWorkspace(
+    args: GetWorkspacesArgs,
+  ): Promise<PaginatedWorkspace> {
     const query = queryBuilder(args, []);
 
     const workspaces = await this.prisma.workspace.findMany({

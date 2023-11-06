@@ -11,9 +11,8 @@ export const useHandlers = (context: {
   categoryItemsPage: ReturnType<typeof useCategoryItemsPage>;
 }) => {
   const {
-    mutations: { createCategoryItem, deleteCategoryItem, updateCategoryItem },
+    mutations: { createCategoryItem, updateCategoryItem },
     state,
-    categoryItemsPage,
   } = context;
 
   const { categoryItemId } = useParams();

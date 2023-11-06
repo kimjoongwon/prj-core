@@ -27,6 +27,7 @@ import { LoggingInterceptor } from './common/interceptors';
 import { RolesModule } from './modules/roles/roles.module';
 import { CategoriesModule } from '@modules/categories/categories.module';
 import { CategoryItemsModule } from '@modules/category-items/category-items.module';
+import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { CategoryItemsModule } from '@modules/category-items/category-items.modu
     CategoryItemsModule,
     ServicesModule,
     RolesModule,
+    WorkspacesModule,
   ],
   providers: [
     {

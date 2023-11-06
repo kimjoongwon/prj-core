@@ -1,4 +1,4 @@
-import { useCategoryFormQuery, useCategoryQuery } from '@hooks';
+import { useCategoryFormQuery } from '@hooks';
 import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
