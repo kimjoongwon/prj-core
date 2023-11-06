@@ -63,6 +63,9 @@ export class CategoryItemsService {
           id: {
             in: ids,
           },
+          deletedAt: {
+            equals: null,
+          },
         },
       });
 
@@ -71,7 +74,7 @@ export class CategoryItemsService {
 
   async findLeafCategoryItemOptions() {
     const leafCategoryItems = await this.findLeafCategoryItems();
-
+    console.log('leafCategoryItems', leafCategoryItems);
     const categoryItemGroupsByAncestorIds = await Promise.all(
       leafCategoryItems?.map(leafCategoryItem =>
         this.findCategoryItemsByAncestorIds([
@@ -96,7 +99,13 @@ export class CategoryItemsService {
   }
 
   async findLeafCategoryItems() {
-    const categoryItems = await this.prisma.categoryItem.findMany({});
+    const categoryItems = await this.prisma.categoryItem.findMany({
+      where: {
+        deletedAt: {
+          equals: null,
+        },
+      },
+    });
 
     const parentIds = categoryItems.map(categoryItem => categoryItem.parentId);
 

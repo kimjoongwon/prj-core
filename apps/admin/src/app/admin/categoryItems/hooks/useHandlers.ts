@@ -1,10 +1,9 @@
 import { useCoCRouter } from '@hooks';
 import { CATEGORY_ITEM_EDIT_PAGE_PATH } from '@constants';
-import { CategoryItemState, useState } from './useState';
-import { cloneDeep } from 'lodash-es';
+import { useState } from './useState';
 import { useMutations } from './useMutations';
 import { CategoryItem } from '@__generated__/graphql';
-import { useQueries } from './useQueries';
+import { toJS } from 'mobx';
 
 export const useHandlers = (context: {
   state: ReturnType<typeof useState>;
@@ -18,29 +17,32 @@ export const useHandlers = (context: {
   } = context;
   const router = useCoCRouter();
 
-  const onClickCategoryItem = (selectedCategoryItem: CategoryItemState) => {
-    state.selectedCategoryItem = selectedCategoryItem;
-    state.categoryItems
-      .filter(
-        categoryItem =>
-          categoryItem.ancestorIds.length ===
-          selectedCategoryItem.ancestorIds.length,
-      )
-      .forEach(categoryItem => {
-        if (categoryItem.id === selectedCategoryItem.id) {
-          categoryItem.isSelected = true;
-          return;
-        }
-        categoryItem.isSelected = false;
-      });
+  const onClickCategoryItem = (selectedCategoryItem: CategoryItem) => {
+    const depth = selectedCategoryItem.ancestorIds.length;
+    if (!state.selectedCategoryItems[depth]) {
+      state.selectedCategoryItems[depth] = selectedCategoryItem;
+    } else {
+      state.selectedCategoryItems.splice(depth, 3);
+    }
   };
 
-  const onClickNewCategory = () => {
+  const onClickNewCategory = ({
+    ancestorIds,
+    parentId,
+  }: {
+    parentId: string | null;
+    ancestorIds: string[];
+  }) => {
+    const searchParams = new URLSearchParams();
+    searchParams.set('parentId', parentId || '');
+    searchParams.set('ancestorIds', ancestorIds.join(','));
+
     router.push({
       url: CATEGORY_ITEM_EDIT_PAGE_PATH,
       params: {
         categoryItemId: 'new',
       },
+      queryString: searchParams.toString(),
     });
   };
 

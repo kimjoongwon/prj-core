@@ -1,86 +1,103 @@
+import { Button } from '@coc/ui';
 import { Listbox, ListboxItem } from '@nextui-org/react';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { CiSquareRemove, CiSquarePlus } from 'react-icons/ci';
+import { CiSquareRemove } from 'react-icons/ci';
 import { FcFolder, FcOpenedFolder } from 'react-icons/fc';
 import { useCategoryItemsPage } from '../../hooks';
+
 interface CategoryItemGroupSectionProps {
   depth: number;
-  categoryItemGroupSection: ReturnType<
-    typeof useCategoryItemsPage
-  >['categoryItemGroupSection'];
 }
 export const CategoryItemGroupSection = observer(
   (props: CategoryItemGroupSectionProps) => {
-    const { categoryItemGroupSection, depth } = props;
+    const { depth } = props;
     const {
+      handlers: { onClickCategoryItem, onClickDeleteIcon, onClickNewCategory },
+      queries: {
+        categoryItemTreesQuery: { data },
+      },
       state,
-      onClickDeleteIcon,
-      onClickNewCategory,
-      onClickCategoryItem,
-    } = categoryItemGroupSection;
+    } = useCategoryItemsPage();
 
-    const selectedParentCategoryItemByDepth = state.categoryItems.find(
-      category =>
-        category.ancestorIds.length === depth - 1 && category.isSelected,
-    );
+    const categoryItems = data.categoryItemTrees;
 
+    const selectedParentCategoryItem = state.selectedCategoryItems[depth - 1];
+
+    const categoryItemsByDepth = categoryItems
+      .filter(categoryItem => categoryItem.ancestorIds.length === depth)
+      .filter(categoryItem =>
+        depth > 0
+          ? selectedParentCategoryItem?.id === categoryItem?.parentId
+          : true,
+      );
+
+    if (!selectedParentCategoryItem && depth > 0) return null;
+    console.log(toJS(selectedParentCategoryItem));
     return (
-      <Listbox>
-        {state.categoryItems
-          .filter(categoryItem => categoryItem.ancestorIds.length === depth)
-          .filter(categoryItem =>
-            depth > 0
-              ? categoryItem.parentId === selectedParentCategoryItemByDepth?.id
-              : true,
-          )
-          .map(categoryItem => {
+      <div className="flex-1">
+        <Button
+          variant="solid"
+          color="primary"
+          fullWidth
+          size="sm"
+          onClick={() => {
+            console.log(depth);
+            console.log(toJS(selectedParentCategoryItem));
+            onClickNewCategory(
+              depth > 0
+                ? {
+                    parentId: selectedParentCategoryItem?.id,
+                    ancestorIds: [
+                      ...selectedParentCategoryItem?.ancestorIds,
+                      selectedParentCategoryItem?.id,
+                    ],
+                  }
+                : {
+                    ancestorIds: [],
+                    parentId: null,
+                  },
+            );
+          }}
+        >
+          추가
+        </Button>
+        <Listbox>
+          {categoryItemsByDepth.map(categoryItem => {
+            const isSelected =
+              state.selectedCategoryItems?.[depth]?.id === categoryItem.id;
+
             return (
               <ListboxItem
-                className="h-7"
                 key={categoryItem.id}
+                className="h-7"
                 variant="bordered"
-                color={categoryItem.isSelected ? 'success' : 'primary'}
+                color={isSelected ? 'success' : 'primary'}
                 startContent={
-                  <>
-                    {categoryItem.isSelected ? (
-                      <FcOpenedFolder />
-                    ) : (
-                      <FcFolder />
-                    )}
-                  </>
+                  <>{isSelected ? <FcOpenedFolder /> : <FcFolder />}</>
                 }
                 endContent={
-                  <>
-                    <CiSquarePlus
-                      size={20}
-                      className="text-success"
-                      onClick={onClickNewCategory}
-                    />
-                    <CiSquareRemove
-                      size={20}
-                      className="text-danger"
-                      onClick={e => {
-                        e.stopPropagation();
-                        onClickDeleteIcon(categoryItem.id);
-                      }}
-                    />
-                  </>
+                  <CiSquareRemove
+                    size={20}
+                    className="text-danger"
+                    onClick={e => {
+                      e.stopPropagation();
+                      onClickDeleteIcon(categoryItem.id);
+                    }}
+                  />
                 }
                 onClick={() => onClickCategoryItem(categoryItem)}
               >
                 <div
-                  className={
-                    categoryItem.isSelected
-                      ? 'text-success'
-                      : 'text-primary-900'
-                  }
+                  className={isSelected ? 'text-success' : 'text-primary-900'}
                 >
                   {categoryItem.name}
                 </div>
               </ListboxItem>
             );
           })}
-      </Listbox>
+        </Listbox>
+      </div>
     );
   },
 );

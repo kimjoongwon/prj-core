@@ -1,6 +1,6 @@
 import { useCoCRouter } from '@hooks';
-import { cloneDeep } from 'lodash-es';
-import { useParams } from 'next/navigation';
+import { cloneDeep, isNull } from 'lodash-es';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useCategoryItemsPage } from '../../../hooks';
 import { useMutations } from './useMutations';
 import { useState } from './useState';
@@ -18,25 +18,20 @@ export const useHandlers = (context: {
 
   const { categoryItemId } = useParams();
   const router = useCoCRouter();
-
+  const searchParams = useSearchParams();
   const onClickSave = async () => {
+    const parentId = searchParams.get('parentId') || null;
+    const ancestorIds = searchParams?.get('ancestorIds')
+      ? searchParams?.get('ancestorIds')?.split(',') || []
+      : [];
     const formState = cloneDeep(state.formState);
-    const selectedCategoryItem = cloneDeep(
-      categoryItemsPage.state.selectedCategoryItem,
-    );
-    console.log(selectedCategoryItem);
     if (categoryItemId === 'new') {
-      if (!selectedCategoryItem) return null;
-
       return await createCategoryItem({
         variables: {
           createCategoryItemInput: {
-            ancestorIds: [
-              ...selectedCategoryItem.ancestorIds,
-              selectedCategoryItem.id,
-            ],
+            ancestorIds: ancestorIds,
             name: formState.name,
-            parentId: selectedCategoryItem.id,
+            parentId,
             tag: formState.tag,
           },
         },
