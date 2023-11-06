@@ -1,9 +1,8 @@
-import { useCategoryItemFormQuery } from '@hooks';
-import { useParams } from 'next/navigation';
+import { useCategoryItemFormQuery, useCategoryItemQuery } from '@hooks';
+import { useParams, useSearchParams } from 'next/navigation';
 
 export const useQueries = () => {
   const { categoryItemId = 'new' } = useParams();
-  console.log('categoryItemId', categoryItemId);
   const categoryItemFormQuery = useCategoryItemFormQuery({
     id: categoryItemId as string,
   });
