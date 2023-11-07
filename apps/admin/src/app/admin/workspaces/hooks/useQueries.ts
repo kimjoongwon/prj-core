@@ -6,7 +6,9 @@ export const useQueries = ({
 }: {
   state: ReturnType<typeof useState>;
 }) => {
+  const workspacesQuery = useWorkspacesQuery(state.query);
+  console.log('workspacesQuery', workspacesQuery);
   return {
-    workspacesQuery: useWorkspacesQuery(state.query),
+    workspacesQuery,
   };
 };

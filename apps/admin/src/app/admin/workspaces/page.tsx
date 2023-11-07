@@ -21,7 +21,7 @@ function WorkspacesPage() {
     state,
     meta: { columns, leftButtons, rightButtons },
   } = workspacesPage;
-
+  console.log('????');
   return (
     <>
       <SearchFilterContainer>
