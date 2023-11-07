@@ -1,14 +1,9 @@
-import { useMutation } from '@apollo/client';
-import { DELETE_WORKSPACE, GET_WORKSPACES } from '@gqls';
-import { MutationOptions } from '@types';
+import { gql } from '@__generated__';
 
-export const useDeleteWorkspace = (options?: MutationOptions) => {
-  return useMutation(DELETE_WORKSPACE, {
-    onCompleted: () => {
-      if (options) {
-        options.onCompleted && options.onCompleted();
-      }
-    },
-    refetchQueries: [GET_WORKSPACES, 'Workspace'],
-  });
-};
+export const DELETE_WORKSPACE = gql(`
+  mutation DeleteWorkspace($id: String!) {
+    deleteWorkspace(id: $id) {
+      id
+    }
+  }
+`);

@@ -3,3 +3,4 @@ export * from './categoryItems';
 export * from './users';
 export * from './auth';
 export * from './services';
+export * from './workspaces';

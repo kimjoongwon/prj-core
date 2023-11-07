@@ -1,3 +1,3 @@
-export * from './useCreateworkspaces';
-export * from './useDeleteworkspaces';
-export * from './useUpdateworkspaces';
+export * from './CREATE_WORKSPACE';
+export * from './DELETE_WORKSPACE';
+export * from './UPDATE_WORKSPACE';

@@ -1,5 +1,5 @@
 ---
-to: src/app/shared/gqls/mutations/<%= name %>s/DELETE_<%= h.inflection.singularize(name).toUpperCase() %>.ts
+to: src/app/shared/hooks/mutations/<%= name %>s/useDelete<%= Name %>.ts
 ---
 
 import { useMutation } from '@apollo/client';
