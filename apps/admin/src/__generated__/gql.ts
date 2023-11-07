@@ -48,7 +48,7 @@ const documents = {
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserFormDocument,
-    "\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n": types.GetWorkspaceDocument,
+    "\n  query GetWorkspace($id: String!) {\n    workspace(id: $id) {\n      id\n    }\n  }\n": types.GetWorkspaceDocument,
     "\n  #graphql\n  query GetWorkspaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    workspaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetWorkspacesDocument,
     "\n  query GetWorkspaceForm($id: String!) {\n    workspaceForm(id: $id) {\n      name\n    }\n  }\n": types.GetWorkspaceFormDocument,
 };
@@ -210,7 +210,7 @@ export function gql(source: "#graphql\n  query GetUserForm($id: String!){\n    u
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n"];
+export function gql(source: "\n  query GetWorkspace($id: String!) {\n    workspace(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspace($id: String!) {\n    workspace(id: $id) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

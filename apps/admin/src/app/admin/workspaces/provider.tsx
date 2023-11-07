@@ -1,7 +1,3 @@
----
-to: src/app/admin/test/<%= h.inflection.pluralize(name) %>/provider.tsx
-unless_exists: true
----
 'use client';
 
 import { createContext } from 'react';
@@ -16,11 +12,11 @@ interface PageContext {
   meta: ReturnType<typeof useMeta>;
 }
 
-export const <% Name %>sPageContext = createContext<PageContext>(
+export const WorkspacesPageContext = createContext<PageContext>(
   {} as PageContext,
 );
 
-export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
+export const WorkspacesPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
   const queries = useQueries({ state });
@@ -28,7 +24,7 @@ export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
   const meta = useMeta();
 
   return (
-    <<% Name %>sPageContext.Provider
+    <WorkspacesPageContext.Provider
       value={{
         state,
         queries,
@@ -37,6 +33,6 @@ export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
       }}
     >
       {children}
-    </<% Name %>sPageContext.Provider>
+    </WorkspacesPageContext.Provider>
   );
 });

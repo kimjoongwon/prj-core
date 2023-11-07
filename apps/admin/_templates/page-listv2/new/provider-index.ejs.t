@@ -1,5 +1,5 @@
 ---
-to: src/app/admin/test/<%= h.inflection.pluralize(name) %>/provider.tsx
+to: src/app/admin/<%= h.inflection.pluralize(name) %>/provider.tsx
 unless_exists: true
 ---
 'use client';
@@ -16,11 +16,11 @@ interface PageContext {
   meta: ReturnType<typeof useMeta>;
 }
 
-export const <% Name %>sPageContext = createContext<PageContext>(
+export const <%= Name %>sPageContext = createContext<PageContext>(
   {} as PageContext,
 );
 
-export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
+export const <%= Name %>sPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
   const state = useState();
   const queries = useQueries({ state });
@@ -28,7 +28,7 @@ export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
   const meta = useMeta();
 
   return (
-    <<% Name %>sPageContext.Provider
+    <<%= Name %>sPageContext.Provider
       value={{
         state,
         queries,
@@ -37,6 +37,6 @@ export const <% Name %>sPageProvider = observer((props: ContainerProps) => {
       }}
     >
       {children}
-    </<% Name %>sPageContext.Provider>
+    </<%= Name %>sPageContext.Provider>
   );
 });

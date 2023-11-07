@@ -1,26 +1,30 @@
+---
+to: src/app/admin/<%= h.inflection.pluralize(name) %>/page.tsx
+unless_exists: true
+---
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import {
   ButtonGroupContainer,
   DataGridContainer,
   PaginationContainer,
   SearchFilterContainer,
 } from '@containers';
-import { useServicesPage } from './hooks';
+import { use<%= Name %>sPage } from './hooks';
 
-function ServicesPage() {
-  const servicesPage = useServicesPage();
+function <%= Name %>sPage() {
+  const <%= name %>sPage = use<%= Name %>sPage();
 
   const {
     handlers: { onClickRow, onClickSorting },
     queries: {
-      servicesQuery: { data },
+      <%= name %>sQuery: { data },
     },
     state,
     meta: { columns, leftButtons, rightButtons },
-  } = servicesPage;
+  } = <%= name %>sPage;
 
   return (
     <>
@@ -33,7 +37,7 @@ function ServicesPage() {
       <DataGridContainer>
         <DataGrid
           columns={columns}
-          data={data.services.nodes}
+          data={data.<%= name %>s.nodes}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
           onSortChange={onClickSorting}
@@ -43,11 +47,11 @@ function ServicesPage() {
         <Pagination
           state={state.query}
           path="skip"
-          totalCount={data.services.pageInfo.totalCount}
+          totalCount={data.<%= name %>s.pageInfo.totalCount}
         />
       </PaginationContainer>
     </>
   );
 }
 
-export default observer(ServicesPage);
+export default observer(<%= Name %>sPage);

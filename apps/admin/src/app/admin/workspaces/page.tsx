@@ -1,26 +1,26 @@
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import {
   ButtonGroupContainer,
   DataGridContainer,
   PaginationContainer,
   SearchFilterContainer,
 } from '@containers';
-import { useServicesPage } from './hooks';
+import { useWorkspacesPage } from './hooks';
 
-function ServicesPage() {
-  const servicesPage = useServicesPage();
+function WorkspacesPage() {
+  const workspacesPage = useWorkspacesPage();
 
   const {
     handlers: { onClickRow, onClickSorting },
     queries: {
-      servicesQuery: { data },
+      workspacesQuery: { data },
     },
     state,
     meta: { columns, leftButtons, rightButtons },
-  } = servicesPage;
+  } = workspacesPage;
 
   return (
     <>
@@ -33,7 +33,7 @@ function ServicesPage() {
       <DataGridContainer>
         <DataGrid
           columns={columns}
-          data={data.services.nodes}
+          data={data.workspaces.nodes}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
           onSortChange={onClickSorting}
@@ -43,11 +43,11 @@ function ServicesPage() {
         <Pagination
           state={state.query}
           path="skip"
-          totalCount={data.services.pageInfo.totalCount}
+          totalCount={data.workspaces.pageInfo.totalCount}
         />
       </PaginationContainer>
     </>
   );
 }
 
-export default observer(ServicesPage);
+export default observer(WorkspacesPage);

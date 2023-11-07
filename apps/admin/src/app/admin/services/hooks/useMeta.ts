@@ -3,19 +3,10 @@ import { useCoCRouter } from '@hooks';
 import { GroupButton } from '@coc/ui';
 import { useActionColumns, useServiceColumns } from '@columns';
 import { User } from '@__generated__/graphql';
-import { useQueries } from './useQueries';
-import { useHandlers } from './useHandlers';
-import {
-  SERVICE_EDIT_PAGE_PATH,
-  SERVICE_PAGE_PATH,
-} from '@constants';
+import { SERVICE_EDIT_PAGE_PATH, SERVICE_PAGE_PATH } from '@constants';
 import { toast } from 'react-toastify';
 
-export const useMeta = ({
-  onClickRow,
-  onClickSorting,
-  servicesQuery,
-}: ReturnType<typeof useQueries> & ReturnType<typeof useHandlers>) => {
+export const useMeta = () => {
   const router = useCoCRouter();
   const serviceColumns = useServiceColumns();
 
@@ -69,21 +60,11 @@ export const useMeta = ({
   ];
 
   return {
-    buttonGroup: {
-      leftButtons: useMemo(() => leftButtons, []),
-      rightButtons: useMemo(() => rightButtons, []),
-    },
-    dataGrid: {
-      columns: [...serviceColumns, ...actionColumns],
-      data: servicesQuery?.data?.services.nodes,
-      onClickRow,
-      onClickSorting,
-    },
-    pagination: {
-      totalCount: useMemo(
-        () => servicesQuery?.data?.services.pageInfo?.totalCount || 1,
-        [],
-      ),
-    },
+    leftButtons: useMemo(() => leftButtons, []),
+    rightButtons: useMemo(() => rightButtons, []),
+    columns: useMemo(
+      () => [...serviceColumns, ...actionColumns],
+      [serviceColumns, actionColumns],
+    ),
   };
 };
