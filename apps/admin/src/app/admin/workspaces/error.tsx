@@ -1,7 +1,3 @@
----
-to: src/app/admin/(dashboard)/<%= h.inflection.pluralize(name) %>/error.tsx
-unless_exists: true
----
 'use client' // Error components must be Client Components
 
 import { useEffect } from 'react'

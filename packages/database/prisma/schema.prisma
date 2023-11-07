@@ -47,26 +47,28 @@ model WorkspaceClassification {
   deletedAt   DateTime? @db.Timestamptz(6)
 }
 
-model WorkspaceGroup {
+model Group {
+  id                   String                 @id @default(cuid())
+  name                 String
+  serviceId            String
+  service              Service                @relation(fields: [serviceId], references: [id])
+  categoryId           String
+  category             Category               @relation(fields: [categoryId], references: [id])
+  createdAt            DateTime               @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime?              @updatedAt @db.Timestamptz(6)
+  deletedAt            DateTime?              @db.Timestamptz(6)
+  workspaceAffiliation WorkspaceAffiliation[]
+}
+
+model WorkspaceAffiliation {
   id          String    @id @default(cuid())
-  name        String
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  groupId     String
+  group       Group     @relation(fields: [groupId], references: [id])
   createdAt   DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime? @db.Timestamptz(6)
-}
-
-model Group {
-  id         String    @id @default(cuid())
-  name       String
-  serviceId  String
-  service    Service   @relation(fields: [serviceId], references: [id])
-  categoryId String
-  category   Category  @relation(fields: [categoryId], references: [id])
-  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime? @db.Timestamptz(6)
 }
 
 model CategoryItem {
@@ -141,7 +143,7 @@ model Workspace {
   deletedAt               DateTime?                 @db.Timestamptz(6)
   member                  Member[]
   workspaceClassification WorkspaceClassification[]
-  workspaceGroup          WorkspaceGroup[]
+  WorkspaceAffiliation    WorkspaceAffiliation[]
 }
 
 enum Roles {

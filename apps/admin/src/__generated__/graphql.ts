@@ -128,7 +128,11 @@ export type CreateServiceInput = {
 };
 
 export type CreateWorkspaceInput = {
+  address: Scalars['String']['input'];
+  businessNumber: Scalars['String']['input'];
+  categoryId: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
 };
 
 export type LoginInput = {
@@ -680,7 +684,15 @@ export type WorkspaceEdge = {
 
 export type WorkspaceForm = {
   __typename?: 'WorkspaceForm';
+  address?: Maybe<Scalars['String']['output']>;
+  businessNumber?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['String']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type WorkspacePageInfo = {
