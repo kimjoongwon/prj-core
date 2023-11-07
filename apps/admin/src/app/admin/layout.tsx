@@ -6,8 +6,9 @@ import {
   CATEGORY_ITEMS_PAGE_PATH,
   SERVICES_PAGE_PATH,
   USERS_PAGE_PATH,
+  WORKSPACES_PAGE_PATH,
 } from '@constants';
-import { CoCModal, CoCNavbar, NavItem } from '@coc/ui';
+import { CoCNavbar, NavItem } from '@coc/ui';
 import { User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
@@ -24,6 +25,19 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         {
           text: '사용자목록-1',
           href: getUrlWithParams(USERS_PAGE_PATH),
+        },
+        {
+          text: '사용자목록-2',
+          href: getUrlWithParams(USERS_PAGE_PATH),
+        },
+      ],
+    },
+    {
+      text: '소속 관리',
+      children: [
+        {
+          text: '소속',
+          href: getUrlWithParams(WORKSPACES_PAGE_PATH),
         },
         {
           text: '사용자목록-2',
