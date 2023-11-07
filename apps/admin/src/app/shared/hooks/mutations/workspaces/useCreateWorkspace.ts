@@ -1,9 +1,9 @@
 import { useMutation } from '@apollo/client';
-import { DELETE_WORKSPACE, GET_WORKSPACES } from '@gqls';
+import { CREATE_WORKSPACE, GET_WORKSPACES } from '@gqls';
 import { MutationOptions } from '@types';
 
-export const useDeleteWorkspace = (options?: MutationOptions) => {
-  return useMutation(DELETE_WORKSPACE, {
+export const useCreateWorkspace = (options?: MutationOptions) => {
+  return useMutation(CREATE_WORKSPACE, {
     onCompleted: () => {
       if (options) {
         options.onCompleted && options.onCompleted();
