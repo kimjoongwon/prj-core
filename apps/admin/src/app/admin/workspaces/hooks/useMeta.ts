@@ -41,13 +41,20 @@ export const useMeta = () => {
     {
       children: '생성',
       color: 'primary',
-      onClick: () =>
+      onClick: () => {
+        router.prefetch({
+          url: WORKSPACE_EDIT_PAGE_PATH,
+          params: {
+            workspaceId: 'new',
+          },
+        });
         router.push({
           url: WORKSPACE_EDIT_PAGE_PATH,
           params: {
             workspaceId: 'new',
           },
-        }),
+        });
+      },
     },
   ];
 
@@ -68,4 +75,3 @@ export const useMeta = () => {
     ),
   };
 };
-

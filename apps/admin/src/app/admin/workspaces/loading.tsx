@@ -1,5 +1,11 @@
+'use client';
+
 import { DashboardSkeleton } from '@skeletons';
+import { usePathname } from 'next/navigation';
 
 export default function Loading() {
-  return <DashboardSkeleton />;
+  const pathname = usePathname();
+  const isEdit = pathname.includes('/edit');
+
+  return isEdit ? null : <DashboardSkeleton />;
 }

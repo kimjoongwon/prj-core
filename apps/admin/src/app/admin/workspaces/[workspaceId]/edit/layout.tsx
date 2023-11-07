@@ -1,6 +1,4 @@
-import { CoCModal } from '@coc/ui';
-
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
-  return <CoCModal>{children}</CoCModal>;
+  return <div>{children}</div>;
 }

@@ -7,9 +7,11 @@ export default function Layout(props: {
 }) {
   const { children, modal } = props;
   return (
-    <WorkspacesPageProvider>
-      <TableLayout>{children}</TableLayout>
-      {modal}
-    </WorkspacesPageProvider>
+    <>
+      <WorkspacesPageProvider>
+        <TableLayout>{children}</TableLayout>
+        {modal}
+      </WorkspacesPageProvider>
+    </>
   );
 }
