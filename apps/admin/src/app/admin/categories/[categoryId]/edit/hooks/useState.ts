@@ -2,10 +2,14 @@ import { CategoryForm } from '@__generated__/graphql';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useQueries } from './useQueries';
 
-export const useStates = (context: ReturnType<typeof useQueries>) => {
-  const { categoryFormQuery } = context;
+export const useState = ({
+  queries,
+}: {
+  queries: ReturnType<typeof useQueries>;
+}) => {
+  const { categoryFormQuery } = queries;
   const categoryForm = categoryFormQuery?.data?.categoryForm;
 
   const formState = useLocalObservable<CategoryForm>(() => categoryForm);
-  return { formState };
+  return { form: formState };
 };

@@ -1,16 +1,19 @@
 import { useCoCRouter } from '@hooks';
 import { useMutations } from './useMutations';
 import { useParams } from 'next/navigation';
-import { useStates } from './useStates';
+import { useState } from './useState';
 
-export const useHandlers = (
-  context: ReturnType<typeof useMutations> & ReturnType<typeof useStates>,
-) => {
+export const useHandlers = ({
+  mutations,
+  state,
+}: {
+  mutations: ReturnType<typeof useMutations>;
+  state: ReturnType<typeof useState>;
+}) => {
   const {
-    formState,
     createCategory: [createCategory],
     updateCategory: [updateCategory],
-  } = context;
+  } = mutations;
 
   const router = useCoCRouter();
   const { categoryId } = useParams();
@@ -20,9 +23,9 @@ export const useHandlers = (
       createCategory({
         variables: {
           createCategoryInput: {
-            name: formState.name,
-            itemId: formState.itemId,
-            serviceId: formState.serviceId,
+            name: state.form.name,
+            itemId: state.form.itemId,
+            serviceId: state.form.serviceId,
           },
         },
       });
@@ -31,9 +34,9 @@ export const useHandlers = (
         variables: {
           updateCategoryInput: {
             id: categoryId as string,
-            name: formState.name,
-            itemId: formState.itemId,
-            serviceId: formState.serviceId,
+            name: state.form.name,
+            itemId: state.form.itemId,
+            serviceId: state.form.serviceId,
           },
         },
       });

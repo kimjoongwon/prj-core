@@ -6,30 +6,30 @@ import { CategoryForm as CategoryFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 
 interface FormProps {
-  formState: CategoryFormType;
+  state: CategoryFormType;
   schema: ZodSchema;
 }
 
 export const CategoryForm = observer((props: FormProps) => {
-  const { formState, schema } = props;
+  const { state, schema } = props;
 
   return (
     <div className="space-y-4">
       <FormControl schema={schema} timings={['onBlur']}>
-        <Input label="서비스 분류명" state={formState} path="name" />
+        <Input label="서비스 분류명" state={state} path="name" />
       </FormControl>
       <Select
         label="카테고리 선택"
         placeholder="Select an Category"
-        options={formState.itemOptions}
-        state={formState}
+        options={state.itemOptions}
+        state={state}
         path="itemId"
       />
       <Select
         label="서비스 선택"
         placeholder="Select an Service"
-        options={formState.serviceOptions}
-        state={formState}
+        options={state.serviceOptions}
+        state={state}
         path="serviceId"
       />
     </div>
