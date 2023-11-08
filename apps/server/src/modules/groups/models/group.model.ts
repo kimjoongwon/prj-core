@@ -2,16 +2,13 @@ import { Base } from '@common';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class Workspace extends Base {
+export class Group extends Base {
   @Field(type => String)
   name: string;
 
   @Field(type => String)
-  phone: string;
+  serviceId: string;
 
   @Field(type => String)
-  address: string;
-
-  @Field(type => String)
-  businessNumber: string;
+  categoryId: string;
 }

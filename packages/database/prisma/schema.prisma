@@ -138,12 +138,12 @@ model Workspace {
   phone                   String                    @db.Char(11)
   address                 String
   businessNumber          String                    @db.Char(10)
-  createdAt               DateTime                  @db.Timestamptz(6)
+  createdAt               DateTime                  @default(now()) @db.Timestamptz(6)
   updatedAt               DateTime?                 @updatedAt @db.Timestamptz(6)
   deletedAt               DateTime?                 @db.Timestamptz(6)
   member                  Member[]
   workspaceClassification WorkspaceClassification[]
-  WorkspaceAffiliation    WorkspaceAffiliation[]
+  workspaceAffiliation    WorkspaceAffiliation[]
 }
 
 enum Roles {

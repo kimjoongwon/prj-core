@@ -3,7 +3,7 @@ to: src/app/admin/<%= h.inflection.pluralize(name) %>/[<%= name %>Id]/edit/provi
 ---
 'use client';
 
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps, Form } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {
@@ -20,9 +20,13 @@ interface PageContext {
   state: ReturnType<typeof useState>;
 }
 
-export const <%= Name %>EditPageContext = createContext<PageContext>({} as PageContext);
+export const <%= Name %>EditPageContext = createContext<PageContext>(
+  {} as PageContext,
+);
 
 export const <%= Name %>EditPageProvider = observer((props: ContainerProps) => {
+  const { children } = props;
+
   const queries = useQueries();
   const mutations = useMutations();
   const state = useState({
@@ -34,7 +38,8 @@ export const <%= Name %>EditPageProvider = observer((props: ContainerProps) => {
   });
   const schemas = useSchemas();
 
-  const { children } = props;
+  const { <%= name %>FormSchema } = schemas;
+  const { onClickCancel, onClickSave } = handlers;
 
   return (
     <<%= Name %>EditPageContext.Provider
@@ -44,7 +49,15 @@ export const <%= Name %>EditPageProvider = observer((props: ContainerProps) => {
         state,
       }}
     >
-      {children}
+      <Form
+        title="카테고리"
+        state={state.form}
+        schema={<%= name %>FormSchema}
+        onClickSave={onClickSave}
+        onClickCancel={onClickCancel}
+      >
+        {children}
+      </Form>
     </<%= Name %>EditPageContext.Provider>
   );
 });

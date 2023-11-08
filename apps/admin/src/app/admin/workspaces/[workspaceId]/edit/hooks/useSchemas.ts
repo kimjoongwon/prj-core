@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
 export const useSchemas = () => {
-  const { workspaceFormSchema } = z.object({
+  const workspaceFormSchema = z.object({
     name: z.string().min(1).max(10),
+    address: z.string().min(1).max(10),
+    phone: z.string().min(1).max(10),
+    businessNumber: z.string().min(1).max(10),
   });
 
   return {
     workspaceFormSchema,
   };
 };
-

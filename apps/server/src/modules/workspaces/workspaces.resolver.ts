@@ -47,7 +47,7 @@ export class WorkspacesResolver {
   @Public()
   @Query(() => WorkspaceForm, { name: 'workspaceForm' })
   getWorkspaceForm(@Args('id') id: string) {
-    return this.workspacesService.findForm();
+    return this.workspacesService.findForm(id);
   }
 
   @Public()

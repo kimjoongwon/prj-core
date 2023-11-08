@@ -28,6 +28,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { CategoriesModule } from '@modules/categories/categories.module';
 import { CategoryItemsModule } from '@modules/category-items/category-items.module';
 import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
+import { GroupsModule } from '@modules/groups/groups.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { WorkspacesModule } from '@modules/workspaces/workspaces.module';
     ServicesModule,
     RolesModule,
     WorkspacesModule,
+    GroupsModule,
   ],
   providers: [
     {

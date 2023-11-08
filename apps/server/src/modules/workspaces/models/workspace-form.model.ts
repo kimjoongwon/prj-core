@@ -1,12 +1,12 @@
-import { ObjectType, PartialType } from '@nestjs/graphql';
+import { IntersectionType, ObjectType } from '@nestjs/graphql';
 import { CreateWorkspaceInput } from '../dto';
 
 @ObjectType()
-export class WorkspaceForm extends PartialType(
+class Form {}
+
+@ObjectType()
+export class WorkspaceForm extends IntersectionType(
   CreateWorkspaceInput,
+  Form,
   ObjectType,
 ) {}
-
-export const workspaceForm = {
-  name: '',
-};

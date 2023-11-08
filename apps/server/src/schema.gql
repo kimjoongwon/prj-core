@@ -84,6 +84,13 @@ input CreateCategoryItemInput {
   tag: String!
 }
 
+input CreateGroupInput {
+  categoryId: String!
+  deletedAt: DateTime
+  name: String!
+  serviceId: String!
+}
+
 input CreateProfileInput {
   createdAt: DateTime
   deletedAt: DateTime
@@ -106,7 +113,6 @@ input CreateServiceInput {
 input CreateWorkspaceInput {
   address: String!
   businessNumber: String!
-  categoryId: String!
   name: String!
   phone: String!
 }
@@ -115,6 +121,34 @@ input CreateWorkspaceInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Group {
+  categoryId: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: ID!
+  name: String!
+  serviceId: String!
+  updatedAt: DateTime
+}
+
+type GroupEdge {
+  cursor: String!
+  node: Group!
+}
+
+type GroupForm {
+  createdAt: DateTime!
+  id: String
+  name: String!
+  serviceId: String!
+}
+
+type GroupPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  totalCount: Int!
+}
 
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
@@ -129,12 +163,14 @@ input LoginInput {
 type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createRole(createRoleInput: CreateRoleInput!): Role!
   createService(createServiceInput: CreateServiceInput!): Service!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
   deleteCategories(ids: [String!]!): Category!
   deleteCategoryItem(id: String!): CategoryItem!
+  deleteGroup(id: String!): Group!
   deleteRole(id: String!): Role!
   deleteService(id: String!): Service!
   deleteWorkspace(id: String!): Workspace!
@@ -145,6 +181,7 @@ type Mutation {
   signup(data: SignupInput!): Auth!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
@@ -167,6 +204,12 @@ type PaginatedCategoryItem {
   edges: [CategoryItemEdge!]!
   nodes: [CategoryItem!]!
   pageInfo: CategoryItemPageInfo!
+}
+
+type PaginatedGroup {
+  edges: [GroupEdge!]!
+  nodes: [Group!]!
+  pageInfo: GroupPageInfo!
 }
 
 type PaginatedRole {
@@ -215,6 +258,9 @@ type Query {
   categoryItemForm(id: String!): CategoryItemForm!
   categoryItemTrees: [CategoryItem!]!
   categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
+  group(id: String!): Group!
+  groupForm(id: String!): GroupForm!
+  groups(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedGroup!
   profile(id: String!): Profile!
   profiles: [Profile!]!
   role(id: String!): Role!
@@ -321,6 +367,16 @@ input UpdateCategoryItemInput {
   updatedAt: DateTime
 }
 
+input UpdateGroupInput {
+  categoryId: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: ID
+  name: String
+  serviceId: String
+  updatedAt: DateTime
+}
+
 input UpdateProfileInput {
   createdAt: DateTime
   deletedAt: DateTime
@@ -359,10 +415,13 @@ input UpdateUserInput {
 }
 
 input UpdateWorkspaceInput {
+  address: String
+  businessNumber: String
   createdAt: DateTime
   deletedAt: DateTime
   id: ID
   name: String
+  phone: String
   updatedAt: DateTime
 }
 
@@ -399,10 +458,13 @@ type Users {
 }
 
 type Workspace {
+  address: String!
+  businessNumber: String!
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
   name: String!
+  phone: String!
   updatedAt: DateTime
 }
 
@@ -412,15 +474,10 @@ type WorkspaceEdge {
 }
 
 type WorkspaceForm {
-  address: String
-  businessNumber: String
-  categoryId: String
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: ID
-  name: String
-  phone: String
-  updatedAt: DateTime
+  address: String!
+  businessNumber: String!
+  name: String!
+  phone: String!
 }
 
 type WorkspacePageInfo {

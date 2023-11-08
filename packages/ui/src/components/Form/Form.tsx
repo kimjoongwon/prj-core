@@ -34,7 +34,7 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
         <CardBody>{children}</CardBody>
         <CardFooter className="space-x-2">
           <Button
-            isDisabled={!schema.safeParse(state).success}
+            isDisabled={!schema?.safeParse(state).success}
             onClick={onClickSave}
             color="primary"
           >

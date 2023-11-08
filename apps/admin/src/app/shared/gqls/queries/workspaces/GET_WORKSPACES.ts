@@ -16,8 +16,12 @@ export const GET_WORKSPACES = gql(`
     ) {
       nodes {
         id
-        createdAt
+        address
+        businessNumber
+        phone
         name
+        createdAt
+        updatedAt
       }
       pageInfo {
         totalCount

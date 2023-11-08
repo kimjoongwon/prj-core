@@ -13,17 +13,16 @@ export const useHandlers = ({
   const {
     createWorkspace: [createWorkspace],
     updateWorkspace: [updateWorkspace],
-  } = mutations;  
+  } = mutations;
 
   const router = useCoCRouter();
-  const { categoryId } = useParams();
+  const { workspaceId } = useParams();
 
   const onClickSave = () => {
-    if (categoryId === 'new') {
+    if (workspaceId === 'new') {
       createWorkspace({
         variables: {
-          createWorkspaceInput: {
-          },
+          createWorkspaceInput: state.form,
         },
       });
     } else {
@@ -31,6 +30,7 @@ export const useHandlers = ({
         variables: {
           updateWorkspaceInput: {
             id: workspaceId as string,
+            ...state.form,
           },
         },
       });
@@ -46,4 +46,3 @@ export const useHandlers = ({
     onClickCancel,
   };
 };
-

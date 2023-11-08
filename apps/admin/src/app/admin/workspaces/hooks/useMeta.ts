@@ -4,13 +4,13 @@ import { GroupButton } from '@coc/ui';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useWorkspaceColumns } from '@columns';
 import { WORKSPACE_EDIT_PAGE_PATH, WORKSPACE_PAGE_PATH } from '@constants';
-import { User } from '@__generated__/graphql';
+import { User, Workspace } from '@__generated__/graphql';
 
 export const useMeta = () => {
   const router = useCoCRouter();
   const workspaceColumns = useWorkspaceColumns();
 
-  const actionColumns = useActionColumns<User>({
+  const actionColumns = useActionColumns<Workspace>({
     meta: {
       buttons: [
         {

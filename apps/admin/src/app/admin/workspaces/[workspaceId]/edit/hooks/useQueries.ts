@@ -2,10 +2,13 @@ import { useWorkspaceFormQuery } from '@hooks';
 import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
-  const { id = 'new' } = useParams();
+  const { workspaceId = 'new' } = useParams();
+  console.log('id', workspaceId);
   const workspaceFormQuery = useWorkspaceFormQuery({
-    id: id as string,
+    id: workspaceId as string,
   });
+
+  console.log('workspaceFormQuery', workspaceFormQuery);
 
   return {
     workspaceFormQuery,

@@ -59,9 +59,7 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
         if (typeof keys === 'string') {
           localState.value = keys;
         }
-        if (keys instanceof Set<Key>) {
-          localState.value = Array.from(keys)[0] as string;
-        }
+        localState.value = Array.from(keys)[0] as string;
       }}
       value={localState.value}
     >

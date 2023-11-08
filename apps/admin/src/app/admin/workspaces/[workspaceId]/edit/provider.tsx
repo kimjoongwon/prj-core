@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps, Form } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {
@@ -17,9 +17,13 @@ interface PageContext {
   state: ReturnType<typeof useState>;
 }
 
-export const WorkspaceEditPageContext = createContext<PageContext>({} as PageContext);
+export const WorkspaceEditPageContext = createContext<PageContext>(
+  {} as PageContext,
+);
 
 export const WorkspaceEditPageProvider = observer((props: ContainerProps) => {
+  const { children } = props;
+
   const queries = useQueries();
   const mutations = useMutations();
   const state = useState({
@@ -31,7 +35,8 @@ export const WorkspaceEditPageProvider = observer((props: ContainerProps) => {
   });
   const schemas = useSchemas();
 
-  const { children } = props;
+  const { workspaceFormSchema } = schemas;
+  const { onClickCancel, onClickSave } = handlers;
 
   return (
     <WorkspaceEditPageContext.Provider
@@ -41,7 +46,15 @@ export const WorkspaceEditPageProvider = observer((props: ContainerProps) => {
         state,
       }}
     >
-      {children}
+      <Form
+        title="소속"
+        state={state.form}
+        schema={workspaceFormSchema}
+        onClickSave={onClickSave}
+        onClickCancel={onClickCancel}
+      >
+        {children}
+      </Form>
     </WorkspaceEditPageContext.Provider>
   );
 });

@@ -19,10 +19,26 @@ export class WorkspacesService {
     });
   }
 
-  findForm(): WorkspaceForm {
+  async findForm(id: string): Promise<WorkspaceForm> {
+    console.log('id', id);
+    if (id === 'new') {
+      return {
+        name: '',
+        address: '',
+        businessNumber: '',
+        phone: '',
+      };
+    }
+
+    const workspace = await this.prisma.workspace.findUnique({
+      where: { id },
+    });
+
     return {
-      id: '',
-      name: '',
+      address: workspace.address,
+      businessNumber: workspace.businessNumber,
+      name: workspace.name,
+      phone: workspace.phone,
     };
   }
 
