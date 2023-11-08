@@ -1,3 +1,6 @@
+---
+to: src/app/admin/<%= h.inflection.pluralize(name) %>/[<%= name %>Id]/edit/provider.tsx
+---
 'use client';
 
 import { ContainerProps } from '@coc/ui';
@@ -17,9 +20,9 @@ interface PageContext {
   state: ReturnType<typeof useState>;
 }
 
-export const CategoryEditPageContext = createContext<PageContext>({} as PageContext);
+export const <%= Name %>EditPageContext = createContext<PageContext>({} as PageContext);
 
-export const CategoryEditPageProvider = observer((props: ContainerProps) => {
+export const <%= Name %>EditPageProvider = observer((props: ContainerProps) => {
   const queries = useQueries();
   const mutations = useMutations();
   const state = useState({
@@ -34,7 +37,7 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
 
   return (
-    <CategoryEditPageContext.Provider
+    <<%= Name %>EditPageContext.Provider
       value={{
         handlers,
         schemas,
@@ -42,6 +45,6 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
       }}
     >
       {children}
-    </CategoryEditPageContext.Provider>
+    </<%= Name %>EditPageContext.Provider>
   );
 });

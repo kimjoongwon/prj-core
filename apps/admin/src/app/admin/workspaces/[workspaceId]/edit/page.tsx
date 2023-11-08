@@ -1,12 +1,27 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
-import { useWorkspacesPage } from '../../hooks';
+import React from 'react';
+import { WorkspaceForm } from '@components';
+import { useWorkspaceEditPage } from './hooks';
+import { Form } from '@coc/ui';
 
-const Page = () => {
-  const workspacesPage = useWorkspacesPage();
-  console.log('workspacesPage', workspacesPage);
-  return <div>text?</div>;
-};
+export default function Page() {
+  const {
+    handlers: { onClickCancel, onClickSave },
+    schemas: { workspaceFormSchema },
+    state,
+  } = useWorkspaceEditPage();
 
-export default observer(Page);
+  return (
+    <Form
+      title="카테고리"
+      state={state.form}
+      schema={workspaceFormSchema}
+      onClickSave={onClickSave}
+      onClickCancel={onClickCancel}
+    >
+      <WorkspaceForm state={state.form} schema={workspaceFormSchema} />;
+    </Form>
+  );
+}
+

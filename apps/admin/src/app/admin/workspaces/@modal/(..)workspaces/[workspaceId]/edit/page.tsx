@@ -1,7 +1,7 @@
 'use client';
 
-const Page = () => {
+const WorkspaceEditPage = () => {
   return <div>testmodal</div>;
 };
 
-export default Page;
+export default WorkspaceEditPage;

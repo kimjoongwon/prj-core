@@ -2,7 +2,6 @@ import { CreateServiceInput, UpdateServiceInput } from '@__generated__/graphql';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
 import { useQueries } from './useQueries';
-import dayjs from 'dayjs';
 
 export const useState = (context: ReturnType<typeof useQueries>) => {
   const { serviceId = 'new' } = useParams();

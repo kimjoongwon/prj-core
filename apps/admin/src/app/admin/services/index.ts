@@ -1,4 +1,4 @@
 export * from './provider';
 export * from './hooks/useServicesPage';
 export * from './[serviceId]/edit/provider';
-export * from './[serviceId]/edit/_hooks/useServiceEditPage';
+export * from './[serviceId]/edit/hooks/useServiceEditPage';

@@ -17,9 +17,9 @@ interface PageContext {
   state: ReturnType<typeof useState>;
 }
 
-export const CategoryEditPageContext = createContext<PageContext>({} as PageContext);
+export const WorkspaceEditPageContext = createContext<PageContext>({} as PageContext);
 
-export const CategoryEditPageProvider = observer((props: ContainerProps) => {
+export const WorkspaceEditPageProvider = observer((props: ContainerProps) => {
   const queries = useQueries();
   const mutations = useMutations();
   const state = useState({
@@ -34,7 +34,7 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
 
   return (
-    <CategoryEditPageContext.Provider
+    <WorkspaceEditPageContext.Provider
       value={{
         handlers,
         schemas,
@@ -42,6 +42,6 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
       }}
     >
       {children}
-    </CategoryEditPageContext.Provider>
+    </WorkspaceEditPageContext.Provider>
   );
 });

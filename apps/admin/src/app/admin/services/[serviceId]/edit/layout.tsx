@@ -1,11 +1,11 @@
 import { ContainerProps } from '@coc/ui';
 import { ServiceEditPageProvider } from './provider';
 
-export interface UserEditPageProps extends ContainerProps {
+interface LayoutProps extends ContainerProps {
   params: { serviceId: string | 'new' };
 }
 
-export default function Layout(props: UserEditPageProps) {
+export default function Layout(props: LayoutProps) {
   const { children } = props;
 
   return <ServiceEditPageProvider>{children}</ServiceEditPageProvider>;

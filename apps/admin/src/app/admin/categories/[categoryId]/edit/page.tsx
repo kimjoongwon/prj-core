@@ -2,13 +2,25 @@
 
 import React from 'react';
 import { CategoryForm } from '@components';
-import { usePage } from './_hooks';
+import { useCategoryEditPage } from './hooks';
+import { Form } from '@coc/ui';
 
 export default function Page() {
-  const page = usePage();
   const {
-    form: { state, schema },
-  } = page;
+    handlers: { onClickCancel, onClickSave },
+    schemas: { categoryFormSchema },
+    state,
+  } = useCategoryEditPage();
 
-  return <CategoryForm formState={state} schema={schema} />;
+  return (
+    <Form
+      title="카테고리"
+      state={state.form}
+      schema={categoryFormSchema}
+      onClickSave={onClickSave}
+      onClickCancel={onClickCancel}
+    >
+      <CategoryForm state={state.form} schema={categoryFormSchema} />;
+    </Form>
+  );
 }

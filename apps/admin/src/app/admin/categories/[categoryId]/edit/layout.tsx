@@ -1,18 +1,18 @@
-import { ContainerProps } from '@coc/ui';
 import { EditLayout } from '@components';
-import { Provider } from './provider';
+import { CategoryEditPageProvider } from './provider';
 
-export interface UserEditPageProps extends ContainerProps {
-  params: { id: string | 'new' };
+export interface LayoutProps {
+  params: { categoryId: string | 'new' };
   modal: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export default function Layout(props: UserEditPageProps) {
+export default function Layout(props: LayoutProps) {
   const { children } = props;
 
   return (
     <EditLayout>
-      <Provider>{children}</Provider>
+      <CategoryEditPageProvider>{children}</CategoryEditPageProvider>
     </EditLayout>
   );
 }

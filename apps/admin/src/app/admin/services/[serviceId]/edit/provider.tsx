@@ -9,8 +9,8 @@ import {
   useMutations,
   useQueries,
   useState,
-} from './_hooks';
-import { useSchemas } from './_hooks/useSchema';
+} from './hooks';
+import { useSchemas } from './hooks/useSchema';
 interface CategoryEditProviderProps {
   children: React.ReactNode;
 }

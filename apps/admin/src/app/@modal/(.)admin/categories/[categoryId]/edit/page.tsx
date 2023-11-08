@@ -1,7 +1,7 @@
 'use client';
 
 import { CategoryForm } from '@components';
-import { usePage } from '../../../../../admin/categories/[categoryId]/edit/_hooks';
+import { usePage } from '../../../../../admin/categories/[categoryId]/edit/hooks';
 
 export default function Page() {
   const {
