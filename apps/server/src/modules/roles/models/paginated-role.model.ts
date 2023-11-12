@@ -1,4 +1,4 @@
-import { Paginated } from '@common';
+import { Paginated } from '@common/models';
 import { ObjectType } from '@nestjs/graphql';
 import { Role } from './role.model';
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
 import { PaginatedRole, RoleForm } from './models';
 import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
 import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { queryBuilder } from '@common/utils';
 
 @Injectable()
 export class RolesService {

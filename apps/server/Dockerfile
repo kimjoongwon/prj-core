@@ -23,25 +23,12 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN npm i -g pnpm@7.27.0
-RUN npm i -g prisma
-RUN pnpm install
-
 COPY --from=builder /app/out/full/ .
-
-# Build the project and its dependencies
-RUN npx prisma generate --schema=./apps/server/prisma/schema.prisma
-
+RUN npm i -g pnpm
+RUN pnpm install
+RUN pnpm prisma generate --schema=./packages/database/prisma/schema.prisma
 COPY turbo.json turbo.json
-
-# Uncomment and use build args to enable remote caching
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=$TURBO_TEAM
-
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=$TURBO_TOKEN
-
-RUN pnpm run build --filter=server
+RUN pnpm run build
 
 FROM base AS runner
 WORKDIR /app
@@ -53,4 +40,6 @@ WORKDIR /app
 
 COPY --from=installer /app .
 
-CMD node apps/server/dist/main.js
+WORKDIR apps/server
+
+CMD npm run start:prod

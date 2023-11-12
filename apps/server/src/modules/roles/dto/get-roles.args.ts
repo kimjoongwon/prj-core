@@ -1,4 +1,4 @@
-import { QueryArgs } from '@common';
+import { QueryArgs } from '@common/dto';
 import { ArgsType } from '@nestjs/graphql';
 
 @ArgsType()

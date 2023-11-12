@@ -15,36 +15,26 @@ interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
 }
 
 export const Form = observer(<T extends object>(porps: FormProps<T>) => {
-  const {
-    children,
-    onClickSave,
-    onClickCancel,
-    schema,
-    state,
-    title,
-    ...rest
-  } = porps;
+  const { children, onClickSave, onClickCancel, schema, state, title, ...rest } = porps;
 
   return (
-    <form {...rest} className="w-full">
-      <Card fullWidth>
-        <CardHeader>
-          <p className="text-large">{title}</p>
-        </CardHeader>
-        <CardBody>{children}</CardBody>
-        <CardFooter className="space-x-2">
-          <Button
-            isDisabled={!schema?.safeParse(state).success}
-            onClick={onClickSave}
-            color="primary"
-          >
-            저장
-          </Button>
-          <Button color="danger" onClick={onClickCancel}>
-            취소
-          </Button>
-        </CardFooter>
-      </Card>
-    </form>
+    <Card fullWidth>
+      <CardHeader>
+        <p className="text-large">{title}</p>
+      </CardHeader>
+      <CardBody>
+        <form {...rest}>
+          {children}
+        </form>
+      </CardBody>
+      <CardFooter className="space-x-2">
+        <Button isDisabled={!schema?.safeParse(state).success} onClick={onClickSave} color="primary">
+          저장
+        </Button>
+        <Button color="danger" onClick={onClickCancel}>
+          취소
+        </Button>
+      </CardFooter>
+    </Card>
   );
 });

@@ -9,7 +9,13 @@
         "outDir": "./dist"
       }
     ],
+    "tsConfigPath": "tsconfig.build.json",
     "deleteOutDir": true,
-    "builder": "swc"
+    "builder": {
+      "type": "swc",
+      "options": {
+        
+      }
+    }
   }
 }

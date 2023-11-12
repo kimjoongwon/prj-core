@@ -1,5 +1,5 @@
 import { $Enums } from '@coc/db';
-import { Base } from '@common';
+import { Base } from '@common/interfaces';
 import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
 
 /**

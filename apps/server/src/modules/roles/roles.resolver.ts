@@ -1,9 +1,10 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { RolesService } from './roles.service';
 import { PaginatedRole, Role, RoleForm } from './models';
 import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
+import { GqlAuthGuard } from '@common/guards';
+import { Public } from '@common/decorators';
 
 @Resolver(() => Role)
 @UseGuards(GqlAuthGuard)

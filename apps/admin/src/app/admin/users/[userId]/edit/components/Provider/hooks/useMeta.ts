@@ -16,7 +16,19 @@ export const useMeta = (context: ReturnType<typeof useMutations>) => {
     if (userId === 'new') {
       signUp();
     } else {
-      updateUser();
+      updateUser({
+        variables: {
+          updateUserInput: {
+            id: userId as string,
+            email: '',
+            password: '',
+            profile: {
+              nickname: '',
+              phone: '',
+            },
+          },
+        },
+      });
     }
   };
 

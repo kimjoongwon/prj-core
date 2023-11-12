@@ -15,7 +15,7 @@ export const WorkspaceForm = observer((props: FormProps) => {
 
   return (
     <div className="space-y-4">
-      <Input label="이름" state={state} path="name" />
+      <Input label="이름2" state={state} path="name" />
       <Input label="사업자 번호" state={state} path="businessNumber" />
       <Input label="주소" state={state} path="address" />
       <Input label="휴대폰" state={state} path="phone" />

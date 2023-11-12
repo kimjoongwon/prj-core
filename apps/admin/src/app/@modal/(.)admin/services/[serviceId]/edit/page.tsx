@@ -2,7 +2,7 @@
 
 import { ServiceForm } from '@components';
 import { observer } from 'mobx-react-lite';
-import { useServiceEditPage } from '../../../../../admin/services/[serviceId]/edit/hooks';
+import { useServiceEditPage } from '../../../../../admin/services/[serviceId]/edit/hooks/useServiceEditPage';
 
 function Page() {
   const {

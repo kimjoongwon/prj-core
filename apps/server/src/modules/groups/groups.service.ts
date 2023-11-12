@@ -20,7 +20,8 @@ export class GroupsService {
       return {
         name: '',
         serviceId: '',
-        categoryId: '',
+        id: '',
+        createdAt: new Date(),
       };
     }
 
