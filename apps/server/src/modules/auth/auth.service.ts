@@ -33,6 +33,8 @@ export class AuthService {
 
     const { userId } = await this.prisma.profile.create({
       data: {
+        roleId: '1',
+        userId: '1',
         nickname,
         phone,
         user: {

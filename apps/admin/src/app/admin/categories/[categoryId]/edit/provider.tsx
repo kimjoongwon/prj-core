@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps, Form } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {
@@ -17,7 +17,9 @@ interface PageContext {
   state: ReturnType<typeof useState>;
 }
 
-export const CategoryEditPageContext = createContext<PageContext>({} as PageContext);
+export const CategoryEditPageContext = createContext<PageContext>(
+  {} as PageContext,
+);
 
 export const CategoryEditPageProvider = observer((props: ContainerProps) => {
   const queries = useQueries();
@@ -31,6 +33,9 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
   });
   const schemas = useSchemas();
 
+  const { categoryFormSchema } = schemas;
+  const { onClickCancel, onClickSave } = handlers;
+
   const { children } = props;
 
   return (
@@ -41,7 +46,15 @@ export const CategoryEditPageProvider = observer((props: ContainerProps) => {
         state,
       }}
     >
-      {children}
+      <Form
+        title="카테고리"
+        state={state.form}
+        schema={categoryFormSchema}
+        onClickSave={onClickSave}
+        onClickCancel={onClickCancel}
+      >
+        {children}
+      </Form>
     </CategoryEditPageContext.Provider>
   );
 });

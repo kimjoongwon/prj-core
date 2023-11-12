@@ -108,6 +108,13 @@ export type CreateCategoryItemInput = {
   tag: Scalars['String']['input'];
 };
 
+export type CreateGroupInput = {
+  categoryId: Scalars['String']['input'];
+  deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  name: Scalars['String']['input'];
+  serviceId: Scalars['String']['input'];
+};
+
 export type CreateProfileInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -134,6 +141,38 @@ export type CreateWorkspaceInput = {
   phone: Scalars['String']['input'];
 };
 
+export type Group = {
+  __typename?: 'Group';
+  categoryId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  serviceId: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type GroupEdge = {
+  __typename?: 'GroupEdge';
+  cursor: Scalars['String']['output'];
+  node: Group;
+};
+
+export type GroupForm = {
+  __typename?: 'GroupForm';
+  createdAt: Scalars['DateTime']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  serviceId: Scalars['String']['output'];
+};
+
+export type GroupPageInfo = {
+  __typename?: 'GroupPageInfo';
+  endCursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+  totalCount: Scalars['Int']['output'];
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -143,12 +182,14 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCategory: Category;
   createCategoryItem: CategoryItem;
+  createGroup: Group;
   createProfile: Profile;
   createRole: Role;
   createService: Service;
   createWorkspace: Workspace;
   deleteCategories: Category;
   deleteCategoryItem: CategoryItem;
+  deleteGroup: Group;
   deleteRole: Role;
   deleteService: Service;
   deleteWorkspace: Workspace;
@@ -159,6 +200,7 @@ export type Mutation = {
   signup: Auth;
   updateCategory: Category;
   updateCategoryItem: CategoryItem;
+  updateGroup: Group;
   updateProfile: Profile;
   updateRole: Role;
   updateService: Service;
@@ -174,6 +216,11 @@ export type MutationCreateCategoryArgs = {
 
 export type MutationCreateCategoryItemArgs = {
   createCategoryItemInput: CreateCategoryItemInput;
+};
+
+
+export type MutationCreateGroupArgs = {
+  createGroupInput: CreateGroupInput;
 };
 
 
@@ -203,6 +250,11 @@ export type MutationDeleteCategoriesArgs = {
 
 
 export type MutationDeleteCategoryItemArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteGroupArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -257,6 +309,11 @@ export type MutationUpdateCategoryItemArgs = {
 };
 
 
+export type MutationUpdateGroupArgs = {
+  updateGroupInput: UpdateGroupInput;
+};
+
+
 export type MutationUpdateProfileArgs = {
   updateProfileInput: UpdateProfileInput;
 };
@@ -299,6 +356,13 @@ export type PaginatedCategoryItem = {
   edges: Array<CategoryItemEdge>;
   nodes: Array<CategoryItem>;
   pageInfo: CategoryItemPageInfo;
+};
+
+export type PaginatedGroup = {
+  __typename?: 'PaginatedGroup';
+  edges: Array<GroupEdge>;
+  nodes: Array<Group>;
+  pageInfo: GroupPageInfo;
 };
 
 export type PaginatedRole = {
@@ -353,6 +417,9 @@ export type Query = {
   categoryItemForm: CategoryItemForm;
   categoryItemTrees: Array<CategoryItem>;
   categoryItems: PaginatedCategoryItem;
+  group: Group;
+  groupForm: GroupForm;
+  groups: PaginatedGroup;
   profile: Profile;
   profiles: Array<Profile>;
   role: Role;
@@ -404,6 +471,28 @@ export type QueryCategoryItemsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   sortingKey?: InputMaybe<Scalars['String']['input']>;
   sortingValue?: InputMaybe<Scalars['String']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGroupArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGroupFormArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGroupsArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  endTimestamp?: InputMaybe<Scalars['Float']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sortingKey?: InputMaybe<Scalars['String']['input']>;
+  sortingValue?: InputMaybe<Scalars['String']['input']>;
+  startTimestamp?: InputMaybe<Scalars['Float']['input']>;
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -582,6 +671,16 @@ export type UpdateCategoryItemInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
   tag?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type UpdateGroupInput = {
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  serviceId?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
