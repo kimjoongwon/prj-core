@@ -2,7 +2,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Injectable } from '@nestjs/common';
 import { GqlOptionsFactory } from '@nestjs/graphql';
 import { join } from 'path';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+  // ApolloServerPluginLandingPageProductionDefault,
+} from '@apollo/server/plugin/landingPage/default';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { upperDirectiveTransformer } from '../../directive-transforms/upper-directive-transformer';
 
@@ -12,10 +16,13 @@ export class GqlConfigService implements GqlOptionsFactory {
     return {
       driver: ApolloDriver,
       fieldResolverEnhancers: ['interceptors', 'filters', 'guards'],
-      playground: false,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      playground: false,
+      plugins: [
+        ApolloServerPluginLandingPageLocalDefault(),
+        // ApolloServerPluginLandingPageProductionDefault(),
+      ],
       transformSchema: schema => {
         return upperDirectiveTransformer(schema, 'upper');
       },

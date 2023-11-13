@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM --platform=linux/amd64 node:18-alpine AS base
 
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!
@@ -36,7 +36,7 @@ COPY turbo.json turbo.json
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
 RUN npm -g install pnpm@7.27.0
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 RUN yarn turbo run build --filter=admin
 
 FROM base AS runner
