@@ -10,7 +10,7 @@ export default function Layout(props: {
   return (
     <PageProvider>
       <TableLayout>{children}</TableLayout>
-      <div>{modal}</div>
+      {modal}
     </PageProvider>
   );
 }

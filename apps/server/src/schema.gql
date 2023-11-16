@@ -113,10 +113,10 @@ input CreateServiceInput {
   name: String!
 }
 
-input CreateWorkspaceInput {
+input CreateSpaceInput {
   address: String!
-  businessNumber: String!
   name: String!
+  ownerId: String!
   phone: String!
 }
 
@@ -170,13 +170,13 @@ type Mutation {
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   createRole(createRoleInput: CreateRoleInput!): Role!
   createService(createServiceInput: CreateServiceInput!): Service!
-  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): Workspace!
+  createSpace(createSpaceInput: CreateSpaceInput!): Space!
   deleteCategories(ids: [String!]!): Category!
   deleteCategoryItem(id: String!): CategoryItem!
   deleteGroup(id: String!): Group!
   deleteRole(id: String!): Role!
   deleteService(id: String!): Service!
-  deleteWorkspace(id: String!): Workspace!
+  deleteSpace(id: String!): Space!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   removeCategory(id: String!): Category!
@@ -188,8 +188,8 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
+  updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  updateWorkspace(updateWorkspaceInput: UpdateWorkspaceInput!): Workspace!
 }
 
 type Option {
@@ -227,10 +227,10 @@ type PaginatedService {
   pageInfo: ServicePageInfo!
 }
 
-type PaginatedWorkspace {
-  edges: [WorkspaceEdge!]!
-  nodes: [Workspace!]!
-  pageInfo: WorkspacePageInfo!
+type PaginatedSpace {
+  edges: [SpaceEdge!]!
+  nodes: [Space!]!
+  pageInfo: SpacePageInfo!
 }
 
 type Profile {
@@ -272,12 +272,12 @@ type Query {
   service(id: String!): Service!
   serviceForm: ServiceForm!
   services(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedService!
+  space(id: String!): Space!
+  spaceForm(id: String!): SpaceForm!
+  spaces(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedSpace!
   user(id: String!): User!
   userForm(id: String!): UserForm!
   users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
-  workspace(id: String!): Workspace!
-  workspaceForm(id: String!): WorkspaceForm!
-  workspaces(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedWorkspace!
 }
 
 type Role {
@@ -344,6 +344,36 @@ input SignupInput {
   profile: ProfileInput!
 }
 
+type Space {
+  address: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: ID!
+  name: String!
+  owner: User!
+  ownerId: String!
+  phone: String!
+  updatedAt: DateTime
+}
+
+type SpaceEdge {
+  cursor: String!
+  node: Space!
+}
+
+type SpaceForm {
+  address: String!
+  name: String!
+  ownerId: String!
+  phone: String!
+}
+
+type SpacePageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  totalCount: Int!
+}
+
 type Token {
   """JWT access token"""
   accessToken: JWT!
@@ -408,22 +438,19 @@ input UpdateServiceInput {
   updatedAt: DateTime
 }
 
+input UpdateSpaceInput {
+  address: String
+  id: ID
+  name: String
+  ownerId: String
+  phone: String
+}
+
 input UpdateUserInput {
   email: String
   id: ID!
   password: String
   profile: ProfileInput
-}
-
-input UpdateWorkspaceInput {
-  address: String
-  businessNumber: String
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: ID
-  name: String
-  phone: String
-  updatedAt: DateTime
 }
 
 type User {
@@ -456,33 +483,4 @@ type Users {
   edges: [UserEdge!]!
   nodes: [User!]!
   pageInfo: UserPageInfo!
-}
-
-type Workspace {
-  address: String!
-  businessNumber: String!
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: ID!
-  name: String!
-  phone: String!
-  updatedAt: DateTime
-}
-
-type WorkspaceEdge {
-  cursor: String!
-  node: Workspace!
-}
-
-type WorkspaceForm {
-  address: String!
-  businessNumber: String!
-  name: String!
-  phone: String!
-}
-
-type WorkspacePageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
 }

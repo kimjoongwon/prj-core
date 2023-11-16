@@ -1,9 +1,12 @@
-import { Field, ObjectType, PartialType } from '@nestjs/graphql';
-import { CreateSpaceInput } from '../dto';
-import { Option } from '@common';
+import { IntersectionType, ObjectType } from '@nestjs/graphql';
+import { CreateSpaceInput } from '../dto/index';
 
 @ObjectType()
-export class SpaceForm extends PartialType(CreateSpaceInput, ObjectType) {
-  @Field(type => Option)
-  ownerOptions: Option[];
-}
+class Form {}
+
+@ObjectType()
+export class SpaceForm extends IntersectionType(
+  CreateSpaceInput,
+  Form,
+  ObjectType,
+) {}

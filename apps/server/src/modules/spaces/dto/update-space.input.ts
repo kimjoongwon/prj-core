@@ -1,5 +1,5 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import { CreateSpaceInput } from '.';
+import { CreateSpaceInput } from './create-space.input';
 
 @InputType()
 export class UpdateSpaceInput extends PartialType(CreateSpaceInput, InputType) {

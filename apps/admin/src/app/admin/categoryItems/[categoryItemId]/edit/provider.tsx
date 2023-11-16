@@ -26,35 +26,45 @@ interface PageContext {
 
 export const PageContext = createContext<PageContext>({} as PageContext);
 
-export const Provider = observer((props: CategoryEditProviderProps) => {
-  const categoryItemsPage = useCategoryItemsPage();
-  const queries = useQueries();
-  const mutations = useMutations();
-  const state = useState({ ...queries });
-  const schemas = useSchemas();
-  const handlers = useHandlers({
-    mutations,
-    state,
-    categoryItemsPage,
-  });
+export const CategoryItemEditPageProvider = observer(
+  (props: CategoryEditProviderProps) => {
+    const categoryItemsPage = useCategoryItemsPage();
+    const queries = useQueries();
+    const mutations = useMutations();
+    const state = useState({ ...queries });
+    const schemas = useSchemas();
+    const handlers = useHandlers({
+      mutations,
+      state,
+      categoryItemsPage,
+    });
 
-  return (
-    <PageContext.Provider
-      value={{
-        context: {
-          categoryItemsPage,
-        },
-        form: {
-          state: state.formState,
-          schema: schemas.categoryItemSchema,
-          buttons: {
-            onClickSave: handlers.onClickSave,
-            onClickCancel: handlers.onClickCancel,
+    return (
+      <PageContext.Provider
+        value={{
+          context: {
+            categoryItemsPage,
           },
-        },
-      }}
-    >
-      {props.children}
-    </PageContext.Provider>
-  );
-});
+          form: {
+            state: state.formState,
+            schema: schemas.categoryItemSchema,
+            buttons: {
+              onClickSave: handlers.onClickSave,
+              onClickCancel: handlers.onClickCancel,
+            },
+          },
+        }}
+      >
+        <Form
+          title="카테고리"
+          state={state.formState}
+          schema={schemas.categoryItemSchema}
+          onClickSave={handlers.onClickSave}
+          onClickCancel={handlers.onClickCancel}
+        >
+          {props.children}
+        </Form>
+      </PageContext.Provider>
+    );
+  },
+);
