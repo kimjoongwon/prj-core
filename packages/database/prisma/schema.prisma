@@ -39,7 +39,6 @@ model Group {
   name      Json
   serviceId String
   service   Service   @relation(fields: [serviceId], references: [id])
-  itemId    String
   tenantId  String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
