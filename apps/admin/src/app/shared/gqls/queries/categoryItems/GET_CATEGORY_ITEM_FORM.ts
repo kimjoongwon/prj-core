@@ -8,6 +8,7 @@ export const GET_CATEGORY_ITEM_FORM = gql(`
       ancestorIds
       parentId
       tag
+      tenantId
     }
   }
 `);

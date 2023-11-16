@@ -37,6 +37,7 @@ export class CategoryItemsService {
   async findForm(id: string): Promise<CategoryItemForm> {
     if (id === 'new') {
       return {
+        tenantId: 'test',
         ancestorIds: [],
         name: '',
         parentId: null,
@@ -49,6 +50,7 @@ export class CategoryItemsService {
     });
 
     return {
+      tenantId: categoryItem.tenantId,
       ancestorIds: categoryItem?.ancestorIds,
       name: categoryItem?.name,
       parentId: categoryItem?.parentId,

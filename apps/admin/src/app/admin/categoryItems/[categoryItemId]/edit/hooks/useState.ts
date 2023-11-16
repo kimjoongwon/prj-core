@@ -16,6 +16,7 @@ export const useState = (context: ReturnType<typeof useQueries>) => {
     parentId: categoryItemForm.parentId,
     ancestorIds: categoryItemForm.ancestorIds,
     tag: categoryItemForm.tag,
+    tenantId: categoryItemForm.tenantId,
   }));
 
   return {

@@ -5,7 +5,6 @@ export const GET_CATEGORY = gql(`
     category(id: $id) {
       id
       name
-      itemId
     }
   }
 `);

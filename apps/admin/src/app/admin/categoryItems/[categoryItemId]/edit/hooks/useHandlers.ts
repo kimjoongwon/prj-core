@@ -28,6 +28,7 @@ export const useHandlers = (context: {
       return await createCategoryItem({
         variables: {
           createCategoryItemInput: {
+            tenantId: formState.tenantId,
             ancestorIds: ancestorIds,
             name: formState.name,
             parentId,
