@@ -22,6 +22,9 @@ const documents = {
     "\n  mutation CreateCategoryItem($createCategoryItemInput: CreateCategoryItemInput!) {\n    createCategoryItem(createCategoryItemInput: $createCategoryItemInput) {\n      id\n      name\n      parentId\n    }\n  }\n": types.CreateCategoryItemDocument,
     "\n  #graphql\n  mutation DeleteCategoryItem($id: String!) {\n    deleteCategoryItem(id: $id) {\n      id\n      name\n      deletedAt\n    }\n  }\n": types.DeleteCategoryItemDocument,
     "\n  #graphql\n  mutation UpdateCategoryItem($updateCategoryItemInput: UpdateCategoryItemInput!) {\n    updateCategoryItem(updateCategoryItemInput: $updateCategoryItemInput) {\n      id\n      name\n      deletedAt\n    }\n  }\n": types.UpdateCategoryItemDocument,
+    "\n  mutation CreateGroup($createGroupInput: CreateGroupInput!) {\n    createGroup(createGroupInput: $createGroupInput) {\n      name\n    }\n  }\n": types.CreateGroupDocument,
+    "\n  mutation DeleteGroup($id: String!) {\n    deleteGroup(id: $id) {\n      id\n    }\n  }\n": types.DeleteGroupDocument,
+    "\n  mutation UpdateGroup($updateGroupInput: UpdateGroupInput!) {\n    updateGroup(updateGroupInput: $updateGroupInput) {\n      id\n    }\n  }\n": types.UpdateGroupDocument,
     "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      name\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteRole($id: String!) {\n    deleteRole(id: $id) {\n      id\n    }\n  }\n": types.DeleteRoleDocument,
     "\n  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {\n    updateRole(updateRoleInput: $updateRoleInput) {\n      id\n    }\n  }\n": types.UpdateRoleDocument,
@@ -39,6 +42,9 @@ const documents = {
     "\n  #graphql\n  query GetCategoryItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    categoryItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        name\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetCategoryItemsDocument,
     "\n  #graphql\n  query GetCategoryItemForm($id: String!) {\n    categoryItemForm(id: $id) {\n      name\n      ancestorIds\n      parentId\n      tag\n    }\n  }\n": types.GetCategoryItemFormDocument,
     "#graphql\n  query GetCategoryItemTrees {\n    categoryItemTrees {\n      id\n      name\n      tag\n      ancestorIds\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n": types.GetCategoryItemTreesDocument,
+    "\n  query GetGroup($id: String!){\n    group(id: $id) {\n      id\n    }\n  }\n": types.GetGroupDocument,
+    "\n  #graphql\n  query GetGroups(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    groups(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetGroupsDocument,
+    "\n  query GetGroupForm($id: String!) {\n    groupForm(id: $id) {\n      name\n    }\n  }\n": types.GetGroupFormDocument,
     "\n  query GetRole($id: String!){\n    role(id: $id) {\n      id\n    }\n  }\n": types.GetRoleDocument,
     "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetRolesDocument,
     "\n  query GetRoleForm {\n    roleForm {\n      name\n    }\n  }\n": types.GetRoleFormDocument,
@@ -103,6 +109,18 @@ export function gql(source: "\n  #graphql\n  mutation DeleteCategoryItem($id: St
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  #graphql\n  mutation UpdateCategoryItem($updateCategoryItemInput: UpdateCategoryItemInput!) {\n    updateCategoryItem(updateCategoryItemInput: $updateCategoryItemInput) {\n      id\n      name\n      deletedAt\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation UpdateCategoryItem($updateCategoryItemInput: UpdateCategoryItemInput!) {\n    updateCategoryItem(updateCategoryItemInput: $updateCategoryItemInput) {\n      id\n      name\n      deletedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateGroup($createGroupInput: CreateGroupInput!) {\n    createGroup(createGroupInput: $createGroupInput) {\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateGroup($createGroupInput: CreateGroupInput!) {\n    createGroup(createGroupInput: $createGroupInput) {\n      name\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteGroup($id: String!) {\n    deleteGroup(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteGroup($id: String!) {\n    deleteGroup(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateGroup($updateGroupInput: UpdateGroupInput!) {\n    updateGroup(updateGroupInput: $updateGroupInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateGroup($updateGroupInput: UpdateGroupInput!) {\n    updateGroup(updateGroupInput: $updateGroupInput) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -171,6 +189,18 @@ export function gql(source: "\n  #graphql\n  query GetCategoryItemForm($id: Stri
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "#graphql\n  query GetCategoryItemTrees {\n    categoryItemTrees {\n      id\n      name\n      tag\n      ancestorIds\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetCategoryItemTrees {\n    categoryItemTrees {\n      id\n      name\n      tag\n      ancestorIds\n      parentId\n      createdAt\n      updatedAt\n      deletedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetGroup($id: String!){\n    group(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetGroup($id: String!){\n    group(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  #graphql\n  query GetGroups(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    groups(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetGroups(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    groups(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetGroupForm($id: String!) {\n    groupForm(id: $id) {\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetGroupForm($id: String!) {\n    groupForm(id: $id) {\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

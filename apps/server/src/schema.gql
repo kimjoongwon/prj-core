@@ -14,12 +14,12 @@ type Auth {
 }
 
 type Category {
+  categoryItem: CategoryItem!
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
-  itemId: String
   name: ID!
-  serviceId: String
+  service: Service!
   updatedAt: DateTime
 }
 
@@ -44,6 +44,7 @@ type CategoryItem {
   name: String!
   parentId: String
   tag: String!
+  tenantId: String!
   updatedAt: DateTime
 }
 
@@ -57,6 +58,7 @@ type CategoryItemForm {
   name: String!
   parentId: String
   tag: String!
+  tenantId: String!
 }
 
 type CategoryItemPageInfo {
@@ -78,10 +80,11 @@ input CreateCategoryInput {
 }
 
 input CreateCategoryItemInput {
-  ancestorIds: [String!]!
+  ancestorIds: [String!]! = []
   name: String!
   parentId: String
   tag: String!
+  tenantId: String!
 }
 
 input CreateGroupInput {
@@ -358,13 +361,11 @@ input UpdateCategoryInput {
 
 input UpdateCategoryItemInput {
   ancestorIds: [String!] = []
-  createdAt: DateTime
-  deletedAt: DateTime
   id: ID!
   name: String
   parentId: String
   tag: String
-  updatedAt: DateTime
+  tenantId: String
 }
 
 input UpdateGroupInput {

@@ -1,9 +1,8 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import { CategoryItem } from '../model';
-
+import { CreateCategoryItemInput } from './create-category-item.input';
 @InputType()
 export class UpdateCategoryItemInput extends PartialType(
-  CategoryItem,
+  CreateCategoryItemInput,
   InputType,
 ) {
   @Field(type => ID!)

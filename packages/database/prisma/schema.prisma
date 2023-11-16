@@ -16,39 +16,34 @@ model User {
   deletedAt DateTime? @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  member    Member[]
+  Tenant    Tenant[]
+  Space     Space[]
 }
 
 model Category {
-  id              String       @id @default(cuid())
-  name            String       @unique
-  serviceId       String
-  service         Service      @relation(fields: [serviceId], references: [id])
-  itemId          String
-  userWorkspaceId String // 필터링 기준점
-  item            CategoryItem @relation(fields: [itemId], references: [id])
-  createdAt       DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?    @updatedAt @db.Timestamptz(6)
-  deletedAt       DateTime?    @db.Timestamptz(6)
-}
+  id             String       @id @default(cuid())
+  name           Json         @unique
+  serviceId      String
+  service        Service      @relation(fields: [serviceId], references: [id])
+  categoryItemId String
+  categoryItem   CategoryItem @relation(fields: [categoryItemId], references: [id])
+  tenantId       String
 
-model UserWorkspace {
-  id          String @id @default(cuid())
-  userId      String
-  roleId      String
-  workspaceId String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 model Group {
-  id          String    @id @default(cuid())
-  name        String
-  serviceId   String
-  service     Service   @relation(fields: [serviceId], references: [id])
-  itemId      String
-  userWorkspaceId String // 필터링 기준점
-  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime? @db.Timestamptz(6)
+  id        String    @id @default(cuid())
+  name      Json
+  serviceId String
+  service   Service   @relation(fields: [serviceId], references: [id])
+  itemId    String
+  tenantId  String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 model CategoryItem {
@@ -57,8 +52,7 @@ model CategoryItem {
   tag         String
   ancestorIds String[]
   parentId    String?
-  memberId    String
-  workspaceId String // 필터링 기준점
+  tenantId    String
   createdAt   DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime?  @db.Timestamptz(6)
@@ -66,26 +60,25 @@ model CategoryItem {
 }
 
 model Service {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  workspaceId String
-  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?  @db.Timestamptz(6)
-  category    Category[]
-  group       Group[]
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?  @db.Timestamptz(6)
+  category  Category[]
+  group     Group[]
 }
 
 model Profile {
   id        String    @id @default(cuid())
-  phone     String    @unique
   nickname  String
+  phone     String    @unique
   userId    String    @unique
   roleId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
-  user      User[]
+  users     User[]
 }
 
 model Role {
@@ -95,32 +88,64 @@ model Role {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime? @db.Timestamptz(6)
-  member      Member[]
 }
 
-model Member {
-  id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id])
-  workspaceId String
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  roleId      String
-  role        Role      @relation(fields: [roleId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime? @db.Timestamptz(6)
+model Tenant {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  spaceId   String
+  space     Space     @relation(fields: [spaceId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
-model Workspace {
-  id             String    @id @default(cuid())
-  name           String    @unique
-  phone          String    @db.Char(11)
-  address        String
-  businessNumber String    @db.Char(10)
-  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt      DateTime? @db.Timestamptz(6)
-  member         Member[]
+model Classification {
+  id         String    @id @default(cuid())
+  serviceId  String
+  categoryId String
+  itemId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime? @db.Timestamptz(6)
+}
+
+model Space {
+  id        String    @id @default(cuid())
+  ownerId   String
+  owner     User      @relation(fields: [ownerId], references: [id])
+  name      String    @unique
+  phone     String    @db.Char(11)
+  address   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenant    Tenant[]
+}
+
+model EmailTemplate {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  subject   String
+  content   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Translation {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  content   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+enum EmailTemplates {
+  REGISTER
+  FORGET_PASSWORD
 }
 
 enum Roles {

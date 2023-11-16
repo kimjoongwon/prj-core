@@ -1,16 +1,9 @@
-import { Field, InputType } from '@nestjs/graphql';
-
+import { InputType, OmitType } from '@nestjs/graphql';
+import { CategoryItem } from '../model';
+import { GetOmitFields } from '@common';
 @InputType()
-export class CreateCategoryItemInput {
-  @Field(type => String)
-  name: string;
-
-  @Field(type => String)
-  tag: string;
-
-  @Field(type => [String])
-  ancestorIds: string[];
-
-  @Field(type => String, { nullable: true })
-  parentId: string;
-}
+export class CreateCategoryItemInput extends OmitType(
+  CategoryItem,
+  GetOmitFields(),
+  InputType,
+) {}

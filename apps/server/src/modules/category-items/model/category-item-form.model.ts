@@ -1,16 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { IntersectionType, ObjectType, OmitType } from '@nestjs/graphql';
+import { GetOmitFields } from '@common';
+import { CategoryItem } from './category-item.model';
 
 @ObjectType()
-export class CategoryItemForm {
-  @Field(type => String)
-  name: string;
-
-  @Field(type => String)
-  tag: string;
-
-  @Field(type => [String])
-  ancestorIds: string[];
-
-  @Field(type => String, { nullable: true })
-  parentId: string;
-}
+export class AdditionalForm {}
+@ObjectType()
+export class CategoryItemForm extends IntersectionType(
+  OmitType(CategoryItem, GetOmitFields(), ObjectType),
+  AdditionalForm,
+  ObjectType,
+) {}

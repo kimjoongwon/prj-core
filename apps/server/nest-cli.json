@@ -14,7 +14,7 @@
     "builder": {
       "type": "swc",
       "options": {
-        
+        "watch": true
       }
     }
   }

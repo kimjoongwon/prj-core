@@ -14,4 +14,7 @@ export class CategoryItem extends Base {
 
   @Field(type => String, { nullable: true })
   parentId: string;
+
+  @Field(type => String)
+  tenantId: string;
 }

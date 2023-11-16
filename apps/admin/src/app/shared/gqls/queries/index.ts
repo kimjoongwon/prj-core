@@ -4,3 +4,6 @@ export * from './users';
 export * from './services';
 export * from './roles';
 export * from './workspaces';
+export * from './groups';
+
+

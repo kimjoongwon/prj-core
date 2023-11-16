@@ -4,6 +4,7 @@ import { useCoCRouter } from '@hooks';
 import {
   CATEGORIES_PAGE_PATH,
   CATEGORY_ITEMS_PAGE_PATH,
+  GROUPS_PAGE_PATH,
   SERVICES_PAGE_PATH,
   USERS_PAGE_PATH,
   WORKSPACES_PAGE_PATH,
@@ -25,6 +26,19 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         {
           text: '사용자목록-1',
           href: getUrlWithParams(USERS_PAGE_PATH),
+        },
+        {
+          text: '사용자목록-2',
+          href: getUrlWithParams(USERS_PAGE_PATH),
+        },
+      ],
+    },
+    {
+      text: '그룹 관리',
+      children: [
+        {
+          text: '그룹 관리',
+          href: getUrlWithParams(GROUPS_PAGE_PATH),
         },
         {
           text: '사용자목록-2',
