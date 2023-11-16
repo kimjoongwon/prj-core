@@ -24,7 +24,7 @@ import { LoggerModule } from './modules/logger/logger.module';
 import { ProfilesModule } from './modules/profiles/profiles.module';
 import { ServicesModule } from './modules/services/services.module';
 import { UsersModule } from './modules/users/users.module';
-import { WorkspacesModule } from './modules/workspaces/workspaces.module';
+import { SpacesModule, WorkspacesModule } from './modules/spaces/spaces.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
@@ -55,8 +55,8 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
     CategoryItemsModule,
     ServicesModule,
     RolesModule,
-    WorkspacesModule,
     GroupsModule,
+    SpacesModule,
   ],
   providers: [
     {

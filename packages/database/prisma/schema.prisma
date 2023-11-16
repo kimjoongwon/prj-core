@@ -16,8 +16,8 @@ model User {
   deletedAt DateTime? @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  Tenant    Tenant[]
-  Space     Space[]
+  tenants   Tenant[]
+  spaces    Space[]
 }
 
 model Category {
@@ -121,22 +121,13 @@ model Space {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
-  tenant    Tenant[]
+  tenants   Tenant[]
 }
 
 model EmailTemplate {
   id        String    @id @default(cuid())
   name      String    @unique
   subject   String
-  content   String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-}
-
-model Translation {
-  id        String    @id @default(cuid())
-  name      String    @unique
   content   String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)

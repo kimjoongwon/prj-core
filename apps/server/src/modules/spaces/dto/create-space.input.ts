@@ -1,16 +1,10 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { GetOmitFields } from '@common';
+import { InputType, OmitType } from '@nestjs/graphql';
+import { Space } from '../models/space.model';
 
 @InputType()
-export class CreateSpaceInput {
-  @Field(type => String)
-  name: string;
-
-  @Field(type => String)
-  ownerId: string;
-
-  @Field(type => String)
-  phone: string;
-
-  @Field(type => String)
-  address: string;
-}
+export class CreateSpaceInput extends OmitType(
+  Space,
+  [...GetOmitFields(), 'owner'],
+  InputType,
+) {}

@@ -1,5 +1,5 @@
 import { useCoCRouter } from '@hooks';
-import { cloneDeep, isNull } from 'lodash-es';
+import { cloneDeep } from 'lodash-es';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCategoryItemsPage } from '../../../hooks';
 import { useMutations } from './useMutations';
@@ -13,6 +13,7 @@ export const useHandlers = (context: {
   const {
     mutations: { createCategoryItem, updateCategoryItem },
     state,
+    categoryItemsPage,
   } = context;
 
   const { categoryItemId } = useParams();

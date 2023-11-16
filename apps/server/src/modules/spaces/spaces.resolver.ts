@@ -2,8 +2,8 @@ import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard, Public } from '@common';
 import { SpacesService } from './spaces.service';
-import { PaginatedSpace, Space, SpaceForm } from './models';
-import { CreateSpaceInput, GetSpacesArgs, UpdateSpaceInput } from './dto';
+import { PaginatedSpace, Space, SpaceForm } from './models/index';
+import { CreateSpaceInput, GetSpacesArgs, UpdateSpaceInput } from './dto/index';
 
 @Resolver(() => Space)
 @UseGuards(GqlAuthGuard)
