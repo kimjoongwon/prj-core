@@ -1,18 +1,9 @@
-import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { InputType, OmitType } from '@nestjs/graphql';
 import { Group } from '../models';
 
 @InputType()
 export class CreateGroupInput extends OmitType(
   Group,
-  ['id', 'createdAt', 'updatedAt'],
+  ['id', 'createdAt', 'updatedAt', 'deletedAt'],
   InputType,
-) {
-  @Field(type => String)
-  name: string;
-
-  @Field(type => String)
-  serviceId: string;
-
-  @Field(type => String)
-  categoryId: string;
-}
+) {}

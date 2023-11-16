@@ -11,17 +11,25 @@ export class GroupsService {
 
   create(createGroupInput: CreateGroupInput) {
     return this.prisma.group.create({
-      data: createGroupInput,
+      data: {
+        ...createGroupInput,
+        serviceId: '',
+        itemId: '',
+        tenantId: '',
+        name: {
+          ko: '',
+          en: '',
+        },
+      },
     });
   }
 
   async findForm(id: string): Promise<GroupForm> {
     if (id === 'new') {
       return {
-        name: '',
+        name: { en: '', ko: '' },
         serviceId: '',
         id: '',
-        createdAt: new Date(),
       };
     }
 

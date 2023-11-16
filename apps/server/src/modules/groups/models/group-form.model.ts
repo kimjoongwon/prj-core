@@ -14,7 +14,7 @@ class Form {}
 @ObjectType()
 export class GroupForm extends OmitType(
   Group,
-  ['categoryId', 'deletedAt', 'updatedAt'],
+  ['createdAt', 'deletedAt', 'updatedAt'],
   ObjectType,
 ) {
   @Field(type => String, { nullable: true })
