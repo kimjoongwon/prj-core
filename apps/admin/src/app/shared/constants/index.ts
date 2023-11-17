@@ -6,3 +6,4 @@ export * from './users';
 export * from './services';
 export * from './workspaces';
 export * from './groups';
+export * from './spaces';

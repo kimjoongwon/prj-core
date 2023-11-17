@@ -14,6 +14,7 @@ import { User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
+import { SPACES_PAGE_PATH } from '../shared/constants/spaces';
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
@@ -51,7 +52,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '소속',
-          href: getUrlWithParams(WORKSPACES_PAGE_PATH),
+          href: getUrlWithParams(SPACES_PAGE_PATH),
         },
         {
           text: '사용자목록-2',

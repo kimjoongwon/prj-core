@@ -1,14 +1,14 @@
 import { gql } from '@__generated__';
 
-export const GET_WORKSPACES = gql(`
+export const GET_SPACES = gql(`
   #graphql
-  query GetWorkspaces(
+  query GetSpaces(
     $skip: Int
     $take: Int
     $sortingKey: String
     $sortingValue: String
   ) {
-    workspaces(
+    spaces(
       skip: $skip
       take: $take
       sortingKey: $sortingKey
@@ -16,12 +16,8 @@ export const GET_WORKSPACES = gql(`
     ) {
       nodes {
         id
-        address
-        businessNumber
-        phone
-        name
         createdAt
-        updatedAt
+        name
       }
       pageInfo {
         totalCount

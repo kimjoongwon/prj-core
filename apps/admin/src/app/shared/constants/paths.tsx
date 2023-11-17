@@ -14,9 +14,9 @@ import {
   USERS_PAGE_PATH,
   USER_EDIT_PAGE_PATH,
   USER_PAGE_PATH,
-  WORKSPACES_PAGE_PATH,
-  WORKSPACE_EDIT_PAGE_PATH,
-  WORKSPACE_PAGE_PATH,
+  SPACES_PAGE_PATH,
+  SPACE_EDIT_PAGE_PATH,
+  SPACE_PAGE_PATH,
 } from '@constants';
 
 export const DASHBOARD_PATH = '/admin' as const;
@@ -26,9 +26,9 @@ export type Paths =
   | typeof USERS_PAGE_PATH
   | typeof USER_PAGE_PATH
   | typeof USER_EDIT_PAGE_PATH
-  | typeof WORKSPACES_PAGE_PATH
-  | typeof WORKSPACE_PAGE_PATH
-  | typeof WORKSPACE_EDIT_PAGE_PATH
+  | typeof SPACES_PAGE_PATH
+  | typeof SPACE_PAGE_PATH
+  | typeof SPACE_EDIT_PAGE_PATH
   | typeof CATEGORY_EDIT_PAGE_PATH
   | typeof CATEGORY_PAGE_PATH
   | typeof CATEGORIES_PAGE_PATH

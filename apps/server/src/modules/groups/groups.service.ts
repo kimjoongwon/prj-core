@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
 import { queryBuilder } from '@common';
-import { PaginatedGroup, GroupForm } from './models';
+import { PaginatedGroup, GroupForm, defaultGroupForm } from './models';
 import { CreateGroupInput, GetGroupsArgs, UpdateGroupInput } from './dto';
 import { PrismaService } from '@modules/global/prisma/prisma.service';
 
@@ -11,38 +11,18 @@ export class GroupsService {
 
   create(createGroupInput: CreateGroupInput) {
     return this.prisma.group.create({
-      data: {
-        ...createGroupInput,
-        serviceId: '',
-        tenantId: '',
-        name: {
-          ko: '',
-          en: '',
-        },
-      },
+      data: createGroupInput,
     });
   }
 
   async findForm(id: string): Promise<GroupForm> {
     if (id === 'new') {
-      return {
-        categoryId: '',
-        name: {
-          ko: '',
-          en: '',
-        },
-        serviceId: '',
-        id: '',
-      };
+      return defaultGroupForm;
     }
 
-    const group = await this.prisma.group.findUnique({
+    return await this.prisma.group.findUnique({
       where: { id },
     });
-
-    return {
-      ...group,
-    };
   }
 
   async findPaginatedGroup(args: GetGroupsArgs): Promise<PaginatedGroup> {
