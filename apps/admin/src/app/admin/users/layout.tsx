@@ -1,5 +1,5 @@
 import { TableLayout } from '@components';
-import { PageProvider } from './_components';
+import { PageProvider } from './components';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;

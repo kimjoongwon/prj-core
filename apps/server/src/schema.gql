@@ -342,6 +342,7 @@ type ServicePageInfo {
 
 input SignupInput {
   email: String!
+  name: String!
   password: String!
   profile: ProfileInput!
 }

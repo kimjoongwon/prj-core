@@ -8,9 +8,9 @@ export class Group extends Base implements CoCGroup {
   @Field(type => String)
   tenantId: string;
 
-  @Field(type => GraphQLJSONObject)
-  name: CoCGroup['name'];
-
   @Field(type => String)
   serviceId: string;
+
+  @Field(type => GraphQLJSONObject)
+  name: CoCGroup['name'];
 }

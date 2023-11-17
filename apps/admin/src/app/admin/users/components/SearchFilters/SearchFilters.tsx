@@ -2,7 +2,7 @@
 
 import { Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
-import { usePage } from '../../_hooks';
+import { usePage } from '../../hooks';
 
 export const SearchFilters = observer(() => {
   const page = usePage();
