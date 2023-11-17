@@ -1,6 +1,7 @@
 import { Base } from '@common';
 import { User } from '@modules/users/models/user.model';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { EmailAddressResolver } from 'graphql-scalars';
 
 @ObjectType()
 export class Space extends Base {
@@ -10,7 +11,7 @@ export class Space extends Base {
   @Field(type => String)
   phone: string;
 
-  @Field(type => String)
+  @Field(type => EmailAddressResolver)
   address: string;
 
   @Field(type => String)

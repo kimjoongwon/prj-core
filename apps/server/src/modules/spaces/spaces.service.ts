@@ -42,7 +42,9 @@ export class SpacesService {
     const query = queryBuilder(args, []);
 
     const spaces = await this.prisma.space.findMany({
-      ...query,
+      include: {
+        owner: true,
+      },
     });
 
     const totalCount = await this.prisma.space.count({

@@ -26,12 +26,52 @@ import { ServicesModule } from './modules/services/services.module';
 import { UsersModule } from './modules/users/users.module';
 import { SpacesModule } from './modules/spaces/spaces.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from '@apollo/server/plugin/landingPage/default';
+import { join } from 'path';
+import { upperDirectiveTransformer } from './directive-transforms/upper-directive-transformer';
+import GraphQLJSON from 'graphql-type-json';
+import {
+  DirectiveLocation,
+  GraphQLDirective,
+  GraphQLScalarType,
+  GraphQLString,
+} from 'graphql';
+import {
+  EmailAddressMock,
+  EmailAddressResolver,
+  EmailAddressTypeDefinition,
+} from 'graphql-scalars';
+import { EmailAddress } from 'node_modules/graphql-scalars/typings/typeDefs.cjs';
 
 @Module({
   imports: [
-    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      useClass: GqlConfigService,
+      fieldResolverEnhancers: ['interceptors', 'filters', 'guards'],
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      playground: false,
+      // resolvers: [{ EmailAddress: EmailAddressResolver }],
+      plugins: [
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageProductionDefault()
+          : ApolloServerPluginLandingPageLocalDefault(),
+      ],
+      transformSchema: schema => {
+        return upperDirectiveTransformer(schema, 'upper');
+      },
+      introspection: true,
+      buildSchemaOptions: {
+        directives: [
+          new GraphQLDirective({
+            name: 'upper',
+            locations: [DirectiveLocation.FIELD_DEFINITION],
+          }),
+        ],
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,

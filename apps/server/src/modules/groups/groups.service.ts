@@ -14,7 +14,6 @@ export class GroupsService {
       data: {
         ...createGroupInput,
         serviceId: '',
-        itemId: '',
         tenantId: '',
         name: {
           ko: '',
@@ -27,7 +26,11 @@ export class GroupsService {
   async findForm(id: string): Promise<GroupForm> {
     if (id === 'new') {
       return {
-        name: { en: '', ko: '' },
+        categoryId: '',
+        name: {
+          ko: '',
+          en: '',
+        },
         serviceId: '',
         id: '',
       };

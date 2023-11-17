@@ -1,24 +1,16 @@
 import { Base } from '@common';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { GraphQLJSONObject } from 'graphql-scalars';
+import { GraphQLJSONObject, LocaleResolver } from 'graphql-scalars';
+import { Group as CoCGroup } from '@coc/db';
 
 @ObjectType()
-class PT {
+export class Group extends Base implements CoCGroup {
   @Field(type => String)
-  ko: string;
+  tenantId: string;
 
-  @Field(type => String)
-  en: string;
-}
-
-@ObjectType()
-export class Group extends Base {
-  @Field(type => GraphQLJSONObject)
-  name: Locale;
+  @Field(type => LocaleResolver)
+  name: string;
 
   @Field(type => String)
   serviceId: string;
-
-  @Field(type => String)
-  categoryId: string;
 }

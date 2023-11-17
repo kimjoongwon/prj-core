@@ -2,7 +2,7 @@ import { Field, InterfaceType, ID } from '@nestjs/graphql';
 
 @InterfaceType()
 export class Base {
-  @Field(type => ID)
+  @Field(type => String)
   id: string;
 
   @Field()
