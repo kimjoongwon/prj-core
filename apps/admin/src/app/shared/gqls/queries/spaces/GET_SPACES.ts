@@ -16,6 +16,9 @@ export const GET_SPACES = gql(`
     ) {
       nodes {
         id
+        address
+        phone
+        updatedAt
         createdAt
         name
       }

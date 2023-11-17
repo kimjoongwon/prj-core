@@ -1,5 +1,6 @@
 'use client';
+
 export default function Loading() {
-  console.log('loading!!!!!!!!!!!!');
+  console.log('loading!!')
   return <div>loading!!!!!!!!!</div>;
 }

@@ -10,3 +10,9 @@ export class SpaceForm extends IntersectionType(
   Form,
   ObjectType,
 ) {}
+
+export const defaultSpaceForm: SpaceForm = {
+  name: '',
+  phone: '',
+  address: '',
+};

@@ -5,6 +5,6 @@ import { Space } from '../models/space.model';
 @InputType()
 export class CreateSpaceInput extends OmitType(
   Space,
-  [...GetOmitFields(), 'owner'],
+  GetOmitFields(),
   InputType,
 ) {}

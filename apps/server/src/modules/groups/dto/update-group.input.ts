@@ -1,5 +1,4 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import { Group } from '../models/group.model';
 import { CreateGroupInput } from '.';
 
 @InputType()

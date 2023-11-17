@@ -47,7 +47,7 @@ export const SpaceEditPageProvider = observer((props: ContainerProps) => {
       }}
     >
       <Form
-        title="카테고리"
+        title="작업 공간"
         state={state.form}
         schema={spaceFormSchema}
         onClickSave={onClickSave}

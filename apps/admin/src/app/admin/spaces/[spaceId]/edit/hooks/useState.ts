@@ -9,7 +9,6 @@ export const useState = ({
 }) => {
   const { spaceFormQuery } = queries;
   const spaceForm = spaceFormQuery?.data?.spaceForm;
-
   const formState = useLocalObservable<SpaceForm>(() => spaceForm);
   return { form: formState };
 };

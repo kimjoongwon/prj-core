@@ -6,7 +6,7 @@ export default function Layout(props: {
   modal: React.ReactNode;
 }) {
   const { children, modal } = props;
-  console.log('categoryItems');
+
   return (
     <PageProvider>
       <TableLayout>{children}</TableLayout>

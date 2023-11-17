@@ -1,22 +1,15 @@
 import { Base } from '@common';
-import { User } from '@modules/users/models/user.model';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { EmailAddressResolver } from 'graphql-scalars';
+import { Space as CoCSpace } from '@coc/db';
 
 @ObjectType()
-export class Space extends Base {
+export class Space extends Base implements CoCSpace {
   @Field(type => String)
   name: string;
 
   @Field(type => String)
   phone: string;
 
-  @Field(type => EmailAddressResolver)
-  address: string;
-
   @Field(type => String)
-  ownerId: string;
-
-  @Field(type => User)
-  owner: User;
+  address: string;
 }

@@ -6,9 +6,9 @@ import { use<%= Name %>FormQuery } from '@hooks';
 import { useParams } from 'next/navigation';
 
 export const useQueries = () => {
-  const { id = 'new' } = useParams();
+  const { <%= name %>Id = 'new' } = useParams();
   const <%= name %>FormQuery = use<%= Name %>FormQuery({
-    id: id as string,
+    id: <%= name %>Id as string,
   });
 
   return {

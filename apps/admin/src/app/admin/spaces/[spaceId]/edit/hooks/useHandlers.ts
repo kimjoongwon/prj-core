@@ -13,17 +13,16 @@ export const useHandlers = ({
   const {
     createSpace: [createSpace],
     updateSpace: [updateSpace],
-  } = mutations;  
+  } = mutations;
 
   const router = useCoCRouter();
-  const { categoryId } = useParams();
+  const { spaceId } = useParams();
 
   const onClickSave = () => {
-    if (categoryId === 'new') {
+    if (spaceId === 'new') {
       createSpace({
         variables: {
-          createSpaceInput: {
-          },
+          createSpaceInput: state.form,
         },
       });
     } else {
@@ -31,6 +30,7 @@ export const useHandlers = ({
         variables: {
           updateSpaceInput: {
             id: spaceId as string,
+            ...state.form,
           },
         },
       });
@@ -46,4 +46,3 @@ export const useHandlers = ({
     onClickCancel,
   };
 };
-

@@ -34,6 +34,7 @@ export const useHandlers = ({
         variables: {
           update<%= Name %>Input: {
             id: <%= name %>Id as string,
+            ...state.form,
           },
         },
       });

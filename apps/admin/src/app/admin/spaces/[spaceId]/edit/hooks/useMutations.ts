@@ -1,8 +1,4 @@
-import {
-  useCoCRouter,
-  useCreateSpace,
-  useUpdateSpace,
-} from '@hooks';
+import { useCoCRouter, useCreateSpace, useUpdateSpace } from '@hooks';
 
 export const useMutations = () => {
   const router = useCoCRouter();

@@ -31,10 +31,10 @@ const documents = {
     "\n  mutation CreateService($createServiceInput: CreateServiceInput!) {\n    createService(createServiceInput: $createServiceInput) {\n      id\n      name\n    }\n  }\n": types.CreateServiceDocument,
     "\n  mutation DeleteService($id: String!) {\n    deleteService(id: $id) {\n      id\n    }\n  }\n": types.DeleteServiceDocument,
     "\n  mutation UpdateService($updateServiceInput: UpdateServiceInput!) {\n    updateService(updateServiceInput: $updateServiceInput) {\n      id\n      name\n    }\n  }\n": types.UpdateServiceDocument,
+    "\n  mutation CreateSpace($createSpaceInput: CreateSpaceInput!) {\n    createSpace(createSpaceInput: $createSpaceInput) {\n      name\n    }\n  }\n": types.CreateSpaceDocument,
+    "\n  mutation DeleteSpace($id: String!) {\n    deleteSpace(id: $id) {\n      id\n    }\n  }\n": types.DeleteSpaceDocument,
+    "\n  mutation UpdateSpace($updateSpaceInput: UpdateSpaceInput!) {\n    updateSpace(updateSpaceInput: $updateSpaceInput) {\n      id\n    }\n  }\n": types.UpdateSpaceDocument,
     "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n": types.UpdateUserDocument,
-    "\n  mutation CreateWorkspace($createWorkspaceInput: CreateWorkspaceInput!) {\n    createWorkspace(createWorkspaceInput: $createWorkspaceInput) {\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
-    "\n  mutation DeleteWorkspace($id: String!) {\n    deleteWorkspace(id: $id) {\n      id\n    }\n  }\n": types.DeleteWorkspaceDocument,
-    "\n  mutation UpdateWorkspace($updateWorkspaceInput: UpdateWorkspaceInput!) {\n    updateWorkspace(updateWorkspaceInput: $updateWorkspaceInput) {\n      id\n    }\n  }\n": types.UpdateWorkspaceDocument,
     "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deletedAt\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
     "\n  query GetCategory($id: String!) {\n    category(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetCategoryDocument,
     "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetCategoryFormDocument,
@@ -51,12 +51,12 @@ const documents = {
     "\n  query GetService($id: String!) {\n    service(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetServiceDocument,
     "\n  #graphql\n  query GetServices(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    services(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetServicesDocument,
     "\n  query GetServiceForm {\n    serviceForm {\n      name\n    }\n  }\n": types.GetServiceFormDocument,
+    "\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n": types.GetSpaceDocument,
+    "\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetSpacesDocument,
+    "\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n": types.GetSpaceFormDocument,
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserFormDocument,
-    "\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n": types.GetWorkspaceDocument,
-    "\n  #graphql\n  query GetWorkspaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    workspaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        businessNumber\n        phone\n        name\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetWorkspacesDocument,
-    "\n  query GetWorkspaceForm($id: String!) {\n    workspaceForm(id: $id) {\n      name\n      address\n      businessNumber\n      phone\n    }\n  }\n": types.GetWorkspaceFormDocument,
 };
 
 /**
@@ -148,19 +148,19 @@ export function gql(source: "\n  mutation UpdateService($updateServiceInput: Upd
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation CreateSpace($createSpaceInput: CreateSpaceInput!) {\n    createSpace(createSpaceInput: $createSpaceInput) {\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateSpace($createSpaceInput: CreateSpaceInput!) {\n    createSpace(createSpaceInput: $createSpaceInput) {\n      name\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteSpace($id: String!) {\n    deleteSpace(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteSpace($id: String!) {\n    deleteSpace(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateSpace($updateSpaceInput: UpdateSpaceInput!) {\n    updateSpace(updateSpaceInput: $updateSpaceInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateSpace($updateSpaceInput: UpdateSpaceInput!) {\n    updateSpace(updateSpaceInput: $updateSpaceInput) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n"): (typeof documents)["#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation CreateWorkspace($createWorkspaceInput: CreateWorkspaceInput!) {\n    createWorkspace(createWorkspaceInput: $createWorkspaceInput) {\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateWorkspace($createWorkspaceInput: CreateWorkspaceInput!) {\n    createWorkspace(createWorkspaceInput: $createWorkspaceInput) {\n      name\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation DeleteWorkspace($id: String!) {\n    deleteWorkspace(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteWorkspace($id: String!) {\n    deleteWorkspace(id: $id) {\n      id\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation UpdateWorkspace($updateWorkspaceInput: UpdateWorkspaceInput!) {\n    updateWorkspace(updateWorkspaceInput: $updateWorkspaceInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateWorkspace($updateWorkspaceInput: UpdateWorkspaceInput!) {\n    updateWorkspace(updateWorkspaceInput: $updateWorkspaceInput) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -228,6 +228,18 @@ export function gql(source: "\n  query GetServiceForm {\n    serviceForm {\n    
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n"): (typeof documents)["\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -237,18 +249,6 @@ export function gql(source: "#graphql\n  query GetUsers(\n    $email: String\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspace($id: String!){\n    workspace(id: $id) {\n      id\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  #graphql\n  query GetWorkspaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    workspaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        businessNumber\n        phone\n        name\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetWorkspaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    workspaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        businessNumber\n        phone\n        name\n        createdAt\n        updatedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  query GetWorkspaceForm($id: String!) {\n    workspaceForm(id: $id) {\n      name\n      address\n      businessNumber\n      phone\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceForm($id: String!) {\n    workspaceForm(id: $id) {\n      name\n      address\n      businessNumber\n      phone\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

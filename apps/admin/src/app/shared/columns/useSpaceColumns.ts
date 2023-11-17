@@ -1,9 +1,9 @@
-import { Workspace } from '@__generated__/graphql';
+import { Space } from '@__generated__/graphql';
 import { createColumnHelper } from '@tanstack/react-table';
 import { DateCell } from '../components/cells';
 
 export const useSpaceColumns = () => {
-  const columnHelper = createColumnHelper<Workspace>();
+  const columnHelper = createColumnHelper<Space>();
 
   const columns = [
     columnHelper.accessor('name', {

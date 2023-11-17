@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SpaceForm } from '@components';
 import { useSpaceEditPage } from './hooks';
-import { Form } from '@coc/ui';
+import { SpaceForm } from '@components';
 
 export default function Page() {
   const {
@@ -11,8 +10,5 @@ export default function Page() {
     state,
   } = useSpaceEditPage();
 
-  return (
-    <SpaceForm state={state.form} schema={spaceFormSchema} />
-  );
+  return <SpaceForm state={state.form} schema={spaceFormSchema} />;
 }
-

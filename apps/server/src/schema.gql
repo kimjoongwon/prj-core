@@ -113,9 +113,8 @@ input CreateServiceInput {
 }
 
 input CreateSpaceInput {
-  address: EmailAddress!
+  address: String!
   name: String!
-  ownerId: String!
   phone: String!
 }
 
@@ -123,11 +122,6 @@ input CreateSpaceInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-"""
-A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
-"""
-scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
 type Group {
   createdAt: DateTime!
@@ -353,13 +347,11 @@ input SignupInput {
 }
 
 type Space {
-  address: EmailAddress!
+  address: String!
   createdAt: DateTime!
   deletedAt: DateTime
   id: String!
   name: String!
-  owner: User!
-  ownerId: String!
   phone: String!
   updatedAt: DateTime
 }
@@ -370,9 +362,8 @@ type SpaceEdge {
 }
 
 type SpaceForm {
-  address: EmailAddress!
+  address: String!
   name: String!
-  ownerId: String!
   phone: String!
 }
 
@@ -444,10 +435,9 @@ input UpdateServiceInput {
 }
 
 input UpdateSpaceInput {
-  address: EmailAddress
+  address: String
   id: ID
   name: String
-  ownerId: String
   phone: String
 }
 

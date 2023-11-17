@@ -16,36 +16,23 @@ export class SpacesService {
   }
 
   async findForm(id: string): Promise<SpaceForm> {
-    console.log('id', id);
     if (id === 'new') {
       return {
-        ownerId: '',
         name: '',
         address: '',
         phone: '',
       };
     }
 
-    const space = await this.prisma.space.findUnique({
+    return this.prisma.space.findUnique({
       where: { id },
     });
-
-    return {
-      address: space.address,
-      name: space.name,
-      phone: space.phone,
-      ownerId: space.ownerId,
-    };
   }
 
   async findPaginatedSpace(args: GetSpacesArgs): Promise<PaginatedSpace> {
     const query = queryBuilder(args, []);
 
-    const spaces = await this.prisma.space.findMany({
-      include: {
-        owner: true,
-      },
-    });
+    const spaces = await this.prisma.space.findMany({});
 
     const totalCount = await this.prisma.space.count({
       where: query?.where,
@@ -78,6 +65,7 @@ export class SpacesService {
   }
 
   update(updateCategoryInput: UpdateSpaceInput) {
+    console.log('updateCategoryInput', updateCategoryInput);
     return this.prisma.space.update({
       where: { id: updateCategoryInput.id },
       data: updateCategoryInput,
