@@ -1,12 +1,9 @@
-import { $Enums } from '@coc/db';
-import { Field, InputType } from '@nestjs/graphql';
-import { Roles } from '../models';
+import { InputType, OmitType, PartialType } from '@nestjs/graphql';
+import { Role } from '../models/role.model';
+import { BASE_FIELDS } from '../../../common/constants';
 
 @InputType()
-export class CreateRoleInput {
-  @Field(type => Roles)
-  name: $Enums.Roles;
-
-  @Field(type => [String], { defaultValue: [] })
-  accessPages: string[];
-}
+export class CreateRoleInput extends PartialType(
+  OmitType(Role, BASE_FIELDS, InputType),
+  InputType,
+) {}

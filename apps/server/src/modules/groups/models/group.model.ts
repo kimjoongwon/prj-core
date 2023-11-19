@@ -1,7 +1,7 @@
-import { Base } from '@common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-scalars';
 import { Group as CoCGroup } from '@coc/db';
+import { Base } from '../../../common/interfaces';
 
 @ObjectType()
 export class Group extends Base implements CoCGroup {

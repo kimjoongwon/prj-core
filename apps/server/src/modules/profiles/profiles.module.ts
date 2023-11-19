@@ -3,7 +3,7 @@ import { ProfilesService } from './profiles.service';
 import { ProfilesResolver } from './profiles.resolver';
 
 @Module({
-  providers: [ProfilesResolver, ProfilesService],
+  providers: [ProfilesService, ProfilesResolver],
   exports: [ProfilesService],
 })
 export class ProfilesModule {}

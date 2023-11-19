@@ -5,9 +5,9 @@ import {
   CATEGORIES_PAGE_PATH,
   CATEGORY_ITEMS_PAGE_PATH,
   GROUPS_PAGE_PATH,
+  ROLES_PAGE_PATH,
   SERVICES_PAGE_PATH,
   USERS_PAGE_PATH,
-  WORKSPACES_PAGE_PATH,
 } from '@constants';
 import { CoCNavbar, NavItem } from '@coc/ui';
 import { User } from '@nextui-org/react';
@@ -21,15 +21,15 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const items = [
     {
-      text: '사용자 관리',
+      text: '사용자 서비스',
       href: getUrlWithParams(USERS_PAGE_PATH),
       children: [
         {
-          text: '사용자목록-1',
-          href: getUrlWithParams(USERS_PAGE_PATH),
+          text: '역할 관리',
+          href: getUrlWithParams(ROLES_PAGE_PATH),
         },
         {
-          text: '사용자목록-2',
+          text: '사용자 관리',
           href: getUrlWithParams(USERS_PAGE_PATH),
         },
       ],

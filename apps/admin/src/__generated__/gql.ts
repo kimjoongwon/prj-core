@@ -25,8 +25,9 @@ const documents = {
     "\n  mutation CreateGroup($createGroupInput: CreateGroupInput!) {\n    createGroup(createGroupInput: $createGroupInput) {\n      name\n    }\n  }\n": types.CreateGroupDocument,
     "\n  mutation DeleteGroup($id: String!) {\n    deleteGroup(id: $id) {\n      id\n    }\n  }\n": types.DeleteGroupDocument,
     "\n  mutation UpdateGroup($updateGroupInput: UpdateGroupInput!) {\n    updateGroup(updateGroupInput: $updateGroupInput) {\n      id\n    }\n  }\n": types.UpdateGroupDocument,
-    "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      name\n    }\n  }\n": types.CreateRoleDocument,
+    "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      id\n    }\n  }\n": types.CreateRoleDocument,
     "\n  mutation DeleteRole($id: String!) {\n    deleteRole(id: $id) {\n      id\n    }\n  }\n": types.DeleteRoleDocument,
+    "\n  mutation RemoveRole($id: String!) {\n    removeRole(id: $id) {\n      id\n    }\n  }\n": types.RemoveRoleDocument,
     "\n  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {\n    updateRole(updateRoleInput: $updateRoleInput) {\n      id\n    }\n  }\n": types.UpdateRoleDocument,
     "\n  mutation CreateService($createServiceInput: CreateServiceInput!) {\n    createService(createServiceInput: $createServiceInput) {\n      id\n      name\n    }\n  }\n": types.CreateServiceDocument,
     "\n  mutation DeleteService($id: String!) {\n    deleteService(id: $id) {\n      id\n    }\n  }\n": types.DeleteServiceDocument,
@@ -46,16 +47,16 @@ const documents = {
     "\n  #graphql\n  query GetGroups(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    groups(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetGroupsDocument,
     "\n  query GetGroupForm($id: String!) {\n    groupForm(id: $id) {\n      name\n    }\n  }\n": types.GetGroupFormDocument,
     "\n  query GetRole($id: String!){\n    role(id: $id) {\n      id\n    }\n  }\n": types.GetRoleDocument,
-    "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetRolesDocument,
-    "\n  query GetRoleForm {\n    roleForm {\n      name\n    }\n  }\n": types.GetRoleFormDocument,
+    "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        name\n        deletedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetRolesDocument,
+    "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n": types.GetRoleFormDocument,
     "\n  query GetService($id: String!) {\n    service(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetServiceDocument,
     "\n  #graphql\n  query GetServices(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    services(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetServicesDocument,
     "\n  query GetServiceForm {\n    serviceForm {\n      name\n    }\n  }\n": types.GetServiceFormDocument,
     "\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n": types.GetSpaceDocument,
     "\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetSpacesDocument,
     "\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n": types.GetSpaceFormDocument,
-    "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
-    "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
+    "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
+    "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profiles {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      email\n      password\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserFormDocument,
 };
 
@@ -124,11 +125,15 @@ export function gql(source: "\n  mutation UpdateGroup($updateGroupInput: UpdateG
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      name\n    }\n  }\n"];
+export function gql(source: "\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation CreateRole($createRoleInput: CreateRoleInput!) {\n    createRole(createRoleInput: $createRoleInput) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation DeleteRole($id: String!) {\n    deleteRole(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteRole($id: String!) {\n    deleteRole(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveRole($id: String!) {\n    removeRole(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveRole($id: String!) {\n    removeRole(id: $id) {\n      id\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -208,11 +213,11 @@ export function gql(source: "\n  query GetRole($id: String!){\n    role(id: $id)
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
+export function gql(source: "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        name\n        deletedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        name\n        deletedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetRoleForm {\n    roleForm {\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetRoleForm {\n    roleForm {\n      name\n    }\n  }\n"];
+export function gql(source: "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -240,11 +245,11 @@ export function gql(source: "\n  query GetSpaceForm($id: String!) {\n    spaceFo
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profile {\n        nickname\n        phone\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profile {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n"];
+export function gql(source: "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profiles {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n        profiles {\n          id\n          nickname\n          phone\n        }\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,12 +1,24 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Base } from '@common';
-import { Profile } from '@modules/profiles/entities/profile.entity';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { User as CoCUser } from '@coc/db';
+import { Base } from '../../../common/interfaces/base.interface';
+import { Tenant } from '../../tenants/models/tenant.model';
+import { Profile } from '../../profiles/models/profile.model';
 
 @ObjectType()
-export class User extends Base {
-  @Field()
+@InputType('UserInput')
+export class User extends Base implements CoCUser {
+  @Field(type => String)
   email: string;
 
-  @Field(() => Profile)
-  profile?: Profile;
+  @Field(type => String)
+  password: string;
+
+  @Field(type => String)
+  name: string;
+
+  @Field(type => [Profile])
+  profiles?: Profile[];
+
+  @Field(type => [Tenant])
+  tenants?: Tenant[];
 }

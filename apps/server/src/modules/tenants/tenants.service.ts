@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
-import { PaginatedTenant, TenantForm } from './models';
-import { CreateTenantInput, GetTenantsArgs, UpdateTenantInput } from './dto';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { CreateTenantInput } from './dto/create-tenant.input';
+import { TenantForm } from './models/tenant-form.model';
+import { GetTenantsArgs } from './dto/get-tenants.args';
+import { UpdateTenantInput } from './dto/update-tenant.input';
+import { PaginatedTenant } from './models/paginated-tenant.model';
+import { queryBuilder } from '../../common/utils';
 
 @Injectable()
 export class TenantsService {
@@ -23,13 +26,10 @@ export class TenantsService {
     const query = queryBuilder(args, []) as any;
 
     const tenants = await this.prisma.tenant.findMany({
-      // ...query,
+      where: query?.where,
       include: {
-        space: {
-          include: {
-            owner: true,
-          },
-        },
+        role: true,
+        space: true,
         user: true,
       },
     });

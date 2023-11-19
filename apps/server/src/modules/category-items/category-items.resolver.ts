@@ -1,13 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
-import { CategoryItem, CategoryItemForm, PaginatedCategoryItem } from './model';
 import { CategoryItemsService } from './category-items.service';
-import {
-  CreateCategoryItemInput,
-  GetCategoryItemsArgs,
-  UpdateCategoryItemInput,
-} from './dto';
+import { Public } from '../../common/decorators';
+import { GqlAuthGuard } from '../../common/guards';
+import { CreateCategoryItemInput } from './dto/create-category-item.input';
+import { GetCategoryItemsArgs } from './dto/get-category-items.args';
+import { UpdateCategoryItemInput } from './dto/update-category-item.input';
+import { CategoryItemForm } from './model/category-item-form.model';
+import { CategoryItem } from './model/category-item.model';
+import { PaginatedCategoryItem } from './model/paginated-category.model';
 
 @Resolver(() => CategoryItem)
 @UseGuards(GqlAuthGuard)

@@ -18,7 +18,7 @@ export const GET_USERS = gql(`#graphql
       nodes {
         id
         email
-        profile {
+        profiles {
           id
           nickname
           phone

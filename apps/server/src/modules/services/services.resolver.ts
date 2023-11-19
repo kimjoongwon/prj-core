@@ -1,9 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { ServicesService } from './services.service';
-import { PaginatedService, Service, ServiceForm } from './models';
-import { CreateServiceInput, GetServicesArgs, UpdateServiceInput } from './dto';
+import { Public } from '../../common/decorators';
+import { GqlAuthGuard } from '../../common/guards';
+import { PaginatedService } from './models/paginated-service.model';
+import { ServiceForm } from './models/service-form.model';
+import { Service } from './models/service.model';
+import { CreateServiceInput } from './dto/create-service.input';
+import { GetServicesArgs } from './dto/get-services.args';
+import { UpdateServiceInput } from './dto/update-service.input';
 
 @Resolver(() => Service)
 @UseGuards(GqlAuthGuard)

@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
-import { PaginatedService, ServiceForm } from './models';
-import { CreateServiceInput, GetServicesArgs, UpdateServiceInput } from './dto';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { queryBuilder } from '../../common/utils';
+import { PaginatedService } from './models/paginated-service.model';
+import { ServiceForm } from './models/service-form.model';
+import { CreateServiceInput } from './dto/create-service.input';
+import { GetServicesArgs } from './dto/get-services.args';
+import { UpdateServiceInput } from './dto/update-service.input';
 
 @Injectable()
 export class ServicesService {

@@ -1,9 +1,10 @@
 import { InputType, OmitType } from '@nestjs/graphql';
-import { CategoryItem } from '../model';
-import { GetOmitFields } from '@common';
+import { BASE_FIELDS } from '../../../common/constants';
+import { CategoryItem } from '../model/category-item.model';
+
 @InputType()
 export class CreateCategoryItemInput extends OmitType(
   CategoryItem,
-  GetOmitFields(),
+  BASE_FIELDS,
   InputType,
 ) {}

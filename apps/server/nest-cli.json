@@ -10,12 +10,6 @@
       }
     ],
     "tsConfigPath": "tsconfig.build.json",
-    "deleteOutDir": true,
-    "builder": {
-      "type": "swc",
-      "options": {
-        "watch": true
-      }
-    }
+    "deleteOutDir": true
   }
 }

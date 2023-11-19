@@ -19,14 +19,13 @@ export const useHandlers = ({
   } = mutations;  
 
   const router = useCoCRouter();
-  const { categoryId } = useParams();
+  const { <%= name %>Id } = useParams();
 
   const onClickSave = () => {
-    if (categoryId === 'new') {
+    if (<%= name %>Id === 'new') {
       create<%= Name %>({
         variables: {
-          create<%= Name %>Input: {
-          },
+          create<%= Name %>Input: state.form,
         },
       });
     } else {

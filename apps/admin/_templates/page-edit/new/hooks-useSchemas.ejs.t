@@ -5,7 +5,7 @@ to: src/app/admin/<%= h.inflection.pluralize(name) %>/[<%= name %>Id]/edit/hooks
 import { z } from 'zod';
 
 export const useSchemas = () => {
-  const { <%= name %>FormSchema } = z.object({
+  const <%= name %>FormSchema = z.object({
     name: z.string().min(1).max(10),
   });
 

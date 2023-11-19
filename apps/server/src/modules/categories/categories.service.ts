@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { GetCategoriesArgs } from './dto/get-categories.args';
-import { queryBuilder } from '@common';
 import { last } from 'lodash';
 import { PaginatedCategory } from './models/paginated-category.model';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import { ServicesService } from '@modules/services/services.service';
-import { CategoryItemsService } from '@modules/category-items/category-items.service';
+import { ServicesService } from '../services/services.service';
+import { CategoryItemsService } from '../category-items/category-items.service';
+import { queryBuilder } from '../../common/utils';
 
 @Injectable()
 export class CategoriesService {
@@ -30,7 +30,7 @@ export class CategoriesService {
       },
       data: {
         name: updateCategoryInput.name,
-        itemId: updateCategoryInput.itemId,
+        categoryItemId: updateCategoryInput.categoryItemId,
       },
     });
   }
@@ -74,16 +74,22 @@ export class CategoriesService {
   ): Promise<PaginatedCategory> {
     const query = queryBuilder(args, []);
 
-    const categories = await this.prisma.category.findMany(query);
+    const categories = await this.prisma.category.findMany({
+      include: {
+        categoryItem: true,
+        service: true,
+      },
+    });
 
     const totalCount = await this.prisma.category.count({
       where: query?.where,
     });
 
     const endCursor = last(categories)?.id || '';
-    const result = {
-      edges: categories?.map(category => ({ node: category })) || [],
-      nodes: categories || [],
+
+    return {
+      edges: categories?.map(category => ({ node: { ...category } })),
+      nodes: categories,
       pageInfo: {
         totalCount,
         endCursor: endCursor || 'empty',
@@ -94,8 +100,6 @@ export class CategoriesService {
         hasNextPage: false,
       },
     };
-
-    return result;
   }
 
   remove(id: string) {

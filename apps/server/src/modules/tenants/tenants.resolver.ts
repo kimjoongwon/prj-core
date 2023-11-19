@@ -1,9 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { TenantsService } from './tenants.service';
-import { PaginatedTenant, Tenant, TenantForm } from './models';
-import { CreateTenantInput, GetTenantsArgs, UpdateTenantInput } from './dto';
+import { PaginatedTenant } from './models/paginated-tenant.model';
+import { TenantForm } from './models/tenant-form.model';
+import { Tenant } from './models/tenant.model';
+import { CreateTenantInput } from './dto/create-tenant.input';
+import { UpdateTenantInput } from './dto/update-tenant.input';
+import { GetTenantsArgs } from './dto/get-tenants.args';
+import { GqlAuthGuard } from '../../common/guards';
+import { Public } from '../../common/decorators';
 
 @Resolver(() => Tenant)
 @UseGuards(GqlAuthGuard)

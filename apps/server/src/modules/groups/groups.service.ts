@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
-import { PaginatedGroup, GroupForm, defaultGroupForm } from './models';
-import { CreateGroupInput, GetGroupsArgs, UpdateGroupInput } from './dto';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { queryBuilder } from '../../common/utils';
+import { CreateGroupInput } from './dto/create-group.input';
+import { GetGroupsArgs } from './dto/get-groups.args';
+import { UpdateGroupInput } from './dto/update-group.input';
+import { GroupForm, defaultGroupForm } from './models/group-form.model';
+import { PaginatedGroup } from './models/paginated-group.model';
 
 @Injectable()
 export class GroupsService {

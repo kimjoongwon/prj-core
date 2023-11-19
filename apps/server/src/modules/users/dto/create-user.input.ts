@@ -1,15 +1,9 @@
-import { ProfileInput } from '@modules/auth/dto/profile.input';
-import { Profile } from '@modules/profiles/entities/profile.entity';
-import { Field, InputType } from '@nestjs/graphql';
+import { InputType, OmitType } from '@nestjs/graphql';
+import { User } from '../models/user.model';
 
 @InputType()
-export class CreateUserInput {
-  @Field(() => String)
-  email: string;
-
-  @Field(() => String)
-  password: string;
-
-  @Field()
-  profile: ProfileInput;
-}
+export class CreateUserInput extends OmitType(
+  User,
+  ['createdAt', 'deletedAt', 'id', 'updatedAt'],
+  InputType,
+) {}

@@ -15,6 +15,7 @@ export class UserForm {
 
 export const userForm = {
   id: '',
+  name: '',
   email: '',
   password: '',
   profile: {

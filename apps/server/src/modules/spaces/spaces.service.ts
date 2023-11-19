@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
-import { PaginatedSpace, SpaceForm } from './models/index';
-import { CreateSpaceInput, GetSpacesArgs, UpdateSpaceInput } from './dto/index';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { queryBuilder } from '../../common/utils';
+import { CreateSpaceInput } from './dto/create-space.input';
+import { GetSpacesArgs } from './dto/get-spaces.args';
+import { UpdateSpaceInput } from './dto/update-space.input';
+import { PaginatedSpace } from './models/paginated-space.model';
+import { SpaceForm } from './models/space-form.model';
 
 @Injectable()
 export class SpacesService {

@@ -1,31 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
-import { queryBuilder } from '@common';
 import { last } from 'lodash';
 import { UpdateUserInput } from './dto/update-user.input';
-import { Users } from './models/paginated-user.model';
-import { userForm } from './models';
+import { CreateUserInput } from './dto/create-user.input';
+import { userForm } from './models/user-form.model';
+import { queryBuilder } from '../../common/utils';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  create(createUserInput: CreateUserInput) {
+    return this.prisma.user.create({
+      data: {
+        name: createUserInput.name,
+        email: createUserInput.email,
+        password: createUserInput.password,
+      },
+    });
+  }
+
   findAll() {
     return this.prisma.user.findMany();
   }
 
-  async findPaginatedUsers(args: GetPaginatedUserArgs): Promise<Users> {
+  async findPaginatedUsers(args: GetPaginatedUserArgs) {
     const query = queryBuilder(args, ['email']);
 
-    this.prisma.user.findMany({
-      where: {},
-    });
-
     const users = await this.prisma.user.findMany({
-      ...query,
       include: {
-        profile: true,
+        tenants: true,
       },
     });
 
@@ -41,7 +46,7 @@ export class UsersService {
       pageInfo: {
         totalCount,
         endCursor,
-        hasNextPage: !(users.length < args.take),
+        hasNextPage: true,
       },
     };
   }
@@ -49,9 +54,6 @@ export class UsersService {
   findOne(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
-      include: {
-        profile: true,
-      },
     });
   }
 
@@ -62,13 +64,11 @@ export class UsersService {
 
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { profile: true },
     });
 
     return {
       email: user.email,
       password: '',
-      profile: user.profile,
     };
   }
 
@@ -76,12 +76,8 @@ export class UsersService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        ...updateUserInput,
-        profile: {
-          update: {
-            ...updateUserInput.profile,
-          },
-        },
+        email: updateUserInput.email,
+        name: updateUserInput.name,
       },
     });
   }

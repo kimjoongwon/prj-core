@@ -1,5 +1,5 @@
-import { Base } from '@common';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Base } from '../../../common/interfaces';
 
 @ObjectType()
 export class CategoryItem extends Base {

@@ -1,5 +1,5 @@
 import { IntersectionType, ObjectType } from '@nestjs/graphql';
-import { CreateSpaceInput } from '../dto/index';
+import { CreateSpaceInput } from '../dto/create-space.input';
 
 @ObjectType()
 class Form {}

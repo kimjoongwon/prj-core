@@ -1,29 +1,20 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import {
-  Select as NextSelect,
-  SelectItem,
-  SelectItemProps,
-  SelectProps as NextUISelectProps,
-} from '@nextui-org/react';
+import { Select as NextSelect, SelectItem, SelectItemProps, SelectProps as NextUISelectProps } from '@nextui-org/react';
 import { MobxProps } from '../../types';
 import { Key, useEffect } from 'react';
 import { reaction } from 'mobx';
 import { get, set } from 'lodash-es';
 
-interface SelectProps<T>
-  extends Omit<NextUISelectProps, 'children'>,
-    MobxProps<T> {
+interface SelectProps<T> extends Omit<NextUISelectProps, 'children'>, MobxProps<T> {
   options?: any[];
 }
 
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
   const { state = {}, path = '', options = [], ...rest } = props;
 
-  const localState = useLocalObservable<{ value: SelectItemProps['value'] }>(
-    () => ({
-      value: options?.find(option => option.value === get(state, path))?.value,
-    }),
-  );
+  const localState = useLocalObservable<{ value: SelectItemProps['value'] }>(() => ({
+    value: options?.find(option => option.value === get(state, path))?.value,
+  }));
 
   useEffect(() => {
     const disposer = reaction(
@@ -61,6 +52,7 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
         }
         localState.value = Array.from(keys)[0] as string;
       }}
+      selectedKeys={[localState.value] as any[]}
       value={localState.value}
     >
       {options.map(option => {

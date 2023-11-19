@@ -1,30 +1,19 @@
-import { $Enums } from '@coc/db';
-import { Base } from '@common/interfaces';
-import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { $Enums, Role as CoCRole } from '@coc/db';
+import { Base } from '../../../common/interfaces';
 
-/**
- * @Super God
- * @Site Site관리 권한
- * @Page Page관리 권한
- */
-export enum Roles {
-  Super,
-  Educator,
-  Learner,
-  User,
-}
-
-registerEnumType(Roles, {
-  name: 'RoleNames',
+registerEnumType($Enums.Roles, {
+  name: 'RoleEnum',
 });
 
 @ObjectType()
-export class Role extends Base {
-  @Field(() => Roles, { description: 'Super, Educator, Learner, User' })
+@InputType('RoleInput')
+export class Role extends Base implements CoCRole {
+  @Field(type => $Enums.Roles)
   name: $Enums.Roles;
-
-  @Field(() => [String], {
-    description: '해당 권한이 접근 가능한 페이지 리스트',
-  })
-  accessPages: string[];
 }

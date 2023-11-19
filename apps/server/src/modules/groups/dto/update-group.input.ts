@@ -1,5 +1,5 @@
 import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
-import { CreateGroupInput } from '.';
+import { CreateGroupInput } from './create-group.input';
 
 @InputType()
 export class UpdateGroupInput extends PartialType(CreateGroupInput) {

@@ -5,7 +5,7 @@ export class Base {
   @Field(type => String)
   id: string;
 
-  @Field()
+  @Field(type => Date)
   createdAt: Date;
 
   @Field(type => Date, { nullable: true })

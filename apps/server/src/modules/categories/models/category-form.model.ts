@@ -1,4 +1,4 @@
-import { Option } from '@common';
+import { Option } from '../../../common/models';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()

@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { PaginatedRole, RoleForm } from './models';
-import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
-import { queryBuilder } from '@common/utils';
+import { PaginatedRole } from './models/paginated-role.model';
+import { RoleForm, defaultRoleForm } from './models/role-form.model';
+import { CreateRoleInput } from './dto/create-role.input';
+import { GetRolesArgs } from './dto/get-roles.args';
+import { UpdateRoleInput } from './dto/update-role.input';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { queryBuilder } from '../../common/utils';
 
 @Injectable()
 export class RolesService {
@@ -15,10 +18,17 @@ export class RolesService {
     });
   }
 
-  findForm(): RoleForm {
+  async findForm(roleId: string): Promise<RoleForm> {
+    if (roleId === 'new') {
+      return defaultRoleForm;
+    }
+    const role = await this.prisma.role.findUnique({
+      where: { id: roleId },
+    });
+
     return {
-      name: 'USER',
-      accessPages: [],
+      name: role.name,
+      options: defaultRoleForm.options,
     };
   }
 
@@ -50,6 +60,12 @@ export class RolesService {
     return this.prisma.role.update({
       where: { id },
       data: { deletedAt: new Date() },
+    });
+  }
+
+  remove(id: string) {
+    return this.prisma.role.delete({
+      where: { id },
     });
   }
 

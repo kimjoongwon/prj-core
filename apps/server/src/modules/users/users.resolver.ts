@@ -7,27 +7,37 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { User, UserForm, Users } from './models';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
-import { GetPaginatedUserArgs, UpdateUserInput } from './dto';
-import { Profile } from '@modules/profiles/entities/profile.entity';
+import { PaginatedUser } from './models/paginated-user.model';
+import { UserForm } from './models/user-form.model';
+import { User } from './models/user.model';
+import { CreateUserInput } from './dto/create-user.input';
+import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
+import { UpdateUserInput } from './dto/update-user.input';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { Profile } from '../profiles/models/profile.model';
+import { GqlAuthGuard } from '../../common/guards';
+import { Public } from '../../common/decorators';
+import { Tenant } from '../tenants/models/tenant.model';
 
-@Resolver(() => User)
 @UseGuards(GqlAuthGuard)
+@Resolver(() => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
   @Public()
-  @Query(() => Users, { name: 'users' })
-  getUsers(@Args() getUsersArgs: GetPaginatedUserArgs) {
-    return this.usersService.findPaginatedUsers(getUsersArgs);
+  @Mutation(() => User)
+  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    return this.usersService.create(createUserInput);
   }
 
   @Public()
-  @Query(() => User, { name: 'user' })
-  getUser(@Args('id') id: string) {
-    return this.usersService.findOne(id);
+  @Query(() => PaginatedUser, { name: 'users' })
+  getUsers(@Args() getUsersArgs: GetPaginatedUserArgs) {
+    return this.usersService.findPaginatedUsers(getUsersArgs);
   }
 
   @Public()
@@ -37,10 +47,29 @@ export class UsersResolver {
   }
 
   @Public()
-  @ResolveField(() => Profile, { name: 'profile' })
-  getProfile(@Parent() parent: User) {
-    return parent.profile;
+  @Query(() => User, { name: 'user' })
+  getUser(@Args('id') id: string) {
+    return this.usersService.findOne(id);
   }
+
+  // @Public()
+  // @ResolveField()
+  // async profiles(@Parent() user: User) {
+  //   return this.prismaService.user
+  //     .findUnique({
+  //       where: { id: user.id },
+  //     })
+  //     .profiles();
+  // }
+
+  // @Public()
+  // @ResolveField()
+  // async tenants(@Parent() user: User) {
+  //   return [];
+  //   // return this.prismaService.user
+  //   //   .findUnique({ where: { id: user.id } })
+  //   //   .tenants();
+  // }
 
   @Public()
   @Mutation(() => User)

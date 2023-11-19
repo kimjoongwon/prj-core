@@ -1,10 +1,10 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { InputType, OmitType } from '@nestjs/graphql';
+import { Tenant } from '../models/tenant.model';
+import { BASE_FIELDS } from '../../../common/constants';
 
 @InputType()
-export class CreateTenantInput {
-  @Field(type => String)
-  userId: string;
-
-  @Field(type => String)
-  spaceId: string;
-}
+export class CreateTenantInput extends OmitType(
+  Tenant,
+  [...BASE_FIELDS, 'role', 'space', 'user'],
+  InputType,
+) {}

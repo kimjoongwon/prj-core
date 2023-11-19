@@ -1,9 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { SpacesService } from './spaces.service';
-import { PaginatedSpace, Space, SpaceForm } from './models/index';
-import { CreateSpaceInput, GetSpacesArgs, UpdateSpaceInput } from './dto/index';
+import { Public } from '../../common/decorators';
+import { GqlAuthGuard } from '../../common/guards';
+import { CreateSpaceInput } from './dto/create-space.input';
+import { GetSpacesArgs } from './dto/get-spaces.args';
+import { UpdateSpaceInput } from './dto/update-space.input';
+import { PaginatedSpace } from './models/paginated-space.model';
+import { SpaceForm } from './models/space-form.model';
+import { Space } from './models/space.model';
 
 @Resolver(() => Space)
 @UseGuards(GqlAuthGuard)

@@ -5,7 +5,7 @@ export const GET_USER = gql(`
     user(id: $id) {
       id
       email
-      profile {
+      profiles {
         nickname
         phone
       }

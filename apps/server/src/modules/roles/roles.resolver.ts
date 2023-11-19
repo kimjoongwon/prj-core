@@ -1,10 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
-import { PaginatedRole, Role, RoleForm } from './models';
-import { CreateRoleInput, GetRolesArgs, UpdateRoleInput } from './dto';
-import { GqlAuthGuard } from '@common/guards';
-import { Public } from '@common/decorators';
+import { RoleForm } from './models/role-form.model';
+import { PaginatedRole } from './models/paginated-role.model';
+import { CreateRoleInput } from './dto/create-role.input';
+import { GetRolesArgs } from './dto/get-roles.args';
+import { UpdateRoleInput } from './dto/update-role.input';
+import { Role } from './models/role.model';
+import { GqlAuthGuard } from '../../common/guards';
+import { Public } from '../../common/decorators';
 
 @Resolver(() => Role)
 @UseGuards(GqlAuthGuard)
@@ -36,6 +40,12 @@ export class RolesResolver {
   }
 
   @Public()
+  @Mutation(() => Role)
+  removeRole(@Args('id') id: string) {
+    return this.rolesService.remove(id);
+  }
+
+  @Public()
   @Query(() => Role, { name: 'role' })
   getRole(@Args('id') id: string) {
     return this.rolesService.findOne(id);
@@ -43,8 +53,8 @@ export class RolesResolver {
 
   @Public()
   @Query(() => RoleForm, { name: 'roleForm' })
-  getRoleForm() {
-    return this.rolesService.findForm();
+  getRoleForm(@Args('id') id: string) {
+    return this.rolesService.findForm(id);
   }
 
   @Public()

@@ -1,7 +1,10 @@
-import { Field, Float, InputType } from '@nestjs/graphql';
+import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { Service } from '../models/service.model';
+import { BASE_FIELDS } from '../../../common/constants';
 
 @InputType()
-export class CreateServiceInput {
-  @Field(type => String)
-  name: string;
-}
+export class CreateServiceInput extends OmitType(
+  Service,
+  BASE_FIELDS,
+  InputType,
+) {}

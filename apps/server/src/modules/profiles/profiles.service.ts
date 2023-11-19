@@ -11,14 +11,18 @@ export class ProfilesService {
     return createProfileInput;
   }
 
-  findAll() {
-    return this.prisma.profile.findMany();
-  }
-
-  findOneByUserId(userId: string) {
+  findOne(userId: string) {
     return this.prisma.profile.findUnique({
       where: {
-        userId,
+        id: userId,
+      },
+    });
+  }
+
+  findMany(userId: string) {
+    return this.prisma.profile.findMany({
+      where: {
+        id: userId,
       },
     });
   }

@@ -4,3 +4,4 @@ export * from './categoryItems';
 export * from './services';
 export * from './spaces';
 export * from './groups';
+export * from './roles';

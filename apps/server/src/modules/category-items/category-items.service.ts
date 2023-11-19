@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { CreateCategoryItemInput } from './dto/create-category-item.input';
 import { GetCategoryItemsArgs } from './dto/get-category-items.args';
-import { queryBuilder } from '@common';
 import { PaginatedCategoryItem } from './model/paginated-category.model';
 import { last } from 'lodash';
 import { UpdateCategoryItemInput } from './dto/update-category-item.input';
-import { CategoryItemForm } from './model';
+import { queryBuilder } from '../../common/utils';
+import { CategoryItemForm } from './model/category-item-form.model';
 
 @Injectable()
 export class CategoryItemsService {
@@ -76,7 +76,6 @@ export class CategoryItemsService {
 
   async findLeafCategoryItemOptions() {
     const leafCategoryItems = await this.findLeafCategoryItems();
-    console.log('leafCategoryItems', leafCategoryItems);
     const categoryItemGroupsByAncestorIds = await Promise.all(
       leafCategoryItems?.map(leafCategoryItem =>
         this.findCategoryItemsByAncestorIds([

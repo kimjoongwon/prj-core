@@ -1,9 +1,14 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { GroupsService } from './groups.service';
-import { PaginatedGroup, Group, GroupForm } from './models';
-import { CreateGroupInput, GetGroupsArgs, UpdateGroupInput } from './dto';
+import { Public } from '../../common/decorators';
+import { GqlAuthGuard } from '../../common/guards';
+import { CreateGroupInput } from './dto/create-group.input';
+import { GetGroupsArgs } from './dto/get-groups.args';
+import { UpdateGroupInput } from './dto/update-group.input';
+import { GroupForm } from './models/group-form.model';
+import { Group } from './models/group.model';
+import { PaginatedGroup } from './models/paginated-group.model';
 
 @Resolver(() => Group)
 @UseGuards(GqlAuthGuard)

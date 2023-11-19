@@ -16,8 +16,8 @@ export const GET_ROLES = gql(`
     ) {
       nodes {
         id
-        createdAt
         name
+        deletedAt
       }
       pageInfo {
         totalCount

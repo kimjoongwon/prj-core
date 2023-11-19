@@ -1,13 +1,28 @@
-import { Base } from '@common';
-import { Space } from '@modules/spaces/models';
-import { User } from '@modules/users/models';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Tenant as CoCTenant } from '@coc/db';
+import { Role } from '../../roles/models/role.model';
+import { User } from '../../users/models/user.model';
+import { Space } from '../../spaces/models/space.model';
+import { Base } from '../../../common/interfaces';
 
 @ObjectType()
-export class Tenant extends Base {
-  @Field(type => User)
-  user: User;
+@InputType('TenantInput')
+export class Tenant extends Base implements CoCTenant {
+  @Field(type => String)
+  roleId: string;
 
-  @Field(type => Space)
-  space: Space;
+  @Field(type => Role, { nullable: true })
+  role?: Role;
+
+  @Field(type => String)
+  userId: string;
+
+  @Field(type => User, { nullable: true })
+  user?: User;
+
+  @Field(type => String)
+  spaceId: string;
+
+  @Field(type => Space, { nullable: true })
+  space?: Space;
 }

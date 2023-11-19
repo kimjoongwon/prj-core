@@ -1,4 +1,3 @@
-import { Base } from '@common';
 import { IntersectionType, ObjectType } from '@nestjs/graphql';
 import { SignupInput } from '../dto/signup.input';
 import { ProfileInput } from '../dto/profile.input';

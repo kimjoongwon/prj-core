@@ -3,6 +3,6 @@ import { Role } from '../models/role.model';
 
 @InputType()
 export class UpdateRoleInput extends PartialType(Role, InputType) {
-  @Field(type => ID!)
+  @Field(type => ID!, { nullable: true })
   id: string;
 }

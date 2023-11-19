@@ -4,118 +4,12 @@
 
 directive @upper on FIELD_DEFINITION
 
-type Auth {
-  """JWT access token"""
-  accessToken: JWT!
-
-  """JWT refresh token"""
-  refreshToken: JWT!
-  user: User!
-}
-
-type Category {
-  categoryItem: CategoryItem!
-  createdAt: DateTime!
-  deletedAt: DateTime
+type Role {
   id: String!
-  name: ID!
-  service: Service!
-  updatedAt: DateTime
-}
-
-type CategoryEdge {
-  cursor: String!
-  node: Category!
-}
-
-type CategoryForm {
-  itemId: String!
-  itemOptions: [Option!]!
-  name: String!
-  serviceId: String!
-  serviceOptions: [Option!]!
-}
-
-type CategoryItem {
-  ancestorIds: [String!]!
   createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-  name: String!
-  parentId: String
-  tag: String!
-  tenantId: String!
   updatedAt: DateTime
-}
-
-type CategoryItemEdge {
-  cursor: String!
-  node: CategoryItem!
-}
-
-type CategoryItemForm {
-  ancestorIds: [String!]!
-  name: String!
-  parentId: String
-  tag: String!
-  tenantId: String!
-}
-
-type CategoryItemPageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
-}
-
-type CategoryPageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
-}
-
-input CreateCategoryInput {
-  itemId: String
-  name: String!
-  serviceId: String
-}
-
-input CreateCategoryItemInput {
-  ancestorIds: [String!]! = []
-  name: String!
-  parentId: String
-  tag: String!
-  tenantId: String!
-}
-
-input CreateGroupInput {
-  name: JSONObject!
-  serviceId: String!
-  tenantId: String!
-}
-
-input CreateProfileInput {
-  createdAt: DateTime
   deletedAt: DateTime
-  id: String
-  nickname: String
-  phone: String
-  updatedAt: DateTime
-  userId: Int
-}
-
-input CreateRoleInput {
-  accessPages: [String!]! = []
-  name: RoleNames!
-}
-
-input CreateServiceInput {
-  name: String!
-}
-
-input CreateSpaceInput {
-  address: String!
-  name: String!
-  phone: String!
+  name: RoleEnum!
 }
 
 """
@@ -123,75 +17,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Group {
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-  name: JSONObject!
-  serviceId: String!
-  tenantId: String!
-  updatedAt: DateTime
-}
-
-type GroupEdge {
-  cursor: String!
-  node: Group!
-}
-
-type GroupForm {
-  name: JSONObject!
-  serviceId: String!
-  tenantId: String!
-}
-
-type GroupPageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
-}
-
-"""
-The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
-
-"""
-A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
-"""
-scalar JWT
-
-input LoginInput {
-  email: String!
-  password: String!
-}
-
-type Mutation {
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
-  createGroup(createGroupInput: CreateGroupInput!): Group!
-  createProfile(createProfileInput: CreateProfileInput!): Profile!
-  createRole(createRoleInput: CreateRoleInput!): Role!
-  createService(createServiceInput: CreateServiceInput!): Service!
-  createSpace(createSpaceInput: CreateSpaceInput!): Space!
-  deleteCategories(ids: [String!]!): Category!
-  deleteCategoryItem(id: String!): CategoryItem!
-  deleteGroup(id: String!): Group!
-  deleteRole(id: String!): Role!
-  deleteService(id: String!): Service!
-  deleteSpace(id: String!): Space!
-  login(data: LoginInput!): Auth!
-  refreshToken(token: JWT!): Token!
-  removeCategory(id: String!): Category!
-  removeProfile(id: String!): Profile!
-  signup(data: SignupInput!): Auth!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
-  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
-  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  updateRole(updateRoleInput: UpdateRoleInput!): Role!
-  updateService(updateServiceInput: UpdateServiceInput!): Service!
-  updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+enum RoleEnum {
+  USER
+  SUPER_ADMIN
 }
 
 type Option {
@@ -199,99 +27,9 @@ type Option {
   value: String!
 }
 
-type PaginatedCategory {
-  edges: [CategoryEdge!]!
-  nodes: [Category!]!
-  pageInfo: CategoryPageInfo!
-}
-
-type PaginatedCategoryItem {
-  edges: [CategoryItemEdge!]!
-  nodes: [CategoryItem!]!
-  pageInfo: CategoryItemPageInfo!
-}
-
-type PaginatedGroup {
-  edges: [GroupEdge!]!
-  nodes: [Group!]!
-  pageInfo: GroupPageInfo!
-}
-
-type PaginatedRole {
-  edges: [RoleEdge!]!
-  nodes: [Role!]!
-  pageInfo: RolePageInfo!
-}
-
-type PaginatedService {
-  edges: [ServiceEdge!]!
-  nodes: [Service!]!
-  pageInfo: ServicePageInfo!
-}
-
-type PaginatedSpace {
-  edges: [SpaceEdge!]!
-  nodes: [Space!]!
-  pageInfo: SpacePageInfo!
-}
-
-type Profile {
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-  nickname: String!
-  phone: String!
-  updatedAt: DateTime
-  userId: Int!
-}
-
-type ProfileForm {
-  nickname: String!
-  phone: String!
-}
-
-input ProfileInput {
-  nickname: String!
-  phone: String!
-}
-
-type Query {
-  categories(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategory!
-  category(id: String!): Category!
-  categoryForm(id: String!): CategoryForm!
-  categoryItem(id: String!): CategoryItem!
-  categoryItemForm(id: String!): CategoryItemForm!
-  categoryItemTrees: [CategoryItem!]!
-  categoryItems(cursor: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): PaginatedCategoryItem!
-  group(id: String!): Group!
-  groupForm(id: String!): GroupForm!
-  groups(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedGroup!
-  profile(id: String!): Profile!
-  profiles: [Profile!]!
-  role(id: String!): Role!
-  roleForm: RoleForm!
-  roles(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedRole!
-  service(id: String!): Service!
-  serviceForm: ServiceForm!
-  services(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedService!
-  space(id: String!): Space!
-  spaceForm(id: String!): SpaceForm!
-  spaces(cursor: String, endTimestamp: Float, name: String, skip: Int = 1, sortingKey: String, sortingValue: String, startTimestamp: Float, take: Int): PaginatedSpace!
-  user(id: String!): User!
-  userForm(id: String!): UserForm!
-  users(cursor: String, email: String, skip: Int = 1, sortingKey: String, sortingValue: String, take: Int): Users!
-}
-
-type Role {
-  """해당 권한이 접근 가능한 페이지 리스트"""
-  accessPages: [String!]!
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-
-  """Super, Educator, Learner, User"""
-  name: RoleNames!
-  updatedAt: DateTime
+type RoleForm {
+  name: RoleEnum
+  options: [Option!]!
 }
 
 type RoleEdge {
@@ -299,79 +37,16 @@ type RoleEdge {
   node: Role!
 }
 
-type RoleForm {
-  accessPages: [String!]
-  name: RoleNames
-}
-
-enum RoleNames {
-  Educator
-  Learner
-  Super
-  User
-}
-
 type RolePageInfo {
-  endCursor: String
   hasNextPage: Boolean!
   totalCount: Int!
-}
-
-type Service {
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-  name: String!
-  updatedAt: DateTime
-}
-
-type ServiceEdge {
-  cursor: String!
-  node: Service!
-}
-
-type ServiceForm {
-  name: String
-}
-
-type ServicePageInfo {
   endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
 }
 
-input SignupInput {
-  email: String!
-  name: String!
-  password: String!
-  profile: ProfileInput!
-}
-
-type Space {
-  address: String!
-  createdAt: DateTime!
-  deletedAt: DateTime
-  id: String!
-  name: String!
-  phone: String!
-  updatedAt: DateTime
-}
-
-type SpaceEdge {
-  cursor: String!
-  node: Space!
-}
-
-type SpaceForm {
-  address: String!
-  name: String!
-  phone: String!
-}
-
-type SpacePageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
+type PaginatedRole {
+  edges: [RoleEdge!]!
+  nodes: [Role!]!
+  pageInfo: RolePageInfo!
 }
 
 type Token {
@@ -382,85 +57,210 @@ type Token {
   refreshToken: JWT!
 }
 
-input UpdateCategoryInput {
-  id: ID!
-  itemId: String
-  name: String
-  serviceId: String
-}
+"""
+A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
+"""
+scalar JWT
 
-input UpdateCategoryItemInput {
-  ancestorIds: [String!] = []
-  id: ID!
-  name: String
-  parentId: String
-  tag: String
-  tenantId: String
-}
-
-input UpdateGroupInput {
-  id: ID
-  name: JSONObject
-  serviceId: String
-  tenantId: String
-}
-
-input UpdateProfileInput {
-  createdAt: DateTime
-  deletedAt: DateTime
-  id: ID!
-  nickname: String
-  phone: String
+type Space {
+  id: String!
+  createdAt: DateTime!
   updatedAt: DateTime
-  userId: Int
-}
-
-input UpdateRoleInput {
-  """해당 권한이 접근 가능한 페이지 리스트"""
-  accessPages: [String!]
-  createdAt: DateTime
   deletedAt: DateTime
-  id: ID!
-
-  """Super, Educator, Learner, User"""
-  name: RoleNames
-  updatedAt: DateTime
+  name: String!
+  phone: String!
+  address: String!
 }
 
-input UpdateServiceInput {
-  createdAt: DateTime
+type Tenant {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
   deletedAt: DateTime
-  id: ID!
-  name: String
+  roleId: String!
+  role: Role
+  userId: String!
+  user: User
+  spaceId: String!
+  space: Space
+}
+
+type Profile {
+  id: String!
+  createdAt: DateTime!
   updatedAt: DateTime
-}
-
-input UpdateSpaceInput {
-  address: String
-  id: ID
-  name: String
-  phone: String
-}
-
-input UpdateUserInput {
-  email: String
-  id: ID!
-  password: String
-  profile: ProfileInput
+  deletedAt: DateTime
+  phone: String!
+  nickname: String!
+  userId: String!
 }
 
 type User {
+  id: String!
   createdAt: DateTime!
+  updatedAt: DateTime
   deletedAt: DateTime
   email: String!
-  id: String!
-  profile: Profile!
-  updatedAt: DateTime
+  password: String!
+  name: String!
+  profiles: [Profile!]!
+  tenants: [Tenant!]!
 }
 
-type UserEdge {
+type Auth {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+  user: User!
+}
+
+type Service {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  name: String!
+}
+
+type CategoryItem {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  name: String!
+  tag: String!
+  ancestorIds: [String!]!
+  parentId: String
+  tenantId: String!
+}
+
+type Category {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  serviceId: String!
+  categoryItemId: String!
+  tenantId: String!
+  name: String!
+  service: Service!
+  categoryItem: CategoryItem!
+}
+
+type CategoryEdge {
   cursor: String!
-  node: User!
+  node: Category!
+}
+
+type CategoryPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedCategory {
+  edges: [CategoryEdge!]!
+  nodes: [Category!]!
+  pageInfo: CategoryPageInfo!
+}
+
+type CategoryForm {
+  name: String!
+  itemId: String!
+  serviceId: String!
+  itemOptions: [Option!]!
+  serviceOptions: [Option!]!
+}
+
+type CategoryItemForm {
+  name: String!
+  tag: String!
+  ancestorIds: [String!]!
+  parentId: String
+  tenantId: String!
+}
+
+type CategoryItemEdge {
+  cursor: String!
+  node: CategoryItem!
+}
+
+type CategoryItemPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedCategoryItem {
+  edges: [CategoryItemEdge!]!
+  nodes: [CategoryItem!]!
+  pageInfo: CategoryItemPageInfo!
+}
+
+type ServiceEdge {
+  cursor: String!
+  node: Service!
+}
+
+type ServicePageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedService {
+  edges: [ServiceEdge!]!
+  nodes: [Service!]!
+  pageInfo: ServicePageInfo!
+}
+
+type ServiceForm {
+  name: String
+}
+
+type Group {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  tenantId: String!
+  serviceId: String!
+  name: JSONObject!
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type GroupForm {
+  tenantId: String!
+  serviceId: String!
+  name: JSONObject!
+}
+
+type GroupEdge {
+  cursor: String!
+  node: Group!
+}
+
+type GroupPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedGroup {
+  edges: [GroupEdge!]!
+  nodes: [Group!]!
+  pageInfo: GroupPageInfo!
+}
+
+type ProfileForm {
+  phone: String!
+  nickname: String!
 }
 
 type UserForm {
@@ -469,14 +269,296 @@ type UserForm {
   profile: ProfileForm!
 }
 
-type UserPageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  totalCount: Int!
+type UserEdge {
+  cursor: String!
+  node: User!
 }
 
-type Users {
+type UserPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedUser {
   edges: [UserEdge!]!
   nodes: [User!]!
   pageInfo: UserPageInfo!
+}
+
+type SpaceEdge {
+  cursor: String!
+  node: Space!
+}
+
+type SpacePageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedSpace {
+  edges: [SpaceEdge!]!
+  nodes: [Space!]!
+  pageInfo: SpacePageInfo!
+}
+
+type SpaceForm {
+  name: String!
+  phone: String!
+  address: String!
+}
+
+type TenantEdge {
+  cursor: String!
+  node: Tenant!
+}
+
+type TenantPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedTenant {
+  edges: [TenantEdge!]!
+  nodes: [Tenant!]!
+  pageInfo: TenantPageInfo!
+}
+
+type TenantForm {
+  roleId: String
+  userId: String
+  spaceId: String
+}
+
+input RoleInput {
+  name: RoleEnum!
+}
+
+input SpaceInput {
+  name: String!
+  phone: String!
+  address: String!
+}
+
+input TenantInput {
+  roleId: String!
+  role: RoleInput
+  userId: String!
+  user: UserInput
+  spaceId: String!
+  space: SpaceInput
+}
+
+input inputProfile {
+  phone: String!
+  nickname: String!
+  userId: String!
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  name: String!
+  profiles: [inputProfile!]!
+  tenants: [TenantInput!]!
+}
+
+type Query {
+  users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
+  userForm(id: String!): UserForm!
+  user(id: String!): User!
+  profile(id: ID!): Profile!
+  categoryForm(id: String!): CategoryForm!
+  category(id: String!): Category!
+  categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
+  service(id: String!): Service!
+  serviceForm: ServiceForm!
+  services(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedService!
+  categoryItemTrees: [CategoryItem!]!
+  categoryItemForm(id: String!): CategoryItemForm!
+  categoryItem(id: String!): CategoryItem!
+  categoryItems(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategoryItem!
+  role(id: String!): Role!
+  roleForm(id: String!): RoleForm!
+  roles(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedRole!
+  group(id: String!): Group!
+  groupForm(id: String!): GroupForm!
+  groups(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedGroup!
+  space(id: String!): Space!
+  spaceForm(id: String!): SpaceForm!
+  spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
+  tenant(id: String!): Tenant!
+  tenantForm: TenantForm!
+  tenants(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTenant!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: String!): Profile!
+  signup(data: SignupInput!): Auth!
+  login(data: LoginInput!): Auth!
+  refreshToken(token: JWT!): Token!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  deleteCategories(ids: [String!]!): Category!
+  removeCategory(id: String!): Category!
+  createService(createServiceInput: CreateServiceInput!): Service!
+  updateService(updateServiceInput: UpdateServiceInput!): Service!
+  deleteService(id: String!): Service!
+  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
+  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
+  deleteCategoryItem(id: String!): CategoryItem!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  deleteRole(id: String!): Role!
+  removeRole(id: String!): Role!
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  deleteGroup(id: String!): Group!
+  createSpace(createSpaceInput: CreateSpaceInput!): Space!
+  updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
+  deleteSpace(id: String!): Space!
+  createTenant(createTenantInput: CreateTenantInput!): Tenant!
+  updateTenant(updateTenantInput: UpdateTenantInput!): Tenant!
+  deleteTenant(id: String!): Tenant!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  profiles: [inputProfile!]!
+  tenants: [TenantInput!]!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
+  profiles: [inputProfile!]
+  tenants: [TenantInput!]
+  id: ID!
+}
+
+input UpdateProfileInput {
+  phone: String
+  nickname: String
+  userId: String
+  id: ID!
+}
+
+input SignupInput {
+  email: String!
+  name: String!
+  password: String!
+  profile: ProfileInput!
+}
+
+input ProfileInput {
+  phone: String!
+  nickname: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateCategoryInput {
+  serviceId: String!
+  categoryItemId: String!
+  tenantId: String!
+  name: String!
+}
+
+input UpdateCategoryInput {
+  serviceId: String
+  categoryItemId: String
+  tenantId: String
+  name: String
+  id: ID!
+}
+
+input CreateServiceInput {
+  name: String!
+}
+
+input UpdateServiceInput {
+  id: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  name: String
+}
+
+input CreateCategoryItemInput {
+  name: String!
+  tag: String!
+  ancestorIds: [String!]! = []
+  parentId: String
+  tenantId: String!
+}
+
+input UpdateCategoryItemInput {
+  name: String
+  tag: String
+  ancestorIds: [String!] = []
+  parentId: String
+  tenantId: String
+  id: ID!
+}
+
+input CreateRoleInput {
+  name: RoleEnum
+}
+
+input UpdateRoleInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  name: RoleEnum
+}
+
+input CreateGroupInput {
+  tenantId: String!
+  serviceId: String!
+  name: JSONObject!
+}
+
+input UpdateGroupInput {
+  tenantId: String
+  serviceId: String
+  name: JSONObject
+  id: ID
+}
+
+input CreateSpaceInput {
+  name: String!
+  phone: String!
+  address: String!
+}
+
+input UpdateSpaceInput {
+  name: String
+  phone: String
+  address: String
+  id: ID
+}
+
+input CreateTenantInput {
+  roleId: String!
+  userId: String!
+  spaceId: String!
+}
+
+input UpdateTenantInput {
+  roleId: String
+  userId: String
+  spaceId: String
+  id: ID!
 }
