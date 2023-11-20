@@ -3,58 +3,42 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, CorsConfig } from './configs/config.type';
-import { WinstonModule, utilities } from 'nest-winston';
-import winston from 'winston';
+import { loggerConfig } from './configs';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      transports: [
-        new winston.transports.Console({
-          level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-          format: winston.format.combine(
-            // winston.format.prettyPrint(),
-            winston.format.splat(),
-            winston.format.timestamp(),
-            winston.format.ms(),
-            utilities.format.nestLike('로그', {
-              colors: true,
-              prettyPrint: true,
-            }),
-          ),
-        }),
-        new winston.transports.File({ filename: 'combined.log' }),
-      ],
-    }),
-  });
-
+  const app = await NestFactory.create(AppModule, loggerConfig());
   const logger = new Logger();
-  // 유효성 검사 파이프(class-validator, class-transformer)
+
   const configService = app.get(ConfigService);
-  // cors 설정
   const corsConfig = configService.get<CorsConfig>('cors');
   const appConfig = configService.get<AppConfig>('app');
 
   app.useGlobalPipes(new ValidationPipe());
   // HMR
   if (module.hot) {
-    logger.log('HMR Enabled!');
+    logger.log(
+      module.hot ? 'HMR이 적용되었습니다.' : 'Stop HMR',
+      'HMR Enabled',
+    );
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
 
   // Cors
   if (corsConfig.enabled) {
-    logger.log('Cors Enabled!');
+    logger.log(
+      corsConfig.enabled ? 'CORS이 적용되었습니다.' : 'CORS STOP',
+      'Cors Enabled',
+    );
     app.enableCors({
       origin: '*',
       credentials: true,
     });
   }
 
-  console.info(appConfig.port, 'running');
+  logger.log(`${appConfig.port} listening..`, 'Server Started');
   await app.listen(appConfig.port);
 }
 
