@@ -9,14 +9,14 @@ datasource db {
 
 model User {
   id        String    @id @default(cuid())
-  name      String
   email     String    @unique
   password  String
   deletedAt DateTime? @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  tenants   Tenant[]
+  name      String
   profiles  Profile[]
+  tenants   Tenant[]
 }
 
 model Profile {
@@ -24,34 +24,34 @@ model Profile {
   nickname  String
   phone     String    @unique
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+  user      User      @relation(fields: [userId], references: [id])
 }
 
 model Category {
   id             String       @id @default(cuid())
   name           String       @unique
   serviceId      String
-  service        Service      @relation(fields: [serviceId], references: [id])
-  categoryItemId String
-  categoryItem   CategoryItem @relation(fields: [categoryItemId], references: [id])
-  tenantId       String
   createdAt      DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
   deletedAt      DateTime?    @db.Timestamptz(6)
+  categoryItemId String
+  tenantId       String
+  categoryItem   CategoryItem @relation(fields: [categoryItemId], references: [id])
+  service        Service      @relation(fields: [serviceId], references: [id])
 }
 
 model Group {
   id        String    @id @default(cuid())
   name      String
   serviceId String
-  service   Service   @relation(fields: [serviceId], references: [id])
-  tenantId  String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+  tenantId  String
+  service   Service   @relation(fields: [serviceId], references: [id])
 }
 
 model CategoryItem {
@@ -60,10 +60,10 @@ model CategoryItem {
   tag         String
   ancestorIds String[]
   parentId    String?
-  tenantId    String
   createdAt   DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime?  @db.Timestamptz(6)
+  tenantId    String
   category    Category[]
 }
 
@@ -89,14 +89,14 @@ model Role {
 model Tenant {
   id        String    @id @default(cuid())
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
   spaceId   String
-  space     Space     @relation(fields: [spaceId], references: [id])
-  roleId    String
-  role      Role      @relation(fields: [roleId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+  roleId    String
+  role      Role      @relation(fields: [roleId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 }
 
 model Classification {
@@ -128,6 +128,65 @@ model EmailTemplate {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Session {
+  id            String    @id @default(cuid())
+  name          String
+  informationId String
+  tenantId      String
+  startDateTime DateTime  @default(now()) @db.Date
+  endDateTime   DateTime  @default(now()) @db.Date
+  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+}
+
+model Information {
+  id        String    @id @default(cuid())
+  name      String
+  tenantId  String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Knowledge {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  tenantId  String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Timeline {
+  id            String         @id @default(cuid())
+  tenantId      String
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?      @db.Timestamptz(6)
+  timelineItems TimelineItem[]
+}
+
+model TimelineItem {
+  id           String        @id @default(cuid())
+  timelineId   String
+  timeline     Timeline      @relation(fields: [timelineId], references: [id])
+  tenantId     String
+  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
+  deletedAt    DateTime?     @db.Timestamptz(6)
+  reservations Reservation[]
+}
+
+model Reservation {
+  id             String       @id @default(cuid())
+  status         String
+  timelineItemId String
+  timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
 }
 
 enum EmailTemplates {
