@@ -2,7 +2,7 @@
 to: src/modules/<%= name %>s/dto/get-<%=name %>s.args.ts
 ---
 
-import { QueryArgs } from '@common';
+import { QueryArgs } from '../../../common/dto/query.args';
 import { ArgsType } from '@nestjs/graphql';
 
 @ArgsType()

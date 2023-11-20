@@ -332,6 +332,103 @@ type TenantForm {
   spaceId: String
 }
 
+type TimelineItem {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  title: String!
+  description: String!
+  address: String!
+  timelineId: String!
+}
+
+type TimelineItemEdge {
+  cursor: String!
+  node: TimelineItem!
+}
+
+type TimelineItemPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedTimelineItem {
+  edges: [TimelineItemEdge!]!
+  nodes: [TimelineItem!]!
+  pageInfo: TimelineItemPageInfo!
+}
+
+type TimelineItemForm {
+  title: String!
+  description: String!
+  address: String!
+  timelineId: String!
+}
+
+type Timeline {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  sessionId: String!
+  tenantId: String!
+}
+
+type TimelineEdge {
+  cursor: String!
+  node: Timeline!
+}
+
+type TimelinePageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedTimeline {
+  edges: [TimelineEdge!]!
+  nodes: [Timeline!]!
+  pageInfo: TimelinePageInfo!
+}
+
+type TimelineForm {
+  sessionId: String!
+  tenantId: String!
+}
+
+type Reservation {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  deletedAt: DateTime
+  status: String!
+  timelineItemId: String!
+}
+
+type ReservationEdge {
+  cursor: String!
+  node: Reservation!
+}
+
+type ReservationPageInfo {
+  hasNextPage: Boolean!
+  totalCount: Int!
+  endCursor: String
+}
+
+type PaginatedReservation {
+  edges: [ReservationEdge!]!
+  nodes: [Reservation!]!
+  pageInfo: ReservationPageInfo!
+}
+
+type ReservationForm {
+  status: String!
+  timelineItemId: String!
+}
+
 input RoleInput {
   name: RoleEnum!
 }
@@ -392,6 +489,15 @@ type Query {
   tenant(id: String!): Tenant!
   tenantForm: TenantForm!
   tenants(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTenant!
+  timeline(id: String!): Timeline!
+  timelineForm: TimelineForm!
+  timelines(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimeline!
+  timeline_item(id: String!): TimelineItem!
+  timeline_itemForm: TimelineItemForm!
+  timeline_items(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimelineItem!
+  reservation(id: String!): Reservation!
+  reservationForm: ReservationForm!
+  reservations(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedReservation!
 }
 
 type Mutation {
@@ -425,6 +531,15 @@ type Mutation {
   createTenant(createTenantInput: CreateTenantInput!): Tenant!
   updateTenant(updateTenantInput: UpdateTenantInput!): Tenant!
   deleteTenant(id: String!): Tenant!
+  createTimeline(createTimelineInput: CreateTimelineInput!): Timeline!
+  updateTimeline(updateTimelineInput: UpdateTimelineInput!): Timeline!
+  deleteTimeline(id: String!): Timeline!
+  createTimelineItem(createTimelineItemInput: CreateTimelineItemInput!): TimelineItem!
+  updateTimelineItem(updateTimelineItemInput: UpdateTimelineItemInput!): TimelineItem!
+  deleteTimelineItem(id: String!): TimelineItem!
+  createReservation(createReservationInput: CreateReservationInput!): Reservation!
+  updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
+  deleteReservation(id: String!): Reservation!
 }
 
 input UpdateProfileInput {
@@ -561,4 +676,50 @@ input UpdateTenantInput {
   userId: String
   spaceId: String
   id: ID!
+}
+
+input CreateTimelineInput {
+  sessionId: String!
+  tenantId: String!
+}
+
+input UpdateTimelineInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  sessionId: String
+  tenantId: String
+}
+
+input CreateTimelineItemInput {
+  title: String!
+  description: String!
+  address: String!
+  timelineId: String!
+}
+
+input UpdateTimelineItemInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  title: String
+  description: String
+  address: String
+  timelineId: String
+}
+
+input CreateReservationInput {
+  status: String!
+  timelineItemId: String!
+}
+
+input UpdateReservationInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  status: String
+  timelineItemId: String
 }

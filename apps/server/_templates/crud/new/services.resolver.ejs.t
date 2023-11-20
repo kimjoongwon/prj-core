@@ -3,10 +3,15 @@ to: src/modules/<%= name %>s/<%= name %>s.resolver.ts
 ---
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthGuard, Public } from '@common';
 import { <%= h.changeCase.pascal(name) %>sService } from './<%= name %>s.service';
-import { Paginated<%= h.changeCase.pascal(name) %>, <%= h.changeCase.pascal(name) %>, <%= h.changeCase.pascal(name) %>Form } from './models';
-import { Create<%= h.changeCase.pascal(name) %>Input, Get<%= h.changeCase.pascal(name) %>sArgs, Update<%= h.changeCase.pascal(name) %>Input } from './dto';
+import { GqlAuthGuard } from '../../common/guards/gql-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
+import { Get<%= h.changeCase.pascal(name) %>sArgs } from './dto/get-<%= h.changeCase.snake(name) %>s.args';
+import { Create<%= h.changeCase.pascal(name) %>Input } from './dto/create-<%= h.changeCase.snake(name) %>.input';
+import { Update<%= h.changeCase.pascal(name) %>Input } from './dto/update-<%= h.changeCase.snake(name) %>.input';
+import { Paginated<%= h.changeCase.pascal(name) %> } from './models/paginated-<%= h.changeCase.snake(name) %>.model';
+import { <%= Name %>Form } from './models/<%= h.changeCase.snake(name) %>-form.model';
+import { <%= h.changeCase.pascal(name) %> } from './models/<%= h.changeCase.snake(name) %>.model';
 
 @Resolver(() => <%= h.changeCase.pascal(name) %>)
 @UseGuards(GqlAuthGuard)

@@ -3,10 +3,13 @@ to: src/modules/<%= name %>s//<%= name %>s.service.ts
 ---
 import { Injectable } from '@nestjs/common';
 import { last } from 'lodash';
-import { queryBuilder } from '@common';
-import { Paginated<%= h.changeCase.pascal(name) %>, <%= h.changeCase.pascal(name) %>Form } from './models';
-import { Create<%= h.changeCase.pascal(name) %>Input, Get<%= h.changeCase.pascal(name) %>sArgs, Update<%= h.changeCase.pascal(name) %>Input } from './dto';
-import { PrismaService } from '@modules/global/prisma/prisma.service';
+import { PrismaService } from '../global/prisma/prisma.service';
+import { queryBuilder } from '../../common/utils/query-builder';
+import { Create<%= h.changeCase.pascal(name) %>Input } from './dto/create-<%=name %>.input';
+import { Get<%= h.changeCase.pascal(name) %>sArgs } from './dto/get-<%=name %>s.args';
+import { Update<%= h.changeCase.pascal(name) %>Input } from './dto/update-<%=name %>.input';
+import { <%= Name %>Form } from './models/<%=name %>-form.model';
+import { Paginated<%= h.changeCase.pascal(name) %> } from './models/paginated-<%=name %>.model';
 
 @Injectable()
 export class <%= h.changeCase.pascal(name) %>sService {
@@ -20,8 +23,6 @@ export class <%= h.changeCase.pascal(name) %>sService {
 
   findForm(): <%= h.changeCase.pascal(name) %>Form {
     return {
-      id: '',
-      name: '',
       name: '',
     };
   }

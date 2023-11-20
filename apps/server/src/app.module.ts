@@ -34,6 +34,9 @@ import { upperDirectiveTransformer } from './directive-transforms/upper-directiv
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { LoggingInterceptor } from './common/interceptors';
+import { TimelineItemsModule } from './modules/timelineItems/timelineItems.module';
+import { TimelinesModule } from './modules/timelines/timelines.module';
+import { ReservationsModule } from './modules/reservations/reservations.module';
 
 @Module({
   imports: [
@@ -86,6 +89,9 @@ import { LoggingInterceptor } from './common/interceptors';
     GroupsModule,
     SpacesModule,
     TenantsModule,
+    TimelinesModule,
+    TimelineItemsModule,
+    ReservationsModule,
   ],
   providers: [
     {
