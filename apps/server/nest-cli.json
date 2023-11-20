@@ -9,7 +9,7 @@
         "outDir": "./dist"
       }
     ],
-    "tsConfigPath": "tsconfig.build.json",
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "typeCheck": true
   }
 }

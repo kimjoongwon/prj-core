@@ -11,15 +11,8 @@ import { Observable, tap } from 'rxjs';
 export class LoggingInterceptor implements NestInterceptor {
   constructor(private readonly logger: Logger) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    // const ctx = GqlExecutionContext.create(context);
-
+  intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
     this.logger.debug(`Before...`);
-
-    // this.logger.debug(
-    //   'body:',
-    //   JSON.stringify(ctx.getContext<{ req: Request }>().req.body),
-    // );
 
     const now = Date.now();
     return next

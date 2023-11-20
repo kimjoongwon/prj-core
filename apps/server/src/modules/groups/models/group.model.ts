@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLJSONObject } from 'graphql-scalars';
-import { Group as CoCGroup } from '@coc/db';
+import { Group as CoCGroup } from '@prisma/client';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()

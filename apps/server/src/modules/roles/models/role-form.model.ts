@@ -1,6 +1,6 @@
 import { Field, ObjectType, PartialType } from '@nestjs/graphql';
 import { CreateRoleInput } from '../dto/create-role.input';
-import { $Enums } from '@coc/db';
+import { $Enums } from '@prisma/client';
 import { Option } from '../../../common/models';
 @ObjectType()
 export class RoleForm extends PartialType(CreateRoleInput, ObjectType) {

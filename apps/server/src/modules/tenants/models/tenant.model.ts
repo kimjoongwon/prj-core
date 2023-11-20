@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { Tenant as CoCTenant } from '@coc/db';
+import { Tenant as CoCTenant } from '@prisma/client';
 import { Role } from '../../roles/models/role.model';
 import { User } from '../../users/models/user.model';
 import { Space } from '../../spaces/models/space.model';

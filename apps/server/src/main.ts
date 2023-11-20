@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, CorsConfig } from './configs/config.type';
 import { WinstonModule, utilities } from 'nest-winston';
 import winston from 'winston';
+
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,7 +19,7 @@ async function bootstrap() {
             winston.format.splat(),
             winston.format.timestamp(),
             winston.format.ms(),
-            utilities.format.nestLike('COC LOGGER', {
+            utilities.format.nestLike('로그', {
               colors: true,
               prettyPrint: true,
             }),
@@ -28,6 +30,7 @@ async function bootstrap() {
     }),
   });
 
+  const logger = new Logger();
   // 유효성 검사 파이프(class-validator, class-transformer)
   const configService = app.get(ConfigService);
   // cors 설정
@@ -35,17 +38,16 @@ async function bootstrap() {
   const appConfig = configService.get<AppConfig>('app');
 
   app.useGlobalPipes(new ValidationPipe());
-
-  // // HMR
-  // if (module.hot) {
-  //   console.info('---------HMR Enabled!-----------');
-  //   module.hot.accept();
-  //   module.hot.dispose(() => app.close());
-  // }
+  // HMR
+  if (module.hot) {
+    logger.log('HMR Enabled!');
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 
   // Cors
   if (corsConfig.enabled) {
-    console.info('---------Cors Enabled!----------');
+    logger.log('Cors Enabled!');
     app.enableCors({
       origin: '*',
       credentials: true,

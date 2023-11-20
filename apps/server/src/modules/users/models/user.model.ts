@@ -1,9 +1,8 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { User as CoCUser } from '@coc/db';
 import { Base } from '../../../common/interfaces/base.interface';
 import { Tenant } from '../../tenants/models/tenant.model';
 import { Profile } from '../../profiles/models/profile.model';
-
+import { User as CoCUser } from '@prisma/client';
 @ObjectType()
 @InputType('UserInput')
 export class User extends Base implements CoCUser {

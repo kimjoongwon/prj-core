@@ -366,10 +366,10 @@ input UserInput {
 }
 
 type Query {
+  profile(id: ID!): Profile!
   users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
   userForm(id: String!): UserForm!
   user(id: String!): User!
-  profile(id: ID!): Profile!
   categoryForm(id: String!): CategoryForm!
   category(id: String!): Category!
   categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
@@ -395,13 +395,13 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   signup(data: SignupInput!): Auth!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategories(ids: [String!]!): Category!
@@ -427,23 +427,6 @@ type Mutation {
   deleteTenant(id: String!): Tenant!
 }
 
-input CreateUserInput {
-  email: String!
-  password: String!
-  name: String!
-  profiles: [inputProfile!]!
-  tenants: [TenantInput!]!
-}
-
-input UpdateUserInput {
-  email: String
-  password: String
-  name: String
-  profiles: [inputProfile!]
-  tenants: [TenantInput!]
-  id: ID!
-}
-
 input UpdateProfileInput {
   phone: String
   nickname: String
@@ -466,6 +449,23 @@ input ProfileInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  profiles: [inputProfile!]!
+  tenants: [TenantInput!]!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
+  profiles: [inputProfile!]
+  tenants: [TenantInput!]
+  id: ID!
 }
 
 input CreateCategoryInput {

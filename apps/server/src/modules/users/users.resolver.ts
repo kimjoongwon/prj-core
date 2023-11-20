@@ -1,11 +1,4 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { UseGuards } from '@nestjs/common';
 import { PaginatedUser } from './models/paginated-user.model';
@@ -15,10 +8,8 @@ import { CreateUserInput } from './dto/create-user.input';
 import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from '../global/prisma/prisma.service';
-import { Profile } from '../profiles/models/profile.model';
 import { GqlAuthGuard } from '../../common/guards';
 import { Public } from '../../common/decorators';
-import { Tenant } from '../tenants/models/tenant.model';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)

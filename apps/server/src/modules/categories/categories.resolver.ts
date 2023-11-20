@@ -57,6 +57,7 @@ export class CategoriesResolver {
   @Public()
   @Mutation(() => Category)
   removeCategory(@Args('id') id: string) {
+    console.log('?');
     return this.categoriesService.remove(id);
   }
 }

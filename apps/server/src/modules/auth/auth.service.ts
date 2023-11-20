@@ -1,4 +1,3 @@
-import { User } from '@prisma/client';
 import {
   Injectable,
   NotFoundException,
@@ -12,6 +11,7 @@ import { SignupInput } from './dto/signup.input';
 import { PasswordService } from './providers/password.service';
 import { AuthConfig } from '../../configs';
 import { PrismaService } from '../global/prisma/prisma.service';
+import { User } from '../users/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -31,15 +31,15 @@ export class AuthService {
 
     const hashedPassword = await this.passwordService.hashPassword(password);
 
-    const { userId } = await this.prisma.profile.create({
+    const { id: userId } = await this.prisma.user.create({
       data: {
-        nickname,
-        phone,
-        user: {
+        name: email,
+        email,
+        password: hashedPassword,
+        profiles: {
           create: {
-            name: 'nickname',
-            password: hashedPassword,
-            email,
+            nickname,
+            phone,
           },
         },
       },
