@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { UseGuards } from '@nestjs/common';
 import { PaginatedUser } from './models/paginated-user.model';
@@ -43,24 +50,23 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  // @Public()
-  // @ResolveField()
-  // async profiles(@Parent() user: User) {
-  //   return this.prismaService.user
-  //     .findUnique({
-  //       where: { id: user.id },
-  //     })
-  //     .profiles();
-  // }
+  @Public()
+  @ResolveField()
+  async profiles(@Parent() user: User) {
+    return this.prismaService.user
+      .findUnique({
+        where: { id: user.id },
+      })
+      .profiles();
+  }
 
-  // @Public()
-  // @ResolveField()
-  // async tenants(@Parent() user: User) {
-  //   return [];
-  //   // return this.prismaService.user
-  //   //   .findUnique({ where: { id: user.id } })
-  //   //   .tenants();
-  // }
+  @Public()
+  @ResolveField()
+  async tenants(@Parent() user: User) {
+    return this.prismaService.user
+      .findUnique({ where: { id: user.id } })
+      .tenants();
+  }
 
   @Public()
   @Mutation(() => User)

@@ -3,11 +3,18 @@ import { gql } from '@__generated__';
 export const GET_USER_FORM = gql(`#graphql
   query GetUserForm($id: String!){
     userForm(id: $id) {
+      name
       email
       password
-      profile {
-        nickname
-        phone
+      roleId
+      spaceId
+      roleOptions {
+        name
+        value
+      }
+      spaceOptions {
+        name
+        value
       }
     }
   }

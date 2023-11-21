@@ -50,8 +50,8 @@ export class <%= h.changeCase.pascal(name) %>sResolver {
 
   @Public()
   @Query(() => <%= h.changeCase.pascal(name) %>Form, { name: '<%= h.changeCase.snake(name) %>Form' })
-  get<%= h.changeCase.pascal(name) %>Form() {
-    return this.<%= h.changeCase.camel(name) %>sService.findForm();
+  get<%= h.changeCase.pascal(name) %>Form(@Args('id') id: string) {
+    return this.<%= h.changeCase.camel(name) %>sService.findForm(id);
   }
 
   @Public()

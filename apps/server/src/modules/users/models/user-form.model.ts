@@ -1,25 +1,36 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { ProfileForm } from './profile-form.model';
+import {
+  Field,
+  IntersectionType,
+  ObjectType,
+  PartialType,
+} from '@nestjs/graphql';
+import { CreateUserInput } from '../dto/create-user.input';
+import { Option } from '../../../common/models';
 
 @ObjectType()
-export class UserForm {
-  @Field(type => String)
-  email: string;
+export class AdditionalForm {
+  @Field(type => [Option])
+  spaceOptions: Option[];
 
-  @Field(type => String)
-  password: string;
-
-  @Field(type => ProfileForm)
-  profile: ProfileForm;
+  @Field(type => [Option])
+  roleOptions: Option[];
 }
 
-export const userForm = {
-  id: '',
+@ObjectType()
+export class UserForm extends IntersectionType(
+  CreateUserInput,
+  AdditionalForm,
+  ObjectType,
+) {}
+
+export const defaultUserForm: UserForm = {
   name: '',
   email: '',
   password: '',
-  profile: {
-    nickname: '',
-    phone: '',
-  },
+  roleOptions: [],
+  spaceOptions: [],
+  roleId: '',
+  spaceId: '',
+  phone: '',
+  nickname: '',
 };

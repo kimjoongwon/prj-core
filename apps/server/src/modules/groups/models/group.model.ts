@@ -1,5 +1,4 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { GraphQLJSONObject } from 'graphql-scalars';
 import { Group as CoCGroup } from '@prisma/client';
 import { Base } from '../../../common/interfaces';
 
@@ -11,6 +10,6 @@ export class Group extends Base implements CoCGroup {
   @Field(type => String)
   serviceId: string;
 
-  @Field(type => GraphQLJSONObject)
-  name: CoCGroup['name'];
+  @Field(type => String)
+  name: string;
 }

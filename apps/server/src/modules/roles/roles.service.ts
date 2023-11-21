@@ -32,6 +32,15 @@ export class RolesService {
     };
   }
 
+  async getRoleOptions() {
+    const roleOptions = (await this.prisma.role.findMany({})).map(role => ({
+      name: role.name,
+      value: role.id,
+    }));
+
+    return roleOptions;
+  }
+
   async findPaginatedRole(args: GetRolesArgs): Promise<PaginatedRole> {
     const query = queryBuilder(args, []);
 

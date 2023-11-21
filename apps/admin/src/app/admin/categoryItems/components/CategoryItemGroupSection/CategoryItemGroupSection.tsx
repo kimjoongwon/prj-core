@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { CiSquareRemove } from 'react-icons/ci';
 import { FcFolder, FcOpenedFolder } from 'react-icons/fc';
 import { useCategoryItemsPage } from '../../hooks';
+import { CategoryItem } from '@__generated__/graphql';
 
 interface CategoryItemGroupSectionProps {
   depth: number;
@@ -86,7 +87,9 @@ export const CategoryItemGroupSection = observer(
                     }}
                   />
                 }
-                onClick={() => onClickCategoryItem(categoryItem)}
+                onClick={() =>
+                  onClickCategoryItem(categoryItem as CategoryItem)
+                }
               >
                 <div
                   className={isSelected ? 'text-success' : 'text-primary-900'}

@@ -37,6 +37,7 @@ import { LoggingInterceptor } from './common/interceptors';
 import { TimelineItemsModule } from './modules/timelineItems/timelineItems.module';
 import { TimelinesModule } from './modules/timelines/timelines.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
+import { SessionsModule } from './modules/sessions/sessions.module';
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { ReservationsModule } from './modules/reservations/reservations.module';
     TimelinesModule,
     TimelineItemsModule,
     ReservationsModule,
+    SessionsModule,
   ],
   providers: [
     {

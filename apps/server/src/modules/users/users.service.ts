@@ -4,19 +4,43 @@ import { GetPaginatedUserArgs } from './dto/get-paginated-user.args';
 import { last } from 'lodash';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CreateUserInput } from './dto/create-user.input';
-import { userForm } from './models/user-form.model';
 import { queryBuilder } from '../../common/utils';
+import { UserForm, defaultUserForm } from './models/user-form.model';
+import { SpacesService } from '../spaces/spaces.service';
+import { RolesService } from '../roles/roles.service';
+import { PasswordService } from '../auth/providers/password.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly spacesService: SpacesService,
+    private readonly rolesService: RolesService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
-  create(createUserInput: CreateUserInput) {
+  async create(createUserInput: CreateUserInput) {
+    const hashPassword = await this.passwordService.hashPassword(
+      createUserInput.password,
+    );
+
     return this.prisma.user.create({
       data: {
         name: createUserInput.name,
         email: createUserInput.email,
-        password: createUserInput.password,
+        password: hashPassword,
+        tenants: {
+          create: {
+            roleId: createUserInput.roleId,
+            spaceId: createUserInput.spaceId,
+          },
+        },
+        profiles: {
+          create: {
+            nickname: createUserInput.nickname,
+            phone: createUserInput.phone,
+          },
+        },
       },
     });
   }
@@ -57,7 +81,14 @@ export class UsersService {
     });
   }
 
-  async findForm(id: string) {
+  async findForm(id: string): Promise<UserForm> {
+    const spaceOptions = await this.spacesService.getServiceOptions();
+    const roleOptions = await this.rolesService.getRoleOptions();
+
+    const userForm = { ...defaultUserForm };
+    userForm.spaceOptions = spaceOptions;
+    userForm.roleOptions = roleOptions;
+
     if (id === 'new') {
       return userForm;
     }
@@ -67,8 +98,9 @@ export class UsersService {
     });
 
     return {
-      email: user.email,
+      ...userForm,
       password: '',
+      email: user.email,
     };
   }
 

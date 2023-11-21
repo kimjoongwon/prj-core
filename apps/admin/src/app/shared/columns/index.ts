@@ -5,3 +5,4 @@ export * from './useCategoryColumns';
 export * from './useServiceColumns';
 export * from './useGroupColumns';
 export * from './useRoleColumns';
+export * from './useSessionColumns';

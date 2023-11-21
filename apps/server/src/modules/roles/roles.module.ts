@@ -4,5 +4,6 @@ import { RolesResolver } from './roles.resolver';
 
 @Module({
   providers: [RolesResolver, RolesService],
+  exports: [RolesService],
 })
 export class RolesModule {}
