@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { last } from 'lodash';
+import { cloneDeep, last } from 'lodash';
 import { queryBuilder } from '../../common/utils';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { CreateTimelineInput } from './dto/create-timeline.input';
 import { GetTimelinesArgs } from './dto/get-timelines.args';
 import { UpdateTimelineInput } from './dto/update-timeline.input';
 import { PaginatedTimeline } from './models/paginated-timeline.model';
-import { TimelineForm } from './models/timeline-form.model';
+import {
+  TimelineForm,
+  defaultTimelineForm,
+} from './models/timeline-form.model';
+import { TimelineItemsService } from '../timelineItems/timelineItems.service';
 
 @Injectable()
 export class TimelinesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly timelineItemsService: TimelineItemsService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   create(createTimelineInput: CreateTimelineInput) {
     return this.prisma.timeline.create({
@@ -18,10 +25,22 @@ export class TimelinesService {
     });
   }
 
-  findForm(): TimelineForm {
+  async findForm(id: string): Promise<TimelineForm> {
+    const timelineForm = cloneDeep(defaultTimelineForm);
+
+    timelineForm.timelineItemOptions =
+      await this.timelineItemsService.getTimelineItemOptions();
+    if (id === 'new') {
+      return timelineForm;
+    }
+
+    const timeline = await this.prisma.timeline.findUnique({
+      where: { id },
+    });
+
     return {
-      sessionId: '',
-      tenantId: '',
+      ...timelineForm,
+      ...timeline,
     };
   }
 

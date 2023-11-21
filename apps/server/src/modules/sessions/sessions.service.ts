@@ -27,6 +27,9 @@ export class SessionsService {
 
     const sessions = await this.prisma.session.findMany({
       ...query,
+      include: {
+        timelines: true,
+      },
     });
 
     const totalCount = await this.prisma.session.count({

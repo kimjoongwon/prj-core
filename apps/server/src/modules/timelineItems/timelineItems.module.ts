@@ -4,5 +4,6 @@ import { TimelineItemsResolver } from './timelineItems.resolver';
 
 @Module({
   providers: [TimelineItemsResolver, TimelineItemsService],
+  exports: [TimelineItemsService],
 })
 export class TimelineItemsModule {}

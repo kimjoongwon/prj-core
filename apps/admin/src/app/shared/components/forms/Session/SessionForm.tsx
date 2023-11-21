@@ -1,19 +1,16 @@
----
-to: src/app/shared/components/forms/<%= Name %>/<%= Name %>Form.tsx
----
 'use client';
 
 import { observer } from 'mobx-react-lite';
 import { FormControl, Input, Select } from '@coc/ui';
-import { <%= Name %>Form as <%= Name %>FormType } from '@__generated__/graphql';
+import { SessionForm as SessionFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 
 interface FormProps {
-  state: <%= Name %>FormType;
+  state: SessionFormType;
   schema: ZodSchema;
 }
 
-export const <%= Name %>Form = observer((props: FormProps) => {
+export const SessionForm = observer((props: FormProps) => {
   const { state, schema } = props;
 
   return (
