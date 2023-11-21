@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {
   useDefaultObjects,
-  useMeta,
+  useHandlers,
   useMutations,
   useQueries,
   useState,
@@ -15,7 +15,7 @@ import { UserSchema, userSchema } from '@schemas';
 interface PageContext {
   schema: UserSchema;
   state: ReturnType<typeof useState>;
-  meta: ReturnType<typeof useMeta>;
+  handlers: ReturnType<typeof useHandlers>;
 }
 
 export const PageContext = createContext<PageContext>({} as PageContext);
@@ -25,12 +25,12 @@ export const Provider = observer((props: ContainerProps) => {
   const defaultObjects = useDefaultObjects();
   const state = useState({ ...queries, ...defaultObjects });
   const mutations = useMutations(state);
-  const meta = useMeta(mutations);
+  const handlers = useHandlers({ state, mutations });
 
   return (
     <PageContext.Provider
       value={{
-        meta,
+        handlers,
         state,
         schema: userSchema,
       }}

@@ -21,7 +21,7 @@ export class <%= h.changeCase.pascal(name) %>sService {
     });
   }
 
-  findForm(): <%= h.changeCase.pascal(name) %>Form {
+  findForm(id: string): <%= h.changeCase.pascal(name) %>Form {
     return {
       name: '',
     };

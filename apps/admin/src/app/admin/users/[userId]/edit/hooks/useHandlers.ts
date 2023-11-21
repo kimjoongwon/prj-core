@@ -2,30 +2,39 @@ import { useCoCRouter } from '@hooks';
 import { useMutations } from './useMutations';
 import { useParams } from 'next/navigation';
 import { USERS_PAGE_PATH } from '@constants';
+import { useState } from './useState';
+import { cloneDeep, omit } from 'lodash-es';
 
-export const useMeta = (context: ReturnType<typeof useMutations>) => {
+export const useHandlers = (context: {
+  mutations: ReturnType<typeof useMutations>;
+  state: ReturnType<typeof useState>;
+}) => {
   const {
-    signUp: [signUp],
-    updateUser: [updateUser],
+    state,
+    mutations: {
+      createUser: [createUser],
+      updateUser: [updateUser],
+    },
   } = context;
 
   const router = useCoCRouter();
   const { userId } = useParams();
 
   const onClickSave = () => {
+    const form = omit(state.formState, ['roleOptions', 'spaceOptions']);
+
     if (userId === 'new') {
-      signUp();
+      createUser({
+        variables: {
+          createUserInput: form,
+        },
+      });
     } else {
       updateUser({
         variables: {
           updateUserInput: {
             id: userId as string,
-            email: '',
-            password: '',
-            profile: {
-              nickname: '',
-              phone: '',
-            },
+            ...form,
           },
         },
       });

@@ -13,17 +13,16 @@ export const useHandlers = ({
   const {
     createGroup: [createGroup],
     updateGroup: [updateGroup],
-  } = mutations;  
+  } = mutations;
 
   const router = useCoCRouter();
-  const { categoryId } = useParams();
+  const { groupId } = useParams();
 
   const onClickSave = () => {
-    if (categoryId === 'new') {
+    if (groupId === 'new') {
       createGroup({
         variables: {
-          createGroupInput: {
-          },
+          createGroupInput: state.form,
         },
       });
     } else {
@@ -46,4 +45,3 @@ export const useHandlers = ({
     onClickCancel,
   };
 };
-

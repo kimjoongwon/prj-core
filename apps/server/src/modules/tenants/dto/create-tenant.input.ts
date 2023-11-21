@@ -1,4 +1,4 @@
-import { InputType, OmitType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, OmitType } from '@nestjs/graphql';
 import { Tenant } from '../models/tenant.model';
 import { BASE_FIELDS } from '../../../common/constants';
 

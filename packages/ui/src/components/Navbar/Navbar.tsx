@@ -17,6 +17,7 @@ import {
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { FaChevronDown, FaUser } from 'react-icons/fa';
+import { FcAbout, FcManager } from 'react-icons/fc';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
 import { observer } from 'mobx-react-lite';
@@ -40,19 +41,13 @@ interface NavbarProps {
 export const CoCNavbar = observer((props: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { rightContents = <div>left</div>, leftContents = <div>right</div> } =
-    props;
+  const { rightContents = <div>left</div>, leftContents = <div>right</div> } = props;
   const { navItems = [], navMenuItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
     if (!item.children) {
       return (
         <NavbarItem key={v4()} isActive={item.active}>
-          <Link
-            href={item.href}
-            color={item.active ? undefined : 'foreground'}
-            size="lg"
-            as={NextLink}
-          >
+          <Link href={item.href} color={item.active ? undefined : 'foreground'} size="lg" as={NextLink}>
             {item.text}
           </Link>
         </NavbarItem>
@@ -83,6 +78,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
           {(item.children || []).map(child => (
             <DropdownItem
               key={v4()}
+              className="w-[700px]"
               description="Overcome any challenge with a supporting team ready to respond."
               startContent={<FaUser />}
               href={child.href}
@@ -105,16 +101,9 @@ export const CoCNavbar = observer((props: NavbarProps) => {
   );
 
   return (
-    <NextUINavbar
-      maxWidth="2xl"
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-    >
+    <NextUINavbar maxWidth="2xl" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
-        <NavbarMenuToggle
-          className="sm:hidden"
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-        />
+        <NavbarMenuToggle className="sm:hidden" aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
         <NavbarBrand>
           <p className="font-bold text-large">프로미스</p>
         </NavbarBrand>

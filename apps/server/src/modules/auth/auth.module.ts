@@ -30,6 +30,6 @@ import { AuthConfig } from '../../configs';
     AuthResolver,
     PasswordService,
   ],
-  exports: [AuthService],
+  exports: [AuthService, PasswordService],
 })
 export class AuthModule {}

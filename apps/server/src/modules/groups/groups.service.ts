@@ -23,9 +23,15 @@ export class GroupsService {
       return defaultGroupForm;
     }
 
-    return await this.prisma.group.findUnique({
+    const group = await this.prisma.group.findUnique({
       where: { id },
     });
+
+    return {
+      name: group.name,
+      serviceId: group.serviceId,
+      tenantId: group.tenantId,
+    };
   }
 
   async findPaginatedGroup(args: GetGroupsArgs): Promise<PaginatedGroup> {

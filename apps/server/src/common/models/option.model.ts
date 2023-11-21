@@ -1,6 +1,7 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
+@InputType('OptionInput')
 export class Option {
   @Field(() => String)
   name: string;

@@ -5,3 +5,4 @@ export * from './services';
 export * from './spaces';
 export * from './groups';
 export * from './roles';
+export * from './sessions';

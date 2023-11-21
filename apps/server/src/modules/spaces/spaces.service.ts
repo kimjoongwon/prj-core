@@ -32,6 +32,17 @@ export class SpacesService {
     });
   }
 
+  async getServiceOptions() {
+    const serviceOptions = (await this.prisma.space.findMany({})).map(
+      space => ({
+        name: space.name,
+        value: space.id,
+      }),
+    );
+
+    return serviceOptions;
+  }
+
   async findPaginatedSpace(args: GetSpacesArgs): Promise<PaginatedSpace> {
     const query = queryBuilder(args, []);
 

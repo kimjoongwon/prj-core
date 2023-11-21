@@ -6,3 +6,4 @@ export * from './services';
 export * from './groups';
 export * from './spaces';
 export * from './roles';
+export * from './sessions';
