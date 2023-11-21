@@ -7,6 +7,7 @@ import { GetTimelineItemsArgs } from './dto/get-timelineItems.args';
 import { UpdateTimelineItemInput } from './dto/update-timelineItem.input';
 import { TimelineItemForm } from './models/timelineItem-form.model';
 import { PaginatedTimelineItem } from './models/paginated-timelineItem.model';
+import { Option } from '../../common/models';
 
 @Injectable()
 export class TimelineItemsService {
@@ -25,6 +26,18 @@ export class TimelineItemsService {
       title: '',
       timelineId: '',
     };
+  }
+
+  async getTimelineItemOptions(): Promise<Option[]> {
+    const timelineItems = await this.prisma.timelineItem.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+    return timelineItems.map(timelineItem => ({
+      name: timelineItem.title,
+      value: timelineItem.id,
+    }));
   }
 
   async findPaginatedTimelineItem(

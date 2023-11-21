@@ -47,8 +47,8 @@ export class TimelinesResolver {
 
   @Public()
   @Query(() => TimelineForm, { name: 'timelineForm' })
-  getTimelineForm() {
-    return this.timelinesService.findForm();
+  getTimelineForm(@Args('id') id: string) {
+    return this.timelinesService.findForm(id);
   }
 
   @Public()

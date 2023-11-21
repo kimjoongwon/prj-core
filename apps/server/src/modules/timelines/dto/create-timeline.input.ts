@@ -1,4 +1,4 @@
-import { InputType, OmitType } from '@nestjs/graphql';
+import { Field, InputType, OmitType } from '@nestjs/graphql';
 import { BASE_FIELDS } from '../../../common/constants';
 import { Timeline } from '../models/timeline.model';
 
@@ -7,4 +7,7 @@ export class CreateTimelineInput extends OmitType(
   Timeline,
   [...BASE_FIELDS],
   InputType,
-) {}
+) {
+  @Field(type => [String])
+  timelineItemIds: string[];
+}

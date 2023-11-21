@@ -16,4 +16,5 @@ export const defaultSessionForm: SessionForm = {
   tenantId: '',
   startDateTime: undefined,
   endDateTime: undefined,
+  timelineIds: [],
 };

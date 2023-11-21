@@ -139,7 +139,7 @@ model Session {
   createdAt     DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt     DateTime?  @db.Timestamptz(6)
-  timeline      Timeline[]
+  timelines     Timeline[]
 }
 
 model Timeline {
