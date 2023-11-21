@@ -100,6 +100,7 @@ export class UsersService {
     return {
       ...userForm,
       password: '',
+      name: user.name,
       email: user.email,
     };
   }

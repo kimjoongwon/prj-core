@@ -18,11 +18,6 @@ export const GET_USERS = gql(`#graphql
       nodes {
         id
         email
-        profiles {
-          id
-          nickname
-          phone
-        }
       }
       pageInfo {
         endCursor

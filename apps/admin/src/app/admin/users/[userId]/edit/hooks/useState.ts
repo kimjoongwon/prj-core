@@ -11,6 +11,7 @@ export const useState = (
 
   const formState = useLocalObservable(() => data.userForm);
 
+  console.log(data);
   return {
     formState,
   };

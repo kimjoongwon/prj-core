@@ -11,12 +11,6 @@ export const useUserColumns = () => {
     columnHelper.accessor('email', {
       header: '이메일',
     }),
-    columnHelper.accessor('profile.nickname', {
-      header: '닉네임',
-    }),
-    columnHelper.accessor('profile.phone', {
-      header: '휴대폰',
-    }),
   ];
   return columns;
 };
