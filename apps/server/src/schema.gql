@@ -253,6 +253,18 @@ type PaginatedGroup {
   pageInfo: GroupPageInfo!
 }
 
+type UserForm {
+  email: String!
+  password: String!
+  name: String!
+  roleId: String
+  spaceId: String
+  phone: String!
+  nickname: String!
+  spaceOptions: [Option!]!
+  roleOptions: [Option!]!
+}
+
 type UserEdge {
   cursor: String!
   node: User!
@@ -452,18 +464,6 @@ type PaginatedSession {
   pageInfo: SessionPageInfo!
 }
 
-type UserForm {
-  email: String!
-  password: String!
-  name: String!
-  roleId: String
-  spaceId: String
-  phone: String!
-  nickname: String!
-  spaceOptions: [Option!]!
-  roleOptions: [Option!]!
-}
-
 input RoleInput {
   name: RoleEnum!
 }
@@ -509,6 +509,9 @@ input TimelineInputType {
 
 type Query {
   profile(id: ID!): Profile!
+  users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
+  userForm(id: String!): UserForm!
+  user(id: String!): User!
   space(id: String!): Space!
   spaceForm(id: String!): SpaceForm!
   spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
@@ -543,9 +546,6 @@ type Query {
   session(id: String!): Session!
   sessionForm(id: String!): SessionForm!
   sessions(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSession!
-  users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
-  userForm(id: String!): UserForm!
-  user(id: String!): User!
 }
 
 type Mutation {
@@ -554,6 +554,8 @@ type Mutation {
   signup(data: SignupInput!): Auth!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
   createSpace(createSpaceInput: CreateSpaceInput!): Space!
   updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
   deleteSpace(id: String!): Space!
@@ -589,8 +591,6 @@ type Mutation {
   createSession(createSessionInput: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   deleteSession(id: String!): Session!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
 }
 
 input UpdateProfileInput {
@@ -615,6 +615,26 @@ input ProfileInput {
 input LoginInput {
   email: String!
   password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+  roleId: String
+  spaceId: String
+  phone: String!
+  nickname: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  roleId: String
+  spaceId: String
+  phone: String
+  nickname: String
+  id: ID!
 }
 
 input CreateSpaceInput {
@@ -777,24 +797,4 @@ input UpdateSessionInput {
   endDateTime: DateTime
   name: String
   tilelines: [TimelineInputType!]
-}
-
-input CreateUserInput {
-  email: String!
-  password: String!
-  name: String!
-  roleId: String
-  spaceId: String
-  phone: String!
-  nickname: String!
-}
-
-input UpdateUserInput {
-  email: String
-  name: String
-  roleId: String
-  spaceId: String
-  phone: String
-  nickname: String
-  id: ID!
 }
