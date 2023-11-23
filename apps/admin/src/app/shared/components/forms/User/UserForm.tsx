@@ -58,7 +58,6 @@ export const UserForm = observer(
           options={state.spaceOptions}
           placeholder="공간을 선택해주세요."
         />
-        <MultiSelect state={state} path="test" options={state.roleOptions} />
       </div>
     );
   },
