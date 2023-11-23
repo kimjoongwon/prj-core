@@ -95,7 +95,6 @@ export class CategoryItemsService {
         };
       },
     );
-    console.log('leafCategoryItemOptions', leafCategoryItemOptions);
     return leafCategoryItemOptions;
   }
 

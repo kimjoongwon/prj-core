@@ -1,9 +1,11 @@
+'use client';
+
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Select as NextSelect, SelectItem, SelectItemProps, SelectProps as NextUISelectProps } from '@nextui-org/react';
+import { Select as NextSelect, SelectItem, SelectProps as NextUISelectProps } from '@nextui-org/react';
 import { MobxProps } from '../../types';
-import { Key, useEffect } from 'react';
+import { useEffect } from 'react';
 import { reaction } from 'mobx';
-import { get, set } from 'lodash-es';
+import { cloneDeep, get, set } from 'lodash-es';
 
 interface SelectProps<T> extends Omit<NextUISelectProps, 'children'>, MobxProps<T> {
   options?: any[];
@@ -12,8 +14,9 @@ interface SelectProps<T> extends Omit<NextUISelectProps, 'children'>, MobxProps<
 export const Select = observer(<T extends object>(props: SelectProps<T>) => {
   const { state = {}, path = '', options = [], ...rest } = props;
 
-  const localState = useLocalObservable<{ value: SelectItemProps['value'] }>(() => ({
-    value: options?.find(option => option.value === get(state, path))?.value,
+  const _options = cloneDeep(options);
+  const localState = useLocalObservable<{ value?: string }>(() => ({
+    value: _options?.find(option => option.value === get(state, path))?.value || undefined,
   }));
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
     const disposer = reaction(
       () => get(state, path),
       value => {
-        localState.value = value;
+        localState.value = value || undefined;
       },
     );
 
@@ -46,16 +49,13 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
     <NextSelect
       variant="bordered"
       {...rest}
-      onSelectionChange={keys => {
-        if (typeof keys === 'string') {
-          localState.value = keys;
-        }
-        localState.value = Array.from(keys)[0] as string;
+      onChange={e => {
+        localState.value = e.target.value;
       }}
-      selectedKeys={[localState.value] as any[]}
-      value={localState.value}
+      selectedKeys={localState.value ? [localState.value] : undefined}
+      // value={localState.value}
     >
-      {options.map(option => {
+      {_options.map(option => {
         return (
           <SelectItem key={option.value} value={option.value}>
             {option.name}

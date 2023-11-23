@@ -79,7 +79,6 @@ export class SpacesService {
   }
 
   update(updateCategoryInput: UpdateSpaceInput) {
-    console.log('updateCategoryInput', updateCategoryInput);
     return this.prisma.space.update({
       where: { id: updateCategoryInput.id },
       data: updateCategoryInput,

@@ -88,8 +88,8 @@ export class UsersService {
     const userForm = { ...defaultUserForm };
     userForm.spaceOptions = spaceOptions;
     userForm.roleOptions = roleOptions;
-
     if (id === 'new') {
+      userForm.roleId = roleOptions[0].value;
       return userForm;
     }
 

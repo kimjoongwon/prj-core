@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { UserForm } from '@components';
-import { Button, Spacer } from '@coc/ui';
+import { Form } from '@coc/ui';
 import { useUsersPage } from './hooks/usePage';
 
 export default function Page() {
@@ -13,19 +13,14 @@ export default function Page() {
   } = useUsersPage();
 
   return (
-    <div>
+    <Form
+      state={formState}
+      schema={schema}
+      title={'유저 편집'}
+      onClickSave={onClickSave}
+      onClickCancel={onClickCancel}
+    >
       <UserForm schema={schema} state={formState} />
-      <Spacer y={3} />
-      <div className="flex justify-end">
-        <div className="space-x-2">
-          <Button color="danger" onClick={onClickCancel}>
-            Cancel
-          </Button>
-          <Button color="primary" onClick={onClickSave}>
-            Save
-          </Button>
-        </div>
-      </div>
-    </div>
+    </Form>
   );
 }

@@ -4,7 +4,7 @@ import { Tenant } from '../../tenants/models/tenant.model';
 import { Profile } from '../../profiles/models/profile.model';
 import { User as CoCUser } from '@prisma/client';
 @ObjectType()
-@InputType('UserInput')
+@InputType('UserInputType')
 export class User extends Base implements CoCUser {
   @Field(type => String)
   email: string;

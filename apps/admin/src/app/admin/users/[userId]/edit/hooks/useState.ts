@@ -1,17 +1,13 @@
 import { useLocalObservable } from 'mobx-react-lite';
 import { useQueries } from './useQueries';
-import { useDefaultObjects } from './useDefaultObjects';
 
-export const useState = (
-  context: ReturnType<typeof useQueries> & ReturnType<typeof useDefaultObjects>,
-) => {
+export const useState = (context: ReturnType<typeof useQueries>) => {
   const {
     userFormQuery: { data },
   } = context;
 
   const formState = useLocalObservable(() => data.userForm);
 
-  console.log(data);
   return {
     formState,
   };

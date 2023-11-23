@@ -3,7 +3,7 @@ import { useMutations } from './useMutations';
 import { useParams } from 'next/navigation';
 import { USERS_PAGE_PATH } from '@constants';
 import { useState } from './useState';
-import { cloneDeep, omit } from 'lodash-es';
+import { omit } from 'lodash-es';
 
 export const useHandlers = (context: {
   mutations: ReturnType<typeof useMutations>;

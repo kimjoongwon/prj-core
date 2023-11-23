@@ -34,7 +34,6 @@ export const CategoryItemGroupSection = observer(
       );
 
     if (!selectedParentCategoryItem && depth > 0) return null;
-    console.log(toJS(selectedParentCategoryItem));
     return (
       <div className="flex-1">
         <Button
@@ -43,8 +42,6 @@ export const CategoryItemGroupSection = observer(
           fullWidth
           size="sm"
           onClick={() => {
-            console.log(depth);
-            console.log(toJS(selectedParentCategoryItem));
             onClickNewCategory(
               depth > 0
                 ? {
