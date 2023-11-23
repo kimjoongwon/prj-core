@@ -253,18 +253,6 @@ type PaginatedGroup {
   pageInfo: GroupPageInfo!
 }
 
-type UserForm {
-  email: String!
-  password: String!
-  name: String!
-  roleId: String
-  spaceId: String
-  phone: String
-  nickname: String
-  spaceOptions: [Option!]!
-  roleOptions: [Option!]!
-}
-
 type UserEdge {
   cursor: String!
   node: User!
@@ -464,6 +452,18 @@ type PaginatedSession {
   pageInfo: SessionPageInfo!
 }
 
+type UserForm {
+  email: String!
+  password: String!
+  name: String!
+  roleId: String
+  spaceId: String
+  phone: String!
+  nickname: String!
+  spaceOptions: [Option!]!
+  roleOptions: [Option!]!
+}
+
 input RoleInput {
   name: RoleEnum!
 }
@@ -509,12 +509,22 @@ input TimelineInputType {
 
 type Query {
   profile(id: ID!): Profile!
+  space(id: String!): Space!
+  spaceForm(id: String!): SpaceForm!
+  spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
   role(id: String!): Role!
   roleForm(id: String!): RoleForm!
   roles(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedRole!
+  categoryForm(id: String!): CategoryForm!
+  category(id: String!): Category!
+  categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
   service(id: String!): Service!
   serviceForm: ServiceForm!
   services(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedService!
+  categoryItemTrees: [CategoryItem!]!
+  categoryItemForm(id: String!): CategoryItemForm!
+  categoryItem(id: String!): CategoryItem!
+  categoryItems(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategoryItem!
   group(id: String!): Group!
   groupForm(id: String!): GroupForm!
   groups(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedGroup!
@@ -536,16 +546,6 @@ type Query {
   users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
   userForm(id: String!): UserForm!
   user(id: String!): User!
-  space(id: String!): Space!
-  spaceForm(id: String!): SpaceForm!
-  spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
-  categoryForm(id: String!): CategoryForm!
-  category(id: String!): Category!
-  categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
-  categoryItemTrees: [CategoryItem!]!
-  categoryItemForm(id: String!): CategoryItemForm!
-  categoryItem(id: String!): CategoryItem!
-  categoryItems(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategoryItem!
 }
 
 type Mutation {
@@ -554,13 +554,23 @@ type Mutation {
   signup(data: SignupInput!): Auth!
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
+  createSpace(createSpaceInput: CreateSpaceInput!): Space!
+  updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
+  deleteSpace(id: String!): Space!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   deleteRole(id: String!): Role!
   removeRole(id: String!): Role!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  deleteCategories(ids: [String!]!): Category!
+  removeCategory(id: String!): Category!
   createService(createServiceInput: CreateServiceInput!): Service!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
   deleteService(id: String!): Service!
+  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
+  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
+  deleteCategoryItem(id: String!): CategoryItem!
   createGroup(createGroupInput: CreateGroupInput!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
   deleteGroup(id: String!): Group!
@@ -581,16 +591,6 @@ type Mutation {
   deleteSession(id: String!): Session!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
-  createSpace(createSpaceInput: CreateSpaceInput!): Space!
-  updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
-  deleteSpace(id: String!): Space!
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  deleteCategories(ids: [String!]!): Category!
-  removeCategory(id: String!): Category!
-  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
-  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
-  deleteCategoryItem(id: String!): CategoryItem!
 }
 
 input UpdateProfileInput {
@@ -617,6 +617,19 @@ input LoginInput {
   password: String!
 }
 
+input CreateSpaceInput {
+  name: String!
+  phone: String!
+  address: String!
+}
+
+input UpdateSpaceInput {
+  name: String
+  phone: String
+  address: String
+  id: ID
+}
+
 input CreateRoleInput {
   name: RoleEnum
 }
@@ -629,6 +642,21 @@ input UpdateRoleInput {
   name: RoleEnum
 }
 
+input CreateCategoryInput {
+  serviceId: String!
+  categoryItemId: String!
+  tenantId: String!
+  name: String!
+}
+
+input UpdateCategoryInput {
+  serviceId: String
+  categoryItemId: String
+  tenantId: String
+  name: String
+  id: ID!
+}
+
 input CreateServiceInput {
   name: String!
 }
@@ -639,6 +667,23 @@ input UpdateServiceInput {
   updatedAt: DateTime
   deletedAt: DateTime
   name: String
+}
+
+input CreateCategoryItemInput {
+  name: String!
+  tag: String!
+  ancestorIds: [String!]! = []
+  parentId: String
+  tenantId: String!
+}
+
+input UpdateCategoryItemInput {
+  name: String
+  tag: String
+  ancestorIds: [String!] = []
+  parentId: String
+  tenantId: String
+  id: ID!
 }
 
 input CreateGroupInput {
@@ -740,8 +785,8 @@ input CreateUserInput {
   name: String!
   roleId: String
   spaceId: String
-  phone: String
-  nickname: String
+  phone: String!
+  nickname: String!
 }
 
 input UpdateUserInput {
@@ -751,50 +796,5 @@ input UpdateUserInput {
   spaceId: String
   phone: String
   nickname: String
-  id: ID!
-}
-
-input CreateSpaceInput {
-  name: String!
-  phone: String!
-  address: String!
-}
-
-input UpdateSpaceInput {
-  name: String
-  phone: String
-  address: String
-  id: ID
-}
-
-input CreateCategoryInput {
-  serviceId: String!
-  categoryItemId: String!
-  tenantId: String!
-  name: String!
-}
-
-input UpdateCategoryInput {
-  serviceId: String
-  categoryItemId: String
-  tenantId: String
-  name: String
-  id: ID!
-}
-
-input CreateCategoryItemInput {
-  name: String!
-  tag: String!
-  ancestorIds: [String!]! = []
-  parentId: String
-  tenantId: String!
-}
-
-input UpdateCategoryItemInput {
-  name: String
-  tag: String
-  ancestorIds: [String!] = []
-  parentId: String
-  tenantId: String
   id: ID!
 }
