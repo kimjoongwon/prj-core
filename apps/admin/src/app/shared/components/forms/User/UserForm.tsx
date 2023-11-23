@@ -1,7 +1,13 @@
 'use client';
 
 import { UserForm as _UserForm } from '@__generated__/graphql';
-import { FormControl, FormGroupControl, Input, Select } from '@coc/ui';
+import {
+  FormControl,
+  FormGroupControl,
+  Input,
+  MultiSelect,
+  Select,
+} from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { ZodSchema } from 'zod';
 
@@ -38,24 +44,21 @@ export const UserForm = observer(
         <FormControl timings={['onBlur']} schema={schema}>
           <Input label="휴대폰" state={state} path="phone" />
         </FormControl>
-        <FormControl timings={['onBlur', 'onFocus']} schema={schema}>
-          <Select
-            label="역할"
-            state={state}
-            path="roleId"
-            options={state.roleOptions}
-            placeholder="역할을 선택해주세요."
-          />
-        </FormControl>
-        <FormControl timings={['onBlur']} schema={schema}>
-          <Select
-            label="공간"
-            state={state}
-            path="spaceId"
-            options={state.spaceOptions}
-            placeholder="공간을 선택해주세요."
-          />
-        </FormControl>
+        <Select
+          label="역할"
+          state={state}
+          path="roleId"
+          options={state.roleOptions}
+          placeholder="역할을 선택해주세요."
+        />
+        <Select
+          label="공간"
+          state={state}
+          path="spaceId"
+          options={state.spaceOptions}
+          placeholder="공간을 선택해주세요."
+        />
+        <MultiSelect state={state} path="test" options={state.roleOptions} />
       </div>
     );
   },

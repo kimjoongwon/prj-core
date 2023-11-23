@@ -6,8 +6,10 @@ export const useState = (context: ReturnType<typeof useQueries>) => {
     userFormQuery: { data },
   } = context;
 
-  const formState = useLocalObservable(() => data.userForm);
-
+  const formState = useLocalObservable(() => ({
+    ...data.userForm,
+    test: [],
+  }));
   return {
     formState,
   };

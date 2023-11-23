@@ -14,11 +14,6 @@ export * from './controls';
 export * from './Skeleton';
 export * from './Select';
 export * from './Form';
-export {
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Card,
-  Spacer,
-} from '@nextui-org/react';
+export * from './MultiSelect';
+export { CardHeader, CardBody, CardFooter, Card, Spacer } from '@nextui-org/react';
 export * from './CoCModal';

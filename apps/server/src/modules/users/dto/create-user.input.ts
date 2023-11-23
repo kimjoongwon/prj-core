@@ -27,9 +27,9 @@ export class CreateUserInput
   @Field(type => String, { nullable: true })
   spaceId: string;
 
-  @Field(type => String, { nullable: true })
+  @Field(type => String)
   phone: string;
 
-  @Field(type => String, { nullable: true })
+  @Field(type => String)
   nickname: string;
 }
