@@ -45,15 +45,16 @@ export const MultiSelect = observer(<T extends object>(props: SelectProps<T>) =>
       disposer();
     };
   }, []);
-
+  console.log('localState.value', localState.value);
   return (
     <NextSelect
       variant="bordered"
       {...rest}
+      selectionMode="multiple"
       onChange={e => {
         localState.value = e.target.value?.split(',') || [];
       }}
-      selectedKeys={localState.value}
+      selectedKeys={new Set(localState.value)}
     >
       {options.map(option => {
         return (
