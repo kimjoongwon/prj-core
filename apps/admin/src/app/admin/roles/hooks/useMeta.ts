@@ -70,7 +70,6 @@ export const useMeta = ({
       children: '삭제',
       color: 'danger',
       onClick: () => {
-        console.log('state.table', state.table);
         removeRole({
           variables: {
             id: state.table.selectedRowIds[0],

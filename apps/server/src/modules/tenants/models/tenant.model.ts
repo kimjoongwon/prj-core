@@ -6,7 +6,7 @@ import { Space } from '../../spaces/models/space.model';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()
-@InputType('TenantInput')
+@InputType('TenantInputType')
 export class Tenant extends Base implements CoCTenant {
   @Field(type => String)
   roleId: string;

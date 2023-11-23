@@ -3,7 +3,6 @@ import { CategoryItemEditPageProvider } from '../../../../[categoryItemId]/edit/
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
-  console.log('!!!!!!!!!!')
   return (
     <CoCModal>
       <CategoryItemEditPageProvider>{children}</CategoryItemEditPageProvider>

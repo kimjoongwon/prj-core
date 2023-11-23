@@ -23,9 +23,7 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
         <p className="text-large">{title}</p>
       </CardHeader>
       <CardBody>
-        <form {...rest}>
-          {children}
-        </form>
+        <form {...rest}>{children}</form>
       </CardBody>
       <CardFooter className="space-x-2">
         <Button isDisabled={!schema?.safeParse(state).success} onClick={onClickSave} color="primary">

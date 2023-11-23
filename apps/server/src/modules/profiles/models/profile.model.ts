@@ -3,7 +3,7 @@ import { Profile as CoCProfile } from '@prisma/client';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()
-@InputType('inputProfile')
+@InputType('ProfileInputType')
 export class Profile extends Base implements CoCProfile {
   @Field(type => String)
   phone: string;

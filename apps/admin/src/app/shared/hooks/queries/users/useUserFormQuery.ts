@@ -5,5 +5,6 @@ import { GET_USER_FORM } from '@gqls';
 export const useUserFormQuery = (variables: GetUserFormQueryVariables) => {
   return useSuspenseQuery(GET_USER_FORM, {
     variables,
+    fetchPolicy: 'cache-and-network',
   });
 };

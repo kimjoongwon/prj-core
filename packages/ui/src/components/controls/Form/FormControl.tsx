@@ -9,7 +9,7 @@ interface FormControlProps<T> {
 }
 
 export interface ValidationState {
-  state: 'invalid' | 'valid';
+  isInvalid: boolean;
   errorMessage: string;
   success: boolean;
 }
@@ -19,7 +19,7 @@ export const FormControl = <T extends any>(props: FormControlProps<T>) => {
 
   const [validation, setValidation] = useState<ValidationState>({
     errorMessage: ' ',
-    state: 'valid',
+    isInvalid: false,
     success: true,
   });
 
@@ -35,16 +35,19 @@ export const FormControl = <T extends any>(props: FormControlProps<T>) => {
         }
 
         const result = (schema as ZodSchema).safeParse(child.props.state);
+
         validation.errorMessage = '';
-        validation.state = 'valid';
+
+        validation.isInvalid = false;
+
         validation.success = result.success;
+
         if (!result.success) {
-          const errorMessage = get(
-            result?.error.format(),
-            child.props.path,
-          )?._errors.join('-');
+          const errorMessage = get(result?.error.format(), child.props.path)?._errors.join('-');
+
           validation.errorMessage = errorMessage || '';
-          validation.state = isUndefined(errorMessage) ? 'valid' : 'invalid';
+
+          validation.isInvalid = isUndefined(errorMessage) ? false : true;
         }
 
         setValidation({ ...validation });
