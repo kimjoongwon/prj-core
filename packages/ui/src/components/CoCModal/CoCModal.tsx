@@ -1,3 +1,5 @@
+;
+
 import { Modal, ModalContent, ModalProps } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 interface CoCModalProps extends ModalProps {

@@ -10,5 +10,5 @@ export default function Page() {
     state,
   } = useSessionEditPage();
 
-  return <SessionForm state={state.form} schema={sessionFormSchema} />;
+  return <SessionForm />;
 }

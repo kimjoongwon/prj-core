@@ -2,15 +2,22 @@
   "name": "@coc/ui",
   "version": "1.2.5",
   "description": "ui library",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
-  "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./index.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": "./dist",
+    "./styles.css": "./dist/index.css"
+  },
   "scripts": {
     "build": "tsup --config tsup.config.ts",
-    "start:dev": "tsup --config tsup.config.ts --watch",
+    "start:dev": "tsup --watch",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -21,6 +28,7 @@
     "@nextui-org/react": "2.2.9",
     "@tanstack/react-table": "^8.10.7",
     "@types/uuid": "^9.0.7",
+    "dayjs": "1.11.10",
     "framer-motion": "^10.16.5",
     "lodash-es": "4.17.21",
     "mobx": "^6.11.0",

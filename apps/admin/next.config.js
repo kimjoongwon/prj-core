@@ -4,7 +4,9 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {},
+  experimental: {
+    esmExternals: true,
+  },
 };
 
 module.exports = nextConfig;

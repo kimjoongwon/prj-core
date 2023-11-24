@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start:dev": "next dev -p 3004 --turbo",
+    "start:dev": "next dev -p 3004",
     "lint": "tsc --noEmit && eslint \"app/**/*.ts*\"",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
