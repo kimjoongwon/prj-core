@@ -4,18 +4,13 @@ export default defineConfig(option => ({
   entry: ['./index.ts'],
   format: ['esm'],
   outDir: './dist',
-  clean: false,
+  clean: option.watch ? false : true,
   minify: !option.watch,
   watch: option.watch,
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
-  splitting: false,
-  treeshake: false,
+  treeshake: option.watch ? false : true,
   external: ['react', 'react-dom'],
   dts: true,
-  esbuildOptions(options) {
-    options.inject?.push('./inject.js');
-  },
-  onSuccess: './scripts/post-build.sh',
 }));
