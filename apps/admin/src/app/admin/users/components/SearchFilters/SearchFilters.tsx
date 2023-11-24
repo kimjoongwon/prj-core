@@ -1,8 +1,8 @@
 'use client';
 
-import { Search } from '@coc/ui';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../../hooks';
+import { Search } from '@coc/ui';
 
 export const SearchFilters = observer(() => {
   const page = usePage();

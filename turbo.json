@@ -19,7 +19,6 @@
       "dependsOn": ["build"]
     },
     "start:dev": {
-      // "dependsOn": ["^start:dev"],
       "cache": false,
       "persistent": true
     },

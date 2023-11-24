@@ -1,5 +1,3 @@
-'use client';
-
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Select as NextSelect, SelectItem, SelectProps as NextUISelectProps } from '@nextui-org/react';
 import { MobxProps } from '../../types';

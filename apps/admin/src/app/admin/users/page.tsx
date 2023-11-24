@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonGroup, Checkbox, DataGrid, Pagination } from '@coc/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import { SearchFilters } from './components';
 import { usePage } from './hooks';
 import {

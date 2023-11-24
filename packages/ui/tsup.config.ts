@@ -2,19 +2,20 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig(option => ({
   entry: ['./index.ts'],
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   outDir: './dist',
-  clean: true,
+  clean: false,
   minify: !option.watch,
+  watch: option.watch,
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
-  esbuildOptions: options => {
-    options.banner = {
-      js: '"use client"',
-    };
-  },
+  splitting: false,
+  treeshake: false,
   external: ['react', 'react-dom'],
   dts: true,
-  banner: {},
+  esbuildOptions(options) {
+    options.inject?.push('./inject.js');
+  },
+  onSuccess: './scripts/post-build.sh',
 }));

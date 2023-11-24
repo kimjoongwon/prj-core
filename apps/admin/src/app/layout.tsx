@@ -1,4 +1,5 @@
 import './globals.css';
+import '@coc/ui/styles.css';
 import { Providers } from './providers';
 
 export default function RootLayout(props: {

@@ -1,4 +1,4 @@
-'use client';
+;
 
 import { ChangeEventHandler, ForwardedRef } from 'react';
 import { MobxProps } from '../../types';
