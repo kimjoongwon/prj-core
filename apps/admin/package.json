@@ -19,6 +19,7 @@
     "@apollo/experimental-nextjs-app-support": "0.5.1",
     "@coc/ui": "workspace:*",
     "@nextui-org/react": "2.2.9",
+    "@tailwindcss/aspect-ratio": "0.4.2",
     "@tanstack/react-table": "^8.10.7",
     "dayjs": "1.11.10",
     "file-saver": "2.0.5",

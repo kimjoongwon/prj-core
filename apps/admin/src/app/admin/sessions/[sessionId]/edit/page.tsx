@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SessionForm } from '@components';
 import { useSessionEditPage } from './hooks';
+import { Calendar } from '../../../../shared/components/ui/Calendar';
 
 export default function Page() {
   const {
@@ -10,5 +10,5 @@ export default function Page() {
     state,
   } = useSessionEditPage();
 
-  return <SessionForm />;
+  return <Calendar />;
 }

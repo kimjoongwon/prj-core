@@ -1,9 +1,9 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Calendar } from '@coc/ui';
 import { SessionForm as SessionFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
+import { Calendar } from '@coc/ui';
 
 interface FormProps {
   state: SessionFormType;
