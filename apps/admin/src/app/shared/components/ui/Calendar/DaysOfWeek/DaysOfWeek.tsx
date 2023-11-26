@@ -4,7 +4,15 @@ export const DaysOfWeek = () => {
   return (
     <>
       {daysOfWeek.map(dayOfWeek => {
-        return <div>{dayOfWeek}</div>;
+        return (
+          <div
+            className={
+              ['SAT', 'SUN'].includes(dayOfWeek) ? 'text-danger-400' : undefined
+            }
+          >
+            {dayOfWeek}
+          </div>
+        );
       })}
     </>
   );
