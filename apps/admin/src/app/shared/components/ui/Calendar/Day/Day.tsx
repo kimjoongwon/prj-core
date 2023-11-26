@@ -5,15 +5,16 @@ export interface DayProps {
     startDate: Date;
     endDate: Date;
   };
-  day: string;
-  isVisible: boolean;
+  day: number;
+  active?: boolean;
 }
 
 export const Day = (props: DayProps) => {
-  const { day, isVisible, state } = props;
+  const { day, active } = props;
 
   return (
     <Button
+      disabled={!active}
       onClick={() => {}}
       variant="bordered"
       className={`
@@ -33,7 +34,8 @@ export const Day = (props: DayProps) => {
           absolute 
           top-1 
           right-1 
-          text-xs 
+          text-3xl
+          font-bold
           text-gray-500"
         >
           {day}
