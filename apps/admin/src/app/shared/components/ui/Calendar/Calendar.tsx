@@ -6,95 +6,137 @@ import { Day } from './Day';
 import { DaysOfWeek } from './DaysOfWeek';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Button } from '@coc/ui';
-import dayOfYear from 'dayjs/plugin/dayOfYear';
 import { ButtonGroup } from '@nextui-org/react';
 import { FcNext, FcPrevious } from 'react-icons/fc';
-const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
+import { action, get, reaction, set } from 'mobx';
+import { useEffect } from 'react';
 
-dayjs.extend(dayOfYear);
-
-export interface CalendarProps {
-  state: {
-    startDate: Date;
-    endDate: Date;
-  };
-  paths: string;
+export interface CalendarProps<T> {
+  state: T;
+  path: string;
 }
 
-export const Calendar = observer((props: CalendarProps) => {
-  const { paths, state } = props;
+export interface CalendarLocalState {
+  calendarDate: dayjs.Dayjs;
+  selectedDate: Date;
+}
 
-  const localState = useLocalObservable(() => ({
-    calendarDate: dayjs(),
-  }));
+export const Calendar = observer(
+  <T extends object>(props: CalendarProps<T>) => {
+    const { state = {}, path = '' } = props;
+    const localState = useLocalObservable(() => ({
+      calendarDate: dayjs(),
+    }));
 
-  const startDayOfMonthDay = localState.calendarDate.startOf('M').day();
+    useEffect(() => {
+      const disposer = reaction(
+        () => localState.calendarDate,
+        () => {
+          console.log('??');
+          console.log(state, path);
+          set(state, path, localState.calendarDate.toDate());
+          console.log(get(state, path));
+        },
+      );
 
-  const endDayOfMonthDay = localState.calendarDate.endOf('M').day() - 1;
+      return () => disposer();
+    }, []);
 
-  const onClickNextMonth = () => {
-    localState.calendarDate = localState.calendarDate.add(1, 'M');
-  };
+    useEffect(() => {
+      const disposer = reaction(
+        () => get(state, path),
+        value => {
+          localState.calendarDate = value;
+        },
+      );
 
-  const onClickPrevMonth = () => {
-    localState.calendarDate = localState.calendarDate.subtract(1, 'M');
-  };
-  const prevMonth = localState.calendarDate.subtract(1, 'M');
+      return () => disposer();
+    }, []);
 
-  const prevMonthRange = range(
-    prevMonth.daysInMonth(),
-    prevMonth.daysInMonth() - startDayOfMonthDay,
-  ).reverse();
+    const startDayOfMonthDay = dayjs(localState.calendarDate)
+      .startOf('M')
+      .day();
 
-  const currentMonthRange = range(1, localState.calendarDate.daysInMonth() + 1);
+    const onClickNextMonth = () => {
+      localState.calendarDate = localState.calendarDate.add(1, 'M');
+    };
 
-  const nextMonthRange = range(
-    1,
-    7 * 6 - (prevMonthRange.length + currentMonthRange.length) + 1,
-  );
+    const onClickPrevMonth = () => {
+      localState.calendarDate = localState.calendarDate.subtract(1, 'M');
+    };
+    const prevMonth = localState.calendarDate.subtract(1, 'M');
 
-  return (
-    <div className="w-full">
-      <div className="flex flex-1 justify-between">
-        <div className="flex space-x-2">
-          <div className="text-4xl font-bold">
-            {localState.calendarDate.year()}년
+    const prevMonthRange = range(
+      prevMonth.daysInMonth(),
+      prevMonth.daysInMonth() - startDayOfMonthDay,
+    ).reverse();
+
+    const currentMonthRange = range(
+      1,
+      localState.calendarDate.daysInMonth() + 1,
+    );
+
+    const nextMonthRange = range(
+      1,
+      7 * 6 - (prevMonthRange.length + currentMonthRange.length) + 1,
+    );
+
+    const onClickDay = action((day: number) => {
+      localState.calendarDate = localState.calendarDate.set('D', day);
+    });
+
+    return (
+      <div className="w-full">
+        <div className="flex justify-between">
+          <div className="flex space-x-2">
+            <div className="text-2xl lg:text-4xl font-bold">
+              {localState.calendarDate.year()}년
+            </div>
+            <div className="text-2xl lg:text-4xl font-bold">
+              {localState.calendarDate.month() + 1}월
+            </div>
           </div>
-          <div className="text-4xl font-bold">
-            {localState.calendarDate.month() + 1}월
-          </div>
+          <ButtonGroup>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={onClickPrevMonth}
+              startContent={<FcPrevious />}
+            >
+              이전 달
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={onClickNextMonth}
+              endContent={<FcNext />}
+            >
+              다음 달
+            </Button>
+          </ButtonGroup>
         </div>
-        <ButtonGroup>
-          <Button
-            variant="ghost"
-            onClick={onClickPrevMonth}
-            startContent={<FcPrevious />}
-          >
-            이전 달
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={onClickNextMonth}
-            endContent={<FcNext />}
-          >
-            다음 달
-          </Button>
-        </ButtonGroup>
+        <div className="grid grid-cols-7 mt-4">
+          <DaysOfWeek />
+        </div>
+        <div className="grid grid-cols-7 grid-rows-6 gap-1">
+          {prevMonthRange.map(value => (
+            <Day day={value} />
+          ))}
+          {currentMonthRange.map(value => {
+            return (
+              <Day
+                active
+                selected={localState.calendarDate.get('D') === value}
+                day={value}
+                onClickDay={() => onClickDay(value)}
+              />
+            );
+          })}
+          {nextMonthRange.map(value => {
+            return <Day day={value} />;
+          })}
+        </div>
       </div>
-      <div className="grid grid-cols-7 gap-4 text-3xl font-bold text-right my-3">
-        <DaysOfWeek />
-      </div>
-      <div className="grid grid-cols-7 grid-rows-6 gap-4">
-        {prevMonthRange.map(value => (
-          <Day state={state} day={value} />
-        ))}
-        {currentMonthRange.map(value => {
-          return <Day active state={state} day={value} />;
-        })}
-        {nextMonthRange.map(value => {
-          return <Day state={state} day={value} />;
-        })}
-      </div>
-    </div>
-  );
-});
+    );
+  },
+);

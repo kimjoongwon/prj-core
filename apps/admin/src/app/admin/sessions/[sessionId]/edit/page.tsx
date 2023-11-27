@@ -3,12 +3,23 @@
 import React from 'react';
 import { useSessionEditPage } from './hooks';
 import { Calendar } from '../../../../shared/components/ui/Calendar';
+import { observer } from 'mobx-react-lite';
+import { Timelines } from '../../../../shared/components/ui/Timelines';
+import { Spacer } from '@nextui-org/react';
 
-export default function Page() {
+function Page() {
   const {
     schemas: { sessionFormSchema },
     state,
   } = useSessionEditPage();
 
-  return <Calendar />;
+  return (
+    <div className="md:flex">
+      <Calendar state={state} path="form.endDateTime" />
+      <Spacer y={4} />
+      <Timelines className="grid grid-cols-7 gap-2" />
+    </div>
+  );
 }
+
+export default observer(Page);

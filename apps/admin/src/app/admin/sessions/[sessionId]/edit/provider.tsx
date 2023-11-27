@@ -29,6 +29,7 @@ export const SessionEditPageProvider = observer((props: ContainerProps) => {
   const state = useState({
     queries,
   });
+
   const handlers = useHandlers({
     mutations,
     state,

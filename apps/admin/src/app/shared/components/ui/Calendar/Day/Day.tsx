@@ -1,42 +1,42 @@
 import { Button } from '@coc/ui';
+import { CalendarLocalState } from '../Calendar';
 
 export interface DayProps {
-  state: {
-    startDate: Date;
-    endDate: Date;
-  };
   day: number;
   active?: boolean;
+  selected?: boolean;
+  onClickDay?: (day: number) => void;
 }
 
 export const Day = (props: DayProps) => {
-  const { day, active } = props;
+  const { day, active, onClickDay, selected } = props;
 
   return (
     <Button
       disabled={!active}
-      onClick={() => {}}
-      variant="bordered"
+      onClick={() => onClickDay && onClickDay(day)}
+      color={selected ? 'primary' : 'default'}
+      variant={selected ? 'solid' : 'bordered'}
       className={`
-      w-full 
+      min-w-0
+      w-full
       aspect-w-1
-      aspect-h-1 
-      border 
+      aspect-h-1
+      border
       border-gray-300 
       focus:outline-none 
       focus:ring-2 
-      focus:ring-blue-500 
-      hover:bg-blue-100`}
+      focus:ring-blue-500`}
     >
       <div>
         <div
-          className="
+          className={`
           absolute 
           top-1 
-          right-1 
-          text-3xl
-          font-bold
-          text-gray-500"
+          right-1
+          text-medium
+          ${active ? undefined : 'text-gray-500'}
+          font-bold`}
         >
           {day}
         </div>
