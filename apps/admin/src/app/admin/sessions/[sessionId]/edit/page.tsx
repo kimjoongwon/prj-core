@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { useSessionEditPage } from './hooks';
-import { Calendar } from '../../../../shared/components/ui/Calendar';
 import { observer } from 'mobx-react-lite';
-import { Timelines } from '../../../../shared/components/ui/Timelines';
 import { Spacer } from '@nextui-org/react';
+import { FormControl, TimePicker, TimeRangePicker } from '@coc/ui';
 
 function Page() {
   const {
@@ -14,10 +13,18 @@ function Page() {
   } = useSessionEditPage();
 
   return (
-    <div className="md:flex">
-      <Calendar state={state} path="form.endDateTime" />
+    <div>
+      {/* <Calendar state={state} path="form.endDateTime" /> */}
       <Spacer y={4} />
-      <Timelines className="grid grid-cols-7 gap-2" />
+      <FormControl label="시작시간">
+        <TimePicker />
+      </FormControl>
+      <FormControl label="종료시간">
+        <TimePicker />
+      </FormControl>
+      <FormControl label="시작~종료">
+        <TimeRangePicker />
+      </FormControl>
     </div>
   );
 }
