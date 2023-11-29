@@ -16,12 +16,6 @@ function Page() {
     <div>
       {/* <Calendar state={state} path="form.endDateTime" /> */}
       <Spacer y={4} />
-      <FormControl label="시작시간">
-        <TimePicker />
-      </FormControl>
-      <FormControl label="종료시간">
-        <TimePicker />
-      </FormControl>
       <FormControl label="시작~종료">
         <TimeRangePicker />
       </FormControl>

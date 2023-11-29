@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Select, Spacer } from '@coc/ui';
+import { Button, Input, Select, Spacer } from '@coc/ui';
+import { Table, TableCell, TableHeader, TableRow } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import { range } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
@@ -30,24 +31,32 @@ export const Timelines = observer((props: TimelinesProps) => {
     }));
 
   return (
-    <div>
-      <Select
+    <form>
+      <input
+        style={{ width: '110px' }}
+        type="time"
+        onChange={e => console.log(e.target.value)}
+        value={'12:00'}
+      />
+
+      {/* <Select
         label="수업 간격 설정"
         size="sm"
         state={localState}
         path="interval"
         options={intervalOptions}
-      />
-      <Spacer />
-      <div className={className}>
+        />
+        <Spacer />
+        <div className={className}>
         {range(startMin, endMin)
           .filter(min => min % localState.interval === 0)
           .map(min => (
             <Button variant="bordered" className="min-w-0">
-              {startTime.minute(min).format('HH:mm')}
+            {startTime.minute(min).format('HH:mm')}
             </Button>
-          ))}
-      </div>
-    </div>
+            ))}
+          </div> */}
+      <Button>예약 생성</Button>
+    </form>
   );
 });

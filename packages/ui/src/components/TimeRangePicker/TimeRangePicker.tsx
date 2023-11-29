@@ -36,20 +36,22 @@ export const TimeRangePicker = observer(<T extends object>(props: TimeRangePicke
     if (event.target.value < localStartTimeState.value) {
       localState.errorMessage = '종료시간이 시작시간보다 빠를 수 없습니다.';
     } else {
-      localState.errorMessage = '';
+      localState.errorMessage = ' ';
       localEndTimeState.value = event.target.value;
     }
   };
 
   return (
-    <div className="flex space-x-4 border-1">
-      <FormControl label="시작시간">
-        <input type="time" onChange={handleStartTimeChange} value={localStartTimeState.value} />
-      </FormControl>
-      <FormControl label="종료시간">
-        <input type="time" onChange={handleEndTimeChange} value={localEndTimeState.value} />
-      </FormControl>
-      <label>{localState.errorMessage}</label>
+    <div className="flex flex-col items-center">
+      <div className="flex space-x-4">
+        <FormControl label="시작시간">
+          <input type="time" onChange={handleStartTimeChange} value={localStartTimeState.value} />
+        </FormControl>
+        <FormControl label="종료시간">
+          <input type="time" onChange={handleEndTimeChange} value={localEndTimeState.value} />
+        </FormControl>
+      </div>
+      <p className={`h5 ${localState.errorMessage ? 'text-red-500' : ''}`}>{localState.errorMessage || ''}</p>
     </div>
   );
 });
