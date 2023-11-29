@@ -24,8 +24,9 @@ export const useHandlers = ({
         variables: {
           createCategoryInput: {
             name: state.form.name,
-            itemId: state.form.itemId,
+            categoryItemId: state.form.itemId,
             serviceId: state.form.serviceId,
+            tenantId: '',
           },
         },
       });
@@ -35,7 +36,7 @@ export const useHandlers = ({
           updateCategoryInput: {
             id: categoryId as string,
             name: state.form.name,
-            itemId: state.form.itemId,
+            categoryItemId: state.form.itemId,
             serviceId: state.form.serviceId,
           },
         },

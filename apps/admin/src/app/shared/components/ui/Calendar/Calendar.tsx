@@ -120,11 +120,12 @@ export const Calendar = observer(
         </div>
         <div className="grid grid-cols-7 grid-rows-6 gap-1">
           {prevMonthRange.map(value => (
-            <Day day={value} />
+            <Day key={value} day={value} />
           ))}
           {currentMonthRange.map(value => {
             return (
               <Day
+                key={value}
                 active
                 selected={localState.calendarDate.get('D') === value}
                 day={value}
@@ -133,7 +134,7 @@ export const Calendar = observer(
             );
           })}
           {nextMonthRange.map(value => {
-            return <Day day={value} />;
+            return <Day key={value} day={value} />;
           })}
         </div>
       </div>

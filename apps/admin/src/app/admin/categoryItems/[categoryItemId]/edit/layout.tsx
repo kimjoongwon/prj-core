@@ -1,6 +1,6 @@
-import { CoCModal, ContainerProps } from '@coc/ui';
+import { ContainerProps } from '@coc/ui';
 import { EditLayout } from '@components';
-import { Provider } from './provider';
+import { CategoryItemEditPageProvider } from './provider';
 
 export interface UserEditPageProps extends ContainerProps {}
 
@@ -8,8 +8,8 @@ export default function Layout(props: UserEditPageProps) {
   const { children } = props;
 
   return (
-    <Provider>
+    <CategoryItemEditPageProvider>
       <EditLayout>{children}</EditLayout>
-    </Provider>
+    </CategoryItemEditPageProvider>
   );
 }

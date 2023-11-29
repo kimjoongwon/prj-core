@@ -8,6 +8,7 @@ export const DaysOfWeek = () => {
       {daysOfWeek.map(dayOfWeek => {
         return (
           <div
+            key={dayOfWeek}
             className={`${
               ['SAT', 'SUN'].includes(dayOfWeek) ? 'text-danger-400' : undefined
             } text-large font-bold text-right`}
