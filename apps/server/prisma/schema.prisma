@@ -134,6 +134,7 @@ model Session {
   id        String     @id @default(cuid())
   name      String
   tenantId  String
+  dates     DateTime[] @db.Timestamptz(6)
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt DateTime?  @db.Timestamptz(6)
