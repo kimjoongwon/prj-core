@@ -1,9 +1,12 @@
-
-
 import { ButtonProps, Button as NextUIButton } from '@nextui-org/react';
+import { action } from 'mobx';
 
 export function BaseButton(props: ButtonProps) {
-  const { children, ...rest } = props;
+  const { children, onClick, ...rest } = props;
 
-  return <NextUIButton {...rest}>{children}</NextUIButton>;
+  return (
+    <NextUIButton color="primary" {...rest} onClick={action(onClick)}>
+      {children}
+    </NextUIButton>
+  );
 }

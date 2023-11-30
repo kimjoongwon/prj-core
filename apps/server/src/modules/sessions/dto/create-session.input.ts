@@ -7,7 +7,4 @@ export class CreateSessionInput extends OmitType(
   Session,
   [...BASE_FIELDS, 'tilelines'],
   InputType,
-) {
-  @Field(type => [String])
-  timelineIds: string[];
-}
+) {}

@@ -48,7 +48,7 @@ export const SessionEditPageProvider = observer((props: ContainerProps) => {
       }}
     >
       <Form
-        title="Session"
+        title="Session 편집"
         state={state.form}
         schema={sessionFormSchema}
         onClickSave={onClickSave}

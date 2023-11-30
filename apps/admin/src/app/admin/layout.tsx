@@ -8,14 +8,15 @@ import {
   ROLES_PAGE_PATH,
   SERVICES_PAGE_PATH,
   SESSIONS_PAGE_PATH,
+  TIMELINES_PAGE_PATH,
   USERS_PAGE_PATH,
+  SPACES_PAGE_PATH,
 } from '@constants';
 import { CoCNavbar, NavItem } from '@coc/ui';
 import { User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { SPACES_PAGE_PATH } from '../shared/constants/spaces';
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
@@ -65,8 +66,12 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       text: '예약 관리',
       children: [
         {
-          text: '예약 목록',
+          text: '예약 관리',
           href: getUrlWithParams(SESSIONS_PAGE_PATH),
+        },
+        {
+          text: '타임라인 관리',
+          href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
         },
       ],
     },

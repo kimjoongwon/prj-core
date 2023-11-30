@@ -1,3 +1,6 @@
+import Calendar from './Calendar';
+import ModalMount from './ModalMount';
+import { ModalProvider, useModal } from './ModalMount';
 export * from './Button';
 export * from './Checkbox';
 export * from './RadioGroup';
@@ -15,8 +18,10 @@ export * from './Skeleton';
 export * from './Select';
 export * from './Form';
 export * from './MultiSelect';
-export * from './Calendar';
 export { CardHeader, CardBody, CardFooter, Card, Spacer } from '@nextui-org/react';
 export * from './CoCModal';
 export * from './TimePicker';
 export * from './TimeRangePicker';
+export * from './Chips';
+
+export { useModal, Calendar, ModalMount, ModalProvider };

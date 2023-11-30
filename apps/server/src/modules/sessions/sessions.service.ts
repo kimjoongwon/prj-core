@@ -19,7 +19,19 @@ export class SessionsService {
   }
 
   findForm(id: string): SessionForm {
-    return defaultSessionForm;
+    const sessionForm = { ...defaultSessionForm };
+    if (id === 'new') {
+      return sessionForm;
+    }
+
+    const session = this.prisma.session.findUnique({
+      where: { id },
+    });
+
+    return {
+      ...sessionForm,
+      ...session,
+    };
   }
 
   async findPaginatedSession(args: GetSessionsArgs): Promise<PaginatedSession> {

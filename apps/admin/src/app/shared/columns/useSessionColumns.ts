@@ -5,9 +5,10 @@ export const useSessionColumns = () => {
   const columnHelper = createColumnHelper<Session>();
 
   const columns = [
-    columnHelper.accessor('id', {
-      header: '아이디',
+    columnHelper.accessor('name', {
+      header: '이름',
     }),
   ];
+
   return columns;
 };

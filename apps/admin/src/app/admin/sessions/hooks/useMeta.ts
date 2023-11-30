@@ -3,7 +3,11 @@ import { toast } from 'react-toastify';
 import { GroupButton } from '@coc/ui';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useSessionColumns } from '@columns';
-import { SESSION_EDIT_PAGE_PATH, SESSION_PAGE_PATH } from '@constants';
+import {
+  SESSION_EDIT_PAGE_PATH,
+  SESSION_PAGE_PATH,
+  TIMELINES_PAGE_PATH,
+} from '@constants';
 import { User } from '@__generated__/graphql';
 
 export const useMeta = () => {
@@ -28,6 +32,16 @@ export const useMeta = () => {
           onClick: context =>
             router.push({
               url: SESSION_PAGE_PATH,
+              params: {
+                sessionId: context.row.original.id,
+              },
+            }),
+        },
+        {
+          children: '타임라인 생성/등록',
+          onClick: context =>
+            router.push({
+              url: TIMELINES_PAGE_PATH,
               params: {
                 sessionId: context.row.original.id,
               },

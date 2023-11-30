@@ -10,7 +10,4 @@ export class Timeline extends Base implements CoCTimeline {
 
   @Field(type => String)
   sessionId: string;
-
-  @Field(type => String)
-  tenantId: string;
 }

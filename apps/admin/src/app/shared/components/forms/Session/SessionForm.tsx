@@ -1,22 +1,53 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
 import { SessionForm as SessionFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
-import { Calendar } from '@coc/ui';
+import {
+  Button,
+  Calendar,
+  Chips,
+  FormControl,
+  Input,
+  Spacer,
+  useModal,
+} from '@coc/ui';
+import dayjs from 'dayjs';
 
-interface FormProps {
+interface SessionFormProps {
   state: SessionFormType;
   schema: ZodSchema;
 }
 
 export const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
 
-export const SessionForm = observer(() => {
+export const SessionForm = (props: SessionFormProps) => {
+  const modal = useModal();
+  const { schema, state } = props;
+
   return (
     <div>
-      <div>1</div>
-      <Calendar />
+      <FormControl schema={schema} label="세션명">
+        <Input state={state} path="name" placeholder="세션명을 입력해주세요." />
+      </FormControl>
+      <Spacer y={2} />
+      <Button
+        variant="solid"
+        onClick={() => {
+          modal.footer = (
+            <Button onClick={() => (modal.isOpen = false)}>등록</Button>
+          );
+          modal.body = <Calendar state={state} path={'dates'} />;
+          modal.isOpen = !modal.isOpen;
+        }}
+      >
+        날짜 선택
+      </Button>
+      <Spacer y={2} />
+      <Chips
+        data={state.dates.map(date => ({
+          title: dayjs(date).format('YYYY-MM-DD'),
+        }))}
+      />
     </div>
   );
-});
+};

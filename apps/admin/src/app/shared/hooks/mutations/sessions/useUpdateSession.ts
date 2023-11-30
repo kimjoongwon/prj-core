@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { UPDATE_SESSION, GET_SESSIONS } from '@gqls';
+import { UPDATE_SESSION, GET_SESSIONS, GET_SESSION_FORM } from '@gqls';
 import { MutationOptions } from '@types';
 
 export const useUpdateSession = (options?: MutationOptions) => {
@@ -9,6 +9,6 @@ export const useUpdateSession = (options?: MutationOptions) => {
         options.onCompleted && options.onCompleted();
       }
     },
-    refetchQueries: [GET_SESSIONS, 'Session'],
+    refetchQueries: [GET_SESSIONS, 'Session', GET_SESSION_FORM, 'SessionForm'],
   });
 };

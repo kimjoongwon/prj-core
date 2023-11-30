@@ -23,6 +23,9 @@ import {
   SESSIONS_PAGE_PATH,
   SESSION_PAGE_PATH,
   SESSION_EDIT_PAGE_PATH,
+  TIMELINES_PAGE_PATH,
+  TIMELINE_EDIT_PAGE_PATH,
+  TIMELINE_PAGE_PATH,
 } from '@constants';
 
 export const DASHBOARD_PATH = '/admin' as const;
@@ -51,4 +54,7 @@ export type Paths =
   | typeof ROLE_PAGE_PATH
   | typeof SESSIONS_PAGE_PATH
   | typeof SESSION_PAGE_PATH
-  | typeof SESSION_EDIT_PAGE_PATH;
+  | typeof SESSION_EDIT_PAGE_PATH
+  | typeof TIMELINES_PAGE_PATH
+  | typeof TIMELINE_EDIT_PAGE_PATH
+  | typeof TIMELINE_PAGE_PATH;
