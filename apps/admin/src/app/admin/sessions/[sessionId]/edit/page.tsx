@@ -3,8 +3,7 @@
 import React from 'react';
 import { useSessionEditPage } from './hooks';
 import { observer } from 'mobx-react-lite';
-import { Spacer } from '@nextui-org/react';
-import { FormControl, TimePicker, TimeRangePicker } from '@coc/ui';
+import { SessionForm } from '@components';
 
 function Page() {
   const {
@@ -12,15 +11,7 @@ function Page() {
     state,
   } = useSessionEditPage();
 
-  return (
-    <div>
-      {/* <Calendar state={state} path="form.endDateTime" /> */}
-      <Spacer y={4} />
-      <FormControl label="시작~종료">
-        <TimeRangePicker />
-      </FormControl>
-    </div>
-  );
+  return <SessionForm state={state.form} schema={sessionFormSchema} />;
 }
 
 export default observer(Page);

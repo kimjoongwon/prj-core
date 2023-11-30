@@ -14,7 +14,5 @@ export class SessionForm extends IntersectionType(
 export const defaultSessionForm: SessionForm = {
   name: '',
   tenantId: '',
-  startDateTime: undefined,
-  endDateTime: undefined,
-  timelineIds: [],
+  dates: [],
 };

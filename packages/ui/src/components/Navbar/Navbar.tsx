@@ -1,5 +1,3 @@
-;
-
 import {
   Button,
   Dropdown,
@@ -17,7 +15,6 @@ import {
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { FaChevronDown, FaUser } from 'react-icons/fa';
-import { FcAbout, FcManager } from 'react-icons/fc';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
 import { observer } from 'mobx-react-lite';

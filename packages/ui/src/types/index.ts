@@ -29,7 +29,7 @@ export interface FormUnitProps<T> {
 }
 
 export interface MobxProps<T> {
-  path?: Leaves<T, 5>;
+  path?: Paths<T, 6>;
   state?: T;
 }
 export interface HeaderCellProps<T, M> {

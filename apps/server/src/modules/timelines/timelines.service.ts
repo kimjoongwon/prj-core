@@ -10,14 +10,11 @@ import {
   TimelineForm,
   defaultTimelineForm,
 } from './models/timeline-form.model';
-import { TimelineItemsService } from '../timelineItems/timelineItems.service';
+import { GetTimelineFormArgs } from './dto/get-timeline-form.args';
 
 @Injectable()
 export class TimelinesService {
-  constructor(
-    private readonly timelineItemsService: TimelineItemsService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   create(createTimelineInput: CreateTimelineInput) {
     return this.prisma.timeline.create({
@@ -25,17 +22,22 @@ export class TimelinesService {
     });
   }
 
-  async findForm(id: string): Promise<TimelineForm> {
+  async findForm(args: GetTimelineFormArgs): Promise<TimelineForm> {
+    const { sessionId, timelineId } = args;
     const timelineForm = cloneDeep(defaultTimelineForm);
 
-    timelineForm.timelineItemOptions =
-      await this.timelineItemsService.getTimelineItemOptions();
-    if (id === 'new') {
+    const session = await this.prisma.session.findUnique({
+      where: { id: sessionId },
+    });
+
+    timelineForm.session = session;
+
+    if (timelineId === 'new') {
       return timelineForm;
     }
 
     const timeline = await this.prisma.timeline.findUnique({
-      where: { id },
+      where: { id: timelineId },
     });
 
     return {

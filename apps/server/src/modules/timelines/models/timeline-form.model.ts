@@ -1,11 +1,11 @@
 import { ObjectType, IntersectionType, Field } from '@nestjs/graphql';
 import { CreateTimelineInput } from '../dto/create-timeline.input';
-import { Option } from '../../../common/models';
+import { Session } from '../../sessions/models/session.model';
 
 @ObjectType()
 class AdditionalForm {
-  @Field(type => [Option])
-  timelineItemOptions: Option[];
+  @Field(() => Session)
+  session: Session;
 }
 
 @ObjectType()
@@ -13,11 +13,13 @@ export class TimelineForm extends IntersectionType(
   CreateTimelineInput,
   AdditionalForm,
   ObjectType,
-) {}
+) {
+  @Field(() => Date, { nullable: true })
+  date: Date;
+}
 
 export const defaultTimelineForm: TimelineForm = {
-  tenantId: '',
   sessionId: '',
-  timelineItemIds: [],
-  timelineItemOptions: [],
+  date: null,
+  session: new Session(),
 };

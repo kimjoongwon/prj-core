@@ -4,6 +4,10 @@ import { TimelineItem as CoCTimelineItem } from '@prisma/client';
 
 @ObjectType()
 export class TimelineItem extends Base implements CoCTimelineItem {
+  startDateTime: Date;
+  endDateTime: Date;
+  maxCapacity: number;
+  minCapacity: number;
   @Field(type => String)
   title: string;
 

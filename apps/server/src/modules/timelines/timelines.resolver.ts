@@ -9,6 +9,8 @@ import { UpdateTimelineInput } from './dto/update-timeline.input';
 import { PaginatedTimeline } from './models/paginated-timeline.model';
 import { TimelineForm } from './models/timeline-form.model';
 import { Timeline } from './models/timeline.model';
+import { get } from 'axios';
+import { GetTimelineFormArgs } from './dto/get-timeline-form.args';
 
 @Resolver(() => Timeline)
 @UseGuards(GqlAuthGuard)
@@ -47,8 +49,8 @@ export class TimelinesResolver {
 
   @Public()
   @Query(() => TimelineForm, { name: 'timelineForm' })
-  getTimelineForm(@Args('id') id: string) {
-    return this.timelinesService.findForm(id);
+  getTimelineForm(@Args() args: GetTimelineFormArgs) {
+    return this.timelinesService.findForm(args);
   }
 
   @Public()

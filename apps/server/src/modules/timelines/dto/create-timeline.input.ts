@@ -7,7 +7,4 @@ export class CreateTimelineInput extends OmitType(
   Timeline,
   [...BASE_FIELDS],
   InputType,
-) {
-  @Field(type => [String])
-  timelineItemIds: string[];
-}
+) {}
