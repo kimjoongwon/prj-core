@@ -368,11 +368,13 @@ type Timeline {
   createdAt: DateTime!
   updatedAt: DateTime
   deletedAt: DateTime
+  date: DateTime!
   sessionId: String!
   tenantId: String!
 }
 
 type TimelineForm {
+  date: DateTime!
   sessionId: String!
   tenantId: String!
   timelineItemIds: [String!]!
@@ -432,19 +434,16 @@ type Session {
   createdAt: DateTime!
   updatedAt: DateTime
   deletedAt: DateTime
+  dates: [DateTime!]!
   tenantId: String!
-  startDateTime: DateTime!
-  endDateTime: DateTime!
   name: String!
   tilelines: [Timeline!]
 }
 
 type SessionForm {
+  dates: [DateTime!]!
   tenantId: String!
-  startDateTime: DateTime!
-  endDateTime: DateTime!
   name: String!
-  timelineIds: [String!]!
 }
 
 type SessionEdge {
@@ -503,8 +502,16 @@ input UserInputType {
 }
 
 input TimelineInputType {
+  date: DateTime!
   sessionId: String!
   tenantId: String!
+}
+
+input SessionInputType {
+  dates: [DateTime!]!
+  tenantId: String!
+  name: String!
+  tilelines: [TimelineInputType!]
 }
 
 type Query {
@@ -733,6 +740,7 @@ input UpdateTenantInput {
 }
 
 input CreateTimelineInput {
+  date: DateTime!
   sessionId: String!
   tenantId: String!
   timelineItemIds: [String!]!
@@ -743,6 +751,7 @@ input UpdateTimelineInput {
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
+  date: DateTime
   sessionId: String
   tenantId: String
 }
@@ -780,11 +789,9 @@ input UpdateReservationInput {
 }
 
 input CreateSessionInput {
+  dates: [DateTime!]!
   tenantId: String!
-  startDateTime: DateTime!
-  endDateTime: DateTime!
   name: String!
-  timelineIds: [String!]!
 }
 
 input UpdateSessionInput {
@@ -792,9 +799,8 @@ input UpdateSessionInput {
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
+  dates: [DateTime!]
   tenantId: String
-  startDateTime: DateTime
-  endDateTime: DateTime
   name: String
   tilelines: [TimelineInputType!]
 }

@@ -58,7 +58,7 @@ const documents = {
     "\n  query GetServiceForm {\n    serviceForm {\n      name\n    }\n  }\n": types.GetServiceFormDocument,
     "\n  query GetSession($id: String!){\n    session(id: $id) {\n      id\n    }\n  }\n": types.GetSessionDocument,
     "\n  #graphql\n  query GetSessions(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    sessions(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetSessionsDocument,
-    "\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n    }\n  }\n": types.GetSessionFormDocument,
+    "\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n      dates\n      tenantId\n    }\n  }\n": types.GetSessionFormDocument,
     "\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n": types.GetSpaceDocument,
     "\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetSpacesDocument,
     "\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n": types.GetSpaceFormDocument,
@@ -264,7 +264,7 @@ export function gql(source: "\n  #graphql\n  query GetSessions(\n    $skip: Int\
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n    }\n  }\n"];
+export function gql(source: "\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n      dates\n      tenantId\n    }\n  }\n"): (typeof documents)["\n  query GetSessionForm($id: String!) {\n    sessionForm(id: $id) {\n      name\n      dates\n      tenantId\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

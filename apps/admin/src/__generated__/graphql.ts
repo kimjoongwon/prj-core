@@ -135,9 +135,8 @@ export type CreateServiceInput = {
 };
 
 export type CreateSessionInput = {
-  endDateTime: Scalars['DateTime']['input'];
+  dates: Array<Scalars['DateTime']['input']>;
   name: Scalars['String']['input'];
-  startDateTime: Scalars['DateTime']['input'];
   tenantId: Scalars['String']['input'];
 };
 
@@ -154,8 +153,10 @@ export type CreateTenantInput = {
 };
 
 export type CreateTimelineInput = {
+  date: Scalars['DateTime']['input'];
   sessionId: Scalars['String']['input'];
   tenantId: Scalars['String']['input'];
+  timelineItemIds: Array<Scalars['String']['input']>;
 };
 
 export type CreateTimelineItemInput = {
@@ -168,9 +169,9 @@ export type CreateTimelineItemInput = {
 export type CreateUserInput = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  nickname?: InputMaybe<Scalars['String']['input']>;
+  nickname: Scalars['String']['input'];
   password: Scalars['String']['input'];
-  phone?: InputMaybe<Scalars['String']['input']>;
+  phone: Scalars['String']['input'];
   roleId?: InputMaybe<Scalars['String']['input']>;
   spaceId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -578,6 +579,12 @@ export type ProfileInput = {
   phone: Scalars['String']['input'];
 };
 
+export type ProfileInputType = {
+  nickname: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   categories: PaginatedCategory;
@@ -808,6 +815,11 @@ export type QueryTimelineArgs = {
 };
 
 
+export type QueryTimelineFormArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryTimeline_ItemArgs = {
   id: Scalars['String']['input'];
 };
@@ -952,12 +964,12 @@ export type ServicePageInfo = {
 export type Session = {
   __typename?: 'Session';
   createdAt: Scalars['DateTime']['output'];
+  dates: Array<Scalars['DateTime']['output']>;
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
-  endDateTime: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  startDateTime: Scalars['DateTime']['output'];
   tenantId: Scalars['String']['output'];
+  tilelines?: Maybe<Array<Timeline>>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -969,10 +981,16 @@ export type SessionEdge = {
 
 export type SessionForm = {
   __typename?: 'SessionForm';
-  endDateTime: Scalars['DateTime']['output'];
+  dates: Array<Scalars['DateTime']['output']>;
   name: Scalars['String']['output'];
-  startDateTime: Scalars['DateTime']['output'];
   tenantId: Scalars['String']['output'];
+};
+
+export type SessionInputType = {
+  dates: Array<Scalars['DateTime']['input']>;
+  name: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
+  tilelines?: InputMaybe<Array<TimelineInputType>>;
 };
 
 export type SessionPageInfo = {
@@ -1053,12 +1071,12 @@ export type TenantForm = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
-export type TenantInput = {
+export type TenantInputType = {
   role?: InputMaybe<RoleInput>;
   roleId: Scalars['String']['input'];
   space?: InputMaybe<SpaceInput>;
   spaceId: Scalars['String']['input'];
-  user?: InputMaybe<UserInput>;
+  user?: InputMaybe<UserInputType>;
   userId: Scalars['String']['input'];
 };
 
@@ -1072,6 +1090,7 @@ export type TenantPageInfo = {
 export type Timeline = {
   __typename?: 'Timeline';
   createdAt: Scalars['DateTime']['output'];
+  date: Scalars['DateTime']['output'];
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['String']['output'];
   sessionId: Scalars['String']['output'];
@@ -1087,8 +1106,17 @@ export type TimelineEdge = {
 
 export type TimelineForm = {
   __typename?: 'TimelineForm';
+  date: Scalars['DateTime']['output'];
   sessionId: Scalars['String']['output'];
   tenantId: Scalars['String']['output'];
+  timelineItemIds: Array<Scalars['String']['output']>;
+  timelineItemOptions: Array<Option>;
+};
+
+export type TimelineInputType = {
+  date: Scalars['DateTime']['input'];
+  sessionId: Scalars['String']['input'];
+  tenantId: Scalars['String']['input'];
 };
 
 export type TimelineItem = {
@@ -1197,12 +1225,12 @@ export type UpdateServiceInput = {
 
 export type UpdateSessionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  dates?: InputMaybe<Array<Scalars['DateTime']['input']>>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  endDateTime?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  startDateTime?: InputMaybe<Scalars['DateTime']['input']>;
   tenantId?: InputMaybe<Scalars['String']['input']>;
+  tilelines?: InputMaybe<Array<TimelineInputType>>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -1222,6 +1250,7 @@ export type UpdateTenantInput = {
 
 export type UpdateTimelineInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  date?: InputMaybe<Scalars['DateTime']['input']>;
   deletedAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   sessionId?: InputMaybe<Scalars['String']['input']>;
@@ -1273,21 +1302,21 @@ export type UserForm = {
   __typename?: 'UserForm';
   email: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  nickname?: Maybe<Scalars['String']['output']>;
+  nickname: Scalars['String']['output'];
   password: Scalars['String']['output'];
-  phone?: Maybe<Scalars['String']['output']>;
+  phone: Scalars['String']['output'];
   roleId?: Maybe<Scalars['String']['output']>;
   roleOptions: Array<Option>;
   spaceId?: Maybe<Scalars['String']['output']>;
   spaceOptions: Array<Option>;
 };
 
-export type UserInput = {
+export type UserInputType = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
-  profiles: Array<InputProfile>;
-  tenants: Array<TenantInput>;
+  profiles: Array<ProfileInputType>;
+  tenants: Array<TenantInputType>;
 };
 
 export type UserPageInfo = {
@@ -1295,12 +1324,6 @@ export type UserPageInfo = {
   endCursor?: Maybe<Scalars['String']['output']>;
   hasNextPage: Scalars['Boolean']['output'];
   totalCount: Scalars['Int']['output'];
-};
-
-export type InputProfile = {
-  nickname: Scalars['String']['input'];
-  phone: Scalars['String']['input'];
-  userId: Scalars['String']['input'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -1635,7 +1658,7 @@ export type GetSessionFormQueryVariables = Exact<{
 }>;
 
 
-export type GetSessionFormQuery = { __typename?: 'Query', sessionForm: { __typename?: 'SessionForm', name: string } };
+export type GetSessionFormQuery = { __typename?: 'Query', sessionForm: { __typename?: 'SessionForm', name: string, dates: Array<any>, tenantId: string } };
 
 export type GetSpaceQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1732,7 +1755,7 @@ export const GetServicesDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetServiceFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetServiceForm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serviceForm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetServiceFormQuery, GetServiceFormQueryVariables>;
 export const GetSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSession"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"session"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetSessionQuery, GetSessionQueryVariables>;
 export const GetSessionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSessions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingKey"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingValue"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetSessionsQuery, GetSessionsQueryVariables>;
-export const GetSessionFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSessionForm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessionForm"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetSessionFormQuery, GetSessionFormQueryVariables>;
+export const GetSessionFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSessionForm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessionForm"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"dates"}},{"kind":"Field","name":{"kind":"Name","value":"tenantId"}}]}}]}}]} as unknown as DocumentNode<GetSessionFormQuery, GetSessionFormQueryVariables>;
 export const GetSpaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpace"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"space"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetSpaceQuery, GetSpaceQueryVariables>;
 export const GetSpacesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpaces"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"skip"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spaces"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"skip"},"value":{"kind":"Variable","name":{"kind":"Name","value":"skip"}}},{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingKey"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingKey"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortingValue"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortingValue"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetSpacesQuery, GetSpacesQueryVariables>;
 export const GetSpaceFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSpaceForm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"spaceForm"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}}]}}]}}]} as unknown as DocumentNode<GetSpaceFormQuery, GetSpaceFormQueryVariables>;

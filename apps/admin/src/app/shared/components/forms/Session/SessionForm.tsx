@@ -15,7 +15,6 @@ export const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
 export const SessionForm = observer(() => {
   return (
     <div>
-      <div>1</div>
       <Calendar />
     </div>
   );
