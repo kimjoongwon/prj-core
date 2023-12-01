@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Calendar } from '@coc/ui';
+import { Calendar, Input } from '@coc/ui';
 import { TimelineForm as TimelineFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 import dayjs from 'dayjs';
@@ -23,9 +23,12 @@ export const TimelineForm = observer((props: FormProps) => {
         onClickDay={day => (state.date = dayjs().set('D', day).toDate())}
       />
       {state.date && (
-        <div className="font-bold">
-          {dayjs(state.date).format('YYYY년 MM월 DD일')}
-        </div>
+        <>
+          <div className="font-bold">
+            {dayjs(state.date).format('YYYY년 MM월 DD일')}
+          </div>
+          <Input state={state} path="name" placeholder="타임라인명" />
+        </>
       )}
     </div>
   );

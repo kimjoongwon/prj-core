@@ -143,6 +143,7 @@ model Session {
 
 model Timeline {
   id            String         @id @default(cuid())
+  name          String
   sessionId     String
   date          DateTime       @db.Date()
   session       Session        @relation(fields: [sessionId], references: [id])

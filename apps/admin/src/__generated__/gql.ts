@@ -38,6 +38,9 @@ const documents = {
     "\n  mutation CreateSpace($createSpaceInput: CreateSpaceInput!) {\n    createSpace(createSpaceInput: $createSpaceInput) {\n      name\n    }\n  }\n": types.CreateSpaceDocument,
     "\n  mutation DeleteSpace($id: String!) {\n    deleteSpace(id: $id) {\n      id\n    }\n  }\n": types.DeleteSpaceDocument,
     "\n  mutation UpdateSpace($updateSpaceInput: UpdateSpaceInput!) {\n    updateSpace(updateSpaceInput: $updateSpaceInput) {\n      id\n    }\n  }\n": types.UpdateSpaceDocument,
+    "\n  mutation CreateTimelineItem($createTimelineItemInput: CreateTimelineItemInput!) {\n    createTimelineItem(createTimelineItemInput: $createTimelineItemInput) {\n      description\n      title\n    }\n  }\n": types.CreateTimelineItemDocument,
+    "\n  mutation DeleteTimelineItem($id: String!) {\n    deleteTimelineItem(id: $id) {\n      id\n    }\n  }\n": types.DeleteTimelineItemDocument,
+    "\n  mutation UpdateTimelineItem($updateTimelineItemInput: UpdateTimelineItemInput!) {\n    updateTimelineItem(updateTimelineItemInput: $updateTimelineItemInput) {\n      id\n    }\n  }\n": types.UpdateTimelineItemDocument,
     "\n  mutation CreateTimeline($createTimelineInput: CreateTimelineInput!) {\n    createTimeline(createTimelineInput: $createTimelineInput) {\n      date\n    }\n  }\n": types.CreateTimelineDocument,
     "\n  mutation DeleteTimeline($id: String!) {\n    deleteTimeline(id: $id) {\n      id\n    }\n  }\n": types.DeleteTimelineDocument,
     "\n  mutation UpdateTimeline($updateTimelineInput: UpdateTimelineInput!) {\n    updateTimeline(updateTimelineInput: $updateTimelineInput) {\n      id\n    }\n  }\n": types.UpdateTimelineDocument,
@@ -65,9 +68,12 @@ const documents = {
     "\n  query GetSpace($id: String!){\n    space(id: $id) {\n      id\n    }\n  }\n": types.GetSpaceDocument,
     "\n  #graphql\n  query GetSpaces(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    spaces(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        address\n        phone\n        updatedAt\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetSpacesDocument,
     "\n  query GetSpaceForm($id: String!) {\n    spaceForm(id: $id) {\n      name\n      address\n      phone\n    }\n  }\n": types.GetSpaceFormDocument,
+    "\n  query GetTimelineItem($id: String!){\n    timelineItem(id: $id) {\n      id\n    }\n  }\n": types.GetTimelineItemDocument,
+    "\n  #graphql\n  query GetTimelineItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    timelineItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        title\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetTimelineItemsDocument,
+    "\n  query GetTimelineItemForm($id: String!) {\n    timelineItemForm(id: $id) {\n      title\n      startDateTime\n      endDateTime\n      maxCapacity\n      minCapacity\n      description\n      address\n      timelineId\n    }\n  }\n": types.GetTimelineItemFormDocument,
     "\n  query GetTimeline($id: String!){\n    timeline(id: $id) {\n      date\n    }\n  }\n": types.GetTimelineDocument,
     "\n  #graphql\n  query GetTimelines(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    timelines(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        date\n        createdAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetTimelinesDocument,
-    "\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n": types.GetTimelineFormDocument,
+    "\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      name\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n": types.GetTimelineFormDocument,
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetUserFormDocument,
@@ -190,6 +196,18 @@ export function gql(source: "\n  mutation UpdateSpace($updateSpaceInput: UpdateS
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation CreateTimelineItem($createTimelineItemInput: CreateTimelineItemInput!) {\n    createTimelineItem(createTimelineItemInput: $createTimelineItemInput) {\n      description\n      title\n    }\n  }\n"): (typeof documents)["\n  mutation CreateTimelineItem($createTimelineItemInput: CreateTimelineItemInput!) {\n    createTimelineItem(createTimelineItemInput: $createTimelineItemInput) {\n      description\n      title\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteTimelineItem($id: String!) {\n    deleteTimelineItem(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteTimelineItem($id: String!) {\n    deleteTimelineItem(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateTimelineItem($updateTimelineItemInput: UpdateTimelineItemInput!) {\n    updateTimelineItem(updateTimelineItemInput: $updateTimelineItemInput) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateTimelineItem($updateTimelineItemInput: UpdateTimelineItemInput!) {\n    updateTimelineItem(updateTimelineItemInput: $updateTimelineItemInput) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation CreateTimeline($createTimelineInput: CreateTimelineInput!) {\n    createTimeline(createTimelineInput: $createTimelineInput) {\n      date\n    }\n  }\n"): (typeof documents)["\n  mutation CreateTimeline($createTimelineInput: CreateTimelineInput!) {\n    createTimeline(createTimelineInput: $createTimelineInput) {\n      date\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -298,6 +316,18 @@ export function gql(source: "\n  query GetSpaceForm($id: String!) {\n    spaceFo
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query GetTimelineItem($id: String!){\n    timelineItem(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  query GetTimelineItem($id: String!){\n    timelineItem(id: $id) {\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  #graphql\n  query GetTimelineItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    timelineItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        title\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetTimelineItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    timelineItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        title\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetTimelineItemForm($id: String!) {\n    timelineItemForm(id: $id) {\n      title\n      startDateTime\n      endDateTime\n      maxCapacity\n      minCapacity\n      description\n      address\n      timelineId\n    }\n  }\n"): (typeof documents)["\n  query GetTimelineItemForm($id: String!) {\n    timelineItemForm(id: $id) {\n      title\n      startDateTime\n      endDateTime\n      maxCapacity\n      minCapacity\n      description\n      address\n      timelineId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  query GetTimeline($id: String!){\n    timeline(id: $id) {\n      date\n    }\n  }\n"): (typeof documents)["\n  query GetTimeline($id: String!){\n    timeline(id: $id) {\n      date\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -306,7 +336,7 @@ export function gql(source: "\n  #graphql\n  query GetTimelines(\n    $skip: Int
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      name\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      name\n      sessionId\n      date\n      session {\n        name\n        dates\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

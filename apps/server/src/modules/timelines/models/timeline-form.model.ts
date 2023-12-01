@@ -22,4 +22,5 @@ export const defaultTimelineForm: TimelineForm = {
   sessionId: '',
   date: null,
   session: new Session(),
+  name: '',
 };

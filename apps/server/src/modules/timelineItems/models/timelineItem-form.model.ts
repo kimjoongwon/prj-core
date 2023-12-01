@@ -16,4 +16,8 @@ export const defaultTimelineItemForm: TimelineItemForm = {
   description: '',
   address: '',
   timelineId: '',
+  startDateTime: undefined,
+  endDateTime: undefined,
+  maxCapacity: 0,
+  minCapacity: 0,
 };

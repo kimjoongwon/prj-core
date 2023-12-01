@@ -1,4 +1,5 @@
 import SessionForm from './Session';
+import TimelineItemForm from './TimelineItem';
 export * from './User';
 export * from './CategoryItem';
 export * from './Category';
@@ -8,4 +9,4 @@ export * from './Space';
 export * from './Role';
 export * from './Session';
 export * from './Timeline';
-export { SessionForm };
+export { SessionForm, TimelineItemForm };
