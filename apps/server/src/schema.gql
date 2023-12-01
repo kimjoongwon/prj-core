@@ -50,10 +50,14 @@ type PaginatedRole {
 }
 
 type Token {
-  """JWT access token"""
+  """
+  JWT access token
+  """
   accessToken: JWT!
 
-  """JWT refresh token"""
+  """
+  JWT refresh token
+  """
   refreshToken: JWT!
 }
 
@@ -108,10 +112,14 @@ type User {
 }
 
 type Auth {
-  """JWT access token"""
+  """
+  JWT access token
+  """
   accessToken: JWT!
 
-  """JWT refresh token"""
+  """
+  JWT refresh token
+  """
   refreshToken: JWT!
   user: User!
 }
@@ -510,45 +518,152 @@ input SessionInputType {
   tilelines: [TimelineInputType!]
 }
 
+input SessionInputType {
+  dates: [DateTime!]!
+  tenantId: String!
+  name: String!
+  tilelines: [TimelineInputType!]
+}
+
 type Query {
   profile(id: ID!): Profile!
-  users(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String, email: String): PaginatedUser!
+  users(
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+    email: String
+  ): PaginatedUser!
   userForm(id: String!): UserForm!
   user(id: String!): User!
   space(id: String!): Space!
   spaceForm(id: String!): SpaceForm!
-  spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
+  spaces(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedSpace!
   role(id: String!): Role!
   roleForm(id: String!): RoleForm!
-  roles(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedRole!
+  roles(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedRole!
   categoryForm(id: String!): CategoryForm!
   category(id: String!): Category!
-  categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
+  categories(
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedCategory!
   service(id: String!): Service!
   serviceForm: ServiceForm!
-  services(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedService!
+  services(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedService!
   categoryItemTrees: [CategoryItem!]!
   categoryItemForm(id: String!): CategoryItemForm!
   categoryItem(id: String!): CategoryItem!
-  categoryItems(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategoryItem!
+  categoryItems(
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedCategoryItem!
   group(id: String!): Group!
   groupForm(id: String!): GroupForm!
-  groups(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedGroup!
+  groups(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedGroup!
   tenant(id: String!): Tenant!
   tenantForm: TenantForm!
-  tenants(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTenant!
+  tenants(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedTenant!
   timeline_item(id: String!): TimelineItem!
   timeline_itemForm: TimelineItemForm!
-  timeline_items(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimelineItem!
+  timeline_items(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedTimelineItem!
   reservation(id: String!): Reservation!
   reservationForm: ReservationForm!
-  reservations(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedReservation!
+  reservations(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedReservation!
   session(id: String!): Session!
   sessionForm(id: String!): SessionForm!
-  sessions(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSession!
+  sessions(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedSession!
   timeline(id: String!): Timeline!
   timelineForm(timelineId: String!, sessionId: String!): TimelineForm!
-  timelines(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimeline!
+  timelines(
+    name: String
+    startTimestamp: Float
+    endTimestamp: Float
+    take: Int
+    skip: Int = 1
+    cursor: String
+    sortingKey: String
+    sortingValue: String
+  ): PaginatedTimeline!
 }
 
 type Mutation {
@@ -573,8 +688,12 @@ type Mutation {
   createService(createServiceInput: CreateServiceInput!): Service!
   updateService(updateServiceInput: UpdateServiceInput!): Service!
   deleteService(id: String!): Service!
-  createCategoryItem(createCategoryItemInput: CreateCategoryItemInput!): CategoryItem!
-  updateCategoryItem(updateCategoryItemInput: UpdateCategoryItemInput!): CategoryItem!
+  createCategoryItem(
+    createCategoryItemInput: CreateCategoryItemInput!
+  ): CategoryItem!
+  updateCategoryItem(
+    updateCategoryItemInput: UpdateCategoryItemInput!
+  ): CategoryItem!
   deleteCategoryItem(id: String!): CategoryItem!
   createGroup(createGroupInput: CreateGroupInput!): Group!
   updateGroup(updateGroupInput: UpdateGroupInput!): Group!
@@ -582,11 +701,19 @@ type Mutation {
   createTenant(createTenantInput: CreateTenantInput!): Tenant!
   updateTenant(updateTenantInput: UpdateTenantInput!): Tenant!
   deleteTenant(id: String!): Tenant!
-  createTimelineItem(createTimelineItemInput: CreateTimelineItemInput!): TimelineItem!
-  updateTimelineItem(updateTimelineItemInput: UpdateTimelineItemInput!): TimelineItem!
+  createTimelineItem(
+    createTimelineItemInput: CreateTimelineItemInput!
+  ): TimelineItem!
+  updateTimelineItem(
+    updateTimelineItemInput: UpdateTimelineItemInput!
+  ): TimelineItem!
   deleteTimelineItem(id: String!): TimelineItem!
-  createReservation(createReservationInput: CreateReservationInput!): Reservation!
-  updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
+  createReservation(
+    createReservationInput: CreateReservationInput!
+  ): Reservation!
+  updateReservation(
+    updateReservationInput: UpdateReservationInput!
+  ): Reservation!
   deleteReservation(id: String!): Reservation!
   createSession(createSessionInput: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
