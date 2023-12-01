@@ -40,19 +40,19 @@ export class TimelineItemsResolver {
   }
 
   @Public()
-  @Query(() => TimelineItem, { name: 'timeline_item' })
+  @Query(() => TimelineItem, { name: 'timelineItem' })
   getTimelineItem(@Args('id') id: string) {
     return this.timelineItemsService.findOne(id);
   }
 
   @Public()
-  @Query(() => TimelineItemForm, { name: 'timeline_itemForm' })
-  getTimelineItemForm() {
-    return this.timelineItemsService.findForm();
+  @Query(() => TimelineItemForm, { name: 'timelineItemForm' })
+  getTimelineItemForm(@Args('id') id: string) {
+    return this.timelineItemsService.findForm(id);
   }
 
   @Public()
-  @Query(() => PaginatedTimelineItem, { name: 'timeline_items' })
+  @Query(() => PaginatedTimelineItem, { name: 'timelineItems' })
   getTimelineItems(@Args() args: GetTimelineItemsArgs) {
     return this.timelineItemsService.findPaginatedTimelineItem(args);
   }

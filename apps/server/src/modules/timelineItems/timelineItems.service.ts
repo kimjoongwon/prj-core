@@ -5,9 +5,13 @@ import { queryBuilder } from '../../common/utils/query-builder';
 import { CreateTimelineItemInput } from './dto/create-timelineItem.input';
 import { GetTimelineItemsArgs } from './dto/get-timelineItems.args';
 import { UpdateTimelineItemInput } from './dto/update-timelineItem.input';
-import { TimelineItemForm } from './models/timelineItem-form.model';
+import {
+  TimelineItemForm,
+  defaultTimelineItemForm,
+} from './models/timelineItem-form.model';
 import { PaginatedTimelineItem } from './models/paginated-timelineItem.model';
 import { Option } from '../../common/models';
+import { GetTimelineItemFormArgs } from './dto/get-timelineItem-form.args';
 
 @Injectable()
 export class TimelineItemsService {
@@ -19,12 +23,18 @@ export class TimelineItemsService {
     });
   }
 
-  findForm(): TimelineItemForm {
+  findForm(id: string): TimelineItemForm {
+    if (id === 'new') {
+      return defaultTimelineItemForm;
+    }
+
+    const timelineItem = this.prisma.timelineItem.findUnique({
+      where: { id },
+    });
+
     return {
-      address: '',
-      description: '',
-      title: '',
-      timelineId: '',
+      ...defaultTimelineItemForm,
+      ...timelineItem,
     };
   }
 

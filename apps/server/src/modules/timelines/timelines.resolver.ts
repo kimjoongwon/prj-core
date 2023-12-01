@@ -9,7 +9,6 @@ import { UpdateTimelineInput } from './dto/update-timeline.input';
 import { PaginatedTimeline } from './models/paginated-timeline.model';
 import { TimelineForm } from './models/timeline-form.model';
 import { Timeline } from './models/timeline.model';
-import { get } from 'axios';
 import { GetTimelineFormArgs } from './dto/get-timeline-form.args';
 
 @Resolver(() => Timeline)

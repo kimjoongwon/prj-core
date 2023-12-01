@@ -7,3 +7,4 @@ export * from './groups';
 export * from './roles';
 export * from './sessions';
 export * from './timelines';
+export * from './timelineItems';
