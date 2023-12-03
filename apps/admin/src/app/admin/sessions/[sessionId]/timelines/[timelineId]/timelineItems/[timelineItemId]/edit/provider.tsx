@@ -21,40 +21,42 @@ export const TimelineItemEditPageContext = createContext<PageContext>(
   {} as PageContext,
 );
 
-export const TimelineItemEditPageProvider = observer((props: ContainerProps) => {
-  const { children } = props;
+export const TimelineItemEditPageProvider = observer(
+  (props: ContainerProps) => {
+    const { children } = props;
 
-  const queries = useQueries();
-  const mutations = useMutations();
-  const state = useState({
-    queries,
-  });
-  const handlers = useHandlers({
-    mutations,
-    state,
-  });
-  const schemas = useSchemas();
+    const queries = useQueries();
+    const mutations = useMutations();
+    const state = useState({
+      queries,
+    });
+    const handlers = useHandlers({
+      mutations,
+      state,
+    });
+    const schemas = useSchemas();
 
-  const { timelineItemFormSchema } = schemas;
-  const { onClickCancel, onClickSave } = handlers;
+    const { timelineItemFormSchema } = schemas;
+    const { onClickCancel, onClickSave } = handlers;
 
-  return (
-    <TimelineItemEditPageContext.Provider
-      value={{
-        handlers,
-        schemas,
-        state,
-      }}
-    >
-      <Form
-        title="카테고리"
-        state={state.form}
-        schema={timelineItemFormSchema}
-        onClickSave={onClickSave}
-        onClickCancel={onClickCancel}
+    return (
+      <TimelineItemEditPageContext.Provider
+        value={{
+          handlers,
+          schemas,
+          state,
+        }}
       >
-        {children}
-      </Form>
-    </TimelineItemEditPageContext.Provider>
-  );
-});
+        <Form
+          title="카테고리"
+          state={state.form}
+          schema={timelineItemFormSchema}
+          onClickSave={onClickSave}
+          onClickCancel={onClickCancel}
+        >
+          {children}
+        </Form>
+      </TimelineItemEditPageContext.Provider>
+    );
+  },
+);

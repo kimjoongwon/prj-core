@@ -30,6 +30,13 @@ export class TimelinesService {
       where: { id: sessionId },
     });
 
+    const timelineItems = await this.prisma.timelineItem.findMany({
+      where: { sessionId },
+    });
+
+    console.log(sessionId);
+    console.log(timelineItems);
+    timelineForm.timelineItems = timelineItems;
     timelineForm.session = session;
 
     if (timelineId === 'new') {

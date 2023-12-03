@@ -25,10 +25,10 @@ export const TimelineEditPageProvider = observer((props: ContainerProps) => {
   const { children } = props;
 
   const queries = useQueries();
-  const mutations = useMutations();
   const state = useState({
     queries,
   });
+  const mutations = useMutations();
   const handlers = useHandlers({
     mutations,
     state,

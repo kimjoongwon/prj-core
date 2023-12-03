@@ -11,7 +11,7 @@ interface FormProps {
 
 export const TimelineItemForm = (props: FormProps) => {
   const { state, schema } = props;
-  console.log({ ...state });
+
   return (
     <div className="space-y-4">
       <Input state={state} path="title" placeholder="타임라인블럭" />

@@ -3,12 +3,22 @@
 import React from 'react';
 import { TimelineForm } from '@components';
 import { useTimelineEditPage } from './hooks';
+import { observer } from 'mobx-react-lite';
 
-export default function Page() {
+function Page() {
   const {
     schemas: { timelineFormSchema },
     state,
   } = useTimelineEditPage();
-
-  return <TimelineForm state={state.form} schema={timelineFormSchema} />;
+  console.log(state.form);
+  console.log(state.selectedTimelineItemIds);
+  return (
+    <TimelineForm
+      selectedTimelineItemIds={state.selectedTimelineItemIds}
+      state={state.form}
+      schema={timelineFormSchema}
+    />
+  );
 }
+
+export default observer(Page);

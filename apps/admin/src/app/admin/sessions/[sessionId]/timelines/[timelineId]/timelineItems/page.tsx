@@ -32,7 +32,6 @@ function TimelineItemsPage() {
           data={data.timelineItems.nodes}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
-          onSortChange={onClickSorting}
         />
       </DataGridContainer>
       <PaginationContainer>

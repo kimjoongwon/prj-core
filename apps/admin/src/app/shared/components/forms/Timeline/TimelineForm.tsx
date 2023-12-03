@@ -12,10 +12,11 @@ import { useParams } from 'next/navigation';
 interface FormProps {
   state: TimelineFormType;
   schema: ZodSchema;
+  selectedTimelineItemIds: string[];
 }
 
 export const TimelineForm = observer((props: FormProps) => {
-  const { state } = props;
+  const { state, selectedTimelineItemIds } = props;
   const rotuer = useCoCRouter();
   const { sessionId, timelineId } = useParams<{
     sessionId: string;
@@ -47,6 +48,13 @@ export const TimelineForm = observer((props: FormProps) => {
               })
             }
           />
+          {state.timelineItems
+            .filter(timelineItem =>
+              selectedTimelineItemIds.includes(timelineItem.id),
+            )
+            .map((timelineItem, index) => {
+              return <div>{timelineItem.title}</div>;
+            })}
         </>
       )}
     </div>

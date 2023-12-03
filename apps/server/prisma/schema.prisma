@@ -156,6 +156,7 @@ model Timeline {
 model TimelineItem {
   id            String        @id @default(cuid())
   timelineId    String?
+  sessionId     String
   title         String
   startDateTime DateTime      @db.Timestamptz(6)
   endDateTime   DateTime      @db.Timestamptz(6)

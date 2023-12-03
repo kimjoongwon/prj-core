@@ -13,7 +13,7 @@ import {
 import { Row, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { action } from 'mobx';
+import { action, toJS } from 'mobx';
 
 interface DataGridProps<T> {
   selectionMode: TableProps['selectionMode'];
@@ -59,7 +59,7 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
     if (keys === 'all') {
       state.selectedRowIds = rows.map(row => row.original.id);
     }
-    onSelectionChange && onSelectionChange(state.selectedRowIds);
+    onSelectionChange && onSelectionChange(toJS(state.selectedRowIds));
   });
 
   return (
