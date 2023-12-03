@@ -11,7 +11,6 @@ import {
 } from './models/timelineItem-form.model';
 import { PaginatedTimelineItem } from './models/paginated-timelineItem.model';
 import { Option } from '../../common/models';
-import { GetTimelineItemFormArgs } from './dto/get-timelineItem-form.args';
 
 @Injectable()
 export class TimelineItemsService {
@@ -23,12 +22,12 @@ export class TimelineItemsService {
     });
   }
 
-  findForm(id: string): TimelineItemForm {
+  async findForm(id: string): Promise<TimelineItemForm> {
     if (id === 'new') {
       return defaultTimelineItemForm;
     }
 
-    const timelineItem = this.prisma.timelineItem.findUnique({
+    const timelineItem = await this.prisma.timelineItem.findUnique({
       where: { id },
     });
 

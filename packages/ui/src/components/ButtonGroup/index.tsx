@@ -1,5 +1,3 @@
-;
-
 import { Link } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { Button } from '../Button';
@@ -35,8 +33,8 @@ export const ButtonGroup = observer((props: ButtonGroupProps) => {
 
   return (
     <div className="flex flex-1 justify-between">
-      <div className="flex gap-2">{leftButtons?.map(renderButton)}</div>
-      <div className="flex gap-2">{rightButtons?.map(renderButton)}</div>
+      <div className="flex">{leftButtons?.map(renderButton)}</div>
+      <div className="flex">{rightButtons?.map(renderButton)}</div>
     </div>
   );
 });

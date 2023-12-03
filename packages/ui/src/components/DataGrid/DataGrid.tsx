@@ -1,5 +1,3 @@
-;
-
 import {
   Table,
   TableHeader,
@@ -12,12 +10,7 @@ import {
   Selection,
 } from '@nextui-org/react';
 
-import {
-  Row,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { Row, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
@@ -31,14 +24,7 @@ interface DataGridProps<T> {
 }
 
 export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
-  const {
-    selectionMode,
-    data,
-    columns,
-    onSortChange,
-    onSelectionChange,
-    ...rest
-  } = props;
+  const { selectionMode, data, columns, onSortChange, onSelectionChange, ...rest } = props;
 
   const table = useReactTable({
     data: data as T[],
@@ -49,14 +35,13 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
   const rows = table.getRowModel().rows as Row<T & { id: string }>[];
   const headers = table.getLeafHeaders();
 
-  const state: { sortDescriptor: SortDescriptor; selectedRowIds: string[] } =
-    useLocalObservable(() => ({
-      selectedRowIds: [],
-      sortDescriptor: {
-        column: undefined,
-        direction: 'ascending',
-      },
-    }));
+  const state: { sortDescriptor: SortDescriptor; selectedRowIds: string[] } = useLocalObservable(() => ({
+    selectedRowIds: [],
+    sortDescriptor: {
+      column: undefined,
+      direction: 'ascending',
+    },
+  }));
 
   const _onSortChange: TableProps['onSortChange'] = action(sortDescriptor => {
     state.sortDescriptor = sortDescriptor;
@@ -90,24 +75,18 @@ export const DataGrid = observer(<T extends any>(props: DataGridProps<T>) => {
       <TableHeader>
         {headers?.map(header => (
           <TableColumn key={header.column.id} allowsSorting={!!onSortChange}>
-            {header.isPlaceholder ? (
-              <></>
-            ) : (
-              flexRender(header.column.columnDef.header, header.getContext())
-            )}
+            {header.isPlaceholder ? <></> : flexRender(header.column.columnDef.header, header.getContext())}
           </TableColumn>
         ))}
       </TableHeader>
-      <TableBody
-        emptyContent={rows?.length === 0 ? '데이터가 없습니다.' : undefined}
-      >
+      <TableBody emptyContent={rows?.length === 0 ? '데이터가 없습니다.' : undefined}>
         {rows?.map(row => (
           <TableRow key={row.original.id}>
-            {row.getVisibleCells()?.map(cell => (
-              <TableCell key={v4()}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
+            {row
+              .getVisibleCells()
+              ?.map(cell => (
+                <TableCell key={v4()}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+              ))}
           </TableRow>
         ))}
       </TableBody>

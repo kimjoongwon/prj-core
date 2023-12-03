@@ -8,11 +8,14 @@ export interface LayoutProps {
 }
 
 export default function Layout(props: LayoutProps) {
-  const { children } = props;
+  const { children, modal } = props;
 
   return (
     <EditLayout>
-      <TimelineEditPageProvider>{children}</TimelineEditPageProvider>
+      <TimelineEditPageProvider>
+        {children}
+        {modal}
+      </TimelineEditPageProvider>
     </EditLayout>
   );
 }

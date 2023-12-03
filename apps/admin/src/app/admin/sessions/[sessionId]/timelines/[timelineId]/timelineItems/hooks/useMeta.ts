@@ -3,13 +3,21 @@ import { toast } from 'react-toastify';
 import { GroupButton } from '@coc/ui';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useTimelineItemColumns } from '@columns';
-import { TIMELINEITEM_EDIT_PAGE_PATH, TIMELINEITEM_PAGE_PATH } from '@constants';
+import {
+  TIMELINEITEM_EDIT_PAGE_PATH,
+  TIMELINEITEM_PAGE_PATH,
+} from '@constants';
 import { User } from '@__generated__/graphql';
+import { useParams } from 'next/navigation';
 
 export const useMeta = () => {
   const router = useCoCRouter();
   const timelineItemColumns = useTimelineItemColumns();
-
+  const { sessionId, timelineId, timelineItemId } = useParams<{
+    sessionId: string;
+    timelineId: string;
+    timelineItemId: string;
+  }>();
   const actionColumns = useActionColumns<User>({
     meta: {
       buttons: [
@@ -45,6 +53,8 @@ export const useMeta = () => {
         router.push({
           url: TIMELINEITEM_EDIT_PAGE_PATH,
           params: {
+            sessionId,
+            timelineId,
             timelineItemId: 'new',
           },
         }),
@@ -68,4 +78,3 @@ export const useMeta = () => {
     ),
   };
 };
-

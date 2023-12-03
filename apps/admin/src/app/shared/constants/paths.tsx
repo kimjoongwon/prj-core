@@ -26,12 +26,10 @@ import {
   TIMELINES_PAGE_PATH,
   TIMELINE_EDIT_PAGE_PATH,
   TIMELINE_PAGE_PATH,
-} from '@constants';
-import {
   TIMELINEITEMS_PAGE_PATH,
   TIMELINEITEM_EDIT_PAGE_PATH,
   TIMELINEITEM_PAGE_PATH,
-} from './timelineItems';
+} from '@constants';
 
 export const DASHBOARD_PATH = '/admin' as const;
 

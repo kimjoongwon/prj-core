@@ -1,5 +1,3 @@
-;
-
 import { Modal, ModalContent, ModalProps } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 interface CoCModalProps extends ModalProps {
@@ -8,7 +6,7 @@ interface CoCModalProps extends ModalProps {
 export const CoCModal = observer((props: CoCModalProps) => {
   const { children } = props;
   return (
-    <Modal isOpen>
+    <Modal isOpen isDismissable className="p-2">
       <ModalContent>{children}</ModalContent>
     </Modal>
   );

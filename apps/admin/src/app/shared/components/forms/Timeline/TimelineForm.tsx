@@ -1,10 +1,13 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Calendar, Input } from '@coc/ui';
+import { Button, Calendar, Input } from '@coc/ui';
 import { TimelineForm as TimelineFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 import dayjs from 'dayjs';
+import { useCoCRouter } from '@hooks';
+import { TIMELINEITEMS_PAGE_PATH } from '../../../constants/timelineItems';
+import { useParams } from 'next/navigation';
 
 interface FormProps {
   state: TimelineFormType;
@@ -13,6 +16,11 @@ interface FormProps {
 
 export const TimelineForm = observer((props: FormProps) => {
   const { state } = props;
+  const rotuer = useCoCRouter();
+  const { sessionId, timelineId } = useParams<{
+    sessionId: string;
+    timelineId: string;
+  }>();
 
   return (
     <div className="space-y-4">
@@ -28,6 +36,17 @@ export const TimelineForm = observer((props: FormProps) => {
             {dayjs(state.date).format('YYYY년 MM월 DD일')}
           </div>
           <Input state={state} path="name" placeholder="타임라인명" />
+          <Button
+            onClick={() =>
+              rotuer.push({
+                url: TIMELINEITEMS_PAGE_PATH,
+                params: {
+                  sessionId,
+                  timelineId,
+                },
+              })
+            }
+          />
         </>
       )}
     </div>

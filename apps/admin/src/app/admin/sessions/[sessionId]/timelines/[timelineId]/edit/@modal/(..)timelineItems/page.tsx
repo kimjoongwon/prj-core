@@ -1,14 +1,13 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import {
   ButtonGroupContainer,
   DataGridContainer,
   PaginationContainer,
-  SearchFilterContainer,
 } from '@containers';
-import { useTimelineItemsPage } from './hooks';
+import { useTimelineItemsPage } from '../../../timelineItems/hooks';
 
 function TimelineItemsPage() {
   const timelineItemsPage = useTimelineItemsPage();
@@ -24,9 +23,6 @@ function TimelineItemsPage() {
 
   return (
     <>
-      <SearchFilterContainer>
-        <Search state={state.search} queryState={state.query} path="email" />
-      </SearchFilterContainer>
       <ButtonGroupContainer>
         <ButtonGroup leftButtons={leftButtons} rightButtons={rightButtons} />
       </ButtonGroupContainer>

@@ -1,5 +1,3 @@
-;
-
 import { ChangeEventHandler, ForwardedRef } from 'react';
 import { MobxProps } from '../../types';
 import { Input as NextUIInput, InputProps as NextUIInputProps } from '@nextui-org/react';
@@ -14,13 +12,17 @@ export type InputProps<T> = MobxProps<T> &
   };
 
 export const BaseInput = <T extends any>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
-  const { path = '', state = {}, onChange, validation, ...rest } = props;
+  const { path = '', state = {}, onChange, validation, type, ...rest } = props;
 
   const initialValue = get(state, path);
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(e => {
+    if (type === 'number' && typeof Number(e.target.value) === 'number') {
+      return (localState.value = Number(e.target.value));
+    }
+
     localState.value = e.target.value;
 
     onChange && onChange(e);
@@ -28,13 +30,14 @@ export const BaseInput = <T extends any>(props: InputProps<T>, ref: ForwardedRef
 
   return (
     <NextUIInput
+      type={type}
       variant="bordered"
       {...rest}
       ref={ref}
       onChange={handleChange}
       isInvalid={validation?.isInvalid}
       errorMessage={validation?.errorMessage}
-      value={localState.value}
+      value={String(localState.value)}
     />
   );
 };

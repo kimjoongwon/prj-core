@@ -16,8 +16,8 @@ export const GET_TIMELINE_ITEMS = gql(`
     ) {
       nodes {
         id
-        createdAt
         title
+        createdAt
       }
       pageInfo {
         totalCount

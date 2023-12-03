@@ -155,19 +155,19 @@ model Timeline {
 
 model TimelineItem {
   id            String        @id @default(cuid())
-  timelineId    String
+  timelineId    String?
   title         String
   startDateTime DateTime      @db.Timestamptz(6)
   endDateTime   DateTime      @db.Timestamptz(6)
   description   String
-  address       String
+  address       String?
   maxCapacity   Int
   minCapacity   Int
-  timeline      Timeline      @relation(fields: [timelineId], references: [id])
   createdAt     DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
   deletedAt     DateTime?     @db.Timestamptz(6)
   reservations  Reservation[]
+  timeline      Timeline?     @relation(fields: [timelineId], references: [id])
 }
 
 model Reservation {

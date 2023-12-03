@@ -25,6 +25,6 @@ export class TimelineItem extends Base implements CoCTimelineItem {
   @Field(type => String)
   address: string;
 
-  @Field(type => String)
+  @Field(type => String, { nullable: true })
   timelineId: string;
 }

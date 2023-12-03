@@ -5,8 +5,8 @@ export const useTimelineItemColumns = () => {
   const columnHelper = createColumnHelper<TimelineItem>();
 
   const columns = [
-    columnHelper.accessor('id', {
-      header: '아이디',
+    columnHelper.accessor('title', {
+      header: '타이틀',
     }),
   ];
   return columns;

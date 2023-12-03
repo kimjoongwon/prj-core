@@ -15,4 +15,3 @@ export default function Page() {
     <TimelineItemForm state={state.form} schema={timelineItemFormSchema} />
   );
 }
-

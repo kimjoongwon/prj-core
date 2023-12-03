@@ -5,9 +5,5 @@ interface EditLayoutProps {
 export const EditLayout = (props: EditLayoutProps) => {
   const { children } = props;
 
-  return (
-    <div className="flex space-y-4 w-full justify-center">
-      {children}
-    </div>
-  );
+  return <div className="flex space-y-4 w-full justify-center">{children}</div>;
 };
