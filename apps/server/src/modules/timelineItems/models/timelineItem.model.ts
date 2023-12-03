@@ -1,9 +1,13 @@
 import { Base } from '../../../common/interfaces/base.interface';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { TimelineItem as CoCTimelineItem } from '@prisma/client';
 
 @ObjectType()
+@InputType('TimelineItemInputType')
 export class TimelineItem extends Base implements CoCTimelineItem {
+  @Field(type => String)
+  sessionId: string;
+
   @Field(type => Date)
   startDateTime: Date;
 

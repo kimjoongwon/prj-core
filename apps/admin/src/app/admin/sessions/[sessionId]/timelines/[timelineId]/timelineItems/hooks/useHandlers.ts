@@ -1,24 +1,15 @@
-import { useState } from './useState';
+import { useTimelineEditPage } from '../../edit/hooks';
 
-export const useHandlers = ({
-  state,
-}: {
-  state: ReturnType<typeof useState>;
-}) => {
-  const onClickSorting = (sorting: { key: any; value: any }) => {
-    state.query.sortingKey = sorting.key;
-    state.query.sortingValue = sorting.value;
-  };
+export const useHandlers = ({}: {}) => {
+  const { state } = useTimelineEditPage();
 
   const onClickRow = (rowIds: string[]) => {
-    state.table.selectedRowIds = state.table.selectedRowIds.concat(
-      rowIds as never[],
-    );
+    console.log('rowIds', rowIds, state.selectedTimelineItemIds);
+    state.selectedTimelineItemIds = rowIds;
   };
 
   return {
     onClickRow,
-    onClickSorting,
+    onClickSorting: null,
   };
 };
-

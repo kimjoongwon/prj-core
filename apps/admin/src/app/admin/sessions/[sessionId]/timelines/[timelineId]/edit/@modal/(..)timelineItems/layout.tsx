@@ -6,7 +6,7 @@ export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
     <TimelineItemsPageProvider>
-      <CoCModal>
+      <CoCModal isDismissable closeButton>
         <TableLayout>{children}</TableLayout>
       </CoCModal>
     </TimelineItemsPageProvider>

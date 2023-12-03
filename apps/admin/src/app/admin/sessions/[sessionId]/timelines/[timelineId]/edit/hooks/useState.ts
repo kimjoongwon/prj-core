@@ -1,5 +1,5 @@
-import { TimelineForm } from '@__generated__/graphql';
 import { useLocalObservable } from 'mobx-react-lite';
+import { TimelineForm } from '@__generated__/graphql';
 import { useQueries } from './useQueries';
 
 export const useState = ({
@@ -8,8 +8,13 @@ export const useState = ({
   queries: ReturnType<typeof useQueries>;
 }) => {
   const { timelineFormQuery } = queries;
-  const timelineForm = timelineFormQuery?.data?.timelineForm;
+  const state = useLocalObservable<{
+    form: TimelineForm;
+    selectedTimelineItemIds: string[];
+  }>(() => ({
+    form: timelineFormQuery.data.timelineForm as TimelineForm,
+    selectedTimelineItemIds: [],
+  }));
 
-  const formState = useLocalObservable<TimelineForm>(() => timelineForm);
-  return { form: formState };
+  return state;
 };

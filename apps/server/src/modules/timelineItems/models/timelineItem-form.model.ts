@@ -26,4 +26,5 @@ export const defaultTimelineItemForm: TimelineItemForm = {
   endDateTime: null,
   maxCapacity: 0,
   minCapacity: 0,
+  sessionId: '',
 };

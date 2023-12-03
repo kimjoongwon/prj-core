@@ -9,6 +9,17 @@ export const GET_TIMELINE_FORM = gql(`
       session {
         name
         dates
+        tenantId
+      }
+      timelineItems {
+        id
+        title
+        startDateTime
+        endDateTime
+        maxCapacity
+        minCapacity
+        address
+        description
       }
     }
   }
