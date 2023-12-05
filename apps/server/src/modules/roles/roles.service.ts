@@ -7,6 +7,7 @@ import { GetRolesArgs } from './dto/get-roles.args';
 import { UpdateRoleInput } from './dto/update-role.input';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { queryBuilder } from '../../common/utils';
+import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class RolesService {
@@ -30,6 +31,22 @@ export class RolesService {
       name: role.name,
       options: defaultRoleForm.options,
     };
+  }
+
+  findSuperAdminRole() {
+    return this.prisma.role.findFirst({
+      where: {
+        name: 'SUPER_ADMIN',
+      },
+    });
+  }
+
+  createSuperAdminRole() {
+    return this.prisma.role.create({
+      data: {
+        name: 'SUPER_ADMIN',
+      },
+    });
   }
 
   async getRoleOptions() {

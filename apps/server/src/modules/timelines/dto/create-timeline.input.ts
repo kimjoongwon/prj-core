@@ -1,4 +1,4 @@
-import { Field, InputType, OmitType } from '@nestjs/graphql';
+import { Field, InputType, OmitType, PartialType } from '@nestjs/graphql';
 import { BASE_FIELDS } from '../../../common/constants';
 import { Timeline } from '../models/timeline.model';
 

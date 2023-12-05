@@ -13,7 +13,7 @@ export const useHandlers = ({
   const {
     createTimelineItem: [createTimelineItem],
     updateTimelineItem: [updateTimelineItem],
-  } = mutations;  
+  } = mutations;
 
   const router = useCoCRouter();
   const { timelineItemId } = useParams();
@@ -22,7 +22,11 @@ export const useHandlers = ({
     if (timelineItemId === 'new') {
       createTimelineItem({
         variables: {
-          createTimelineItemInput: state.form,
+          createTimelineItemInput: {
+            ...state.form,
+            endDateTime: state.form.endDateTime || new Date(),
+            startDateTime: state.form.startDateTime || new Date(),
+          },
         },
       });
     } else {
@@ -46,4 +50,3 @@ export const useHandlers = ({
     onClickCancel,
   };
 };
-

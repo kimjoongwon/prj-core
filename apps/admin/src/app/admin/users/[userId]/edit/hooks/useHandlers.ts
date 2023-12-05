@@ -26,7 +26,11 @@ export const useHandlers = (context: {
     if (userId === 'new') {
       createUser({
         variables: {
-          createUserInput: form,
+          createUserInput: {
+            ...form,
+            nickname: 'dd',
+            phone: 'ss',
+          },
         },
       });
     } else {

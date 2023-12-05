@@ -1,10 +1,4 @@
-import {
-  ObjectType,
-  IntersectionType,
-  Field,
-  OmitType,
-  InputType,
-} from '@nestjs/graphql';
+import { ObjectType, IntersectionType, Field } from '@nestjs/graphql';
 import { CreateTimelineInput } from '../dto/create-timeline.input';
 import { Session } from '../../sessions/models/session.model';
 import { TimelineItem } from '../../timelineItems/models/timelineItem.model';

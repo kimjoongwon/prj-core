@@ -7,10 +7,15 @@ import { GetSpacesArgs } from './dto/get-spaces.args';
 import { UpdateSpaceInput } from './dto/update-space.input';
 import { PaginatedSpace } from './models/paginated-space.model';
 import { SpaceForm } from './models/space-form.model';
+import { ConfigService } from '@nestjs/config';
+import { AppConfig } from '../../configs';
 
 @Injectable()
 export class SpacesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
+  ) {}
 
   create(createSpaceInput: CreateSpaceInput) {
     return this.prisma.space.create({
@@ -30,6 +35,25 @@ export class SpacesService {
     return this.prisma.space.findUnique({
       where: { id },
     });
+  }
+
+  findAppSpace() {
+    const appConfig = this.configService.get<AppConfig>('app');
+    const appName = appConfig.name;
+    return this.prisma.space.findFirst({
+      where: { name: appName },
+    });
+  }
+
+  createPromiseSpace() {
+    const appConfig = this.configService.get<AppConfig>('app');
+    const data: CreateSpaceInput = {
+      name: appConfig.name,
+      address: '프로미스',
+      phone: '01073162347',
+    };
+
+    return this.prisma.space.create({ data });
   }
 
   async getServiceOptions() {

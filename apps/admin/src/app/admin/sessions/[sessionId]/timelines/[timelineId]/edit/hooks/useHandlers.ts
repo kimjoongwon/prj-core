@@ -13,7 +13,7 @@ export const useHandlers = ({
   const {
     createTimeline: [createTimeline],
     updateTimeline: [updateTimeline],
-  } = mutations;  
+  } = mutations;
 
   const router = useCoCRouter();
   const { timelineId } = useParams();
@@ -22,7 +22,10 @@ export const useHandlers = ({
     if (timelineId === 'new') {
       createTimeline({
         variables: {
-          createTimelineInput: state.form,
+          createTimelineInput: {
+            ...state.form,
+            date: new Date(),
+          },
         },
       });
     } else {
@@ -46,4 +49,3 @@ export const useHandlers = ({
     onClickCancel,
   };
 };
-

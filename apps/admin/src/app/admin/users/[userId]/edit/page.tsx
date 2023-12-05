@@ -5,6 +5,7 @@ import { UserForm } from '@components';
 import { Form } from '@coc/ui';
 import { useUsersPage } from './hooks/usePage';
 import { useParams } from 'next/navigation';
+import { UserForm as UserFormType } from '@__generated__/graphql';
 
 export default function Page() {
   const {
@@ -22,7 +23,7 @@ export default function Page() {
       onClickSave={onClickSave}
       onClickCancel={onClickCancel}
     >
-      <UserForm schema={schema} state={formState} />
+      <UserForm schema={schema} state={formState as any} />
     </Form>
   );
 }

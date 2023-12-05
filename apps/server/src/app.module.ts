@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   databaseConfig,
   authConfig,
@@ -11,7 +11,6 @@ import {
   fileConfig,
 } from './configs';
 import corsConfig from './configs/cors.config';
-// import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { RolesModule } from './modules/roles/roles.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -38,6 +37,10 @@ import { TimelineItemsModule } from './modules/timelineItems/timelineItems.modul
 import { TimelinesModule } from './modules/timelines/timelines.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
 import { SessionsModule } from './modules/sessions/sessions.module';
+import { PrismaService } from './modules/global/prisma/prisma.service';
+import { RolesService } from './modules/roles/roles.service';
+import { SpacesService } from './modules/spaces/spaces.service';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -96,6 +99,7 @@ import { SessionsModule } from './modules/sessions/sessions.module';
     SessionsModule,
   ],
   providers: [
+    AppService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
@@ -106,4 +110,9 @@ import { SessionsModule } from './modules/sessions/sessions.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+  constructor(private readonly appService: AppService) {}
+  async onApplicationBootstrap() {
+    this.appService.setInitialDB();
+  }
+}

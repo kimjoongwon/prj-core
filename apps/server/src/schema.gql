@@ -344,6 +344,18 @@ type TimelineItem {
   timelineId: String
 }
 
+type TimelineItemForm {
+  sessionId: String!
+  startDateTime: DateTime
+  endDateTime: DateTime
+  maxCapacity: Float!
+  minCapacity: Float!
+  title: String!
+  description: String!
+  address: String!
+  timelineId: String
+}
+
 type TimelineItemEdge {
   cursor: String!
   node: TimelineItem!
@@ -461,18 +473,6 @@ type PaginatedSession {
   pageInfo: SessionPageInfo!
 }
 
-type TimelineItemForm {
-  sessionId: String!
-  startDateTime: DateTime
-  endDateTime: DateTime
-  maxCapacity: Float!
-  minCapacity: Float!
-  title: String!
-  description: String!
-  address: String!
-  timelineId: String
-}
-
 input RoleInput {
   name: RoleEnum!
 }
@@ -563,18 +563,18 @@ type Query {
   tenant(id: String!): Tenant!
   tenantForm: TenantForm!
   tenants(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTenant!
+  timeline(id: String!): Timeline!
+  timelineForm(timelineId: String!, sessionId: String!): TimelineForm!
+  timelines(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimeline!
+  timelineItem(id: String!): TimelineItem!
+  timelineItemForm(id: String!): TimelineItemForm!
+  timelineItems(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimelineItem!
   reservation(id: String!): Reservation!
   reservationForm: ReservationForm!
   reservations(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedReservation!
   session(id: String!): Session!
   sessionForm(id: String!): SessionForm!
   sessions(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSession!
-  timelineItem(id: String!): TimelineItem!
-  timelineItemForm(id: String!): TimelineItemForm!
-  timelineItems(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimelineItem!
-  timeline(id: String!): Timeline!
-  timelineForm(timelineId: String!, sessionId: String!): TimelineForm!
-  timelines(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedTimeline!
 }
 
 type Mutation {
@@ -608,18 +608,18 @@ type Mutation {
   createTenant(createTenantInput: CreateTenantInput!): Tenant!
   updateTenant(updateTenantInput: UpdateTenantInput!): Tenant!
   deleteTenant(id: String!): Tenant!
+  createTimeline(createTimelineInput: CreateTimelineInput!): Timeline!
+  updateTimeline(updateTimelineInput: UpdateTimelineInput!): Timeline!
+  deleteTimeline(id: String!): Timeline!
+  createTimelineItem(createTimelineItemInput: CreateTimelineItemInput!): TimelineItem!
+  updateTimelineItem(updateTimelineItemInput: UpdateTimelineItemInput!): TimelineItem!
+  deleteTimelineItem(id: String!): TimelineItem!
   createReservation(createReservationInput: CreateReservationInput!): Reservation!
   updateReservation(updateReservationInput: UpdateReservationInput!): Reservation!
   deleteReservation(id: String!): Reservation!
   createSession(createSessionInput: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   deleteSession(id: String!): Session!
-  createTimelineItem(createTimelineItemInput: CreateTimelineItemInput!): TimelineItem!
-  updateTimelineItem(updateTimelineItemInput: UpdateTimelineItemInput!): TimelineItem!
-  deleteTimelineItem(id: String!): TimelineItem!
-  createTimeline(createTimelineInput: CreateTimelineInput!): Timeline!
-  updateTimeline(updateTimelineInput: UpdateTimelineInput!): Timeline!
-  deleteTimeline(id: String!): Timeline!
 }
 
 input UpdateProfileInput {
@@ -761,35 +761,20 @@ input UpdateTenantInput {
   id: ID!
 }
 
-input CreateReservationInput {
-  status: String!
-  timelineItemId: String!
-}
-
-input UpdateReservationInput {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  deletedAt: DateTime
-  status: String
-  timelineItemId: String
-}
-
-input CreateSessionInput {
-  dates: [DateTime!]!
-  tenantId: String!
+input CreateTimelineInput {
   name: String!
+  date: DateTime!
+  sessionId: String!
 }
 
-input UpdateSessionInput {
+input UpdateTimelineInput {
   id: ID
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
-  dates: [DateTime!]
-  tenantId: String
   name: String
-  tilelines: [TimelineInputType!]
+  date: DateTime
+  sessionId: String
 }
 
 input CreateTimelineItemInput {
@@ -820,18 +805,33 @@ input UpdateTimelineItemInput {
   timelineId: String
 }
 
-input CreateTimelineInput {
-  name: String!
-  date: DateTime!
-  sessionId: String!
+input CreateReservationInput {
+  status: String!
+  timelineItemId: String!
 }
 
-input UpdateTimelineInput {
+input UpdateReservationInput {
   id: ID
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
+  status: String
+  timelineItemId: String
+}
+
+input CreateSessionInput {
+  dates: [DateTime!]!
+  tenantId: String!
+  name: String!
+}
+
+input UpdateSessionInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  dates: [DateTime!]
+  tenantId: String
   name: String
-  date: DateTime
-  sessionId: String
+  tilelines: [TimelineInputType!]
 }

@@ -53,7 +53,7 @@ export const TimelineForm = observer((props: FormProps) => {
               selectedTimelineItemIds.includes(timelineItem.id),
             )
             .map((timelineItem, index) => {
-              return <div>{timelineItem.title}</div>;
+              return <div key={index}>{timelineItem.title}</div>;
             })}
         </>
       )}
