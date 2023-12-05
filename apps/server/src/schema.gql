@@ -544,9 +544,6 @@ type Query {
   space(id: String!): Space!
   spaceForm(id: String!): SpaceForm!
   spaces(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSpace!
-  role(id: String!): Role!
-  roleForm(id: String!): RoleForm!
-  roles(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedRole!
   categoryForm(id: String!): CategoryForm!
   category(id: String!): Category!
   categories(take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedCategory!
@@ -575,6 +572,9 @@ type Query {
   session(id: String!): Session!
   sessionForm(id: String!): SessionForm!
   sessions(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedSession!
+  role(id: String!): Role!
+  roleForm(id: String!): RoleForm!
+  roles(name: String, startTimestamp: Float, endTimestamp: Float, take: Int, skip: Int = 1, cursor: String, sortingKey: String, sortingValue: String): PaginatedRole!
 }
 
 type Mutation {
@@ -588,10 +588,6 @@ type Mutation {
   createSpace(createSpaceInput: CreateSpaceInput!): Space!
   updateSpace(updateSpaceInput: UpdateSpaceInput!): Space!
   deleteSpace(id: String!): Space!
-  createRole(createRoleInput: CreateRoleInput!): Role!
-  updateRole(updateRoleInput: UpdateRoleInput!): Role!
-  deleteRole(id: String!): Role!
-  removeRole(id: String!): Role!
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   deleteCategories(ids: [String!]!): Category!
@@ -620,6 +616,10 @@ type Mutation {
   createSession(createSessionInput: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   deleteSession(id: String!): Session!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  deleteRole(id: String!): Role!
+  removeRole(id: String!): Role!
 }
 
 input UpdateProfileInput {
@@ -677,18 +677,6 @@ input UpdateSpaceInput {
   phone: String
   address: String
   id: ID
-}
-
-input CreateRoleInput {
-  name: RoleEnum
-}
-
-input UpdateRoleInput {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  deletedAt: DateTime
-  name: RoleEnum
 }
 
 input CreateCategoryInput {
@@ -834,4 +822,16 @@ input UpdateSessionInput {
   tenantId: String
   name: String
   tilelines: [TimelineInputType!]
+}
+
+input CreateRoleInput {
+  name: RoleEnum
+}
+
+input UpdateRoleInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+  name: RoleEnum
 }

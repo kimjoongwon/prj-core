@@ -16,6 +16,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   ) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
+    console.log('exception', exception);
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
@@ -33,6 +34,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
+
+    console.log(' ', responseBody);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }

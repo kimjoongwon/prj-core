@@ -1,8 +1,8 @@
-import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import {
   databaseConfig,
   authConfig,
@@ -37,9 +37,6 @@ import { TimelineItemsModule } from './modules/timelineItems/timelineItems.modul
 import { TimelinesModule } from './modules/timelines/timelines.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
 import { SessionsModule } from './modules/sessions/sessions.module';
-import { PrismaService } from './modules/global/prisma/prisma.service';
-import { RolesService } from './modules/roles/roles.service';
-import { SpacesService } from './modules/spaces/spaces.service';
 import { AppService } from './app.service';
 
 @Module({
@@ -113,6 +110,6 @@ import { AppService } from './app.service';
 export class AppModule implements OnApplicationBootstrap {
   constructor(private readonly appService: AppService) {}
   async onApplicationBootstrap() {
-    this.appService.setInitialDB();
+    await this.appService.setInitialDB();
   }
 }

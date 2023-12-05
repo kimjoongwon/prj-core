@@ -57,7 +57,7 @@ export class RolesResolver {
     return this.rolesService.findForm(id);
   }
 
-  @Public()
+  // @Public()
   @Query(() => PaginatedRole, { name: 'roles' })
   getRoles(@Args() args: GetRolesArgs) {
     return this.rolesService.findPaginatedRole(args);
