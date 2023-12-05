@@ -18,7 +18,7 @@ import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
-function DashboardLayout({ children }: { children: React.ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
   const pathname = usePathname();
   const items = [
@@ -120,4 +120,4 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default observer(DashboardLayout);
+export default observer(Layout);

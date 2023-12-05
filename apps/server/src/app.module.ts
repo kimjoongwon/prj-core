@@ -11,7 +11,6 @@ import {
   fileConfig,
 } from './configs';
 import corsConfig from './configs/cors.config';
-import { AllExceptionsFilter } from './common/filters/AllExceptionsFilter';
 import { RolesModule } from './modules/roles/roles.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
@@ -23,7 +22,7 @@ import { ProfilesModule } from './modules/profiles/profiles.module';
 import { ServicesModule } from './modules/services/services.module';
 import { UsersModule } from './modules/users/users.module';
 import { SpacesModule } from './modules/spaces/spaces.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -97,10 +96,10 @@ import { AppService } from './app.service';
   ],
   providers: [
     AppService,
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: AllExceptionsFilter,
+    // },
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,

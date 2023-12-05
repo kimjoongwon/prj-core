@@ -31,8 +31,8 @@ import {
   TIMELINEITEM_PAGE_PATH,
 } from '@constants';
 
-export const DASHBOARD_PATH = '/admin' as const;
-
+export const ADMIN_PATH = '/admin' as const;
+export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard` as const;
 export type Paths =
   | typeof LOGIN_PAGE_PATH
   | typeof USERS_PAGE_PATH
@@ -63,4 +63,5 @@ export type Paths =
   | typeof TIMELINE_PAGE_PATH
   | typeof TIMELINEITEMS_PAGE_PATH
   | typeof TIMELINEITEM_EDIT_PAGE_PATH
-  | typeof TIMELINEITEM_PAGE_PATH;
+  | typeof TIMELINEITEM_PAGE_PATH
+  | typeof DASHBOARD_PAGE_PATH;

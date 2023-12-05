@@ -1,19 +1,47 @@
 import { onError } from '@apollo/client/link/error';
-
+import { isServer } from '../utils/isServer';
+import { redirect } from 'next/navigation';
+interface OriginalError {
+  statusCode: number;
+  message: string;
+}
 export const errorLink = onError(
   ({ graphQLErrors, networkError, response }) => {
-    console.log('response', JSON.stringify(response));
-    console.log('graphQLErrors', graphQLErrors);
+    if (response?.errors && response?.errors?.length > 0) {
+      response?.errors?.forEach(error => {
+        console.log(error.extensions['originalError']);
+        const originalError = error.extensions[
+          'originalError'
+        ] as OriginalError;
+        if (originalError && originalError['statusCode'] === 401) {
+          if (!isServer()) {
+            const { search, pathname } = window.location;
+            return (window.location.href =
+              '/auth/login?redirect=' + pathname + search);
+          }
+        }
+      });
+    }
 
     if (graphQLErrors)
-      graphQLErrors?.forEach(({ message, locations, path }) =>
-        console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-            locations,
-          )}, Path: ${path}`,
-        ),
+      graphQLErrors?.forEach(
+        ({
+          message,
+          locations,
+          path,
+          stack,
+          name,
+          originalError,
+          nodes,
+          cause,
+          source,
+        }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+              locations,
+            )}, Path: ${path} stack: ${stack} name: ${name} originalError: ${originalError} nodes: ${nodes} cause: ${cause} source: ${source}`,
+          ),
       );
-    graphQLErrors?.forEach(test => console.log(test));
 
     if (networkError) console.log(`[Network error]: ${networkError}`);
   },

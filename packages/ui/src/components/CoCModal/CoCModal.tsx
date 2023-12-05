@@ -10,7 +10,7 @@ export const CoCModal = observer((props: CoCModalProps) => {
     isOpen: true,
   }));
   return (
-    <Modal isOpen={true}>
+    <Modal isOpen={true} size="full">
       <ModalContent>{children}</ModalContent>
     </Modal>
   );

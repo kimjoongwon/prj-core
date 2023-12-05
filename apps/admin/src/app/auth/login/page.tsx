@@ -5,8 +5,9 @@ import { useLocalObservable } from 'mobx-react-lite';
 import { useCoCRouter } from '../../shared/hooks/common';
 import { useMutation } from '@apollo/client';
 import { gql } from '@__generated__';
+import { DASHBOARD_PAGE_PATH } from '../../shared/constants/paths';
 
-export const LOGIN = gql(`
+const LOGIN = gql(`
   mutation Login($data: LoginInput!) {
     login(data: $data) {
       accessToken
@@ -33,19 +34,22 @@ export default function Page() {
         localStorage.setItem('accessToken', data.login.accessToken);
         localStorage.setItem('refreshToken', data.login.refreshToken);
         router.push({
-          url: '/admin/roles',
+          url: DASHBOARD_PAGE_PATH,
         });
       },
     });
   };
 
   return (
-    <div className="">
+    <>
+      <div className="w-full h-40 flex items-center justify-center">
+        <div className="font-bold text-4xl text-primary-700">PROMISE</div>
+      </div>
       <LoginForm state={state.form} />
-      <Spacer y={2} />
+      <Spacer y={8} />
       <Button fullWidth onClick={onClickLogin} isLoading={loading}>
-        Login
+        로그인
       </Button>
-    </div>
+    </>
   );
 }

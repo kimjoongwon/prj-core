@@ -1,9 +1,10 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, CorsConfig } from './configs/config.type';
 import { loggerConfig } from './configs';
+import { HttpErrorFilter } from './common/filters';
 
 declare const module: any;
 
@@ -14,7 +15,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const corsConfig = configService.get<CorsConfig>('cors');
   const appConfig = configService.get<AppConfig>('app');
-
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new HttpErrorFilter());
   app.useGlobalPipes(new ValidationPipe());
   // HMR
   if (module.hot) {
