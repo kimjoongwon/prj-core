@@ -23,8 +23,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const items = [
     {
-      text: '사용자 관리',
-      href: getUrlWithParams(USERS_PAGE_PATH),
+      text: '사용자 서비스',
       children: [
         {
           text: '역할 목록',
@@ -37,33 +36,34 @@ function Layout({ children }: { children: React.ReactNode }) {
       ],
     },
     {
-      text: '그룹 관리',
-      children: [
-        {
-          text: '그룹 관리',
-          href: getUrlWithParams(GROUPS_PAGE_PATH),
-        },
-        {
-          text: '사용자목록-2',
-          href: getUrlWithParams(USERS_PAGE_PATH),
-        },
-      ],
-    },
-    {
       text: '소속 관리',
       children: [
         {
           text: '소속',
           href: getUrlWithParams(SPACES_PAGE_PATH),
         },
+      ],
+    },
+    {
+      text: '카테고리 서비스',
+      children: [
         {
-          text: '사용자목록-2',
-          href: getUrlWithParams(USERS_PAGE_PATH),
+          text: '카테고리 관리',
+          href: getUrlWithParams(CATEGORIES_PAGE_PATH),
         },
       ],
     },
     {
-      text: '예약 관리',
+      text: '그룹 서비스',
+      children: [
+        {
+          text: '카테고리 관리',
+          href: getUrlWithParams(CATEGORIES_PAGE_PATH),
+        },
+      ],
+    },
+    {
+      text: '예약 서비스',
       children: [
         {
           text: '예약 관리',
@@ -74,18 +74,6 @@ function Layout({ children }: { children: React.ReactNode }) {
           href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
         },
       ],
-    },
-    {
-      text: '서비스목록',
-      href: getUrlWithParams(SERVICES_PAGE_PATH),
-    },
-    {
-      text: '서비스 카테고리',
-      href: getUrlWithParams(CATEGORIES_PAGE_PATH),
-    },
-    {
-      text: '카테고리관리',
-      href: getUrlWithParams(CATEGORY_ITEMS_PAGE_PATH),
     },
   ];
 

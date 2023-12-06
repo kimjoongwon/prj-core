@@ -1,9 +1,10 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Tenant as CoCTenant } from '@prisma/client';
 import { Role } from '../../roles/models/role.model';
-import { User } from '../../users/models/user.model';
+import { User, WrapperType } from '../../users/models/user.model';
 import { Space } from '../../spaces/models/space.model';
 import { Base } from '../../../common/interfaces';
+import { Relation } from '../../../common/types';
 
 @ObjectType()
 @InputType('TenantInputType')
@@ -18,7 +19,7 @@ export class Tenant extends Base implements CoCTenant {
   userId: string;
 
   @Field(type => User, { nullable: true })
-  user?: User;
+  user?: Relation<User>;
 
   @Field(type => String)
   spaceId: string;

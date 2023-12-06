@@ -14,16 +14,18 @@ import {
   NavbarMenuToggle,
 } from '@nextui-org/react';
 import { useState } from 'react';
-import { FaChevronDown, FaUser } from 'react-icons/fa';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { action } from 'mobx';
+import { FaArrowDown, FaArrowUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 export interface NavItem {
   text: string;
   href: string;
   children?: NavItem[];
   active: boolean;
+  icon?: React.ReactNode;
 }
 
 interface navMenuItem extends NavItem {}
@@ -36,7 +38,13 @@ interface NavbarProps {
 }
 
 export const CoCNavbar = observer((props: NavbarProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const state = useLocalObservable(() => ({
+    isMenuOpen: true,
+    selectedMenuItemText: '',
+  }));
+
+  const pathname = window.location.pathname;
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { rightContents = <div>left</div>, leftContents = <div>right</div> } = props;
   const { navItems = [], navMenuItems = [] } = props;
@@ -57,30 +65,20 @@ export const CoCNavbar = observer((props: NavbarProps) => {
           <DropdownTrigger>
             <Button
               size="lg"
-              disableRipple
+              variant="light"
               className="text-large p-0 bg-transparent data-[hover=true]:bg-transparent"
-              endContent={<FaChevronDown />}
             >
               {item.text}
             </Button>
           </DropdownTrigger>
         </NavbarItem>
         <DropdownMenu
-          aria-label="ACME features"
-          className="w-[340px]"
           itemClasses={{
             base: 'gap-4',
           }}
         >
           {(item.children || []).map(child => (
-            <DropdownItem
-              key={v4()}
-              className="w-[700px]"
-              description="Overcome any challenge with a supporting team ready to respond."
-              startContent={<FaUser />}
-              href={child.href}
-              as={NextLink}
-            >
+            <DropdownItem variant="bordered" key={v4()} href={child.href} as={NextLink}>
               {child.text}
             </DropdownItem>
           ))}
@@ -89,18 +87,39 @@ export const CoCNavbar = observer((props: NavbarProps) => {
     );
   };
 
-  const renderNavMenuItem = (item: navMenuItem) => (
-    <NavbarMenuItem key={item.text}>
-      <Link className="w-full" size="lg" color="foreground" href={item.href}>
-        {item.text}
-      </Link>
-    </NavbarMenuItem>
-  );
+  const renderNavMenuItem = (item: navMenuItem) => {
+    if (item.children) {
+      return (
+        <NavbarMenuItem key={item.text}>
+          <Button
+            startContent={item.icon}
+            variant="light"
+            onClick={action(() => (state.selectedMenuItemText = item.text))}
+            color=''
+          >
+            {item.text}test
+          </Button>
+        </NavbarMenuItem>
+      );
+    }
+
+    return (
+      <NavbarMenuItem key={item.text}>
+        <Link className="w-full" size="lg" color="foreground" href={item.href} as={Button}>
+          {item.text}
+        </Link>
+      </NavbarMenuItem>
+    );
+  };
 
   return (
-    <NextUINavbar maxWidth="2xl" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+    <NextUINavbar
+      maxWidth="2xl"
+      isMenuOpen={state.isMenuOpen}
+      onMenuOpenChange={action(() => (state.isMenuOpen = !state.isMenuOpen))}
+    >
       <NavbarContent>
-        <NavbarMenuToggle className="sm:hidden" aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
+        <NavbarMenuToggle className="sm:hidden" aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'} />
         <NavbarBrand>
           <p className="font-bold text-large">프로미스</p>
         </NavbarBrand>

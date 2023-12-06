@@ -1,32 +1,23 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, CorsConfig } from './configs/config.type';
 import { loggerConfig } from './configs';
-import { HttpErrorFilter } from './common/filters';
+import { AllExceptionsFilter } from './common/filters';
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, loggerConfig());
-  const logger = new Logger();
 
+  const logger = new Logger();
   const configService = app.get(ConfigService);
   const corsConfig = configService.get<CorsConfig>('cors');
   const appConfig = configService.get<AppConfig>('app');
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new HttpErrorFilter());
+
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe());
-  // HMR
-  if (module.hot) {
-    logger.log(
-      module.hot ? 'HMR이 적용되었습니다.' : 'Stop HMR',
-      'HMR Enabled',
-    );
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
 
   // Cors
   if (corsConfig.enabled) {
@@ -41,6 +32,7 @@ async function bootstrap() {
   }
 
   logger.log(`${appConfig.port} listening..`, 'Server Started');
+
   await app.listen(appConfig.port);
 }
 

@@ -11,7 +11,9 @@ import { GqlArgumentsHost, GqlExceptionFilter } from '@nestjs/graphql';
 import { GraphQLResolveInfo } from 'graphql';
 
 @Catch()
-export class HttpErrorFilter implements ExceptionFilter, GqlExceptionFilter {
+export class AllExceptionsFilter
+  implements ExceptionFilter, GqlExceptionFilter
+{
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
