@@ -3,21 +3,17 @@
 import { useCoCRouter } from '@hooks';
 import {
   CATEGORIES_PAGE_PATH,
-  CATEGORY_ITEMS_PAGE_PATH,
-  GROUPS_PAGE_PATH,
   ROLES_PAGE_PATH,
-  SERVICES_PAGE_PATH,
   SESSIONS_PAGE_PATH,
   TIMELINES_PAGE_PATH,
   USERS_PAGE_PATH,
   SPACES_PAGE_PATH,
 } from '@constants';
-import { CoCNavbar, NavItem } from '@coc/ui';
+import { CoCNavbar } from '@coc/ui';
 import { User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
-
+import { FcNext } from 'react-icons/fc';
 function Layout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
   const pathname = usePathname();
@@ -27,10 +23,12 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '역할 목록',
+          endContent: <FcNext />,
           href: getUrlWithParams(ROLES_PAGE_PATH),
         },
         {
           text: '사용자 목록',
+          endContent: <FcNext />,
           href: getUrlWithParams(USERS_PAGE_PATH),
         },
       ],
@@ -40,6 +38,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '소속',
+          endContent: <FcNext />,
           href: getUrlWithParams(SPACES_PAGE_PATH),
         },
       ],
@@ -49,6 +48,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '카테고리 관리',
+          endContent: <FcNext />,
           href: getUrlWithParams(CATEGORIES_PAGE_PATH),
         },
       ],
@@ -58,6 +58,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '카테고리 관리',
+          endContent: <FcNext />,
           href: getUrlWithParams(CATEGORIES_PAGE_PATH),
         },
       ],
@@ -67,42 +68,21 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '예약 관리',
+          endContent: <FcNext />,
           href: getUrlWithParams(SESSIONS_PAGE_PATH),
         },
         {
           text: '타임라인 관리',
+          endContent: <FcNext />,
           href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
         },
       ],
     },
   ];
 
-  const convertItem = (item: any): NavItem => {
-    if (item.children) {
-      return {
-        text: item.text,
-        href: item.href,
-        active: item.href === pathname,
-        children: item.children.map(convertItem),
-      };
-    }
-    return {
-      text: item.text,
-      href: item.href,
-      active: item.href === pathname,
-      children: item?.children,
-    };
-  };
-
-  const menuItems = useMemo(() => items.map(convertItem), [pathname]);
-
   return (
     <div>
-      <CoCNavbar
-        navItems={menuItems}
-        navMenuItems={menuItems}
-        rightContents={<User name="kimjoongwon" />}
-      />
+      <CoCNavbar navItems={items} rightContents={<User name="kimjoongwon" />} />
       <div className="flex flex-col w-full items-center p-4">{children}</div>
     </div>
   );

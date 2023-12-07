@@ -33,7 +33,7 @@ function SpacesPage() {
       <DataGridContainer>
         <DataGrid
           columns={columns}
-          data={data.spaces.nodes}
+          data={data?.spaces.nodes || []}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
           onSortChange={onClickSorting}
@@ -43,7 +43,7 @@ function SpacesPage() {
         <Pagination
           state={state.query}
           path="skip"
-          totalCount={data.spaces.pageInfo.totalCount}
+          totalCount={data?.spaces.pageInfo.totalCount || 0}
         />
       </PaginationContainer>
     </>

@@ -33,7 +33,7 @@ function RolesPage() {
       <DataGridContainer>
         <DataGrid
           columns={columns}
-          data={data.roles.nodes}
+          data={data?.roles.nodes || []}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
           onSortChange={onClickSorting}
@@ -43,7 +43,7 @@ function RolesPage() {
         <Pagination
           state={state.query}
           path="skip"
-          totalCount={data.roles.pageInfo.totalCount}
+          totalCount={data?.roles.pageInfo.totalCount || 0}
         />
       </PaginationContainer>
     </>

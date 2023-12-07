@@ -1,5 +1,4 @@
 import {
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -13,46 +12,44 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@nextui-org/react';
-import { useState } from 'react';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
-import { FaArrowDown, FaArrowUp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
+import { Button } from '../Button';
 
 export interface NavItem {
   text: string;
-  href: string;
+  href?: string;
   children?: NavItem[];
-  active: boolean;
-  icon?: React.ReactNode;
+  startContent?: React.ReactNode;
+  endContent?: React.ReactNode;
 }
-
-interface navMenuItem extends NavItem {}
 
 interface NavbarProps {
   navItems: NavItem[];
-  navMenuItems: navMenuItem[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
 }
 
 export const CoCNavbar = observer((props: NavbarProps) => {
+  const pathname = usePathname();
   const state = useLocalObservable(() => ({
-    isMenuOpen: true,
+    isMenuOpen: false,
     selectedMenuItemText: '',
   }));
 
-  const pathname = window.location.pathname;
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const { rightContents = <div>left</div>, leftContents = <div>right</div> } = props;
-  const { navItems = [], navMenuItems = [] } = props;
+  const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
     if (!item.children) {
       return (
-        <NavbarItem key={v4()} isActive={item.active}>
-          <Link href={item.href} color={item.active ? undefined : 'foreground'} size="lg" as={NextLink}>
+        <NavbarItem key={v4()}>
+          <Link href={item.href} size="lg" as={NextLink}>
             {item.text}
           </Link>
         </NavbarItem>
@@ -60,25 +57,35 @@ export const CoCNavbar = observer((props: NavbarProps) => {
     }
 
     return (
-      <Dropdown key={v4()}>
+      <Dropdown>
         <NavbarItem>
           <DropdownTrigger>
             <Button
-              size="lg"
+              disableRipple
+              className="text-large p-0 bg-transparent data-[hover=true]:bg-transparent text-gray-900"
+              radius="sm"
               variant="light"
-              className="text-large p-0 bg-transparent data-[hover=true]:bg-transparent"
             >
               {item.text}
             </Button>
           </DropdownTrigger>
         </NavbarItem>
         <DropdownMenu
+          aria-label="ACME features"
+          className="w-[340px]"
           itemClasses={{
             base: 'gap-4',
           }}
         >
-          {(item.children || []).map(child => (
-            <DropdownItem variant="bordered" key={v4()} href={child.href} as={NextLink}>
+          {(item.children || []).map((child, index) => (
+            <DropdownItem
+              key={index}
+              description={'asdasdihasodhasodhasodhsaodhasodhsaodhaosdhoahdohosaudhosaihdosa'}
+              href={child.href}
+              // startContent={child.startContent}
+              // endContent={child.endContent}
+              as={NextLink}
+            >
               {child.text}
             </DropdownItem>
           ))}
@@ -87,24 +94,36 @@ export const CoCNavbar = observer((props: NavbarProps) => {
     );
   };
 
-  const renderNavMenuItem = (item: navMenuItem) => {
+  const renderNavMenuItem = (item: NavItem) => {
     if (item.children) {
       return (
-        <NavbarMenuItem key={item.text}>
-          <Button
-            startContent={item.icon}
-            variant="light"
-            onClick={action(() => (state.selectedMenuItemText = item.text))}
-            color=''
-          >
-            {item.text}test
-          </Button>
-        </NavbarMenuItem>
+        <React.Fragment key={v4()}>
+          <NavbarMenuItem key={item.text}>{item.text}</NavbarMenuItem>
+          {item.children?.map(item => {
+            return (
+              <Button
+                key={v4()}
+                fullWidth
+                color={pathname === item.href ? 'primary' : 'default'}
+                className="justify-between"
+                startContent={item.startContent}
+                endContent={item.endContent}
+                onClick={() => {
+                  router.push(item?.href || '');
+                  state.isMenuOpen = false;
+                }}
+                variant="ghost"
+              >
+                {item.text}
+              </Button>
+            );
+          })}
+        </React.Fragment>
       );
     }
 
     return (
-      <NavbarMenuItem key={item.text}>
+      <NavbarMenuItem key={v4()}>
         <Link className="w-full" size="lg" color="foreground" href={item.href} as={Button}>
           {item.text}
         </Link>
@@ -114,6 +133,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
   return (
     <NextUINavbar
+      position="sticky"
       maxWidth="2xl"
       isMenuOpen={state.isMenuOpen}
       onMenuOpenChange={action(() => (state.isMenuOpen = !state.isMenuOpen))}
@@ -131,7 +151,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
       <NavbarContent justify="end">{rightContents}</NavbarContent>
 
-      <NavbarMenu>{navMenuItems.map(renderNavMenuItem)}</NavbarMenu>
+      <NavbarMenu>{navItems.map(renderNavMenuItem)}</NavbarMenu>
     </NextUINavbar>
   );
 });

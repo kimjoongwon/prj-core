@@ -1,10 +1,11 @@
 import { onError } from '@apollo/client/link/error';
 import { isServer } from '../utils/isServer';
-import { redirect } from 'next/navigation';
+
 interface OriginalError {
   statusCode: number;
   message: string;
 }
+
 export const errorLink = onError(
   ({ graphQLErrors, networkError, response }) => {
     if (response?.errors && response?.errors?.length > 0) {
@@ -13,6 +14,7 @@ export const errorLink = onError(
         const originalError = error.extensions[
           'originalError'
         ] as OriginalError;
+
         if (originalError && originalError['statusCode'] === 401) {
           if (!isServer()) {
             const { search, pathname } = window.location;

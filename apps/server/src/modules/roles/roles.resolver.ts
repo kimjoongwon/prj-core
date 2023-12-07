@@ -9,6 +9,8 @@ import { UpdateRoleInput } from './dto/update-role.input';
 import { Role } from './models/role.model';
 import { GqlAuthGuard } from '../../common/guards';
 import { Public } from '../../common/decorators';
+import { User as UserEntity } from '@prisma/client';
+import { User } from '../../common/decorators/user.decorator';
 
 @Resolver(() => Role)
 @UseGuards(GqlAuthGuard)
@@ -57,9 +59,8 @@ export class RolesResolver {
     return this.rolesService.findForm(id);
   }
 
-  // @Public()
   @Query(() => PaginatedRole, { name: 'roles' })
-  getRoles(@Args() args: GetRolesArgs) {
+  getRoles(@User() user: UserEntity, @Args() args: GetRolesArgs) {
     return this.rolesService.findPaginatedRole(args);
   }
 }
