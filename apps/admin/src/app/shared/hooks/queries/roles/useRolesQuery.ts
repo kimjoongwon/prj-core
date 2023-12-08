@@ -1,14 +1,13 @@
 import { GetRolesQueryVariables } from '@__generated__/graphql';
-import { skipToken } from '@apollo/client';
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { skipToken, useSuspenseQuery } from '@apollo/client';
+import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { GET_ROLES } from '@gqls';
-import { isServer } from '@utils';
 
 export const useRolesQuery = (variables: GetRolesQueryVariables) => {
   return useSuspenseQuery(
     GET_ROLES,
-    isServer() ? skipToken : { variables },
-
+    // isServer() ? skipToken : { variables },
+    { variables, fetchPolicy: 'cache-and-network' },
     // fetchPolicy: 'cache-and-network',
     // errorPolicy: 'all',
   );
