@@ -10,19 +10,16 @@ export type WrapperType<T> = T;
 
 @ObjectType()
 @InputType('UserInputType')
-export class User extends Base implements CoCUser {
+export class User extends Base implements Omit<CoCUser, 'password'> {
   @Field(type => String, { middleware: [loggerMiddleware] })
   email: string;
 
   @Field(type => String)
-  password: string;
-
-  @Field(type => String)
   name: string;
 
-  @Field(type => [Profile])
+  @Field(type => [Profile], { nullable: true })
   profiles?: Relation<Profile>[];
 
-  @Field(type => [Tenant])
+  @Field(type => [Tenant], { nullable: true })
   tenants?: Relation<Tenant>[];
 }

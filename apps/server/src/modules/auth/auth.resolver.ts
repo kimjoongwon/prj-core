@@ -24,12 +24,13 @@ export class AuthResolver {
     return {
       accessToken,
       refreshToken,
+      user: await this.auth.getUserFromToken(accessToken),
     };
   }
 
   @Mutation(() => Auth)
   async login(@Args('data') { email, password }: LoginInput) {
-    const { accessToken, refreshToken } = await this.auth.login(
+    const { accessToken, refreshToken, user } = await this.auth.login(
       email.toLowerCase(),
       password,
     );
@@ -37,6 +38,7 @@ export class AuthResolver {
     return {
       accessToken,
       refreshToken,
+      user,
     };
   }
 

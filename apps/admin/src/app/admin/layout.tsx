@@ -1,6 +1,6 @@
 'use client';
 
-import { useCoCRouter } from '@hooks';
+import { useAccount, useCoCRouter } from '@hooks';
 import {
   CATEGORIES_PAGE_PATH,
   ROLES_PAGE_PATH,
@@ -12,11 +12,11 @@ import {
 import { CoCNavbar } from '@coc/ui';
 import { User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { usePathname } from 'next/navigation';
 import { FcNext } from 'react-icons/fc';
 function Layout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
-  const pathname = usePathname();
+  const account = useAccount();
+
   const items = [
     {
       text: '사용자 서비스',
@@ -79,10 +79,13 @@ function Layout({ children }: { children: React.ReactNode }) {
       ],
     },
   ];
-
+  console.log(account.user?.email);
   return (
     <div>
-      <CoCNavbar navItems={items} rightContents={<User name="kimjoongwon" />} />
+      <CoCNavbar
+        navItems={items}
+        rightContents={<User name={account.user?.email} />}
+      />
       <div className="flex flex-col w-full items-center p-4">{children}</div>
     </div>
   );
