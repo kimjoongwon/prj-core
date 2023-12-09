@@ -1,6 +1,5 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
 import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
 import {
   ButtonGroupContainer,
@@ -33,7 +32,7 @@ function RolesPage() {
       <DataGridContainer>
         <DataGrid
           columns={columns}
-          data={data?.roles.nodes || []}
+          data={data?.roles?.nodes || []}
           selectionMode="multiple"
           onSelectionChange={onClickRow}
           onSortChange={onClickSorting}
@@ -50,4 +49,4 @@ function RolesPage() {
   );
 }
 
-export default observer(RolesPage);
+export default RolesPage;

@@ -12,6 +12,9 @@ export class AdditionalForm {
   @Field(type => [Option])
   spaceOptions: Option[];
 
+  @Field(type => String, { defaultValue: '' })
+  password: string;
+
   @Field(type => [Option])
   roleOptions: Option[];
 }

@@ -78,10 +78,13 @@ export class AuthService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  generateTokens(payload: { userId: string }): Token {
+  async generateTokens(payload: { userId: string }): Promise<Token> {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
+      user: await this.prisma.user.findUnique({
+        where: { id: payload.userId },
+      }),
     };
   }
 
