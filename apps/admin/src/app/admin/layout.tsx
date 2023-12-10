@@ -8,11 +8,20 @@ import {
   TIMELINES_PAGE_PATH,
   USERS_PAGE_PATH,
   SPACES_PAGE_PATH,
+  GROUPS_PAGE_PATH,
 } from '@constants';
 import { CoCNavbar } from '@coc/ui';
-import { User } from '@nextui-org/react';
+import { Spacer, User } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { FcNext } from 'react-icons/fc';
+import { FcBusinessman } from 'react-icons/fc';
+import { FcManager } from 'react-icons/fc';
+import { FcOrgUnit } from 'react-icons/fc';
+import { FcFolder } from 'react-icons/fc';
+import { FcGenealogy } from 'react-icons/fc';
+import { FcOvertime } from 'react-icons/fc';
+import { FcTimeline } from 'react-icons/fc';
+
 function Layout({ children }: { children: React.ReactNode }) {
   const { getUrlWithParams } = useCoCRouter();
   const account = useAccount();
@@ -23,11 +32,13 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '역할 목록',
+          startContent: <FcBusinessman />,
           endContent: <FcNext />,
           href: getUrlWithParams(ROLES_PAGE_PATH),
         },
         {
           text: '사용자 목록',
+          startContent: <FcManager />,
           endContent: <FcNext />,
           href: getUrlWithParams(USERS_PAGE_PATH),
         },
@@ -38,6 +49,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '소속',
+          startContent: <FcOrgUnit />,
           endContent: <FcNext />,
           href: getUrlWithParams(SPACES_PAGE_PATH),
         },
@@ -48,6 +60,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '카테고리 관리',
+          startContent: <FcFolder />,
           endContent: <FcNext />,
           href: getUrlWithParams(CATEGORIES_PAGE_PATH),
         },
@@ -57,9 +70,10 @@ function Layout({ children }: { children: React.ReactNode }) {
       text: '그룹 서비스',
       children: [
         {
-          text: '카테고리 관리',
+          text: '그룹 관리',
+          startContent: <FcGenealogy />,
           endContent: <FcNext />,
-          href: getUrlWithParams(CATEGORIES_PAGE_PATH),
+          href: getUrlWithParams(GROUPS_PAGE_PATH),
         },
       ],
     },
@@ -68,25 +82,36 @@ function Layout({ children }: { children: React.ReactNode }) {
       children: [
         {
           text: '예약 관리',
+          startContent: <FcOvertime />,
           endContent: <FcNext />,
           href: getUrlWithParams(SESSIONS_PAGE_PATH),
         },
         {
           text: '타임라인 관리',
+          startContent: <FcTimeline />,
           endContent: <FcNext />,
           href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
         },
       ],
     },
   ];
-  console.log(account.user?.email);
+  console.log('account', account);
   return (
     <div>
-      <CoCNavbar
-        navItems={items}
-        rightContents={<User name={account.user?.email} />}
-      />
-      <div className="flex flex-col w-full items-center p-4">{children}</div>
+      <div className="flex">
+        <aside className="flex-0 basis-20" />
+        <div className="flex flex-1 flex-col w-full items-center p-4">
+          <CoCNavbar
+            navItems={items}
+            rightContents={
+              <User name={account.user?.email} onClick={account.logout} />
+            }
+          />
+          <Spacer y={10} />
+          {children}
+        </div>
+        <aside className="flex-0 basis-20" />
+      </div>
     </div>
   );
 }

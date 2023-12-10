@@ -11,6 +11,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Button,
 } from '@nextui-org/react';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
@@ -18,7 +19,6 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { Button } from '../Button';
 
 export interface NavItem {
   text: string;
@@ -46,23 +46,13 @@ export const CoCNavbar = observer((props: NavbarProps) => {
   const { rightContents = <div>left</div>, leftContents = <div>right</div> } = props;
   const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
-    if (!item.children) {
-      return (
-        <NavbarItem key={v4()}>
-          <Link href={item.href} size="lg" as={NextLink}>
-            {item.text}
-          </Link>
-        </NavbarItem>
-      );
-    }
-
     return (
       <Dropdown>
         <NavbarItem>
           <DropdownTrigger>
             <Button
               disableRipple
-              className="text-large p-0 bg-transparent data-[hover=true]:bg-transparent text-gray-900"
+              className="capitalize text-large p-0 bg-transparent data-[hover=true]:bg-transparent text-gray-900"
               radius="sm"
               variant="light"
             >
@@ -76,14 +66,14 @@ export const CoCNavbar = observer((props: NavbarProps) => {
           itemClasses={{
             base: 'gap-4',
           }}
+          variant="flat"
         >
-          {(item.children || []).map((child, index) => (
+          {(item.children || []).map(child => (
             <DropdownItem
-              key={index}
-              description={'asdasdihasodhasodhasodhsaodhasodhsaodhaosdhoahdohosaudhosaihdosa'}
+              startContent={child.startContent}
+              endContent={child.endContent}
+              key={child.text}
               href={child.href}
-              // startContent={child.startContent}
-              // endContent={child.endContent}
               as={NextLink}
             >
               {child.text}

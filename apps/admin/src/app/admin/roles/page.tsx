@@ -1,11 +1,10 @@
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import {
   ButtonGroupContainer,
   DataGridContainer,
   PaginationContainer,
-  SearchFilterContainer,
 } from '@containers';
 import { useRolesPage } from './hooks';
 
@@ -23,9 +22,6 @@ function RolesPage() {
 
   return (
     <>
-      <SearchFilterContainer>
-        <Search state={state.search} queryState={state.query} path="email" />
-      </SearchFilterContainer>
       <ButtonGroupContainer>
         <ButtonGroup leftButtons={leftButtons} rightButtons={rightButtons} />
       </ButtonGroupContainer>

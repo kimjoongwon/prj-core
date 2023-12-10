@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Query, Context } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RoleForm } from './models/role-form.model';
@@ -9,8 +9,6 @@ import { UpdateRoleInput } from './dto/update-role.input';
 import { Role } from './models/role.model';
 import { GqlAuthGuard } from '../../common/guards';
 import { Public } from '../../common/decorators';
-import { User as UserEntity } from '@prisma/client';
-import { User } from '../../common/decorators/user.decorator';
 
 @Resolver(() => Role)
 @UseGuards(GqlAuthGuard)
@@ -55,12 +53,13 @@ export class RolesResolver {
 
   @Public()
   @Query(() => RoleForm, { name: 'roleForm' })
-  getRoleForm(@Args('id') id: string) {
+  getRoleForm(@Args('id') id: string, @Context() context) {
+    console.log('context', context);
     return this.rolesService.findForm(id);
   }
 
   @Query(() => PaginatedRole, { name: 'roles' })
-  getRoles(@User() user: UserEntity, @Args() args: GetRolesArgs) {
+  getRoles(@Args() args: GetRolesArgs) {
     return this.rolesService.findPaginatedRole(args);
   }
 }

@@ -9,14 +9,15 @@ import {
   PaginationContainer,
   SearchFilterContainer,
 } from '@containers';
+import { observer } from 'mobx-react-lite';
 
-export default function Page() {
+function Page() {
   const page = usePage();
 
   const {
     meta: { dataGrid, pagination, buttonGroup },
   } = page;
-
+  console.log(page.state.table.selectedRowIds);
   return (
     <>
       <SearchFilterContainer>
@@ -47,3 +48,5 @@ export default function Page() {
     </>
   );
 }
+
+export default observer(Page);

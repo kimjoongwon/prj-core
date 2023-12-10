@@ -1,16 +1,11 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { Profile as CoCProfile } from '@prisma/client';
-import { Base } from '../../../common/interfaces';
+import { ProfileEntity } from './profile.entity';
+import { User } from '../../users/models/user.model';
+import { Relation } from '../../../common/types';
 
 @ObjectType()
 @InputType('ProfileInputType')
-export class Profile extends Base implements CoCProfile {
-  @Field(type => String)
-  phone: string;
-
-  @Field(type => String)
-  nickname: string;
-
-  @Field(type => String)
-  userId: string;
+export class Profile extends ProfileEntity {
+  @Field(type => User, { nullable: true })
+  user?: Relation<User>;
 }

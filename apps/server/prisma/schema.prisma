@@ -181,6 +181,52 @@ model Reservation {
   deletedAt      DateTime?    @db.Timestamptz(6)
 }
 
+model Subject {
+  id         String              @id @default(cuid())
+  name       String              @unique
+  conditions SubjectConditions[] @default([])
+  property   String[]            @default([])
+  condition  String
+  abilities  Ability[]
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime?           @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime?           @db.Timestamptz(6)
+}
+
+model Ability {
+  id        String         @id @default(cuid())
+  type      AbilityTypes
+  roleId    String
+  action    AbilityActions
+  subjectId String
+  subject   Subject        @relation(fields: [subjectId], references: [id])
+  createdAt DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?      @db.Timestamptz(6)
+}
+
+enum SubjectConditions {
+  Equal
+  GreaterThan
+  GreaterThanOrEqual
+  LessThan
+  LessThanOrEqual
+  In
+}
+
+enum AbilityActions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  ACCESS
+}
+
+enum AbilityTypes {
+  CAN
+  CAN_NOT
+}
+
 enum EmailTemplates {
   REGISTER
   FORGET_PASSWORD
