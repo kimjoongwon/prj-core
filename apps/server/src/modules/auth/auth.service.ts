@@ -70,12 +70,24 @@ export class AuthService {
   }
 
   validateUser(userId: string): Promise<User> {
-    return this.prisma.user.findUnique({ where: { id: userId } });
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        profiles: true,
+        tenants: true,
+      },
+    });
   }
 
   getUserFromToken(token: string): Promise<User> {
     const id = this.jwtService.decode(token)['userId'];
-    return this.prisma.user.findUnique({ where: { id } });
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        profiles: true,
+        tenants: true,
+      },
+    });
   }
 
   async generateTokens(payload: { userId: string }): Promise<Token> {
@@ -84,6 +96,10 @@ export class AuthService {
       refreshToken: this.generateRefreshToken(payload),
       user: await this.prisma.user.findUnique({
         where: { id: payload.userId },
+        include: {
+          profiles: true,
+          tenants: true,
+        },
       }),
     };
   }

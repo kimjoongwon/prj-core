@@ -12,8 +12,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <NextUIProvider>
       <ModalProvider>
         <ApolloWrapper>
-          <AccountProvider>{children}</AccountProvider>
-          <ModalMount />
+          <AccountProvider>
+            {children}
+            <ModalMount />
+          </AccountProvider>
         </ApolloWrapper>
       </ModalProvider>
       <ToastContainer theme="dark" />

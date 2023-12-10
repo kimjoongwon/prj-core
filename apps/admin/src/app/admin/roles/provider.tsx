@@ -22,7 +22,7 @@ export const RolesPageProvider = observer((props: ContainerProps) => {
   const handlers = useHandlers({ state });
   const mutations = useMutations();
   const meta = useMeta({ mutations, state });
-  console.log(queries.rolesQuery.data);
+
   return (
     <RolesPageContext.Provider
       value={{

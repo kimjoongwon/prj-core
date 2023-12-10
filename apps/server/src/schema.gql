@@ -150,6 +150,7 @@ input CreateUserInput {
   email: String!
   name: String!
   nickname: String!
+  password: String!
   phone: String!
   roleId: String
   spaceId: String
@@ -331,6 +332,7 @@ type Profile {
   nickname: String!
   phone: String!
   updatedAt: DateTime
+  user: User
   userId: String!
 }
 
@@ -340,9 +342,7 @@ input ProfileInput {
 }
 
 input ProfileInputType {
-  nickname: String!
-  phone: String!
-  userId: String!
+  user: UserInputType
 }
 
 type Query {
@@ -434,7 +434,7 @@ type RoleForm {
   options: [Option!]!
 }
 
-input RoleInput {
+input RoleInputType {
   name: RoleEnum!
 }
 
@@ -567,7 +567,7 @@ type TenantForm {
 }
 
 input TenantInputType {
-  role: RoleInput
+  role: RoleInputType
   roleId: String!
   space: SpaceInput
   spaceId: String!
@@ -706,6 +706,7 @@ input UpdateProfileInput {
   id: ID!
   nickname: String
   phone: String
+  user: UserInputType
   userId: String
 }
 
@@ -801,8 +802,9 @@ type User {
   email: String!
   id: String!
   name: String!
-  profiles: [Profile!]
-  tenants: [Tenant!]
+  password: String!
+  profiles: [Profile!]!
+  tenants: [Tenant!]!
   updatedAt: DateTime
 }
 
@@ -824,10 +826,8 @@ type UserForm {
 }
 
 input UserInputType {
-  email: String!
-  name: String!
-  profiles: [ProfileInputType!]
-  tenants: [TenantInputType!]
+  profiles: [ProfileInputType!]!
+  tenants: [TenantInputType!]!
 }
 
 type UserPageInfo {

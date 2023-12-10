@@ -6,7 +6,6 @@ import { useActionColumns, useRoleColumns } from '@columns';
 import { ROLE_EDIT_PAGE_PATH, ROLE_PAGE_PATH } from '@constants';
 import { User } from '@__generated__/graphql';
 import { useMutations } from './useMutations';
-import { useParams } from 'next/navigation';
 import { useState } from './useState';
 
 export const useMeta = ({
@@ -21,8 +20,6 @@ export const useMeta = ({
   } = mutations;
   const router = useCoCRouter();
   const roleColumns = useRoleColumns();
-
-  const { roleId } = useParams();
 
   const actionColumns = useActionColumns<User>({
     meta: {

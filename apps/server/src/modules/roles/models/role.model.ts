@@ -12,7 +12,7 @@ registerEnumType($Enums.Roles, {
 });
 
 @ObjectType()
-@InputType('RoleInput')
+@InputType('RoleInputType')
 export class Role extends Base implements CoCRole {
   @Field(type => $Enums.Roles)
   name: $Enums.Roles;
