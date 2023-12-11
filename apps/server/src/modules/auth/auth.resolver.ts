@@ -4,6 +4,7 @@ import {
   Args,
   Parent,
   ResolveField,
+  Context,
 } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './models/auth.model';
@@ -12,6 +13,7 @@ import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
 import { RefreshTokenInput } from './dto/refresh-token.input';
 import { User } from '../users/models/user.model';
+import { Req, Res } from '../../common/decorators';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -31,22 +33,27 @@ export class AuthResolver {
   }
 
   @Mutation(() => Auth)
-  async login(@Args('data') { email, password }: LoginInput) {
+  async login(@Args('data') { email, password }: LoginInput, @Res() res) {
     const { accessToken, refreshToken, user } = await this.auth.login(
       email.toLowerCase(),
       password,
     );
 
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+
     return {
-      accessToken,
       refreshToken,
+      accessToken,
       user,
     };
   }
 
   @Mutation(() => Token)
-  async refreshToken(@Args() { token }: RefreshTokenInput) {
-    return this.auth.refreshToken(token);
+  async refreshToken(@Args() { token }: RefreshTokenInput, @Req() req) {
+    const refreshToken = req.cookies.refreshToken;
+    return this.auth.refreshToken(refreshToken);
   }
 
   @ResolveField('user', () => User)

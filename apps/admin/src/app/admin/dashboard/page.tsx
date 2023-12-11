@@ -1,6 +1,5 @@
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import {
   Button,
   Dropdown,
