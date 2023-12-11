@@ -15,12 +15,14 @@ export const errorLink = onError(
           'originalError'
         ] as OriginalError;
 
+        if (isServer()) {
+          return;
+        }
+
         if (originalError && originalError['statusCode'] === 401) {
-          if (!isServer()) {
-            const { search, pathname } = window.location;
-            return (window.location.href =
-              '/auth/login?redirect=' + pathname + search);
-          }
+          const { search, pathname } = window.location;
+          return (window.location.href =
+            '/auth/login?redirect=' + pathname + search);
         }
       });
     }

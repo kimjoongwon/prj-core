@@ -5,6 +5,8 @@ import { GET_ROLES } from '@gqls';
 import { isServer } from '@utils';
 
 export const useRolesQuery = (variables: GetRolesQueryVariables) => {
-  
-  return useSuspenseQuery(GET_ROLES, isServer() ? skipToken : { variables });
+  return useSuspenseQuery(
+    GET_ROLES,
+    isServer() ? skipToken : { variables, fetchPolicy: 'cache-and-network' },
+  );
 };

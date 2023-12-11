@@ -42,7 +42,6 @@ function makeClient() {
             ssrMultipartLink,
             errorLink,
             roundTripLink,
-            authLink,
             removeTypenameLink,
             httpLink,
           ]

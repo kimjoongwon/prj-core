@@ -1,13 +1,14 @@
 import { setContext } from '@apollo/client/link/context';
-import { isServer } from '../utils/isServer';
+import { getItem } from '../libs/storage';
 
-export const authLink = setContext((_, { headers }) => {
-  const token = isServer() ? '' : localStorage.getItem('accessToken');
-  const tenantId = isServer() ? '' : localStorage.getItem('tenantId');
+export const authLink = setContext(async (_, { headers }) => {
+  const tenantId = getItem('tenantId');
+  const accessToken = getItem('accessToken');
+
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: `Bearer ${accessToken}`,
       'tenant-id': tenantId ? tenantId : '',
     },
   };

@@ -17,8 +17,8 @@ export default registerAs<AuthConfig>('auth', () => {
 
   return {
     secret: process.env.AUTH_JWT_SECRET,
-    expires: process.env.AUTH_JWT_TOKEN_EXPIRES_IN,
     refresh: process.env.AUTH_JWT_TOKEN_REFRESH_IN,
+    expires: process.env.AUTH_JWT_TOKEN_EXPIRES_IN,
     bcryptSaltOrRound: 10,
   };
 });

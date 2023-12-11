@@ -3,10 +3,14 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../decorators';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+  ) {
     super();
   }
 
@@ -18,11 +22,13 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
     if (isPublic) {
       return true;
     }
+
     return super.canActivate(context);
   }
 
   getRequest(context: ExecutionContext) {
-    const ctx = GqlExecutionContext.create(context);
-    return ctx.getContext().req;
+    const ctx = GqlExecutionContext.create(context).getContext();
+
+    return ctx.req;
   }
 }

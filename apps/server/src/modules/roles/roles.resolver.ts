@@ -9,6 +9,7 @@ import { UpdateRoleInput } from './dto/update-role.input';
 import { Role } from './models/role.model';
 import { GqlAuthGuard } from '../../common/guards';
 import { Public } from '../../common/decorators';
+import { User } from '../../common/decorators/user.decorator';
 
 @Resolver(() => Role)
 @UseGuards(GqlAuthGuard)
@@ -59,7 +60,8 @@ export class RolesResolver {
   }
 
   @Query(() => PaginatedRole, { name: 'roles' })
-  getRoles(@Args() args: GetRolesArgs) {
+  getRoles(@Args() args: GetRolesArgs, @User() user) {
+    console.log('user', user);
     return this.rolesService.findPaginatedRole(args);
   }
 }
