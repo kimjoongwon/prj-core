@@ -18,13 +18,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: process.env.NODE_ENV != 'production',
       secretOrKey: authConfig.secret,
     });
   }
 
   async validate(payload: JwtDto): Promise<User> {
     const user = await this.authService.validateUser(payload.userId);
+    if (payload.exp < Date.now()) {
+      this.logger.log(`User token expired`);
+      throw new UnauthorizedException('Token expired');
+    }
+
     if (!user) {
       this.logger.log(`User ${user.email} not found`);
       throw new UnauthorizedException();

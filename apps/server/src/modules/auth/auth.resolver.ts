@@ -21,10 +21,12 @@ export class AuthResolver {
   async signup(@Args('data') data: SignupInput): Promise<Token> {
     data.email = data.email.toLowerCase();
     const { accessToken, refreshToken } = await this.auth.createUser(data);
+    const user = await this.auth.getUserFromToken(accessToken);
+
     return {
       accessToken,
       refreshToken,
-      user: await this.auth.getUserFromToken(accessToken),
+      user,
     };
   }
 

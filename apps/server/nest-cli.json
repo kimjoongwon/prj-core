@@ -4,14 +4,6 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "builder": "swc",
-    "plugins": [
-      {
-        "name": "@nestjs/graphql",
-        "options": {
-          "introspectComments": true
-        }
-      }
-    ],
     "assets": [
       {
         "include": "./.env",

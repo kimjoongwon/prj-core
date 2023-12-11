@@ -106,6 +106,7 @@ export class AuthService {
 
   private generateAccessToken(payload: { userId: string }): string {
     const authConfig = this.configService.get<AuthConfig>('auth');
+    console.log(authConfig.expires);
     return this.jwtService.sign(payload, {
       secret: authConfig.secret,
       expiresIn: authConfig.expires,

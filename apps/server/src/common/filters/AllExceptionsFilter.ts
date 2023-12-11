@@ -21,7 +21,9 @@ export class AllExceptionsFilter
 
     const gqlHost = GqlArgumentsHost.create(host);
     const info = gqlHost.getInfo<GraphQLResolveInfo>();
-
+    console.log('exception', exception.cause);
+    console.log('exception', exception.message);
+    console.log('exception', exception.name);
     const status = exception.getStatus
       ? exception.getStatus()
       : HttpStatus.INTERNAL_SERVER_ERROR;
