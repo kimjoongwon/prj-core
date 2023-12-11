@@ -14,5 +14,10 @@ export const getItem = <K extends keyof LocalStorage>(
   key: K,
 ): LocalStorage[K] | null => {
   const item = localStorage.getItem(key);
-  return item ? JSON.parse(item) : null;
+  if (!item) return null;
+  try {
+    return JSON.parse(item);
+  } catch (error) {
+    return item;
+  }
 };

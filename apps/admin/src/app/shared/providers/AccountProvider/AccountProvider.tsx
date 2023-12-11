@@ -7,8 +7,10 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useCoCRouter } from '@hooks';
 import { useMutation } from '@apollo/client';
 import { DASHBOARD_PAGE_PATH, LOGIN_PAGE_PATH } from '@constants';
-import { setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 import dayjs from 'dayjs';
+import { setItem } from '../../libs/storage';
+import { cookies } from 'next/headers';
 
 const LOGIN = gql(`
   mutation Login($data: LoginInput!) {
@@ -63,14 +65,11 @@ export const AccountProvider = observer(
             },
           },
           onCompleted: data => {
-            localStorage.setItem('accessToken', data.login.accessToken);
-            setCookie('refreshToken', data.login.refreshToken, {
-              httpOnly: true,
-              secure: process.env.NODE_ENV === 'production',
-              expires: dayjs().add(1, 'month').toDate(),
-            });
-
-            localStorage.setItem('tenantId', data.login.user.tenants?.[0]?.id);
+            const {
+              login: { accessToken, refreshToken },
+            } = data;
+            setItem('accessToken', accessToken);
+            setItem('tenantId', data.login.user.tenants?.[0]?.id);
             this.user = data.login.user;
             router.push({ url: DASHBOARD_PAGE_PATH });
           },
@@ -78,7 +77,7 @@ export const AccountProvider = observer(
       },
       logout() {
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        deleteCookie('refreshToken');
         account.user = null;
         router.push({ url: LOGIN_PAGE_PATH });
       },

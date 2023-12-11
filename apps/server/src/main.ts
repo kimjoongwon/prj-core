@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfig, CorsConfig } from './configs/config.type';
 import { loggerConfig } from './configs';
 import { AllExceptionsFilter } from './common/filters';
+import cookieParser from 'cookie-parser';
 
 declare const module: any;
 
@@ -18,6 +19,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe());
+  app.use(cookieParser());
 
   // Cors
   if (corsConfig.enabled) {
@@ -26,7 +28,7 @@ async function bootstrap() {
       'Cors Enabled',
     );
     app.enableCors({
-      origin: '*',
+      origin: 'http://localhost:3004',
       credentials: true,
     });
   }
