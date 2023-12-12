@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
-    "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshTokenDocument,
+    "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        name\n        tenants {\n          id\n        }\n      }\n    }\n  }\n": types.RefreshTokenDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n": types.CreateCategoryDocument,
     "\n  #graphql\n  mutation DeleteCategories($ids: [String!]!) {\n    deleteCategories(ids: $ids) {\n      name\n    }\n  }\n": types.DeleteCategoriesDocument,
@@ -101,7 +101,7 @@ export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n"];
+export function gql(source: "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        name\n        tenants {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        name\n        tenants {\n          id\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

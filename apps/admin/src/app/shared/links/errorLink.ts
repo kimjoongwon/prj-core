@@ -22,7 +22,7 @@ export const errorLink = onError(
         if (originalError && originalError['statusCode'] === 401) {
           const { search, pathname } = window.location;
           return (window.location.href =
-            '/gateway?redirectUrl=' + pathname + search);
+            '/auth?redirectUrl=' + pathname + search);
         }
       });
     }

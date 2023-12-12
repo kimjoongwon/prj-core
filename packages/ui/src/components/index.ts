@@ -1,6 +1,7 @@
 import Calendar from './Calendar';
 import ModalMount from './ModalMount';
 import { ModalProvider, useModal } from './ModalMount';
+import AutoComplete from './AutoComplete';
 export * from './Button';
 export * from './Checkbox';
 export * from './RadioGroup';
@@ -24,4 +25,4 @@ export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
 
-export { useModal, Calendar, ModalMount, ModalProvider };
+export { useModal, Calendar, ModalMount, ModalProvider, AutoComplete };

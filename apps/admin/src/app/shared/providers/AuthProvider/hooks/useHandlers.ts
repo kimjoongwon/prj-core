@@ -1,10 +1,10 @@
-import { setItem } from '../../../libs/storage';
+import { useCoCRouter } from '@hooks';
+import { authStore } from '@stores';
 import { useMutations } from './useMutations';
-import { useState } from './useState';
 import { deleteCookie } from 'cookies-next';
+import { storage } from '@libs';
 
 export const useHandlers = ({
-  state,
   mutations: {
     refreshTokenMutation: [
       refreshTokenMutate,
@@ -13,21 +13,22 @@ export const useHandlers = ({
     loginMutation: [loginMutate, { loading: isLoginLoading }],
   },
 }: {
-  state: ReturnType<typeof useState>;
   mutations: ReturnType<typeof useMutations>;
 }) => {
+  const router = useCoCRouter();
+
   const refreshToken = () => {
     refreshTokenMutate({
       onCompleted: data => {
-        const { accessToken } = data.refreshToken;
+        const { accessToken, user } = data.refreshToken;
         const { search } = window.location;
 
         const pathname = new URLSearchParams(search).get('redirectUrl');
-
-        state.accessToken = accessToken;
+        authStore.accessToken = accessToken;
+        authStore.user = user;
 
         if (pathname) {
-          window.location.href = pathname;
+          router.replace(pathname as any);
         }
       },
     });
@@ -36,7 +37,7 @@ export const useHandlers = ({
   const login = (onCompleted?: () => void) => {
     const {
       loginForm: { email, password },
-    } = state;
+    } = authStore;
 
     loginMutate({
       variables: {
@@ -49,9 +50,10 @@ export const useHandlers = ({
         const {
           login: { accessToken, user },
         } = data;
-        setItem('tenantId', user.tenants?.[0]?.id);
-        state.accessToken = accessToken;
-        state.user = data.login.user;
+
+        storage.setItem('tenantId', user.tenants?.[0]?.id);
+        authStore.accessToken = accessToken;
+        authStore.user = data.login.user;
         if (onCompleted) {
           onCompleted();
         }
@@ -60,8 +62,8 @@ export const useHandlers = ({
   };
 
   const logout = (onCompleted?: () => void) => {
-    state.accessToken = undefined;
-    state.user = null;
+    authStore.accessToken = undefined;
+    authStore.user = null;
     deleteCookie('refreshToken');
     if (onCompleted) {
       onCompleted();

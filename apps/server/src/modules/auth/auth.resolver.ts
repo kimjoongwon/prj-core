@@ -60,7 +60,7 @@ export class AuthResolver {
     const { accessToken, refreshToken, user } =
       await this.auth.refreshToken(oldRefreshToken);
 
-    req.cookies('refreshToken', refreshToken, {
+    req.res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
 

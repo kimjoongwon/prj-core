@@ -6,6 +6,14 @@ export const REFRESH_TOKEN = gql(`
     refreshToken {
       accessToken
       refreshToken
+      user {
+        id
+        email
+        name
+        tenants {
+          id
+        }
+      }
     }
   }
 `);
