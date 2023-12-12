@@ -25,7 +25,7 @@ const AuthLayout = (props: AuthLayoutProps) => {
       return router.replace({ url: LOGIN_PAGE_PATH });
     }
 
-    if (isTokenExpired(accessToken)) {
+    if (isTokenExpired(accessToken) || accessToken) {
       refreshToken();
     }
   }, []);

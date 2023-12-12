@@ -12,6 +12,7 @@ import { PasswordService } from './providers/password.service';
 import { AuthConfig } from '../../configs';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { User } from '../users/models/user.model';
+import { JwtDto } from './dto/jwt.dto';
 
 @Injectable()
 export class AuthService {
@@ -122,7 +123,12 @@ export class AuthService {
   }
 
   refreshToken(token: string) {
+    if (this.isTokenExpired(token)) {
+      throw new UnauthorizedException('Token expired');
+    }
+
     const authConfig = this.configService.get<AuthConfig>('auth');
+
     try {
       const { userId } = this.jwtService.verify(token, {
         secret: authConfig.secret,
@@ -134,5 +140,11 @@ export class AuthService {
     } catch (e) {
       throw new UnauthorizedException();
     }
+  }
+
+  isTokenExpired(token: string) {
+    const decodedToken = this.jwtService.decode(token) as JwtDto;
+
+    return decodedToken.exp * 1000 < Date.now();
   }
 }

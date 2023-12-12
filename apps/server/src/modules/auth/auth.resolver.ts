@@ -11,9 +11,9 @@ import { Auth } from './models/auth.model';
 import { Token } from './models/token.model';
 import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
-import { RefreshTokenInput } from './dto/refresh-token.input';
 import { User } from '../users/models/user.model';
 import { Req, Res } from '../../common/decorators';
+import { JwtService } from '@nestjs/jwt';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -33,7 +33,13 @@ export class AuthResolver {
   }
 
   @Mutation(() => Auth)
-  async login(@Args('data') { email, password }: LoginInput, @Res() res) {
+  async login(
+    @Args('data') { email, password }: LoginInput,
+    @Res() res,
+    @Req() req,
+  ) {
+    const oldRefreshToken = req.cookies.refreshToken;
+
     const { accessToken, refreshToken, user } = await this.auth.login(
       email.toLowerCase(),
       password,

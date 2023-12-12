@@ -11,7 +11,7 @@ import { User } from '@prisma/client';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly authService: AuthService,
-    readonly configService: ConfigService,
+    private readonly configService: ConfigService,
     private readonly logger: Logger,
   ) {
     const authConfig = configService.get<AuthConfig>('auth');
@@ -25,7 +25,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: JwtDto): Promise<User> {
     const user = await this.authService.validateUser(payload.userId);
     if (payload.exp * 1000 < Date.now()) {
-      this.logger.log(`User token expired`);
+      this.logger.log('User token expired');
+
       throw new UnauthorizedException('Token expired');
     }
 

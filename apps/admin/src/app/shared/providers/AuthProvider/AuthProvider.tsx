@@ -26,9 +26,9 @@ export const AuthProvider = observer((props: { children: React.ReactNode }) => {
   reaction(
     () => state.accessToken,
     () => {
-      if (!state.accessToken) {
-        refreshToken();
-      }
+      if (state.accessToken) return;
+
+      refreshToken();
     },
   );
 

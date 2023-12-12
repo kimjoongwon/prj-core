@@ -23,7 +23,9 @@ export const useHandlers = ({
         const { search } = window.location;
 
         const pathname = new URLSearchParams(search).get('redirectUrl');
+
         state.accessToken = accessToken;
+
         if (pathname) {
           window.location.href = pathname;
         }
