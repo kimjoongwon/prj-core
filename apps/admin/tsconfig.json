@@ -37,7 +37,8 @@
       "@containers": ["./src/app/shared/components/containers/index.ts"],
       "@types": ["./src/app/shared/types/index.ts"],
       "@adminPages": ["./src/app/admin/index.ts"],
-      "@libs": ["./src/app/shared/libs/index.ts"]
+      "@libs": ["./src/app/shared/libs/index.ts"],
+      "@stores": ["./src/app/shared/stores/index.ts"]
     }
   },
   "include": [

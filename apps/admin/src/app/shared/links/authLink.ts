@@ -1,9 +1,10 @@
 import { setContext } from '@apollo/client/link/context';
-import { getItem } from '../libs/storage';
+import { storage } from '@libs';
+import { authStore } from '@stores';
 
 export const authLink = setContext(async (_, { headers }) => {
-  const tenantId = getItem('tenantId');
-  const accessToken = getItem('accessToken');
+  const tenantId = storage.getItem('tenantId');
+  const accessToken = authStore.accessToken;
 
   return {
     headers: {

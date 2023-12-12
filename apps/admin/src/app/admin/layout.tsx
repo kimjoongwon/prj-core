@@ -22,6 +22,7 @@ import { FcFolder } from 'react-icons/fc';
 import { FcGenealogy } from 'react-icons/fc';
 import { FcOvertime } from 'react-icons/fc';
 import { FcTimeline } from 'react-icons/fc';
+import { authStore } from '@stores';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const router = useCoCRouter();
@@ -97,7 +98,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       ],
     },
   ];
-  console.log('account', auth);
+
   return (
     <div>
       <div className="flex">
@@ -107,7 +108,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             navItems={items}
             rightContents={
               <User
-                name={auth.state.user?.email}
+                name={authStore.user?.email}
                 onClick={() =>
                   auth.handlers.logout(() =>
                     router.push({ url: LOGIN_PAGE_PATH }),

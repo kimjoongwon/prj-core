@@ -244,12 +244,12 @@ type Mutation {
 }
 
 type Option {
-  name: String!
+  text: String!
   value: String!
 }
 
 input OptionInput {
-  name: String!
+  text: String!
   value: String!
 }
 
