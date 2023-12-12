@@ -38,8 +38,6 @@ export class AuthResolver {
     @Res() res,
     @Req() req,
   ) {
-    const oldRefreshToken = req.cookies.refreshToken;
-
     const { accessToken, refreshToken, user } = await this.auth.login(
       email.toLowerCase(),
       password,
@@ -58,8 +56,19 @@ export class AuthResolver {
 
   @Mutation(() => Token)
   async refreshToken(@Req() req) {
-    const refreshToken = req.cookies.refreshToken;
-    return this.auth.refreshToken(refreshToken);
+    const oldRefreshToken = req.cookies.refreshToken;
+    const { accessToken, refreshToken, user } =
+      await this.auth.refreshToken(oldRefreshToken);
+
+    req.cookies('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      user,
+    };
   }
 
   @ResolveField('user', () => User)
