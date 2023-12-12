@@ -51,7 +51,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => Token)
-  async refreshToken(@Args() { token }: RefreshTokenInput, @Req() req) {
+  async refreshToken(@Req() req) {
     const refreshToken = req.cookies.refreshToken;
     return this.auth.refreshToken(refreshToken);
   }

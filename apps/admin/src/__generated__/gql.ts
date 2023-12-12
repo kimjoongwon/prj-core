@@ -13,7 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  #graphql\n  mutation RefreshToken($token: JWT!) {\n    refreshToken(token: $token) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshTokenDocument,
+    "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
+    "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshTokenDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n": types.CreateCategoryDocument,
     "\n  #graphql\n  mutation DeleteCategories($ids: [String!]!) {\n    deleteCategories(ids: $ids) {\n      name\n    }\n  }\n": types.DeleteCategoriesDocument,
@@ -77,7 +78,6 @@ const documents = {
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
     "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetUserFormDocument,
-    "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
 };
 
 /**
@@ -97,7 +97,11 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  #graphql\n  mutation RefreshToken($token: JWT!) {\n    refreshToken(token: $token) {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation RefreshToken($token: JWT!) {\n    refreshToken(token: $token) {\n      accessToken\n      refreshToken\n    }\n  }\n"];
+export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -350,10 +354,6 @@ export function gql(source: "#graphql\n  query GetUsers(\n    $email: String\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAccount, useCoCRouter } from '@hooks';
+import { useAuth, useCoCRouter } from '@hooks';
 import {
   CATEGORIES_PAGE_PATH,
   ROLES_PAGE_PATH,
@@ -9,6 +9,7 @@ import {
   USERS_PAGE_PATH,
   SPACES_PAGE_PATH,
   GROUPS_PAGE_PATH,
+  LOGIN_PAGE_PATH,
 } from '@constants';
 import { CoCNavbar } from '@coc/ui';
 import { Spacer, User } from '@nextui-org/react';
@@ -23,8 +24,9 @@ import { FcOvertime } from 'react-icons/fc';
 import { FcTimeline } from 'react-icons/fc';
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { getUrlWithParams } = useCoCRouter();
-  const account = useAccount();
+  const router = useCoCRouter();
+  const { getUrlWithParams } = router;
+  const auth = useAuth();
 
   const items = [
     {
@@ -95,7 +97,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       ],
     },
   ];
-  console.log('account', account);
+  console.log('account', auth);
   return (
     <div>
       <div className="flex">
@@ -104,7 +106,14 @@ function Layout({ children }: { children: React.ReactNode }) {
           <CoCNavbar
             navItems={items}
             rightContents={
-              <User name={account.user?.email} onClick={account.logout} />
+              <User
+                name={auth.state.user?.email}
+                onClick={() =>
+                  auth.handlers.logout(() =>
+                    router.push({ url: LOGIN_PAGE_PATH }),
+                  )
+                }
+              />
             }
           />
           <Spacer y={10} />

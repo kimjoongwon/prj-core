@@ -223,7 +223,7 @@ type Mutation {
   deleteTimeline(id: String!): Timeline!
   deleteTimelineItem(id: String!): TimelineItem!
   login(data: LoginInput!): Auth!
-  refreshToken(token: JWT!): Token!
+  refreshToken: Token!
   removeCategory(id: String!): Category!
   removeProfile(id: String!): Profile!
   removeRole(id: String!): Role!
