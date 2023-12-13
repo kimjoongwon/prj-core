@@ -44,7 +44,7 @@ export class TimelineItemsService {
       },
     });
     return timelineItems.map(timelineItem => ({
-      name: timelineItem.title,
+      text: timelineItem.title,
       value: timelineItem.id,
     }));
   }

@@ -29,8 +29,8 @@ export class TenantsService {
       where: query?.where,
       include: {
         role: true,
-        space: true,
         user: true,
+        space: true,
       },
     });
 
