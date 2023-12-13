@@ -31,7 +31,6 @@ export const BaseInput = <T extends any>(props: InputProps<T>, ref: ForwardedRef
   return (
     <NextUIInput
       type={type}
-      variant="bordered"
       {...rest}
       ref={ref}
       onChange={handleChange}

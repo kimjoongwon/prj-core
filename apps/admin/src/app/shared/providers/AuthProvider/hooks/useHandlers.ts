@@ -11,6 +11,7 @@ export const useHandlers = ({
       { loading: isRefreshTokenLoading },
     ],
     loginMutation: [loginMutate, { loading: isLoginLoading }],
+    logoutMutation: [logoutMutate, { loading: isLogoutLoading }],
   },
 }: {
   mutations: ReturnType<typeof useMutations>;
@@ -24,11 +25,14 @@ export const useHandlers = ({
         const { search } = window.location;
 
         const pathname = new URLSearchParams(search).get('redirectUrl');
+
         authStore.accessToken = accessToken;
         authStore.user = user;
 
         if (pathname) {
-          router.replace(pathname as any);
+          router.replace({
+            url: pathname as any,
+          });
         }
       },
     });
@@ -62,9 +66,9 @@ export const useHandlers = ({
   };
 
   const logout = (onCompleted?: () => void) => {
+    logoutMutate();
     authStore.accessToken = undefined;
-    authStore.user = null;
-    deleteCookie('refreshToken');
+    authStore.user = undefined;
     if (onCompleted) {
       onCompleted();
     }

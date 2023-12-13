@@ -7,10 +7,9 @@ import { observable } from 'mobx';
 
 interface Auth {
   loginForm: LoginInput;
-  user:
+  user?:
     | LoginMutation['login']['user']
-    | RefreshTokenMutation['refreshToken']['user']
-    | null;
+    | RefreshTokenMutation['refreshToken']['user'];
   loading: boolean;
   accessToken?: string;
 }
@@ -22,5 +21,5 @@ export const authStore = observable<Auth>({
     email: '',
     password: '',
   },
-  user: null,
+  user: undefined,
 });

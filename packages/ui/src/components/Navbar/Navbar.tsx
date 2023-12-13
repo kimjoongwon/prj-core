@@ -12,6 +12,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Button,
+  Divider,
 } from '@nextui-org/react';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
@@ -47,7 +48,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
   const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
     return (
-      <Dropdown>
+      <Dropdown key={item.text}>
         <NavbarItem>
           <DropdownTrigger>
             <Button
@@ -55,12 +56,14 @@ export const CoCNavbar = observer((props: NavbarProps) => {
               className="capitalize text-large p-0 bg-transparent data-[hover=true]:bg-transparent text-gray-900"
               radius="sm"
               variant="light"
+              color="danger"
             >
               {item.text}
             </Button>
           </DropdownTrigger>
         </NavbarItem>
         <DropdownMenu
+          selectedKeys={pathname}
           aria-label="ACME features"
           className="w-[340px]"
           itemClasses={{
@@ -72,9 +75,10 @@ export const CoCNavbar = observer((props: NavbarProps) => {
             <DropdownItem
               startContent={child.startContent}
               endContent={child.endContent}
-              key={child.text}
+              key={child.href}
               href={child.href}
               as={NextLink}
+              className="font-bold text-4xl"
             >
               {child.text}
             </DropdownItem>
@@ -125,13 +129,16 @@ export const CoCNavbar = observer((props: NavbarProps) => {
     <NextUINavbar
       position="sticky"
       maxWidth="2xl"
+      isBordered={true}
       isMenuOpen={state.isMenuOpen}
       onMenuOpenChange={action(() => (state.isMenuOpen = !state.isMenuOpen))}
     >
       <NavbarContent>
         <NavbarMenuToggle className="sm:hidden" aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'} />
         <NavbarBrand>
-          <p className="font-bold text-large">프로미스</p>
+          <Button onClick={() => router.replace('/admin/dashboard')} className="font-bold text-2xl" variant="light">
+            프로미스
+          </Button>
         </NavbarBrand>
       </NavbarContent>
 

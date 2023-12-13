@@ -123,6 +123,10 @@ export class AuthService {
   }
 
   refreshToken(token: string) {
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
     if (this.isTokenExpired(token)) {
       throw new UnauthorizedException('Token expired');
     }
@@ -145,6 +149,6 @@ export class AuthService {
   isTokenExpired(token: string) {
     const decodedToken = this.jwtService.decode(token) as JwtDto;
 
-    return decodedToken.exp * 1000 < Date.now();
+    return decodedToken?.exp * 1000 < Date.now();
   }
 }

@@ -8,11 +8,11 @@ export const GET_CATEGORY_FORM = gql(`
       itemId
       serviceId
       itemOptions {
-        name
+        text
         value
       }
       serviceOptions {
-        name
+        text
         value
       }
     }

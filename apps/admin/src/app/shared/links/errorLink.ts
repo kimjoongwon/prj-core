@@ -1,5 +1,4 @@
 import { onError } from '@apollo/client/link/error';
-import { isServer } from '../utils/isServer';
 
 interface OriginalError {
   statusCode: number;
@@ -9,18 +8,25 @@ interface OriginalError {
 export const errorLink = onError(
   ({ graphQLErrors, networkError, response }) => {
     if (response?.errors && response?.errors?.length > 0) {
+      const { search, pathname } = window.location;
+
       response?.errors?.forEach(error => {
         console.log(error.extensions['originalError']);
         const originalError = error.extensions[
           'originalError'
         ] as OriginalError;
 
-        if (isServer()) {
-          return;
-        }
-
         if (originalError && originalError['statusCode'] === 401) {
-          const { search, pathname } = window.location;
+          if (originalError.message === 'No token provided') {
+            return (window.location.href =
+              '/auth/login?redirectUrl=' + pathname + search);
+          }
+
+          if (originalError.message === 'Token expired') {
+            return (window.location.href =
+              '/auth/login?redirectUrl=' + pathname + search);
+          }
+
           return (window.location.href =
             '/auth?redirectUrl=' + pathname + search);
         }

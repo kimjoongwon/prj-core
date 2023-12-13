@@ -8,7 +8,7 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = (props: AuthLayoutProps) => {
-  return <>{props.children}</>;
+  return <div className="flex justify-center">{props.children}</div>;
 };
 
 export default observer(AuthLayout);

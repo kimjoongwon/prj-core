@@ -23,6 +23,8 @@ import { FcGenealogy } from 'react-icons/fc';
 import { FcOvertime } from 'react-icons/fc';
 import { FcTimeline } from 'react-icons/fc';
 import { authStore } from '@stores';
+import { cookies } from 'next/headers';
+import { deleteCookie } from 'cookies-next';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const router = useCoCRouter();
@@ -36,13 +38,11 @@ function Layout({ children }: { children: React.ReactNode }) {
         {
           text: '역할 목록',
           startContent: <FcBusinessman />,
-          endContent: <FcNext />,
           href: getUrlWithParams(ROLES_PAGE_PATH),
         },
         {
           text: '사용자 목록',
           startContent: <FcManager />,
-          endContent: <FcNext />,
           href: getUrlWithParams(USERS_PAGE_PATH),
         },
       ],
@@ -53,7 +53,6 @@ function Layout({ children }: { children: React.ReactNode }) {
         {
           text: '소속',
           startContent: <FcOrgUnit />,
-          endContent: <FcNext />,
           href: getUrlWithParams(SPACES_PAGE_PATH),
         },
       ],
@@ -64,7 +63,6 @@ function Layout({ children }: { children: React.ReactNode }) {
         {
           text: '카테고리 관리',
           startContent: <FcFolder />,
-          endContent: <FcNext />,
           href: getUrlWithParams(CATEGORIES_PAGE_PATH),
         },
       ],
@@ -75,7 +73,6 @@ function Layout({ children }: { children: React.ReactNode }) {
         {
           text: '그룹 관리',
           startContent: <FcGenealogy />,
-          endContent: <FcNext />,
           href: getUrlWithParams(GROUPS_PAGE_PATH),
         },
       ],
@@ -86,13 +83,11 @@ function Layout({ children }: { children: React.ReactNode }) {
         {
           text: '예약 관리',
           startContent: <FcOvertime />,
-          endContent: <FcNext />,
           href: getUrlWithParams(SESSIONS_PAGE_PATH),
         },
         {
           text: '타임라인 관리',
           startContent: <FcTimeline />,
-          endContent: <FcNext />,
           href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
         },
       ],
@@ -109,11 +104,15 @@ function Layout({ children }: { children: React.ReactNode }) {
             rightContents={
               <User
                 name={authStore.user?.email}
-                onClick={() =>
-                  auth.handlers.logout(() =>
-                    router.push({ url: LOGIN_PAGE_PATH }),
-                  )
-                }
+                onClick={() => {
+                  // logout api필요 쿠키 초기화를 위해서!!
+                  auth.handlers.logout(() => {
+                    authStore.user = undefined;
+                    authStore.accessToken = undefined;
+                    deleteCookie('refreshToken');
+                    router.push({ url: LOGIN_PAGE_PATH });
+                  });
+                }}
               />
             }
           />

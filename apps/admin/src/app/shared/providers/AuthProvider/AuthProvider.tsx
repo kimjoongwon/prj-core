@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { authStore, useHandlers } from './hooks';
 import { useMutations } from './hooks/useMutations';
+import { usePathname } from 'next/navigation';
 
 interface AuthContext {
   handlers: ReturnType<typeof useHandlers>;
@@ -17,10 +18,15 @@ export const AuthProvider = observer((props: { children: React.ReactNode }) => {
     mutations,
   });
 
+  const pathname = usePathname();
+
   const { refreshToken } = handlers;
 
   useEffect(() => {
     if (authStore.accessToken) return;
+
+    if (pathname.includes('/auth')) return;
+
     refreshToken();
   }, []);
 

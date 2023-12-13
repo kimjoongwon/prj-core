@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n": types.LoginDocument,
+    "\n  mutation Logout{\n    logout \n  }\n": types.LogoutDocument,
     "\n  #graphql\n  mutation RefreshToken {\n    refreshToken {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        name\n        tenants {\n          id\n        }\n      }\n    }\n  }\n": types.RefreshTokenDocument,
     "#graphql\n  mutation SignUp($signUpInput: SignupInput!) {\n    signup(data: $signUpInput) {\n      user {\n        id\n        email\n      }\n    }\n  }\n": types.SignUpDocument,
     "\n  #graphql\n  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {\n    createCategory(createCategoryInput: $createCategoryInput) {\n      id\n    }\n  }\n": types.CreateCategoryDocument,
@@ -49,7 +50,7 @@ const documents = {
     "#graphql\n  mutation UpdateUser ($updateUserInput: UpdateUserInput!) {\n    updateUser(updateUserInput: $updateUserInput){\n      email\n    }\n  }\n": types.UpdateUserDocument,
     "#graphql\n  query GetCategories($take: Int, $skip: Int) {\n    categories (take: $take, skip: $skip) {\n      nodes {\n        id \n        name\n        deletedAt\n      }\n      pageInfo {\n        endCursor \n        totalCount\n      }\n    }\n  }\n": types.GetCategoriesDocument,
     "\n  query GetCategory($id: String!) {\n    category(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetCategoryDocument,
-    "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetCategoryFormDocument,
+    "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        text\n        value\n      }\n      serviceOptions {\n        text\n        value\n      }\n    }\n  }\n": types.GetCategoryFormDocument,
     "\n  #graphql\n  query GetCategoryItem ($id: String!){\n    categoryItem (id: $id) {\n      id\n      name\n      parentId\n    }\n  }\n": types.GetCategoryItemDocument,
     "\n  #graphql\n  query GetCategoryItems(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    categoryItems(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        name\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetCategoryItemsDocument,
     "\n  #graphql\n  query GetCategoryItemForm($id: String!) {\n    categoryItemForm(id: $id) {\n      name\n      ancestorIds\n      parentId\n      tag\n      tenantId\n    }\n  }\n": types.GetCategoryItemFormDocument,
@@ -59,7 +60,7 @@ const documents = {
     "\n  query GetGroupForm($id: String!) {\n    groupForm(id: $id) {\n      name\n      tenantId\n      serviceId\n    }\n  }\n": types.GetGroupFormDocument,
     "\n  query GetRole($id: String!){\n    role(id: $id) {\n      id\n    }\n  }\n": types.GetRoleDocument,
     "\n  #graphql\n  query GetRoles(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    roles(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        name\n        deletedAt\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetRolesDocument,
-    "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n": types.GetRoleFormDocument,
+    "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        text\n        value\n      }\n    }\n  }\n": types.GetRoleFormDocument,
     "\n  query GetService($id: String!) {\n    service(id: $id) {\n      id\n      name\n    }\n  }\n": types.GetServiceDocument,
     "\n  #graphql\n  query GetServices(\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    services(\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        createdAt\n        name\n      }\n      pageInfo {\n        totalCount\n      }\n    }\n  }\n": types.GetServicesDocument,
     "\n  query GetServiceForm {\n    serviceForm {\n      name\n    }\n  }\n": types.GetServiceFormDocument,
@@ -77,7 +78,7 @@ const documents = {
     "\n  query GetTimelineForm($timelineId: String!, $sessionId: String!) {\n    timelineForm(timelineId: $timelineId, sessionId: $sessionId) {\n      sessionId\n      date\n      session {\n        name\n        dates\n        tenantId\n      }\n      timelineItems {\n        id\n        title\n        startDateTime\n        endDateTime\n        maxCapacity\n        minCapacity\n        address\n        description\n      }\n    }\n  }\n": types.GetTimelineFormDocument,
     "\n  query GetUser($id: String!) {\n    user(id: $id) {\n      id\n      email\n      profiles {\n        nickname\n        phone\n      }\n    }\n  }\n": types.GetUserDocument,
     "#graphql\n  query GetUsers(\n    $email: String\n    $skip: Int\n    $take: Int\n    $sortingKey: String\n    $sortingValue: String\n  ) {\n    users(\n      email: $email\n      skip: $skip\n      take: $take\n      sortingKey: $sortingKey\n      sortingValue: $sortingValue\n    ) {\n      nodes {\n        id\n        email\n      }\n      pageInfo {\n        endCursor\n        totalCount\n      }\n    }\n  }\n": types.GetUsersDocument,
-    "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n": types.GetUserFormDocument,
+    "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        text\n        value\n      }\n      spaceOptions {\n        text\n        value\n      }\n    }\n  }\n": types.GetUserFormDocument,
 };
 
 /**
@@ -98,6 +99,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"): (typeof documents)["\n  mutation Login($data: LoginInput!) {\n    login(data: $data) {\n      user {\n        id\n        name\n        email\n        createdAt\n        tenants {\n          id\n          role {\n            id\n            name\n          }\n        }\n      }\n      accessToken\n      refreshToken\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation Logout{\n    logout \n  }\n"): (typeof documents)["\n  mutation Logout{\n    logout \n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -241,7 +246,7 @@ export function gql(source: "\n  query GetCategory($id: String!) {\n    category
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        name\n        value\n      }\n      serviceOptions {\n        name\n        value\n      }\n    }\n  }\n"];
+export function gql(source: "\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        text\n        value\n      }\n      serviceOptions {\n        text\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query GetCategoryForm($id: String!) {\n    categoryForm(id: $id) {\n      name\n      itemId\n      serviceId\n      itemOptions {\n        text\n        value\n      }\n      serviceOptions {\n        text\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -281,7 +286,7 @@ export function gql(source: "\n  #graphql\n  query GetRoles(\n    $skip: Int\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        name\n        value\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        text\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetRoleForm($id: String!) {\n    roleForm(id: $id) {\n      name\n      options {\n        text\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -353,7 +358,7 @@ export function gql(source: "#graphql\n  query GetUsers(\n    $email: String\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        name\n        value\n      }\n      spaceOptions {\n        name\n        value\n      }\n    }\n  }\n"];
+export function gql(source: "#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        text\n        value\n      }\n      spaceOptions {\n        text\n        value\n      }\n    }\n  }\n"): (typeof documents)["#graphql\n  query GetUserForm($id: String!){\n    userForm(id: $id) {\n      name\n      email\n      password\n      roleId\n      spaceId\n      roleOptions {\n        text\n        value\n      }\n      spaceOptions {\n        text\n        value\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

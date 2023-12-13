@@ -9,11 +9,11 @@ export const GET_USER_FORM = gql(`#graphql
       roleId
       spaceId
       roleOptions {
-        name
+        text
         value
       }
       spaceOptions {
-        name
+        text
         value
       }
     }

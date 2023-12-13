@@ -30,16 +30,9 @@ export function LoginForm(props: LoginFormProps) {
 
   return (
     <Card fullWidth>
-      <CardBody>
+      <CardBody >
         <FormControl timings={['onBlur']} schema={schema}>
-          <Input
-            state={state}
-            path="email"
-            placeholder="이메일을 입력해주세요."
-            label="이메일"
-            type="email"
-            variant="bordered"
-          />
+          <Input state={state} path="email" placeholder="이메일을 입력해주세요." label="이메일" type="email" />
         </FormControl>
         <Spacer />
         <FormControl timings={['onBlur']} schema={schema}>
@@ -48,7 +41,6 @@ export function LoginForm(props: LoginFormProps) {
             path="password"
             placeholder="패스워드를 입력해주세요."
             label="패스워드"
-            variant="bordered"
             type="password"
           />
         </FormControl>

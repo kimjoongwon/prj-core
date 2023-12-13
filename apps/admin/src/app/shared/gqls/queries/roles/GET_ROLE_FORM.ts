@@ -5,7 +5,7 @@ export const GET_ROLE_FORM = gql(`
     roleForm(id: $id) {
       name
       options {
-        name
+        text
         value
       }
     }
