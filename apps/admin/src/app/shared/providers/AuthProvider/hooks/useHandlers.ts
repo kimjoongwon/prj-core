@@ -1,7 +1,6 @@
 import { useCoCRouter } from '@hooks';
 import { authStore } from '@stores';
 import { useMutations } from './useMutations';
-import { deleteCookie } from 'cookies-next';
 import { storage } from '@libs';
 
 export const useHandlers = ({

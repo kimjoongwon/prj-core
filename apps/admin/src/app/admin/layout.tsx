@@ -11,10 +11,9 @@ import {
   GROUPS_PAGE_PATH,
   LOGIN_PAGE_PATH,
 } from '@constants';
-import { CoCNavbar } from '@coc/ui';
-import { Spacer, User } from '@nextui-org/react';
+import { CoCNavbar, User } from '@coc/ui';
+import { Spacer } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { FcNext } from 'react-icons/fc';
 import { FcBusinessman } from 'react-icons/fc';
 import { FcManager } from 'react-icons/fc';
 import { FcOrgUnit } from 'react-icons/fc';
@@ -23,7 +22,6 @@ import { FcGenealogy } from 'react-icons/fc';
 import { FcOvertime } from 'react-icons/fc';
 import { FcTimeline } from 'react-icons/fc';
 import { authStore } from '@stores';
-import { cookies } from 'next/headers';
 import { deleteCookie } from 'cookies-next';
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -101,20 +99,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-1 flex-col w-full items-center p-4">
           <CoCNavbar
             navItems={items}
-            rightContents={
-              <User
-                name={authStore.user?.email}
-                onClick={() => {
-                  // logout api필요 쿠키 초기화를 위해서!!
-                  auth.handlers.logout(() => {
-                    authStore.user = undefined;
-                    authStore.accessToken = undefined;
-                    deleteCookie('refreshToken');
-                    router.push({ url: LOGIN_PAGE_PATH });
-                  });
-                }}
-              />
-            }
+            rightContents={<User name={authStore.user?.email} />}
           />
           <Spacer y={10} />
           {children}
