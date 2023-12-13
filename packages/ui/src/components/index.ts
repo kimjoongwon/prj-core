@@ -4,6 +4,7 @@ import { ModalProvider, useModal } from './ModalMount';
 import AutoComplete from './AutoComplete';
 import Editor from './Editor';
 import Textarea from './Textarea';
+import User from './User';
 export * from './Button';
 export * from './Checkbox';
 export * from './RadioGroup';
@@ -21,10 +22,25 @@ export * from './Skeleton';
 export * from './Select';
 export * from './Form';
 export * from './MultiSelect';
-export { CardHeader, CardBody, CardFooter, Card, Spacer } from '@nextui-org/react';
+export {
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Card,
+  Spacer,
+} from '@nextui-org/react';
 export * from './CoCModal';
 export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
 
-export { Textarea, useModal, Calendar, ModalMount, ModalProvider, AutoComplete, Editor };
+export {
+  Textarea,
+  useModal,
+  Calendar,
+  ModalMount,
+  ModalProvider,
+  AutoComplete,
+  Editor,
+  User,
+};

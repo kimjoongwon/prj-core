@@ -12,7 +12,6 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Button,
-  Divider,
 } from '@nextui-org/react';
 import { v4 } from 'uuid';
 import NextLink from 'next/link';
@@ -44,7 +43,8 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
   const router = useRouter();
 
-  const { rightContents = <div>left</div>, leftContents = <div>right</div> } = props;
+  const { rightContents = <div>left</div>, leftContents = <div>right</div> } =
+    props;
   const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
     return (
@@ -118,7 +118,13 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
     return (
       <NavbarMenuItem key={v4()}>
-        <Link className="w-full" size="lg" color="foreground" href={item.href} as={Button}>
+        <Link
+          className="w-full"
+          size="lg"
+          color="foreground"
+          href={item.href}
+          as={Button}
+        >
           {item.text}
         </Link>
       </NavbarMenuItem>
@@ -127,16 +133,21 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
   return (
     <NextUINavbar
-      position="sticky"
       maxWidth="2xl"
-      isBordered={true}
       isMenuOpen={state.isMenuOpen}
       onMenuOpenChange={action(() => (state.isMenuOpen = !state.isMenuOpen))}
     >
       <NavbarContent>
-        <NavbarMenuToggle className="sm:hidden" aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'} />
+        <NavbarMenuToggle
+          className="sm:hidden"
+          aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'}
+        />
         <NavbarBrand>
-          <Button onClick={() => router.replace('/admin/dashboard')} className="font-bold text-2xl" variant="light">
+          <Button
+            onClick={() => router.replace('/admin/dashboard')}
+            className="font-bold text-2xl"
+            variant="light"
+          >
             프로미스
           </Button>
         </NavbarBrand>
