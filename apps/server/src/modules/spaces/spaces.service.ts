@@ -56,15 +56,13 @@ export class SpacesService {
     return this.prisma.space.create({ data });
   }
 
-  async getServiceOptions() {
-    const serviceOptions = (await this.prisma.space.findMany({})).map(
-      space => ({
-        name: space.name,
-        value: space.id,
-      }),
-    );
+  async getSpaceOptions() {
+    const spaceOptions = (await this.prisma.space.findMany({})).map(space => ({
+      text: space.name,
+      value: space.id,
+    }));
 
-    return serviceOptions;
+    return spaceOptions;
   }
 
   async findPaginatedSpace(args: GetSpacesArgs): Promise<PaginatedSpace> {

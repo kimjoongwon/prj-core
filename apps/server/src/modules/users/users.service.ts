@@ -83,7 +83,7 @@ export class UsersService {
   }
 
   async findForm(id: string): Promise<UserForm> {
-    const spaceOptions = await this.spacesService.getServiceOptions();
+    const spaceOptions = await this.spacesService.getSpaceOptions();
     const roleOptions = await this.rolesService.getRoleOptions();
 
     const userForm = { ...defaultUserForm };

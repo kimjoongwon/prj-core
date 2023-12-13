@@ -12,11 +12,11 @@ export const defaultRoleForm: RoleForm = {
   name: $Enums.Roles.USER,
   options: [
     {
-      name: '유저',
+      text: '유저',
       value: $Enums.Roles.USER,
     },
     {
-      name: '슈퍼매니져',
+      text: '슈퍼매니져',
       value: $Enums.Roles.SUPER_ADMIN,
     },
   ],

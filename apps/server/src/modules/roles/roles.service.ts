@@ -51,7 +51,7 @@ export class RolesService {
 
   async getRoleOptions() {
     const roleOptions = (await this.prisma.role.findMany({})).map(role => ({
-      name: role.name,
+      text: role.name,
       value: role.id,
     }));
 

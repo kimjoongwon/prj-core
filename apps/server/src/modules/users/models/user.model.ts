@@ -8,8 +8,8 @@ import { Tenant } from '../../tenants/models/tenant.model';
 @InputType('UserInputType')
 export class User extends UserEntity {
   @Field(type => [Profile])
-  profiles: Relation<Profile>[];
+  profiles?: Relation<Profile>[];
 
   @Field(type => [Tenant])
-  tenants: Relation<Tenant>[];
+  tenants?: Relation<Tenant>[];
 }
