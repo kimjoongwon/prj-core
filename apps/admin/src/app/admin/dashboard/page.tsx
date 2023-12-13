@@ -1,5 +1,6 @@
 'use client';
 
+import { AutoComplete } from '@coc/ui';
 import {
   Button,
   Dropdown,
@@ -7,8 +8,12 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react';
+import { useLocalObservable } from 'mobx-react-lite';
 
 export default function Page() {
+  const state = useLocalObservable(() => ({
+    space: 'aaaa',
+  }));
   return (
     <div>
       <Dropdown>
@@ -21,6 +26,25 @@ export default function Page() {
           <DropdownItem key="test3">test</DropdownItem>
         </DropdownMenu>
       </Dropdown>
+      <AutoComplete
+        state={state}
+        path="space"
+        label="사용자 소속"
+        options={[
+          {
+            text: 'test',
+            value: 'test',
+          },
+          {
+            text: 'aaaa',
+            value: 'aaaa',
+          },
+          {
+            text: 'bbb',
+            value: 'bbb',
+          },
+        ]}
+      />
     </div>
   );
 }
