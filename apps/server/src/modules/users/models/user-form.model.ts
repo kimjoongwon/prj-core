@@ -1,9 +1,4 @@
-import {
-  Field,
-  IntersectionType,
-  ObjectType,
-  PartialType,
-} from '@nestjs/graphql';
+import { Field, IntersectionType, ObjectType } from '@nestjs/graphql';
 import { CreateUserInput } from '../dto/create-user.input';
 import { Option } from '../../../common/models';
 

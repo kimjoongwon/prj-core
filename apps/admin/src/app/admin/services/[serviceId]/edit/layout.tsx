@@ -1,3 +1,5 @@
+'use client';
+
 import { ContainerProps } from '@coc/ui';
 import { ServiceEditPageProvider } from './provider';
 

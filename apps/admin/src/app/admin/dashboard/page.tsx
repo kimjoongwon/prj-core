@@ -1,6 +1,6 @@
 'use client';
 
-import { AutoComplete, Editor } from '@coc/ui';
+import { AutoComplete, Editor, Textarea } from '@coc/ui';
 import {
   Button,
   Dropdown,
@@ -14,9 +14,9 @@ function DashboardPage() {
   const state = useLocalObservable(() => ({
     space: 'aaaa',
     htmlText: '',
+    textArea: '',
   }));
 
-  console.log(state.htmlText);
   return (
     <div>
       <Dropdown>
@@ -48,12 +48,19 @@ function DashboardPage() {
           },
         ]}
       />
-      <div className='w-[300px]'>
+      <Textarea state={state} path="textArea" />
+      <div className="w-[300px]">
         <Editor state={state} path="htmlText" />
       </div>
-      <div>{state.htmlText}</div>
+      <Text king={state} />
     </div>
   );
 }
+
+const Text = observer((props: { king: any }) => {
+  const { king } = props;
+  console.log(king.textArea);
+  return <p className="whitespace-pre">{king?.textArea}</p>;
+});
 
 export default observer(DashboardPage);

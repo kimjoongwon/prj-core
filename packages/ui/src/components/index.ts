@@ -3,6 +3,7 @@ import ModalMount from './ModalMount';
 import { ModalProvider, useModal } from './ModalMount';
 import AutoComplete from './AutoComplete';
 import Editor from './Editor';
+import Textarea from './Textarea';
 export * from './Button';
 export * from './Checkbox';
 export * from './RadioGroup';
@@ -26,4 +27,4 @@ export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
 
-export { useModal, Calendar, ModalMount, ModalProvider, AutoComplete, Editor };
+export { Textarea, useModal, Calendar, ModalMount, ModalProvider, AutoComplete, Editor };
