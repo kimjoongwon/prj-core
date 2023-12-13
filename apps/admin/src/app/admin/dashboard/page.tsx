@@ -1,6 +1,6 @@
 'use client';
 
-import { AutoComplete } from '@coc/ui';
+import { AutoComplete, Editor } from '@coc/ui';
 import {
   Button,
   Dropdown,
@@ -8,12 +8,15 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react';
-import { useLocalObservable } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 
-export default function Page() {
+function DashboardPage() {
   const state = useLocalObservable(() => ({
     space: 'aaaa',
+    htmlText: '',
   }));
+
+  console.log(state.htmlText);
   return (
     <div>
       <Dropdown>
@@ -45,6 +48,12 @@ export default function Page() {
           },
         ]}
       />
+      <div className='w-[300px]'>
+        <Editor state={state} path="htmlText" />
+      </div>
+      <div>{state.htmlText}</div>
     </div>
   );
 }
+
+export default observer(DashboardPage);
