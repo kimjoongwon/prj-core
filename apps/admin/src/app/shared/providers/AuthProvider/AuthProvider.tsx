@@ -2,9 +2,9 @@
 
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { authStore, useHandlers } from './hooks';
-import { useMutations } from './hooks/useMutations';
 import { usePathname } from 'next/navigation';
+import { useHandlers, useMutations } from './hooks';
+import { authStore } from '@stores';
 
 interface AuthContext {
   handlers: ReturnType<typeof useHandlers>;

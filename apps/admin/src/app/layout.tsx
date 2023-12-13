@@ -1,6 +1,6 @@
 import './globals.css';
 import '@coc/ui/styles.css';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import { Providers } from './providers';
 
 export default function RootLayout(props: {
