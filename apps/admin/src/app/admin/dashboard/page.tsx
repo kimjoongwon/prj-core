@@ -9,6 +9,7 @@ import {
   DropdownTrigger,
 } from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
+import { modalStore } from '../../shared/stores/modalStore';
 
 function DashboardPage() {
   const state = useLocalObservable(() => ({
@@ -53,6 +54,13 @@ function DashboardPage() {
         <Editor state={state} path="htmlText" />
       </div>
       <Text king={state} />
+      <Button
+        onClick={() => {
+          modalStore.SasModal.isOpen = true;
+        }}
+      >
+        테스트모달
+      </Button>
     </div>
   );
 }
