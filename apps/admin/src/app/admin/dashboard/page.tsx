@@ -16,7 +16,10 @@ function DashboardPage() {
     space: 'aaaa',
     htmlText: '',
     textArea: '',
+    tests: ['test', 'test2'],
   }));
+
+  console.log(state.tests);
 
   return (
     <div>
@@ -57,6 +60,42 @@ function DashboardPage() {
       <Button
         onClick={() => {
           modalStore.SasModal.isOpen = true;
+          modalStore.SasModal.state = state;
+          modalStore.SasModal.path = 'tests';
+          modalStore.SasModal.options = [
+            {
+              text: 'test',
+              value: 'test',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+            {
+              text: 'test2',
+              value: 'test2',
+            },
+          ];
         }}
       >
         테스트모달

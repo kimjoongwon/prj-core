@@ -5,5 +5,15 @@ export const modalStore = observable({
     isOpen: false,
     state: {},
     path: '',
+    options: [
+      {
+        text: 'test',
+        value: 'test',
+      },
+      {
+        text: 'test2',
+        value: 'test2',
+      },
+    ],
   },
 });
