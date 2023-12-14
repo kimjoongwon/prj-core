@@ -1,7 +1,7 @@
 import './globals.css';
 import '@coc/ui/styles.css';
-// import 'react-quill/dist/quill.snow.css';
 import { Providers } from './providers';
+import { ModalMount } from '@coc/ui';
 
 export default function RootLayout(props: {
   children: React.ReactNode;

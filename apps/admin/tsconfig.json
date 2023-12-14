@@ -38,7 +38,8 @@
       "@types": ["./src/app/shared/types/index.ts"],
       "@adminPages": ["./src/app/admin/index.ts"],
       "@libs": ["./src/app/shared/libs/index.ts"],
-      "@stores": ["./src/app/shared/stores/index.ts"]
+      "@stores": ["./src/app/shared/stores/index.ts"],
+      "@modals": ["./src/app/shared/modals/index.ts"]
     }
   },
   "include": [
