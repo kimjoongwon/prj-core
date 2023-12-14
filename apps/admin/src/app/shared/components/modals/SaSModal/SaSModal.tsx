@@ -5,6 +5,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  Selection,
 } from '@nextui-org/react';
 import { modalStore } from '@stores';
 import { get } from 'lodash-es';
@@ -14,12 +15,20 @@ export const SaSModal = () => {
   const initialValues = get(state, path);
 
   const { localState } = useMobxHookForm(initialValues, state, path);
+  const handleSelectionChange = (keys: Selection) => {
+    console.log('?');
+  };
 
   return (
-    <Modal isOpen={modalStore.SasModal.isOpen}>
+    <Modal isOpen={isOpen}>
       <ModalContent>
         <ModalBody>
-          <Listbox selectedKeys={[]} items={[]}>
+          <Listbox
+            selectionMode="multiple"
+            items={[]}
+            variant="flat"
+            onSelectionChange={handleSelectionChange}
+          >
             {item => {
               return <ListboxItem key={'test1'}>test</ListboxItem>;
             }}
