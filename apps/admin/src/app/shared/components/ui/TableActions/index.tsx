@@ -13,8 +13,8 @@ export const TableActions = <T extends object>(
         const { onClick, ...rest } = button;
         return (
           <Button
-            key={index}
             {...rest}
+            key={index}
             size="sm"
             variant="ghost"
             onClick={() => button.onClick(context)}

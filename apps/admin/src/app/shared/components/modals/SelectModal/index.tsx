@@ -1,6 +1,13 @@
 'use client';
 
-import { SelectModal } from './SelectModal';
-import { observer } from 'mobx-react-lite';
+import dynamic from 'next/dynamic';
+import { SelectModalView } from './SelectModalView';
 
-export default observer(SelectModal);
+const SelectModal = dynamic(
+  () => import('./SelectModalView').then(mod => mod.SelectModalView),
+  {
+    ssr: false,
+  },
+) as typeof SelectModalView;
+
+export default SelectModal;

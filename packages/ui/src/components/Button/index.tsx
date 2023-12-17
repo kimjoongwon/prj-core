@@ -7,7 +7,7 @@ import { forwardRef } from 'react';
 import Skeleton from '../Skeleton';
 
 const DynamicButton = dynamic(
-  () => import('./Button').then(mod => observer(forwardRef(mod.BaseButton))),
+  () => import('./Button').then(mod => forwardRef(mod.BaseButton)),
   {
     loading() {
       return <Skeleton className="h-[32px] w-full" />;
@@ -18,4 +18,4 @@ const DynamicButton = dynamic(
 
 const Button = DynamicButton as typeof BaseButton;
 
-export default Button;
+export default observer(Button);

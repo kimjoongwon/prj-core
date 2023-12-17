@@ -21,7 +21,6 @@ import { FcGenealogy } from 'react-icons/fc';
 import { FcOvertime } from 'react-icons/fc';
 import { FcTimeline } from 'react-icons/fc';
 import { authStore } from '@stores';
-import { deleteCookie } from 'cookies-next';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const router = useCoCRouter();

@@ -1,6 +1,13 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
-import { ModalMount } from './ModalMount';
+import dynamic from 'next/dynamic';
+import { ModalMountView } from './ModalMountView';
 
-export default observer(ModalMount);
+const ModalMount = dynamic(
+  () => import('./ModalMountView').then(mod => mod.ModalMountView),
+  {
+    ssr: false,
+  },
+) as typeof ModalMountView;
+
+export default ModalMount;

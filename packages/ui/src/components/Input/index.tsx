@@ -9,7 +9,7 @@ import { BaseInput, InputProps } from './Input';
 const DynamicInput = dynamic(
   () =>
     import('./Input').then(mod => {
-      return observer(forwardRef(mod.BaseInput));
+      return forwardRef(mod.BaseInput);
     }),
   {
     loading() {
@@ -23,4 +23,4 @@ const Input = DynamicInput as <T extends object>(
   props: InputProps<T>,
 ) => ReturnType<typeof BaseInput>;
 
-export default Input;
+export default observer(Input);

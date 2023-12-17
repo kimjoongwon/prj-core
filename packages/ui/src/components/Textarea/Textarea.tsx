@@ -14,5 +14,12 @@ export const BaseTextarea = <T extends object>(props: BaseTextareaProps<T>) => {
     localState.value = e.target.value;
   };
 
-  return <Textarea {...rest} value={localState.value} onChange={handleOnChange} />;
+  return (
+    <Textarea
+      {...rest}
+      value={localState.value}
+      onChange={handleOnChange}
+      placeholder="test"
+    />
+  );
 };

@@ -2,6 +2,7 @@
 
 import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
 import { useRolesPage } from './hooks';
+import { observer } from 'mobx-react-lite';
 
 function RolesPage() {
   const rolesPage = useRolesPage();
@@ -34,4 +35,4 @@ function RolesPage() {
   );
 }
 
-export default RolesPage;
+export default observer(RolesPage);

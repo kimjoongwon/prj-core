@@ -39,7 +39,7 @@
       "@adminPages": ["./src/app/admin/index.ts"],
       "@libs": ["./src/app/shared/libs/index.ts"],
       "@stores": ["./src/app/shared/stores/index.ts"],
-      "@modals": ["./src/app/shared/components/modals/index.ts"],
+      "@modals": ["./src/app/shared/components/modals/index.tsx"],
       "@common": ["./src/app/shared/hooks/common/index.ts"]
     }
   },
