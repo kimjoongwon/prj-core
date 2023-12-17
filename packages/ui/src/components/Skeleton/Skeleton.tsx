@@ -1,7 +1,5 @@
-;
-
 import { SkeletonProps, Skeleton as NextSkeleton } from '@nextui-org/react';
 
-export const Skeleton = (props: SkeletonProps) => {
-  return <NextSkeleton className="rounded-medium" {...props} />;
-};
+export function Skeleton(props: SkeletonProps) {
+  return <NextSkeleton {...props} />;
+}

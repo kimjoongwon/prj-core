@@ -1,6 +1,9 @@
 import { ChangeEventHandler, ForwardedRef } from 'react';
 import { MobxProps } from '../../types';
-import { Input as NextUIInput, InputProps as NextUIInputProps } from '@nextui-org/react';
+import {
+  Input as NextUIInput,
+  InputProps as NextUIInputProps,
+} from '@nextui-org/react';
 import { useMobxHookForm } from '../../hooks';
 import { action } from 'mobx';
 import { ValidationState } from '../controls/Form/FormControl';
@@ -11,25 +14,31 @@ export type InputProps<T> = MobxProps<T> &
     validation?: ValidationState;
   };
 
-export const BaseInput = <T extends any>(props: InputProps<T>, ref: ForwardedRef<HTMLInputElement>) => {
+export const BaseInput = <T extends any>(
+  props: InputProps<T>,
+  ref: ForwardedRef<HTMLInputElement>,
+) => {
   const { path = '', state = {}, onChange, validation, type, ...rest } = props;
 
   const initialValue = get(state, path);
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(e => {
-    if (type === 'number' && typeof Number(e.target.value) === 'number') {
-      return (localState.value = Number(e.target.value));
-    }
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
+    e => {
+      if (type === 'number' && typeof Number(e.target.value) === 'number') {
+        return (localState.value = Number(e.target.value));
+      }
 
-    localState.value = e.target.value;
+      localState.value = e.target.value;
 
-    onChange && onChange(e);
-  });
+      onChange && onChange(e);
+    },
+  );
 
   return (
     <NextUIInput
+      fullWidth
       type={type}
       {...rest}
       ref={ref}

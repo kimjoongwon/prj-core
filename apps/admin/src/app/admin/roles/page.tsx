@@ -1,11 +1,6 @@
 'use client';
 
 import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
-import {
-  ButtonGroupContainer,
-  DataGridContainer,
-  PaginationContainer,
-} from '@containers';
 import { useRolesPage } from './hooks';
 
 function RolesPage() {
@@ -22,25 +17,19 @@ function RolesPage() {
 
   return (
     <>
-      <ButtonGroupContainer>
-        <ButtonGroup leftButtons={leftButtons} rightButtons={rightButtons} />
-      </ButtonGroupContainer>
-      <DataGridContainer>
-        <DataGrid
-          columns={columns}
-          data={data?.roles?.nodes || []}
-          selectionMode="multiple"
-          onSelectionChange={onClickRow}
-          onSortChange={onClickSorting}
-        />
-      </DataGridContainer>
-      <PaginationContainer>
-        <Pagination
-          state={state.query}
-          path="skip"
-          totalCount={data?.roles.pageInfo.totalCount || 0}
-        />
-      </PaginationContainer>
+      <ButtonGroup leftButtons={leftButtons} rightButtons={rightButtons} />
+      <DataGrid
+        columns={columns}
+        data={data?.roles?.nodes || []}
+        selectionMode="multiple"
+        onSelectionChange={onClickRow}
+        onSortChange={onClickSorting}
+      />
+      <Pagination
+        state={state.query}
+        path="skip"
+        totalCount={data?.roles.pageInfo.totalCount || 0}
+      />
     </>
   );
 }

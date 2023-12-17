@@ -1,4 +1,5 @@
 interface LocalStorage {
+  accessToken: string;
   tenantId: string;
 }
 

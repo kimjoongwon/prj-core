@@ -1,17 +1,24 @@
 'use clinet';
 
-import { Pagination as NextUIPagination, PaginationProps as NextUIPaginationProps } from '@nextui-org/react';
+import {
+  Pagination as NextUIPagination,
+  PaginationProps as NextUIPaginationProps,
+} from '@nextui-org/react';
 import { useMobxHookForm } from '../../hooks';
 import { MobxProps } from '../../types';
 import { get, set } from 'lodash-es';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
-interface PaginationProps<T> extends Omit<NextUIPaginationProps, 'total'>, MobxProps<T> {
+export interface PaginationProps<T>
+  extends Omit<NextUIPaginationProps, 'total'>,
+    MobxProps<T> {
   totalCount: number;
 }
 
-export const Pagination = observer(<T extends { take: number; skip: number }>(props: PaginationProps<T>) => {
+export const Pagination = <T extends { take: number; skip: number }>(
+  props: PaginationProps<T>,
+) => {
   const {
     state = {
       take: 0,
@@ -46,4 +53,4 @@ export const Pagination = observer(<T extends { take: number; skip: number }>(pr
       page={currentPage}
     />
   );
-});
+};

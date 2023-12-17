@@ -1,11 +1,9 @@
-;
-
 import { observer } from 'mobx-react-lite';
 import { get, isUndefined, set } from 'lodash-es';
 import { MobxProps } from '../../types';
 import { KeyboardEventHandler } from 'react';
-import { Input } from '../Input';
 import { FaSearch } from 'react-icons/fa';
+import Input from '../Input';
 
 interface SearchProps<T> extends MobxProps<T> {
   queryState: any;

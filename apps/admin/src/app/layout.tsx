@@ -1,7 +1,5 @@
-import './globals.css';
-import '@coc/ui/styles.css';
 import { Providers } from './providers';
-import { ModalMount } from '@coc/ui';
+import './globals.css';
 
 export default function RootLayout(props: {
   children: React.ReactNode;

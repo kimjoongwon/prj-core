@@ -1,9 +1,7 @@
-;
-
 import { observer } from 'mobx-react-lite';
 import { FormHTMLAttributes } from 'react';
 import { CardBody, Card, CardHeader, CardFooter } from '@nextui-org/react';
-import { Button } from '../Button';
+import Button from '../Button';
 
 interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
   state: T;
@@ -15,7 +13,15 @@ interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
 }
 
 export const Form = observer(<T extends object>(porps: FormProps<T>) => {
-  const { children, onClickSave, onClickCancel, schema, state, title, ...rest } = porps;
+  const {
+    children,
+    onClickSave,
+    onClickCancel,
+    schema,
+    state,
+    title,
+    ...rest
+  } = porps;
 
   return (
     <Card fullWidth>
@@ -26,7 +32,11 @@ export const Form = observer(<T extends object>(porps: FormProps<T>) => {
         <form {...rest}>{children}</form>
       </CardBody>
       <CardFooter className="space-x-2">
-        <Button isDisabled={!schema?.safeParse(state).success} onClick={onClickSave} color="primary">
+        <Button
+          isDisabled={!schema?.safeParse(state).success}
+          onClick={onClickSave}
+          color="primary"
+        >
           저장
         </Button>
         <Button color="danger" onClick={onClickCancel}>

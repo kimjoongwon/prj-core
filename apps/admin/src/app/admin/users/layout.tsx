@@ -1,11 +1,11 @@
 import { TableLayout } from '@components';
-import { PageProvider } from './components';
+import { UsersPageProvider } from './provider';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
-    <PageProvider>
+    <UsersPageProvider>
       <TableLayout>{children}</TableLayout>
-    </PageProvider>
+    </UsersPageProvider>
   );
 }

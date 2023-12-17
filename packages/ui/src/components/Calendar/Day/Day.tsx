@@ -1,5 +1,5 @@
 import { Spacer } from '@nextui-org/react';
-import { Button } from '../../Button';
+import Button from '../../Button';
 
 export interface DayProps {
   day: number;
@@ -24,7 +24,13 @@ export const Day = (props: DayProps) => {
         className="min-w-0 w-full aspect-w-1 aspect-h-1 border-1 rounded-md"
       >
         <div className="space-y-0.5 flex flex-col justify-between">
-          <div className={`text-right ${selected ? 'text-blue-500' : 'text-gray-500'} font-bold p-1`}>{day}</div>
+          <div
+            className={`text-right ${
+              selected ? 'text-blue-500' : 'text-gray-500'
+            } font-bold p-1`}
+          >
+            {day}
+          </div>
           {selected && <div className="pb-2 bg-blue-500 h-2 rounded-xl" />}
           <Spacer y={0.5} />
         </div>

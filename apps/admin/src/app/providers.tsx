@@ -1,4 +1,5 @@
 'use client';
+
 import { NextUIProvider } from '@nextui-org/react';
 import { ApolloWrapper } from './shared/libs/apollo-wrapper';
 import { ToastContainer } from 'react-toastify';

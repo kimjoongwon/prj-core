@@ -5,20 +5,20 @@ import AutoComplete from './AutoComplete';
 import Editor from './Editor';
 import Textarea from './Textarea';
 import User from './User';
-export * from './Button';
+import Input from './Input';
+import Button from './Button';
+import Skeleton from './Skeleton';
+import DataGrid from './DataGrid';
+import Pagination from './Pagination';
 export * from './Checkbox';
 export * from './RadioGroup';
-export * from './Input';
 export * from './Switch';
-export * from './DataGrid';
 export * from './Chip';
 export * from './Navbar';
-export * from './Pagination';
 export * from './ButtonGroup';
 export * from './Search';
 export * from './forms';
 export * from './controls';
-export * from './Skeleton';
 export * from './Select';
 export * from './Form';
 export * from './MultiSelect';
@@ -43,4 +43,9 @@ export {
   AutoComplete,
   Editor,
   User,
+  Input,
+  Button,
+  Skeleton,
+  DataGrid,
+  Pagination,
 };

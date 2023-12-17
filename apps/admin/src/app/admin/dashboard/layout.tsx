@@ -1,4 +1,4 @@
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
-  return <div>{children}</div>;
+  return <div className="w-full">{children}</div>;
 }

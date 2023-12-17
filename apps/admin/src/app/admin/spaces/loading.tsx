@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardSkeleton } from '@skeletons';
 import { usePathname } from 'next/navigation';
 
 export default function Loading() {
@@ -9,5 +8,5 @@ export default function Loading() {
   if (pathname.includes('edit')) {
     return null;
   }
-  return <DashboardSkeleton />;
+  return <div>loading</div>;
 }

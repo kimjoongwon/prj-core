@@ -1,8 +1,8 @@
 import { Link } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { Button } from '../Button';
 import { v4 } from 'uuid';
 import { GroupButton } from '../../types';
+import Button from '../Button';
 
 interface ButtonGroupProps {
   leftButtons?: GroupButton[];
@@ -25,7 +25,7 @@ export const ButtonGroup = observer((props: ButtonGroupProps) => {
     }
 
     return (
-      <Button key={v4()} color="primary" {...props}>
+      <Button key={v4()} {...props} size="sm">
         {children}
       </Button>
     );
@@ -33,8 +33,8 @@ export const ButtonGroup = observer((props: ButtonGroupProps) => {
 
   return (
     <div className="flex flex-1 justify-between">
-      <div className="flex">{leftButtons?.map(renderButton)}</div>
-      <div className="flex">{rightButtons?.map(renderButton)}</div>
+      <div>{leftButtons?.map(renderButton)}</div>
+      <div>{rightButtons?.map(renderButton)}</div>
     </div>
   );
 });

@@ -1,5 +1,3 @@
-import { DashboardSkeleton } from '@skeletons';
-
 export default function Loading() {
-  return <DashboardSkeleton />;
+  return <div>loading..</div>;
 }

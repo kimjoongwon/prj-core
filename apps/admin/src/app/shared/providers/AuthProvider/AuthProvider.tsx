@@ -26,7 +26,6 @@ export const AuthProvider = observer((props: { children: React.ReactNode }) => {
     if (authStore.accessToken) return;
 
     if (pathname.includes('/auth')) return;
-
     refreshToken();
   }, []);
 

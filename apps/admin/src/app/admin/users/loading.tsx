@@ -1,5 +1,7 @@
-import { DashboardSkeleton } from '../../shared/components/skeletons';
+'use client';
+
+import { Spinner } from '@nextui-org/react';
 
 export default function Loading() {
-  return <DashboardSkeleton />;
+  return <Spinner />;
 }

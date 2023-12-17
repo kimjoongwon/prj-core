@@ -5,7 +5,6 @@ import {
   Listbox,
   ListboxItem,
   Modal,
-  ModalBody,
   ModalContent,
   ModalHeader,
   ScrollShadow,
@@ -89,17 +88,7 @@ export const SaSModal = () => {
                   textValue={item.value}
                 >
                   <div className="flex gap-2 items-center">
-                    <Avatar
-                      alt={item.value}
-                      className="flex-shrink-0"
-                      size="sm"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-small">{item.value}</span>
-                      <span className="text-tiny text-default-400">
-                        {item.value}
-                      </span>
-                    </div>
+                    <span className="text-small">{item.value}</span>
                   </div>
                 </ListboxItem>
               );

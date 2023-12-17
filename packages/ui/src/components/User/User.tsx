@@ -6,7 +6,6 @@ import {
   User,
   UserProps,
 } from '@nextui-org/react';
-import { Button } from '../Button';
 
 export interface BaseUserProps extends UserProps {}
 
@@ -31,7 +30,9 @@ export const BaseUser = (props: BaseUserProps) => {
           <p className="font-semibold">zoey@example.com</p>
         </DropdownItem>
         <DropdownItem>설정</DropdownItem>
-        <DropdownItem color="danger" className='text-danger'>로그아웃</DropdownItem>
+        <DropdownItem color="danger" className="text-danger">
+          로그아웃
+        </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

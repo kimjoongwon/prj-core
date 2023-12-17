@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import { MobxProps } from '../../types';
 import { get } from 'lodash-es';

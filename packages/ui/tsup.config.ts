@@ -4,7 +4,7 @@ export default defineConfig(option => ({
   entry: ['./index.ts'],
   format: ['esm'],
   outDir: './dist',
-  clean: option.watch ? false : true,
+  clean: !option.watch,
   minify: !option.watch,
   watch: option.watch,
   env: {
@@ -12,7 +12,7 @@ export default defineConfig(option => ({
   },
   external: ['react', 'react-dom'],
   dts: true,
-  esbuildOptions(options, context) {
+  esbuildOptions(options) {
     options.inject?.push('./inject.js');
   },
 }));

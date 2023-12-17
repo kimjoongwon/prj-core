@@ -9,8 +9,8 @@ import { ButtonGroup } from '@nextui-org/react';
 import { FcNext, FcPrevious } from 'react-icons/fc';
 import { action, reaction } from 'mobx';
 import { useEffect } from 'react';
-import { Button } from '../Button';
 import { MobxProps } from '../../types';
+import Button from '../Button';
 
 export interface CalendarProps<T> extends MobxProps<T> {
   readOnly?: boolean;
@@ -23,7 +23,12 @@ export interface CalendarLocalState {
 }
 
 export const Calendar = <T extends object>(props: CalendarProps<T>) => {
-  const { state = {}, path = '', readOnly = false, onClickDay: _onClickDay } = props;
+  const {
+    state = {},
+    path = '',
+    readOnly = false,
+    onClickDay: _onClickDay,
+  } = props;
   const localState = useLocalObservable<CalendarLocalState>(() => ({
     calendarDate: dayjs().startOf('D').toDate(),
     values: get(state, path) || [],
@@ -54,34 +59,56 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
   const startDayOfMonthDay = dayjs(localState.calendarDate).startOf('M').day();
 
   const onClickNextMonth = () => {
-    localState.calendarDate = dayjs(localState.calendarDate).add(1, 'M').toDate();
+    localState.calendarDate = dayjs(localState.calendarDate)
+      .add(1, 'M')
+      .toDate();
   };
 
   const onClickPrevMonth = () => {
-    localState.calendarDate = dayjs(localState.calendarDate).subtract(1, 'M').toDate();
+    localState.calendarDate = dayjs(localState.calendarDate)
+      .subtract(1, 'M')
+      .toDate();
   };
   const prevMonth = dayjs(localState.calendarDate).subtract(1, 'M');
 
-  const prevMonthRange = range(prevMonth.daysInMonth(), prevMonth.daysInMonth() - startDayOfMonthDay).reverse();
+  const prevMonthRange = range(
+    prevMonth.daysInMonth(),
+    prevMonth.daysInMonth() - startDayOfMonthDay,
+  ).reverse();
 
-  const currentMonthRange = range(1, dayjs(localState.calendarDate).daysInMonth() + 1);
+  const currentMonthRange = range(
+    1,
+    dayjs(localState.calendarDate).daysInMonth() + 1,
+  );
 
-  const nextMonthRange = range(1, 7 * 6 - (prevMonthRange.length + currentMonthRange.length) + 1);
+  const nextMonthRange = range(
+    1,
+    7 * 6 - (prevMonthRange.length + currentMonthRange.length) + 1,
+  );
 
   const onClickDay = action((day: number) => {
     if (
       localState.values.some((date: Date) => {
-        return dayjs(date).isSame(dayjs(localState.calendarDate).set('D', day), 'date');
+        return dayjs(date).isSame(
+          dayjs(localState.calendarDate).set('D', day),
+          'date',
+        );
       })
     ) {
       const values = localState.values.filter((date: Date) => {
-        return !dayjs(date).isSame(dayjs(localState.calendarDate).set('D', day), 'date');
+        return !dayjs(date).isSame(
+          dayjs(localState.calendarDate).set('D', day),
+          'date',
+        );
       });
       localState.values = values;
       return;
     }
 
-    localState.values = [...localState.values, dayjs(localState.calendarDate).set('D', day).toDate()];
+    localState.values = [
+      ...localState.values,
+      dayjs(localState.calendarDate).set('D', day).toDate(),
+    ];
   });
 
   console.log('localState.values', localState.values);
@@ -90,14 +117,28 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
     <div className="w-full">
       <div className="flex justify-between">
         <div className="flex space-x-2">
-          <div className="text-2xl lg:text-4xl font-bold">{dayjs(localState.calendarDate).year()}년</div>
-          <div className="text-2xl lg:text-4xl font-bold">{dayjs(localState.calendarDate).month() + 1}월</div>
+          <div className="text-2xl lg:text-4xl font-bold">
+            {dayjs(localState.calendarDate).year()}년
+          </div>
+          <div className="text-2xl lg:text-4xl font-bold">
+            {dayjs(localState.calendarDate).month() + 1}월
+          </div>
         </div>
         <ButtonGroup>
-          <Button size="sm" variant="ghost" onClick={onClickPrevMonth} startContent={<FcPrevious />}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onClickPrevMonth}
+            startContent={<FcPrevious />}
+          >
             이전 달
           </Button>
-          <Button size="sm" variant="ghost" onClick={onClickNextMonth} endContent={<FcNext />}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onClickNextMonth}
+            endContent={<FcNext />}
+          >
             다음 달
           </Button>
         </ButtonGroup>
@@ -117,7 +158,10 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
               active
               selected={
                 !!localState.values.find((date: Date) =>
-                  dayjs(date).isSame(dayjs(localState.calendarDate).set('D', value), 'date'),
+                  dayjs(date).isSame(
+                    dayjs(localState.calendarDate).set('D', value),
+                    'date',
+                  ),
                 )
               }
               day={value}

@@ -22,6 +22,7 @@ export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
     <NextUICheckbox
       {...rest}
       onChange={onChange}
+      size='lg'
       isSelected={localState.value}
     />
   );

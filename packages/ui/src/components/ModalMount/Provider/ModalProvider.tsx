@@ -1,3 +1,5 @@
+'use client';
+
 import { ModalProps } from '@nextui-org/react';
 import { useLocalObservable } from 'mobx-react-lite';
 import { createContext, useContext } from 'react';
@@ -28,5 +30,7 @@ export const ModalProvider = (props: ModalProviderProps) => {
 
   const state = useLocalObservable<ModalState>(() => ({ ...initialState }));
 
-  return <ModalContext.Provider value={state}>{children}</ModalContext.Provider>;
+  return (
+    <ModalContext.Provider value={state}>{children}</ModalContext.Provider>
+  );
 };

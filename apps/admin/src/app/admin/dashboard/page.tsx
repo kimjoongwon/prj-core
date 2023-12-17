@@ -1,15 +1,7 @@
 'use client';
 
-import { AutoComplete, Editor, Textarea } from '@coc/ui';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { modalStore } from '../../shared/stores/modalStore';
+import { Input, Button } from '@coc/ui';
 
 function DashboardPage() {
   const state = useLocalObservable(() => ({
@@ -19,94 +11,17 @@ function DashboardPage() {
     tests: ['test', 'test2'],
   }));
 
-  console.log(state.tests);
-
   return (
-    <div>
-      <Dropdown>
-        <DropdownTrigger>
-          <Button>test</Button>
-        </DropdownTrigger>
-        <DropdownMenu aria-label="Static Actions">
-          <DropdownItem key="test1">test</DropdownItem>
-          <DropdownItem key="test2">test</DropdownItem>
-          <DropdownItem key="test3">test</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-      <AutoComplete
-        state={state}
-        path="space"
-        label="사용자 소속"
-        options={[
-          {
-            text: 'test',
-            value: 'test',
-          },
-          {
-            text: 'aaaa',
-            value: 'aaaa',
-          },
-          {
-            text: 'bbb',
-            value: 'bbb',
-          },
-        ]}
-      />
-      <Textarea state={state} path="textArea" />
-      <div className="w-[300px]">
-        <Editor state={state} path="htmlText" />
-      </div>
+    <div className="w-full">
+      <Input state={state} path="space" />
       <Text king={state} />
-      <Button
-        onClick={() => {
-          modalStore.SasModal.isOpen = true;
-          modalStore.SasModal.state = state;
-          modalStore.SasModal.path = 'tests';
-          modalStore.SasModal.options = [
-            {
-              text: 'test',
-              value: 'test',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-            {
-              text: 'test2',
-              value: 'test2',
-            },
-          ];
-        }}
-      >
-        테스트모달
-      </Button>
+      <Button />
     </div>
   );
 }
 
 const Text = observer((props: { king: any }) => {
   const { king } = props;
-  console.log(king.textArea);
   return <p className="whitespace-pre">{king?.textArea}</p>;
 });
 
