@@ -9,7 +9,6 @@ import {
   USERS_PAGE_PATH,
   SPACES_PAGE_PATH,
   GROUPS_PAGE_PATH,
-  LOGIN_PAGE_PATH,
 } from '@constants';
 import { CoCNavbar, User } from '@coc/ui';
 import { Spacer } from '@nextui-org/react';

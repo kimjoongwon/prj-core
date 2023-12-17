@@ -1,6 +1,6 @@
+import React, { ReactNode } from 'react';
 import { useMobxHookForm } from '@coc/ui';
 import {
-  Avatar,
   Chip,
   Listbox,
   ListboxItem,
@@ -12,9 +12,8 @@ import {
 } from '@nextui-org/react';
 import { modalStore } from '@stores';
 import { get } from 'lodash-es';
-import React, { ReactNode } from 'react';
 
-export const SaSModal = () => {
+export const SelectModal = () => {
   const {
     isOpen,
     path = '',
@@ -29,16 +28,15 @@ export const SaSModal = () => {
         value: 'test2',
       },
     ],
-  } = modalStore.SasModal;
+  } = modalStore.SelectModal;
   const initialValues = get(state, path);
 
   const { localState } = useMobxHookForm(initialValues, state, path);
+
   const handleSelectionChange = (keys: Selection) => {
     const values = Array.from(keys);
     localState.value = values;
   };
-
-  console.log('value', localState.value);
 
   const topContent = React.useMemo(() => {
     if (!localState.value.length) {
@@ -52,7 +50,6 @@ export const SaSModal = () => {
         orientation="horizontal"
       >
         {localState.value.map((itemValue: any) => {
-          console.log('item', itemValue);
           return (
             <Chip key={itemValue}>
               {options?.find(option => option.value === itemValue)?.text}
@@ -64,7 +61,10 @@ export const SaSModal = () => {
   }, [localState.value.length]);
 
   return (
-    <Modal isOpen={isOpen} onClose={() => (modalStore.SasModal.isOpen = false)}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => (modalStore.SelectModal.isOpen = false)}
+    >
       <ModalContent className="p-4">
         <ModalHeader>테스트</ModalHeader>
         <ListboxWrapper>

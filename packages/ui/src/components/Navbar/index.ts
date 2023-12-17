@@ -1,3 +1,3 @@
-'use clinet';
+'use client';
 
 export * from './Navbar';

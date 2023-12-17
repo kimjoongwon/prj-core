@@ -1,4 +1,4 @@
 import ModalMount from './ModalMount';
-import SaSModal from './SaSModal';
+import SelectModal from './SelectModal';
 
-export { ModalMount, SaSModal };
+export { ModalMount, SelectModal };

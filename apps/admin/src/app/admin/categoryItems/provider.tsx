@@ -3,9 +3,8 @@
 import { ContainerProps } from '@coc/ui';
 import { createContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { CategoryItemState, useHandlers, useQueries, useState } from './hooks';
+import { useHandlers, useQueries, useState } from './hooks';
 import { useMutations } from './hooks/useMutations';
-import { CategoryItem } from '@__generated__/graphql';
 
 interface PageContext {
   queries: ReturnType<typeof useQueries>;

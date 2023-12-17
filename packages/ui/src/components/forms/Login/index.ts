@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 
 import { LoginForm as BaseLoginForm } from './LoginForm';
 import { observer } from 'mobx-react-lite';

@@ -1,8 +1,6 @@
-'use client';
-
-import { SaSModal } from '@components';
+import { SelectModal } from '@modals';
 import { modalStore } from '@stores';
 
 export const ModalMount = () => {
-  return <>{modalStore.SasModal.isOpen && <SaSModal />}</>;
+  return <>{modalStore.SelectModal.isOpen && <SelectModal />}</>;
 };

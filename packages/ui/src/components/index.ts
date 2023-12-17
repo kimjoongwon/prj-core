@@ -1,7 +1,6 @@
 import Calendar from './Calendar';
-import ModalMount from './ModalMount';
-import { ModalProvider, useModal } from './ModalMount';
 import AutoComplete from './AutoComplete';
+import PageModal from './PageModal';
 import Editor from './Editor';
 import Textarea from './Textarea';
 import User from './User';
@@ -29,17 +28,15 @@ export {
   Card,
   Spacer,
 } from '@nextui-org/react';
-export * from './CoCModal';
+export * from './PageModal';
 export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
 
 export {
   Textarea,
-  useModal,
   Calendar,
-  ModalMount,
-  ModalProvider,
+  PageModal,
   AutoComplete,
   Editor,
   User,

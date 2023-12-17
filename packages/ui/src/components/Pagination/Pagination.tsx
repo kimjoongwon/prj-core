@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 
 import {
   Pagination as NextUIPagination,

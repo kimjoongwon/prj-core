@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 
 export const modalStore = observable({
-  SasModal: {
+  SelectModal: {
     isOpen: false,
     state: {},
     path: '',

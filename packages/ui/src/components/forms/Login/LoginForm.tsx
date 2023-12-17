@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 
 import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { FormControl } from '../../controls/Form/FormControl';

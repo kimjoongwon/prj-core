@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 
 import { observer } from 'mobx-react-lite';
 import dynamic from 'next/dynamic';

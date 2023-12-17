@@ -1,12 +1,12 @@
-import { CoCModal } from '@coc/ui';
+import { PageModal } from '@coc/ui';
 import { SpaceEditPageProvider } from '../../../../[spaceId]/edit/provider';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
 
   return (
-    <CoCModal>
+    <PageModal>
       <SpaceEditPageProvider>{children}</SpaceEditPageProvider>
-    </CoCModal>
+    </PageModal>
   );
 }

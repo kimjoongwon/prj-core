@@ -1,2 +1,3 @@
-export * from './ModalProvider';
-export * from './AuthProvider';
+import AuthProvider from './AuthProvider';
+
+export { AuthProvider };

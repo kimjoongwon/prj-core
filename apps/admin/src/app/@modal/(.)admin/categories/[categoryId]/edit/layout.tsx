@@ -1,11 +1,11 @@
-import { CoCModal } from '@coc/ui';
+import { PageModal } from '@coc/ui';
 import { CategoryEditPageProvider } from '../../../../../admin/categories/[categoryId]/edit/provider';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
-    <CoCModal>
+    <PageModal>
       <CategoryEditPageProvider>{children}</CategoryEditPageProvider>
-    </CoCModal>
+    </PageModal>
   );
 }

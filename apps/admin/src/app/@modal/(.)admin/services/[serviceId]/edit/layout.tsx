@@ -1,4 +1,4 @@
-import { CoCModal } from '@coc/ui';
+import { PageModal } from '@coc/ui';
 import { ServiceEditPageProvider } from '../../../../../admin/services/[serviceId]/edit/provider';
 
 interface LayoutProps {
@@ -8,8 +8,8 @@ interface LayoutProps {
 export default function Layout(props: LayoutProps) {
   const { children } = props;
   return (
-    <CoCModal>
+    <PageModal>
       <ServiceEditPageProvider>{children}</ServiceEditPageProvider>
-    </CoCModal>
+    </PageModal>
   );
 }

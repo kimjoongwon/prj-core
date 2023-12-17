@@ -1,5 +1,5 @@
 import { Button } from '@coc/ui';
-import { ColumnMeta } from '@columns';
+import type { ColumnMeta } from '@columns';
 import { CellContext } from '@tanstack/react-table';
 
 export const TableActions = <T extends object>(

@@ -2,6 +2,8 @@
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Input, Button } from '@coc/ui';
+import { modalStore } from '@stores';
+import { action } from 'mobx';
 
 function DashboardPage() {
   const state = useLocalObservable(() => ({
@@ -11,11 +13,21 @@ function DashboardPage() {
     tests: ['test', 'test2'],
   }));
 
+  console.log(modalStore.SelectModal.isOpen);
+
   return (
     <div className="w-full">
       <Input state={state} path="space" />
       <Text king={state} />
-      <Button />
+      <Button
+        onClick={action(() => {
+          modalStore.SelectModal.isOpen = true;
+          modalStore.SelectModal.state = state;
+          modalStore.SelectModal.path = 'textArea';
+        })}
+      >
+        모달 오픈
+      </Button>
     </div>
   );
 }

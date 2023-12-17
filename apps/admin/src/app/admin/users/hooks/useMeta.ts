@@ -1,4 +1,4 @@
-import { useCoCRouter } from '@hooks';
+import { useCoCRouter } from '@common';
 import { GroupButton } from '@coc/ui';
 import { useActionColumns, useUserColumns } from '@columns';
 import { User } from '@__generated__/graphql';

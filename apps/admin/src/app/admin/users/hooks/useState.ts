@@ -1,7 +1,7 @@
-import { useLocalObservable } from 'mobx-react-lite';
+import { observable } from 'mobx';
 
 export const useState = () => {
-  return useLocalObservable(() => ({
+  return observable({
     test: {
       checked: false,
     },
@@ -18,5 +18,5 @@ export const useState = () => {
     table: {
       selectedRowIds: [],
     },
-  }));
+  });
 };

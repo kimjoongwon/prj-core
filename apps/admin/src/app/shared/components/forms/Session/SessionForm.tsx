@@ -2,15 +2,7 @@
 
 import { SessionForm as SessionFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
-import {
-  Button,
-  Calendar,
-  Chips,
-  FormControl,
-  Input,
-  Spacer,
-  useModal,
-} from '@coc/ui';
+import { Button, Calendar, Chips, FormControl, Input, Spacer } from '@coc/ui';
 import dayjs from 'dayjs';
 
 interface SessionFormProps {
@@ -21,7 +13,6 @@ interface SessionFormProps {
 export const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
 
 export const SessionForm = (props: SessionFormProps) => {
-  const modal = useModal();
   const { schema, state } = props;
 
   return (
@@ -33,11 +24,11 @@ export const SessionForm = (props: SessionFormProps) => {
       <Button
         variant="solid"
         onClick={() => {
-          modal.footer = (
-            <Button onClick={() => (modal.isOpen = false)}>등록</Button>
-          );
-          modal.body = <Calendar state={state} path={'dates'} />;
-          modal.isOpen = !modal.isOpen;
+          // modal.footer = (
+          //   <Button onClick={() => (modal.isOpen = false)}>등록</Button>
+          // );
+          // modal.body = <Calendar state={state} path={'dates'} />;
+          // modal.isOpen = !modal.isOpen;
         }}
       >
         날짜 선택
