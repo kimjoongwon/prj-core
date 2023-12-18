@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Relation } from '../../../common/types';
 import { UserEntity } from './user.entity';
 import { Profile } from '../../profiles/models/profile.model';
