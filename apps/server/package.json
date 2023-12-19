@@ -33,7 +33,6 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.2.9",
-    "@prisma/client": "5.6.0",
     "@types/cookie-parser": "^1.4.6",
     "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
@@ -70,11 +69,8 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "nodemon": "^3.0.1",
-    "prettier": "^3.1.0",
-    "prisma": "^5.6.0",
     "run-script-webpack-plugin": "^0.2.0",
     "ts-loader": "^9.5.1",
-    "typescript": "5.2.2",
     "webpack": "^5.89.0",
     "webpack-node-externals": "^3.0.0"
   }

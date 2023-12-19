@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  deletedAt DateTime? @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  name      String
+  profiles  Profile[]
+  tenants   Tenant[]
+}
+
+model Profile {
+  id        String    @id @default(cuid())
+  nickname  String
+  phone     String    @unique
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id             String       @id @default(cuid())
+  name           String       @unique
+  serviceId      String
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt      DateTime?    @db.Timestamptz(6)
+  categoryItemId String
+  tenantId       String
+  categoryItem   CategoryItem @relation(fields: [categoryItemId], references: [id])
+  service        Service      @relation(fields: [serviceId], references: [id])
+}
+
+model Group {
+  id        String    @id @default(cuid())
+  name      String
+  serviceId String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenantId  String
+  service   Service   @relation(fields: [serviceId], references: [id])
+}
+
+model CategoryItem {
+  id          String     @id @default(cuid())
+  name        String
+  tag         String
+  ancestorIds String[]
+  parentId    String?
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?  @db.Timestamptz(6)
+  tenantId    String
+  category    Category[]
+}
+
+model Service {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?  @db.Timestamptz(6)
+  category  Category[]
+  group     Group[]
+}
+
+model Role {
+  id        String    @id @default(cuid())
+  name      Roles     @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
+}
+
+model Tenant {
+  id        String    @id @default(cuid())
+  userId    String
+  spaceId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  roleId    String
+  role      Role      @relation(fields: [roleId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Classification {
+  id         String    @id @default(cuid())
+  serviceId  String
+  categoryId String
+  itemId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime? @db.Timestamptz(6)
+}
+
+model Space {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  phone     String    @db.Char(11)
+  address   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
+}
+
+model EmailTemplate {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  subject   String
+  content   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Session {
+  id        String     @id @default(cuid())
+  name      String
+  tenantId  String
+  dates     DateTime[] @db.Timestamptz(6)
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?  @db.Timestamptz(6)
+  timelines Timeline[]
+}
+
+model Timeline {
+  id            String         @id @default(cuid())
+  name          String
+  sessionId     String
+  date          DateTime       @db.Date()
+  session       Session        @relation(fields: [sessionId], references: [id])
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?      @db.Timestamptz(6)
+  timelineItems TimelineItem[]
+}
+
+model TimelineItem {
+  id            String        @id @default(cuid())
+  timelineId    String?
+  sessionId     String
+  title         String
+  startDateTime DateTime      @db.Timestamptz(6)
+  endDateTime   DateTime      @db.Timestamptz(6)
+  description   String
+  address       String?
+  maxCapacity   Int
+  minCapacity   Int
+  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?     @db.Timestamptz(6)
+  reservations  Reservation[]
+  timeline      Timeline?     @relation(fields: [timelineId], references: [id])
+}
+
+model Reservation {
+  id             String       @id @default(cuid())
+  status         String
+  timelineItemId String
+  timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt      DateTime?    @db.Timestamptz(6)
+}
+
+model Subject {
+  id         String              @id @default(cuid())
+  name       String              @unique
+  conditions SubjectConditions[] @default([])
+  property   String[]            @default([])
+  condition  String
+  abilities  Ability[]
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime?           @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime?           @db.Timestamptz(6)
+}
+
+model Ability {
+  id        String         @id @default(cuid())
+  type      AbilityTypes
+  roleId    String
+  action    AbilityActions
+  subjectId String
+  subject   Subject        @relation(fields: [subjectId], references: [id])
+  createdAt DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?      @db.Timestamptz(6)
+}
+
+enum SubjectConditions {
+  Equal
+  GreaterThan
+  GreaterThanOrEqual
+  LessThan
+  LessThanOrEqual
+  In
+}
+
+enum AbilityActions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  ACCESS
+}
+
+enum AbilityTypes {
+  CAN
+  CAN_NOT
+}
+
+enum EmailTemplates {
+  REGISTER
+  FORGET_PASSWORD
+}
+
+enum Roles {
+  USER
+  SUPER_ADMIN
+}
