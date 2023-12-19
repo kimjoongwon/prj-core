@@ -23,7 +23,6 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
-    "@nextui-org/react": "2.2.9",
     "@tanstack/react-table": "^8.10.7",
     "dayjs": "1.11.10",
     "framer-motion": "^10.16.5",
@@ -49,8 +48,6 @@
     "eslint": "8.54.0",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
-    "tsup": "^8.0.0",
-    "typescript": "5.2.2",
     "vitest": "0.34.6"
   }
 }

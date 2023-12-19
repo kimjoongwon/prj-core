@@ -13,6 +13,7 @@ import {
   mailConfig,
 } from '../configs';
 import { HttpModule } from '@nestjs/axios';
+import { EmailAddressResolver } from 'graphql-scalars';
 
 export const libModules = [
   GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -23,6 +24,9 @@ export const libModules = [
     playground: false,
     plugins,
     transformSchema: schema => upperDirectiveTransformer(schema, 'upper'),
+    resolvers: {
+      EmailAddress: EmailAddressResolver,
+    },
   }),
   ConfigModule.forRoot({
     isGlobal: true,

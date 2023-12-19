@@ -17,7 +17,6 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { GqlAuthGuard } from '../../common/guards';
 import { Public } from '../../common/decorators';
-import { testScheme } from '@coc/schema';
 
 @UseGuards(GqlAuthGuard)
 @Resolver(() => User)
@@ -30,9 +29,6 @@ export class UsersResolver {
   @Public()
   @Mutation(() => User)
   createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    testScheme.parse({
-      name: 'test',
-    });
     return this.usersService.create(createUserInput);
   }
 

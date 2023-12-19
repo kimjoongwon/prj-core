@@ -4,7 +4,7 @@ export default defineConfig(option => ({
   entry: ['./index.ts'],
   format: ['esm', 'cjs'],
   outDir: './dist',
-  clean: !option.watch,
+  clean: true,
   minify: !option.watch,
   watch: option.watch,
   env: {
