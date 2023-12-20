@@ -17,15 +17,14 @@
   "dependencies": {
     "@apollo/client": "3.8.7",
     "@apollo/experimental-nextjs-app-support": "0.5.1",
-    "@coc/ui": "workspace:*",
     "@coc/schema": "workspace:*",
+    "@coc/ui": "workspace:*",
     "@nextui-org/react": "2.2.9",
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tanstack/react-table": "^8.10.7",
     "axios": "^1.6.2",
     "cookies-next": "4.1.0",
     "dayjs": "1.11.10",
-    "file-saver": "2.0.5",
     "framer-motion": "^10.16.5",
     "graphql": "^16.8.1",
     "graphql-ws": "5.14.2",
@@ -58,11 +57,7 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "autoprefixer": "10.4.16",
-    "cypress": "13.5.1",
-    "eslint": "8.54.0",
     "postcss": "8.4.31",
-    "prettier-plugin-tailwindcss": "0.5.7",
-    "tailwindcss": "^3.3.5",
-    "vitest": "0.34.6"
+    "tailwindcss": "^3.3.5"
   }
 }
