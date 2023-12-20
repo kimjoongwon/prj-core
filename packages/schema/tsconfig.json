@@ -1,15 +1,8 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": ["tsconfig/nestjs"],
   "include": ["src/**/*"],
   "compilerOptions": {
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strictBindCallApply": false,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "skipLibCheck": true,
-    "strictNullChecks": false
+    "incremental": false
   },
   "exclude": ["dist", "node_modules"]
 }

@@ -6,7 +6,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup --config tsup.config.ts",
+    "build": "prisma generate && tsup --config tsup.config.ts",
     "start:dev": "tsup --watch --config tsup.config.ts"
   },
   "keywords": [],

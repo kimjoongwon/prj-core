@@ -25,7 +25,8 @@ export class AppModule implements OnApplicationBootstrap {
     const prisma = this.prisma;
     async function getModelNames() {
       const modelNames = Object.keys(prisma).filter(
-        modelName => !(modelName.includes('$') || modelName.includes('_')),
+        modelName =>
+          !(modelName.includes('$') || modelName.includes('_')),
       );
       return modelNames;
     }
