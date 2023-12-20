@@ -4,15 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "8.30.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-next": "^13.4.3",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-turbo": "^1.9.8",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint": "latest",
+    "@vercel/style-guide": "latest",
+    "eslint-config-turbo": "latest"
   },
   "publishConfig": {
     "access": "public"

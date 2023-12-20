@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
+    "eslint-config-custom": "workspace:*",
     "@nestjs/schematics": "^10.0.3",
     "@nestjs/testing": "^10.2.9",
     "@swc/cli": "^0.1.63",
