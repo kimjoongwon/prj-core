@@ -28,7 +28,9 @@ export class UsersResolver {
 
   @Public()
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ) {
     return this.usersService.create(createUserInput);
   }
 
@@ -70,7 +72,12 @@ export class UsersResolver {
 
   @Public()
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
+  updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.usersService.update(
+      updateUserInput.id,
+      updateUserInput,
+    );
   }
 }

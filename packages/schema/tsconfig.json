@@ -1,8 +1,14 @@
 {
-  "extends": ["tsconfig/nestjs"],
-  "include": ["src/**/*"],
+  "extends": ["tsconfig/node16.json"],
   "compilerOptions": {
-    "incremental": false
+    "incremental": false,
+    "experimentalDecorators": true,
+    "strictBindCallApply": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": false,
+    "skipLibCheck": true
   },
+  "include": ["index.ts"],
   "exclude": ["dist", "node_modules"]
 }

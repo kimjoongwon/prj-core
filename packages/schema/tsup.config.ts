@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig(option => ({
   entry: ['./index.ts'],
-  format: ['esm', 'cjs'],
+  format: ['cjs'],
   outDir: './dist',
   clean: true,
   minify: !option.watch,
@@ -10,5 +10,7 @@ export default defineConfig(option => ({
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
-  dts: true,
+  dts: {
+    resolve: true,
+  },
 }));
