@@ -1,18 +1,7 @@
-import {
-  Field,
-  InterfaceType,
-  ObjectType,
-  PartialType,
-} from '@nestjs/graphql';
-
-@InterfaceType()
-class Base {
-  @Field(() => String)
-  createdtAt: string;
-}
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class AceUser extends PartialType(Base, ObjectType) {
+export class AceUser {
   @Field()
   name: string;
 

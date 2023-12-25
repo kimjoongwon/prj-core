@@ -9,7 +9,6 @@ import { UpdateSpaceInput } from './dto/update-space.input';
 import { PaginatedSpace } from './models/paginated-space.model';
 import { SpaceForm } from './models/space-form.model';
 import { Space } from './models/space.model';
-import { QueryWithZod } from 'nestjs-graphql-zod';
 
 @Resolver(() => Space)
 @UseGuards(GqlAuthGuard)

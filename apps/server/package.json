@@ -49,8 +49,7 @@
     "passport-local": "^1.0.0",
     "rxjs": "^7.8.1",
     "uuid": "^9.0.1",
-    "winston": "^3.11.0",
-    "nestjs-graphql-zod": "workspace:*"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
