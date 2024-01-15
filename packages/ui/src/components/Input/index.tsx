@@ -1,26 +1,50 @@
 'use client';
 
-import { forwardRef } from 'react';
-import dynamic from 'next/dynamic';
-import { Skeleton } from '@nextui-org/react';
+import { ChangeEventHandler } from 'react';
+import { MobxProps } from '../../types';
+import { ValidationState } from '../controls/Form/FormControl';
+import { InputView } from './InputView';
+import { InputProps as NextUIInputProps } from '@nextui-org/react';
+import { useMobxHookForm } from '../../hooks';
+import { action, get } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { BaseInput, InputProps } from './Input';
 
-const DynamicInput = dynamic(
-  () =>
-    import('./Input').then(mod => {
-      return forwardRef(mod.BaseInput);
-    }),
-  {
-    loading() {
-      return <Skeleton className="w-full h-14" />;
-    },
-    ssr: false,
-  },
-);
+export type InputProps<T> = MobxProps<T> &
+  NextUIInputProps & {
+    validation?: ValidationState;
+  };
 
-const Input = DynamicInput as <T extends object>(
-  props: InputProps<T>,
-) => ReturnType<typeof BaseInput>;
+function Input<T extends object>(props: InputProps<T>) {
+  const { path = '', state = {}, onChange, validation, type } = props;
+
+  const initialValue = get(state, path);
+
+  const { localState } = useMobxHookForm(initialValue, state, path);
+
+  const handleChange:
+    | ChangeEventHandler<HTMLInputElement>
+    | undefined = action(e => {
+    if (
+      type === 'number' &&
+      typeof Number(e.target.value) === 'number'
+    ) {
+      return (localState.value = Number(e.target.value));
+    }
+
+    localState.value = e.target.value;
+
+    onChange && onChange(e);
+  });
+
+  return (
+    <InputView
+      {...props}
+      onChange={handleChange}
+      value={String(localState.value)}
+      isInvalid={validation?.isInvalid}
+      errorMessage={validation?.errorMessage}
+    />
+  );
+}
 
 export default observer(Input);

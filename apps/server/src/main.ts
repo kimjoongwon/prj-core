@@ -28,7 +28,7 @@ async function bootstrap() {
       'Cors Enabled',
     );
     app.enableCors({
-      origin: 'http://localhost:3004',
+      origin: 'http://192.168.0.41:3004',
       credentials: true,
     });
   }

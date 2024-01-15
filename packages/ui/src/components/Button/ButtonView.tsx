@@ -1,6 +1,9 @@
-import { ButtonProps, Button as NextUIButton } from '@nextui-org/react';
+import {
+  ButtonProps,
+  Button as NextUIButton,
+} from '@nextui-org/react';
 
-export function BaseButton(props: ButtonProps) {
+export function ButtonView(props: ButtonProps) {
   const { children, onClick, ...rest } = props;
 
   return (

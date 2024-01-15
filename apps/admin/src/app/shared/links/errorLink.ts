@@ -7,6 +7,7 @@ interface OriginalError {
 
 export const errorLink = onError(
   ({ graphQLErrors, networkError, response }) => {
+    console.log(JSON.stringify(graphQLErrors), JSON.stringify(networkError))
     if (response?.errors && response?.errors?.length > 0) {
       const { search, pathname } = window.location;
 
