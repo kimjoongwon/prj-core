@@ -1,1 +1,1 @@
-export * from '@coc/database';
+export * from '@prisma/client';
