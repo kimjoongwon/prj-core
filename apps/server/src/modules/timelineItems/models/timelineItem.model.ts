@@ -1,6 +1,6 @@
 import { Base } from '../../../common/interfaces/base.interface';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { TimelineItem as CoCTimelineItem } from '@prisma/client';
+import { TimelineItem as CoCTimelineItem } from '@coc/database';
 
 @ObjectType()
 @InputType('TimelineItemInputType')

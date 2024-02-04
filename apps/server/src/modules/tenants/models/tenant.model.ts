@@ -4,7 +4,7 @@ import { User } from '../../users/models/user.model';
 import { Space } from '../../spaces/models/space.model';
 import { Relation } from '../../../common/types';
 import { Base } from '../../../common/interfaces';
-import { Tenant as CoCTenant } from '@prisma/client';
+import { Tenant as CoCTenant } from '@coc/database';
 
 @ObjectType()
 @InputType('TenantInputType')

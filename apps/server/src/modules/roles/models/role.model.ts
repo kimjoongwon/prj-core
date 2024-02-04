@@ -4,7 +4,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { $Enums, Role as CoCRole } from '@prisma/client';
+import { $Enums, Role as CoCRole } from '@coc/database';
 import { Base } from '../../../common/interfaces';
 
 registerEnumType($Enums.Roles, {

@@ -1,6 +1,6 @@
 import { Base } from '../../../common/interfaces/base.interface';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Reservation as CoCReservation } from '@prisma/client';
+import { Reservation as CoCReservation } from '@coc/database';
 
 @ObjectType()
 export class Reservation extends Base implements CoCReservation {

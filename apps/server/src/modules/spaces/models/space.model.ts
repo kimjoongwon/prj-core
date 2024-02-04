@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { Space as CoCSpace } from '@prisma/client';
+import { Space as CoCSpace } from '@coc/database';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()

@@ -7,7 +7,7 @@ import { GetRolesArgs } from './dto/get-roles.args';
 import { UpdateRoleInput } from './dto/update-role.input';
 import { PrismaService } from '../global/prisma/prisma.service';
 import { queryBuilder } from '../../common/utils';
-import { $Enums } from '@prisma/client';
+import { $Enums } from '@coc/database';
 
 @Injectable()
 export class RolesService {
