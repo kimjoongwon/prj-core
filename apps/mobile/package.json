@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "npx react-native run-android",
-    "ios": "npx react-native run-ios",
+    "android": "npx react-native@0.73.2 run-android",
+    "ios": "npx react-native@0.73.2 run-ios",
     "lint": "eslint .",
-    "start": "npx react-native start --reset-cache",
+    "start": "npx react-native@0.73.2 start --reset-cache",
     "test": "jest"
   },
   "dependencies": {
