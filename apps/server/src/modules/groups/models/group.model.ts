@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Group as CoCGroup } from '@prisma/client';
+import { Group as CoCGroup } from '@coc/database';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()

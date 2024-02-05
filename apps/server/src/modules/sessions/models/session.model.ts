@@ -1,6 +1,6 @@
 import { Base } from '../../../common/interfaces/base.interface';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { Session as CoCSession } from '@prisma/client';
+import { Session as CoCSession } from '@coc/database';
 import { Timeline } from '../../timelines/models/timeline.model';
 
 @ObjectType()

@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Service as CoCServer } from '@prisma/client';
+import { Service as CoCServer } from '@coc/database';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()

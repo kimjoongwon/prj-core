@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Service } from '../../services/models/service.model';
 import { CategoryItem } from '../../category-items/model/category-item.model';
 import { Base } from '../../../common/interfaces/base.interface';
-import { Category as CoCCategory } from '@prisma/client';
+import { Category as CoCCategory } from '@coc/database';
 
 @ObjectType()
 export class Category extends Base implements CoCCategory {

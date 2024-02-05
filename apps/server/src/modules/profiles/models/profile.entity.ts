@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Profile as CoCProfile } from '@prisma/client';
+import { Profile as CoCProfile } from '@coc/database';
 import { Base } from '../../../common/interfaces';
 
 @ObjectType()
