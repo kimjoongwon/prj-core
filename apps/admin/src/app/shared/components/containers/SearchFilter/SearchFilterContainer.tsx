@@ -1,4 +1,4 @@
-import { Card, CardBody, ContainerProps } from '@coc/ui';
+import { Card, CardBody, ContainerProps } from '@coc/shared';
 interface SearchFilterContainerProps {
   children?: React.ReactNode;
 }

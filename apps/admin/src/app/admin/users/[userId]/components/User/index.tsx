@@ -1,4 +1,4 @@
-import { Button } from '@coc/ui';
+import { Button } from '@coc/shared';
 import { usePage } from '../Provider/hooks/usePage';
 
 export const User = () => {

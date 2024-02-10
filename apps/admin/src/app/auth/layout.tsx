@@ -9,28 +9,7 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout = (props: AuthLayoutProps) => {
-  return (
-    <>
-
-      {/* <Script
-        src="https://developers.panopto.com/scripts/embedapi.min.js"
-        onLoad={e => alert(JSON.stringify(e))}
-        onError={e =>
-          alert(
-            'test1' +
-              JSON.stringify(e, [
-                'message',
-                'arguments',
-                'type',
-                'name',
-              ]),
-          )
-        }
-        onReady={() => alert('ready')}
-      /> */}
-      <div className="flex justify-center">{props.children}</div>;
-    </>
-  );
+  return <div className="flex justify-center">{props.children}</div>;
 };
 
 export default observer(AuthLayout);

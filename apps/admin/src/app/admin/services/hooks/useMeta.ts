@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useCoCRouter } from '@hooks';
-import { GroupButton } from '@coc/ui';
+import { GroupButton } from '@coc/shared';
 import { useActionColumns, useServiceColumns } from '@columns';
 import { User } from '@__generated__/graphql';
 import { SERVICE_EDIT_PAGE_PATH, SERVICE_PAGE_PATH } from '@constants';

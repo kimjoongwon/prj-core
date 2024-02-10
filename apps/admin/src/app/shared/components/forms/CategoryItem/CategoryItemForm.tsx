@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardBody, Input, Select } from '@coc/ui';
+import { Card, CardBody, Input, Select } from '@coc/shared';
 import { CategoryItemForm as TCategoryItemForm } from '@__generated__/graphql';
 import { observer } from 'mobx-react-lite';
 

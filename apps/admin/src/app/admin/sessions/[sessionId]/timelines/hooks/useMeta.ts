@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { GroupButton } from '@coc/ui';
+import { GroupButton } from '@coc/shared';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useTimelineColumns } from '@columns';
 import { TIMELINE_EDIT_PAGE_PATH, TIMELINE_PAGE_PATH } from '@constants';

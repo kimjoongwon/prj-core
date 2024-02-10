@@ -1,6 +1,6 @@
 'use client';
 
-import { Form } from '@coc/ui';
+import { Form } from '@coc/shared';
 import { CategoryItemForm, FormContainer } from '@components';
 import { observer } from 'mobx-react-lite';
 import { useCategoryItemEditPage } from './hooks';

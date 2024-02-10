@@ -1,6 +1,6 @@
 import { EditLayout } from '@components';
 import { TimelineItemEditPageProvider } from '../../../../../timelineItems/[timelineItemId]/edit/provider';
-import { PageModal } from '@coc/ui';
+import { PageModal } from '@coc/shared';
 
 export interface LayoutProps {
   params: { timelineItemId: string | 'new' };

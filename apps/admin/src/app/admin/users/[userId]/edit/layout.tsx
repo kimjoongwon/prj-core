@@ -1,4 +1,4 @@
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps } from '@coc/shared';
 import { EditLayout } from '@components';
 import { Provider } from './provider';
 

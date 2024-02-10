@@ -1,7 +1,7 @@
 'use client';
 
 import { TimelineItemForm as TimelineItemFormType } from '@__generated__/graphql';
-import { Input, TimeRangePicker } from '@coc/ui';
+import { Input, TimeRangePicker } from '@coc/shared';
 import { ZodSchema } from 'zod';
 
 interface FormProps {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Search } from '@coc/ui';
+import { Search } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../../_hooks';
 

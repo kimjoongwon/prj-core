@@ -5,7 +5,7 @@ import { get, range, set } from 'lodash-es';
 import { Day } from './Day';
 import { DaysOfWeek } from './DaysOfWeek';
 import { useLocalObservable } from 'mobx-react-lite';
-import { Button } from '@coc/ui';
+import { Button } from '@coc/shared';
 import { ButtonGroup } from '@nextui-org/react';
 import { FcNext, FcPrevious } from 'react-icons/fc';
 import { action, reaction } from 'mobx';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { UserForm } from '@components';
-import { Form } from '@coc/ui';
+import { Form } from '@coc/shared';
 import { useUsersPage } from './hooks/usePage';
 import { useParams } from 'next/navigation';
 import { UserForm as UserFormType } from '@__generated__/graphql';
