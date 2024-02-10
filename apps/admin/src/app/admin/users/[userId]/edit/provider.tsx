@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import { useHandlers, useMutations, useQueries, useState } from './hooks';

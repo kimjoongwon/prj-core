@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { GroupButton } from '@coc/ui';
+import { GroupButton } from '@coc/shared';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useSpaceColumns } from '@columns';
 import { SPACE_EDIT_PAGE_PATH, SPACE_PAGE_PATH } from '@constants';

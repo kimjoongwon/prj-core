@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps } from '@coc/shared';
 import { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useHandlers, useMeta, useQueries, useState } from './hooks';
@@ -12,7 +12,9 @@ interface PageContext {
   meta: ReturnType<typeof useMeta>;
 }
 
-export const PageContext = createContext<PageContext>({} as PageContext);
+export const PageContext = createContext<PageContext>(
+  {} as PageContext,
+);
 
 export const UsersPageProvider = observer((props: ContainerProps) => {
   const { children } = props;

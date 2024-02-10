@@ -3,7 +3,7 @@ to: src/app/admin/<%= h.inflection.pluralize(name) %>/[<%= name %>Id]/edit/provi
 ---
 'use client';
 
-import { ContainerProps, Form } from '@coc/ui';
+import { ContainerProps, Form } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {

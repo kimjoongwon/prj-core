@@ -1,6 +1,6 @@
 'use client';
 
-import { Skeleton } from '@coc/ui';
+import { Skeleton } from '@coc/shared';
 import {
   ButtonGroupContainer,
   DataGridContainer,

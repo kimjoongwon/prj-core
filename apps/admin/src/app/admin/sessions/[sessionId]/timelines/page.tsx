@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/ui';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/shared';
 import {
   ButtonGroupContainer,
   DataGridContainer,

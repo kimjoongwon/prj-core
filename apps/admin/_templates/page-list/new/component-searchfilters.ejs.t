@@ -4,7 +4,7 @@ unless_exists: true
 ---
 'use client';
 
-import { Search } from '@coc/ui';
+import { Search } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../PageProvider/hooks';
 

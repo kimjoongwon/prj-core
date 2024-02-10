@@ -2,7 +2,7 @@
 
 import { SessionForm as SessionFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
-import { Button, Calendar, Chips, FormControl, Input, Spacer } from '@coc/ui';
+import { Button, Calendar, Chips, FormControl, Input, Spacer } from '@coc/shared';
 import dayjs from 'dayjs';
 
 interface SessionFormProps {

@@ -10,7 +10,7 @@ import {
   SPACES_PAGE_PATH,
   GROUPS_PAGE_PATH,
 } from '@constants';
-import { CoCNavbar, User } from '@coc/ui';
+import { CoCNavbar, User } from '@coc/shared';
 import { Spacer } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { FcBusinessman } from 'react-icons/fc';

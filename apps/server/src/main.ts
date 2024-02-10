@@ -21,14 +21,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
-  // Cors
   if (corsConfig.enabled) {
     logger.log(
       corsConfig.enabled ? 'CORS이 적용되었습니다.' : 'CORS STOP',
       'Cors Enabled',
     );
     app.enableCors({
-      origin: 'http://192.168.0.41:3004',
+      origin: ['http://192.168.0.41:3004'],
       credentials: true,
     });
   }

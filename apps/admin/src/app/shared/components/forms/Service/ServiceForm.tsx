@@ -1,6 +1,6 @@
 'use client';
 
-import { FormControl, Input, Select } from '@coc/ui';
+import { FormControl, Input, Select } from '@coc/shared';
 import { CreateServiceInput, UpdateServiceInput } from '@__generated__/graphql';
 import { observer } from 'mobx-react-lite';
 import { ZodSchema } from 'zod';

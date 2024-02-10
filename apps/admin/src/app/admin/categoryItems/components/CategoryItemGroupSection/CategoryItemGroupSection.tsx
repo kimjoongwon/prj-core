@@ -1,4 +1,4 @@
-import { Button } from '@coc/ui';
+import { Button } from '@coc/shared';
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';

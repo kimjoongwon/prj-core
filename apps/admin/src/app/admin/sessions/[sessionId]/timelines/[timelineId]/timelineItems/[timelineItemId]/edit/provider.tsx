@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps, Form } from '@coc/ui';
+import { ContainerProps, Form } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import {

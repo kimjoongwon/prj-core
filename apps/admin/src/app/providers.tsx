@@ -13,23 +13,6 @@ export function Providers({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    // @ts-ignore
-    if (window.EmbedApi) {
-      alert('test');
-    }
-
-    window.addEventListener('message', event => {
-      console.log(event);
-      alert(event.data);
-    });
-    document.addEventListener('message', event => {
-      console.log(event);
-      // @ts-ignore
-      alert(event.data);
-    });
-  });
-
   return (
     <NextUIProvider>
       <ApolloWrapper>

@@ -1,5 +1,5 @@
 'use client';
-import Script from 'next/script';
+
 import './globals.css';
 import { Providers } from './providers';
 
@@ -18,17 +18,6 @@ export default function RootLayout(props: {
           {props.modal}
         </Providers>
       </body>
-      <Script
-        onLoad={e => 'day' + alert(JSON.stringify(e))}
-        onError={e =>
-          alert(
-            'day2' +
-              JSON.stringify(e, ['message', 'arguments', 'type']),
-          )
-        }
-        onReady={() => alert('ready')}
-        src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"
-      ></Script>
     </html>
   );
 }

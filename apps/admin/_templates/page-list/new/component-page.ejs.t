@@ -4,7 +4,7 @@ unless_exists: true
 ---
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination } from '@coc/ui';
+import { ButtonGroup, DataGrid, Pagination } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { usePage } from '../PageProvider/hooks';
 import { SearchFilters } from '../SearchFilters/SearchFilters';

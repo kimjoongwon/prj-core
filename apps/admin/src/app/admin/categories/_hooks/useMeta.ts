@@ -1,5 +1,5 @@
 import { useCoCRouter } from '@hooks';
-import { GroupButton } from '@coc/ui';
+import { GroupButton } from '@coc/shared';
 import { useActionColumns, useCategoryColumns } from '@columns';
 import { useMemo } from 'react';
 import { useQueries } from './useQueries';

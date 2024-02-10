@@ -1,4 +1,4 @@
-import { PageModal } from '@coc/ui';
+import { PageModal } from '@coc/shared';
 import { SpaceEditPageProvider } from '../../../../[spaceId]/edit/provider';
 
 export default function Layout(props: { children: React.ReactNode }) {

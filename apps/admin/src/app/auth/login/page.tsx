@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, LoginForm, Spacer } from '@coc/ui';
+import { Button, LoginForm, Spacer } from '@coc/shared';
 import { DASHBOARD_PAGE_PATH } from '@constants';
 import { useAuth, useCoCRouter } from '@hooks';
 import { observer } from 'mobx-react-lite';

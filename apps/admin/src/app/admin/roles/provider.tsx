@@ -2,7 +2,7 @@
 
 import { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { ContainerProps } from '@coc/ui';
+import { ContainerProps } from '@coc/shared';
 import { useHandlers, useMeta, useQueries, useState } from './hooks';
 import { useMutations } from './hooks/useMutations';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Input, Button, Textarea } from '@coc/ui';
+import { Input, Button, Textarea } from '@coc/shared';
 import { modalStore } from '@stores';
 import { action } from 'mobx';
 
