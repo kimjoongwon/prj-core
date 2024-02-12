@@ -20,17 +20,27 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.511.0",
     "@coc/database": "workspace:*",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^3.2.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/cqrs": "^10.2.7",
+    "@nestjs/jwt": "^10.2.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^7.3.0",
+    "@nestjs/throttler": "^5.1.2",
     "bcrypt": "^5.1.1",
     "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
+    "nestjs-cls": "^4.1.0",
+    "nestjs-i18n": "^10.4.0",
+    "parse-duration": "^1.1.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
