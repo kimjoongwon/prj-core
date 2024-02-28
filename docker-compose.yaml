@@ -23,7 +23,6 @@ services:
       - NODE_ENV=production
     env_file:
       - ./apps/server/.env
-      - ./packages/database/.env
     ports:
       - 3003:3003
     networks:

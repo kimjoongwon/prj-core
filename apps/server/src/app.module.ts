@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { PrismaModule } from './prisma/prisma.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    PrismaModule,
   ],
   providers: [],
 })

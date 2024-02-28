@@ -30,51 +30,72 @@ model Profile {
   user      User      @relation(fields: [userId], references: [id])
 }
 
-model Category {
-  id             String       @id @default(cuid())
-  name           String       @unique
-  serviceId      String
-  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
-  deletedAt      DateTime?    @db.Timestamptz(6)
-  categoryItemId String
-  tenantId       String
-  categoryItem   CategoryItem @relation(fields: [categoryItemId], references: [id])
-  service        Service      @relation(fields: [serviceId], references: [id])
+model UserCategory {
+  id                 String           @id @default(cuid())
+  name               String           @unique
+  createdAt          DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime?        @updatedAt @db.Timestamptz(6)
+  deletedAt          DateTime?        @db.Timestamptz(6)
+  userCategoryItemId String
+  userCategoryItem   UserCategoryItem @relation(fields: [userCategoryItemId], references: [id])
 }
 
-model Group {
+model UserGroup {
   id        String    @id @default(cuid())
   name      String
-  serviceId String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
-  tenantId  String
-  service   Service   @relation(fields: [serviceId], references: [id])
 }
 
-model CategoryItem {
-  id          String     @id @default(cuid())
-  name        String
-  tag         String
-  ancestorIds String[]
-  parentId    String?
-  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?  @db.Timestamptz(6)
-  tenantId    String
-  category    Category[]
+model UserCategoryItem {
+  id           String         @id @default(cuid())
+  name         String
+  tag          String
+  ancestorIds  String[]
+  parentId     String?
+  createdAt    DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt    DateTime?      @db.Timestamptz(6)
+  userCategory UserCategory[]
+}
+
+model SpaceCategory {
+  id                String            @id @default(cuid())
+  name              String            @unique
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime?         @updatedAt @db.Timestamptz(6)
+  deletedAt         DateTime?         @db.Timestamptz(6)
+  categoryItemId    String
+  spaceCategoryItem SpaceCategoryItem @relation(fields: [categoryItemId], references: [id])
+}
+
+model SpaceGroup {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model SpaceCategoryItem {
+  id            String          @id @default(cuid())
+  name          String
+  tag           String
+  ancestorIds   String[]
+  parentId      String?
+  createdAt     DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?       @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?       @db.Timestamptz(6)
+  spaceCategory SpaceCategory[]
 }
 
 model Service {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  createdAt DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime?  @db.Timestamptz(6)
-  category  Category[]
-  group     Group[]
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 model Role {
@@ -99,11 +120,10 @@ model Tenant {
   user      User      @relation(fields: [userId], references: [id])
 }
 
-model Classification {
+model SpaceClassification {
   id         String    @id @default(cuid())
-  serviceId  String
   categoryId String
-  itemId     String
+  spaceId    String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt  DateTime? @db.Timestamptz(6)
