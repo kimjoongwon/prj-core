@@ -6,8 +6,9 @@ import { ValidationState } from '../controls/Form/FormControl';
 import { InputView } from './InputView';
 import { InputProps as NextUIInputProps } from '@nextui-org/react';
 import { useMobxHookForm } from '../../../hooks';
-import { action, get } from 'mobx';
+import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { get } from 'lodash-es';
 
 export type InputProps<T> = MobxProps<T> &
   NextUIInputProps & {

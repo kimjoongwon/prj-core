@@ -10,11 +10,12 @@ datasource db {
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
+  name      String
+  phone     String    @unique
   password  String
   deletedAt DateTime? @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  name      String
   profiles  Profile[]
   tenants   Tenant[]
 }
@@ -22,7 +23,6 @@ model User {
 model Profile {
   id        String    @id @default(cuid())
   nickname  String
-  phone     String    @unique
   userId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)

@@ -1,7 +1,6 @@
 'use client';
 
 import { UserForm as _UserForm } from '@__generated__/graphql';
-import { testScheme } from '@coc/schema';
 import { FormControl, FormGroupControl, Input, Select } from '@coc/shared';
 import { observer } from 'mobx-react-lite';
 import { ZodSchema } from 'zod';
