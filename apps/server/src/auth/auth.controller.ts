@@ -2,6 +2,8 @@ import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from './jwt.auth-guard';
 
 @Controller()
 export class AuthController {
@@ -14,6 +16,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @ApiBearerAuth()
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

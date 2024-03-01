@@ -9,10 +9,12 @@ import {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
+    .setVersion('2.0')
     .setTitle('COC Server')
     .setDescription('The coc API description')
     .setVersion('1.0')
     .addTag('coc')
+    .addBearerAuth()
     .build();
 
   const options: SwaggerDocumentOptions = {

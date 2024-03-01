@@ -13,7 +13,8 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "compile": "graphql-codegen",
     "watch": "graphql-codegen -w",
-    "codegen": "openapi-rq -i ./petstore.yaml -c axios"
+    "codegen": "openapi-rq -i http://localhost:3005/api-json --output ./src/api -c axios"
+    
   },
   "dependencies": {
     "@apollo/client": "3.8.7",
