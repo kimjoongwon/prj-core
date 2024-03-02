@@ -1,9 +1,11 @@
-import Link from 'next/link';
+'use client';
+
+import { Button } from '@coc/shared';
 
 export default function Page() {
   return (
-    <Link href="auth/login">
-      <p>진입 경로입니다.</p>
-    </Link>
+    <div>
+      <Button>Button</Button>
+    </div>
   );
 }

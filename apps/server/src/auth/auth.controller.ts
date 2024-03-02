@@ -1,10 +1,20 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
-import { LocalAuthGuard } from './local-auth.guard';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Get,
+  Body,
+  HttpStatus,
+} from '@nestjs/common';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
-import { Public } from './public.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from './jwt.auth-guard';
+import { Public } from '../common/decorators/public.decorator';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
+import { ProfileDto } from 'src/profiles/dto/profile.dto';
 
+@ApiTags('auth')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -23,8 +33,9 @@ export class AuthController {
   }
 
   @Public()
-  @Get()
-  findAll() {
-    return [];
+  @Post('auth/signUp')
+  @ApiResponse({ status: HttpStatus.CREATED, type: ProfileDto })
+  async signUpUser(@Body() createUserSignUpDto: CreateUserSignUpDto) {
+    return this.authService.signUpUser(createUserSignUpDto);
   }
 }

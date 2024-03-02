@@ -5,9 +5,11 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { patchNestJsSwagger } from 'nestjs-zod';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  patchNestJsSwagger();
   const config = new DocumentBuilder()
     .setVersion('2.0')
     .setTitle('COC Server')
@@ -21,8 +23,12 @@ async function bootstrap() {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
 
+  app.enableCors();
+
   const document = SwaggerModule.createDocument(app, config, options);
   SwaggerModule.setup('api', app, document);
+
+  fetch;
   await app.listen(3005);
 }
 
