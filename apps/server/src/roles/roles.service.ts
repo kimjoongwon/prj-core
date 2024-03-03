@@ -21,6 +21,8 @@ export class RolesService implements OnModuleInit {
       },
     });
 
+    console.log('userRole', userRole);
+
     if (!superAdminRole) {
       await this.create({ name: 'SUPER_ADMIN' });
     }

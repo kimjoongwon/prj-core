@@ -14,7 +14,7 @@ export default registerAs<AuthConfig>('auth', () => {
 
   if (!result.success) {
     throw new InternalServerErrorException(
-      'Environment variables validation error',
+      'Auth Environment variables validation error',
     );
   }
 

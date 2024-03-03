@@ -25,18 +25,13 @@ import { TokenDto } from './dtos/token.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TokenDto })
   @Post('auth/login')
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
-  }
-
-  @ApiBearerAuth()
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
   }
 
   @Public()

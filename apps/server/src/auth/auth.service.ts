@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
 import { ProfilesService } from 'src/profiles/profiles.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserLoginDto } from './dtos/user-login.dto';
 import { UserEntity } from 'src/users/user.entity';
 import { RoleType } from 'src/common/types/RoleTypes';
 import { TokenPayloadDto } from './dtos/token-payload.dto';
@@ -37,14 +36,10 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async validateUser(userLoginDto: UserLoginDto): Promise<UserEntity> {
-    const email = userLoginDto.email;
-    const user = await this.usersService.findOne(email);
+  async validateUser(email: string, password: string): Promise<UserEntity> {
+    const user = await this.usersService.findOneByEmail(email);
 
-    const isPasswordValid = await this.validateHash(
-      userLoginDto.password,
-      user?.password,
-    );
+    const isPasswordValid = await this.validateHash(password, user?.password);
 
     if (!isPasswordValid) {
       throw new NotFoundException('User not found');
@@ -56,32 +51,40 @@ export class AuthService {
   async signUpUser(userSignUpDto: CreateUserSignUpDto) {
     const { createProfileDto, createUserDto } = userSignUpDto;
 
-    const hashedPassword = await this.passwordService.hashPassword(
-      userSignUpDto.createUserDto.password,
-    );
+    this.prisma.$transaction(async (tx) => {
+      const hashedPassword = await this.passwordService.hashPassword(
+        userSignUpDto.createUserDto.password,
+      );
 
-    const newUser = await this.usersService.create({
-      ...createUserDto,
-      password: hashedPassword,
-    });
+      const newUser = await tx.user.create({
+        data: {
+          ...createUserDto,
+          password: hashedPassword,
+        },
+      });
 
-    const baseSpace = await this.space.findBaseSpace();
+      const baseSpace = await this.space.findBaseSpace();
 
-    const userRole = await this.rolesService.findUserRole();
+      const userRole = await this.rolesService.findUserRole();
 
-    await this.tenantsService.create({
-      roleId: userRole!.id,
-      spaceId: baseSpace!.id,
-      userId: newUser.id,
-    });
+      await tx.tenant.create({
+        data: {
+          roleId: userRole!.id,
+          spaceId: baseSpace!.id,
+          userId: newUser.id,
+        },
+      });
 
-    await this.profilesService.create({
-      ...createProfileDto,
-      userId: newUser.id,
-    });
+      await tx.profile.create({
+        data: {
+          ...createProfileDto,
+          userId: newUser.id,
+        },
+      });
 
-    return this.generateTokens({
-      userId: newUser.id,
+      return this.generateTokens({
+        userId: newUser.id,
+      });
     });
   }
 

@@ -20,7 +20,7 @@ export default registerAs<FileConfig>('file', () => {
   const result = environmentVariablesValidatorSchema.safeParse(process.env);
 
   if (!result.success) {
-    throw new Error('Environment variables validation error');
+    throw new Error('File Environment variables validation error');
   }
 
   return {

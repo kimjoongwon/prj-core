@@ -11,18 +11,17 @@ export class SpacesService implements OnModuleInit {
       },
     });
 
-    if (!baseSpace) {
-      console.log('공간이 이미 존재합니다.');
-      return;
-    }
+    console.log('baseSpace', baseSpace);
 
-    this.prisma.space.create({
-      data: {
-        name: '기본',
-        address: '기본',
-        phone: '기본',
-      },
-    });
+    if (!baseSpace) {
+      await this.prisma.space.create({
+        data: {
+          name: '기본',
+          address: '기본',
+          phone: '기본',
+        },
+      });
+    }
   }
 
   create() {

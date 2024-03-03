@@ -1,15 +1,5 @@
 import { registerAs } from '@nestjs/config';
 import { AppConfig } from './config.type';
-import {
-  IsEmail,
-  IsEnum,
-  IsInt,
-  IsOptional,
-  IsString,
-  IsUrl,
-  Max,
-  Min,
-} from 'class-validator';
 import { z } from 'zod';
 
 enum Environment {
@@ -20,10 +10,12 @@ enum Environment {
 
 const environmentVariablesValidatorSchema = z.object({
   ADMIN_EMAIL: z.string().email().optional(),
-  NODE_ENV: z.nativeEnum(Environment),
+  NODE_ENV: z
+    .enum([Environment.Development, Environment.Production, Environment.Test])
+    .optional(),
   APP_NAME: z.string(),
   APP_ADMIN_EMAIL: z.string().email(),
-  APP_PORT: z.number().int().min(0).max(65535),
+  APP_PORT: z.string().transform(Number),
   FRONTEND_DOMAIN: z.string().url(),
   BACKEND_DOMAIN: z.string().url(),
   API_PREFIX: z.string(),
@@ -32,22 +24,20 @@ const environmentVariablesValidatorSchema = z.object({
 });
 
 export default registerAs<AppConfig>('app', () => {
-  environmentVariablesValidatorSchema.parse(process.env);
+  // const parsedEnv = environmentVariablesValidatorSchema.parse(process.env);
 
+  const result = environmentVariablesValidatorSchema.parse(process.env);
+  console.log(result);
   return {
-    adminEmail: process.env.APP_ADMIN_EMAIL,
-    nodeEnv: process.env.NODE_ENV || 'development',
-    name: process.env.APP_NAME || 'app',
-    workingDirectory: process.env.PWD || process.cwd(),
-    frontendDomain: process.env.FRONTEND_DOMAIN,
-    backendDomain: process.env.BACKEND_DOMAIN ?? 'http://localhost',
-    port: process.env.APP_PORT
-      ? parseInt(process.env.APP_PORT, 10)
-      : process.env.PORT
-        ? parseInt(process.env.PORT, 10)
-        : 3006,
-    apiPrefix: process.env.API_PREFIX || 'api',
-    fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
-    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    adminEmail: result.APP_ADMIN_EMAIL,
+    nodeEnv: result.NODE_ENV || 'development',
+    name: result.APP_NAME || 'app',
+    workingDirectory: process.cwd(),
+    frontendDomain: result.FRONTEND_DOMAIN,
+    backendDomain: result.BACKEND_DOMAIN ?? 'http://localhost',
+    port: result.APP_PORT || 3006,
+    apiPrefix: result.API_PREFIX || 'api',
+    fallbackLanguage: result.APP_FALLBACK_LANGUAGE || 'en',
+    headerLanguage: result.APP_HEADER_LANGUAGE || 'x-custom-lang',
   };
 });

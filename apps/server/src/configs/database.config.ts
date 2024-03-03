@@ -7,44 +7,36 @@ const environmentVariablesValidatorSchema = z.object({
   DATABASE_URL: z.string().optional(),
   DATABASE_TYPE: z.string(),
   DATABASE_HOST: z.string(),
-  DATABASE_PORT: z.number().int().min(0).max(65535).optional(),
+  DATABASE_PORT: z.string().optional().default('5432').transform(Number),
   DATABASE_PASSWORD: z.string().optional(),
   DATABASE_NAME: z.string(),
   DATABASE_USERNAME: z.string(),
-  DATABASE_SYNCHRONIZE: z.boolean().optional(),
-  DATABASE_MAX_CONNECTIONS: z.number().int().optional(),
-  DATABASE_SSL_ENABLED: z.boolean().optional(),
-  DATABASE_REJECT_UNAUTHORIZED: z.boolean().optional(),
+  DATABASE_SYNCHRONIZE: z.string().optional().transform(Boolean),
+  DATABASE_MAX_CONNECTIONS: z.string().transform(Number).optional(),
+  DATABASE_SSL_ENABLED: z.string().transform(Boolean).optional(),
+  DATABASE_REJECT_UNAUTHORIZED: z.string().transform(Boolean).optional(),
   DATABASE_CA: z.string().optional(),
   DATABASE_KEY: z.string().optional(),
   DATABASE_CERT: z.string().optional(),
 });
 
 export default registerAs<DatabaseConfig>('database', () => {
-  const result = environmentVariablesValidatorSchema.safeParse(process.env);
-
-  if (!result.success) {
-    throw new Error('Environment variables validation error');
-  }
+  const result = environmentVariablesValidatorSchema.parse(process.env);
 
   return {
-    url: process.env.DATABASE_URL,
-    type: process.env.DATABASE_TYPE,
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT
-      ? parseInt(process.env.DATABASE_PORT, 10)
-      : 5432,
-    password: process.env.DATABASE_PASSWORD,
-    name: process.env.DATABASE_NAME,
-    username: process.env.DATABASE_USERNAME,
-    synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
-    maxConnections: process.env.DATABASE_MAX_CONNECTIONS
-      ? parseInt(process.env.DATABASE_MAX_CONNECTIONS, 10)
-      : 100,
-    sslEnabled: process.env.DATABASE_SSL_ENABLED === 'true',
-    rejectUnauthorized: process.env.DATABASE_REJECT_UNAUTHORIZED === 'true',
-    ca: process.env.DATABASE_CA,
-    key: process.env.DATABASE_KEY,
-    cert: process.env.DATABASE_CERT,
+    url: result.DATABASE_URL,
+    type: result.DATABASE_TYPE,
+    host: result.DATABASE_HOST,
+    port: result.DATABASE_PORT,
+    password: result.DATABASE_PASSWORD,
+    name: result.DATABASE_NAME,
+    username: result.DATABASE_USERNAME,
+    synchronize: result.DATABASE_SYNCHRONIZE,
+    maxConnections: result.DATABASE_MAX_CONNECTIONS || 100,
+    sslEnabled: result.DATABASE_SSL_ENABLED,
+    rejectUnauthorized: result.DATABASE_REJECT_UNAUTHORIZED,
+    ca: result.DATABASE_CA,
+    key: result.DATABASE_KEY,
+    cert: result.DATABASE_CERT,
   };
 });

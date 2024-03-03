@@ -31,6 +31,7 @@ import {
         fileConfig,
         corsConfig,
       ],
+      envFilePath: '.env',
     }),
     ClsModule.forRoot({
       global: true,
