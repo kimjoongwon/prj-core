@@ -16,7 +16,6 @@ import {
   MailConfig,
   TwitterConfig,
 } from './config.type';
-export * from './logger.config';
 export {
   corsConfig,
   appConfig,

@@ -19,6 +19,7 @@ enum Environment {
 }
 
 const environmentVariablesValidatorSchema = z.object({
+  ADMIN_EMAIL: z.string().email().optional(),
   NODE_ENV: z.nativeEnum(Environment),
   APP_NAME: z.string(),
   APP_ADMIN_EMAIL: z.string().email(),

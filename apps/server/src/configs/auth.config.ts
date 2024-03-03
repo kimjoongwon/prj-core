@@ -1,19 +1,22 @@
 import { registerAs } from '@nestjs/config';
 import { AuthConfig } from './config.type';
-import validateConfig from '../common/utils/validate-config';
-import { IsString } from 'class-validator';
+import { z } from 'zod';
+import { InternalServerErrorException } from '@nestjs/common';
 
-class EnvironmentVariablesValidator {
-  @IsString()
-  AUTH_JWT_SECRET: string;
-  @IsString()
-  AUTH_JWT_TOKEN_EXPIRES_IN: string;
-  @IsString()
-  AUTH_JWT_TOKEN_REFRESH_IN: string;
-}
+const environmentVariablesValidatorSchema = z.object({
+  AUTH_JWT_SECRET: z.string(),
+  AUTH_JWT_TOKEN_EXPIRES_IN: z.string(),
+  AUTH_JWT_TOKEN_REFRESH_IN: z.string(),
+});
 
 export default registerAs<AuthConfig>('auth', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  const result = environmentVariablesValidatorSchema.safeParse(process.env);
+
+  if (!result.success) {
+    throw new InternalServerErrorException(
+      'Environment variables validation error',
+    );
+  }
 
   return {
     secret: process.env.AUTH_JWT_SECRET,

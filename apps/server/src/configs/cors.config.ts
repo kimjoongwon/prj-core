@@ -1,15 +1,20 @@
 import { registerAs } from '@nestjs/config';
-import { IsBoolean } from 'class-validator';
 import { CorsConfig } from './config.type';
-import validateConfig from '../common/utils/validate-config';
+import { z } from 'zod';
+import { InternalServerErrorException } from '@nestjs/common';
 
-class EnvironmentVariablesValidator {
-  @IsBoolean()
-  CORS_ENABLED: boolean;
-}
+const environmentVariablesValidatorSchema = z.object({
+  CORS_ENABLED: z.boolean(),
+});
 
 export default registerAs<CorsConfig>('cors', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  const result = environmentVariablesValidatorSchema.safeParse(process.env);
+
+  if (!result.success) {
+    throw new InternalServerErrorException(
+      'Environment variables validation error',
+    );
+  }
 
   return {
     enabled: process.env.CORS_ENABLED === 'true',
