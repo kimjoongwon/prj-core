@@ -1,41 +1,27 @@
 import { registerAs } from '@nestjs/config';
 import { FileConfig } from './config.type';
-import { IsEnum, IsOptional, IsString, ValidateIf } from 'class-validator';
-import validateConfig from '../common/utils/validate-config';
+import { z } from 'zod';
 
 enum FileDriver {
   LOCAL = 'local',
   S3 = 's3',
 }
 
-class EnvironmentVariablesValidator {
-  @IsEnum(FileDriver)
-  FILE_DRIVER: FileDriver;
-
-  @ValidateIf(envValues => envValues.FILE_DRIVER === FileDriver.S3)
-  @IsString()
-  ACCESS_KEY_ID: string;
-
-  @ValidateIf(envValues => envValues.FILE_DRIVER === FileDriver.S3)
-  @IsString()
-  SECRET_ACCESS_KEY: string;
-
-  @ValidateIf(envValues => envValues.FILE_DRIVER === FileDriver.S3)
-  @IsString()
-  AWS_DEFAULT_S3_BUCKET: string;
-
-  @ValidateIf(envValues => envValues.FILE_DRIVER === FileDriver.S3)
-  @IsString()
-  @IsOptional()
-  AWS_DEFAULT_S3_URL: string;
-
-  @ValidateIf(envValues => envValues.FILE_DRIVER === FileDriver.S3)
-  @IsString()
-  AWS_S3_REGION: string;
-}
+const environmentVariablesValidatorSchema = z.object({
+  FILE_DRIVER: z.nativeEnum(FileDriver),
+  ACCESS_KEY_ID: z.string().optional(),
+  SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_DEFAULT_S3_BUCKET: z.string().optional(),
+  AWS_DEFAULT_S3_URL: z.string().optional(),
+  AWS_S3_REGION: z.string().optional(),
+});
 
 export default registerAs<FileConfig>('file', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  const result = environmentVariablesValidatorSchema.safeParse(process.env);
+
+  if (!result.success) {
+    throw new Error('Environment variables validation error');
+  }
 
   return {
     driver: process.env.FILE_DRIVER ?? 'local',

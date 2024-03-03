@@ -1,52 +1,25 @@
 import { registerAs } from '@nestjs/config';
 import { MailConfig } from './config.type';
-import {
-  IsString,
-  IsInt,
-  Min,
-  Max,
-  IsOptional,
-  IsBoolean,
-  IsEmail,
-} from 'class-validator';
-import validateConfig from '../common/utils/validate-config';
+import { z } from 'zod';
 
-class EnvironmentVariablesValidator {
-  @IsInt()
-  @Min(0)
-  @Max(65535)
-  @IsOptional()
-  MAIL_PORT: number;
-
-  @IsString()
-  MAIL_HOST: string;
-
-  @IsString()
-  @IsOptional()
-  MAIL_USER: string;
-
-  @IsString()
-  @IsOptional()
-  MAIL_PASSWORD: string;
-
-  @IsEmail()
-  MAIL_DEFAULT_EMAIL: string;
-
-  @IsString()
-  MAIL_DEFAULT_NAME: string;
-
-  @IsBoolean()
-  MAIL_IGNORE_TLS: boolean;
-
-  @IsBoolean()
-  MAIL_SECURE: boolean;
-
-  @IsBoolean()
-  MAIL_REQUIRE_TLS: boolean;
-}
+const environmentVariablesValidatorSchema = z.object({
+  MAIL_PORT: z.number().int().min(0).max(65535).optional(),
+  MAIL_HOST: z.string(),
+  MAIL_USER: z.string().optional(),
+  MAIL_PASSWORD: z.string().optional(),
+  MAIL_DEFAULT_EMAIL: z.string().email(),
+  MAIL_DEFAULT_NAME: z.string(),
+  MAIL_IGNORE_TLS: z.boolean(),
+  MAIL_SECURE: z.boolean(),
+  MAIL_REQUIRE_TLS: z.boolean(),
+});
 
 export default registerAs<MailConfig>('mail', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  const result = environmentVariablesValidatorSchema.safeParse(process.env);
+
+  if (!result.success) {
+    throw new Error('Environment variables validation error');
+  }
 
   return {
     port: process.env.MAIL_PORT ? parseInt(process.env.MAIL_PORT, 10) : 587,

@@ -1,80 +1,31 @@
 import { registerAs } from '@nestjs/config';
 import { DatabaseConfig } from './config.type';
-import {
-  IsOptional,
-  IsInt,
-  Min,
-  Max,
-  IsString,
-  ValidateIf,
-  IsBoolean,
-} from 'class-validator';
-import validateConfig from '../common/utils/validate-config';
+import { z } from 'zod';
+import { InternalServerErrorException } from '@nestjs/common';
 
-class EnvironmentVariablesValidator {
-  @ValidateIf(envValues => envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_URL: string;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_TYPE: string;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_HOST: string;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsInt()
-  @Min(0)
-  @Max(65535)
-  @IsOptional()
-  DATABASE_PORT: number;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsString()
-  @IsOptional()
-  DATABASE_PASSWORD: string;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_NAME: string;
-
-  @ValidateIf(envValues => !envValues.DATABASE_URL)
-  @IsString()
-  DATABASE_USERNAME: string;
-
-  @IsBoolean()
-  @IsOptional()
-  DATABASE_SYNCHRONIZE: boolean;
-
-  @IsInt()
-  @IsOptional()
-  DATABASE_MAX_CONNECTIONS: number;
-
-  @IsBoolean()
-  @IsOptional()
-  DATABASE_SSL_ENABLED: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  DATABASE_REJECT_UNAUTHORIZED: boolean;
-
-  @IsString()
-  @IsOptional()
-  DATABASE_CA: string;
-
-  @IsString()
-  @IsOptional()
-  DATABASE_KEY: string;
-
-  @IsString()
-  @IsOptional()
-  DATABASE_CERT: string;
-}
+const environmentVariablesValidatorSchema = z.object({
+  DATABASE_URL: z.string().optional(),
+  DATABASE_TYPE: z.string(),
+  DATABASE_HOST: z.string(),
+  DATABASE_PORT: z.number().int().min(0).max(65535).optional(),
+  DATABASE_PASSWORD: z.string().optional(),
+  DATABASE_NAME: z.string(),
+  DATABASE_USERNAME: z.string(),
+  DATABASE_SYNCHRONIZE: z.boolean().optional(),
+  DATABASE_MAX_CONNECTIONS: z.number().int().optional(),
+  DATABASE_SSL_ENABLED: z.boolean().optional(),
+  DATABASE_REJECT_UNAUTHORIZED: z.boolean().optional(),
+  DATABASE_CA: z.string().optional(),
+  DATABASE_KEY: z.string().optional(),
+  DATABASE_CERT: z.string().optional(),
+});
 
 export default registerAs<DatabaseConfig>('database', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  const result = environmentVariablesValidatorSchema.safeParse(process.env);
+
+  if (!result.success) {
+    throw new Error('Environment variables validation error');
+  }
 
   return {
     url: process.env.DATABASE_URL,

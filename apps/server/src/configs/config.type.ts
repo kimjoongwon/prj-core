@@ -1,7 +1,7 @@
 export type AppConfig = {
   nodeEnv: string;
   name: string;
-  adminEmail: string;
+  adminEmail?: string;
   workingDirectory: string;
   frontendDomain?: string;
   backendDomain: string;
