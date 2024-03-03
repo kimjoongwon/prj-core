@@ -10,9 +10,28 @@ import { SpacesModule } from './spaces/spaces.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RolesModule } from './roles/roles.module';
+import {
+  appConfig,
+  authConfig,
+  corsConfig,
+  databaseConfig,
+  fileConfig,
+  mailConfig,
+} from './configs';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [
+        databaseConfig,
+        authConfig,
+        appConfig,
+        mailConfig,
+        fileConfig,
+        corsConfig,
+      ],
+    }),
     ClsModule.forRoot({
       global: true,
       middleware: {

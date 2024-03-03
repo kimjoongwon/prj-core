@@ -2,13 +2,11 @@ import {
   Controller,
   Request,
   Post,
-  UseGuards,
   Get,
   Body,
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { Public } from '../common/decorators/public.decorator';
 import {
@@ -19,9 +17,8 @@ import {
 } from '@nestjs/swagger';
 import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
 import { ProfileDto } from 'src/profiles/dto/profile.dto';
-import { LoginPayloadDto } from './dtos/login-payload.dto';
-import { UserLoginDto } from './dtos/user-login.dto';
-import { RoleType } from 'src/common/types/RoleTypes';
+import { LoginDto } from './dtos/login.dto';
+import { TokenDto } from './dtos/token.dto';
 
 @ApiTags('auth')
 @Controller()
@@ -30,23 +27,10 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({
-    type: LoginPayloadDto,
-    description: 'User info with access token',
-  })
+  @ApiOkResponse({ type: TokenDto })
   @Post('auth/login')
-  async login(@Body() userLoginDto: UserLoginDto) {
-    const userEntity = await this.authService.validateUser(userLoginDto);
-
-    const token = await this.authService.createAccessToken({
-      userId: userEntity.id,
-      role: RoleType.USER,
-    });
-
-    return {
-      user: userEntity,
-      token,
-    };
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @ApiBearerAuth()

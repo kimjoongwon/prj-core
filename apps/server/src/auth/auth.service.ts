@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
@@ -9,11 +13,15 @@ import { UserEntity } from 'src/users/user.entity';
 import { RoleType } from 'src/common/types/RoleTypes';
 import { TokenPayloadDto } from './dtos/token-payload.dto';
 import { TokenType } from 'src/common/types/TokenTypes';
-import bcrypt from 'bcrypt';
 import { SpacesService } from 'src/spaces/spaces.service';
 import { TenantsService } from 'src/tenants/tenants.service';
 import { RolesService } from 'src/roles/roles.service';
 import { PasswordService } from './password.service';
+import { ConfigService } from '@nestjs/config';
+import { AuthConfig } from 'src/configs';
+import { LoginDto } from './dtos/login.dto';
+import { TokenDto } from './dtos/token.dto';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +33,7 @@ export class AuthService {
     private space: SpacesService,
     private rolesService: RolesService,
     private passwordService: PasswordService,
+    private config: ConfigService,
     private prisma: PrismaService,
   ) {}
 
@@ -76,11 +85,25 @@ export class AuthService {
     });
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login({ email, password }: LoginDto): Promise<TokenDto> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException(`No user found for email: ${email}`);
+    }
+
+    const passwordValid = await this.passwordService.validatePassword(
+      password,
+      user.password,
+    );
+
+    if (!passwordValid) {
+      throw new BadRequestException('Invalid password');
+    }
+
+    return this.generateTokens({
+      userId: user.id,
+    });
   }
 
   validateHash(
@@ -108,7 +131,7 @@ export class AuthService {
     };
   }
 
-  generateTokens(payload: { userId: string }): Token {
+  generateTokens(payload: { userId: string }): TokenDto {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
@@ -120,10 +143,11 @@ export class AuthService {
   }
 
   private generateRefreshToken(payload: { userId: string }): string {
+    const authConfig = this.config.get<AuthConfig>('auth');
     // const securityConfig = this.configService.get<SecurityConfig>('security');
     return this.jwtService.sign(payload, {
-      secret: 'JWT_REFRESH_SECRET',
-      expiresIn: '3d',
+      secret: authConfig?.secret,
+      expiresIn: authConfig?.refresh,
     });
     // const securityConfig = this.configService.get<SecurityConfig>('security');
     // return this.jwtService.sign(payload, {
