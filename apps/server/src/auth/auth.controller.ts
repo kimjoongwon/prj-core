@@ -1,20 +1,7 @@
-import {
-  Controller,
-  Request,
-  Post,
-  Get,
-  Body,
-  HttpStatus,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from '../common/decorators/public.decorator';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
 import { ProfileDto } from 'src/profiles/dto/profile.dto';
 import { LoginDto } from './dtos/login.dto';
