@@ -30,72 +30,52 @@ model Profile {
   user      User      @relation(fields: [userId], references: [id])
 }
 
-model UserCategory {
-  id                 String           @id @default(cuid())
-  name               String           @unique
-  createdAt          DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt          DateTime?        @updatedAt @db.Timestamptz(6)
-  deletedAt          DateTime?        @db.Timestamptz(6)
-  userCategoryItemId String
-  userCategoryItem   UserCategoryItem @relation(fields: [userCategoryItemId], references: [id])
+model Category {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  serviceId       String
+  spaceId         String
+  ancestorIds     String[]
+  parentId        String?
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+  deletedAt       DateTime?        @db.Timestamptz(6)
+  space           Space            @relation(fields: [spaceId], references: [id])
+  classifications Classification[]
 }
 
-model UserGroup {
-  id        String    @id @default(cuid())
-  name      String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-}
-
-model UserCategoryItem {
-  id           String         @id @default(cuid())
-  name         String
-  tag          String
-  ancestorIds  String[]
-  parentId     String?
-  createdAt    DateTime       @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime?      @updatedAt @db.Timestamptz(6)
-  deletedAt    DateTime?      @db.Timestamptz(6)
-  userCategory UserCategory[]
-}
-
-model SpaceCategory {
-  id                String            @id @default(cuid())
-  name              String            @unique
-  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime?         @updatedAt @db.Timestamptz(6)
-  deletedAt         DateTime?         @db.Timestamptz(6)
-  categoryItemId    String
-  spaceCategoryItem SpaceCategoryItem @relation(fields: [categoryItemId], references: [id])
-}
-
-model SpaceGroup {
-  id        String    @id @default(cuid())
-  name      String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-}
-
-model SpaceCategoryItem {
-  id            String          @id @default(cuid())
-  name          String
-  tag           String
-  ancestorIds   String[]
-  parentId      String?
-  createdAt     DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime?       @updatedAt @db.Timestamptz(6)
-  deletedAt     DateTime?       @db.Timestamptz(6)
-  spaceCategory SpaceCategory[]
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  serviceId   String
+  spaceId     String
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?    @db.Timestamptz(6)
+  space       Space        @relation(fields: [spaceId], references: [id])
+  assignments Assignment[]
 }
 
 model Service {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
+  id              String           @id @default(cuid())
+  name            String           @unique
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+  deletedAt       DateTime?        @db.Timestamptz(6)
+  classifications Classification[]
+  assignments     Assignment[]
+}
+
+model Assignment {
+  id            String    @id @default(cuid())
+  groupId       String
+  serviceId     String
+  serviceItemId String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+  group         Group     @relation(fields: [groupId], references: [id])
+  service       Service   @relation(fields: [serviceId], references: [id])
 }
 
 model Role {
@@ -120,24 +100,29 @@ model Tenant {
   user      User      @relation(fields: [userId], references: [id])
 }
 
-model SpaceClassification {
-  id         String    @id @default(cuid())
-  categoryId String
-  spaceId    String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime? @db.Timestamptz(6)
+model Classification {
+  id            String    @id @default(cuid())
+  serviceId     String
+  serviceItemId String
+  categoryId    String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+  service       Service   @relation(fields: [serviceId], references: [id])
+  category      Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Space {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  phone     String    @db.Char(11)
-  address   String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-  tenants   Tenant[]
+  id         String     @id @default(cuid())
+  name       String     @unique
+  phone      String     @db.Char(11)
+  address    String
+  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime?  @db.Timestamptz(6)
+  tenants    Tenant[]
+  categories Category[]
+  groups     Group[]
 }
 
 model EmailTemplate {
