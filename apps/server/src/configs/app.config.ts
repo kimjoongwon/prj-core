@@ -10,7 +10,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import validateConfig from '../common/utils/validate-config';
+import { z } from 'zod';
 
 enum Environment {
   Development = 'development',
@@ -18,46 +18,20 @@ enum Environment {
   Test = 'test',
 }
 
-class EnvironmentVariablesValidator {
-  @IsEnum(Environment)
-  @IsOptional()
-  NODE_ENV: Environment;
-
-  @IsString()
-  APP_NAME: string;
-
-  @IsEmail()
-  APP_ADMIN_EMAIL: string;
-
-  @IsInt()
-  @Min(0)
-  @Max(65535)
-  @IsOptional()
-  APP_PORT: number;
-
-  @IsUrl({ require_tld: false })
-  @IsOptional()
-  FRONTEND_DOMAIN: string;
-
-  @IsUrl({ require_tld: false })
-  @IsOptional()
-  BACKEND_DOMAIN: string;
-
-  @IsString()
-  @IsOptional()
-  API_PREFIX: string;
-
-  @IsString()
-  @IsOptional()
-  APP_FALLBACK_LANGUAGE: string;
-
-  @IsString()
-  @IsOptional()
-  APP_HEADER_LANGUAGE: string;
-}
+const environmentVariablesValidatorSchema = z.object({
+  NODE_ENV: z.nativeEnum(Environment),
+  APP_NAME: z.string(),
+  APP_ADMIN_EMAIL: z.string().email(),
+  APP_PORT: z.number().int().min(0).max(65535),
+  FRONTEND_DOMAIN: z.string().url(),
+  BACKEND_DOMAIN: z.string().url(),
+  API_PREFIX: z.string(),
+  APP_FALLBACK_LANGUAGE: z.string(),
+  APP_HEADER_LANGUAGE: z.string(),
+});
 
 export default registerAs<AppConfig>('app', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  environmentVariablesValidatorSchema.parse(process.env);
 
   return {
     adminEmail: process.env.APP_ADMIN_EMAIL,
