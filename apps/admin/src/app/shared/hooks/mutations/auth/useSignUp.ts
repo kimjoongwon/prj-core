@@ -1,4 +1,3 @@
-import { SignUpMutationVariables } from '@__generated__/graphql';
 import { useMutation } from '@apollo/client';
 import { USERS_PAGE_PATH } from '@constants';
 import { GET_USERS, SIGN_UP } from '@gqls';

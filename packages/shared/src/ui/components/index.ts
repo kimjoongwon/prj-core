@@ -32,6 +32,7 @@ export * from './PageModal';
 export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
+export * from './ButtonGroup';
 
 export {
   Textarea,
