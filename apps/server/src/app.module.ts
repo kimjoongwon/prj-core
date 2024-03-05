@@ -1,4 +1,9 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -18,9 +23,30 @@ import {
   fileConfig,
   mailConfig,
 } from './configs';
+import { LoggerModule } from 'nestjs-pino';
+import pino from 'pino';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        customProps: () => ({
+          context: 'HTTP',
+        }),
+        stream: pino.destination({
+          dest: './logs',
+          minLength: 4096,
+          sync: false,
+        }),
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+          },
+        },
+      },
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [
@@ -58,8 +84,8 @@ import {
     },
   ],
 })
-export class AppModule implements OnModuleInit {
-  onModuleInit() {
-    console.log('The module has been initialized.');
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

@@ -1,8 +1,10 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SpacesService implements OnModuleInit {
+  private readonly logger = new Logger(SpacesService.name);
+
   constructor(private readonly prisma: PrismaService) {}
   async onModuleInit() {
     const baseSpace = await this.prisma.space.findUnique({
@@ -11,7 +13,7 @@ export class SpacesService implements OnModuleInit {
       },
     });
 
-    console.log('baseSpace', baseSpace);
+    this.logger.log(baseSpace, 'BaseSpace Exist');
 
     if (!baseSpace) {
       await this.prisma.space.create({

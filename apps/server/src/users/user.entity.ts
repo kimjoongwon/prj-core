@@ -5,7 +5,7 @@ import { User } from '@coc/database';
 
 export const UserEntitySchema = z
   .object({
-    email: z.string(),
+    email: z.string().email(),
     password: z.string(),
     name: z.string(),
     phone: z.string(),

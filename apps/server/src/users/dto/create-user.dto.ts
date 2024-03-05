@@ -5,10 +5,10 @@ import zodToJsonSchema from 'zod-to-json-schema';
 import { z } from 'zod';
 
 export const CreateUserSchema = z.object({
-  name: z.string(),
-  password: z.string(),
-  email: z.string(),
-  phone: z.string(),
+  name: z.string().min(2).max(12),
+  password: z.string().min(6).max(12),
+  email: z.string().email(),
+  phone: z.string().min(11).max(11),
 });
 
 export class CreateUserDto

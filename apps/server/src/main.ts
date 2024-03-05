@@ -6,10 +6,16 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { patchNestJsSwagger } from 'nestjs-zod';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+
   patchNestJsSwagger();
+
   const config = new DocumentBuilder()
     .setVersion('2.0')
     .setTitle('COC Server')
@@ -22,13 +28,10 @@ async function bootstrap() {
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
-
-  app.enableCors();
-
   const document = SwaggerModule.createDocument(app, config, options);
   SwaggerModule.setup('api', app, document);
 
-  fetch;
+  app.enableCors();
   await app.listen(3005);
 }
 

@@ -1,10 +1,11 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Roles } from '@coc/database';
 
 @Injectable()
 export class RolesService implements OnModuleInit {
+  private readonly logger = new Logger(RolesService.name);
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
@@ -21,10 +22,12 @@ export class RolesService implements OnModuleInit {
     });
 
     if (!superAdminRole) {
+      this.logger.log('Create SUPER_ADMIN Role');
       await this.create({ name: 'SUPER_ADMIN' });
     }
 
     if (!userRole) {
+      this.logger.log('Create USER Role');
       await this.create({ name: 'USER' });
     }
   }

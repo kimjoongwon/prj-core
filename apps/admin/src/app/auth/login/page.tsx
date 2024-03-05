@@ -1,6 +1,6 @@
 'use client';
 
-import { LoginForm, Spacer } from '@coc/shared';
+import { Button, LoginForm, Spacer } from '@coc/shared';
 import { useCoCRouter } from '@hooks';
 import { observer } from 'mobx-react-lite';
 import { authStore } from '@stores';
@@ -9,10 +9,19 @@ import { useAuthServiceLogin } from '../../../api/queries';
 function LoginPage() {
   const router = useCoCRouter();
 
-  const { mutate } = useAuthServiceLogin();
+  const { mutate: login } = useAuthServiceLogin();
 
   const onClickLogin = () => {
-    mutate(, {});
+    login(
+      {
+        requestBody: authStore.loginForm,
+      },
+      {
+        onSuccess(data, variables, context) {
+          console.log(data.accessToken);
+        },
+      },
+    );
   };
 
   return (
@@ -24,16 +33,9 @@ function LoginPage() {
       </div>
       <LoginForm state={authStore.loginForm} />
       <Spacer y={8} />
-      {/* <Button
-        size="lg"
-        fullWidth
-        onClick={() =>
-          login(() => router.push({ url: DASHBOARD_PAGE_PATH }))
-        }
-        isLoading={isLoginLoading}
-      >
+      <Button fullWidth onClick={onClickLogin}>
         로그인
-      </Button> */}
+      </Button>
     </div>
   );
 }

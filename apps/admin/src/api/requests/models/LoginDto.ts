@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type UpdateProfileDto = {
+export type LoginDto = {
+    email: string;
+    password: string;
 };
 
