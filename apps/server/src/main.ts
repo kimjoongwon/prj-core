@@ -7,9 +7,11 @@ import {
 } from '@nestjs/swagger';
 import { patchNestJsSwagger } from 'nestjs-zod';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+// import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  // const { httpAdapter } = app.get(HttpAdapterHost);
 
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());

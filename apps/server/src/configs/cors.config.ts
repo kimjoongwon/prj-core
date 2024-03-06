@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { CorsConfig } from './config.type';
-import { z } from 'zod';
+import { z } from 'nestjs-zod/z';
 
 const environmentVariablesValidatorSchema = z.object({
   CORS_ENABLED: z.string().transform(Boolean),
