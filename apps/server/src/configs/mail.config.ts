@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { MailConfig } from './config.type';
-import { z } from 'zod';
+import { z } from 'nestjs-zod/z';
 
 const environmentVariablesValidatorSchema = z.object({
   MAIL_PORT: z.string().transform(Number).optional(),

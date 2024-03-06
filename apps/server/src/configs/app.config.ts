@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { AppConfig } from './config.type';
-import { z } from 'zod';
+import { z } from 'nestjs-zod/z';
 
 enum Environment {
   Development = 'development',
