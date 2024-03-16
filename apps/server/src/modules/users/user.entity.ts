@@ -1,7 +1,7 @@
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
-import { CommonEntitySchema } from 'src/common/zodSchemas/common-entity.schema';
 import { User } from '@prisma/client';
+import { CommonEntitySchema } from 'src/common/schemas/common-entity.schema';
 
 export const UserEntitySchema = z
   .object({

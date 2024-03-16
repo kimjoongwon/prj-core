@@ -8,22 +8,21 @@ import { Public } from 'src/common/decorators/public.decorator';
 import { ProfileDto } from '../profiles/dto/profile.dto';
 
 @ApiTags('auth')
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TokenDto })
-  @Post('auth/login')
+  @Post('login')
   async login(@Body() loginPayloadDto: LoginPayloadDto) {
     return this.authService.login(loginPayloadDto);
   }
 
   @Public()
   @HttpCode(HttpStatus.CREATED)
-  @Post('auth/signUp')
+  @Post('signUp')
   @ApiResponse({ status: HttpStatus.CREATED, type: ProfileDto })
   async signUpUser(@Body() createUserSignUpDto: CreateUserSignUpDto) {
     return this.authService.signUpUser(createUserSignUpDto);

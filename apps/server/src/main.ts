@@ -7,23 +7,19 @@ import {
 } from '@nestjs/swagger';
 import { patchNestJsSwagger } from 'nestjs-zod';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
-// import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-  // const { httpAdapter } = app.get(HttpAdapterHost);
-
   app.useLogger(app.get(Logger));
+  app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
-
   patchNestJsSwagger();
 
   const config = new DocumentBuilder()
-    .setVersion('2.0')
-    .setTitle('COC Server')
-    .setDescription('The coc API description')
-    .setVersion('1.0')
-    .addTag('coc')
+    .setVersion('1.0.0')
+    .setTitle('PROMISE Server')
+    .setDescription('API Description')
+    .addTag('PROMISE')
     .addBearerAuth()
     .build();
 
