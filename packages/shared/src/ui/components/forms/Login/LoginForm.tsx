@@ -2,8 +2,8 @@
 
 import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { FormControl } from '../../controls/Form/FormControl';
-import { z } from 'nestjs-zod/z';
 import Input from '../../Input';
+import { z } from 'zod';
 
 export interface LoginFormProps {
   state: {

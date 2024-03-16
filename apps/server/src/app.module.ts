@@ -1,4 +1,10 @@
-import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  HttpStatus,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_PIPE, HttpAdapterHost } from '@nestjs/core';
@@ -12,7 +18,7 @@ import {
 } from './configs';
 import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
-import { LoggerMiddleware } from './middleware/logger.middleware';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt.auth-guard';
@@ -21,15 +27,17 @@ import { RolesModule } from './modules/roles/roles.module';
 import { SpacesModule } from './modules/spaces/spaces.module';
 import { TenantsModule } from './modules/tenants/tenants.module';
 import { UsersModule } from './modules/users/users.module';
-import {
-  PrismaModule,
-  QueryInfo,
-  loggingMiddleware,
-  providePrismaClientExceptionFilter,
-} from 'nestjs-prisma';
+import { PrismaModule, QueryInfo, loggingMiddleware } from 'nestjs-prisma';
+import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter';
+import { CaslModule } from 'nest-casl';
+import { Roles } from '@prisma/client';
 
 @Module({
   imports: [
+    CaslModule.forRoot<Roles>({
+      superuserRole: Roles.SUPER_ADMIN,
+      getUserFromRequest: (request) => request.user,
+    }),
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
@@ -95,6 +103,7 @@ import {
     SpacesModule,
     TenantsModule,
     RolesModule,
+    CaslModule,
   ],
   providers: [
     {
@@ -105,7 +114,16 @@ import {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    providePrismaClientExceptionFilter(),
+    {
+      provide: APP_FILTER,
+      useFactory: ({ httpAdapter }: HttpAdapterHost) =>
+        new PrismaClientExceptionFilter(httpAdapter, {
+          P2000: HttpStatus.BAD_REQUEST,
+          P2002: HttpStatus.CONFLICT,
+          P2025: HttpStatus.NOT_FOUND,
+        }),
+      inject: [HttpAdapterHost],
+    },
   ],
 })
 export class AppModule implements NestModule {

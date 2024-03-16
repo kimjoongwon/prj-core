@@ -1,7 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { DatabaseConfig } from './config.type';
 import { z } from 'nestjs-zod/z';
-import { InternalServerErrorException } from '@nestjs/common';
 
 const environmentVariablesValidatorSchema = z.object({
   DATABASE_URL: z.string().optional(),
