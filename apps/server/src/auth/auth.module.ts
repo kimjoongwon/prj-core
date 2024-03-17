@@ -34,10 +34,6 @@ import {
       },
       inject: [ConfigService],
     }),
-    // JwtModule.registerAsync({
-    //   secret: jwtConstants.secret,
-    //   signOptions: { expiresIn: '60s' },
-    // }),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, PasswordService],

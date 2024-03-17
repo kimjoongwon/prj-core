@@ -7,7 +7,13 @@ import {
 } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD, APP_PIPE, HttpAdapterHost } from '@nestjs/core';
+import {
+  APP_FILTER,
+  APP_GUARD,
+  APP_PIPE,
+  HttpAdapterHost,
+  RouterModule,
+} from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
 import { ZodValidationPipe } from 'nestjs-zod';
@@ -18,12 +24,8 @@ import {
   loggingMiddleware,
 } from 'nestjs-prisma';
 import {
+  CaslModule,
   LoggerMiddleware,
-  ProfilesModule,
-  RolesModule,
-  SpacesModule,
-  TenantsModule,
-  UsersModule,
   appConfig,
   authConfig,
   corsConfig,
@@ -31,11 +33,13 @@ import {
   fileConfig,
   mailConfig,
 } from '@coc/server';
-import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
+import { AuthModule } from './auth/auth.module';
+import { AuthzModule } from './authz/authz.module';
 
 @Module({
   imports: [
+    CaslModule,
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
@@ -96,11 +100,17 @@ import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
       envFilePath: '.env',
     }),
     AuthModule,
-    UsersModule,
-    ProfilesModule,
-    SpacesModule,
-    TenantsModule,
-    RolesModule,
+    AuthzModule,
+    RouterModule.register([
+      {
+        path: 'auth',
+        module: AuthModule,
+      },
+      {
+        path: 'authz',
+        module: AuthzModule,
+      },
+    ]),
   ],
   providers: [
     {

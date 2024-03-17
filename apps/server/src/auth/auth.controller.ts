@@ -7,7 +7,7 @@ import { TokenDto } from './dtos/token.dto';
 import { ProfileDto, Public } from '@coc/server';
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
