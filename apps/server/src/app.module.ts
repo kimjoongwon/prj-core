@@ -29,15 +29,10 @@ import { TenantsModule } from './modules/tenants/tenants.module';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule, QueryInfo, loggingMiddleware } from 'nestjs-prisma';
 import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter';
-import { CaslModule } from 'nest-casl';
-import { Roles } from '@prisma/client';
+import { AbilitiesModule } from '@coc/modules';
 
 @Module({
   imports: [
-    CaslModule.forRoot<Roles>({
-      superuserRole: Roles.SUPER_ADMIN,
-      getUserFromRequest: (request) => request.user,
-    }),
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
@@ -103,7 +98,7 @@ import { Roles } from '@prisma/client';
     SpacesModule,
     TenantsModule,
     RolesModule,
-    CaslModule,
+    AbilitiesModule,
   ],
   providers: [
     {
