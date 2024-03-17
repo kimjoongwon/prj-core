@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, LoginForm, Spacer } from '@coc/shared';
+import { Button, LoginForm, Spacer } from '@coc/web';
 import { useCoCRouter } from '@hooks';
 import { observer } from 'mobx-react-lite';
 import { authStore } from '@stores';

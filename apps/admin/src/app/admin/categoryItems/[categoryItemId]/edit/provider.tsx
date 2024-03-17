@@ -1,6 +1,6 @@
 'use client';
 
-import { Form } from '@coc/shared';
+import { Form } from '@coc/web';
 import { observer } from 'mobx-react-lite';
 import { createContext } from 'react';
 import { useCategoryItemsPage } from '../../hooks';

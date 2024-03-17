@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { GroupButton } from '@coc/shared';
+import { GroupButton } from '@coc/web';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, useSessionColumns } from '@columns';
 import {

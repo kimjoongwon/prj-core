@@ -1,4 +1,4 @@
-import { Button } from '@coc/shared';
+import { Button } from '@coc/web';
 import { CalendarLocalState } from '../Calendar';
 
 export interface DayProps {

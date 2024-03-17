@@ -1,4 +1,4 @@
-import { Button } from '@coc/shared';
+import { Button } from '@coc/web';
 import type { ColumnMeta } from '@columns';
 import { CellContext } from '@tanstack/react-table';
 

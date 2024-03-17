@@ -1,4 +1,4 @@
-import { ContainerProps } from '@coc/shared';
+import { ContainerProps } from '@coc/web';
 
 interface DetailLayoutProps extends ContainerProps {}
 export const DetailLayout = (props: DetailLayoutProps) => {

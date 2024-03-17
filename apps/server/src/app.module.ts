@@ -8,36 +8,34 @@ import {
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_PIPE, HttpAdapterHost } from '@nestjs/core';
+import { LoggerModule } from 'nestjs-pino';
+import pino from 'pino';
+import { ZodValidationPipe } from 'nestjs-zod';
 import {
+  PrismaClientExceptionFilter,
+  PrismaModule,
+  QueryInfo,
+  loggingMiddleware,
+} from 'nestjs-prisma';
+import {
+  LoggerMiddleware,
+  ProfilesModule,
+  RolesModule,
+  SpacesModule,
+  TenantsModule,
+  UsersModule,
   appConfig,
   authConfig,
   corsConfig,
   databaseConfig,
   fileConfig,
   mailConfig,
-} from './configs';
-import { LoggerModule } from 'nestjs-pino';
-import pino from 'pino';
-import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { ZodValidationPipe } from 'nestjs-zod';
-import { AuthModule } from './modules/auth/auth.module';
-import { JwtAuthGuard } from './modules/auth/guards/jwt.auth-guard';
-import { ProfilesModule } from './modules/profiles/profiles.module';
-import { RolesModule } from './modules/roles/roles.module';
-import { SpacesModule } from './modules/spaces/spaces.module';
-import { TenantsModule } from './modules/tenants/tenants.module';
-import { UsersModule } from './modules/users/users.module';
-import { PrismaModule, QueryInfo, loggingMiddleware } from 'nestjs-prisma';
-import { PrismaClientExceptionFilter } from './common/filters/prisma-client-exception.filter';
-import { CaslModule } from 'nest-casl';
-import { Roles } from '@prisma/client';
+} from '@coc/server';
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 
 @Module({
   imports: [
-    CaslModule.forRoot<Roles>({
-      superuserRole: Roles.SUPER_ADMIN,
-      getUserFromRequest: (request) => request.user,
-    }),
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
@@ -103,7 +101,6 @@ import { Roles } from '@prisma/client';
     SpacesModule,
     TenantsModule,
     RolesModule,
-    CaslModule,
   ],
   providers: [
     {

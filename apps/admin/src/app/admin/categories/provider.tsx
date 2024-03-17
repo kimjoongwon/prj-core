@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/shared';
+import { ContainerProps } from '@coc/web';
 import { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import {

@@ -1,4 +1,4 @@
-import { ContainerProps } from '@coc/shared';
+import { ContainerProps } from '@coc/web';
 
 interface PaginationContainerProps {
   children?: React.ReactNode;

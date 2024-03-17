@@ -1,6 +1,6 @@
 'use client';
 
-import { ContainerProps } from '@coc/shared';
+import { ContainerProps } from '@coc/web';
 import { ServiceEditPageProvider } from './provider';
 
 interface LayoutProps extends ContainerProps {

@@ -1,5 +1,5 @@
 import { useCoCRouter } from '@common';
-import { GroupButton } from '@coc/shared';
+import { GroupButton } from '@coc/web';
 import { useActionColumns, useUserColumns } from '@columns';
 import { User } from '@__generated__/graphql';
 import { useMemo } from 'react';

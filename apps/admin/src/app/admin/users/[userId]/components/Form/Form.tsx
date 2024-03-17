@@ -1,4 +1,4 @@
-import { Card } from '@coc/shared';
+import { Card } from '@coc/web';
 import { observer } from 'mobx-react-lite';
 interface FormProps {
   schema: any;
