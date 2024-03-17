@@ -1,6 +1,6 @@
 import { TableLayout } from '@components';
 import { TimelineItemsPageProvider } from '../../../timelineItems/provider';
-import { PageModal } from '@coc/shared';
+import { PageModal } from '@coc/web';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;

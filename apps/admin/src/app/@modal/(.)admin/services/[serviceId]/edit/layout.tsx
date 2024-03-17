@@ -1,4 +1,4 @@
-import { PageModal } from '@coc/shared';
+import { PageModal } from '@coc/web';
 import { ServiceEditPageProvider } from '../../../../../admin/services/[serviceId]/edit/provider';
 
 interface LayoutProps {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Skeleton } from '@coc/shared';
+import { Skeleton } from '@coc/web';
 import {
   ButtonGroupContainer,
   DataGridContainer,

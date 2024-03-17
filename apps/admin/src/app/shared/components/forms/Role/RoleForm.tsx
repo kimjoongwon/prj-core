@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { FormControl, Select } from '@coc/shared';
+import { FormControl, Select } from '@coc/web';
 import { RoleForm as RoleFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 

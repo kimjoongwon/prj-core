@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Input } from '@coc/shared';
+import { Input } from '@coc/web';
 import { SpaceForm as SpaceFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 

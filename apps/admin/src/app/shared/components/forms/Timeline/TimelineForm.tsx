@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Button, Calendar, Input } from '@coc/shared';
+import { Button, Calendar, Input } from '@coc/web';
 import { TimelineForm as TimelineFormType } from '@__generated__/graphql';
 import { ZodSchema } from 'zod';
 import dayjs from 'dayjs';

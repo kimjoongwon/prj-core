@@ -5,7 +5,7 @@ unless_exists: true
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/shared';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/web';
 import {
   ButtonGroupContainer,
   DataGridContainer,

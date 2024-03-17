@@ -4,7 +4,7 @@ to: src/app/admin/<%= h.inflection.pluralize(name) %>/hooks/useMeta.ts
 
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { GroupButton } from '@coc/shared';
+import { GroupButton } from '@coc/web';
 import { useCoCRouter } from '@hooks';
 import { useActionColumns, use<%= Name %>Columns } from '@columns';
 import { <%= h.changeCase.upper(name) %>_EDIT_PAGE_PATH, <%= h.changeCase.upper(name) %>_PAGE_PATH } from '@constants';

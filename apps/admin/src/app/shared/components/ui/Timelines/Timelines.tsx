@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Input, Select, Spacer } from '@coc/shared';
+import { Button, Input, Select, Spacer } from '@coc/web';
 import { Table, TableCell, TableHeader, TableRow } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import { range } from 'lodash-es';

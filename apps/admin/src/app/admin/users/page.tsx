@@ -1,6 +1,6 @@
 'use client';
 
-import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/shared';
+import { ButtonGroup, DataGrid, Pagination, Search } from '@coc/web';
 import { usePage } from './hooks';
 import { observer } from 'mobx-react-lite';
 
