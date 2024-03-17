@@ -1,5 +1,8 @@
 {
   "private": true,
+  "exports": {
+    "import": "./libs/policies/src/index.ts"
+  },
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",

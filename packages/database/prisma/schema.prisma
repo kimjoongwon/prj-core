@@ -94,6 +94,7 @@ model Tenant {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+  poilcyIds String[]
   roleId    String
   role      Role      @relation(fields: [roleId], references: [id])
   space     Space     @relation(fields: [spaceId], references: [id])
@@ -198,10 +199,18 @@ model Subject {
   deletedAt  DateTime?           @db.Timestamptz(6)
 }
 
+model Policy {
+  id         String    @id @default(cuid())
+  name       String    @unique
+  abilityIds String[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime? @db.Timestamptz(6)
+}
+
 model Ability {
   id        String         @id @default(cuid())
   type      AbilityTypes
-  roleId    String
   action    AbilityActions
   subjectId String
   subject   Subject        @relation(fields: [subjectId], references: [id])
