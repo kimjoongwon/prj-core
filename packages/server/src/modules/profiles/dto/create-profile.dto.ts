@@ -1,7 +1,7 @@
 import { Profile } from '@prisma/client';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'nestjs-zod/z';
-import { CommonEntity } from 'src/types';
+import { CommonEntity } from '../../../types/CommonEntity';
 
 export const defaultProfileObject: Profile = {
   id: '',
