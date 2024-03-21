@@ -2,7 +2,7 @@ import { User } from '@prisma/client';
 import { createZodDto } from 'nestjs-zod';
 import zodToJsonSchema from 'zod-to-json-schema';
 import { z } from 'nestjs-zod/z';
-import { CommonEntity } from 'src/types';
+import { CommonEntity } from '../../../types/CommonEntity';
 
 export const CreateUserSchema = z.object({
   name: z.string().min(2).max(12),

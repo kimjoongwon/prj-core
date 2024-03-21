@@ -2,7 +2,7 @@ import { Space } from '@prisma/client';
 import { createZodDto } from 'nestjs-zod';
 
 import { z } from 'nestjs-zod/z';
-import { CommonEntity } from 'src/types';
+import { CommonEntity } from '../../../types/CommonEntity';
 
 export const defaultSpaceObject: Space = {
   id: '',
