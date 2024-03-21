@@ -1,6 +1,0 @@
-'use client';
-
-export default function Layout(props: { children: React.ReactNode }) {
-  const { children } = props;
-  return <div className="w-full">{children}</div>;
-}

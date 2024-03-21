@@ -29,7 +29,6 @@ importers:
       '@tailwindcss/aspect-ratio': 0.4.2
       '@tanstack/react-query': 5.24.1
       '@tanstack/react-table': ^8.10.7
-      '@types/file-saver': 2.0.7
       '@types/jsonwebtoken': 9.0.5
       '@types/lodash-es': ^4.17.11
       '@types/node': 20.9.2
@@ -105,7 +104,6 @@ importers:
       '@openapi-codegen/cli': 2.0.0_wt5fssy6dqxmzzn6ic564scruu
       '@openapi-codegen/typescript': 8.0.0
       '@parcel/watcher': 2.3.0
-      '@types/file-saver': 2.0.7
       '@types/jsonwebtoken': 9.0.5
       '@types/lodash-es': 4.17.12
       '@types/node': 20.9.2
@@ -7303,10 +7301,6 @@ packages:
       '@types/express-serve-static-core': 4.17.43
       '@types/qs': 6.9.11
       '@types/serve-static': 1.15.5
-    dev: true
-
-  /@types/file-saver/2.0.7:
-    resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
     dev: true
 
   /@types/graceful-fs/4.1.9:

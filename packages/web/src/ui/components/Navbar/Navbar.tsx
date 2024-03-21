@@ -22,10 +22,9 @@ import React from 'react';
 
 export interface NavItem {
   text: string;
-  href?: string;
+  pathname?: string;
+  icon?: string;
   children?: NavItem[];
-  startContent?: React.ReactNode;
-  endContent?: React.ReactNode;
 }
 
 interface NavbarProps {
@@ -43,8 +42,10 @@ export const CoCNavbar = observer((props: NavbarProps) => {
 
   const router = useRouter();
 
-  const { rightContents = <div>left</div>, leftContents = <div>right</div> } =
-    props;
+  const {
+    rightContents = <div>left</div>,
+    leftContents = <div>right</div>,
+  } = props;
   const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
     return (
@@ -73,14 +74,13 @@ export const CoCNavbar = observer((props: NavbarProps) => {
         >
           {(item.children || []).map(child => (
             <DropdownItem
-              startContent={child.startContent}
-              endContent={child.endContent}
-              key={child.href}
-              href={child.href}
+              // startContent={child.startContent}
+              // endContent={child.endContent}
+              key={child.pathname}
+              href={child.pathname}
               as={NextLink}
-              className="font-bold text-4xl"
             >
-              {child.text}
+              <p className="text-1xl font-extrabold">{child.text}</p>
             </DropdownItem>
           ))}
         </DropdownMenu>
@@ -98,12 +98,12 @@ export const CoCNavbar = observer((props: NavbarProps) => {
               <Button
                 key={v4()}
                 fullWidth
-                color={pathname === item.href ? 'primary' : 'default'}
+                color={
+                  pathname === item.pathname ? 'primary' : 'default'
+                }
                 className="justify-between"
-                startContent={item.startContent}
-                endContent={item.endContent}
                 onClick={() => {
-                  router.push(item?.href || '');
+                  router.push(item?.pathname || '');
                   state.isMenuOpen = false;
                 }}
                 variant="ghost"
@@ -122,7 +122,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
           className="w-full"
           size="lg"
           color="foreground"
-          href={item.href}
+          href={item.pathname}
           as={Button}
         >
           {item.text}
@@ -134,14 +134,16 @@ export const CoCNavbar = observer((props: NavbarProps) => {
   return (
     <NextUINavbar
       maxWidth="2xl"
+      isBordered
       isMenuOpen={state.isMenuOpen}
-      onMenuOpenChange={action(() => (state.isMenuOpen = !state.isMenuOpen))}
+      onMenuOpenChange={action(
+        () => (state.isMenuOpen = !state.isMenuOpen),
+      )}
     >
       <NavbarContent>
-        <NavbarMenuToggle
-          className="sm:hidden"
+        {/* <NavbarMenuToggle
           aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'}
-        />
+        /> */}
         <NavbarBrand>
           <Button
             onClick={() => router.replace('/admin/dashboard')}
@@ -153,7 +155,10 @@ export const CoCNavbar = observer((props: NavbarProps) => {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent
+        // className="hidden sm:flex gap-4"
+        justify="center"
+      >
         {navItems.map(renderNavItem)}
       </NavbarContent>
 

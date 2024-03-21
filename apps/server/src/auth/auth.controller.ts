@@ -21,7 +21,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.CREATED)
-  @Post('signUp')
+  @Post('sign-up')
   @ApiResponse({ status: HttpStatus.CREATED, type: ProfileDto })
   async signUpUser(@Body() createUserSignUpDto: CreateUserSignUpDto) {
     return this.authService.signUpUser(createUserSignUpDto);

@@ -1,4 +1,4 @@
-import { z } from 'nestjs-zod/z';
+import { z } from 'zod';
 
 export const userSchema = z.object({
   email: z.string().email('유효하지 않은 이메일'),

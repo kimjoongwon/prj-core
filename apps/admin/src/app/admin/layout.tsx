@@ -10,100 +10,21 @@ import {
   SPACES_PAGE_PATH,
   GROUPS_PAGE_PATH,
 } from '@constants';
-import { CoCNavbar, User } from '@coc/web';
-import { Spacer } from '@nextui-org/react';
+import { CoCNavbar } from '@coc/web';
 import { observer } from 'mobx-react-lite';
-import { FcBusinessman } from 'react-icons/fc';
-import { FcManager } from 'react-icons/fc';
-import { FcOrgUnit } from 'react-icons/fc';
-import { FcFolder } from 'react-icons/fc';
-import { FcGenealogy } from 'react-icons/fc';
-import { FcOvertime } from 'react-icons/fc';
-import { FcTimeline } from 'react-icons/fc';
-import { authStore } from '@stores';
+import { useAdminServiceGetMemus } from '../../api/queries';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const router = useCoCRouter();
   const { getUrlWithParams } = router;
   const auth = useAuth();
 
-  const items = [
-    {
-      text: '사용자 서비스',
-      children: [
-        {
-          text: '역할 목록',
-          startContent: <FcBusinessman />,
-          href: getUrlWithParams(ROLES_PAGE_PATH),
-        },
-        {
-          text: '사용자 목록',
-          startContent: <FcManager />,
-          href: getUrlWithParams(USERS_PAGE_PATH),
-        },
-      ],
-    },
-    {
-      text: '소속 관리',
-      children: [
-        {
-          text: '소속',
-          startContent: <FcOrgUnit />,
-          href: getUrlWithParams(SPACES_PAGE_PATH),
-        },
-      ],
-    },
-    {
-      text: '카테고리 서비스',
-      children: [
-        {
-          text: '카테고리 관리',
-          startContent: <FcFolder />,
-          href: getUrlWithParams(CATEGORIES_PAGE_PATH),
-        },
-      ],
-    },
-    {
-      text: '그룹 서비스',
-      children: [
-        {
-          text: '그룹 관리',
-          startContent: <FcGenealogy />,
-          href: getUrlWithParams(GROUPS_PAGE_PATH),
-        },
-      ],
-    },
-    {
-      text: '예약 서비스',
-      children: [
-        {
-          text: '예약 관리',
-          startContent: <FcOvertime />,
-          href: getUrlWithParams(SESSIONS_PAGE_PATH),
-        },
-        {
-          text: '타임라인 관리',
-          startContent: <FcTimeline />,
-          href: getUrlWithParams(TIMELINES_PAGE_PATH, { sessionId: 'test' }),
-        },
-      ],
-    },
-  ];
+  const { data: menus } = useAdminServiceGetMemus();
 
   return (
-    <div>
-      <div className="flex">
-        <aside className="flex-0 basis-20" />
-        <div className="flex flex-1 flex-col w-full items-center p-4">
-          <CoCNavbar
-            navItems={items}
-            rightContents={<User name={authStore.user?.email} />}
-          />
-          <Spacer y={10} />
-          {children}
-        </div>
-        <aside className="flex-0 basis-20" />
-      </div>
+    <div className="flex flex-col">
+      <CoCNavbar navItems={menus} />
+      {children}
     </div>
   );
 }

@@ -1,0 +1,8 @@
+export const ADMIN_BASE_PATH = '/admin';
+export const ADMIN_USER_SERVICE = '/userService';
+
+export const ADMIN_PATHS = {
+  USER_SERVICE: ADMIN_BASE_PATH + ADMIN_USER_SERVICE,
+  USER_SERVICE_USERS: ADMIN_BASE_PATH + ADMIN_USER_SERVICE + '/users',
+  USER_SERVICE_USER: ADMIN_BASE_PATH + ADMIN_USER_SERVICE + '/users/:id',
+};

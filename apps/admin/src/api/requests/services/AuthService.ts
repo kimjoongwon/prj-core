@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CreateUserSignUpDto } from '../models/CreateUserSignUpDto';
-import type { LoginDto } from '../models/LoginDto';
+import type { LoginPayloadDto } from '../models/LoginPayloadDto';
 import type { ProfileDto } from '../models/ProfileDto';
 import type { TokenDto } from '../models/TokenDto';
 
@@ -18,11 +18,11 @@ export class AuthService {
      * @throws ApiError
      */
     public static login(
-        requestBody: LoginDto,
+        requestBody: LoginPayloadDto,
     ): CancelablePromise<TokenDto> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/login',
+            url: '/auth/login',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -38,7 +38,7 @@ export class AuthService {
     ): CancelablePromise<ProfileDto> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/auth/signUp',
+            url: '/auth/sign-up',
             body: requestBody,
             mediaType: 'application/json',
         });

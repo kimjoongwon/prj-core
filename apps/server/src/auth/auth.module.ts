@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
 import {
+  AbilitiesService,
   AuthConfig,
   ProfilesModule,
   RolesModule,
@@ -36,7 +37,13 @@ import {
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, PasswordService],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    PasswordService,
+    AbilitiesService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

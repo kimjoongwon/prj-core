@@ -36,6 +36,8 @@ import {
 import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { AuthzModule } from './authz/authz.module';
+import { UserModule } from './user/user.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -101,6 +103,7 @@ import { AuthzModule } from './authz/authz.module';
     }),
     AuthModule,
     AuthzModule,
+    AdminModule,
     RouterModule.register([
       {
         path: 'auth',
@@ -110,7 +113,12 @@ import { AuthzModule } from './authz/authz.module';
         path: 'authz',
         module: AuthzModule,
       },
+      {
+        path: 'admin',
+        module: AdminModule,
+      },
     ]),
+    UserModule,
   ],
   providers: [
     {
