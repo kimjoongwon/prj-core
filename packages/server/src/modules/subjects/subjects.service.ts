@@ -1,10 +1,34 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
-export class SubjectsService implements OnModuleInit {
+export class SubjectsService {
   constructor(private readonly prisma: PrismaService) {}
-  onModuleInit() {
-    throw new Error('Method not implemented.');
+
+  async createSubjects() {
+    const prisma = this.prisma;
+    async function getModelNames() {
+      const modelNames = Object.keys(prisma).filter(
+        modelName =>
+          !(
+            modelName.includes('$') ||
+            modelName.includes('_') ||
+            modelName.includes('prismaServiceOptions')
+          ),
+      );
+      return modelNames;
+    }
+
+    const modelNames = await getModelNames();
+
+    const createSubjectDtos = modelNames.map(modelName => ({
+      name: modelName,
+    }));
+
+    console.log('createSubjectDtos', createSubjectDtos);
+
+    return this.prisma.subject.createMany({
+      data: createSubjectDtos,
+    });
   }
 }

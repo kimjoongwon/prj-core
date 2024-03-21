@@ -4,6 +4,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
+  OnApplicationBootstrap,
 } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
@@ -20,6 +21,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import {
   PrismaClientExceptionFilter,
   PrismaModule,
+  PrismaService,
   QueryInfo,
   loggingMiddleware,
 } from 'nestjs-prisma';
@@ -27,6 +29,7 @@ import {
   CaslModule,
   LoggerMiddleware,
   SubjectsModule,
+  SubjectsService,
   appConfig,
   authConfig,
   corsConfig,
@@ -117,6 +120,7 @@ import { AdminModule } from './admin/admin.module';
         module: AdminModule,
       },
     ]),
+    SubjectsModule,
     AuthModule,
     AuthzModule,
     AdminModule,
@@ -143,7 +147,7 @@ import { AdminModule } from './admin/admin.module';
     },
   ],
 })
-export class AppModule implements NestModule {
+export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }

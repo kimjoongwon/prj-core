@@ -119,6 +119,7 @@ importers:
     specifiers:
       '@aws-sdk/client-s3': ^3.525.0
       '@casl/ability': ^6.7.0
+      '@coc/database': workspace:*
       '@coc/server': workspace:*
       '@nestjs/cli': ^10.3.2
       '@nestjs/common': ^10.3.3
@@ -188,6 +189,7 @@ importers:
     dependencies:
       '@aws-sdk/client-s3': 3.525.0
       '@casl/ability': 6.7.0
+      '@coc/database': link:../../packages/database
       '@coc/server': link:../../packages/server
       '@nestjs/common': 10.3.3_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/config': 3.2.0_rgxac5hejhngp5anqgvlcpwokq
@@ -285,6 +287,7 @@ importers:
     specifiers:
       '@aws-sdk/client-s3': ^3.525.0
       '@casl/ability': ^6.7.0
+      '@coc/database': workspace:*
       '@nestjs/cli': ^10.3.2
       '@nestjs/common': ^10.3.3
       '@nestjs/config': ^3.2.0
@@ -352,6 +355,7 @@ importers:
     dependencies:
       '@aws-sdk/client-s3': 3.525.0
       '@casl/ability': 6.7.0
+      '@coc/database': link:../database
       '@nestjs/common': 10.3.3_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/config': 3.2.0_rgxac5hejhngp5anqgvlcpwokq
       '@nestjs/core': 10.3.3_6emzhgumkoj2ywzvgzjxk7b6ii
@@ -2013,8 +2017,8 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.23.9
-      '@babel/types': 7.23.9
+      '@babel/parser': 7.24.0
+      '@babel/types': 7.24.0
     dev: true
 
   /@babel/template/7.24.0:

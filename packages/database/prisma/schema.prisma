@@ -187,15 +187,12 @@ model Reservation {
 }
 
 model Subject {
-  id         String              @id @default(cuid())
-  name       String              @unique
-  conditions SubjectConditions[] @default([])
-  property   String[]            @default([])
-  condition  String
-  abilities  Ability[]
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime?           @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime?           @db.Timestamptz(6)
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  Ability   Ability[]
 }
 
 model Ability {
