@@ -1,8 +1,8 @@
 import { Tenant } from '@prisma/client';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'nestjs-zod/z';
-import { CommonEntity } from 'src/types';
 import zodToJsonSchema from 'zod-to-json-schema';
+import { CommonEntity } from '../../../types/CommonEntity';
 
 export const defaultTenantObject: Tenant = {
   id: '',
