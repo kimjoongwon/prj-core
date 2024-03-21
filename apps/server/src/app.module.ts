@@ -26,6 +26,7 @@ import {
 import {
   CaslModule,
   LoggerMiddleware,
+  SubjectsModule,
   appConfig,
   authConfig,
   corsConfig,
@@ -101,9 +102,7 @@ import { AdminModule } from './admin/admin.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    AuthModule,
-    AuthzModule,
-    AdminModule,
+
     RouterModule.register([
       {
         path: 'auth',
@@ -118,6 +117,9 @@ import { AdminModule } from './admin/admin.module';
         module: AdminModule,
       },
     ]),
+    AuthModule,
+    AuthzModule,
+    AdminModule,
     UserModule,
   ],
   providers: [

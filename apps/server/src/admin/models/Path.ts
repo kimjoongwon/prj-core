@@ -17,12 +17,10 @@ export type Paths = z.infer<typeof pathsSchema>;
 
 export const menuSchema = z.object({
   text: z.string(),
-  icon: z.string(),
-  pathname: pathsSchema,
+  pathname: pathsSchema.optional(),
   children: z
     .object({
       text: z.string(),
-      icon: z.string(),
       pathname: pathsSchema,
     })
     .optional()

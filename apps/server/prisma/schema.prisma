@@ -210,6 +210,15 @@ model Ability {
   deletedAt DateTime?      @db.Timestamptz(6)
 }
 
+model Page {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  path      String    @unique
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
 enum SubjectConditions {
   Equal
   GreaterThan
