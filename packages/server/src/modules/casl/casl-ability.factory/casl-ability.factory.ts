@@ -1,44 +1,53 @@
-// import { Injectable } from '@nestjs/common';
-// import { User } from '@prisma/client';
-// import {
-//   Ability,
-//   AbilityBuilder,
-//   AbilityClass,
-//   ExtractSubjectType,
-//   InferSubjects,
-// } from '@casl/ability';
-// export enum Action {
-//   Manage = 'manage',
-//   Create = 'create',
-//   Read = 'read',
-//   Update = 'update',
-//   Delete = 'delete',
-// }
+import { Injectable } from '@nestjs/common';
+import { Page, User } from '@coc/database';
+import {
+  Ability,
+  AbilityBuilder,
+  AbilityClass,
+  ExtractSubjectType,
+  InferSubjects,
+  PureAbility,
+} from '@casl/ability';
+import { PrismaService } from 'nestjs-prisma';
+export enum Action {
+  Manage = 'manage',
+  Create = 'create',
+  Read = 'read',
+  Update = 'update',
+  Delete = 'delete',
+}
 
-// type Subjects = InferSubjects<typeof Article | typeof User> | 'all';
+type Subjects = InferSubjects<Page> | 'all';
 
-// export type AppAbility = Ability<[Action, Subjects]>;
+export type AppAbility = PureAbility<[Action, Subjects]>;
 
-// @Injectable()
-// export class CaslAbilityFactory {
-//   createForUser(user: User) {
-//     const { can, cannot, build } = new AbilityBuilder<
-//       Ability<[Action, Subjects]>
-//     >(Ability as AbilityClass<AppAbility>);
+@Injectable()
+export class CaslAbilityFactory {
+  constructor(private prisma: PrismaService) {}
+  createForUser(user: User) {
+    const { can, cannot, build } = new AbilityBuilder<
+      PureAbility<[Action, Subjects]>
+    >(PureAbility as AbilityClass<AppAbility>);
 
-//     if (user) {
-//       can(Action.Manage, 'all'); // read-write access to everything
-//     } else {
-//       can(Action.Read, 'all'); // read-only access to everything
-//     }
+    const abilities = this.prisma.ability.findMany({
+      where: {
+        roleId: user.roleId,
+      },
+    });
 
-//     can(Action.Update, Article, { authorId: user.id });
-//     cannot(Action.Delete, Article, { isPublished: true });
+    // if (user) {
+    //   can(Action.Manage, 'all'); // read-write access to everything
+    // } else {
+    //   can(Action.Read, 'all'); // read-only access to everything
+    // }
 
-//     return build({
-//       // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
-//       detectSubjectType: (item) =>
-//         item.constructor as ExtractSubjectType<Subjects>,
-//     });
-//   }
-// }
+    // can(Action.Update, Article, { authorId: user.id });
+    // cannot(Action.Delete, Article, { isPublished: true });
+
+    return build({
+      // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
+      detectSubjectType: item =>
+        item.constructor as ExtractSubjectType<Subjects>,
+    });
+  }
+}

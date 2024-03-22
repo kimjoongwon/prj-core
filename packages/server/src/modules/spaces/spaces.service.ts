@@ -20,8 +20,6 @@ export class SpacesService implements OnModuleInit {
       await this.prisma.space.create({
         data: {
           name: '기본',
-          address: '기본',
-          phone: '기본',
         },
       });
     }

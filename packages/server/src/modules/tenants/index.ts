@@ -1,3 +1,2 @@
-export * from './dto';
-export { TenantsService } from './tenants.service';
-export { TenantsModule } from './tenants.module';
+export * from './tenants.service';
+export * from './tenants.module';

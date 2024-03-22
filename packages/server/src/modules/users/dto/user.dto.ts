@@ -1,5 +1,13 @@
-import { UserEntity, UserEntitySchema } from '../user.entity';
+import { UserEntitySchema } from '../user.entity';
+import { z } from 'nestjs-zod/z';
+import { createZodDto } from 'nestjs-zod';
+import { profileDtoSchema } from '../../profiles/dto/profile.dto';
 
-export const UserDtoSchema = UserEntitySchema;
+export const userDtoSchema = z
+  .object({
+    profiles: z.array(profileDtoSchema),
+    tenants: z.array(z.string()),
+  })
+  .merge(UserEntitySchema);
 
-export class UserDto extends UserEntity {}
+export class UserDto extends createZodDto(userDtoSchema) {}

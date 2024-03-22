@@ -42,6 +42,7 @@ model Category {
   deletedAt       DateTime?        @db.Timestamptz(6)
   space           Space            @relation(fields: [spaceId], references: [id])
   classifications Classification[]
+  service         Service          @relation(fields: [serviceId], references: [id])
 }
 
 model Group {
@@ -64,6 +65,7 @@ model Service {
   deletedAt       DateTime?        @db.Timestamptz(6)
   classifications Classification[]
   assignments     Assignment[]
+  categories        Category[]
 }
 
 model Assignment {
@@ -91,10 +93,10 @@ model Tenant {
   id        String    @id @default(cuid())
   userId    String
   spaceId   String
+  roleId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
-  roleId    String
   role      Role      @relation(fields: [roleId], references: [id])
   space     Space     @relation(fields: [spaceId], references: [id])
   user      User      @relation(fields: [userId], references: [id])
@@ -115,8 +117,6 @@ model Classification {
 model Space {
   id         String     @id @default(cuid())
   name       String     @unique
-  phone      String     @db.Char(11)
-  address    String
   createdAt  DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt  DateTime?  @db.Timestamptz(6)
@@ -205,6 +205,31 @@ model Ability {
   createdAt DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
   deletedAt DateTime?      @db.Timestamptz(6)
+}
+
+// 특정 role과 특정 subject(page)의 가지고 ability를 전부 가져옵니다.
+// 그리고 sujectId를 가진 모든 subject의 pages를 가져옵니다.
+// const abilities = findByRoleId(user.roleId)
+// const subjectIds = abilities.find((ability) => ability.subjectId === page.subjectId)
+// const pages = findByIds(subjectIds)
+// pages.map((page) => can('READ', Page, {path: page.path}))
+
+// 이렇게 능력을 만든다.
+
+// 만약 get요청이 오면
+// ability = createForUser(user)
+// const paths = path.filter(path => ability.can('READ', Page, {path: page.path}))
+
+// return paths
+
+model Page {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  path      String    @unique
+  subjectId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 }
 
 enum SubjectConditions {

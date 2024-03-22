@@ -6,3 +6,4 @@ export * from './tenants';
 export * from './casl';
 export * from './abilities';
 export * from './subjects';
+export * from './tenants';
