@@ -1,6 +1,5 @@
 import { UserEntitySchema } from '../user.entity';
 import { z } from 'nestjs-zod/z';
-import { createZodDto } from 'nestjs-zod';
 import { profileDtoSchema } from '../../profiles/dto/profile.dto';
 
 export const userDtoSchema = z
@@ -10,4 +9,4 @@ export const userDtoSchema = z
   })
   .merge(UserEntitySchema);
 
-export class UserDto extends createZodDto(userDtoSchema) {}
+export type UserDto = z.infer<typeof userDtoSchema>;

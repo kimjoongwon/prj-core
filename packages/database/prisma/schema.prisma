@@ -65,7 +65,7 @@ model Service {
   deletedAt       DateTime?        @db.Timestamptz(6)
   classifications Classification[]
   assignments     Assignment[]
-  categories        Category[]
+  categories      Category[]
 }
 
 model Assignment {
@@ -192,7 +192,7 @@ model Subject {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
-  Ability   Ability[]
+  abilities Ability[]
 }
 
 model Ability {
@@ -201,10 +201,10 @@ model Ability {
   roleId    String
   action    AbilityActions
   subjectId String
-  subject   Subject        @relation(fields: [subjectId], references: [id])
   createdAt DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
   deletedAt DateTime?      @db.Timestamptz(6)
+  subject   Subject        @relation(fields: [subjectId], references: [id])
 }
 
 // 특정 role과 특정 subject(page)의 가지고 ability를 전부 가져옵니다.
@@ -225,7 +225,7 @@ model Ability {
 model Page {
   id        String    @id @default(cuid())
   name      String    @unique
-  path      String    @unique
+  pathname  String    @unique
   subjectId String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)

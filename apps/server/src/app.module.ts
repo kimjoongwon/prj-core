@@ -1,11 +1,4 @@
-import {
-  HttpStatus,
-  Logger,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
+import { HttpStatus, Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
 import {
@@ -21,7 +14,6 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import {
   PrismaClientExceptionFilter,
   PrismaModule,
-  PrismaService,
   QueryInfo,
   loggingMiddleware,
 } from 'nestjs-prisma';
@@ -29,7 +21,6 @@ import {
   CaslModule,
   LoggerMiddleware,
   SubjectsModule,
-  SubjectsService,
   appConfig,
   authConfig,
   corsConfig,
@@ -120,11 +111,11 @@ import { AdminModule } from './admin/admin.module';
         module: AdminModule,
       },
     ]),
-    SubjectsModule,
+    // SubjectsModule,
     AuthModule,
     AuthzModule,
     AdminModule,
-    UserModule,
+    // UserModule,
   ],
   providers: [
     {

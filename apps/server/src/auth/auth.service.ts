@@ -20,7 +20,6 @@ import {
   TokenType,
   UsersService,
 } from '@coc/server';
-import { UserEntity } from '@coc/server/src/modules/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +33,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<UserEntity> {
+  async validateUser(email: string, password: string) {
     const user = await this.usersService.findOneByEmail(email);
 
     const isPasswordValid = await this.validateHash(password, user?.password);

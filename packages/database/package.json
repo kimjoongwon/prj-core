@@ -9,6 +9,7 @@
     "db:push": "prisma db push --skip-generate"
   },
   "dependencies": {
+    "@nestjs/mapped-types": "*",
     "@prisma/client": "5.9.1"
   },
   "devDependencies": {
