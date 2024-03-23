@@ -15,7 +15,7 @@ import {
   SpacesModule,
   TenantsModule,
   UsersModule,
-} from '@coc/server';
+} from '@shared/backend';
 
 @Module({
   imports: [

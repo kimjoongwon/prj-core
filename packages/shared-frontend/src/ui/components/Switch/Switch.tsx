@@ -2,7 +2,7 @@
 
 import { ForwardedRef } from 'react';
 import { action } from 'mobx';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { Switch as NextUISwitch, SwitchProps as NextUISwitchProps } from '@nextui-org/react';
 import { useMobxHookForm } from '../../../hooks';
 import { get } from 'lodash-es';

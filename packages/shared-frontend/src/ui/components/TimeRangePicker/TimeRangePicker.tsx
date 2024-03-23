@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { get } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { FormControl } from '../controls';
 
 interface TimeRangePickerProps<T> extends MobxProps<T> {

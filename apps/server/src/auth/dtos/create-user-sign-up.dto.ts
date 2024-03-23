@@ -1,17 +1,19 @@
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { CreateProfileSchema, CreateUserSchema } from '@coc/server';
+import { profileSchema, userSchema } from '@shared/backend';
 
-export const CreateUserSignUpSchema = z
+export const createSignUpPayloadSchema = z
   .object({
-    createUserDto: CreateUserSchema,
-    createProfileDto: CreateProfileSchema,
+    user: userSchema,
+    profile: profileSchema,
   })
   .required();
 
-export class CreateUserSignUpDto extends createZodDto(CreateUserSignUpSchema) {}
+export class CreateSignUpPayloadDto extends createZodDto(
+  createSignUpPayloadSchema,
+) {}
 
-export const jsonCreateUserSignUpSchema = zodToJsonSchema(
-  CreateUserSignUpSchema,
+export const jsonCreateUserSignUpPayloadSchema = zodToJsonSchema(
+  createSignUpPayloadSchema,
 );

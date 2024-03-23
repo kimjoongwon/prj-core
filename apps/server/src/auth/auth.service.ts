@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
 import { TokenPayloadDto } from './dtos/token-payload.dto';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
@@ -19,7 +18,8 @@ import {
   SpacesService,
   TokenType,
   UsersService,
-} from '@coc/server';
+} from '@shared/backend';
+import { CreateSignUpPayloadDto } from './dtos/create-user-sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -45,17 +45,17 @@ export class AuthService {
     return user!;
   }
 
-  async signUpUser(userSignUpDto: CreateUserSignUpDto) {
-    const { createProfileDto, createUserDto } = userSignUpDto;
+  async signUpUser(createSignUpPayloadDto: CreateSignUpPayloadDto) {
+    const { profile, user } = createSignUpPayloadDto;
 
     await this.prisma.$transaction(async (tx) => {
       const hashedPassword = await this.passwordService.hashPassword(
-        userSignUpDto.createUserDto.password,
+        user.password,
       );
 
       const newUser = await tx.user.create({
         data: {
-          ...createUserDto,
+          ...user,
           password: hashedPassword,
         },
       });
@@ -74,7 +74,7 @@ export class AuthService {
 
       await tx.profile.create({
         data: {
-          ...createProfileDto,
+          ...profile,
           userId: newUser.id,
         },
       });

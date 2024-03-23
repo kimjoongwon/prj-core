@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { Public } from '@coc/server';
+import { Public } from '@shared/backend';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MenuDto } from './models/Path';
 

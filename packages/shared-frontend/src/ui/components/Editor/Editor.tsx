@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { get } from 'lodash-es';
 import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';

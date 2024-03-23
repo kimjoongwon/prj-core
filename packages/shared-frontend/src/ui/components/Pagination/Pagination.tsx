@@ -5,7 +5,7 @@ import {
   PaginationProps as NextUIPaginationProps,
 } from '@nextui-org/react';
 import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { get, set } from 'lodash-es';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';

@@ -1,6 +1,6 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { Select as NextSelect, SelectItem, SelectProps as NextUISelectProps } from '@nextui-org/react';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { useEffect } from 'react';
 import { reaction } from 'mobx';
 import { cloneDeep, get, set } from 'lodash-es';

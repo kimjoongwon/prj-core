@@ -1,5 +1,5 @@
 // import { Injectable } from '@nestjs/common';
-// import { Page, User } from '@coc/database';
+// import { Page, User } from '@shared/backend';
 // import {
 //   Ability,
 //   AbilityBuilder,

@@ -1,6 +1,6 @@
 import { action } from 'mobx';
 import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import {
   Checkbox as NextUICheckbox,
   CheckboxProps as NextUICheckboxProps,

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@coc/web';
+import { Button } from '@shared/frontend';
 
 export default function Page() {
   return (

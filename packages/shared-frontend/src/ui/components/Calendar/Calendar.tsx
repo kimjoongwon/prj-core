@@ -9,7 +9,7 @@ import { ButtonGroup } from '@nextui-org/react';
 import { FcNext, FcPrevious } from 'react-icons/fc';
 import { action, reaction } from 'mobx';
 import { useEffect } from 'react';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import Button from '../Button';
 
 export interface CalendarProps<T> extends MobxProps<T> {

@@ -1,7 +1,7 @@
 import { Autocomplete, AutocompleteItem, AutocompleteProps } from '@nextui-org/react';
 import { cloneDeep, get } from 'lodash-es';
 import React, { useEffect } from 'react';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { useLocalObservable } from 'mobx-react-lite';
 import { reaction, set } from 'mobx';
 import { useMobxHookForm } from '../../../hooks';

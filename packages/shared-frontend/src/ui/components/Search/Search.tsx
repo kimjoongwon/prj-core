@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { get, isUndefined, set } from 'lodash-es';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { KeyboardEventHandler } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import Input from '../Input';

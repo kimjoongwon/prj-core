@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useMobxHookForm } from '@coc/web';
+import { useMobxHookForm } from '@shared/frontend';
 import {
   Chip,
   Listbox,

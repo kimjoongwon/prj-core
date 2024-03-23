@@ -10,7 +10,7 @@ import {
   SpacesModule,
   TenantsModule,
   UsersModule,
-} from '@coc/server';
+} from '@shared/backend';
 
 describe('AuthService', () => {
   let service: AuthService;

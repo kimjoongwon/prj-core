@@ -13,10 +13,7 @@ export default function RootLayout(props: {
         <title>라프첼라</title>
       </head>
       <body>
-        <Providers>
-          {props.children}
-          {props.modal}
-        </Providers>
+        <Providers>{props.children}</Providers>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 import { TextAreaProps, Textarea } from '@nextui-org/react';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { useMobxHookForm } from '../../../hooks';
 import { get } from 'lodash-es';
 

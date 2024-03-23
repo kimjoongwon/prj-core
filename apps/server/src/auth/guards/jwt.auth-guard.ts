@@ -1,4 +1,4 @@
-import { IS_PUBLIC_KEY } from '@coc/server';
+import { IS_PUBLIC_KEY } from '@shared/backend';
 import {
   ExecutionContext,
   Injectable,

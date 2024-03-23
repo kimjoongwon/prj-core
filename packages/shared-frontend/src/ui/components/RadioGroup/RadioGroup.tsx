@@ -3,7 +3,7 @@
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { Radio, RadioGroup as NextUIRadioGroup, RadioGroupProps } from '@nextui-org/react';
 import { get } from 'lodash-es';
 

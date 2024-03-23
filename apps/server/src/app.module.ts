@@ -1,5 +1,4 @@
 import { HttpStatus, Logger, MiddlewareConsumer, Module } from '@nestjs/common';
-import { ClsModule } from 'nestjs-cls';
 import { ConfigModule } from '@nestjs/config';
 import {
   APP_FILTER,
@@ -20,18 +19,16 @@ import {
 import {
   CaslModule,
   LoggerMiddleware,
-  SubjectsModule,
   appConfig,
   authConfig,
   corsConfig,
   databaseConfig,
   fileConfig,
   mailConfig,
-} from '@coc/server';
+} from '@shared/backend';
 import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { AuthzModule } from './authz/authz.module';
-import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 
 @Module({
@@ -50,10 +47,10 @@ import { AdminModule } from './admin/admin.module';
           async (params, next) => {
             // Before query: change params
             const result = await next(params);
-            // After query: result
+
             return result;
           },
-        ], // see example loggingMiddleware below
+        ],
       },
     }),
     LoggerModule.forRoot({
@@ -86,12 +83,6 @@ import { AdminModule } from './admin/admin.module';
       ],
       envFilePath: '.env',
     }),
-    ClsModule.forRoot({
-      global: true,
-      middleware: {
-        mount: true,
-      },
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -111,11 +102,9 @@ import { AdminModule } from './admin/admin.module';
         module: AdminModule,
       },
     ]),
-    // SubjectsModule,
     AuthModule,
     AuthzModule,
     AdminModule,
-    // UserModule,
   ],
   providers: [
     {

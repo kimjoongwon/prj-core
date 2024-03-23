@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEventHandler } from 'react';
-import { MobxProps } from '../../../model';
+import { MobxProps } from '../types';
 import { ValidationState } from '../controls/Form/FormControl';
 import { InputView } from './InputView';
 import { InputProps as NextUIInputProps } from '@nextui-org/react';
