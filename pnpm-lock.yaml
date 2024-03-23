@@ -15,8 +15,8 @@ importers:
   apps/admin:
     specifiers:
       '@7nohe/openapi-react-query-codegen': 0.5.3
-      '@coc/web': workspace:*
       '@nextui-org/react': 2.2.9
+      '@shared/frontend': workspace:*
       '@tailwindcss/aspect-ratio': 0.4.2
       '@tanstack/react-query': 5.24.1
       '@tanstack/react-table': ^8.10.7
@@ -52,8 +52,8 @@ importers:
       typescript: 5.3.3
       zod: 3.22.4
     dependencies:
-      '@coc/web': link:../../packages/web
       '@nextui-org/react': 2.2.9_ir75zrsjz52arohvf5y5flricu
+      '@shared/frontend': link:../../packages/shared-frontend
       '@tailwindcss/aspect-ratio': 0.4.2_tailwindcss@3.4.1
       '@tanstack/react-query': 5.24.1_react@18.2.0
       '@tanstack/react-table': 8.15.0_biqbaboplfbrettd7655fr4n2y
@@ -93,18 +93,13 @@ importers:
 
   apps/server:
     specifiers:
-      '@aws-sdk/client-s3': ^3.525.0
       '@casl/ability': ^6.7.0
-      '@coc/database': workspace:*
-      '@coc/server': workspace:*
       '@nestjs/cli': ^10.3.2
       '@nestjs/common': ^10.3.3
       '@nestjs/config': ^3.2.0
       '@nestjs/core': ^10.3.3
-      '@nestjs/cqrs': ^10.2.7
       '@nestjs/jwt': ^10.2.0
       '@nestjs/mapped-types': '*'
-      '@nestjs/microservices': ^10.3.3
       '@nestjs/passport': ^10.0.3
       '@nestjs/platform-express': ^10.3.3
       '@nestjs/schematics': ^10.1.1
@@ -113,6 +108,7 @@ importers:
       '@nestjs/testing': ^10.3.3
       '@nestjs/throttler': ^5.1.2
       '@prisma/client': 5.9.1
+      '@shared/backend': workspace:*
       '@swc/cli': ^0.3.10
       '@swc/core': ^1.4.2
       '@types/express': ^4.17.21
@@ -130,16 +126,13 @@ importers:
       eslint-config-prettier: ^9.1.0
       eslint-plugin-prettier: ^5.1.3
       jest: 29.7.0
-      libphonenumber-js: ^1.10.57
       lodash: ^4.17.21
-      mime-types: ^2.1.35
       nest-casl: ^1.9.3
       nestjs-cls: ^4.2.0
       nestjs-i18n: ^10.4.5
       nestjs-pino: ^4.0.0
       nestjs-prisma: ^0.23.0
       nestjs-zod: ^3.0.0
-      parse-duration: ^1.1.0
       passport: ^0.7.0
       passport-jwt: ^4.0.1
       passport-local: ^1.0.0
@@ -163,34 +156,27 @@ importers:
       zod: 3.22.4
       zod-to-json-schema: ^3.22.4
     dependencies:
-      '@aws-sdk/client-s3': 3.540.0
       '@casl/ability': 6.7.0
-      '@coc/database': link:../../packages/database
-      '@coc/server': link:../../packages/server
       '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/config': 3.2.0_5rbjzzkx5ngyuk5i3v4hw4k4ra
-      '@nestjs/core': 10.3.5_6veqlaa3o4uship46youv2mxx4
-      '@nestjs/cqrs': 10.2.7_kzi57grd43d2bxd2comi6f5j74
+      '@nestjs/core': 10.3.5_ssi6rvcugz66w3rhefivnsxapm
       '@nestjs/jwt': 10.2.0_@nestjs+common@10.3.5
       '@nestjs/mapped-types': 2.0.5_l5j5xeeu4vuseanop3uigcwely
-      '@nestjs/microservices': 10.3.5_kzi57grd43d2bxd2comi6f5j74
       '@nestjs/passport': 10.0.3_5l2dxiso3f7oc6tmq4kotjetou
       '@nestjs/platform-express': 10.3.5_gtc3ckdchafrwto75hdvh7wpji
       '@nestjs/swagger': 7.3.0_kz55giwcilidfubqv3zfjozt2i
-      '@nestjs/terminus': 10.2.3_ws3ocws4zykenmkuw22yuk5l4m
+      '@nestjs/terminus': 10.2.3_cda2iz3v4gab7flrfavbs72mv4
       '@nestjs/throttler': 5.1.2_lqevlrgzshzklmq4j7sjkz5m7a
       '@prisma/client': 5.9.1_prisma@5.11.0
+      '@shared/backend': link:../../packages/shared-backend
       bcrypt: 5.1.1
-      libphonenumber-js: 1.10.58
       lodash: 4.17.21
-      mime-types: 2.1.35
       nest-casl: 1.9.3_gtc3ckdchafrwto75hdvh7wpji
       nestjs-cls: 4.3.0_kzi57grd43d2bxd2comi6f5j74
       nestjs-i18n: 10.4.5_m7bkywp36d5x5jxf6u5vahw5wi
       nestjs-pino: 4.0.0_y74ourxlkgr4fnkbozm3kufcnu
       nestjs-prisma: 0.23.0_b4ytjoxyarbl2vwil2f5ic7x5a
       nestjs-zod: 3.0.0_34yfydvl2beq56u4pav7ftlfvi
-      parse-duration: 1.1.0
       passport: 0.7.0
       passport-jwt: 4.0.1
       passport-local: 1.0.0
@@ -205,7 +191,7 @@ importers:
     devDependencies:
       '@nestjs/cli': 10.3.2_f6zwjku756kinxxfwphtpqmpmm
       '@nestjs/schematics': 10.1.1_typescript@5.3.3
-      '@nestjs/testing': 10.3.5_hmhinloivpza4kpnvog4vy3l5u
+      '@nestjs/testing': 10.3.5_rfji7f2mxq76lqsbxv4ztefv74
       '@swc/cli': 0.3.10_@swc+core@1.4.8
       '@swc/core': 1.4.8
       '@types/express': 4.17.21
@@ -233,29 +219,6 @@ importers:
       typescript: 5.3.3
       unplugin-swc: 1.4.4_@swc+core@1.4.8
       vitest: 1.3.1_@types+node@20.11.24
-
-  packages/database:
-    specifiers:
-      '@nestjs/mapped-types': '*'
-      '@prisma/client': 5.9.1
-      nestjs-zod: ^3.0.0
-      nestjs-zod-prisma: ^3.0.1
-      prisma: ^5.9.1
-      tsconfig: workspace:*
-      tsup: ^8.0.1
-      typescript: ^5.3.3
-      zod: 3.22.4
-    dependencies:
-      '@nestjs/mapped-types': 2.0.5
-      '@prisma/client': 5.9.1_prisma@5.11.0
-      nestjs-zod: 3.0.0_zod@3.22.4
-      zod: 3.22.4
-    devDependencies:
-      nestjs-zod-prisma: 3.0.1_x2hgioe4f7oal55czkkxvhmdrm
-      prisma: 5.11.0
-      tsconfig: link:../tsconfig
-      tsup: 8.0.2_typescript@5.3.3
-      typescript: 5.3.3
 
   packages/eslint-config-custom:
     specifiers:
@@ -267,11 +230,10 @@ importers:
       eslint: 8.57.0
       eslint-config-turbo: 1.13.0_eslint@8.57.0
 
-  packages/server:
+  packages/shared-backend:
     specifiers:
       '@aws-sdk/client-s3': ^3.525.0
       '@casl/ability': ^6.7.0
-      '@coc/database': workspace:*
       '@nestjs/cli': ^10.3.2
       '@nestjs/common': ^10.3.3
       '@nestjs/config': ^3.2.0
@@ -313,6 +275,7 @@ importers:
       nestjs-pino: ^4.0.0
       nestjs-prisma: ^0.23.0
       nestjs-zod: ^3.0.0
+      nestjs-zod-prisma: ^3.0.1
       parse-duration: ^1.1.0
       passport: ^0.7.0
       passport-jwt: ^4.0.1
@@ -327,7 +290,6 @@ importers:
       source-map-support: ^0.5.21
       supertest: ^6.3.4
       ts-jest: 29.1.2
-      ts-loader: ^9.5.1
       ts-node: ^10.9.2
       tsconfig-paths: 4.2.0
       typescript: ^5.3.3
@@ -339,7 +301,6 @@ importers:
     dependencies:
       '@aws-sdk/client-s3': 3.540.0
       '@casl/ability': 6.7.0
-      '@coc/database': link:../database
       '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/config': 3.2.0_5rbjzzkx5ngyuk5i3v4hw4k4ra
       '@nestjs/core': 10.3.5_6veqlaa3o4uship46youv2mxx4
@@ -394,22 +355,19 @@ importers:
       eslint-config-prettier: 9.1.0_eslint@8.57.0
       eslint-plugin-prettier: 5.1.3_udeglvt2rvqfn252kbszwwr7nu
       jest: 29.7.0_isazjvpdqw62gpjxgwyes7putu
+      nestjs-zod-prisma: 3.0.1_x2hgioe4f7oal55czkkxvhmdrm
       prettier: 3.2.5
       prisma: 5.11.0
       source-map-support: 0.5.21
       supertest: 6.3.4
       ts-jest: 29.1.2_ft44a4vuo3yhmyfgh7dialedhm
-      ts-loader: 9.5.1_typescript@5.3.3
       ts-node: 10.9.2_y3plkklxvokcyjbm4rl4gjgnsi
       tsconfig-paths: 4.2.0
       typescript: 5.3.3
       unplugin-swc: 1.4.4_@swc+core@1.4.8
       vitest: 1.3.1_@types+node@20.11.24
 
-  packages/tsconfig:
-    specifiers: {}
-
-  packages/web:
+  packages/shared-frontend:
     specifiers:
       '@tanstack/react-table': ^8.10.7
       '@types/lodash-es': ^4.17.11
@@ -465,6 +423,9 @@ importers:
       tsup: 8.0.2_typescript@5.3.3
       typescript: 5.3.3
       vitest: 0.34.6
+
+  packages/tsconfig:
+    specifiers: {}
 
 packages:
 
@@ -2606,6 +2567,37 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@nestjs/core/10.3.5_ssi6rvcugz66w3rhefivnsxapm:
+    resolution: {integrity: sha512-U7SrGD9/Mu4eUtxfZYiGdY38FcksEyJegs4dQZ8B19nnusw0aTocPEy4HVsmx0LLO4sG+fBLLYzCDDr9kFwXAQ==}
+    requiresBuild: true
+    peerDependencies:
+      '@nestjs/common': ^10.0.0
+      '@nestjs/microservices': ^10.0.0
+      '@nestjs/platform-express': ^10.0.0
+      '@nestjs/websockets': ^10.0.0
+      reflect-metadata: ^0.1.12 || ^0.2.0
+      rxjs: ^7.1.0
+    peerDependenciesMeta:
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/platform-express':
+        optional: true
+      '@nestjs/websockets':
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
+      '@nestjs/platform-express': 10.3.5_gtc3ckdchafrwto75hdvh7wpji
+      '@nuxtjs/opencollective': 0.3.2
+      fast-safe-stringify: 2.1.1
+      iterare: 1.2.1
+      path-to-regexp: 3.2.0
+      reflect-metadata: 0.2.1
+      rxjs: 7.8.1
+      tslib: 2.6.2
+      uid: 2.0.2
+    transitivePeerDependencies:
+      - encoding
+
   /@nestjs/cqrs/10.2.7_kzi57grd43d2bxd2comi6f5j74:
     resolution: {integrity: sha512-RXhgQOfuT+KzvkueR4S++SB6+6333PL71pOtCzbJAAU/DY3KY56yTCncWRsIdorKfDX5AEwTiQHHJi69XJWdkA==}
     peerDependencies:
@@ -2631,20 +2623,6 @@ packages:
       jsonwebtoken: 9.0.2
     dev: false
 
-  /@nestjs/mapped-types/2.0.5:
-    resolution: {integrity: sha512-bSJv4pd6EY99NX9CjBIyn4TVDoSit82DUZlL4I3bqNfy5Gt+gXTa86i3I/i0iIV9P4hntcGM5GyO+FhZAhxtyg==}
-    peerDependencies:
-      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
-      class-transformer: ^0.4.0 || ^0.5.0
-      class-validator: ^0.13.0 || ^0.14.0
-      reflect-metadata: ^0.1.12 || ^0.2.0
-    peerDependenciesMeta:
-      class-transformer:
-        optional: true
-      class-validator:
-        optional: true
-    dev: false
-
   /@nestjs/mapped-types/2.0.5_l5j5xeeu4vuseanop3uigcwely:
     resolution: {integrity: sha512-bSJv4pd6EY99NX9CjBIyn4TVDoSit82DUZlL4I3bqNfy5Gt+gXTa86i3I/i0iIV9P4hntcGM5GyO+FhZAhxtyg==}
     peerDependencies:
@@ -2662,7 +2640,6 @@ packages:
       class-transformer: 0.5.1
       class-validator: 0.14.1
       reflect-metadata: 0.2.1
-    dev: false
 
   /@nestjs/microservices/10.3.5_kzi57grd43d2bxd2comi6f5j74:
     resolution: {integrity: sha512-zL+8Yg2uCoCbb7KzgAYPGt+W6shAI5Ac/0ls3zoyjK2VtHcSgzLwKQWY48QbhzoDWQzVqCtCAWH0yuCxTqTNQw==}
@@ -2791,6 +2768,62 @@ packages:
       path-to-regexp: 3.2.0
       reflect-metadata: 0.2.1
       swagger-ui-dist: 5.11.2
+
+  /@nestjs/terminus/10.2.3_cda2iz3v4gab7flrfavbs72mv4:
+    resolution: {integrity: sha512-iX7gXtAooePcyQqFt57aDke5MzgdkBeYgF5YsFNNFwOiAFdIQEhfv3PR0G+HlH9F6D7nBCDZt9U87Pks/qHijg==}
+    peerDependencies:
+      '@grpc/grpc-js': '*'
+      '@grpc/proto-loader': '*'
+      '@mikro-orm/core': '*'
+      '@mikro-orm/nestjs': '*'
+      '@nestjs/axios': ^1.0.0 || ^2.0.0 || ^3.0.0
+      '@nestjs/common': ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^9.0.0 || ^10.0.0
+      '@nestjs/microservices': ^9.0.0 || ^10.0.0
+      '@nestjs/mongoose': ^9.0.0 || ^10.0.0
+      '@nestjs/sequelize': ^9.0.0 || ^10.0.0
+      '@nestjs/typeorm': ^9.0.0 || ^10.0.0
+      '@prisma/client': '*'
+      mongoose: '*'
+      reflect-metadata: 0.1.x || 0.2.x
+      rxjs: 7.x
+      sequelize: '*'
+      typeorm: '*'
+    peerDependenciesMeta:
+      '@grpc/grpc-js':
+        optional: true
+      '@grpc/proto-loader':
+        optional: true
+      '@mikro-orm/core':
+        optional: true
+      '@mikro-orm/nestjs':
+        optional: true
+      '@nestjs/axios':
+        optional: true
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/mongoose':
+        optional: true
+      '@nestjs/sequelize':
+        optional: true
+      '@nestjs/typeorm':
+        optional: true
+      '@prisma/client':
+        optional: true
+      mongoose:
+        optional: true
+      sequelize:
+        optional: true
+      typeorm:
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
+      '@nestjs/core': 10.3.5_ssi6rvcugz66w3rhefivnsxapm
+      '@prisma/client': 5.9.1_prisma@5.11.0
+      boxen: 5.1.2
+      check-disk-space: 3.4.0
+      reflect-metadata: 0.2.1
+      rxjs: 7.8.1
     dev: false
 
   /@nestjs/terminus/10.2.3_ws3ocws4zykenmkuw22yuk5l4m:
@@ -2867,6 +2900,25 @@ packages:
       '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/core': 10.3.5_6veqlaa3o4uship46youv2mxx4
       '@nestjs/microservices': 10.3.5_kzi57grd43d2bxd2comi6f5j74
+      '@nestjs/platform-express': 10.3.5_gtc3ckdchafrwto75hdvh7wpji
+      tslib: 2.6.2
+    dev: true
+
+  /@nestjs/testing/10.3.5_rfji7f2mxq76lqsbxv4ztefv74:
+    resolution: {integrity: sha512-j30/lxH0BayeDTigapYtQn/XhMRR7CzlFsm3dHoWViWQv0qT1r2ffe3927BbBLX3N/ZzglE10OAqW06ADZV8dw==}
+    peerDependencies:
+      '@nestjs/common': ^10.0.0
+      '@nestjs/core': ^10.0.0
+      '@nestjs/microservices': ^10.0.0
+      '@nestjs/platform-express': ^10.0.0
+    peerDependenciesMeta:
+      '@nestjs/microservices':
+        optional: true
+      '@nestjs/platform-express':
+        optional: true
+    dependencies:
+      '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
+      '@nestjs/core': 10.3.5_ssi6rvcugz66w3rhefivnsxapm
       '@nestjs/platform-express': 10.3.5_gtc3ckdchafrwto75hdvh7wpji
       tslib: 2.6.2
     dev: true
@@ -11667,7 +11719,7 @@ packages:
         optional: true
     dependencies:
       '@prisma/generator-helper': 4.16.2
-      nestjs-zod: 3.0.0_zod@3.22.4
+      nestjs-zod: 3.0.0_34yfydvl2beq56u4pav7ftlfvi
       parenthesis: 3.1.8
       prisma: 5.11.0
       ts-morph: 13.0.3
@@ -11694,25 +11746,6 @@ packages:
       '@nestjs/common': 10.3.5_sjlgdw6sxl55j5qxfoihpjka6a
       '@nestjs/core': 10.3.5_6veqlaa3o4uship46youv2mxx4
       '@nestjs/swagger': 7.3.0_kz55giwcilidfubqv3zfjozt2i
-      merge-deep: 3.0.3
-      zod: 3.22.4
-    dev: false
-
-  /nestjs-zod/3.0.0_zod@3.22.4:
-    resolution: {integrity: sha512-vL9CHShCVj6TmjCVPOd4my46D8d7FdoB4nQvvh+lmVTuzvnwuD+slSxjT4EDdPDWDFtjhfpvQnnkr55/80KHEQ==}
-    peerDependencies:
-      '@nestjs/common': '>= 8.0.0'
-      '@nestjs/core': '>= 8.0.0'
-      '@nestjs/swagger': '>= 5.0.0'
-      zod: '>= 3.14.3'
-    peerDependenciesMeta:
-      '@nestjs/common':
-        optional: true
-      '@nestjs/core':
-        optional: true
-      '@nestjs/swagger':
-        optional: true
-    dependencies:
       merge-deep: 3.0.3
       zod: 3.22.4
 
@@ -13606,7 +13639,6 @@ packages:
 
   /swagger-ui-dist/5.11.2:
     resolution: {integrity: sha512-jQG0cRgJNMZ7aCoiFofnoojeSaa/+KgWaDlfgs8QN+BXoGMpxeMVY5OEnjq4OlNvF3yjftO8c9GRAgcHlO+u7A==}
-    dev: false
 
   /symbol-observable/4.0.0:
     resolution: {integrity: sha512-b19dMThMV4HVFynSAM1++gBHAbk2Tc/osgLIBZMKsyqh34jb2e8Os7T6ZW/Bt3pJFdBTd2JwAnAAEQV7rSNvcQ==}

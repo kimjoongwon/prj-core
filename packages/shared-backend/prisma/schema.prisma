@@ -1,0 +1,299 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// generator zod {
+//   provider = " "
+// }
+
+generator zod {
+  provider = "nestjs-zod-prisma"
+  output   = "./src/zod" // (default) the directory where generated zod schemas will be saved
+
+  relationModel = true // (default) Create and export both plain and related models.
+  // relationModel         = "default" // Do not export model without relations.
+  // relationModel         = false // Do not generate related model
+
+  generateDto = true // (default) Generate DTOs for NestJS
+
+  // modelCase = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
+  modelCase             = "camelCase" // Output models using camel case (ex. userModel, postModel)
+
+  modelSuffix = "Schema" // (default) Suffix to apply to your prisma models when naming Zod schemas
+
+  dtoCase = "PascalCase" // (default) Output DTOs using pascal case (ex. UserDto, PostDto)
+  // dtoCase             = "camelCase" // Output DTOs using camel case (ex. userDto, postDto)
+
+  dtoSuffix = "Dto" // (default) Suffix to apply to your prisma models when naming DTOs
+
+  // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
+  useDecimalJs = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+
+  // imports               = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
+  // imports               = "../zod-schemas"
+  // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
+  prismaJsonNullability = true // (default) uses prisma's scheme for JSON field nullability
+  // prismaJsonNullability = false // allows null assignment to optional JSON fields
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String    @unique
+  phone     String    @unique
+  password  String
+  deletedAt DateTime? @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  profiles  Profile[]
+  tenants   Tenant[]
+}
+
+model Profile {
+  id        String    @id @default(cuid())
+  nickname  String
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  serviceId       String
+  spaceId         String
+  ancestorIds     String[]
+  parentId        String?
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+  deletedAt       DateTime?        @db.Timestamptz(6)
+  space           Space            @relation(fields: [spaceId], references: [id])
+  classifications Classification[]
+  service         Service          @relation(fields: [serviceId], references: [id])
+}
+
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  serviceId   String
+  spaceId     String
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?    @db.Timestamptz(6)
+  space       Space        @relation(fields: [spaceId], references: [id])
+  assignments Assignment[]
+}
+
+model Service {
+  id              String           @id @default(cuid())
+  name            String           @unique
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+  deletedAt       DateTime?        @db.Timestamptz(6)
+  classifications Classification[]
+  assignments     Assignment[]
+  categories      Category[]
+}
+
+model Assignment {
+  id            String    @id @default(cuid())
+  groupId       String
+  serviceId     String
+  serviceItemId String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+  group         Group     @relation(fields: [groupId], references: [id])
+  service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+model Role {
+  id        String    @id @default(cuid())
+  name      Roles     @unique @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
+}
+
+model Tenant {
+  id        String    @id @default(cuid())
+  userId    String
+  spaceId   String
+  roleId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  role      Role      @relation(fields: [roleId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Classification {
+  id            String    @id @default(cuid())
+  serviceId     String
+  serviceItemId String
+  categoryId    String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+  service       Service   @relation(fields: [serviceId], references: [id])
+  category      Category  @relation(fields: [categoryId], references: [id])
+}
+
+model Space {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt  DateTime?  @db.Timestamptz(6)
+  tenants    Tenant[]
+  categories Category[]
+  groups     Group[]
+}
+
+model EmailTemplate {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  subject   String
+  content   String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model Session {
+  id        String     @id @default(cuid())
+  name      String
+  tenantId  String
+  dates     DateTime[] @db.Timestamptz(6)
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?  @db.Timestamptz(6)
+  timelines Timeline[]
+}
+
+model Timeline {
+  id            String         @id @default(cuid())
+  name          String
+  sessionId     String
+  date          DateTime       @db.Date()
+  session       Session        @relation(fields: [sessionId], references: [id])
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?      @db.Timestamptz(6)
+  timelineItems TimelineItem[]
+}
+
+model TimelineItem {
+  id            String        @id @default(cuid())
+  timelineId    String?
+  sessionId     String
+  title         String
+  startDateTime DateTime      @db.Timestamptz(6)
+  endDateTime   DateTime      @db.Timestamptz(6)
+  description   String
+  address       String?
+  maxCapacity   Int
+  minCapacity   Int
+  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime?     @db.Timestamptz(6)
+  reservations  Reservation[]
+  timeline      Timeline?     @relation(fields: [timelineId], references: [id])
+}
+
+model Reservation {
+  id             String       @id @default(cuid())
+  status         String
+  timelineItemId String
+  timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt      DateTime?    @db.Timestamptz(6)
+}
+
+model Subject {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  abilities Ability[]
+}
+
+model Ability {
+  id        String         @id @default(cuid())
+  type      AbilityTypes
+  roleId    String
+  action    AbilityActions
+  subjectId String
+  createdAt DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime?      @db.Timestamptz(6)
+  subject   Subject        @relation(fields: [subjectId], references: [id])
+}
+
+// 특정 role과 특정 subject(page)의 가지고 ability를 전부 가져옵니다.
+// 그리고 sujectId를 가진 모든 subject의 pages를 가져옵니다.
+// const abilities = findByRoleId(user.roleId)
+// const subjectIds = abilities.find((ability) => ability.subjectId === page.subjectId)
+// const pages = findByIds(subjectIds)
+// pages.map((page) => can('READ', Page, {path: page.path}))
+
+// 이렇게 능력을 만든다.
+
+// 만약 get요청이 오면
+// ability = createForUser(user)
+// const paths = path.filter(path => ability.can('READ', Page, {path: page.path}))
+
+// return paths
+
+model Page {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  pathname  String    @unique
+  subjectId String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+enum SubjectConditions {
+  Equal
+  GreaterThan
+  GreaterThanOrEqual
+  LessThan
+  LessThanOrEqual
+  In
+}
+
+enum AbilityActions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  ACCESS
+}
+
+enum AbilityTypes {
+  CAN
+  CAN_NOT
+}
+
+enum EmailTemplates {
+  REGISTER
+  FORGET_PASSWORD
+}
+
+enum Roles {
+  USER
+  SUPER_ADMIN
+}
