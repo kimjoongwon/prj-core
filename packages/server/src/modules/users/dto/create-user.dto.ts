@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { User } from '@coc/database';
 import { createZodDto } from 'nestjs-zod';
 import zodToJsonSchema from 'zod-to-json-schema';
 import { z } from 'nestjs-zod/z';

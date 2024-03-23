@@ -1,5 +1,6 @@
 {
   "private": true,
+  "version": "0.0.0",
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean",
@@ -8,9 +9,12 @@
     "test": "turbo test"
   },
   "devDependencies": {
-    "prettier": "^3.2.2",
+    "prettier": "3.2.2",
     "tsup": "^8.0.1",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@7.15.0"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
