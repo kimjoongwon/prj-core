@@ -6,6 +6,8 @@ export default function Page() {
   return (
     <div>
       <Button>Button</Button>
+      <Button>Button</Button>
+      <Button>Button</Button>
     </div>
   );
 }
