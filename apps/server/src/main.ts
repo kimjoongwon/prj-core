@@ -18,7 +18,6 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setVersion('1.0.0')
     .setTitle('PROMISE Server')
-    .setDescription('API Description')
     .addTag('PROMISE')
     .addBearerAuth()
     .build();

@@ -8,9 +8,9 @@ import { groupDtoSchema } from '../../groups/dtos/group.dto';
 
 export const spaceDtoSchmea = z
   .object({
-    tenants: z.array(tenantDtoSchema).optional(),
-    categories: z.array(categoryDtoSchema).optional(),
-    groups: z.array(groupDtoSchema).optional(),
+    tenants: z.array(tenantDtoSchema),
+    categories: z.array(categoryDtoSchema),
+    groups: z.array(groupDtoSchema),
   })
   .merge(spaceEntitySchema);
 

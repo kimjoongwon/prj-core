@@ -3,7 +3,7 @@ import { createZodDto } from 'nestjs-zod';
 import { subjectDtoSchema } from '../../subjects/dtos/subject.dto';
 
 export const AbilityDtoSchema = z.object({
-  subject: subjectDtoSchema.optional(),
+  subject: subjectDtoSchema,
 });
 
 export class AbilityDto extends createZodDto(AbilityDtoSchema) {}

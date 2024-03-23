@@ -4,7 +4,9 @@ import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserSignUpDto } from './dtos/create-user-sign-up.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 import { TokenDto } from './dtos/token.dto';
-import { ProfileDto, Public } from '@coc/server';
+import { Public } from '@coc/server';
+import { createZodDto } from 'nestjs-zod';
+import { RelatedProfileModel } from '@coc/database';
 
 @ApiTags('auth')
 @Controller()
@@ -22,7 +24,10 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
-  @ApiResponse({ status: HttpStatus.CREATED, type: ProfileDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: createZodDto(RelatedProfileModel),
+  })
   async signUpUser(@Body() createUserSignUpDto: CreateUserSignUpDto) {
     return this.authService.signUpUser(createUserSignUpDto);
   }

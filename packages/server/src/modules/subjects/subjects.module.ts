@@ -7,6 +7,6 @@ import { SubjectsService } from './subjects.service';
 export class SubjectsModule implements OnModuleInit {
   constructor(private readonly subjectsService: SubjectsService) {}
   onModuleInit() {
-    this.subjectsService.createSubjects();
+    // this.subjectsService.createSubjects();
   }
 }

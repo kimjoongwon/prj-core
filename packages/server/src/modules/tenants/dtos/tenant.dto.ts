@@ -5,9 +5,9 @@ import { createZodDto } from 'nestjs-zod';
 import { spaceDtoSchmea } from '../../spaces/dtos/space.dto';
 
 export const tenantDtoSchema = z.object({
-  role: RoleDtoSchema.optional(),
-  space: spaceDtoSchmea.optional(),
-  user: userDtoSchema.optional(),
+  role: RoleDtoSchema,
+  space: spaceDtoSchmea,
+  user: userDtoSchema,
 });
 
 export class TenantDto extends createZodDto(tenantDtoSchema) {}

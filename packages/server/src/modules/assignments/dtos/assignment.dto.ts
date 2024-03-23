@@ -4,8 +4,8 @@ import { groupDtoSchema } from '../../groups/dtos/group.dto';
 import { createZodDto } from 'nestjs-zod';
 
 export const assignmentDtoSchema = z.object({
-  group: groupDtoSchema.optional(),
-  service: serviceDtoSchema.optional(),
+  group: groupDtoSchema,
+  service: serviceDtoSchema,
 });
 
 export class AssignmentDto extends createZodDto(
