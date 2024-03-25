@@ -29,7 +29,7 @@ export interface NavItem {
 }
 
 interface NavbarProps {
-  navItems: MenuDto[];
+  navItems?: MenuDto[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
 }
