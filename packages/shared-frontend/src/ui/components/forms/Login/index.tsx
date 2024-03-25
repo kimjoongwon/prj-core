@@ -3,27 +3,16 @@
 import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { FormControl } from '../../controls/Form/FormControl';
 import Input from '../../Input';
-import { z } from 'zod';
+import { LoginMutationBody } from '../../../../apis';
+import { observer } from 'mobx-react-lite';
 
 export interface LoginFormProps {
-  state: {
-    email: string;
-    password: string;
-  };
+  state: LoginMutationBody;
+  schema: any;
 }
 
-export function LoginForm(props: LoginFormProps) {
-  const {
-    state = {
-      email: '',
-      password: '',
-    },
-  } = props;
-
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string().min(5),
-  });
+export const LoginForm = observer((props: LoginFormProps) => {
+  const { state, schema } = props;
 
   return (
     <Card fullWidth>
@@ -37,7 +26,7 @@ export function LoginForm(props: LoginFormProps) {
             type="email"
           />
         </FormControl>
-        <Spacer />
+        <Spacer y={2} />
         <FormControl timings={['onBlur']} schema={schema}>
           <Input
             state={state}
@@ -50,4 +39,4 @@ export function LoginForm(props: LoginFormProps) {
       </CardBody>
     </Card>
   );
-}
+});

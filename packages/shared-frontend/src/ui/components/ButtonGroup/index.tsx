@@ -1,8 +1,8 @@
 import { Link } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
-import { GroupButton } from '../../../model';
 import Button from '../Button';
+import { GroupButton } from '../types';
 
 interface ButtonGroupProps {
   leftButtons?: GroupButton[];

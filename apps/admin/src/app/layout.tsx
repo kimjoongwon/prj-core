@@ -1,5 +1,6 @@
 'use client';
 
+import { Footer } from '@shared/frontend';
 import './globals.css';
 import { Providers } from './providers';
 

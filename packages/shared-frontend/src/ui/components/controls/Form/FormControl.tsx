@@ -1,6 +1,12 @@
-import { get, isUndefined } from 'lodash-es';
-import React, { Children, ReactElement, useRef, useState } from 'react';
-import { ZodSchema } from 'zod';
+import { isUndefined } from 'lodash-es';
+import React, { Children, ReactElement, useState } from 'react';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import {
+  ajv,
+  getErrorFromErrorsByPath,
+  getErrorMessageFromSchemaByPath,
+} from '../../../../libs/ajv';
 
 interface FormControlProps<T> {
   children: ReactElement;
@@ -15,54 +21,70 @@ export interface ValidationState {
   success: boolean;
 }
 
-export const FormControl = <T extends any>(props: FormControlProps<T>) => {
-  const { children, timings = [], schema, label } = props;
+export const FormControl = observer(
+  <T extends any>(props: FormControlProps<T>) => {
+    const { children, timings = [], schema, label } = props;
 
-  const [validation, setValidation] = useState<ValidationState>({
-    errorMessage: ' ',
-    isInvalid: false,
-    success: true,
-  });
+    const [validation, setValidation] = useState<ValidationState>({
+      errorMessage: ' ',
+      isInvalid: false,
+      success: true,
+    });
 
-  const ref = useRef<HTMLElement>();
+    const child = Children.only(children);
 
-  const child = Children.only(children);
+    const callbacks =
+      timings?.map(timing => {
+        return {
+          [timing]: () => {
+            if (!child.props.state) {
+              return null;
+            }
+            const _schema: any = schema;
+            const validate = ajv.compile(_schema as any);
+            const valid = validate(toJS(child.props.state));
 
-  const callbacks =
-    timings?.map(timing => {
-      return {
-        [timing]: () => {
-          if (!child.props.state) {
-            return null;
-          }
+            validation.errorMessage = '';
 
-          const result = (schema as ZodSchema).safeParse(child.props.state);
+            validation.isInvalid = false;
 
-          validation.errorMessage = '';
+            validation.success = valid;
+            let errorMessage = null;
 
-          validation.isInvalid = false;
+            if (!valid) {
+              const error = getErrorFromErrorsByPath(
+                validate.errors || [],
+                child.props.path,
+              );
 
-          validation.success = result.success;
+              if (!child.props.path) {
+                throw new Error('path is required');
+              }
+              const errorMessage = getErrorMessageFromSchemaByPath(
+                _schema,
+                child.props.path,
+                error,
+              );
 
-          if (!result.success) {
-            const errorMessage = get(result?.error.format(), child.props.path)?._errors.join('-');
+              validation.errorMessage = errorMessage;
 
-            validation.errorMessage = errorMessage || '';
+              validation.isInvalid = isUndefined(errorMessage)
+                ? false
+                : true;
+            }
 
-            validation.isInvalid = isUndefined(errorMessage) ? false : true;
-          }
+            setValidation({ ...validation });
+          },
+        };
+      }) || [];
 
-          setValidation({ ...validation });
-        },
-      };
-    }) || [];
+    const childProps = Object.assign({ validation }, ...callbacks);
 
-  const childProps = Object.assign({ ref, validation }, ...callbacks);
-
-  return (
-    <div className="flex flex-col">
-      {label && <p className="text-medium font-bold">{label}</p>}
-      {React.cloneElement(child, childProps)}
-    </div>
-  );
-};
+    return (
+      <div className="flex flex-col">
+        {label && <p className="text-medium font-bold">{label}</p>}
+        {React.cloneElement(child, childProps)}
+      </div>
+    );
+  },
+);

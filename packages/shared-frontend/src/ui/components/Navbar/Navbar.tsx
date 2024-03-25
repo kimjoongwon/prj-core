@@ -19,6 +19,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import { MenuDto } from '../../../model';
 
 export interface NavItem {
   text: string;
@@ -28,7 +29,7 @@ export interface NavItem {
 }
 
 interface NavbarProps {
-  navItems: NavItem[];
+  navItems: MenuDto[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
 }
@@ -150,7 +151,7 @@ export const CoCNavbar = observer((props: NavbarProps) => {
             className="font-bold text-2xl"
             variant="light"
           >
-            프로미스
+            로고
           </Button>
         </NavbarBrand>
       </NavbarContent>

@@ -1,14 +1,12 @@
-'use client';
-
 import React from 'react';
-import { observer } from 'mobx-react-lite';
+import { Container } from '@shared/frontend';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
 const AuthLayout = (props: AuthLayoutProps) => {
-  return <div className="flex justify-center">{props.children}</div>;
+  return <Container>{props.children}</Container>;
 };
 
-export default observer(AuthLayout);
+export default AuthLayout;

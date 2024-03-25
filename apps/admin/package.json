@@ -16,11 +16,12 @@
     "codegen": "openapi-rq -i http://localhost:3005/api-json --output ./src/api -c axios"
   },
   "dependencies": {
-    "@shared/frontend": "workspace:*",
     "@nextui-org/react": "2.2.10",
+    "@shared/frontend": "workspace:*",
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tanstack/react-query": "5.28.6",
     "@tanstack/react-table": "^8.15.0",
+    "@vanilla-extract/css": "^1.14.1",
     "ajv": "8",
     "axios": "^1.6.8",
     "cookies-next": "4.1.1",
@@ -49,6 +50,7 @@
     "@types/node": "20.11.30",
     "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
+    "@vanilla-extract/next-plugin": "^2.3.7",
     "autoprefixer": "10.4.19",
     "eslint-config-custom": "workspace:*",
     "postcss": "8.4.38",

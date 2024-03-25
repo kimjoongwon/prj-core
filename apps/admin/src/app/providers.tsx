@@ -20,7 +20,6 @@ function makeQueryClient() {
     },
   });
 }
-axios.defaults.baseURL = 'http://localhost:3005';
 let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {

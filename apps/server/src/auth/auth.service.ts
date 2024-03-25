@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenPayloadDto } from './dtos/token-payload.dto';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
-import { LoginPayloadDto } from './dtos/login-payload.dto';
+import { LoginDto } from './dtos/login.dto';
 import { TokenDto } from './dtos/token.dto';
 import bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
@@ -20,6 +20,7 @@ import {
   UsersService,
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dtos/create-user-sign-up.dto';
+import { loginFormJsonSchema } from './dtos/login-form.dto';
 
 @Injectable()
 export class AuthService {
@@ -85,7 +86,20 @@ export class AuthService {
     });
   }
 
-  async login({ email, password }: LoginPayloadDto): Promise<TokenDto> {
+  getLoginForm() {
+    const loginFormDto = {
+      email: '',
+      password: '',
+    };
+
+    return loginFormDto;
+  }
+
+  getLoginFormJsonSchema() {
+    return loginFormJsonSchema;
+  }
+
+  async login({ email, password }: LoginDto): Promise<TokenDto> {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -144,15 +158,9 @@ export class AuthService {
 
   private generateRefreshToken(payload: { userId: string }): string {
     const authConfig = this.config.get<AuthConfig>('auth');
-    // const securityConfig = this.configService.get<SecurityConfig>('security');
     return this.jwtService.sign(payload, {
       secret: authConfig?.secret,
       expiresIn: authConfig?.refresh,
     });
-    // const securityConfig = this.configService.get<SecurityConfig>('security');
-    // return this.jwtService.sign(payload, {
-    //   secret: this.configService.get('JWT_REFRESH_SECRET'),
-    //   expiresIn: securityConfig.refreshIn,
-    // });
   }
 }

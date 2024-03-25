@@ -9,6 +9,7 @@ import Button from './Button';
 import Skeleton from './Skeleton';
 import DataGrid from './DataGrid';
 import Pagination from './Pagination';
+export * from './Footer';
 export * from './Checkbox';
 export * from './RadioGroup';
 export * from './Switch';
@@ -33,7 +34,10 @@ export * from './TimePicker';
 export * from './TimeRangePicker';
 export * from './Chips';
 export * from './ButtonGroup';
-
+export * from './HStack';
+export * from './VStack';
+export * from './Container';
+export * from './Layout';
 export {
   Textarea,
   Calendar,

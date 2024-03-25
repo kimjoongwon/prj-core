@@ -18,7 +18,7 @@ export type InputProps<T> = MobxProps<T> &
 function Input<T extends object>(props: InputProps<T>) {
   const { path = '', state = {}, onChange, validation, type } = props;
 
-  const initialValue = get(state, path);
+  const initialValue = get(state, path) || '';
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 

@@ -25,7 +25,7 @@ import type {
 import type {
   CreateAuthzDto,
   CreateSignUpPayloadDto,
-  LoginPayloadDto,
+  LoginDto,
   UpdateAuthzDto
 } from './model'
 import {
@@ -37,6 +37,7 @@ import {
   http
 } from 'msw'
 import type {
+  LoginFormDto,
   MenuDto,
   TokenDto
 } from './model'
@@ -45,26 +46,26 @@ import type {
 
 
 export const login = (
-    loginPayloadDto: LoginPayloadDto, options?: AxiosRequestConfig
+    loginDto: LoginDto, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<TokenDto>> => {
     
     return axios.post(
-      `http://localhost:3004/api/auth/login`,
-      loginPayloadDto,options
+      `http://localhost:3005/api/auth/login`,
+      loginDto,options
     );
   }
 
 
 
 export const getLoginMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginPayloadDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginPayloadDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext> => {
  const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: LoginPayloadDto}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: LoginDto}> = (props) => {
           const {data} = props ?? {};
 
           return  login(data,axiosOptions)
@@ -76,11 +77,11 @@ export const getLoginMutationOptions = <TError = AxiosError<unknown>,
    return  { mutationFn, ...mutationOptions }}
 
     export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
-    export type LoginMutationBody = LoginPayloadDto
+    export type LoginMutationBody = LoginDto
     export type LoginMutationError = AxiosError<unknown>
 
     export const useLogin = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginPayloadDto}, TContext>, axios?: AxiosRequestConfig}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext>, axios?: AxiosRequestConfig}
 ) => {
 
       const mutationOptions = getLoginMutationOptions(options);
@@ -88,12 +89,118 @@ export const getLoginMutationOptions = <TError = AxiosError<unknown>,
       return useMutation(mutationOptions);
     }
     
+export const getLoginForm = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<LoginFormDto>> => {
+    
+    return axios.get(
+      `http://localhost:3005/api/auth/login/form`,options
+    );
+  }
+
+
+export const getGetLoginFormQueryKey = () => {
+    return [`http://localhost:3005/api/auth/login/form`] as const;
+    }
+
+    
+export const getGetLoginFormQueryOptions = <TData = Awaited<ReturnType<typeof getLoginForm>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetLoginFormQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginForm>>> = ({ signal }) => getLoginForm({ signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetLoginFormQueryResult = NonNullable<Awaited<ReturnType<typeof getLoginForm>>>
+export type GetLoginFormQueryError = AxiosError<unknown>
+
+export const useGetLoginForm = <TData = Awaited<ReturnType<typeof getLoginForm>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetLoginFormQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getLoginFormSchema = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    
+    return axios.get(
+      `http://localhost:3005/api/auth/login/schema`,options
+    );
+  }
+
+
+export const getGetLoginFormSchemaQueryKey = () => {
+    return [`http://localhost:3005/api/auth/login/schema`] as const;
+    }
+
+    
+export const getGetLoginFormSchemaQueryOptions = <TData = Awaited<ReturnType<typeof getLoginFormSchema>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetLoginFormSchemaQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginFormSchema>>> = ({ signal }) => getLoginFormSchema({ signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetLoginFormSchemaQueryResult = NonNullable<Awaited<ReturnType<typeof getLoginFormSchema>>>
+export type GetLoginFormSchemaQueryError = AxiosError<unknown>
+
+export const useGetLoginFormSchema = <TData = Awaited<ReturnType<typeof getLoginFormSchema>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetLoginFormSchemaQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 export const signUpUser = (
     createSignUpPayloadDto: CreateSignUpPayloadDto, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<void>> => {
     
     return axios.post(
-      `http://localhost:3004/api/auth/sign-up`,
+      `http://localhost:3005/api/auth/sign-up`,
       createSignUpPayloadDto,options
     );
   }
@@ -137,7 +244,7 @@ export const create = (
  ): Promise<AxiosResponse<void>> => {
     
     return axios.post(
-      `http://localhost:3004/api/authz`,
+      `http://localhost:3005/api/authz`,
       createAuthzDto,options
     );
   }
@@ -181,13 +288,13 @@ export const findAll = (
  ): Promise<AxiosResponse<void>> => {
     
     return axios.get(
-      `http://localhost:3004/api/authz`,options
+      `http://localhost:3005/api/authz`,options
     );
   }
 
 
 export const getFindAllQueryKey = () => {
-    return [`http://localhost:3004/api/authz`] as const;
+    return [`http://localhost:3005/api/authz`] as const;
     }
 
     
@@ -234,13 +341,13 @@ export const findOne = (
  ): Promise<AxiosResponse<void>> => {
     
     return axios.get(
-      `http://localhost:3004/api/authz/${id}`,options
+      `http://localhost:3005/api/authz/${id}`,options
     );
   }
 
 
 export const getFindOneQueryKey = (id: string,) => {
-    return [`http://localhost:3004/api/authz/${id}`] as const;
+    return [`http://localhost:3005/api/authz/${id}`] as const;
     }
 
     
@@ -288,7 +395,7 @@ export const update = (
  ): Promise<AxiosResponse<void>> => {
     
     return axios.patch(
-      `http://localhost:3004/api/authz/${id}`,
+      `http://localhost:3005/api/authz/${id}`,
       updateAuthzDto,options
     );
   }
@@ -332,7 +439,7 @@ export const remove = (
  ): Promise<AxiosResponse<void>> => {
     
     return axios.delete(
-      `http://localhost:3004/api/authz/${id}`,options
+      `http://localhost:3005/api/authz/${id}`,options
     );
   }
 
@@ -375,13 +482,13 @@ export const getMemus = (
  ): Promise<AxiosResponse<MenuDto[]>> => {
     
     return axios.get(
-      `http://localhost:3004/api/admin/menus`,options
+      `http://localhost:3005/api/admin/menus`,options
     );
   }
 
 
 export const getGetMemusQueryKey = () => {
-    return [`http://localhost:3004/api/admin/menus`] as const;
+    return [`http://localhost:3005/api/admin/menus`] as const;
     }
 
     
@@ -427,6 +534,8 @@ export const useGetMemus = <TData = Awaited<ReturnType<typeof getMemus>>, TError
 
 export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), ...overrideResponse})
 
+export const getGetLoginFormResponseMock = (overrideResponse: any = {}): LoginFormDto => ({email: faker.word.sample(), password: faker.word.sample(), ...overrideResponse})
+
 export const getGetMemusResponseMock = (overrideResponse: any = {}): MenuDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({children: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({pathname: faker.helpers.arrayElement(['admin/userService/users','admin/userService/users/:id'] as const), text: faker.word.sample(), ...overrideResponse})), undefined]), pathname: faker.helpers.arrayElement([faker.helpers.arrayElement(['admin/userService/users','admin/userService/users/:id'] as const), undefined]), text: faker.word.sample(), ...overrideResponse})))
 
 
@@ -434,6 +543,34 @@ export const getLoginMockHandler = (overrideResponse?: TokenDto) => {
   return http.post('*/auth/login', async () => {
     await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getLoginResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetLoginFormMockHandler = (overrideResponse?: LoginFormDto) => {
+  return http.get('*/auth/login/form', async () => {
+    await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getGetLoginFormResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetLoginFormSchemaMockHandler = () => {
+  return http.get('*/auth/login/schema', async () => {
+    await delay(1000);
+    return new HttpResponse(null,
       {
         status: 200,
         headers: {
@@ -543,6 +680,8 @@ export const getGetMemusMockHandler = (overrideResponse?: MenuDto[]) => {
 }
 export const getPROMISEServerMock = () => [
   getLoginMockHandler(),
+  getGetLoginFormMockHandler(),
+  getGetLoginFormSchemaMockHandler(),
   getSignUpUserMockHandler(),
   getCreateMockHandler(),
   getFindAllMockHandler(),

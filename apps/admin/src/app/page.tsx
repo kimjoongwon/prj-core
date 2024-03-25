@@ -1,13 +1,26 @@
 'use client';
 
-import { Button } from '@shared/frontend';
+import { Button, HStack, VStack } from '@shared/frontend';
 
 export default function Page() {
   return (
-    <div>
-      <Button>Button</Button>
-      <Button>Button</Button>
-      <Button>Button</Button>
+    <div style={{ height: 1000 }}>
+      <HStack>
+        <Button style={{ flex: 1 }}>Button</Button>
+        <VStack>
+          <Button>Button</Button>
+          <Button>Button</Button>
+        </VStack>
+        <Button>Button</Button>
+      </HStack>
+      <HStack>
+        <Button style={{ flex: 1 }}>Button</Button>
+        <VStack>
+          <Button>Button</Button>
+          <Button>Button</Button>
+        </VStack>
+        <Button>Button</Button>
+      </HStack>
     </div>
   );
 }

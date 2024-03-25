@@ -1,15 +1,12 @@
 import {
-  LoginInput,
-  LoginMutation,
-  RefreshTokenMutation,
-} from '@__generated__/graphql';
+  LoginMutationBody,
+  LoginMutationResult,
+} from '@shared/frontend';
 import { observable } from 'mobx';
 
 interface Auth {
-  loginForm: LoginInput;
-  user?:
-    | LoginMutation['login']['user']
-    | RefreshTokenMutation['refreshToken']['user'];
+  loginForm: LoginMutationBody;
+  user?: LoginMutationResult['data'];
   loading: boolean;
   accessToken?: string;
 }

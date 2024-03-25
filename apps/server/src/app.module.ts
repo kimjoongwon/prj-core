@@ -1,4 +1,10 @@
-import { HttpStatus, Logger, MiddlewareConsumer, Module } from '@nestjs/common';
+import {
+  HttpStatus,
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import {
   APP_FILTER,
@@ -87,7 +93,6 @@ import { AdminModule } from './admin/admin.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-
     RouterModule.register([
       {
         path: 'auth',
@@ -127,7 +132,11 @@ import { AdminModule } from './admin/admin.module';
     },
   ],
 })
-export class AppModule {
+export class AppModule implements OnModuleInit {
+  constructor() {}
+  onModuleInit() {
+    //
+  }
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
