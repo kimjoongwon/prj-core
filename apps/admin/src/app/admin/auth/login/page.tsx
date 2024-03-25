@@ -4,9 +4,7 @@ import {
   Button,
   Container,
   LoginForm,
-  LoginFormDto,
   Spacer,
-  VStack,
   useGetLoginForm,
   useGetLoginFormSchema,
   useLogin,
@@ -14,30 +12,26 @@ import {
 import { AxiosError } from 'axios';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { getErrorMessages } from '@shared/frontend/src/libs/ajv';
+import { useCoCRouter } from '@hooks';
 
 const defaultLoginFormObject = {
-  email: '',
-  password: '',
+  email: 'PROMISE@gmail.com',
+  password: 'rkdmf12!@',
 };
 
 const LoginPage = observer(() => {
   const { data: loginForm } = useGetLoginForm();
   const { data: loginFormSchema } = useGetLoginFormSchema();
   const { mutateAsync: login } = useLogin();
+  const { push } = useCoCRouter();
 
-  const state = useLocalObservable(
-    () => loginForm?.data || defaultLoginFormObject,
-  );
+  const state = useLocalObservable(() => defaultLoginFormObject);
 
   const onClickLogin = async () => {
-    console.log(loginFormSchema?.data!);
     const { errorMessages, valid } = getErrorMessages(
       state,
       loginFormSchema?.data!,
     );
-
-    console.log('errorMessages', errorMessages);
-    console.log('valid', valid);
 
     try {
       await login({ data: state });
@@ -46,6 +40,8 @@ const LoginPage = observer(() => {
         console.log(error);
       }
     }
+
+    push({ url: '/admin/dashboard' });
   };
 
   return (

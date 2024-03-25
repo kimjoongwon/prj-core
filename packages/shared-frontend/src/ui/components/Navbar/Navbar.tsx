@@ -29,6 +29,7 @@ export interface NavItem {
 }
 
 interface NavbarProps {
+  state: any;
   navItems?: MenuDto[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
@@ -36,99 +37,23 @@ interface NavbarProps {
 
 export const CoCNavbar = observer((props: NavbarProps) => {
   const pathname = usePathname();
-  const state = useLocalObservable(() => ({
-    isMenuOpen: false,
-    selectedMenuItemText: '',
-  }));
-
   const router = useRouter();
 
   const {
+    state,
     rightContents = <div>left</div>,
     leftContents = <div>right</div>,
   } = props;
   const { navItems = [] } = props;
   const renderNavItem = (item: NavItem) => {
-    return (
-      <Dropdown key={item.text}>
-        <NavbarItem>
-          <DropdownTrigger>
-            <Button
-              disableRipple
-              className="capitalize text-large p-0 bg-transparent data-[hover=true]:bg-transparent text-gray-900"
-              radius="sm"
-              variant="light"
-              color="danger"
-            >
-              {item.text}
-            </Button>
-          </DropdownTrigger>
-        </NavbarItem>
-        <DropdownMenu
-          selectedKeys={pathname}
-          aria-label="ACME features"
-          className="w-[340px]"
-          itemClasses={{
-            base: 'gap-4',
-          }}
-          variant="flat"
-        >
-          {(item.children || []).map(child => (
-            <DropdownItem
-              // startContent={child.startContent}
-              // endContent={child.endContent}
-              key={child.pathname}
-              href={child.pathname}
-              as={NextLink}
-            >
-              <p className="text-1xl font-extrabold">{child.text}</p>
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    );
-  };
-
-  const renderNavMenuItem = (item: NavItem) => {
-    if (item.children) {
-      return (
-        <React.Fragment key={v4()}>
-          <NavbarMenuItem key={item.text}>{item.text}</NavbarMenuItem>
-          {item.children?.map(item => {
-            return (
-              <Button
-                key={v4()}
-                fullWidth
-                color={
-                  pathname === item.pathname ? 'primary' : 'default'
-                }
-                className="justify-between"
-                onClick={() => {
-                  router.push(item?.pathname || '');
-                  state.isMenuOpen = false;
-                }}
-                variant="ghost"
-              >
-                {item.text}
-              </Button>
-            );
-          })}
-        </React.Fragment>
-      );
-    }
+    const onClickMenuItem = () => {
+      state.currentPath = item.pathname;
+    };
 
     return (
-      <NavbarMenuItem key={v4()}>
-        <Link
-          className="w-full"
-          size="lg"
-          color="foreground"
-          href={item.pathname}
-          as={Button}
-        >
-          {item.text}
-        </Link>
-      </NavbarMenuItem>
+      <Button variant="light" onClick={onClickMenuItem}>
+        {item.text}
+      </Button>
     );
   };
 
@@ -142,9 +67,6 @@ export const CoCNavbar = observer((props: NavbarProps) => {
       )}
     >
       <NavbarContent>
-        {/* <NavbarMenuToggle
-          aria-label={state.isMenuOpen ? 'Close menu' : 'Open menu'}
-        /> */}
         <NavbarBrand>
           <Button
             onClick={() => router.replace('/admin/dashboard')}
@@ -156,16 +78,10 @@ export const CoCNavbar = observer((props: NavbarProps) => {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent
-        // className="hidden sm:flex gap-4"
-        justify="center"
-      >
+      <NavbarContent justify="center">
         {navItems.map(renderNavItem)}
       </NavbarContent>
-
       <NavbarContent justify="end">{rightContents}</NavbarContent>
-
-      <NavbarMenu>{navItems.map(renderNavMenuItem)}</NavbarMenu>
     </NextUINavbar>
   );
 });

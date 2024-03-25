@@ -10,12 +10,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const router = useCoCRouter();
   // const { data: menus } = useAdminServiceGetMemus();
 
-  return (
-    <Container>
-      <CoCNavbar />
-      {children}
-    </Container>
-  );
+  return <Container>{children}</Container>;
 }
 
 export default observer(Layout);

@@ -24,6 +24,13 @@ export class SpacesService implements OnModuleInit {
       });
     }
   }
+  async createBaseSpace() {
+    return this.prisma.space.create({
+      data: {
+        name: '기본',
+      },
+    });
+  }
 
   async findBaseSpace() {
     return this.prisma.space.findUnique({

@@ -1,8 +1,11 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'nestjs-zod/z';
 
-const ADMIN_USER_SERVICE_USERS = 'admin/userService/users';
-const ADMIN_USER_SERVICE_USER = 'admin/userService/users/:id';
+const ADMIN_USER_SERVICE_USERS = 'admin/user-service/users';
+const ADMIN_USER_SERVICE_USER = 'admin/user-service/users/:id';
+const ADMIN_DASH_BOARD = 'admin/dashboard';
+const ADMIN_SERVICE = 'admin/service';
+const ADMIN_SETTINGS = 'admin/service/settings';
 
 export const createPath = (paths: string[]) => {
   return paths.join('/');
@@ -11,6 +14,9 @@ export const createPath = (paths: string[]) => {
 export const pathsSchema = z.enum([
   ADMIN_USER_SERVICE_USERS,
   ADMIN_USER_SERVICE_USER,
+  ADMIN_DASH_BOARD,
+  ADMIN_SERVICE,
+  ADMIN_SETTINGS,
 ]);
 
 export type Paths = z.infer<typeof pathsSchema>;

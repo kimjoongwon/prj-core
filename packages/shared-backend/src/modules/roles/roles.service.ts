@@ -39,6 +39,14 @@ export class RolesService implements OnModuleInit {
     return this.prisma.role.create({ data: { name: 'USER' } });
   }
 
+  async findSuperAdminRole() {
+    return this.prisma.role.findFirst({
+      where: {
+        name: Roles.SUPER_ADMIN,
+      },
+    });
+  }
+
   async findUserRole() {
     return this.prisma.role.findFirst({
       where: {

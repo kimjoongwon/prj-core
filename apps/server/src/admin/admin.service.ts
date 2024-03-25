@@ -1,19 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MenuDto } from './models/Path';
+import { ConfigService } from '@nestjs/config';
+import { AppConfig, RolesService, SpacesService } from '@shared/backend';
+import { PasswordService } from 'src/auth/password.service';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class AdminService {
+  logger = new Logger(AdminService.name);
+  constructor(
+    private configService: ConfigService,
+    private spacesService: SpacesService,
+    private rolesService: RolesService,
+    private passwordService: PasswordService,
+    private prisma: PrismaService,
+  ) {}
   getMenus(): MenuDto[] {
     return [
       {
-        text: '이용자 관리',
+        text: '서비스 관리',
+        pathname: 'admin/service',
         children: [
           {
-            text: '멤버 서비스',
-            pathname: 'admin/userService/users',
+            text: '서비스 설정',
+            pathname: 'admin/service/settings',
+          },
+          {
+            text: '서비스 정책',
+            pathname: 'admin/service/settings',
           },
         ],
       },
     ];
+  }
+
+  async createSuperAdmin() {
+    const appConfig = this.configService.get<AppConfig>('app');
+    let baseSpace = await this.spacesService.findBaseSpace();
+
+    if (!baseSpace) {
+      this.logger.log('create promise space');
+      baseSpace = await this.spacesService.createBaseSpace();
+    }
+
+    let superAdminRole = await this.rolesService.findSuperAdminRole();
+
+    if (!superAdminRole) {
+      this.logger.log('create super admin role');
+      superAdminRole = await this.rolesService.createSuperAdmin();
+    }
+
+    const superAdminUser = await this.prisma.user.findFirst({
+      where: {
+        tenants: {
+          some: {
+            roleId: superAdminRole?.id,
+          },
+        },
+      },
+    });
+
+    if (superAdminUser) {
+      return;
+    }
+
+    this.logger.log('create super admin user');
+    const hashPassword = await this.passwordService.hashPassword('rkdmf12!@');
+
+    await this.prisma.user.create({
+      data: {
+        email: `${appConfig?.name}@gmail.com`,
+        name: '김중원',
+        phone: '01073162347',
+        password: hashPassword,
+        profiles: {
+          create: {
+            nickname: '프로미스 관리자',
+          },
+        },
+        tenants: {
+          create: {
+            roleId: superAdminRole?.id,
+            spaceId: baseSpace.id,
+          },
+        },
+      },
+    });
   }
 }

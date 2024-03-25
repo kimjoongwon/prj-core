@@ -1,17 +1,6 @@
-'use client';
-
-import React, { useLayoutEffect } from 'react';
-import { useAuth } from '@hooks';
+import React from 'react';
 
 const AuthPage = () => {
-  const {
-    handlers: { refreshToken },
-  } = useAuth();
-
-  useLayoutEffect(() => {
-    refreshToken();
-  }, []);
-
   return <></>;
 };
 
