@@ -15,19 +15,21 @@ export class AdminService {
     private passwordService: PasswordService,
     private prisma: PrismaService,
   ) {}
+
   getMenus(): MenuDto[] {
     return [
       {
-        text: '서비스 관리',
-        pathname: 'admin/service',
+        text: 'Dashboard',
+        pathname: 'admin/dashboard-service',
+        children: [],
+      },
+      {
+        text: '이용자 서비스',
+        pathname: 'admin/user-service',
         children: [
           {
-            text: '서비스 설정',
-            pathname: 'admin/service/settings',
-          },
-          {
-            text: '서비스 정책',
-            pathname: 'admin/service/settings',
+            text: '사용자 서비스',
+            pathname: 'admin/user-service/users',
           },
         ],
       },
