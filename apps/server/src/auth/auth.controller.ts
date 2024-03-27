@@ -16,7 +16,7 @@ import { LoginFormDto } from './dtos/login-form.dto';
 import { object } from 'zod';
 
 @ApiTags('auth')
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

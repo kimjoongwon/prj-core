@@ -27,6 +27,8 @@ const LoginPage = observer(() => {
 
   const state = useLocalObservable(() => defaultLoginFormObject);
 
+  console.log('loginFormSchema', loginFormSchema);
+
   const onClickLogin = async () => {
     const { errorMessages, valid } = getErrorMessages(
       state,
