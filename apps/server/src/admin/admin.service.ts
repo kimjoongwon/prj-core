@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { MenuDto } from './models/Path';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, RolesService, SpacesService } from '@shared/backend';
 import { PasswordService } from 'src/auth/password.service';
 import { PrismaService } from 'nestjs-prisma';
-
+import { MenuDto } from './dto';
+import { ADMIN_PAGES } from './constants';
 @Injectable()
 export class AdminService {
   logger = new Logger(AdminService.name);
@@ -20,16 +20,16 @@ export class AdminService {
     return [
       {
         text: 'Dashboard',
-        pathname: 'admin/dashboard-service',
+        pathname: ADMIN_PAGES.ADMIN_DASHBOARD_SERVICE_PAGE,
         children: [],
       },
       {
         text: '이용자 서비스',
-        pathname: 'admin/user-service',
+        pathname: ADMIN_PAGES.ADMIN_DASHBOARD_SERVICE_PAGE,
         children: [
           {
             text: '사용자 서비스',
-            pathname: 'admin/user-service/users',
+            pathname: ADMIN_PAGES.ADMIN_DASHBOARD_SERVICE_PAGE,
           },
         ],
       },

@@ -20,13 +20,9 @@
     },
     "start:dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": ["db:generate"]
+      "persistent": true
     },
     "clean": {
-      "cache": false
-    },
-    "db:generate": {
       "cache": false
     },
     "db:push": {
