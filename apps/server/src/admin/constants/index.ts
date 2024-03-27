@@ -1,2 +1,2 @@
 export * from './ADMIN_PATHS';
-export * from './PAGE_URL';
+export * from './ADMIN_PAGES';

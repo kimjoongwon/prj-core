@@ -1,16 +1,19 @@
 'use client';
 
-import { useCoCRouter } from '@hooks';
 import { CoCNavbar, Container, useGetMemus } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { useAdminServiceGetMemus } from '../../api/queries';
+import { menuStore } from '@stores';
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { data } = useGetMemus();
-  const router = useCoCRouter();
-  // const { data: menus } = useAdminServiceGetMemus();
-
-  return <Container>{children}</Container>;
+  const { data: menuData } = useGetMemus();
+  const menus = menuData?.data;
+  console.log('menus', menus);
+  return (
+    <Container>
+      <CoCNavbar navItems={menus} state={menuStore} />
+      {children}
+    </Container>
+  );
 }
 
 export default observer(Layout);
