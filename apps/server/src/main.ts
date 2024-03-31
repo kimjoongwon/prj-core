@@ -13,6 +13,7 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   // app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  app.setGlobalPrefix('api');
   patchNestJsSwagger();
 
   const config = new DocumentBuilder()
@@ -20,16 +21,17 @@ async function bootstrap() {
     .setTitle('PROMISE Server')
     .addTag('PROMISE')
     .addBearerAuth()
+    .setBasePath('api')
     .build();
 
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
   const document = SwaggerModule.createDocument(app, config, options);
+
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
-  app.setGlobalPrefix('api');
   await app.listen(3005);
 }
 

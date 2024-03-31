@@ -1,13 +1,18 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { RolesModule, SpacesModule, SubjectsService } from '@shared/backend';
+import {
+  RolesModule,
+  ServicesModule,
+  SpacesModule,
+  SubjectsModule,
+} from '@shared/backend';
 import { PasswordService } from 'src/auth/password.service';
 
 @Module({
-  imports: [SpacesModule, RolesModule],
+  imports: [SpacesModule, RolesModule, ServicesModule, SubjectsModule],
   controllers: [AdminController],
-  providers: [AdminService, SubjectsService, PasswordService],
+  providers: [AdminService, PasswordService],
 })
 export class AdminModule implements OnModuleInit {
   constructor(private adminService: AdminService) {}

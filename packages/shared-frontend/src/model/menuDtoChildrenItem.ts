@@ -5,8 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { MenuDtoChildrenItemPathname } from './menuDtoChildrenItemPathname';
+import type { MenuDtoChildrenItemText } from './menuDtoChildrenItemText';
 
 export type MenuDtoChildrenItem = {
   pathname: MenuDtoChildrenItemPathname;
-  text: string;
+  text: MenuDtoChildrenItemText;
 };

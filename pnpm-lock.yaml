@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -13,7 +9,7 @@ importers:
         version: 3.2.2
       tsup:
         specifier: ^8.0.1
-        version: 8.0.2(postcss@8.4.38)(typescript@5.4.3)
+        version: 8.0.2
       turbo:
         specifier: latest
         version: 1.13.0
@@ -454,7 +450,7 @@ importers:
     devDependencies:
       '@nestjs/cli':
         specifier: ^10.3.2
-        version: 10.3.2(@swc/cli@0.3.10)(@swc/core@1.4.8)(esbuild@0.19.12)
+        version: 10.3.2(@swc/cli@0.3.10)(@swc/core@1.4.8)
       '@nestjs/schematics':
         specifier: ^10.1.1
         version: 10.1.1(typescript@5.4.3)
@@ -526,7 +522,7 @@ importers:
         version: 6.3.4
       ts-jest:
         specifier: 29.1.2
-        version: 29.1.2(@babel/core@7.24.3)(esbuild@0.19.12)(jest@29.7.0)(typescript@5.4.3)
+        version: 29.1.2(jest@29.7.0)(typescript@5.4.3)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.4.8)(@types/node@20.11.30)(typescript@5.4.3)
@@ -542,9 +538,15 @@ importers:
       vitest:
         specifier: 1.4.0
         version: 1.4.0(@types/node@20.11.30)
+      zod-prisma-types:
+        specifier: ^3.1.6
+        version: 3.1.6
 
   packages/shared-frontend:
     dependencies:
+      '@nextui-org/react':
+        specifier: 2.2.10
+        version: 2.2.10(@types/react@18.2.69)(framer-motion@11.0.20)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)(tailwindcss@3.4.1)
       '@tanstack/react-query':
         specifier: 5.28.6
         version: 5.28.6(react@18.2.0)
@@ -577,7 +579,7 @@ importers:
         version: 4.0.6(mobx@6.12.1)(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: 14.1.4
-        version: 14.1.4(@babel/core@7.24.3)(react-dom@18.2.0)(react@18.2.0)
+        version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
       openapi-types:
         specifier: ^12.1.3
         version: 12.1.3
@@ -644,13 +646,13 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.38)(typescript@5.4.3)
+        version: 8.0.2(typescript@5.4.3)
       typescript:
         specifier: ^5.4.3
         version: 5.4.3
       vitest:
         specifier: 1.4.0
-        version: 1.4.0(@types/node@20.11.30)
+        version: 1.4.0
 
   packages/tsconfig: {}
 
@@ -682,12 +684,29 @@ packages:
         optional: true
     dependencies:
       ajv: 8.9.0
-      ajv-formats: 2.1.1(ajv@8.9.0)
+      ajv-formats: 2.1.1
       fast-json-stable-stringify: 2.1.0
       magic-string: 0.25.7
       rxjs: 6.6.7
       source-map: 0.7.3
     dev: false
+
+  /@angular-devkit/core@17.1.2:
+    resolution: {integrity: sha512-ku+/W/HMCBacSWFppenr9y6Lx8mDuTuQvn1IkTyBLiJOpWnzgVbx9kHDeaDchGa1PwLlJUBBrv27t3qgJOIDPw==}
+    engines: {node: ^18.13.0 || >=20.9.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
+    peerDependencies:
+      chokidar: ^3.5.2
+    peerDependenciesMeta:
+      chokidar:
+        optional: true
+    dependencies:
+      ajv: 8.12.0
+      ajv-formats: 2.1.1
+      jsonc-parser: 3.2.0
+      picomatch: 3.0.1
+      rxjs: 7.8.1
+      source-map: 0.7.4
+    dev: true
 
   /@angular-devkit/core@17.1.2(chokidar@3.6.0):
     resolution: {integrity: sha512-ku+/W/HMCBacSWFppenr9y6Lx8mDuTuQvn1IkTyBLiJOpWnzgVbx9kHDeaDchGa1PwLlJUBBrv27t3qgJOIDPw==}
@@ -699,7 +718,7 @@ packages:
         optional: true
     dependencies:
       ajv: 8.12.0
-      ajv-formats: 2.1.1(ajv@8.12.0)
+      ajv-formats: 2.1.1
       chokidar: 3.6.0
       jsonc-parser: 3.2.0
       picomatch: 3.0.1
@@ -734,6 +753,19 @@ packages:
     transitivePeerDependencies:
       - chokidar
     dev: false
+
+  /@angular-devkit/schematics@17.1.2:
+    resolution: {integrity: sha512-8S9RuM8olFN/gwN+mjbuF1CwHX61f0i59EGXz9tXLnKRUTjsRR+8vVMTAmX0dvVAT5fJTG/T69X+HX7FeumdqA==}
+    engines: {node: ^18.13.0 || >=20.9.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
+    dependencies:
+      '@angular-devkit/core': 17.1.2
+      jsonc-parser: 3.2.0
+      magic-string: 0.30.5
+      ora: 5.4.1
+      rxjs: 7.8.1
+    transitivePeerDependencies:
+      - chokidar
+    dev: true
 
   /@angular-devkit/schematics@17.1.2(chokidar@3.6.0):
     resolution: {integrity: sha512-8S9RuM8olFN/gwN+mjbuF1CwHX61f0i59EGXz9tXLnKRUTjsRR+8vVMTAmX0dvVAT5fJTG/T69X+HX7FeumdqA==}
@@ -2749,6 +2781,49 @@ packages:
       strict-event-emitter: 0.5.1
     dev: true
 
+  /@nestjs/cli@10.3.2(@swc/cli@0.3.10)(@swc/core@1.4.8):
+    resolution: {integrity: sha512-aWmD1GLluWrbuC4a1Iz/XBk5p74Uj6nIVZj6Ov03JbTfgtWqGFLtXuMetvzMiHxfrHehx/myt2iKAPRhKdZvTg==}
+    engines: {node: '>= 16.14'}
+    hasBin: true
+    peerDependencies:
+      '@swc/cli': ^0.1.62 || ^0.3.0
+      '@swc/core': ^1.3.62
+    peerDependenciesMeta:
+      '@swc/cli':
+        optional: true
+      '@swc/core':
+        optional: true
+    dependencies:
+      '@angular-devkit/core': 17.1.2(chokidar@3.6.0)
+      '@angular-devkit/schematics': 17.1.2(chokidar@3.6.0)
+      '@angular-devkit/schematics-cli': 17.1.2(chokidar@3.6.0)
+      '@nestjs/schematics': 10.1.1(chokidar@3.6.0)(typescript@5.3.3)
+      '@swc/cli': 0.3.10(@swc/core@1.4.8)
+      '@swc/core': 1.4.8
+      chalk: 4.1.2
+      chokidar: 3.6.0
+      cli-table3: 0.6.3
+      commander: 4.1.1
+      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.3.3)(webpack@5.90.1)
+      glob: 10.3.10
+      inquirer: 8.2.6
+      node-emoji: 1.11.0
+      ora: 5.4.1
+      rimraf: 4.4.1
+      shelljs: 0.8.5
+      source-map-support: 0.5.21
+      tree-kill: 1.2.2
+      tsconfig-paths: 4.2.0
+      tsconfig-paths-webpack-plugin: 4.1.0
+      typescript: 5.3.3
+      webpack: 5.90.1(@swc/core@1.4.8)
+      webpack-node-externals: 3.0.0
+    transitivePeerDependencies:
+      - esbuild
+      - uglify-js
+      - webpack-cli
+    dev: true
+
   /@nestjs/cli@10.3.2(@swc/cli@0.3.10)(@swc/core@1.4.8)(esbuild@0.19.12):
     resolution: {integrity: sha512-aWmD1GLluWrbuC4a1Iz/XBk5p74Uj6nIVZj6Ov03JbTfgtWqGFLtXuMetvzMiHxfrHehx/myt2iKAPRhKdZvTg==}
     engines: {node: '>= 16.14'}
@@ -2991,8 +3066,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.2'
     dependencies:
-      '@angular-devkit/core': 17.1.2(chokidar@3.6.0)
-      '@angular-devkit/schematics': 17.1.2(chokidar@3.6.0)
+      '@angular-devkit/core': 17.1.2
+      '@angular-devkit/schematics': 17.1.2
       comment-json: 4.2.3
       jsonc-parser: 3.2.1
       pluralize: 8.0.0
@@ -4698,6 +4773,12 @@ packages:
       kleur: 4.1.5
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@prisma/generator-helper@5.11.0:
+    resolution: {integrity: sha512-oK25sTb2q2TPN7OipiU5xkCpDPNvdWvmFgU9UmmPr8uEt2CdwDjxiWonULgwd6YfqnCOLNpLq0wBIONjelaVMg==}
+    dependencies:
+      '@prisma/debug': 5.11.0
     dev: true
 
   /@prisma/get-platform@5.11.0:
@@ -7659,6 +7740,14 @@ packages:
       ajv: 8.12.0
     dev: true
 
+  /ajv-formats@2.1.1:
+    resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+    dependencies:
+      ajv: 8.12.0
+
   /ajv-formats@2.1.1(ajv@8.12.0):
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
     peerDependencies:
@@ -7669,17 +7758,6 @@ packages:
     dependencies:
       ajv: 8.12.0
     dev: true
-
-  /ajv-formats@2.1.1(ajv@8.9.0):
-    resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
-    peerDependencies:
-      ajv: ^8.0.0
-    peerDependenciesMeta:
-      ajv:
-        optional: true
-    dependencies:
-      ajv: 8.9.0
-    dev: false
 
   /ajv-keywords@3.5.2(ajv@6.12.6):
     resolution: {integrity: sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==}
@@ -8509,6 +8587,10 @@ packages:
 
   /code-block-writer@11.0.3:
     resolution: {integrity: sha512-NiujjUFB4SwScJq2bwbYUtXbZhBSlY6vYzm++3Q6oC+U+injTqfPYFK8wS9COOmb2lueqp0ZRB4nK1VYeHgNyw==}
+    dev: true
+
+  /code-block-writer@12.0.0:
+    resolution: {integrity: sha512-q4dMFMlXtKR3XNBHyMHt/3pwYNA69EDk00lloMOaaUMKPUXBw6lpXtbu3MMVG6/uOihGnRDOlkyqsONEUj60+w==}
     dev: true
 
   /collect-v8-coverage@1.0.2:
@@ -10130,7 +10212,7 @@ packages:
       semver: 7.6.0
       tapable: 2.2.1
       typescript: 5.3.3
-      webpack: 5.90.1(@swc/core@1.4.8)(esbuild@0.19.12)
+      webpack: 5.90.1(@swc/core@1.4.8)
     dev: true
 
   /form-data@4.0.0:
@@ -12424,6 +12506,45 @@ packages:
       - '@babel/core'
       - babel-plugin-macros
 
+  /next@14.1.4(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-1WTaXeSrUwlz/XcnhGTY7+8eiaFvdet5z9u3V2jb+Ek1vFo0VhHKSAIJvDWfQpttWjnyw14kBeq28TPq7bTeEQ==}
+    engines: {node: '>=18.17.0'}
+    hasBin: true
+    peerDependencies:
+      '@opentelemetry/api': ^1.1.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      '@next/env': 14.1.4
+      '@swc/helpers': 0.5.2
+      busboy: 1.6.0
+      caniuse-lite: 1.0.30001600
+      graceful-fs: 4.2.11
+      postcss: 8.4.31
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      styled-jsx: 5.1.1(react@18.2.0)
+    optionalDependencies:
+      '@next/swc-darwin-arm64': 14.1.4
+      '@next/swc-darwin-x64': 14.1.4
+      '@next/swc-linux-arm64-gnu': 14.1.4
+      '@next/swc-linux-arm64-musl': 14.1.4
+      '@next/swc-linux-x64-gnu': 14.1.4
+      '@next/swc-linux-x64-musl': 14.1.4
+      '@next/swc-win32-arm64-msvc': 14.1.4
+      '@next/swc-win32-ia32-msvc': 14.1.4
+      '@next/swc-win32-x64-msvc': 14.1.4
+    transitivePeerDependencies:
+      - '@babel/core'
+      - babel-plugin-macros
+    dev: false
+
   /nice-napi@1.0.2:
     resolution: {integrity: sha512-px/KnJAJZf5RuBGcfD+Sp2pAKq0ytz8j+1NehvgIGFkvtvFrDM3T8E4x/JJODXK9WZow8RRGrbA9QQ3hs+pDhA==}
     os: ['!win32']
@@ -13127,6 +13248,22 @@ packages:
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.4.38
+
+  /postcss-load-config@4.0.2:
+    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 3.1.1
+      yaml: 2.4.1
+    dev: true
 
   /postcss-load-config@4.0.2(postcss@8.4.38):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
@@ -14367,6 +14504,23 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
 
+  /styled-jsx@5.1.1(react@18.2.0):
+    resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
+    engines: {node: '>= 12.0.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      babel-plugin-macros: '*'
+      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      babel-plugin-macros:
+        optional: true
+    dependencies:
+      client-only: 0.0.1
+      react: 18.2.0
+    dev: false
+
   /sucrase@3.35.0:
     resolution: {integrity: sha512-8EbVDiu9iN/nESwxeSxDKe0dunta1GOlHufmSSXxMD2z2/tMZpDMpvXQGsc+ajGo8y2uYUmixaSRUc/QPoQ0GA==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -14577,6 +14731,31 @@ packages:
       webpack: 5.90.1(@swc/core@1.4.8)(esbuild@0.19.12)
     dev: true
 
+  /terser-webpack-plugin@5.3.10(@swc/core@1.4.8)(webpack@5.90.1):
+    resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      '@swc/core': '*'
+      esbuild: '*'
+      uglify-js: '*'
+      webpack: ^5.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      esbuild:
+        optional: true
+      uglify-js:
+        optional: true
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      '@swc/core': 1.4.8
+      jest-worker: 27.5.1
+      schema-utils: 3.3.0
+      serialize-javascript: 6.0.2
+      terser: 5.29.2
+      webpack: 5.90.1(@swc/core@1.4.8)
+    dev: true
+
   /terser-webpack-plugin@5.3.10(esbuild@0.19.12)(webpack@5.90.1):
     resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
     engines: {node: '>= 10.13.0'}
@@ -14769,6 +14948,39 @@ packages:
       yargs-parser: 21.1.1
     dev: true
 
+  /ts-jest@29.1.2(jest@29.7.0)(typescript@5.4.3):
+    resolution: {integrity: sha512-br6GJoH/WUX4pu7FbZXuWGKGNDuU7b8Uj77g/Sp7puZV6EXzuByl6JrECvm0MzVzSTkSHWTihsXt+5XYER5b+g==}
+    engines: {node: ^16.10.0 || ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@babel/core': '>=7.0.0-beta.0 <8'
+      '@jest/types': ^29.0.0
+      babel-jest: ^29.0.0
+      esbuild: '*'
+      jest: ^29.0.0
+      typescript: '>=4.3 <6'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@jest/types':
+        optional: true
+      babel-jest:
+        optional: true
+      esbuild:
+        optional: true
+    dependencies:
+      bs-logger: 0.2.6
+      fast-json-stable-stringify: 2.1.0
+      jest: 29.7.0(@types/node@20.11.30)(ts-node@10.9.2)
+      jest-util: 29.7.0
+      json5: 2.2.3
+      lodash.memoize: 4.1.2
+      make-error: 1.3.6
+      semver: 7.6.0
+      typescript: 5.4.3
+      yargs-parser: 21.1.1
+    dev: true
+
   /ts-morph@13.0.3:
     resolution: {integrity: sha512-pSOfUMx8Ld/WUreoSzvMFQG5i9uEiWIsBYjpU9+TTASOeUa89j5HykomeqVULm1oqWtBdleI3KEFRLrlA3zGIw==}
     dependencies:
@@ -14854,7 +15066,7 @@ packages:
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
-  /tsup@8.0.2(postcss@8.4.38)(typescript@5.4.3):
+  /tsup@8.0.2:
     resolution: {integrity: sha512-NY8xtQXdH7hDUAZwcQdY/Vzlw9johQsaqf7iwZ6g1DOUlFYQ5/AtVAjTvihhEyeRlGo4dLRVHtrRaL35M1daqQ==}
     engines: {node: '>=18'}
     hasBin: true
@@ -14881,8 +15093,45 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss: 8.4.38
-      postcss-load-config: 4.0.2(postcss@8.4.38)
+      postcss-load-config: 4.0.2
+      resolve-from: 5.0.0
+      rollup: 4.13.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tree-kill: 1.2.2
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup@8.0.2(typescript@5.4.3):
+    resolution: {integrity: sha512-NY8xtQXdH7hDUAZwcQdY/Vzlw9johQsaqf7iwZ6g1DOUlFYQ5/AtVAjTvihhEyeRlGo4dLRVHtrRaL35M1daqQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.2(esbuild@0.19.12)
+      cac: 6.7.14
+      chokidar: 3.6.0
+      debug: 4.3.4
+      esbuild: 0.19.12
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.13.0
       source-map: 0.8.0-beta.0
@@ -15268,6 +15517,27 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
+  /vite-node@1.4.0:
+    resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.4
+      pathe: 1.1.2
+      picocolors: 1.0.0
+      vite: 5.2.4
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vite-node@1.4.0(@types/node@20.11.30):
     resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -15287,6 +15557,41 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
+
+  /vite@5.2.4:
+    resolution: {integrity: sha512-vjFghvHWidBTinu5TCymJk/lRHlR5ljqB83yugr0HA1xspUPdOZHqbqDLnZ8f9/jINrtFHTCYYyIUi+o+Q5iyg==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.20.2
+      postcss: 8.4.38
+      rollup: 4.13.0
+    optionalDependencies:
+      fsevents: 2.3.3
     dev: true
 
   /vite@5.2.4(@types/node@20.11.30):
@@ -15323,6 +15628,61 @@ packages:
       rollup: 4.13.0
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
+
+  /vitest@1.4.0:
+    resolution: {integrity: sha512-gujzn0g7fmwf83/WzrDTnncZt2UiXP41mHuFYFrdwaLRVQ6JYQEiME2IfEjU3vcFL3VKa75XhI3lFgn+hfVsQw==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@types/node': ^18.0.0 || >=20.0.0
+      '@vitest/browser': 1.4.0
+      '@vitest/ui': 1.4.0
+      happy-dom: '*'
+      jsdom: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@types/node':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      '@vitest/expect': 1.4.0
+      '@vitest/runner': 1.4.0
+      '@vitest/snapshot': 1.4.0
+      '@vitest/spy': 1.4.0
+      '@vitest/utils': 1.4.0
+      acorn-walk: 8.3.2
+      chai: 4.4.1
+      debug: 4.3.4
+      execa: 8.0.1
+      local-pkg: 0.5.0
+      magic-string: 0.30.8
+      pathe: 1.1.2
+      picocolors: 1.0.0
+      std-env: 3.7.0
+      strip-literal: 2.0.0
+      tinybench: 2.6.0
+      tinypool: 0.8.2
+      vite: 5.2.4
+      vite-node: 1.4.0
+      why-is-node-running: 2.2.2
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
     dev: true
 
   /vitest@1.4.0(@types/node@20.11.30):
@@ -15419,6 +15779,46 @@ packages:
 
   /webpack-virtual-modules@0.6.1:
     resolution: {integrity: sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==}
+    dev: true
+
+  /webpack@5.90.1(@swc/core@1.4.8):
+    resolution: {integrity: sha512-SstPdlAC5IvgFnhiRok8hqJo/+ArAbNv7rhU4fnWGHNVfN59HSQFaxZDSAL3IFG2YmqxuRs+IU33milSxbPlog==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
+    dependencies:
+      '@types/eslint-scope': 3.7.7
+      '@types/estree': 1.0.5
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/wasm-edit': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
+      acorn: 8.11.3
+      acorn-import-assertions: 1.9.0(acorn@8.11.3)
+      browserslist: 4.23.0
+      chrome-trace-event: 1.0.3
+      enhanced-resolve: 5.16.0
+      es-module-lexer: 1.4.2
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.10(@swc/core@1.4.8)(webpack@5.90.1)
+      watchpack: 2.4.1
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
     dev: true
 
   /webpack@5.90.1(@swc/core@1.4.8)(esbuild@0.19.12):
@@ -15716,6 +16116,16 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
+  /zod-prisma-types@3.1.6:
+    resolution: {integrity: sha512-ySaG91RraTm4J19zfvuX6S3OxhDMlK4dTfYWM4rS+4AlEGqDqGu5BbIn2trjTDt8OiCMBHoIjZmRXPKQCyNApA==}
+    hasBin: true
+    dependencies:
+      '@prisma/generator-helper': 5.11.0
+      code-block-writer: 12.0.0
+      lodash: 4.17.21
+      zod: 3.22.4
+    dev: true
+
   /zod-to-json-schema@3.22.5(zod@3.22.4):
     resolution: {integrity: sha512-+akaPo6a0zpVCCseDed504KBJUQpEW5QZw7RMneNmKw+fGaML1Z9tUNLnHHAC8x6dzVRO1eB2oEMyZRnuBZg7Q==}
     peerDependencies:
@@ -15726,3 +16136,7 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -9,3 +9,4 @@ export * from './tenants';
 export * from './abilities';
 export * from './subjects';
 export * from './tenants';
+export * from './services';

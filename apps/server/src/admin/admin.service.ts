@@ -19,16 +19,22 @@ export class AdminService {
   getMenus(): MenuDto[] {
     return [
       {
-        text: '사용자 서비스',
+        text: '회원 서비스',
         pathname: ADMIN_PAGES.ADMIN_USER_SERVICE,
         children: [
           {
-            text: '사용자 분류',
-            pathname: ADMIN_PAGES.ADMIN_USER_SERVICE_CATEGORIES,
+            text: '회원 카테고리',
+            pathname: ADMIN_PAGES.ADMIN_USER_SERVICE_CATEGORY,
           },
+        ],
+      },
+      {
+        text: '설정 서비스',
+        pathname: ADMIN_PAGES.ADMIN_SETTING_SERVICE,
+        children: [
           {
-            text: '사용자 그룹',
-            pathname: ADMIN_PAGES.ADMIN_USER_SERVICE_GROUPS,
+            text: '서비스 관리',
+            pathname: ADMIN_PAGES.ADMIN_SETTING_SERVICE_SERVICES,
           },
         ],
       },

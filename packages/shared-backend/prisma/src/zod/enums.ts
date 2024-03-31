@@ -1,3 +1,8 @@
+export enum SERVICE_NAME {
+  userService = "userService",
+  settingService = "settingService"
+}
+
 export enum SubjectConditions {
   Equal = "Equal",
   GreaterThan = "GreaterThan",

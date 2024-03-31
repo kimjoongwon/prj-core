@@ -22,6 +22,7 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
+    "@nextui-org/react": "2.2.10",
     "@tanstack/react-query": "5.28.6",
     "@tanstack/react-table": "^8.15.0",
     "@vanilla-extract/css": "^1.14.1",

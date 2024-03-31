@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RolesService } from './roles.service';
+import { PrismaService } from 'nestjs-prisma';
 
 @Module({
-  controllers: [],
-  providers: [RolesService],
+  providers: [RolesService, PrismaService],
   exports: [RolesService],
 })
 export class RolesModule {}

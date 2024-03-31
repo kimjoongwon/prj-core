@@ -87,9 +87,9 @@ import { AdminModule } from './admin/admin.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    AdminModule,
     AuthModule,
     AuthzModule,
-    AdminModule,
   ],
   providers: [
     {

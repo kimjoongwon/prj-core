@@ -1,10 +1,11 @@
 import * as z from "nestjs-zod/z"
 import { createZodDto } from "nestjs-zod/dto"
+import { SERVICE_NAME } from "./enums"
 import { CompleteClassification, relatedClassificationSchema, CompleteAssignment, relatedAssignmentSchema, CompleteCategory, relatedCategorySchema } from "./index"
 
 export const serviceSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.nativeEnum(SERVICE_NAME),
   createdAt: z.date(),
   updatedAt: z.date().nullish(),
   deletedAt: z.date().nullish(),

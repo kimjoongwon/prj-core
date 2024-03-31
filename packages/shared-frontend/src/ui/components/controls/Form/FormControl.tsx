@@ -81,7 +81,7 @@ export const FormControl = observer(
     const childProps = Object.assign({ validation }, ...callbacks);
 
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-1">
         {label && <p className="text-medium font-bold">{label}</p>}
         {React.cloneElement(child, childProps)}
       </div>
