@@ -4,18 +4,16 @@ import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
 import { ModalMount } from '@modals';
 import 'react-toastify/dist/ReactToastify.css';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
+import { ModalProvider } from '@shared/frontend';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
-        staleTime: 60 * 1000,
+        staleTime: 0,
       },
     },
   });
@@ -36,17 +34,13 @@ function getQueryClient() {
   }
 }
 
-export function Providers({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>
-        {children}
+        <ModalProvider>{children}</ModalProvider>
       </QueryClientProvider>
       <ModalMount />
       <ToastContainer theme="dark" />

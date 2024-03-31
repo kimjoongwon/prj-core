@@ -6,9 +6,10 @@
  */
 import type { MenuDtoChildrenItem } from './menuDtoChildrenItem';
 import type { MenuDtoPathname } from './menuDtoPathname';
+import type { MenuDtoText } from './menuDtoText';
 
 export interface MenuDto {
   children?: MenuDtoChildrenItem[];
-  pathname?: MenuDtoPathname;
-  text: string;
+  pathname: MenuDtoPathname;
+  text: MenuDtoText;
 }

@@ -17,8 +17,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { v4 } from 'uuid';
-import { useLocalObservable } from 'mobx-react-lite';
-import { action, toJS } from 'mobx';
 
 export interface DataGridProps<T> {
   selectionMode: TableProps['selectionMode'];
@@ -29,14 +27,7 @@ export interface DataGridProps<T> {
 }
 
 export function DataGrid<T extends any>(props: DataGridProps<T>) {
-  const {
-    selectionMode,
-    data,
-    columns,
-    onSortChange,
-    onSelectionChange,
-    ...rest
-  } = props;
+  const { selectionMode, data, columns, ...rest } = props;
 
   const table = useReactTable({
     data: data as T[],
@@ -47,70 +38,37 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
   const rows = table.getRowModel().rows as Row<T & { id: string }>[];
   const headers = table.getLeafHeaders();
 
-  const state: { sortDescriptor: SortDescriptor; selectedRowIds: string[] } =
-    useLocalObservable(() => ({
-      selectedRowIds: [],
-      sortDescriptor: {
-        column: undefined,
-        direction: 'ascending',
-      },
-    }));
-
-  const _onSortChange: TableProps['onSortChange'] = action(sortDescriptor => {
-    state.sortDescriptor = sortDescriptor;
-    onSortChange &&
-      onSortChange({
-        key: (sortDescriptor.column as string).split('_').join('.'),
-        value: sortDescriptor.direction === 'ascending' ? 'asc' : 'desc',
-      });
-  });
-
-  const _onSelectionChange = action((keys: Selection) => {
-    if (keys instanceof Set) {
-      state.selectedRowIds = Array.from(keys) as string[];
-    }
-    if (keys === 'all') {
-      state.selectedRowIds = rows.map(row => row.original.id);
-    }
-    onSelectionChange && onSelectionChange(toJS(state.selectedRowIds));
-  });
-
   return (
-    <Table
-      {...rest}
-      align="center"
-      selectionMode={selectionMode}
-      onSelectionChange={_onSelectionChange}
-      selectedKeys={state.selectedRowIds}
-      sortDescriptor={state.sortDescriptor}
-      onSortChange={_onSortChange}
-    >
-      <TableHeader>
+    <table {...rest}>
+      <thead>
         {headers?.map(header => (
-          <TableColumn key={header.column.id} allowsSorting={!!onSortChange}>
+          <tr key={header.column.id}>
             {header.isPlaceholder ? (
               <></>
             ) : (
-              flexRender(header.column.columnDef.header, header.getContext())
+              <th>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+              </th>
             )}
-          </TableColumn>
+          </tr>
         ))}
-      </TableHeader>
-      <TableBody
-        emptyContent={rows?.length === 0 ? '데이터가 없습니다.' : undefined}
-      >
+      </thead>
+      <tbody>
         {rows?.map(row => (
-          <TableRow key={row.original.id}>
+          <tr key={row.original.id}>
             {row
               .getVisibleCells()
               ?.map(cell => (
-                <TableCell key={v4()}>
+                <td key={v4()}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+                </td>
               ))}
-          </TableRow>
+          </tr>
         ))}
-      </TableBody>
-    </Table>
+      </tbody>
+    </table>
   );
 }

@@ -10,6 +10,16 @@ export type MenuDtoPathname = typeof MenuDtoPathname[keyof typeof MenuDtoPathnam
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MenuDtoPathname = {
-  'admin/userService/users': 'admin/userService/users',
-  'admin/userService/users/:id': 'admin/userService/users/:id',
+  ADMIN_SERVICES: '/admin/services',
+  '/admin/services': 'ADMIN_SERVICES',
+  ADMIN_USER_SERVICE: '/admin/services/user-service',
+  '/admin/services/user-service': 'ADMIN_USER_SERVICE',
+  ADMIN_USER_SERVICE_CATEGORY: '/admin/services/user-service/categories',
+  '/admin/services/user-service/categories': 'ADMIN_USER_SERVICE_CATEGORY',
+  ADMIN_SETTING_SERVICE: '/admin/services/setting-service',
+  '/admin/services/setting-service': 'ADMIN_SETTING_SERVICE',
+  ADMIN_SETTING_SERVICE_SERVICES: '/admin/services/setting-service/services',
+  '/admin/services/setting-service/services': 'ADMIN_SETTING_SERVICE_SERVICES',
+  ADMIN_SETTING_SERVICE_SERVICE: '/admin/services/setting-service/services/:serviceId',
+  '/admin/services/setting-service/services/:serviceId': 'ADMIN_SETTING_SERVICE_SERVICE',
 } as const;

@@ -3,6 +3,6 @@ import { Input, InputProps } from '@nextui-org/react';
 
 export const InputView = forwardRef(
   (props: InputProps, ref: ForwardedRef<HTMLInputElement>) => {
-    return <Input ref={ref} {...props} />;
+    return <Input ref={ref} {...props} className="flex flex-1 w-full" />;
   },
 );

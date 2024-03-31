@@ -1,24 +1,12 @@
+import React from 'react';
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Link,
   Navbar as NextUINavbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
   Button,
 } from '@nextui-org/react';
-import { v4 } from 'uuid';
-import NextLink from 'next/link';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
 import { MenuDto } from '../../../model';
 
 export interface NavItem {
@@ -35,37 +23,38 @@ interface NavbarProps {
   leftContents?: React.ReactNode;
 }
 
-export const CoCNavbar = observer((props: NavbarProps) => {
+export const Navbar = observer((props: NavbarProps) => {
   const pathname = usePathname();
   const router = useRouter();
-
   const {
     state,
     rightContents = <div>left</div>,
     leftContents = <div>right</div>,
   } = props;
+
   const { navItems = [] } = props;
+
   const renderNavItem = (item: NavItem) => {
     const onClickMenuItem = () => {
-      state.currentPath = item.pathname;
+      router.push(item.pathname!);
+      state.service.name = item.text;
     };
 
     return (
-      <Button variant="light" onClick={onClickMenuItem}>
+      <Button
+        key={item.pathname}
+        color={pathname === item.pathname ? 'primary' : 'default'}
+        className="font-bold text-lg"
+        variant="light"
+        onClick={onClickMenuItem}
+      >
         {item.text}
       </Button>
     );
   };
 
   return (
-    <NextUINavbar
-      maxWidth="2xl"
-      isBordered
-      isMenuOpen={state.isMenuOpen}
-      onMenuOpenChange={action(
-        () => (state.isMenuOpen = !state.isMenuOpen),
-      )}
-    >
+    <NextUINavbar maxWidth="2xl" isBordered>
       <NavbarContent>
         <NavbarBrand>
           <Button

@@ -22,20 +22,17 @@ function Input<T extends object>(props: InputProps<T>) {
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const handleChange:
-    | ChangeEventHandler<HTMLInputElement>
-    | undefined = action(e => {
-    if (
-      type === 'number' &&
-      typeof Number(e.target.value) === 'number'
-    ) {
-      return (localState.value = Number(e.target.value));
-    }
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
+    e => {
+      if (type === 'number' && typeof Number(e.target.value) === 'number') {
+        return (localState.value = Number(e.target.value));
+      }
 
-    localState.value = e.target.value;
+      localState.value = e.target.value;
 
-    onChange && onChange(e);
-  });
+      onChange && onChange(e);
+    },
+  );
 
   return (
     <InputView
