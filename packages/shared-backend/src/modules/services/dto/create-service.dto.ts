@@ -12,16 +12,16 @@ export const createServiceDtoZodSchema = serviceSchema.omit({
   deletedAt: true,
 });
 
-export const serviceFormZodSchema = z.object({
+export const serviceFormDtoZodSchema = z.object({
   nameOptions: z.array(
     z.object({ text: z.string(), value: SERVICE_NAMESchema }),
   ),
   name: SERVICE_NAMESchema,
 });
 
-export class ServiceFormDto extends createZodDto(serviceFormZodSchema) {}
+export class ServiceFormDto extends createZodDto(serviceFormDtoZodSchema) {}
 
-export const serviceForm = {
+export const serviceFormDto = {
   nameOptions: [
     { text: '이용자 서비스', value: SERVICE_NAME.userService },
     { text: '설정 서비스', value: SERVICE_NAME.settingService },
@@ -31,6 +31,8 @@ export const serviceForm = {
 
 export class CreateServiceDto extends createZodDto(createServiceDtoZodSchema) {}
 
-export const craeteServiceJsonSchema = zodToJsonSchema(
+export const createServiceDtoJsonSchema = zodToJsonSchema(
   createServiceDtoZodSchema,
 );
+
+export type CreateServiceDtoJsonSchema = typeof createServiceDtoJsonSchema;
