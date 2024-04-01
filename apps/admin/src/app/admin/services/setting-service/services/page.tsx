@@ -11,25 +11,27 @@ import {
   Select,
   Textarea,
   VStack,
+  useGetCreateServiceDtoSchema,
   useGetServiceForm,
 } from '@shared/frontend';
 import { observable, toJS } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 const ServicesPage = observer(() => {
-  const { data: serviceForm, isLoading } = useGetServiceForm();
+  const { data: serviceForm } = useGetServiceForm();
+  const { data: createServiceDtoSchema } = useGetCreateServiceDtoSchema();
+
   const serviceFormData = serviceForm?.data;
   const state = observable({ ...serviceFormData }!);
 
-  // const state = observable(serviceFormData);
-
-  console.log('render?')
-  // console.log('serviceForm', serviceForm);
-
   return (
     <Container className="max-w-screen-2xl">
-      <Select options={toJS(state.nameOptions)} state={state} path="name" />
+      <HStack>
+        <FormControl schema={createServiceDtoSchema} timings={['onBlur']}>
+          <Select options={toJS(state.nameOptions)} state={state} path="name" />
+        </FormControl>
+      </HStack>
     </Container>
   );
 });

@@ -11,14 +11,12 @@ import { ServicesService } from './services.service';
 import {
   CreateServiceDto,
   ServiceFormDto,
-  createServiceDtoZodSchema,
-  serviceForm,
-  serviceFormZodSchema,
+  serviceFormDto,
+  createServiceDtoJsonSchema,
 } from './dto/create-service.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ServiceDto } from '../../../prisma/src/zod';
 import { Public } from '../../decorators';
-import { createZodDto } from 'nestjs-zod/dto';
 
 @ApiTags('api/admin/services')
 @Controller('admin/services')
@@ -43,17 +41,17 @@ export class ServicesController {
     status: 200,
   })
   getServiceForm() {
-    return serviceForm;
+    return serviceFormDto;
   }
 
   @Public()
   @Get('schema')
   @ApiResponse({
-    type: typeof createServiceDtoZodSchema,
+    type: Object,
     status: 200,
   })
   getCreateServiceDtoSchema() {
-    return createServiceDtoZodSchema;
+    return createServiceDtoJsonSchema;
   }
 
   @Public()
