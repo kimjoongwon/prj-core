@@ -6,7 +6,13 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD, APP_PIPE, HttpAdapterHost } from '@nestjs/core';
+import {
+  APP_FILTER,
+  APP_GUARD,
+  APP_PIPE,
+  HttpAdapterHost,
+  RouterModule,
+} from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
 import { ZodValidationPipe } from 'nestjs-zod';
@@ -19,6 +25,7 @@ import {
 import {
   CaslModule,
   LoggerMiddleware,
+  ServicesModule,
   appConfig,
   authConfig,
   corsConfig,
@@ -87,6 +94,32 @@ import { AdminModule } from './admin/admin.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    RouterModule.register([
+      {
+        path: 'v1',
+        children: [
+          {
+            path: 'admin',
+            module: AdminModule,
+            children: [
+              {
+                path: 'services',
+                module: ServicesModule,
+              },
+            ],
+          },
+          {
+            path: 'auth',
+            module: AuthModule,
+          },
+          {
+            path: 'authz',
+            module: AuthzModule,
+          },
+        ],
+      },
+    ]),
+    ServicesModule,
     AdminModule,
     AuthModule,
     AuthzModule,

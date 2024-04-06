@@ -5,6 +5,5 @@ export * from './entities';
 export * from './filters';
 export * from './middlewares';
 export * from './pipes';
-export * from './schemas';
 export * from './types';
 export * from './modules';

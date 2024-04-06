@@ -5,15 +5,16 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { patchNestJsSwagger } from 'nestjs-zod';
+// import { patchNestJsSwagger } from 'nestjs-zod';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { patchNestJsSwagger } from 'nestjs-zod';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
-  // app.setGlobalPrefix('api');
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
   app.setGlobalPrefix('api');
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  // app.useGlobalPipes(new ValidationPipe());
   patchNestJsSwagger();
 
   const config = new DocumentBuilder()

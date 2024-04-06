@@ -4,5 +4,16 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { UpdateServiceDtoCreatedAt } from './updateServiceDtoCreatedAt';
+import type { UpdateServiceDtoDeletedAt } from './updateServiceDtoDeletedAt';
+import type { UpdateServiceDtoName } from './updateServiceDtoName';
+import type { UpdateServiceDtoUpdatedAt } from './updateServiceDtoUpdatedAt';
 
-export interface UpdateServiceDto { [key: string]: any }
+export interface UpdateServiceDto {
+  createdAt?: UpdateServiceDtoCreatedAt;
+  deletedAt?: UpdateServiceDtoDeletedAt;
+  id?: string;
+  /** Service name */
+  name?: UpdateServiceDtoName;
+  updatedAt?: UpdateServiceDtoUpdatedAt;
+}

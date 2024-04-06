@@ -1,62 +1,53 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import {
-  CreateServiceDto,
-  ServiceFormDto,
-  serviceFormDto,
-  createServiceDtoJsonSchema,
-} from './dto/create-service.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ServiceDto } from '../../../prisma/src/zod';
+  ApiBody,
+  ApiOkResponse,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Public } from '../../decorators';
+import { ServiceEntity } from './service.entity';
+import { UpdateServiceDto } from './dto/update-service.dto';
+import { targetConstructorToSchema } from 'class-validator-jsonschema';
+import { ServiceFormDto } from './dto/service-form.dto';
 
-@ApiTags('api/admin/services')
-@Controller('admin/services')
+@ApiTags('services')
+@Controller()
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Public()
-  @Post()
-  @ApiResponse({
-    type: ServiceDto,
-    status: 201,
-    description: 'The record has been successfully created.',
-  })
-  createService(@Body() createServiceDto: CreateServiceDto) {
-    return this.servicesService.create(createServiceDto);
+  @Get()
+  @ApiOkResponse({ type: ServiceEntity, isArray: true })
+  getAllService() {
+    return this.servicesService.findAllService();
   }
 
   @Public()
   @Get('form')
-  @ApiResponse({
-    type: ServiceFormDto,
-    status: 200,
-  })
+  @ApiResponse({ type: ServiceFormDto })
   getServiceForm() {
-    return serviceFormDto;
+    return this.servicesService.getServiceForm();
   }
 
   @Public()
-  @Get('schema')
-  @ApiResponse({
-    type: Object,
-    status: 200,
-  })
-  getCreateServiceDtoSchema() {
-    return createServiceDtoJsonSchema;
-  }
-
-  @Public()
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiBody({ type: UpdateServiceDto })
+  @ApiOkResponse({ type: ServiceEntity })
   @Patch(':id')
-  deleteService(@Param('id') id: string) {
-    return this.servicesService.delete(id);
+  updateService(
+    @Param() id: string,
+    @Body() updateServiceDto: UpdateServiceDto,
+  ) {
+    return this.servicesService.update(id, updateServiceDto);
+  }
+
+  @Public()
+  @ApiResponse({ type: typeof targetConstructorToSchema(UpdateServiceDto) })
+  @Get('schema')
+  getUpdateServiceSchema(): object {
+    return targetConstructorToSchema(UpdateServiceDto);
   }
 }

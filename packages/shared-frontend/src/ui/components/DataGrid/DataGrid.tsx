@@ -6,8 +6,6 @@ import {
   TableRow,
   TableCell,
   TableProps,
-  SortDescriptor,
-  Selection,
 } from '@nextui-org/react';
 
 import {

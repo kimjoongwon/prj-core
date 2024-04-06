@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateSignUpPayloadDto { [key: string]: any }
+export type ServiceEntityCreatedAt = {};

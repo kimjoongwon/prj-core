@@ -1,4 +1,5 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateServiceDto } from './create-service.dto';
+import { createZodDto } from 'nestjs-zod';
+import { serviceEntitySchema } from '../service.entity';
 
-export class UpdateServiceDto extends PartialType(CreateServiceDto) {}
+export const updateServiceDtoSchema = serviceEntitySchema.partial();
+export class UpdateServiceDto extends createZodDto(updateServiceDtoSchema) {}

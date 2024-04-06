@@ -38,7 +38,6 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: object })
   @Get('login/schema')
   getLoginFormSchema() {
     return this.authService.getLoginFormJsonSchema();

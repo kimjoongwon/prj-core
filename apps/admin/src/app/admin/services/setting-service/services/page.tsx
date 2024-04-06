@@ -1,37 +1,53 @@
 'use client';
 
 import {
-  Button,
   Container,
-  CreateServiceDto,
   DataGrid,
   FormControl,
   HStack,
-  Input,
   Select,
-  Textarea,
-  VStack,
-  useGetCreateServiceDtoSchema,
+  ServiceDto,
+  useGetAllService,
   useGetServiceForm,
 } from '@shared/frontend';
-import { observable, toJS } from 'mobx';
+import { createColumnHelper } from '@tanstack/react-table';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 const ServicesPage = observer(() => {
-  const { data: serviceForm } = useGetServiceForm();
-  const { data: createServiceDtoSchema } = useGetCreateServiceDtoSchema();
+  const { data: serviceForm, isLoading } = useGetServiceForm();
+  const { data: getAllService } = useGetAllService();
+  const services = getAllService?.data || [];
 
   const serviceFormData = serviceForm?.data;
-  const state = observable({ ...serviceFormData }!);
+  const { defaultObject, form, schema } = serviceFormData || {};
+  const state = observable({ ...defaultObject });
+
+  const columnHelper = createColumnHelper<ServiceDto>();
+  const columns = [
+    columnHelper.accessor('name', {
+      header: '서비스 명',
+    }),
+  ];
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <Container className="max-w-screen-2xl">
       <HStack>
-        <FormControl schema={createServiceDtoSchema} timings={['onBlur']}>
-          <Select options={toJS(state.nameOptions)} state={state} path="name" />
+        <FormControl schema={schema} timings={['onBlur']}>
+          <Select
+            options={form?.nameOptions}
+            state={state}
+            path="name"
+            value={state.name}
+          />
         </FormControl>
       </HStack>
+      <DataGrid selectionMode="multiple" data={services} columns={columns} />
     </Container>
   );
 });
