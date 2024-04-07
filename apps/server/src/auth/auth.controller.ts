@@ -7,17 +7,13 @@ import {
   Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { LoginDto } from './dtos/login.dto';
-import { TokenDto } from './dtos/token.dto';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
+import { TokenDto } from './dto/token.dto';
 import { Public } from '@shared/backend';
-import { CreateSignUpPayloadDto } from './dtos/create-user-sign-up.dto';
-import { LoginFormDto } from './dtos/login-form.dto';
+import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
+import { LoginFormDto } from './dto/login-form.dto';
+import { UserDto } from './dto/user.dto';
 
 @ApiTags('auth')
 @Controller()
@@ -30,6 +26,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, type: UserDto })
+  @Get('current-user')
+  getCurrentUser(@Body() tokenDto: TokenDto) {
+    return this.authService.getCurrentUser(tokenDto);
   }
 
   @Public()
