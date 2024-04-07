@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TokenPayloadDto } from './dtos/token-payload.dto';
+import { TokenPayloadDto } from './dto/token-payload.dto';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
-import { LoginDto } from './dtos/login.dto';
-import { TokenDto } from './dtos/token.dto';
+import { LoginDto } from './dto/login.dto';
+import { TokenDto } from './dto/token.dto';
 import bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import {
@@ -19,8 +19,8 @@ import {
   TokenType,
   UsersService,
 } from '@shared/backend';
-import { CreateSignUpPayloadDto } from './dtos/create-user-sign-up.dto';
-import { loginFormJsonSchema } from './dtos/login-form.dto';
+import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
+import { loginFormJsonSchema } from './dto/login-form.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,6 +33,12 @@ export class AuthService {
     private config: ConfigService,
     private prisma: PrismaService,
   ) {}
+
+  async getCurrentUser({ accessToken }: TokenDto) {
+    const { userId } = this.jwtService.verify<{ userId: string }>(accessToken);
+    const user = await this.usersService.findById(userId);
+    return user;
+  }
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findOneByEmail(email);

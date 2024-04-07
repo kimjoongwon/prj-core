@@ -10,8 +10,6 @@ export const customInstance = <T>(
   options?: AxiosRequestConfig,
 ): Promise<T> => {
   const source = Axios.CancelToken.source();
-  console.log('test!!!!!!!', localStorage.getItem('accessToken'));
-  console.log(config, options);
   const headers = {
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     ...config.headers,
