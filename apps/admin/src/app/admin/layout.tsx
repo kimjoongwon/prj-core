@@ -17,7 +17,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   const { push } = useCoCRouter();
   const serviceMenus = menuData?.data;
   const menus = serviceMenus?.find(
-    menu => menu.text === contextStore.service.name,
+    menu => menu.text === contextStore?.service.name,
   )?.children;
 
   return (

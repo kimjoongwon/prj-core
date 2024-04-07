@@ -7,16 +7,20 @@ import {
   Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LoginDto } from './dtos/login.dto';
 import { TokenDto } from './dtos/token.dto';
 import { Public } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dtos/create-user-sign-up.dto';
 import { LoginFormDto } from './dtos/login-form.dto';
-import { object } from 'zod';
 
 @ApiTags('auth')
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 

@@ -10,3 +10,4 @@ export * from './abilities';
 export * from './subjects';
 export * from './tenants';
 export * from './services/services.module';
+export * from './categories/categories.module';

@@ -3,6 +3,7 @@
 import {
   Container,
   DataGrid,
+  DateCell,
   FormControl,
   HStack,
   Select,
@@ -28,6 +29,10 @@ const ServicesPage = observer(() => {
   const columns = [
     columnHelper.accessor('name', {
       header: '서비스 명',
+    }),
+    columnHelper.accessor('createdAt', {
+      header: '생성일',
+      cell: DateCell,
     }),
   ];
 

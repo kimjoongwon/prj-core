@@ -22,6 +22,7 @@ export * from './controls';
 export * from './Select';
 export * from './Form';
 export * from './MultiSelect';
+export * from './cells';
 export {
   CardHeader,
   CardBody,

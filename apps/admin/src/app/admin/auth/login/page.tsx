@@ -13,6 +13,7 @@ import { AxiosError } from 'axios';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { getErrorMessages } from '@shared/frontend/src/libs/ajv';
 import { useCoCRouter } from '@hooks';
+import { authStore } from '../../../shared/stores/authStore';
 
 const defaultLoginFormObject = {
   email: 'PROMISE@gmail.com',
@@ -21,35 +22,32 @@ const defaultLoginFormObject = {
 
 const LoginPage = observer(() => {
   const { data: loginForm } = useGetLoginForm();
-  const { data: loginFormSchema } = useGetLoginFormSchema();
+  const { data: schema } = useGetLoginFormSchema();
   const { mutateAsync: login } = useLogin();
   const { push } = useCoCRouter();
 
   const state = useLocalObservable(() => defaultLoginFormObject);
 
-  console.log('loginFormSchema', loginFormSchema);
-
   const onClickLogin = async () => {
-    const { errorMessages, valid } = getErrorMessages(
-      state,
-      loginFormSchema?.data!,
-    );
+    const { errorMessages, valid } = getErrorMessages(state, schema);
 
     try {
-      await login({ data: state });
+      const { accessToken, refreshToken } = await login({ data: state });
+      window.localStorage.setItem('accessToken', accessToken);
+      window.localStorage.setItem('refreshToken', refreshToken);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
       }
     }
 
-    push({ url: '/admin/dashboard' });
+    alert('로그인 성공');
   };
 
   return (
     <Container className="max-w-screen-sm">
       <Spacer y={10} />
-      <LoginForm state={state} schema={loginFormSchema?.data} />
+      <LoginForm state={state} schema={schema} />
       <Spacer y={10} />
       <Button fullWidth onClick={onClickLogin}>
         로그인

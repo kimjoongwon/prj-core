@@ -62,27 +62,23 @@ model Profile {
 model Category {
   id              String           @id @default(cuid())
   name            String           @unique
-  serviceId       String
-  spaceId         String
   ancestorIds     String[]
   parentId        String?
+  spaceId         String
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
   deletedAt       DateTime?        @db.Timestamptz(6)
-  space           Space            @relation(fields: [spaceId], references: [id])
   classifications Classification[]
-  service         Service          @relation(fields: [serviceId], references: [id])
+  space           Space            @relation(fields: [spaceId], references: [id])
 }
 
 model Group {
   id          String       @id @default(cuid())
   name        String
-  serviceId   String
   spaceId     String
   createdAt   DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
   deletedAt   DateTime?    @db.Timestamptz(6)
-  space       Space        @relation(fields: [spaceId], references: [id])
   assignments Assignment[]
 }
 
@@ -99,7 +95,6 @@ model Service {
   deletedAt       DateTime?        @db.Timestamptz(6)
   classifications Classification[]
   assignments     Assignment[]
-  categories      Category[]
 }
 
 model Assignment {
@@ -156,7 +151,6 @@ model Space {
   deletedAt  DateTime?  @db.Timestamptz(6)
   tenants    Tenant[]
   categories Category[]
-  groups     Group[]
 }
 
 model EmailTemplate {

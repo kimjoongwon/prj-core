@@ -1,6 +1,6 @@
 import * as z from "nestjs-zod/z"
 import { createZodDto } from "nestjs-zod/dto"
-import { CompleteTenant, relatedTenantSchema, CompleteCategory, relatedCategorySchema, CompleteGroup, relatedGroupSchema } from "./index"
+import { CompleteTenant, relatedTenantSchema, CompleteCategory, relatedCategorySchema } from "./index"
 
 export const spaceSchema = z.object({
   id: z.string(),
@@ -16,7 +16,6 @@ export class SpaceDto extends createZodDto(spaceSchema) {
 export interface CompleteSpace extends z.infer<typeof spaceSchema> {
   tenants: CompleteTenant[]
   categories: CompleteCategory[]
-  groups: CompleteGroup[]
 }
 
 /**
@@ -27,5 +26,4 @@ export interface CompleteSpace extends z.infer<typeof spaceSchema> {
 export const relatedSpaceSchema: z.ZodSchema<CompleteSpace> = z.lazy(() => spaceSchema.extend({
   tenants: relatedTenantSchema.array(),
   categories: relatedCategorySchema.array(),
-  groups: relatedGroupSchema.array(),
 }))

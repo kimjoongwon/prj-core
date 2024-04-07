@@ -7,6 +7,12 @@ module.exports = {
       baseUrl: 'http://localhost:3005',
       client: 'react-query',
       mock: true,
+      override: {
+        mutator: {
+          path: './src/libs/customAxios.ts',
+          name: 'useCustomClient',
+        },
+      },
     },
   },
 };

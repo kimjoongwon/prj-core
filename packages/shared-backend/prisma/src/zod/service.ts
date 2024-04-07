@@ -1,7 +1,7 @@
 import * as z from "nestjs-zod/z"
 import { createZodDto } from "nestjs-zod/dto"
 import { SERVICE_NAME } from "./enums"
-import { CompleteClassification, relatedClassificationSchema, CompleteAssignment, relatedAssignmentSchema, CompleteCategory, relatedCategorySchema } from "./index"
+import { CompleteClassification, relatedClassificationSchema, CompleteAssignment, relatedAssignmentSchema } from "./index"
 
 export const serviceSchema = z.object({
   id: z.string(),
@@ -17,7 +17,6 @@ export class ServiceDto extends createZodDto(serviceSchema) {
 export interface CompleteService extends z.infer<typeof serviceSchema> {
   classifications: CompleteClassification[]
   assignments: CompleteAssignment[]
-  categories: CompleteCategory[]
 }
 
 /**
@@ -28,5 +27,4 @@ export interface CompleteService extends z.infer<typeof serviceSchema> {
 export const relatedServiceSchema: z.ZodSchema<CompleteService> = z.lazy(() => serviceSchema.extend({
   classifications: relatedClassificationSchema.array(),
   assignments: relatedAssignmentSchema.array(),
-  categories: relatedCategorySchema.array(),
 }))

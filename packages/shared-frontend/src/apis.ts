@@ -4,947 +4,1302 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryFunction,
   QueryKey,
   UseMutationOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query'
-import axios from 'axios'
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios'
+  UseQueryResult,
+} from '@tanstack/react-query';
 import type {
   CreateAuthzDto,
   CreateSignUpPayloadDto,
   LoginDto,
   ServiceFormDto,
   UpdateAuthzDto,
-  UpdateServiceDto
-} from './model'
-import {
-  faker
-} from '@faker-js/faker'
-import {
-  HttpResponse,
-  delay,
-  http
-} from 'msw'
-import type {
-  LoginFormDto,
-  MenuDto,
-  ServiceEntity,
-  TokenDto
-} from './model'
+  UpdateServiceDto,
+} from './model';
+import { faker } from '@faker-js/faker';
+import { HttpResponse, delay, http } from 'msw';
+import type { LoginFormDto, MenuDto, ServiceEntity, TokenDto } from './model';
+import { customInstance } from './libs/customAxios';
+import type { ErrorType, BodyType } from './libs/customAxios';
 
-
-
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
 export const getAllService = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ServiceEntity[]>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/admin/services`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<ServiceEntity[]>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetAllServiceQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/services`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/services`] as const;
+};
 
-    
-export const getGetAllServiceQueryOptions = <TData = Awaited<ReturnType<typeof getAllService>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetAllServiceQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllService>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAllServiceQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({
+    signal,
+  }) => getAllService(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAllService>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService({ signal, ...axiosOptions });
+export type GetAllServiceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllService>>
+>;
+export type GetAllServiceQueryError = ErrorType<unknown>;
 
-      
+export const useGetAllService = <
+  TData = Awaited<ReturnType<typeof getAllService>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllServiceQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllServiceQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
-export type GetAllServiceQueryError = AxiosError<unknown>
-
-export const useGetAllService = <TData = Awaited<ReturnType<typeof getAllService>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllServiceQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const getServiceForm = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ServiceFormDto>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/admin/services/form`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<ServiceFormDto>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services/form`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetServiceFormQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/services/form`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/services/form`] as const;
+};
 
-    
-export const getGetServiceFormQueryOptions = <TData = Awaited<ReturnType<typeof getServiceForm>>, TError = AxiosError<ServiceFormDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceForm>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetServiceFormQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceForm>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getServiceForm>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetServiceFormQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceFormQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceForm>>> = ({
+    signal,
+  }) => getServiceForm(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getServiceForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceForm>>> = ({ signal }) => getServiceForm({ signal, ...axiosOptions });
+export type GetServiceFormQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceForm>>
+>;
+export type GetServiceFormQueryError = ErrorType<ServiceFormDto>;
 
-      
+export const useGetServiceForm = <
+  TData = Awaited<ReturnType<typeof getServiceForm>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getServiceForm>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceFormQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getServiceForm>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceFormQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceForm>>>
-export type GetServiceFormQueryError = AxiosError<ServiceFormDto>
-
-export const useGetServiceForm = <TData = Awaited<ReturnType<typeof getServiceForm>>, TError = AxiosError<ServiceFormDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceForm>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetServiceFormQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const updateService = (
-    id: string,
-    updateServiceDto: UpdateServiceDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ServiceEntity>> => {
-    
-    return axios.patch(
-      `http://localhost:3005/api/v1/admin/services/${id}`,
-      updateServiceDto,options
-    );
-  }
-
-
-
-export const getUpdateServiceMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{id: string;data: UpdateServiceDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{id: string;data: UpdateServiceDto}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateService>>, {id: string;data: UpdateServiceDto}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  updateService(id,data,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateServiceMutationResult = NonNullable<Awaited<ReturnType<typeof updateService>>>
-    export type UpdateServiceMutationBody = UpdateServiceDto
-    export type UpdateServiceMutationError = AxiosError<unknown>
-
-    export const useUpdateService = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{id: string;data: UpdateServiceDto}, TContext>, axios?: AxiosRequestConfig}
+  id: string,
+  updateServiceDto: BodyType<UpdateServiceDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<ServiceEntity>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services/${id}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateServiceDto,
+    },
+    options,
+  );
+};
 
-      const mutationOptions = getUpdateServiceMutationOptions(options);
+export const getUpdateServiceMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateService>>,
+    TError,
+    { id: string; data: BodyType<UpdateServiceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateService>>,
+  TError,
+  { id: string; data: BodyType<UpdateServiceDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateService>>,
+    { id: string; data: BodyType<UpdateServiceDto> }
+  > = props => {
+    const { id, data } = props ?? {};
+
+    return updateService(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateServiceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateService>>
+>;
+export type UpdateServiceMutationBody = BodyType<UpdateServiceDto>;
+export type UpdateServiceMutationError = ErrorType<unknown>;
+
+export const useUpdateService = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateService>>,
+    TError,
+    { id: string; data: BodyType<UpdateServiceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getUpdateServiceMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const getUpdateServiceSchema = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/admin/services/schema`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<unknown>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services/schema`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetUpdateServiceSchemaQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/services/schema`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/services/schema`] as const;
+};
 
-    
-export const getGetUpdateServiceSchemaQueryOptions = <TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUpdateServiceSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetUpdateServiceSchemaQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUpdateServiceSchemaQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUpdateServiceSchemaQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>
+  > = ({ signal }) => getUpdateServiceSchema(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUpdateServiceSchema>>> = ({ signal }) => getUpdateServiceSchema({ signal, ...axiosOptions });
+export type GetUpdateServiceSchemaQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUpdateServiceSchema>>
+>;
+export type GetUpdateServiceSchemaQueryError = ErrorType<unknown>;
 
-      
+export const useGetUpdateServiceSchema = <
+  TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetUpdateServiceSchemaQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUpdateServiceSchema>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetUpdateServiceSchemaQueryResult = NonNullable<Awaited<ReturnType<typeof getUpdateServiceSchema>>>
-export type GetUpdateServiceSchemaQueryError = AxiosError<unknown>
-
-export const useGetUpdateServiceSchema = <TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUpdateServiceSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetUpdateServiceSchemaQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const getMemus = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<MenuDto[]>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/admin/admin/menus`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MenuDto[]>(
+    {
+      url: `http://localhost:3005/api/v1/admin/admin/menus`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetMemusQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/admin/menus`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/admin/menus`] as const;
+};
 
-    
-export const getGetMemusQueryOptions = <TData = Awaited<ReturnType<typeof getMemus>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetMemusQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetMemusQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMemusQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({
+    signal,
+  }) => getMemus(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMemus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({ signal }) => getMemus({ signal, ...axiosOptions });
+export type GetMemusQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMemus>>
+>;
+export type GetMemusQueryError = ErrorType<unknown>;
 
-      
+export const useGetMemus = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetMemusQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetMemusQueryResult = NonNullable<Awaited<ReturnType<typeof getMemus>>>
-export type GetMemusQueryError = AxiosError<unknown>
-
-export const useGetMemus = <TData = Awaited<ReturnType<typeof getMemus>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetMemusQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const login = (
-    loginDto: LoginDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TokenDto>> => {
-    
-    return axios.post(
-      `http://localhost:3005/api/v1/auth/auth/login`,
-      loginDto,options
-    );
-  }
-
-
-
-export const getLoginMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: LoginDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  login(data,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
-    export type LoginMutationBody = LoginDto
-    export type LoginMutationError = AxiosError<unknown>
-
-    export const useLogin = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginDto}, TContext>, axios?: AxiosRequestConfig}
+  loginDto: BodyType<LoginDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<TokenDto>(
+    {
+      url: `http://localhost:3005/api/v1/auth/login`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: loginDto,
+    },
+    options,
+  );
+};
 
-      const mutationOptions = getLoginMutationOptions(options);
+export const getLoginMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof login>>,
+    TError,
+    { data: BodyType<LoginDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof login>>,
+  TError,
+  { data: BodyType<LoginDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof login>>,
+    { data: BodyType<LoginDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return login(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type LoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof login>>
+>;
+export type LoginMutationBody = BodyType<LoginDto>;
+export type LoginMutationError = ErrorType<unknown>;
+
+export const useLogin = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof login>>,
+    TError,
+    { data: BodyType<LoginDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getLoginMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const getLoginForm = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<LoginFormDto>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/auth/auth/login/form`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<LoginFormDto>(
+    {
+      url: `http://localhost:3005/api/v1/auth/login/form`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetLoginFormQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/auth/login/form`] as const;
-    }
+  return [`http://localhost:3005/api/v1/auth/login/form`] as const;
+};
 
-    
-export const getGetLoginFormQueryOptions = <TData = Awaited<ReturnType<typeof getLoginForm>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetLoginFormQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLoginForm>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetLoginFormQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginForm>>> = ({
+    signal,
+  }) => getLoginForm(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLoginForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginForm>>> = ({ signal }) => getLoginForm({ signal, ...axiosOptions });
+export type GetLoginFormQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginForm>>
+>;
+export type GetLoginFormQueryError = ErrorType<unknown>;
 
-      
+export const useGetLoginForm = <
+  TData = Awaited<ReturnType<typeof getLoginForm>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetLoginFormQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetLoginFormQueryResult = NonNullable<Awaited<ReturnType<typeof getLoginForm>>>
-export type GetLoginFormQueryError = AxiosError<unknown>
-
-export const useGetLoginForm = <TData = Awaited<ReturnType<typeof getLoginForm>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginForm>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetLoginFormQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const getLoginFormSchema = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/auth/auth/login/schema`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/auth/login/schema`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetLoginFormSchemaQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/auth/login/schema`] as const;
-    }
+  return [`http://localhost:3005/api/v1/auth/login/schema`] as const;
+};
 
-    
-export const getGetLoginFormSchemaQueryOptions = <TData = Awaited<ReturnType<typeof getLoginFormSchema>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getGetLoginFormSchemaQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLoginFormSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormSchemaQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetLoginFormSchemaQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getLoginFormSchema>>
+  > = ({ signal }) => getLoginFormSchema(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getLoginFormSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginFormSchema>>> = ({ signal }) => getLoginFormSchema({ signal, ...axiosOptions });
+export type GetLoginFormSchemaQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginFormSchema>>
+>;
+export type GetLoginFormSchemaQueryError = ErrorType<unknown>;
 
-      
+export const useGetLoginFormSchema = <
+  TData = Awaited<ReturnType<typeof getLoginFormSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetLoginFormSchemaQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetLoginFormSchemaQueryResult = NonNullable<Awaited<ReturnType<typeof getLoginFormSchema>>>
-export type GetLoginFormSchemaQueryError = AxiosError<unknown>
-
-export const useGetLoginFormSchema = <TData = Awaited<ReturnType<typeof getLoginFormSchema>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLoginFormSchema>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetLoginFormSchemaQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const signUpUser = (
-    createSignUpPayloadDto: CreateSignUpPayloadDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.post(
-      `http://localhost:3005/api/v1/auth/auth/sign-up`,
-      createSignUpPayloadDto,options
-    );
-  }
-
-
-
-export const getSignUpUserMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: CreateSignUpPayloadDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: CreateSignUpPayloadDto}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUpUser>>, {data: CreateSignUpPayloadDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  signUpUser(data,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type SignUpUserMutationResult = NonNullable<Awaited<ReturnType<typeof signUpUser>>>
-    export type SignUpUserMutationBody = CreateSignUpPayloadDto
-    export type SignUpUserMutationError = AxiosError<unknown>
-
-    export const useSignUpUser = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: CreateSignUpPayloadDto}, TContext>, axios?: AxiosRequestConfig}
+  createSignUpPayloadDto: BodyType<CreateSignUpPayloadDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/auth/sign-up`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createSignUpPayloadDto,
+    },
+    options,
+  );
+};
 
-      const mutationOptions = getSignUpUserMutationOptions(options);
+export const getSignUpUserMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof signUpUser>>,
+    TError,
+    { data: BodyType<CreateSignUpPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof signUpUser>>,
+  TError,
+  { data: BodyType<CreateSignUpPayloadDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof signUpUser>>,
+    { data: BodyType<CreateSignUpPayloadDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return signUpUser(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SignUpUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof signUpUser>>
+>;
+export type SignUpUserMutationBody = BodyType<CreateSignUpPayloadDto>;
+export type SignUpUserMutationError = ErrorType<unknown>;
+
+export const useSignUpUser = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof signUpUser>>,
+    TError,
+    { data: BodyType<CreateSignUpPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getSignUpUserMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const create = (
-    createAuthzDto: CreateAuthzDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.post(
-      `http://localhost:3005/api/v1/authz`,
-      createAuthzDto,options
-    );
-  }
-
-
-
-export const getCreateMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateAuthzDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateAuthzDto}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof create>>, {data: CreateAuthzDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  create(data,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type CreateMutationResult = NonNullable<Awaited<ReturnType<typeof create>>>
-    export type CreateMutationBody = CreateAuthzDto
-    export type CreateMutationError = AxiosError<unknown>
-
-    export const useCreate = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateAuthzDto}, TContext>, axios?: AxiosRequestConfig}
+  createAuthzDto: BodyType<CreateAuthzDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/authz`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createAuthzDto,
+    },
+    options,
+  );
+};
 
-      const mutationOptions = getCreateMutationOptions(options);
+export const getCreateMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof create>>,
+    TError,
+    { data: BodyType<CreateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof create>>,
+  TError,
+  { data: BodyType<CreateAuthzDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof create>>,
+    { data: BodyType<CreateAuthzDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return create(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof create>>
+>;
+export type CreateMutationBody = BodyType<CreateAuthzDto>;
+export type CreateMutationError = ErrorType<unknown>;
+
+export const useCreate = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof create>>,
+    TError,
+    { data: BodyType<CreateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getCreateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const findAll = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/authz`,options
-    );
-  }
-
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    { url: `http://localhost:3005/api/v1/authz`, method: 'GET', signal },
+    options,
+  );
+};
 
 export const getFindAllQueryKey = () => {
-    return [`http://localhost:3005/api/v1/authz`] as const;
-    }
+  return [`http://localhost:3005/api/v1/authz`] as const;
+};
 
-    
-export const getFindAllQueryOptions = <TData = Awaited<ReturnType<typeof findAll>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
+export const getFindAllQueryOptions = <
+  TData = Awaited<ReturnType<typeof findAll>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getFindAllQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findAll>>> = ({
+    signal,
+  }) => findAll(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof findAll>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAll>>> = ({ signal }) => findAll({ signal, ...axiosOptions });
+export type FindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findAll>>
+>;
+export type FindAllQueryError = ErrorType<unknown>;
 
-      
+export const useFindAll = <
+  TData = Awaited<ReturnType<typeof findAll>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindAllQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type FindAllQueryResult = NonNullable<Awaited<ReturnType<typeof findAll>>>
-export type FindAllQueryError = AxiosError<unknown>
-
-export const useFindAll = <TData = Awaited<ReturnType<typeof findAll>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getFindAllQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const findOne = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.get(
-      `http://localhost:3005/api/v1/authz/${id}`,options
-    );
-  }
-
-
-export const getFindOneQueryKey = (id: string,) => {
-    return [`http://localhost:3005/api/v1/authz/${id}`] as const;
-    }
-
-    
-export const getFindOneQueryOptions = <TData = Awaited<ReturnType<typeof findOne>>, TError = AxiosError<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, axios?: AxiosRequestConfig}
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
+  return customInstance<void>(
+    { url: `http://localhost:3005/api/v1/authz/${id}`, method: 'GET', signal },
+    options,
+  );
+};
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+export const getFindOneQueryKey = (id: string) => {
+  return [`http://localhost:3005/api/v1/authz/${id}`] as const;
+};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindOneQueryKey(id);
+export const getFindOneQueryOptions = <
+  TData = Awaited<ReturnType<typeof findOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  
+  const queryKey = queryOptions?.queryKey ?? getFindOneQueryKey(id);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({ signal }) => findOne(id, { signal, ...axiosOptions });
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({
+    signal,
+  }) => findOne(id, requestOptions, signal);
 
-      
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
 
-      
+export type FindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findOne>>
+>;
+export type FindOneQueryError = ErrorType<unknown>;
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData> & { queryKey: QueryKey }
-}
+export const useFindOne = <
+  TData = Awaited<ReturnType<typeof findOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindOneQueryOptions(id, options);
 
-export type FindOneQueryResult = NonNullable<Awaited<ReturnType<typeof findOne>>>
-export type FindOneQueryError = AxiosError<unknown>
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export const useFindOne = <TData = Awaited<ReturnType<typeof findOne>>, TError = AxiosError<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getFindOneQueryOptions(id,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};
 
 export const update = (
-    id: string,
-    updateAuthzDto: UpdateAuthzDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.patch(
-      `http://localhost:3005/api/v1/authz/${id}`,
-      updateAuthzDto,options
-    );
-  }
-
-
-
-export const getUpdateMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: UpdateAuthzDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: UpdateAuthzDto}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof update>>, {id: string;data: UpdateAuthzDto}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  update(id,data,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateMutationResult = NonNullable<Awaited<ReturnType<typeof update>>>
-    export type UpdateMutationBody = UpdateAuthzDto
-    export type UpdateMutationError = AxiosError<unknown>
-
-    export const useUpdate = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: UpdateAuthzDto}, TContext>, axios?: AxiosRequestConfig}
+  id: string,
+  updateAuthzDto: BodyType<UpdateAuthzDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/authz/${id}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateAuthzDto,
+    },
+    options,
+  );
+};
 
-      const mutationOptions = getUpdateMutationOptions(options);
+export const getUpdateMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof update>>,
+    TError,
+    { id: string; data: BodyType<UpdateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof update>>,
+  TError,
+  { id: string; data: BodyType<UpdateAuthzDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof update>>,
+    { id: string; data: BodyType<UpdateAuthzDto> }
+  > = props => {
+    const { id, data } = props ?? {};
+
+    return update(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof update>>
+>;
+export type UpdateMutationBody = BodyType<UpdateAuthzDto>;
+export type UpdateMutationError = ErrorType<unknown>;
+
+export const useUpdate = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof update>>,
+    TError,
+    { id: string; data: BodyType<UpdateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const remove = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    
-    return axios.delete(
-      `http://localhost:3005/api/v1/authz/${id}`,options
-    );
-  }
-
-
-
-export const getRemoveMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext> => {
- const {mutation: mutationOptions, axios: axiosOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof remove>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
-
-          return  remove(id,axiosOptions)
-        }
-
-        
-
-
-   return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveMutationResult = NonNullable<Awaited<ReturnType<typeof remove>>>
-    
-    export type RemoveMutationError = AxiosError<unknown>
-
-    export const useRemove = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
+  return customInstance<void>(
+    { url: `http://localhost:3005/api/v1/authz/${id}`, method: 'DELETE' },
+    options,
+  );
+};
 
-      const mutationOptions = getRemoveMutationOptions(options);
+export const getRemoveMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof remove>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof remove>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof remove>>,
+    { id: string }
+  > = props => {
+    const { id } = props ?? {};
 
+    return remove(id, requestOptions);
+  };
 
-export const getGetAllServiceResponseMock = (overrideResponse: any = {}): ServiceEntity[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: {}, deletedAt: {}, id: faker.word.sample(), name: faker.helpers.arrayElement([faker.helpers.arrayElement(['userService','settingService'] as const), undefined]), updatedAt: {}, ...overrideResponse})))
+  return { mutationFn, ...mutationOptions };
+};
 
-export const getUpdateServiceResponseMock = (overrideResponse: any = {}): ServiceEntity => ({createdAt: {}, deletedAt: {}, id: faker.word.sample(), name: faker.helpers.arrayElement([faker.helpers.arrayElement(['userService','settingService'] as const), undefined]), updatedAt: {}, ...overrideResponse})
+export type RemoveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof remove>>
+>;
 
-export const getGetMemusResponseMock = (overrideResponse: any = {}): MenuDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({children: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({pathname: faker.helpers.arrayElement(['/admin/services','ADMIN_SERVICES','/admin/services/user-service','ADMIN_USER_SERVICE','/admin/services/user-service/categories','ADMIN_USER_SERVICE_CATEGORY','/admin/services/setting-service','ADMIN_SETTING_SERVICE','/admin/services/setting-service/services','ADMIN_SETTING_SERVICE_SERVICES','/admin/services/setting-service/services/:serviceId','ADMIN_SETTING_SERVICE_SERVICE'] as const), text: faker.helpers.arrayElement(['서비스 관리','회원 서비스','회원 카테고리','설정 관리','설정','설정 서비스'] as const), ...overrideResponse})), undefined]), pathname: faker.helpers.arrayElement(['/admin/services','ADMIN_SERVICES','/admin/services/user-service','ADMIN_USER_SERVICE','/admin/services/user-service/categories','ADMIN_USER_SERVICE_CATEGORY','/admin/services/setting-service','ADMIN_SETTING_SERVICE','/admin/services/setting-service/services','ADMIN_SETTING_SERVICE_SERVICES','/admin/services/setting-service/services/:serviceId','ADMIN_SETTING_SERVICE_SERVICE'] as const), text: faker.helpers.arrayElement(['서비스 관리','회원 서비스','회원 카테고리','설정 관리','설정','설정 서비스'] as const), ...overrideResponse})))
+export type RemoveMutationError = ErrorType<unknown>;
 
-export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), ...overrideResponse})
+export const useRemove = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof remove>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getRemoveMutationOptions(options);
 
-export const getGetLoginFormResponseMock = (overrideResponse: any = {}): LoginFormDto => ({email: faker.word.sample(), password: faker.word.sample(), ...overrideResponse})
+  return useMutation(mutationOptions);
+};
 
+export const getGetAllServiceResponseMock = (
+  overrideResponse: any = {},
+): ServiceEntity[] =>
+  Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    createdAt: {},
+    deletedAt: {},
+    id: faker.word.sample(),
+    name: faker.helpers.arrayElement([
+      faker.helpers.arrayElement(['userService', 'settingService'] as const),
+      undefined,
+    ]),
+    updatedAt: {},
+    ...overrideResponse,
+  }));
 
-export const getGetAllServiceMockHandler = (overrideResponse?: ServiceEntity[]) => {
+export const getUpdateServiceResponseMock = (
+  overrideResponse: any = {},
+): ServiceEntity => ({
+  createdAt: {},
+  deletedAt: {},
+  id: faker.word.sample(),
+  name: faker.helpers.arrayElement([
+    faker.helpers.arrayElement(['userService', 'settingService'] as const),
+    undefined,
+  ]),
+  updatedAt: {},
+  ...overrideResponse,
+});
+
+export const getGetMemusResponseMock = (
+  overrideResponse: any = {},
+): MenuDto[] =>
+  Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    children: faker.helpers.arrayElement([
+      Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => ({
+        pathname: faker.helpers.arrayElement([
+          '/admin/services',
+          'ADMIN_SERVICES',
+          '/admin/services/user-service',
+          'ADMIN_USER_SERVICE',
+          '/admin/services/user-service/categories',
+          'ADMIN_USER_SERVICE_CATEGORY',
+          '/admin/services/setting-service',
+          'ADMIN_SETTING_SERVICE',
+          '/admin/services/setting-service/services',
+          'ADMIN_SETTING_SERVICE_SERVICES',
+          '/admin/services/setting-service/services/:serviceId',
+          'ADMIN_SETTING_SERVICE_SERVICE',
+        ] as const),
+        text: faker.helpers.arrayElement([
+          '서비스 관리',
+          '회원 서비스',
+          '회원 카테고리',
+          '설정 관리',
+          '설정',
+          '설정 서비스',
+        ] as const),
+        ...overrideResponse,
+      })),
+      undefined,
+    ]),
+    pathname: faker.helpers.arrayElement([
+      '/admin/services',
+      'ADMIN_SERVICES',
+      '/admin/services/user-service',
+      'ADMIN_USER_SERVICE',
+      '/admin/services/user-service/categories',
+      'ADMIN_USER_SERVICE_CATEGORY',
+      '/admin/services/setting-service',
+      'ADMIN_SETTING_SERVICE',
+      '/admin/services/setting-service/services',
+      'ADMIN_SETTING_SERVICE_SERVICES',
+      '/admin/services/setting-service/services/:serviceId',
+      'ADMIN_SETTING_SERVICE_SERVICE',
+    ] as const),
+    text: faker.helpers.arrayElement([
+      '서비스 관리',
+      '회원 서비스',
+      '회원 카테고리',
+      '설정 관리',
+      '설정',
+      '설정 서비스',
+    ] as const),
+    ...overrideResponse,
+  }));
+
+export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({
+  accessToken: faker.word.sample(),
+  refreshToken: faker.word.sample(),
+  ...overrideResponse,
+});
+
+export const getGetLoginFormResponseMock = (
+  overrideResponse: any = {},
+): LoginFormDto => ({
+  email: faker.word.sample(),
+  password: faker.word.sample(),
+  ...overrideResponse,
+});
+
+export const getGetAllServiceMockHandler = (
+  overrideResponse?: ServiceEntity[],
+) => {
   return http.get('*/api/v1/admin/services', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getGetAllServiceResponseMock()),
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getGetAllServiceResponseMock(),
+      ),
       {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+        },
+      },
+    );
+  });
+};
 
 export const getGetServiceFormMockHandler = () => {
   return http.get('*/api/v1/admin/services/form', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
-export const getUpdateServiceMockHandler = (overrideResponse?: ServiceEntity) => {
+export const getUpdateServiceMockHandler = (
+  overrideResponse?: ServiceEntity,
+) => {
   return http.patch('*/api/v1/admin/services/:id', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getUpdateServiceResponseMock()),
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getUpdateServiceResponseMock(),
+      ),
       {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+        },
+      },
+    );
+  });
+};
 
 export const getGetUpdateServiceSchemaMockHandler = () => {
   return http.get('*/api/v1/admin/services/schema', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getGetMemusMockHandler = (overrideResponse?: MenuDto[]) => {
   return http.get('*/api/v1/admin/admin/menus', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getGetMemusResponseMock()),
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getGetMemusResponseMock(),
+      ),
       {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+        },
+      },
+    );
+  });
+};
 
 export const getLoginMockHandler = (overrideResponse?: TokenDto) => {
-  return http.post('*/api/v1/auth/auth/login', async () => {
+  return http.post('*/api/v1/auth/login', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getLoginResponseMock()),
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getLoginResponseMock(),
+      ),
       {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+        },
+      },
+    );
+  });
+};
 
 export const getGetLoginFormMockHandler = (overrideResponse?: LoginFormDto) => {
-  return http.get('*/api/v1/auth/auth/login/form', async () => {
+  return http.get('*/api/v1/auth/login/form', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getGetLoginFormResponseMock()),
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getGetLoginFormResponseMock(),
+      ),
       {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+        },
+      },
+    );
+  });
+};
 
 export const getGetLoginFormSchemaMockHandler = () => {
-  return http.get('*/api/v1/auth/auth/login/schema', async () => {
+  return http.get('*/api/v1/auth/login/schema', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getSignUpUserMockHandler = () => {
-  return http.post('*/api/v1/auth/auth/sign-up', async () => {
+  return http.post('*/api/v1/auth/sign-up', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getCreateMockHandler = () => {
   return http.post('*/api/v1/authz', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getFindAllMockHandler = () => {
   return http.get('*/api/v1/authz', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getFindOneMockHandler = () => {
   return http.get('*/api/v1/authz/:id', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getUpdateMockHandler = () => {
   return http.patch('*/api/v1/authz/:id', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 
 export const getRemoveMockHandler = () => {
   return http.delete('*/api/v1/authz/:id', async () => {
     await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
 export const getPROMISEServerMock = () => [
   getGetAllServiceMockHandler(),
   getGetServiceFormMockHandler(),
@@ -959,5 +1314,5 @@ export const getPROMISEServerMock = () => [
   getFindAllMockHandler(),
   getFindOneMockHandler(),
   getUpdateMockHandler(),
-  getRemoveMockHandler()
-]
+  getRemoveMockHandler(),
+];
