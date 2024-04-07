@@ -35,8 +35,16 @@ export class AuthService {
   ) {}
 
   async getCurrentUser({ accessToken }: TokenDto) {
-    const { userId } = this.jwtService.verify<{ userId: string }>(accessToken);
+    let userId: string;
+
+    try {
+      userId = this.jwtService.verify<{ userId: string }>(accessToken)?.userId;
+    } catch (error) {
+      throw new BadRequestException('Invalid token');
+    }
+
     const user = await this.usersService.findById(userId);
+
     return user;
   }
 

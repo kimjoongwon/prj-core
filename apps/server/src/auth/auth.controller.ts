@@ -5,6 +5,7 @@ import {
   HttpStatus,
   HttpCode,
   Get,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -28,10 +29,10 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  @HttpCode(HttpStatus.OK)
+  @Public()
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
   @Get('current-user')
-  getCurrentUser(@Body() tokenDto: TokenDto) {
+  getCurrentUser(@Query() tokenDto: TokenDto) {
     return this.authService.getCurrentUser(tokenDto);
   }
 
