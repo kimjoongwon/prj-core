@@ -1,4 +1,13 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { makeAutoObservable, reaction } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { UserDto } from '../../model/userDto';
 type Dispatch = (Auth: string) => void;
 
 type AuthProviderProps = { children: ReactNode; initialState?: string | null };
@@ -6,18 +15,34 @@ type AuthProviderProps = { children: ReactNode; initialState?: string | null };
 const AuthContext = createContext<string | null>(null);
 const AuthDispatchContext = createContext<Dispatch | null>(null);
 
-const AuthProvider = ({ children, initialState = null }: AuthProviderProps) => {
-  // it's a quick demo with useState but you can also have a more complexe state with a useReducer
-  const [token, setToken] = useState(initialState);
+class AuthStore {
+  constructor() {
+    makeAutoObservable(this);
+  }
+  user: UserDto | undefined;
+  accessToken: string | null = null;
+}
 
-  return (
-    <AuthContext.Provider value={token}>
-      <AuthDispatchContext.Provider value={setToken}>
-        {children}
-      </AuthDispatchContext.Provider>
-    </AuthContext.Provider>
-  );
-};
+export const authStore = new AuthStore();
+
+const AuthProvider = observer(
+  ({ children, initialState = null }: AuthProviderProps) => {
+    const state = useLocalObservable(() => ({ accessToken: initialState }));
+
+    useEffect(() => {
+      const disposer = reaction(
+        () => state.accessToken,
+        accessToken => {
+          authStore.accessToken = accessToken;
+        },
+      );
+
+      return disposer;
+    });
+
+    return <>{children}</>;
+  },
+);
 
 const useAuth = (): string | null => {
   return useContext<string | null>(AuthContext);

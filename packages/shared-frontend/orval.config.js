@@ -10,7 +10,7 @@ module.exports = {
       override: {
         mutator: {
           path: './src/libs/customAxios.ts',
-          name: 'useCustomClient',
+          name: 'customInstance',
         },
       },
     },

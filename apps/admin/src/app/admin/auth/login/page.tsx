@@ -2,9 +2,13 @@
 
 import {
   Button,
+  Card,
   Container,
   LoginForm,
   Spacer,
+  authStore,
+  getCurrentUser,
+  useGetCurrentUser,
   useGetLoginForm,
   useGetLoginFormSchema,
   useLogin,
@@ -13,7 +17,6 @@ import { AxiosError } from 'axios';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { getErrorMessages } from '@shared/frontend/src/libs/ajv';
 import { useCoCRouter } from '@hooks';
-import { authStore } from '../../../shared/stores/authStore';
 
 const defaultLoginFormObject = {
   email: 'PROMISE@gmail.com',
@@ -23,6 +26,7 @@ const defaultLoginFormObject = {
 const LoginPage = observer(() => {
   const { data: loginForm } = useGetLoginForm();
   const { data: schema } = useGetLoginFormSchema();
+
   const { mutateAsync: login } = useLogin();
   const { push } = useCoCRouter();
 
@@ -33,19 +37,30 @@ const LoginPage = observer(() => {
 
     try {
       const { accessToken, refreshToken } = await login({ data: state });
-      window.localStorage.setItem('accessToken', accessToken);
-      window.localStorage.setItem('refreshToken', refreshToken);
+      authStore.accessToken = accessToken;
+
+      const user = await getCurrentUser({
+        accessToken,
+        refreshToken,
+      });
+
+      authStore.user = user;
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
       }
     }
-
-    alert('로그인 성공');
   };
+
+  console.log('authStore', { ...authStore });
 
   return (
     <Container className="max-w-screen-sm">
+      <Card>
+        <h1 className="text-3xl font-bold">
+          {authStore.user?.tenants[0].id || '없음'}
+        </h1>
+      </Card>
       <Spacer y={10} />
       <LoginForm state={state} schema={schema} />
       <Spacer y={10} />

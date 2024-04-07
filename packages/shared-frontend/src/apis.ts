@@ -16,6 +16,7 @@ import type {
 import type {
   CreateAuthzDto,
   CreateSignUpPayloadDto,
+  GetCurrentUserParams,
   LoginDto,
   ServiceFormDto,
   UpdateAuthzDto,
@@ -23,7 +24,13 @@ import type {
 } from './model';
 import { faker } from '@faker-js/faker';
 import { HttpResponse, delay, http } from 'msw';
-import type { LoginFormDto, MenuDto, ServiceEntity, TokenDto } from './model';
+import type {
+  LoginFormDto,
+  MenuDto,
+  ServiceEntity,
+  TokenDto,
+  UserDto,
+} from './model';
 import { customInstance } from './libs/customAxios';
 import type { ErrorType, BodyType } from './libs/customAxios';
 
@@ -443,6 +450,84 @@ export const useLogin = <
   const mutationOptions = getLoginMutationOptions(options);
 
   return useMutation(mutationOptions);
+};
+
+export const getCurrentUser = (
+  params: GetCurrentUserParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<UserDto>(
+    {
+      url: `http://localhost:3005/api/v1/auth/current-user`,
+      method: 'GET',
+      params,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetCurrentUserQueryKey = (params: GetCurrentUserParams) => {
+  return [
+    `http://localhost:3005/api/v1/auth/current-user`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetCurrentUserQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCurrentUser>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetCurrentUserParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCurrentUserQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({
+    signal,
+  }) => getCurrentUser(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCurrentUser>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCurrentUserQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCurrentUser>>
+>;
+export type GetCurrentUserQueryError = ErrorType<unknown>;
+
+export const useGetCurrentUser = <
+  TData = Awaited<ReturnType<typeof getCurrentUser>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetCurrentUserParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCurrentUserQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
 };
 
 export const getLoginForm = (
@@ -1096,6 +1181,45 @@ export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({
   ...overrideResponse,
 });
 
+export const getGetCurrentUserResponseMock = (
+  overrideResponse: any = {},
+): UserDto => ({
+  createdAt: {},
+  deletedAt: {},
+  email: faker.internet.email(),
+  id: faker.word.sample(),
+  name: faker.word.sample(),
+  password: faker.word.sample(),
+  phone: faker.word.sample(),
+  profiles: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    createdAt: {},
+    deletedAt: {},
+    id: faker.word.sample(),
+    nickname: faker.word.sample(),
+    updatedAt: {},
+    userId: faker.word.sample(),
+    ...overrideResponse,
+  })),
+  tenants: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    createdAt: {},
+    deletedAt: {},
+    id: faker.word.sample(),
+    roleId: faker.word.sample(),
+    spaceId: faker.word.sample(),
+    updatedAt: {},
+    userId: faker.word.sample(),
+    ...overrideResponse,
+  })),
+  updatedAt: {},
+  ...overrideResponse,
+});
+
 export const getGetLoginFormResponseMock = (
   overrideResponse: any = {},
 ): LoginFormDto => ({
@@ -1189,6 +1313,23 @@ export const getLoginMockHandler = (overrideResponse?: TokenDto) => {
     return new HttpResponse(
       JSON.stringify(
         overrideResponse ? overrideResponse : getLoginResponseMock(),
+      ),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  });
+};
+
+export const getGetCurrentUserMockHandler = (overrideResponse?: UserDto) => {
+  return http.get('*/api/v1/auth/current-user', async () => {
+    await delay(1000);
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getGetCurrentUserResponseMock(),
       ),
       {
         status: 200,
@@ -1307,6 +1448,7 @@ export const getPROMISEServerMock = () => [
   getGetUpdateServiceSchemaMockHandler(),
   getGetMemusMockHandler(),
   getLoginMockHandler(),
+  getGetCurrentUserMockHandler(),
   getGetLoginFormMockHandler(),
   getGetLoginFormSchemaMockHandler(),
   getSignUpUserMockHandler(),

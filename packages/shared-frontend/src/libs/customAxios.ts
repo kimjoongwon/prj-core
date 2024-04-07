@@ -1,4 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { authStore } from '../ui/providers/AuthProvider';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: 'http://localhost:3005/api',
@@ -11,7 +12,8 @@ export const customInstance = <T>(
 ): Promise<T> => {
   const source = Axios.CancelToken.source();
   const headers = {
-    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    Authorization: `Bearer ${authStore.accessToken}`,
+    tenantId: authStore.user?.tenants[0].id,
     ...config.headers,
     ...options?.headers,
   };

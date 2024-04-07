@@ -5,8 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import { ModalMount } from '@modals';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import axios from 'axios';
-import { ModalProvider } from '@shared/frontend';
+import { AuthProvider, ModalProvider } from '@shared/frontend';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -40,7 +39,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>
-        <ModalProvider>{children}</ModalProvider>
+        <AuthProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </AuthProvider>
       </QueryClientProvider>
       <ModalMount />
       <ToastContainer theme="dark" />

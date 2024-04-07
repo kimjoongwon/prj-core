@@ -13,9 +13,8 @@ import { Divider } from '@nextui-org/react';
 import { useCoCRouter } from '../shared/hooks/common/useCoCRouter';
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { data: menuData } = useGetMemus();
+  const { data: serviceMenus } = useGetMemus();
   const { push } = useCoCRouter();
-  const serviceMenus = menuData?.data;
   const menus = serviceMenus?.find(
     menu => menu.text === contextStore?.service.name,
   )?.children;
