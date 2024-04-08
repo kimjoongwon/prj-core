@@ -1,27 +1,13 @@
-import { makeAutoObservable, reaction } from 'mobx';
+import { AuthStore } from '@shared/frontend';
+import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { UserDto } from '../../model/userDto';
+import { createContext, ReactNode, useContext, useEffect } from 'react';
 type Dispatch = (Auth: string) => void;
 
 type AuthProviderProps = { children: ReactNode; initialState?: string | null };
 
 const AuthContext = createContext<string | null>(null);
 const AuthDispatchContext = createContext<Dispatch | null>(null);
-
-class AuthStore {
-  constructor() {
-    makeAutoObservable(this);
-  }
-  user: UserDto | undefined;
-  accessToken: string | null = null;
-}
 
 export const authStore = new AuthStore();
 

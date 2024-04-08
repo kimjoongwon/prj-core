@@ -1,5 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { authStore } from '../ui/providers/AuthProvider';
+import { authStore } from '../stores/authStore';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: 'http://localhost:3005/api',
