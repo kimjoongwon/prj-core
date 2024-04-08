@@ -5,7 +5,8 @@ import { ToastContainer } from 'react-toastify';
 import { ModalMount } from '@modals';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider, ModalProvider } from '@shared/frontend';
+import { ModalProvider } from '@shared/frontend';
+import { AuthProvider } from '@providers';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
