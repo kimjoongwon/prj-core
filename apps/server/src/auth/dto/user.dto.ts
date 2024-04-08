@@ -1,6 +1,6 @@
 import {
   prorfileEntitySchema,
-  tenantEntitySchema,
+  relatedTenantEntitySchema,
   userEntitySchema,
 } from '@shared/backend';
 import { createZodDto } from 'nestjs-zod';
@@ -8,7 +8,7 @@ import { lazy } from 'nestjs-zod/z';
 
 export const userDtoSchema = lazy(() =>
   userEntitySchema.extend({
-    tenants: tenantEntitySchema.array(),
+    tenants: relatedTenantEntitySchema.array(),
     profiles: prorfileEntitySchema.array(),
   }),
 );

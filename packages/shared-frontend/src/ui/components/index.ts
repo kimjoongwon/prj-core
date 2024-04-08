@@ -3,7 +3,6 @@ import AutoComplete from './AutoComplete';
 import PageModal from './PageModal';
 import Editor from './Editor';
 import Textarea from './Textarea';
-import User from './User';
 import Input from './Input';
 import Button from './Button';
 import Skeleton from './Skeleton';
@@ -45,10 +44,10 @@ export {
   PageModal,
   AutoComplete,
   Editor,
-  User,
   Input,
   Button,
   Skeleton,
   DataGrid,
   Pagination,
 };
+export * from './User';

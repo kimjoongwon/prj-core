@@ -6,13 +6,15 @@ import {
   useGetMemus,
   Button,
   HStack,
+  User,
+  authStore,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { contextStore } from '@stores';
 import { Divider } from '@nextui-org/react';
 import { useCoCRouter } from '../shared/hooks/common/useCoCRouter';
 
-function Layout({ children }: { children: React.ReactNode }) {
+export default observer(({ children }: { children: React.ReactNode }) => {
   const { data: serviceMenus } = useGetMemus();
   const { push } = useCoCRouter();
   const menus = serviceMenus?.find(
@@ -21,10 +23,11 @@ function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <Container>
+      {authStore.user?.email}
       <Navbar
         navItems={serviceMenus}
         state={contextStore}
-        rightContents={<div className="font-bold">접속유저정보영역</div>}
+        rightContents={<User />}
       />
       <HStack className="py-2">
         {menus?.map(menu => (
@@ -42,6 +45,4 @@ function Layout({ children }: { children: React.ReactNode }) {
       {children}
     </Container>
   );
-}
-
-export default observer(Layout);
+});

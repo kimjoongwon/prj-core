@@ -70,6 +70,7 @@ export const Navbar = observer((props: NavbarProps) => {
       <NavbarContent justify="center">
         {navItems.map(renderNavItem)}
       </NavbarContent>
+
       <NavbarContent justify="end">{rightContents}</NavbarContent>
     </NextUINavbar>
   );

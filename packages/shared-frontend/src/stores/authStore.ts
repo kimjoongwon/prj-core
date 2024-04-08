@@ -5,7 +5,7 @@ export class AuthStore {
   constructor() {
     makeAutoObservable(this);
   }
-  user: UserDto | undefined;
+  user: UserDto | undefined = undefined;
   accessToken: string | null = null;
 }
 

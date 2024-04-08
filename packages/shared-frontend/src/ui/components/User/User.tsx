@@ -3,21 +3,22 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  User,
-  UserProps,
+  User as BaseUser,
 } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
+import { authStore } from '../../../stores/authStore';
 
-export interface BaseUserProps extends UserProps {}
-
-export const BaseUser = (props: BaseUserProps) => {
+export const User = observer(() => {
+  console.log('User Component Props', authStore);
+  const email = authStore.user?.email;
   return (
     <Dropdown>
       <DropdownTrigger>
-        <User
-          {...props}
+        <BaseUser
           isFocusable
+          name={email}
           avatarProps={{
-            color: 'primary',
+            size: 'sm',
             isBordered: true,
             isFocusable: true,
             as: 'button',
@@ -27,13 +28,19 @@ export const BaseUser = (props: BaseUserProps) => {
       <DropdownMenu variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
           <p className="font-semibold">Signed in as</p>
-          <p className="font-semibold">zoey@example.com</p>
+          <p className="font-semibold">{email}</p>
         </DropdownItem>
-        <DropdownItem>설정</DropdownItem>
+        <DropdownItem key="space" className="h-14 gap-2">
+          <p className="font-semibold">
+            {/* @ts-ignore */}
+            소속: {authStore.user?.tenants?.[0]?.space?.name}
+          </p>
+          <DropdownItem>설정</DropdownItem>
+        </DropdownItem>
         <DropdownItem color="danger" className="text-danger">
           로그아웃
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );
-};
+});

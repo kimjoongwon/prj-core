@@ -1,4 +1,3 @@
-import { AuthStore } from '@shared/frontend';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
@@ -9,8 +8,6 @@ type AuthProviderProps = { children: ReactNode; initialState?: string | null };
 const AuthContext = createContext<string | null>(null);
 const AuthDispatchContext = createContext<Dispatch | null>(null);
 
-export const authStore = new AuthStore();
-
 const AuthProvider = observer(
   ({ children, initialState = null }: AuthProviderProps) => {
     const state = useLocalObservable(() => ({ accessToken: initialState }));
@@ -19,7 +16,7 @@ const AuthProvider = observer(
       const disposer = reaction(
         () => state.accessToken,
         accessToken => {
-          authStore.accessToken = accessToken;
+          console.log('accessToken', accessToken);
         },
       );
 

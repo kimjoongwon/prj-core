@@ -16,7 +16,11 @@ export class UsersService {
       where: { id },
       include: {
         profiles: true,
-        tenants: true,
+        tenants: {
+          include: {
+            space: true,
+          },
+        },
       },
     });
   }
