@@ -1,16 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { createZodDto } from 'nestjs-zod/dto';
-import { z } from 'nestjs-zod/z';
+import { lazy, z } from 'nestjs-zod/z';
+import { userDtoSchema } from './user.dto';
 
-const tokenDtoSchema = z.object({
-  accessToken: z.string(),
-  refreshToken: z.string(),
-});
+const tokenDtoSchema = lazy(() =>
+  z.object({
+    accessToken: z.string(),
+    refreshToken: z.string(),
+    user: userDtoSchema,
+  }),
+);
 
-export class TokenDto extends createZodDto(tokenDtoSchema) {
-  @ApiProperty({ required: true })
-  accessToken: string;
-
-  @ApiProperty({ required: true })
-  refreshToken: string;
-}
+export class TokenDto extends createZodDto(tokenDtoSchema) {}

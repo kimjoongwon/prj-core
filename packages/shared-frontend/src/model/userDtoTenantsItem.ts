@@ -4,16 +4,10 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDtoTenantsItemCreatedAt } from './userDtoTenantsItemCreatedAt';
-import type { UserDtoTenantsItemDeletedAt } from './userDtoTenantsItemDeletedAt';
-import type { UserDtoTenantsItemUpdatedAt } from './userDtoTenantsItemUpdatedAt';
+import type { UserDtoTenantsItemSpace } from './userDtoTenantsItemSpace';
+import type { UserDtoTenantsItemUser } from './userDtoTenantsItemUser';
 
 export type UserDtoTenantsItem = {
-  createdAt: UserDtoTenantsItemCreatedAt;
-  deletedAt: UserDtoTenantsItemDeletedAt;
-  id: string;
-  roleId: string;
-  spaceId: string;
-  updatedAt: UserDtoTenantsItemUpdatedAt;
-  userId: string;
+  space: UserDtoTenantsItemSpace;
+  user: UserDtoTenantsItemUser;
 };

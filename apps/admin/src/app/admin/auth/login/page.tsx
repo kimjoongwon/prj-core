@@ -31,16 +31,16 @@ const LoginPage = observer(() => {
     const { errorMessages, valid } = getErrorMessages(state, schema);
 
     try {
-      const { accessToken, refreshToken } = await login({ data: state });
+      const { accessToken, refreshToken } = await login({
+        data: state,
+      });
 
       const user = await getCurrentUser({
         accessToken,
         refreshToken,
       });
-
       authStore.accessToken = accessToken;
       authStore.user = user;
-      test.test = accessToken;
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);

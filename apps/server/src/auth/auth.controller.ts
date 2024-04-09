@@ -5,13 +5,20 @@ import {
   HttpStatus,
   HttpCode,
   Get,
-  Query,
+  Res,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { TokenDto } from './dto/token.dto';
-import { Public } from '@shared/backend';
+import { AccessToken, Public } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
 import { UserDto } from './dto/user.dto';
@@ -25,15 +32,40 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TokenDto })
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res) {
+    const { refreshToken, ...rest } = await this.authService.login(loginDto);
+
+    res.cookie('refreshToken', refreshToken, { httpOnly: true });
+
+    return res.json({ ...rest });
+  }
+
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, type: UserDto })
+  @Get('current-user')
+  getCurrentUser(@AccessToken() accessToken: string) {
+    return this.authService.getCurrentUser({ accessToken });
   }
 
   @Public()
-  @ApiResponse({ status: HttpStatus.OK, type: UserDto })
-  @Get('current-user')
-  getCurrentUser(@Query() tokenDto: TokenDto) {
-    return this.authService.getCurrentUser(tokenDto);
+  @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
+  @Get('refresh-token')
+  refreshToken(@Req() req) {
+    const oldRefreshToken = req.cookies?.refreshToken;
+    if (!oldRefreshToken) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    const { accessToken, refreshToken } =
+      this.authService.validateToken(oldRefreshToken);
+
+    req.res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+
+    return {
+      accessToken,
+    };
   }
 
   @Public()

@@ -8,9 +8,11 @@ import {
 // import { patchNestJsSwagger } from 'nestjs-zod';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { patchNestJsSwagger } from 'nestjs-zod';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.use(cookieParser());
   app.useLogger(app.get(Logger));
   app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new LoggerErrorInterceptor());

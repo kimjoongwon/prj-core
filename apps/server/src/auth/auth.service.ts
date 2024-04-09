@@ -129,9 +129,12 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    return this.generateTokens({
-      userId: user.id,
-    });
+    return {
+      ...this.generateTokens({
+        userId: user.id,
+      }),
+      user,
+    };
   }
 
   validateHash(
@@ -176,5 +179,24 @@ export class AuthService {
       secret: authConfig?.secret,
       expiresIn: authConfig?.refresh,
     });
+  }
+
+  validateToken(token: string) {
+    let payload = null;
+
+    const authConfig = this.config.get<AuthConfig>('auth');
+
+    try {
+      payload = this.jwtService.verify(token, {
+        secret: authConfig.secret,
+      });
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Invalid token');
+    }
+
+    return this.generateTokens({ userId: payload.userId });
   }
 }
