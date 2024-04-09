@@ -1,0 +1,2 @@
+com.reactnativeimageselector
+xml file_provider
