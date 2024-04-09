@@ -1,3 +1,4 @@
+import { authStore, getCurrentUser } from '@shared/frontend';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
@@ -16,7 +17,7 @@ const AuthProvider = observer(
       const disposer = reaction(
         () => state.accessToken,
         accessToken => {
-          console.log('accessToken', accessToken);
+
         },
       );
 
