@@ -19,9 +19,9 @@ import React from 'react';
 const ServicesPage = observer(() => {
   const { data: serviceForm, isLoading } = useGetServiceForm();
   const { data: getAllService } = useGetAllService();
-  const services = getAllService?.data || [];
+  const services = getAllService || [];
 
-  const serviceFormData = serviceForm?.data;
+  const serviceFormData = serviceForm;
   const { defaultObject, form, schema } = serviceFormData || {};
   const state = observable({ ...defaultObject });
 
