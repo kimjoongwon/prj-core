@@ -18,7 +18,6 @@ import { ServiceFormDto } from './dto/service-form.dto';
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
-  @Public()
   @Get()
   @ApiOkResponse({ type: ServiceEntity, isArray: true })
   getAllService() {

@@ -181,7 +181,7 @@ export class AuthService {
     });
   }
 
-  validateToken(token: string) {
+  async validateToken(token: string) {
     let payload = null;
 
     const authConfig = this.config.get<AuthConfig>('auth');
@@ -197,6 +197,11 @@ export class AuthService {
       throw new BadRequestException('Invalid token');
     }
 
-    return this.generateTokens({ userId: payload.userId });
+    const user = await this.usersService.findById(payload.userId);
+
+    return {
+      ...this.generateTokens({ userId: payload.userId }),
+      user,
+    };
   }
 }

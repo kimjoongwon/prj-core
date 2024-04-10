@@ -24,6 +24,7 @@ import {
 } from 'nestjs-prisma';
 import {
   CaslModule,
+  CategoriesModule,
   LoggerMiddleware,
   ServicesModule,
   appConfig,
@@ -105,6 +106,12 @@ import { AdminModule } from './admin/admin.module';
               {
                 path: 'services',
                 module: ServicesModule,
+                children: [
+                  {
+                    path: ':serviceId/categories',
+                    module: CategoriesModule,
+                  },
+                ],
               },
             ],
           },
@@ -119,6 +126,7 @@ import { AdminModule } from './admin/admin.module';
         ],
       },
     ]),
+    CategoriesModule,
     ServicesModule,
     AdminModule,
     AuthModule,

@@ -23,7 +23,6 @@ export default observer(({ children }: { children: React.ReactNode }) => {
 
   return (
     <Container>
-      {authStore.user?.email}
       <Navbar
         navItems={serviceMenus}
         state={contextStore}

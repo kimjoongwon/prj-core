@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'nestjs-prisma';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ServiceSpaceDto } from '../../dto';
 
 @Injectable()
 export class CategoriesService {
@@ -12,19 +13,22 @@ export class CategoriesService {
     });
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    return this.prisma.category.update({
+      where: { id },
+      data: updateCategoryDto,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
-
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  getCategoriesByServiceSpace({ serviceId, spaceId }: ServiceSpaceDto) {
+    return this.prisma.category.findMany({
+      where: {
+        spaceId,
+        serviceId,
+        deletedAt: {
+          not: null,
+        },
+      },
+    });
   }
 }

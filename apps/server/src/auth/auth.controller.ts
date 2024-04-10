@@ -50,14 +50,14 @@ export class AuthController {
   @Public()
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Get('refresh-token')
-  refreshToken(@Req() req) {
+  async refreshToken(@Req() req) {
     const oldRefreshToken = req.cookies?.refreshToken;
     if (!oldRefreshToken) {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const { accessToken, refreshToken } =
-      this.authService.validateToken(oldRefreshToken);
+    const { accessToken, refreshToken, user } =
+      await this.authService.validateToken(oldRefreshToken);
 
     req.res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -65,6 +65,7 @@ export class AuthController {
 
     return {
       accessToken,
+      user,
     };
   }
 

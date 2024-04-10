@@ -19,7 +19,6 @@ import type {
 import type {
   CreateAuthzDto,
   CreateSignUpPayloadDto,
-  GetCurrentUserParams,
   LoginDto,
   ServiceFormDto,
   UpdateAuthzDto,
@@ -368,34 +367,33 @@ export const getLoginMutationOptions = <TError = ErrorType<unknown>,
     }
     
 export const getCurrentUser = (
-    params: GetCurrentUserParams,
+    
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<UserDto>(
-      {url: `http://localhost:3005/api/v1/auth/current-user`, method: 'GET',
-        params, signal
+      {url: `http://localhost:3005/api/v1/auth/current-user`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetCurrentUserQueryKey = (params: GetCurrentUserParams,) => {
-    return [`http://localhost:3005/api/v1/auth/current-user`, ...(params ? [params]: [])] as const;
+export const getGetCurrentUserQueryKey = () => {
+    return [`http://localhost:3005/api/v1/auth/current-user`] as const;
     }
 
     
-export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>(params: GetCurrentUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser(requestOptions, signal);
 
       
 
@@ -408,11 +406,11 @@ export type GetCurrentUserQueryResult = NonNullable<Awaited<ReturnType<typeof ge
 export type GetCurrentUserQueryError = ErrorType<unknown>
 
 export const useGetCurrentUser = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>(
- params: GetCurrentUserParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetCurrentUserQueryOptions(params,options)
+  const queryOptions = getGetCurrentUserQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -899,11 +897,11 @@ export const getUpdateServiceResponseMock = (overrideResponse: any = {}): Servic
 
 export const getGetMemusResponseMock = (overrideResponse: any = {}): MenuDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({children: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({pathname: faker.helpers.arrayElement(['/admin/services','ADMIN_SERVICES','/admin/services/user-service','ADMIN_USER_SERVICE','/admin/services/user-service/categories','ADMIN_USER_SERVICE_CATEGORY','/admin/services/setting-service','ADMIN_SETTING_SERVICE','/admin/services/setting-service/services','ADMIN_SETTING_SERVICE_SERVICES','/admin/services/setting-service/services/:serviceId','ADMIN_SETTING_SERVICE_SERVICE'] as const), text: faker.helpers.arrayElement(['서비스 관리','회원 서비스','회원 카테고리','설정 관리','설정','설정 서비스'] as const), ...overrideResponse})), undefined]), pathname: faker.helpers.arrayElement(['/admin/services','ADMIN_SERVICES','/admin/services/user-service','ADMIN_USER_SERVICE','/admin/services/user-service/categories','ADMIN_USER_SERVICE_CATEGORY','/admin/services/setting-service','ADMIN_SETTING_SERVICE','/admin/services/setting-service/services','ADMIN_SETTING_SERVICE_SERVICES','/admin/services/setting-service/services/:serviceId','ADMIN_SETTING_SERVICE_SERVICE'] as const), text: faker.helpers.arrayElement(['서비스 관리','회원 서비스','회원 카테고리','설정 관리','설정','설정 서비스'] as const), ...overrideResponse})))
 
-export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), ...overrideResponse})
+export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), user: {createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: {}, deletedAt: {}, id: faker.word.sample(), nickname: faker.word.sample(), updatedAt: {}, userId: faker.word.sample(), ...overrideResponse})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({space: {createdAt: {}, deletedAt: {}, id: faker.word.sample(), name: faker.word.sample(), updatedAt: {}, ...overrideResponse}, user: {createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), updatedAt: {}, ...overrideResponse}, ...overrideResponse})), updatedAt: {}, ...overrideResponse}, ...overrideResponse})
 
 export const getGetCurrentUserResponseMock = (overrideResponse: any = {}): UserDto => ({createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: {}, deletedAt: {}, id: faker.word.sample(), nickname: faker.word.sample(), updatedAt: {}, userId: faker.word.sample(), ...overrideResponse})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({space: {createdAt: {}, deletedAt: {}, id: faker.word.sample(), name: faker.word.sample(), updatedAt: {}, ...overrideResponse}, user: {createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), updatedAt: {}, ...overrideResponse}, ...overrideResponse})), updatedAt: {}, ...overrideResponse})
 
-export const getRefreshTokenResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), ...overrideResponse})
+export const getRefreshTokenResponseMock = (overrideResponse: any = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), user: {createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: {}, deletedAt: {}, id: faker.word.sample(), nickname: faker.word.sample(), updatedAt: {}, userId: faker.word.sample(), ...overrideResponse})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({space: {createdAt: {}, deletedAt: {}, id: faker.word.sample(), name: faker.word.sample(), updatedAt: {}, ...overrideResponse}, user: {createdAt: {}, deletedAt: {}, email: faker.internet.email(), id: faker.word.sample(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), updatedAt: {}, ...overrideResponse}, ...overrideResponse})), updatedAt: {}, ...overrideResponse}, ...overrideResponse})
 
 export const getGetLoginFormResponseMock = (overrideResponse: any = {}): LoginFormDto => ({email: faker.word.sample(), password: faker.word.sample(), ...overrideResponse})
 

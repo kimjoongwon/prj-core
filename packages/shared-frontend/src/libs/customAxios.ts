@@ -13,7 +13,8 @@ export const customInstance = <T>(
   const source = Axios.CancelToken.source();
   const headers = {
     Authorization: `Bearer ${authStore.accessToken}`,
-    tenantId: authStore.user?.tenants[0].id,
+    // @ts-ignore
+    tenantId: authStore.user?.tenants?.[0]?.id || '',
     ...config.headers,
     ...options?.headers,
   };

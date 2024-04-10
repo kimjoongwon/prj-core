@@ -5,7 +5,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MenuDto } from './dto';
 import { ADMIN_SERVICE_URLS } from './constants';
 
-@ApiTags(ADMIN_SERVICE_URLS.ADMIN)
+@ApiTags('admin')
 @Controller()
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

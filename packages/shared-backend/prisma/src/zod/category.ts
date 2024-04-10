@@ -8,6 +8,7 @@ export const categorySchema = z.object({
   ancestorIds: z.string().array(),
   parentId: z.string().nullish(),
   spaceId: z.string(),
+  serviceId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date().nullish(),
   deletedAt: z.date().nullish(),

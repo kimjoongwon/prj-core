@@ -31,14 +31,10 @@ const LoginPage = observer(() => {
     const { errorMessages, valid } = getErrorMessages(state, schema);
 
     try {
-      const { accessToken, refreshToken } = await login({
+      const { accessToken, user } = await login({
         data: state,
       });
 
-      const user = await getCurrentUser({
-        accessToken,
-        refreshToken,
-      });
       authStore.accessToken = accessToken;
       authStore.user = user;
     } catch (error) {
