@@ -1,23 +1,23 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
   DocumentBuilder,
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-// import { patchNestJsSwagger } from 'nestjs-zod';
-import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
-import { patchNestJsSwagger } from 'nestjs-zod';
+import { Logger } from 'nestjs-pino';
+import { CustomClassSerializerInterceptor } from '@shared/backend';
+import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-  app.setGlobalPrefix('api');
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
-  // app.useGlobalPipes(new ValidationPipe());
-  patchNestJsSwagger();
+  app.useGlobalInterceptors(
+    new CustomClassSerializerInterceptor(app.get(Reflector)),
+  );
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const config = new DocumentBuilder()
     .setVersion('1.0.0')

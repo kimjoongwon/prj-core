@@ -3,7 +3,6 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { SERVICE_NAME } from '@prisma/client';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { serviceJsonSchema } from './service.entity';
 
 @Injectable()
 export class ServicesService {
@@ -40,7 +39,7 @@ export class ServicesService {
           },
         ],
       },
-      schema: serviceJsonSchema,
+      schema: {},
     };
   }
 

@@ -19,7 +19,7 @@ export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
-  @ApiOkResponse({ type: ServiceEntity, isArray: true })
+  @ApiResponse({ type: ServiceEntity, isArray: true })
   getAllService() {
     return this.servicesService.findAllService();
   }

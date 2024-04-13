@@ -1,26 +1,25 @@
-import { Service, SERVICE_NAME } from '@prisma/client';
-import { z } from 'nestjs-zod/z';
-import { createZodDto } from 'nestjs-zod/dto';
-import { commonSchema } from '../../schema/common.schema';
-import { zodToJsonSchema } from 'zod-to-json-schema';
-export const serviceEntitySchema = z
-  .object({
-    name: z
-      .nativeEnum(SERVICE_NAME, {
-        invalid_type_error: 'Invalid service name',
-        required_error: 'Service name is required',
-        description: 'Service name',
-      })
-      .default(SERVICE_NAME.userService)
-      .describe('Service name'),
+import { ApiProperty } from '@nestjs/swagger';
+import { $Enums, Service } from '@prisma/client';
+
+export class ServiceEntity implements Service {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty({
+    enum: $Enums.SERVICE_NAME,
   })
-  .merge(commonSchema)
-  .required();
+  name: $Enums.SERVICE_NAME;
 
-export class ServiceEntity
-  extends createZodDto(serviceEntitySchema)
-  implements Service {}
+  @ApiProperty()
+  createdAt: Date;
 
-export const serviceJsonSchema = zodToJsonSchema(serviceEntitySchema, {
-  errorMessages: true,
-});
+  @ApiProperty({
+    example: null,
+  })
+  updatedAt: Date | null;
+
+  @ApiProperty({
+    example: null,
+  })
+  deletedAt: Date | null;
+}

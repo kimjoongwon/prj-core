@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Patch, Param, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Get,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiHeader,
   ApiParam,
   ApiResponse,
   ApiTags,
@@ -11,7 +21,9 @@ import {
 import { CategoryDto } from './dto/category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ServiceSpaceDto } from '../../dto';
-import { Public } from '../../decorators';
+import { ResponseEntity } from '../../entity';
+import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
+import { CategoryEntity } from './entities/category.entity';
 
 @ApiTags('categories')
 @Controller()
@@ -20,29 +32,26 @@ export class CategoriesController {
 
   @Get()
   @ApiBearerAuth()
-  @ApiParam({ name: 'serviceId', type: 'string' })
-  @ApiParam({ name: 'spaceId', type: 'string' })
-  @ApiResponse({ status: 200, type: [CategoryDto] })
-  getCategories(@Param() params: ServiceSpaceDto) {
-    return this.categoriesService.getCategoriesByServiceSpace(params);
-  }
-
-  @Public()
-  @Get()
-  getSchema() {}
-  getForm() {
-    const form = {
-      createDto: {},
-      fields: {},
-      schema: {},
-    };
-    return form;
+  // @ApiParam({
+  //   name: 'serviceId',
+  //   type: 'string',
+  //   example: 'cltbdwy4t0000aze04ql33b9s',
+  // })
+  // @ApiParam({
+  //   name: 'spaceId',
+  //   type: 'string',
+  //   example: 'cluh249ey0000xmps4yq8kwym',
+  // })
+  @ApiBearerAuth()
+  @ApiResponseEntity(CategoryEntity)
+  getCategories(@Param() serviceSpaceDto: ServiceSpaceDto) {
+    return this.categoriesService.getCategoriesByServiceSpace(serviceSpaceDto);
   }
 
   @Post()
   @ApiBearerAuth()
   @ApiBody({ type: CreateCategoryDto })
-  @ApiResponse({ status: 201, type: CategoryDto })
+  @ApiResponse({ status: 201, type: ResponseEntity<CategoryDto> })
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoriesService.create(createCategoryDto);
   }

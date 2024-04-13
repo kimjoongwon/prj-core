@@ -1,21 +1,23 @@
-import { nativeEnum, z } from 'nestjs-zod/z';
-import { serviceEntitySchema } from '../service.entity';
-import { createZodDto } from 'nestjs-zod';
-import { SERVICE_NAME } from '@prisma/client';
+import { OptionDto } from '../../../dto';
+import { ServiceEntity } from '../service.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-export const serviceFormDtoSchema = z.object({
-  defaultObject: z.object({
-    name: z.nativeEnum(SERVICE_NAME).default(SERVICE_NAME.userService),
-  }),
-  form: z.object({
-    nameOptions: z.array(
-      z.object({
-        text: z.enum(['설정 서비스', '유저 서비스']),
-        value: z.nativeEnum(SERVICE_NAME),
-      }),
-    ),
-  }),
-  schema: z.object({}),
-});
+class Form {
+  @ApiProperty({
+    type: () => [OptionDto],
+  })
+  nameOptions: OptionDto[];
+}
 
-export class ServiceFormDto extends createZodDto(serviceFormDtoSchema) {}
+export class ServiceFormDto {
+  @ApiProperty({
+    type: () => Form,
+  })
+  form: Form;
+
+  @ApiProperty()
+  schema: object;
+
+  @ApiProperty()
+  defaultObject: ServiceEntity;
+}

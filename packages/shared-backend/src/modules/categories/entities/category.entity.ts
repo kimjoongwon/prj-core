@@ -1,16 +1,30 @@
-import { z } from 'nestjs-zod/z';
-import { createZodDto } from 'nestjs-zod';
 import { Category } from '@prisma/client';
-import { commonSchema } from '../../../schema/common.schema';
+import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
+import { CommonEntity } from '../../../entity';
 
-export const categoryEntitySchema: z.ZodType<Category> = z
-  .object({
-    name: z.string(),
-    ancestorIds: z.array(z.string()),
-    parentId: z.string().nullable(),
-    serviceId: z.string(),
-    spaceId: z.string(),
-  })
-  .merge(commonSchema);
+export class CategoryEntity extends CommonEntity implements Category {
+  constructor(category: Category) {
+    super();
+    Object.assign(this, category);
+  }
 
-export class CategoryEntity extends createZodDto(categoryEntitySchema) {}
+  @ApiProperty()
+  @Exclude()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  ancestorIds: string[];
+
+  @ApiProperty({ example: null })
+  parentId: string | null;
+
+  @ApiProperty()
+  spaceId: string;
+
+  @ApiProperty()
+  serviceId: string;
+}

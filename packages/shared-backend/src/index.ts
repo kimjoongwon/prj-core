@@ -7,3 +7,4 @@ export * from './middlewares';
 export * from './pipes';
 export * from './types';
 export * from './modules';
+export * from './interceptor';

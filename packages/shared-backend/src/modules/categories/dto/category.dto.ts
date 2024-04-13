@@ -1,4 +1,3 @@
-import { createZodDto } from 'nestjs-zod';
-import { categoryEntitySchema } from '../entities/category.entity';
+import { CategoryEntity } from '../entities/category.entity';
 
-export class CategoryDto extends createZodDto(categoryEntitySchema) {}
+export class CategoryDto extends CategoryEntity {}

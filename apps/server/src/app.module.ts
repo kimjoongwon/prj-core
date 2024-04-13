@@ -9,13 +9,11 @@ import { ConfigModule } from '@nestjs/config';
 import {
   APP_FILTER,
   APP_GUARD,
-  APP_PIPE,
   HttpAdapterHost,
   RouterModule,
 } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
-import { ZodValidationPipe } from 'nestjs-zod';
 import {
   PrismaClientExceptionFilter,
   PrismaModule,
@@ -53,7 +51,6 @@ import { AdminModule } from './admin/admin.module';
               `[Prisma Query] ${query.model}.${query.action} - ${query.executionTime}ms`,
           }),
           async (params, next) => {
-            // Before query: change params
             const result = await next(params);
 
             return result;
@@ -97,7 +94,7 @@ import { AdminModule } from './admin/admin.module';
     }),
     RouterModule.register([
       {
-        path: 'v1',
+        path: 'api/v1',
         children: [
           {
             path: 'admin',
@@ -133,10 +130,10 @@ import { AdminModule } from './admin/admin.module';
     AuthzModule,
   ],
   providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ZodValidationPipe,
-    },
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe,
+    // },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
