@@ -1,12 +1,17 @@
-import { applyDecorators, SetMetadata } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
+import { RoleType } from '../types';
+import { Public } from './public.decorator';
 
-export function Auth(...roles: Role[]) {
+export function Auth(
+  roles: RoleType[] = [],
+  options?: Partial<{ public: boolean }>,
+): MethodDecorator {
+  const isPublicRoute = options?.public;
+
   return applyDecorators(
-    SetMetadata('roles', roles),
-    // UseGuards(AuthGuard, RolesGuard),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
+    isPublicRoute ? Public() : () => null,
   );
 }
