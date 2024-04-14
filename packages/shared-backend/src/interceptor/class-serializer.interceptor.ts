@@ -5,7 +5,6 @@ import {
   ClassSerializerContextOptions,
 } from '@nestjs/common';
 import { classToPlain } from 'class-transformer';
-import { ResponseEntity } from '../entity';
 
 @Injectable()
 export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor {
