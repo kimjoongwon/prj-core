@@ -19,7 +19,6 @@ export class UserEntity extends CommonEntity implements User {
   email: string;
 
   @ApiProperty()
-  @Transform(() => 'lucky girl')
   name: string;
 
   @ApiProperty()
@@ -27,4 +26,9 @@ export class UserEntity extends CommonEntity implements User {
 
   @ApiProperty()
   password: string;
+
+  constructor(partial: Partial<UserEntity>) {
+    super();
+    Object.assign(this, partial);
+  }
 }

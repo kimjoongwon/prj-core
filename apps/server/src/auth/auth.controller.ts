@@ -48,8 +48,11 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-    // return new ResponseEntity(ResponseStatus['OK'], 'Login success', tokenDto);
-    return new TokenDto(accessToken, refreshToken, user);
+    return new ResponseEntity(
+      ResponseStatus.OK,
+      'Login success',
+      new TokenDto(accessToken, refreshToken, new UserDto(user)),
+    );
   }
 
   @ApiBearerAuth()

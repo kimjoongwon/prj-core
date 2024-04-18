@@ -4,7 +4,7 @@ import {
   PlainLiteralObject,
   ClassSerializerContextOptions,
 } from '@nestjs/common';
-import { classToPlain, instanceToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor {
