@@ -1,6 +1,8 @@
 import { z } from 'nestjs-zod/z';
 import { commonSchema } from '../../schema/common.schema';
-import { createZodDto } from 'nestjs-zod';
+import { CommonEntity } from '../../entity';
+import { Exclude, Expose } from 'class-transformer';
+import { Space } from '@prisma/client';
 
 export const spaceEntitySchema = z
   .object({
@@ -8,4 +10,16 @@ export const spaceEntitySchema = z
   })
   .merge(commonSchema);
 
-export class SpaceEntity extends createZodDto(spaceEntitySchema) {}
+export class SpaceEntity extends CommonEntity implements Space {
+  @Exclude() _name: string;
+
+  constructor(space: SpaceEntity) {
+    super();
+    Object.assign(this, space);
+  }
+
+  @Expose()
+  get name(): string {
+    return this._name;
+  }
+}
