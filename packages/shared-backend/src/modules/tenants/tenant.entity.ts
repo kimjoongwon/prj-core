@@ -1,9 +1,11 @@
 import { z } from 'nestjs-zod/z';
 import { commonSchema } from '../../schema/common.schema';
-import { createZodDto } from 'nestjs-zod';
 import { Tenant } from '@prisma/client';
 import { userEntitySchema } from '../users';
 import { spaceEntitySchema } from '../spaces';
+import { CommonEntity } from '../../entity';
+import { Exclude, Expose } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const tenantEntitySchema = z
   .object({
@@ -18,6 +20,31 @@ export const relatedTenantEntitySchema = z.object({
   space: spaceEntitySchema,
 });
 
-export class TenantEntity
-  extends createZodDto(tenantEntitySchema)
-  implements Tenant {}
+export abstract class TenantEntity extends CommonEntity implements Tenant {
+  @Exclude() _userId: string;
+  @Exclude() _spaceId: string;
+  @Exclude() _roleId: string;
+
+  constructor(tenant: Tenant) {
+    super();
+    Object.assign(this, tenant);
+  }
+
+  @Expose()
+  @ApiProperty()
+  get userId(): string {
+    return this._userId;
+  }
+
+  @Expose()
+  @ApiProperty()
+  get spaceId(): string {
+    return this._spaceId;
+  }
+
+  @Expose()
+  @ApiProperty()
+  get roleId(): string {
+    return this._roleId;
+  }
+}
