@@ -4,13 +4,11 @@ import {
   MiddlewareConsumer,
   Module,
   OnModuleInit,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import {
   APP_FILTER,
   APP_GUARD,
-  APP_PIPE,
   HttpAdapterHost,
   RouterModule,
 } from '@nestjs/core';
