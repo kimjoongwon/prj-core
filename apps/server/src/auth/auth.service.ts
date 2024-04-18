@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
-import { LoginDto } from './dto/login.dto';
 import { TokenDto } from './dto/token.dto';
 import bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
@@ -21,6 +20,7 @@ import {
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { loginFormJsonSchema } from './dto/login-form.dto';
+import { LoginPayloadDto } from './dto/login-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -113,7 +113,7 @@ export class AuthService {
     return loginFormJsonSchema;
   }
 
-  async login({ email, password }: LoginDto): Promise<TokenDto> {
+  async login({ email, password }: LoginPayloadDto): Promise<TokenDto> {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
