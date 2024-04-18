@@ -10,7 +10,6 @@ export enum ResponseStatus {
 }
 
 export class ResponseEntity<T> {
-  // private 필드들은 모두 @Exclude()로 제외
   @ApiProperty()
   statusCode: string;
 
