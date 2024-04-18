@@ -18,7 +18,12 @@ import {
 } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { TokenDto } from './dto/token.dto';
-import { AccessToken, Public } from '@shared/backend';
+import {
+  AccessToken,
+  Public,
+  ResponseEntity,
+  ResponseStatus,
+} from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
 import { UserDto } from './dto/user.dto';
@@ -32,12 +37,16 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TokenDto })
   @Post('login')
-  async login(@Body() loginDto: LoginDto, @Res() res) {
-    const { refreshToken, ...rest } = await this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res) {
+    const { refreshToken } = await this.authService.login(loginDto);
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-    return res.json({ ...rest });
+    return new ResponseEntity(
+      ResponseStatus['BAD_REQUEST'],
+      'Login success',
+      {},
+    );
   }
 
   @ApiBearerAuth()

@@ -14,7 +14,6 @@ export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor
     if (!isArray && !isObject) {
       return response;
     }
-    console.log('response', response);
     return isArray
       ? response.map(res => this.transformToPlain(res, options))
       : this.transformToPlain(response, options);

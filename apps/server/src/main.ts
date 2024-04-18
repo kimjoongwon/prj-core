@@ -14,10 +14,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(
     new CustomClassSerializerInterceptor(app.get(Reflector)),
   );
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const config = new DocumentBuilder()
     .setVersion('1.0.0')
