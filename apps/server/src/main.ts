@@ -16,7 +16,9 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(
-    new CustomClassSerializerInterceptor(app.get(Reflector)),
+    new CustomClassSerializerInterceptor(app.get(Reflector), {
+      enableImplicitConversion: true,
+    }),
   );
 
   const config = new DocumentBuilder()

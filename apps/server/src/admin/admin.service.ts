@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig, RolesService, SpacesService } from '@shared/backend';
-import { PasswordService } from 'src/auth/password.service';
 import { PrismaService } from 'nestjs-prisma';
 import { MenuDto } from './dto';
 import { ADMIN_PAGES } from './constants';
+import { PasswordService } from '../auth/password.service';
 @Injectable()
 export class AdminService {
   logger = new Logger(AdminService.name);

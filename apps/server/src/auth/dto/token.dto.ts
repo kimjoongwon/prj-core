@@ -1,13 +1,24 @@
-import { createZodDto } from 'nestjs-zod/dto';
-import { lazy, z } from 'nestjs-zod/z';
-import { userDtoSchema } from './user.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserDto } from '@shared/backend';
+import { Transform, Type } from 'class-transformer';
 
-const tokenDtoSchema = lazy(() =>
-  z.object({
-    accessToken: z.string(),
-    refreshToken: z.string(),
-    user: userDtoSchema,
-  }),
-);
+export class TokenDto {
+  @ApiProperty()
+  accessToken: string;
 
-export class TokenDto extends createZodDto(tokenDtoSchema) {}
+  @ApiProperty()
+  @Transform(() => 'token!')
+  refreshToken: string;
+
+  @ApiProperty({
+    type: () => UserDto,
+  })
+  @Type(() => UserDto)
+  user: UserDto;
+
+  constructor(accessToken: string, refreshToken: string, user: UserDto) {
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    this.user = user;
+  }
+}

@@ -24,10 +24,11 @@ import {
   Public,
   ResponseEntity,
   ResponseStatus,
+  UserDto,
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
-import { UserDto } from './dto/user.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @ApiTags('auth')
 @Controller()
@@ -42,18 +43,20 @@ export class AuthController {
     @Body() loginDto: LoginPayloadDto,
     @Res({ passthrough: true }) res,
   ) {
-    const { refreshToken, user } = await this.authService.login(loginDto);
+    const { accessToken, refreshToken, user } =
+      await this.authService.login(loginDto);
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-    return new ResponseEntity(ResponseStatus['OK'], 'Login success', { user });
+    // return new ResponseEntity(ResponseStatus['OK'], 'Login success', tokenDto);
+    return new TokenDto(accessToken, refreshToken, user);
   }
 
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
   @Get('current-user')
   getCurrentUser(@AccessToken() accessToken: string) {
-    return this.authService.getCurrentUser({ accessToken });
+    return this.authService.getCurrentUser(accessToken);
   }
 
   @Public()

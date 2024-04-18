@@ -8,7 +8,6 @@ import { TokenPayloadDto } from './dto/token-payload.dto';
 import { PasswordService } from './password.service';
 import { ConfigService } from '@nestjs/config';
 import { TokenDto } from './dto/token.dto';
-import bcrypt from 'bcrypt';
 import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
@@ -16,11 +15,13 @@ import {
   RolesService,
   SpacesService,
   TokenType,
+  UserDto,
   UsersService,
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { loginFormJsonSchema } from './dto/login-form.dto';
 import { LoginPayloadDto } from './dto/login-payload.dto';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  async getCurrentUser({ accessToken }: TokenDto) {
+  async getCurrentUser(accessToken: string) {
     let userId: string;
 
     try {
@@ -114,7 +115,13 @@ export class AuthService {
   }
 
   async login({ email, password }: LoginPayloadDto): Promise<TokenDto> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        profiles: true,
+        tenants: true,
+      },
+    });
 
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
@@ -129,10 +136,13 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
+    const { accessToken, refreshToken } = this.generateTokens({
+      userId: user.id,
+    });
+
     return {
-      ...this.generateTokens({
-        userId: user.id,
-      }),
+      accessToken,
+      refreshToken,
       user,
     };
   }
@@ -162,7 +172,7 @@ export class AuthService {
     };
   }
 
-  generateTokens(payload: { userId: string }): TokenDto {
+  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user'> {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),

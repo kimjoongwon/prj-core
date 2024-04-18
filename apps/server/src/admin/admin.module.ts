@@ -7,7 +7,7 @@ import {
   SpacesModule,
   SubjectsModule,
 } from '@shared/backend';
-import { PasswordService } from 'src/auth/password.service';
+import { PasswordService } from '../auth/password.service';
 
 @Module({
   imports: [SpacesModule, RolesModule, ServicesModule, SubjectsModule],

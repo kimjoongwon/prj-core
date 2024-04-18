@@ -1,5 +1,9 @@
 import { z } from 'nestjs-zod/z';
 import { commonSchema } from '../../schema/common.schema';
+import { CommonEntity } from '../../entity';
+import { User } from '@prisma/client';
+import { Exclude, Expose, Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 export const userEntitySchema = z
   .object({
@@ -9,3 +13,18 @@ export const userEntitySchema = z
     password: z.string(),
   })
   .merge(commonSchema);
+
+export class UserEntity extends CommonEntity implements User {
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  @Transform(() => 'lucky girl')
+  name: string;
+
+  @ApiProperty()
+  phone: string;
+
+  @ApiProperty()
+  password: string;
+}
