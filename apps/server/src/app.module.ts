@@ -105,7 +105,7 @@ import { AdminModule } from './admin/admin.module';
                 module: ServicesModule,
                 children: [
                   {
-                    path: ':service/categories',
+                    path: ':serviceName/categories',
                     module: CategoriesModule,
                   },
                 ],

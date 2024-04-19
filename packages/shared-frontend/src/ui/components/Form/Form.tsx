@@ -12,7 +12,7 @@ interface FormProps<T> extends FormHTMLAttributes<HTMLFormElement> {
   onClickCancel?: () => void;
 }
 
-export const Form = observer(<T extends object>(porps: FormProps<T>) => {
+export const FormLayout = observer(<T extends object>(porps: FormProps<T>) => {
   const {
     children,
     onClickSave,

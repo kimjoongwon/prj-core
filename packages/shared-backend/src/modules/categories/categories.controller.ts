@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Patch, Param, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CategoryDto } from './dto/category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ServiceSpaceDto } from '../../dto';
@@ -16,17 +16,22 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto, { isArray: true })
+  @ApiParam({ name: 'service-name', type: 'string' })
   @Get()
-  getCategories(@Param() serviceSpaceDto: ServiceSpaceDto) {
+  getCategories(
+    @Param() serviceSpaceDto: ServiceSpaceDto,
+    @Param('service-name') serviceName: string,
+  ) {
     return this.categoriesService.getCategoriesByServiceSpace(serviceSpaceDto);
   }
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
+  @ApiParam({ name: 'service-name', type: 'string' })
   @Post()
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
-    @Param('serviceId') serviceId: string,
+    @Param('service-name') serviceName: string,
   ) {
     const category = await this.categoriesService.create(createCategoryDto);
     return new ResponseEntity(
@@ -38,9 +43,10 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
+  @ApiParam({ name: 'service-name', type: 'string' })
   @Patch(':categoryId')
   update(
-    @Param('serviceId') serviceId: string,
+    @Param('service-name') serviceName: string,
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
