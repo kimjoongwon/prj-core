@@ -6,7 +6,7 @@ export class AuthStore {
     makeAutoObservable(this);
   }
   user: UserDto | undefined = undefined;
-  accessToken: string | null = null;
+  accessToken: string | undefined = undefined;
 }
 
 export const authStore = new AuthStore();

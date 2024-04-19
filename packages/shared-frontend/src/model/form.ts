@@ -4,8 +4,8 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { OptionDto } from './optionDto';
 
-export interface LoginPayloadDto {
-  email: string;
-  password: string;
+export interface Form {
+  nameOptions: OptionDto[];
 }

@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ServiceEntityUpdatedAt = {} | null;
+export type ServiceEntityUpdatedAt = { [key: string]: any };

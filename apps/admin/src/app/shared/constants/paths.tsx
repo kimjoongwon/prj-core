@@ -33,35 +33,14 @@ import {
 
 export const ADMIN_PATH = '/admin' as const;
 export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard` as const;
+export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth` as const;
+export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login` as const;
+export const ADMIN_AUTH_SERVICE_PATH = `${ADMIN_AUTH_PATH}/service` as const;
+export const ADMIN_AUTH_SERVICE_CATEGORIES_PATH =
+  `${ADMIN_AUTH_SERVICE_PATH}/categories` as const;
 export type Paths =
-  | typeof LOGIN_PAGE_PATH
-  | typeof USERS_PAGE_PATH
-  | typeof USER_PAGE_PATH
-  | typeof USER_EDIT_PAGE_PATH
-  | typeof SPACES_PAGE_PATH
-  | typeof SPACE_PAGE_PATH
-  | typeof SPACE_EDIT_PAGE_PATH
-  | typeof CATEGORY_EDIT_PAGE_PATH
-  | typeof CATEGORY_PAGE_PATH
-  | typeof CATEGORIES_PAGE_PATH
-  | typeof CATEGORY_ITEMS_PAGE_PATH
-  | typeof CATEGORY_ITEM_EDIT_PAGE_PATH
-  | typeof SERVICES_PAGE_PATH
-  | typeof SERVICE_PAGE_PATH
-  | typeof SERVICE_EDIT_PAGE_PATH
-  | typeof GROUPS_PAGE_PATH
-  | typeof GROUP_EDIT_PAGE_PATH
-  | typeof GROUP_PAGE_PATH
-  | typeof ROLE_EDIT_PAGE_PATH
-  | typeof ROLES_PAGE_PATH
-  | typeof ROLE_PAGE_PATH
-  | typeof SESSIONS_PAGE_PATH
-  | typeof SESSION_PAGE_PATH
-  | typeof SESSION_EDIT_PAGE_PATH
-  | typeof TIMELINES_PAGE_PATH
-  | typeof TIMELINE_EDIT_PAGE_PATH
-  | typeof TIMELINE_PAGE_PATH
-  | typeof TIMELINEITEMS_PAGE_PATH
-  | typeof TIMELINEITEM_EDIT_PAGE_PATH
-  | typeof TIMELINEITEM_PAGE_PATH
-  | typeof DASHBOARD_PAGE_PATH;
+  | typeof DASHBOARD_PAGE_PATH
+  | typeof ADMIN_AUTH_PATH
+  | typeof ADMIN_AUTH_LOGIN_PATH
+  | typeof ADMIN_AUTH_SERVICE_PATH
+  | typeof ADMIN_AUTH_SERVICE_CATEGORIES_PATH;

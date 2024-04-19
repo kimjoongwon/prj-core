@@ -7,18 +7,18 @@ import {
 } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname, useRouter } from 'next/navigation';
-import { MenuDto } from '../../../model';
+import { Paths } from '../../../stores/navStore';
 
 export interface NavItem {
   text: string;
-  pathname?: string;
+  pathname: Paths;
   icon?: string;
   children?: NavItem[];
 }
 
 interface NavbarProps {
   state: any;
-  navItems?: MenuDto[];
+  navItems?: NavItem[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
 }

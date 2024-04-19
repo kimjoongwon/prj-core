@@ -1,6 +1,6 @@
 export enum SERVICE_NAME {
-  userService = "userService",
-  settingService = "settingService"
+  user = "user",
+  space = "space"
 }
 
 export enum SubjectConditions {

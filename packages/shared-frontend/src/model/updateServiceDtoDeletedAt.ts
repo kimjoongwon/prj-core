@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateServiceDtoDeletedAt = {} | null;
+export type UpdateServiceDtoDeletedAt = { [key: string]: any };

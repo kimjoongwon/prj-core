@@ -23,20 +23,17 @@ const defaultLoginFormObject = {
 export const test = observable({ test: '' });
 
 const LoginPage = observer(() => {
-  const { data: schema } = useGetLoginFormSchema();
   const { mutateAsync: login } = useLogin();
   const state = useLocalObservable(() => defaultLoginFormObject);
 
   const onClickLogin = async () => {
-    const { errorMessages, valid } = getErrorMessages(state, schema);
-
     try {
-      const { accessToken, user } = await login({
+      const { data: tokenDto } = await login({
         data: state,
       });
 
-      authStore.accessToken = accessToken;
-      authStore.user = user;
+      authStore.accessToken = tokenDto?.accessToken;
+      authStore.user = tokenDto?.user;
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -48,7 +45,7 @@ const LoginPage = observer(() => {
     <Container className="max-w-screen-sm">
       {test.test}
       <Spacer y={10} />
-      <LoginForm state={state} schema={schema} />
+      <LoginForm state={state} />
       <Spacer y={10} />
       <Button fullWidth onClick={onClickLogin}>
         로그인

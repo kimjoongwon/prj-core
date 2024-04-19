@@ -36,16 +36,22 @@ export const useCoCRouter = <T extends object>() => {
     getUrlWithParams: getUrlWithParamsAndQueryString,
     push: (cocRouterArgs: CoCRouterArgs<T>) => {
       const { params, url, queryString, options } = cocRouterArgs;
-      const urlWithParamsAndQueryString =
-        getUrlWithParamsAndQueryString(url, params, queryString);
+      const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
+        url,
+        params,
+        queryString,
+      );
 
       router.push(urlWithParamsAndQueryString, options);
     },
     replace: (cocRouterArgs: CoCRouterArgs<T>) => {
       const { params, url, queryString, options } = cocRouterArgs;
 
-      const urlWithParamsAndQueryString =
-        getUrlWithParamsAndQueryString(url, params, queryString);
+      const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
+        url,
+        params,
+        queryString,
+      );
 
       router.replace(urlWithParamsAndQueryString, options);
     },
@@ -54,8 +60,11 @@ export const useCoCRouter = <T extends object>() => {
     prefetch: (cocRouterArgs: CoCRouterArgs<T>) => {
       const { params, url, queryString } = cocRouterArgs;
 
-      const urlWithParamsAndQueryString =
-        getUrlWithParamsAndQueryString(url, params, queryString);
+      const urlWithParamsAndQueryString = getUrlWithParamsAndQueryString(
+        url,
+        params,
+        queryString,
+      );
       router.prefetch(urlWithParamsAndQueryString);
     },
   };

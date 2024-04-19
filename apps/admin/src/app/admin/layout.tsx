@@ -1,42 +1,51 @@
 'use client';
 
-import {
-  Navbar,
-  Container,
-  useGetMemus,
-  Button,
-  HStack,
-  User,
-  authStore,
-} from '@shared/frontend';
+import { Container, Button, HStack, useGetAllService } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { contextStore } from '@stores';
+import { navStore } from '@stores';
 import { Divider } from '@nextui-org/react';
 import { useCoCRouter } from '../shared/hooks/common/useCoCRouter';
+import { NavItem } from '@components';
 
 export default observer(({ children }: { children: React.ReactNode }) => {
-  const { data: serviceMenus } = useGetMemus();
   const { push } = useCoCRouter();
-  const menus = serviceMenus?.find(
-    menu => menu.text === contextStore?.service.name,
-  )?.children;
+  const { data } = useGetAllService();
+
+  const navItems: NavItem[] = [
+    {
+      text: 'dashboard',
+      pathname: '/admin/dashboard',
+    },
+    {
+      text: '로그인',
+      pathname: '/admin/auth/login',
+    },
+    {
+      text: '유저 카테고리',
+      pathname: '/admin/services/user/categories',
+    },
+  ];
 
   return (
     <Container>
-      <Navbar
-        navItems={serviceMenus}
-        state={contextStore}
-        rightContents={<User />}
-      />
+      <div>test</div>
+
       <HStack className="py-2">
-        {menus?.map(menu => (
+        {navItems?.map(item => (
           <Button
-            key={menu.pathname}
+            key={item.pathname}
             className="font-bold"
             variant="bordered"
-            onClick={() => push({ url: menu.pathname })}
+            onClick={() => {
+              navStore.push({
+                url: item.pathname,
+                params: {
+                  serviceId: 'test',
+                },
+              });
+            }}
           >
-            {menu.text}
+            {item.text}
           </Button>
         ))}
       </HStack>
