@@ -9,7 +9,7 @@ import { NavItem } from '@components';
 
 export default observer(({ children }: { children: React.ReactNode }) => {
   const { push } = useCoCRouter();
-  const { data } = useGetAllService();
+  // const { data } = useGetAllService();
 
   const navItems: NavItem[] = [
     {
@@ -28,8 +28,6 @@ export default observer(({ children }: { children: React.ReactNode }) => {
 
   return (
     <Container>
-      <div>test</div>
-
       <HStack className="py-2">
         {navItems?.map(item => (
           <Button

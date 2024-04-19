@@ -24,11 +24,11 @@ export class ServicesService {
       form: {
         nameOptions: [
           {
-            text: '설정 서비스',
+            text: '공간 서비스',
             value: 'space',
           },
           {
-            text: '유저 서비스',
+            text: '사용자 서비스',
             value: 'user',
           },
         ],

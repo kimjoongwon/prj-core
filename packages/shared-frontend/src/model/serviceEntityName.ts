@@ -10,6 +10,6 @@ export type ServiceEntityName = typeof ServiceEntityName[keyof typeof ServiceEnt
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ServiceEntityName = {
-  userService: 'userService',
-  settingService: 'settingService',
+  user: 'user',
+  space: 'space',
 } as const;

@@ -10,6 +10,6 @@ export type UpdateCategoryDtoName = typeof UpdateCategoryDtoName[keyof typeof Up
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateCategoryDtoName = {
-  userService: 'userService',
-  settingService: 'settingService',
+  user: 'user',
+  space: 'space',
 } as const;
