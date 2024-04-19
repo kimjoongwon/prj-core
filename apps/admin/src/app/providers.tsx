@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ModalProvider } from '@shared/frontend';
 import { AuthProvider } from '@providers';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { navStore } from './shared/stores/navStore';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -36,7 +39,11 @@ function getQueryClient() {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
+  const router = useRouter();
 
+  useEffect(() => {
+    navStore.router = router;
+  }, []);
   return (
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>

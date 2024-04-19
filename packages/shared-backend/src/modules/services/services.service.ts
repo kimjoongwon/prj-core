@@ -1,41 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dto/create-service.dto';
-import { SERVICE_NAME } from '@prisma/client';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { SERVICE_NAME } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
   constructor(private prisma: PrismaService) {}
 
   createServices() {
-    return this.prisma.service.createMany({
-      data: [
-        {
-          name: SERVICE_NAME.settingService,
-        },
-        {
-          name: SERVICE_NAME.userService,
-        },
-      ],
-      skipDuplicates: true,
+    this.prisma.service.create({
+      data: {
+        name: SERVICE_NAME.space,
+      },
     });
   }
 
   getServiceForm() {
     return {
       defaultObject: {
-        name: SERVICE_NAME.userService,
+        name: 'user',
       },
       form: {
         nameOptions: [
           {
             text: '설정 서비스',
-            value: SERVICE_NAME.settingService,
+            value: 'space',
           },
           {
             text: '유저 서비스',
-            value: SERVICE_NAME.userService,
+            value: 'user',
           },
         ],
       },

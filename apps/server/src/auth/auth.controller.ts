@@ -28,7 +28,6 @@ import {
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
-import { instanceToPlain } from 'class-transformer';
 
 @ApiTags('auth')
 @Controller()

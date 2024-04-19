@@ -4,12 +4,5 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { MenuDtoChildrenItem } from './menuDtoChildrenItem';
-import type { MenuDtoPathname } from './menuDtoPathname';
-import type { MenuDtoText } from './menuDtoText';
 
-export interface MenuDto {
-  children?: MenuDtoChildrenItem[];
-  pathname: MenuDtoPathname;
-  text: MenuDtoText;
-}
+export interface MenuDto { [key: string]: any }

@@ -5,7 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface LoginFormDto {
-  email: string;
-  password: string;
-}
+export interface LoginFormDto { [key: string]: any }

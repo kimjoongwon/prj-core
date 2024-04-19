@@ -105,7 +105,7 @@ import { AdminModule } from './admin/admin.module';
                 module: ServicesModule,
                 children: [
                   {
-                    path: ':serviceId/categories',
+                    path: ':service/categories',
                     module: CategoriesModule,
                   },
                 ],
@@ -148,9 +148,7 @@ import { AdminModule } from './admin/admin.module';
 })
 export class AppModule implements OnModuleInit {
   constructor() {}
-  onModuleInit() {
-    //
-  }
+  onModuleInit() {}
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }

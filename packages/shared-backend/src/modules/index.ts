@@ -9,5 +9,5 @@ export * from './tenants';
 export * from './abilities';
 export * from './subjects';
 export * from './tenants';
-export * from './services/services.module';
+export * from './services';
 export * from './categories/categories.module';

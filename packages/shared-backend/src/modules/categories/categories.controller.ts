@@ -7,6 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ServiceSpaceDto } from '../../dto';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { Auth } from '../../decorators';
+import { ResponseEntity, ResponseStatus } from '../../entity';
 
 @ApiTags('categories')
 @Controller()
@@ -21,18 +22,25 @@ export class CategoriesController {
   }
 
   @Auth()
-  @ApiBody({ type: CreateCategoryDto })
   @ApiResponseEntity(CategoryDto)
   @Post()
-  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  async createCategory(
+    @Body() createCategoryDto: CreateCategoryDto,
+    @Param('serviceId') serviceId: string,
+  ) {
+    const category = await this.categoriesService.create(createCategoryDto);
+    return new ResponseEntity(
+      ResponseStatus.CREATED,
+      'Category created',
+      new CategoryDto(category),
+    );
   }
 
   @Auth()
-  @ApiBody({ type: UpdateCategoryDto })
-  @ApiResponse({ status: 200, type: CategoryDto })
+  @ApiResponseEntity(CategoryDto)
   @Patch(':categoryId')
   update(
+    @Param('serviceId') serviceId: string,
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {

@@ -84,8 +84,8 @@ model Group {
 }
 
 enum SERVICE_NAME {
-  userService
-  settingService
+  user
+  space
 }
 
 model Service {

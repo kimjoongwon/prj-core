@@ -13,7 +13,6 @@ export * from './Checkbox';
 export * from './RadioGroup';
 export * from './Switch';
 export * from './Chip';
-export * from './Navbar';
 export * from './ButtonGroup';
 export * from './Search';
 export * from './forms';

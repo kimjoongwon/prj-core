@@ -4,10 +4,10 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TokenDtoUser } from './tokenDtoUser';
+import type { UserDto } from './userDto';
 
 export interface TokenDto {
   accessToken: string;
   refreshToken: string;
-  user: TokenDtoUser;
+  user: UserDto;
 }

@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateServiceDtoName = typeof UpdateServiceDtoName[keyof typeof UpdateServiceDtoName];
+export type UpdateCategoryDtoName = typeof UpdateCategoryDtoName[keyof typeof UpdateCategoryDtoName];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UpdateServiceDtoName = {
+export const UpdateCategoryDtoName = {
   userService: 'userService',
   settingService: 'settingService',
 } as const;

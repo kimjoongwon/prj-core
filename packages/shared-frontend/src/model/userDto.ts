@@ -4,21 +4,18 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDtoCreatedAt } from './userDtoCreatedAt';
-import type { UserDtoDeletedAt } from './userDtoDeletedAt';
-import type { UserDtoProfilesItem } from './userDtoProfilesItem';
-import type { UserDtoTenantsItem } from './userDtoTenantsItem';
-import type { UserDtoUpdatedAt } from './userDtoUpdatedAt';
+import type { ProfileDto } from './profileDto';
+import type { TenantDto } from './tenantDto';
 
 export interface UserDto {
-  createdAt: UserDtoCreatedAt;
-  deletedAt: UserDtoDeletedAt;
+  createdAt: string;
+  deletedAt?: string;
   email: string;
   id: string;
   name: string;
   password: string;
   phone: string;
-  profiles: UserDtoProfilesItem[];
-  tenants: UserDtoTenantsItem[];
-  updatedAt: UserDtoUpdatedAt;
+  profiles: ProfileDto[][];
+  tenants: TenantDto[][];
+  updatedAt?: string;
 }

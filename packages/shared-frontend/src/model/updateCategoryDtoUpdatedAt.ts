@@ -5,7 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface LoginPayloadDto {
-  email: string;
-  password: string;
-}
+export type UpdateCategoryDtoUpdatedAt = { [key: string]: any };
