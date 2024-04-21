@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -6,14 +6,39 @@ import { SERVICE_NAME } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
-  constructor(private prisma: PrismaService) {}
+  logger = new Logger(ServicesService.name);
+  constructor(private readonly prisma: PrismaService) {}
 
-  createServices() {
-    this.prisma.service.create({
-      data: {
-        name: SERVICE_NAME.space,
+  async createServices() {
+    this.logger.log('Create Services');
+
+    const space = await this.prisma.service.findFirst({
+      where: {
+        name: SERVICE_NAME.SPACE,
       },
     });
+
+    if (!space) {
+      this.prisma.service.create({
+        data: {
+          name: SERVICE_NAME.SPACE,
+        },
+      });
+    }
+
+    const user = await this.prisma.service.findFirst({
+      where: {
+        name: SERVICE_NAME.USER,
+      },
+    });
+
+    if (!user) {
+      this.prisma.service.create({
+        data: {
+          name: SERVICE_NAME.USER,
+        },
+      });
+    }
   }
 
   getServiceForm() {

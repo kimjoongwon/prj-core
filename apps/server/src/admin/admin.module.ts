@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import {
@@ -13,10 +13,6 @@ import { PasswordService } from '../auth/password.service';
   imports: [SpacesModule, RolesModule, ServicesModule, SubjectsModule],
   controllers: [AdminController],
   providers: [AdminService, PasswordService],
+  exports: [AdminService],
 })
-export class AdminModule implements OnModuleInit {
-  constructor(private adminService: AdminService) {}
-  onModuleInit() {
-    this.adminService.createSuperAdmin();
-  }
-}
+export class AdminModule {}

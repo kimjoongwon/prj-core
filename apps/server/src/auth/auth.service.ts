@@ -15,7 +15,6 @@ import {
   RolesService,
   SpacesService,
   TokenType,
-  UserDto,
   UsersService,
 } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';

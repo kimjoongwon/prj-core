@@ -1,29 +1,14 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
-export class SpacesService implements OnModuleInit {
-  private readonly logger = new Logger(SpacesService.name);
-
+export class SpacesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async onModuleInit() {
-    const baseSpace = await this.prisma.space.findUnique({
-      where: {
-        name: '기본',
-      },
-    });
-
-    this.logger.log(baseSpace, 'BaseSpace Exist');
-
-    if (!baseSpace) {
-      await this.prisma.space.create({
-        data: {
-          name: '기본',
-        },
-      });
-    }
+  async getAccessibleSpacesByIds(spaceIds: string[]) {
+    return this.prisma.space.findMany({ where: { id: { in: spaceIds } } });
   }
+
   async createBaseSpace() {
     return this.prisma.space.create({
       data: {

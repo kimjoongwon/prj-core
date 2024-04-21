@@ -17,7 +17,7 @@ export const ADMIN_PATH = '/admin' as const;
 export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard` as const;
 export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth` as const;
 export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login` as const;
-export const ADMIN_SERVICE_NAME_PATH = `${ADMIN_PATH}/services/user` as const;
+export const ADMIN_SERVICE_NAME_PATH = `${ADMIN_PATH}/services/:serviceId` as const;
 export const ADMIN_AUTH_SERVICE_CATEGORIES_PATH =
   `${ADMIN_SERVICE_NAME_PATH}/categories` as const;
 
