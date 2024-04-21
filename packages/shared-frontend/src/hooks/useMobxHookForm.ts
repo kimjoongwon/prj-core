@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocalObservable } from 'mobx-react-lite';
-import { reaction } from 'mobx';
+import { observable, reaction } from 'mobx';
 import { get, set } from 'lodash-es';
 
 export const useMobxHookForm = (initialValue: any, state: any, path: any) => {

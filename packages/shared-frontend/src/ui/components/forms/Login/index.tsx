@@ -1,9 +1,9 @@
 'use client';
 
 import { Card, CardBody, Spacer } from '@nextui-org/react';
-import { LoginMutationBody } from '../../../../apis';
 import { observer } from 'mobx-react-lite';
 import Input from '../../Input';
+import { LoginMutationBody } from '../../../../auth/auth';
 
 export interface LoginFormProps {
   state: LoginMutationBody;

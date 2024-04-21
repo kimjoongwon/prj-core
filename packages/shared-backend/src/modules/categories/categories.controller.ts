@@ -16,23 +16,15 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto, { isArray: true })
-  @ApiParam({ name: 'service-name', type: 'string' })
   @Get()
-  getCategories(
-    @Param() serviceSpaceDto: ServiceSpaceDto,
-    @Param('service-name') serviceName: string,
-  ) {
+  getCategories(@Param() serviceSpaceDto: ServiceSpaceDto) {
     return this.categoriesService.getCategoriesByServiceSpace(serviceSpaceDto);
   }
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
-  @ApiParam({ name: 'service-name', type: 'string' })
   @Post()
-  async createCategory(
-    @Body() createCategoryDto: CreateCategoryDto,
-    @Param('service-name') serviceName: string,
-  ) {
+  async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     const category = await this.categoriesService.create(createCategoryDto);
     return new ResponseEntity(
       ResponseStatus.CREATED,
@@ -43,7 +35,6 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
-  @ApiParam({ name: 'service-name', type: 'string' })
   @Patch(':categoryId')
   update(
     @Param('service-name') serviceName: string,

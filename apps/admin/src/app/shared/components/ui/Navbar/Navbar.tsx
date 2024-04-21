@@ -13,6 +13,7 @@ export interface NavItem {
   text: string;
   pathname: Paths;
   icon?: string;
+  params?: any;
   children?: NavItem[];
 }
 

@@ -1,15 +1,28 @@
 'use client';
 
-import { Container, Button, HStack, useGetAllService } from '@shared/frontend';
+import {
+  Container,
+  Button,
+  HStack,
+  useGetAllService,
+  useGetAccessibleAllSpace,
+  Select,
+  authStore,
+} from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { navStore } from '@stores';
 import { Divider } from '@nextui-org/react';
-import { useCoCRouter } from '../shared/hooks/common/useCoCRouter';
 import { NavItem } from '@components';
 
-export default observer(({ children }: { children: React.ReactNode }) => {
-  const { push } = useCoCRouter();
-  // const { data } = useGetAllService();
+const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
+  const { data: services, isLoading } = useGetAllService();
+  const { data: queryData } = useGetAccessibleAllSpace();
+  const spaces = queryData?.data;
+
+  const spaceOptions = spaces?.map(space => ({
+    text: space.name,
+    value: space.id,
+  }));
 
   const navItems: NavItem[] = [
     {
@@ -22,33 +35,47 @@ export default observer(({ children }: { children: React.ReactNode }) => {
     },
     {
       text: '유저 카테고리',
-      pathname: '/admin/services/user/categories',
+      pathname: '/admin/services/:serviceId/categories',
+      params: {
+        serviceId: services?.find(service => service.name === 'USER')?.id,
+      },
     },
   ];
+
+  console.log(authStore.currentSpaceId);
 
   return (
     <Container>
       <HStack className="py-2">
         {navItems?.map(item => (
           <Button
+            isLoading={isLoading}
             key={item.pathname}
             className="font-bold"
             variant="bordered"
             onClick={() => {
               navStore.push({
                 url: item.pathname,
-                params: {
-                  serviceId: 'test',
-                },
+                params: item.params,
               });
             }}
           >
             {item.text}
           </Button>
         ))}
+        <Select
+          options={spaceOptions}
+          state={authStore}
+          path="currentSpaceId"
+          value={spaceOptions?.[0]?.value}
+        />
       </HStack>
       <Divider />
+      <div>tenant: {authStore.currentTenant?.id}</div>
+      <div>space: {authStore.currentSpaceId}</div>
       {children}
     </Container>
   );
 });
+
+export default AdminLayout;

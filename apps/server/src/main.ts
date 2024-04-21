@@ -26,7 +26,7 @@ async function bootstrap() {
     .setTitle('PROMISE Server')
     .addTag('PROMISE')
     .addBearerAuth()
-    .setBasePath('api')
+    // .addServer('api')
     .build();
 
   const options: SwaggerDocumentOptions = {

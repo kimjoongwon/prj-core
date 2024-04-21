@@ -5,8 +5,6 @@ import {
   SelectProps as NextUISelectProps,
 } from '@nextui-org/react';
 import { MobxProps } from '../types';
-import { useEffect } from 'react';
-import { reaction } from 'mobx';
 import { cloneDeep, get, set } from 'lodash-es';
 import { useMobxHookForm } from '../../../hooks';
 

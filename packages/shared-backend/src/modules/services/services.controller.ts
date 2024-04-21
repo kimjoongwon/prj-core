@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Logger } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import {
   ApiBody,
@@ -16,7 +16,10 @@ import { ServiceFormDto } from './dto/service-form.dto';
 @ApiTags('services')
 @Controller()
 export class ServicesController {
-  constructor(private readonly servicesService: ServicesService) {}
+  logger = new Logger(ServicesController.name)
+  constructor(private readonly servicesService: ServicesService) {
+    this.logger.debug('----------------------')
+  }
 
   @Get()
   @ApiResponse({ type: ServiceEntity, isArray: true })

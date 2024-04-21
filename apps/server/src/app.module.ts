@@ -17,6 +17,7 @@ import pino from 'pino';
 import {
   PrismaClientExceptionFilter,
   PrismaModule,
+  PrismaService,
   QueryInfo,
   loggingMiddleware,
 } from 'nestjs-prisma';
@@ -24,7 +25,11 @@ import {
   CaslModule,
   CategoriesModule,
   LoggerMiddleware,
+  RolesModule,
+  RolesService,
   ServicesModule,
+  ServicesService,
+  SpacesModule,
   appConfig,
   authConfig,
   corsConfig,
@@ -36,6 +41,7 @@ import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { AuthzModule } from './authz/authz.module';
 import { AdminModule } from './admin/admin.module';
+import { AdminService } from './admin/admin.service';
 
 @Module({
   imports: [
@@ -88,6 +94,7 @@ import { AdminModule } from './admin/admin.module';
       ],
       envFilePath: '.env',
     }),
+    ServicesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -101,14 +108,16 @@ import { AdminModule } from './admin/admin.module';
             module: AdminModule,
             children: [
               {
+                path: 'categories',
+                module: CategoriesModule,
+              },
+              {
                 path: 'services',
                 module: ServicesModule,
-                children: [
-                  {
-                    path: ':serviceName/categories',
-                    module: CategoriesModule,
-                  },
-                ],
+              },
+              {
+                path: 'spaces',
+                module: SpacesModule,
               },
             ],
           },
@@ -124,10 +133,10 @@ import { AdminModule } from './admin/admin.module';
       },
     ]),
     CategoriesModule,
-    ServicesModule,
     AdminModule,
     AuthModule,
     AuthzModule,
+    RolesModule,
   ],
   providers: [
     {
@@ -147,8 +156,65 @@ import { AdminModule } from './admin/admin.module';
   ],
 })
 export class AppModule implements OnModuleInit {
-  constructor() {}
-  onModuleInit() {}
+  logger = new Logger(AppModule.name);
+
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly prisma: PrismaService,
+    private readonly rolesService: RolesService,
+    private readonly servicesService: ServicesService,
+  ) {}
+
+  async onModuleInit() {
+    this.adminService.createSuperAdmin();
+
+    const superAdminRole = await this.prisma.role.findFirst({
+      where: {
+        name: 'SUPER_ADMIN',
+      },
+    });
+
+    const userRole = await this.prisma.role.findFirst({
+      where: {
+        name: 'USER',
+      },
+    });
+
+    if (!superAdminRole) {
+      this.logger.log('Create SUPER_ADMIN Role');
+      await this.rolesService.createSuperAdmin();
+    }
+
+    if (!userRole) {
+      this.logger.log('Create USER Role');
+      await this.rolesService.createUser();
+    }
+
+    const baseSpace = await this.prisma.space.findUnique({
+      where: {
+        name: '기본',
+      },
+    });
+
+    this.logger.log(baseSpace, 'BaseSpace Exist');
+
+    if (!baseSpace) {
+      await this.prisma.space.create({
+        data: {
+          name: '기본',
+        },
+      });
+    }
+
+    this.logger.log(baseSpace, 'BaseSpace Exist1');
+    try {
+      const result = this.servicesService.createServices();
+      this.logger.log(baseSpace, 'BaseSpace Exist2', result);
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
+
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }

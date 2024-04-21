@@ -41,7 +41,6 @@ model Category {
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
   deletedAt       DateTime?        @db.Timestamptz(6)
   classifications Classification[]
-  space           Space            @relation(fields: [spaceId], references: [id])
 }
 
 model Group {
@@ -55,13 +54,13 @@ model Group {
 }
 
 enum SERVICE_NAME {
-  user
-  space
+  USER
+  SPACE
 }
 
 model Service {
   id              String           @id @default(cuid())
-  name            SERVICE_NAME     @unique
+  name            SERVICE_NAME
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
   deletedAt       DateTime?        @db.Timestamptz(6)
@@ -122,7 +121,6 @@ model Space {
   updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
   deletedAt  DateTime?  @db.Timestamptz(6)
   tenants    Tenant[]
-  categories Category[]
 }
 
 model EmailTemplate {
