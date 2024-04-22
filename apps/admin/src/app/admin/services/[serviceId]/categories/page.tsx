@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { Button, ButtonProps, Spacer } from '@nextui-org/react';
+import React from 'react';
+import { Button, Spacer } from '@nextui-org/react';
 import {
-  CategoryDto,
   Container,
   HStack,
   Input,
@@ -11,22 +10,15 @@ import {
   authStore,
   getGetCategoriesQueryKey,
   useCreateCategory,
-  useGetCategories,
 } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
-import { observable } from 'mobx';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   CategoriesPageProvider,
   Category,
-  CategoryPage,
-  useCategoryPage,
+  useCategoriesPage,
 } from './provider';
-
-interface CategoryPageProviderProps {
-  children: React.ReactNode;
-}
 
 interface CategoryProps {
   category: Category;
@@ -43,17 +35,19 @@ function Page() {
 export default observer(Page);
 
 export const CategoriesPage = observer(() => {
-  const { state } = useCategoryPage();
-
+  const state = useCategoriesPage();
+  console.log(state.categoryPage?.categoriesGroupedByParentId);
   return (
     <Container>
       <CategoryForm />
       <Spacer y={2} />
       <CategoryContainer>
         <CategorySection>
-          {state.categoryPage?.categories.map(category => {
-            return <CategoryCard key={category.id} category={category} />;
-          })}
+          {state.categoryPage?.categoriesGroupedByParentId['null'].map(
+            category => {
+              return <CategoryCard category={category} />;
+            },
+          )}
         </CategorySection>
       </CategoryContainer>
     </Container>
@@ -80,10 +74,7 @@ export const CategorySection = observer((props: FinderSection) => {
 
 export const CategoryCard = observer((props: CategoryProps) => {
   const { category } = props;
-  const onClickCategoryCard = () => {
-    category.open();
-  };
-
+  const onClickCategoryCard = () => category.open();
   return (
     <Button
       variant="ghost"
@@ -115,8 +106,6 @@ export const CategoryForm = () => {
   }));
 
   const onClickCreateCategory = () => {
-    const user = authStore.user;
-
     mutate({
       data: {
         parentId: null,

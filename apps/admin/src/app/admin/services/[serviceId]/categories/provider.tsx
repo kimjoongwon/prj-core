@@ -1,11 +1,18 @@
 import { CategoryDto, useGetCategories } from '@shared/frontend';
-import { makeAutoObservable } from 'mobx';
+import { computed, makeAutoObservable } from 'mobx';
+import { entries, findIndex, groupBy } from 'lodash-es';
 import React from 'react';
 
 export class CategoryPage {
+  openedParentIds: string[] = [];
   categories: Category[] = [];
+
   constructor() {
     makeAutoObservable(this);
+  }
+
+  get categoriesGroupedByParentId() {
+    return groupBy(this.categories, 'parentId');
   }
 
   setCategories(categories: Category[]) {
@@ -38,9 +45,20 @@ export class Category implements CategoryDto {
   }
 
   open() {
-    this.state.categoryPage?.categories.forEach(category => {
+    const categoriesGroupedByParentId =
+      this.state.categoryPage?.categoriesGroupedByParentId!;
+
+    const parentIds = Object.keys(categoriesGroupedByParentId);
+
+    const depth = findIndex(parentIds, parentId => parentId === this.parentId);
+
+    const categories = categoriesGroupedByParentId?.[this.parentId || ''];
+
+    categories?.forEach(category => {
       console.log(category.id);
+
       if (category.id === this.id) {
+        this.state.categoryPage?.openedParentIds.push(this.id);
         category.state.open = true;
       } else {
         category.state.open = false;
@@ -50,15 +68,13 @@ export class Category implements CategoryDto {
 }
 
 interface CategoryPageContextValue {
-  state: {
-    categoryPage: CategoryPage | null;
-  };
+  categoryPage: CategoryPage | null;
 }
 
 export const CategoryPageContext =
   React.createContext<CategoryPageContextValue>({} as CategoryPageContextValue);
 
-export const useCategoryPage = () => {
+export const useCategoriesPage = () => {
   const state = React.useContext(CategoryPageContext);
   if (!state) {
     throw new Error(
@@ -90,9 +106,7 @@ export const CategoriesPageProvider = (props: CategoryPageProviderProps) => {
   return (
     <CategoryPageContext.Provider
       value={{
-        state: {
-          categoryPage,
-        },
+        categoryPage,
       }}
     >
       {props.children}
