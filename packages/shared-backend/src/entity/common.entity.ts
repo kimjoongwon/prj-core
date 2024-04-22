@@ -1,6 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { format } from 'date-fns';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CommonEntity {
   @ApiProperty()
@@ -9,10 +7,9 @@ export class CommonEntity {
   @ApiProperty()
   createdAt: Date;
 
-  @ApiPropertyOptional({ example: null })
-  @Transform(({ value }) => format(new Date(value), 'yyyy.MM.dd HH:mm') || null)
+  @ApiProperty({ nullable: true })
   updatedAt: Date;
 
-  @ApiPropertyOptional({ example: null })
+  @ApiProperty({ nullable: true })
   deletedAt: Date;
 }

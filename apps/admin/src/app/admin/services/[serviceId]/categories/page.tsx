@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, ButtonProps, Spacer } from '@nextui-org/react';
 import {
   CategoryDto,
@@ -16,77 +16,46 @@ import {
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
 import { observable } from 'mobx';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  CategoriesPageProvider,
+  Category,
+  CategoryPage,
+  useCategoryPage,
+} from './provider';
 
 interface CategoryPageProviderProps {
   children: React.ReactNode;
 }
 
-export interface CategoryPageState {
-  categories: CategoryDto[];
+interface CategoryProps {
+  category: Category;
 }
-
-export interface CategoryPageContextValue {
-  state: CategoryPageState;
-}
-
-const CategoryPageContext = React.createContext<CategoryPageContextValue>(
-  {} as CategoryPageContextValue,
-);
-
-const CategoryPageProvider = (props: CategoryPageProviderProps) => {
-  const { data: queryData } = useGetCategories();
-  const categories = queryData?.data || [];
-
-  const state = observable({
-    categories,
-  });
-
-  return (
-    <CategoryPageContext.Provider
-      value={{
-        state,
-      }}
-    >
-      {props.children}
-    </CategoryPageContext.Provider>
-  );
-};
-
-export const useCategoryPage = () => {
-  const store = React.useContext(CategoryPageContext);
-  if (!store) {
-    throw new Error(
-      'useCategoryPage must be used within a CategoryPageProvider',
-    );
-  }
-  return store;
-};
 
 function Page() {
   return (
-    <CategoryPageProvider>
+    <CategoriesPageProvider>
       <CategoriesPage />
-    </CategoryPageProvider>
+    </CategoriesPageProvider>
   );
 }
 
 export default observer(Page);
 
 export const CategoriesPage = observer(() => {
-  const { data: qData } = useGetCategories();
-  const categories = qData?.data || [];
+  const { state } = useCategoryPage();
 
   return (
     <Container>
       <CategoryForm />
       <Spacer y={2} />
-      <Category>
+      <CategoryContainer>
         <CategorySection>
-          {categories.map(category => {
-            return <CategoryItem key={category.id} />;
+          {state.categoryPage?.categories.map(category => {
+            return <CategoryCard key={category.id} category={category} />;
           })}
         </CategorySection>
-      </Category>
+      </CategoryContainer>
     </Container>
   );
 });
@@ -99,7 +68,7 @@ interface FinderSection {
   children: React.ReactNode;
 }
 
-export const Category = observer((props: FinderProps) => {
+export const CategoryContainer = observer((props: FinderProps) => {
   const { children } = props;
   return <HStack className="gap-2">{children}</HStack>;
 });
@@ -109,25 +78,34 @@ export const CategorySection = observer((props: FinderSection) => {
   return <VStack className="gap-2">{children}</VStack>;
 });
 
-export const CategoryItemButton = observer((props: ButtonProps) => {
-  const { children, ...rest } = props;
+export const CategoryCard = observer((props: CategoryProps) => {
+  const { category } = props;
+  const onClickCategoryCard = () => {
+    category.state.open = !category.state.open;
+  };
+
   return (
-    <Button {...rest} variant="ghost">
-      {children}
+    <Button
+      variant="ghost"
+      color={category.state.open ? 'primary' : 'default'}
+      onClick={onClickCategoryCard}
+    >
+      {category?.name}
     </Button>
   );
 });
 
-export const CategoryItem = observer(() => {
-  return <CategoryItemButton>CategoryItem</CategoryItemButton>;
-});
-
 export const CategoryForm = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
+  const queryClient = useQueryClient();
   const { mutate } = useCreateCategory({
     mutation: {
       onSuccess: () => {
-        getGetCategoriesQueryKey();
+        const queryKey = getGetCategoriesQueryKey();
+
+        queryClient.invalidateQueries({
+          queryKey,
+        });
       },
     },
   });

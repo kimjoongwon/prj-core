@@ -20,7 +20,7 @@ export class CategoryEntity extends CommonEntity implements Category {
   ancestorIds: string[];
 
   @ApiProperty({ nullable: true })
-  parentId: string | null;
+  parentId: string;
 
   @ApiProperty()
   spaceId: string;

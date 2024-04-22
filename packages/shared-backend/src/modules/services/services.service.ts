@@ -19,7 +19,8 @@ export class ServicesService {
     });
 
     if (!space) {
-      this.prisma.service.create({
+      this.logger.log('space service is not exist');
+      await this.prisma.service.create({
         data: {
           name: SERVICE_NAME.SPACE,
         },
@@ -33,7 +34,8 @@ export class ServicesService {
     });
 
     if (!user) {
-      this.prisma.service.create({
+      this.logger.log('user service is not exist');
+      await this.prisma.service.create({
         data: {
           name: SERVICE_NAME.USER,
         },

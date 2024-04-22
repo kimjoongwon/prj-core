@@ -206,10 +206,8 @@ export class AppModule implements OnModuleInit {
       });
     }
 
-    this.logger.log(baseSpace, 'BaseSpace Exist1');
     try {
-      const result = this.servicesService.createServices();
-      this.logger.log(baseSpace, 'BaseSpace Exist2', result);
+      await this.servicesService.createServices();
     } catch (error) {
       this.logger.error(error);
     }
