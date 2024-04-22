@@ -1,36 +1,51 @@
-import {
-  CategoryDto,
-  CategoryDtoParentId,
-  useGetCategories,
-} from '@shared/frontend';
+import { CategoryDto, useGetCategories } from '@shared/frontend';
 import { makeAutoObservable } from 'mobx';
 import React from 'react';
 
 export class CategoryPage {
   categories: Category[] = [];
-  constructor(categories: Category[]) {
-    this.categories = categories;
+  constructor() {
     makeAutoObservable(this);
+  }
+
+  setCategories(categories: Category[]) {
+    this.categories = categories;
   }
 }
 
 export class Category implements CategoryDto {
-  state = {
+  state: {
+    categoryPage: CategoryPage | null;
+    open: boolean;
+  } = {
+    categoryPage: null,
     open: false,
   };
+  id: string = '';
   ancestorIds: string[] = [];
   createdAt: string = '';
   deletedAt: string | null = null;
-  id: string = '';
   name: string = '';
   parentId: string | null = null;
   serviceId: string = '';
   spaceId: string = '';
   updatedAt: string | null = '';
 
-  constructor(category: CategoryDto) {
+  constructor(category: CategoryDto, categoryPage: CategoryPage) {
     Object.assign(this, category);
+    this.state.categoryPage = categoryPage;
     makeAutoObservable(this);
+  }
+
+  open() {
+    this.state.categoryPage?.categories.forEach(category => {
+      console.log(category.id);
+      if (category.id === this.id) {
+        category.state.open = true;
+      } else {
+        category.state.open = false;
+      }
+    });
   }
 }
 
@@ -59,8 +74,14 @@ interface CategoryPageProviderProps {
 
 export const CategoriesPageProvider = (props: CategoryPageProviderProps) => {
   const { data: queryData, isLoading } = useGetCategories();
-  const categories = queryData?.data.map(category => new Category(category));
-  const categoryPage = new CategoryPage(categories || []);
+
+  const categoryPage = new CategoryPage();
+
+  const categories = queryData?.data.map(
+    category => new Category(category, categoryPage),
+  );
+
+  categoryPage.setCategories(categories || []);
 
   if (isLoading) {
     return <div>Loading...</div>;

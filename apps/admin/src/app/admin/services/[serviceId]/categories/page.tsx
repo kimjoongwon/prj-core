@@ -81,7 +81,7 @@ export const CategorySection = observer((props: FinderSection) => {
 export const CategoryCard = observer((props: CategoryProps) => {
   const { category } = props;
   const onClickCategoryCard = () => {
-    category.state.open = !category.state.open;
+    category.open();
   };
 
   return (

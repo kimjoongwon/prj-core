@@ -10,7 +10,6 @@ export class CategoryEntity extends CommonEntity implements Category {
   }
 
   @ApiProperty()
-  @Exclude()
   id: string;
 
   @ApiProperty()
