@@ -1,11 +1,22 @@
-import { CategoryDto, useGetCategories } from '@shared/frontend';
-import { computed, makeAutoObservable } from 'mobx';
-import { entries, findIndex, groupBy } from 'lodash-es';
+import {
+  CategoryDto,
+  CreateCategoryDto,
+  useGetCategories,
+} from '@shared/frontend';
+import { makeAutoObservable } from 'mobx';
+import { groupBy } from 'lodash-es';
 import React from 'react';
 
 export class CategoryPage {
-  openedParentIds: string[] = [];
+  openedCategory: Category = {} as Category;
   categories: Category[] = [];
+  form: CreateCategoryDto = {
+    name: '',
+    ancestorIds: [],
+    parentId: null,
+    serviceId: '',
+    spaceId: '',
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -22,14 +33,14 @@ export class CategoryPage {
 
 export class Category implements CategoryDto {
   state: {
-    categoryPage: CategoryPage | null;
+    categoryPage: CategoryPage;
     open: boolean;
   } = {
-    categoryPage: null,
+    categoryPage: {} as CategoryPage,
     open: false,
   };
   id: string = '';
-  ancestorIds: string[] = [];
+  ancestorIds: string[] = ['null'];
   createdAt: string = '';
   deletedAt: string | null = null;
   name: string = '';
@@ -48,17 +59,11 @@ export class Category implements CategoryDto {
     const categoriesGroupedByParentId =
       this.state.categoryPage?.categoriesGroupedByParentId!;
 
-    const parentIds = Object.keys(categoriesGroupedByParentId);
-
-    const depth = findIndex(parentIds, parentId => parentId === this.parentId);
-
-    const categories = categoriesGroupedByParentId?.[this.parentId || ''];
+    const categories = categoriesGroupedByParentId?.[this.parentId!];
 
     categories?.forEach(category => {
-      console.log(category.id);
-
       if (category.id === this.id) {
-        this.state.categoryPage?.openedParentIds.push(this.id);
+        this.state.categoryPage.openedCategory = this;
         category.state.open = true;
       } else {
         category.state.open = false;
@@ -67,9 +72,7 @@ export class Category implements CategoryDto {
   }
 }
 
-interface CategoryPageContextValue {
-  categoryPage: CategoryPage | null;
-}
+type CategoryPageContextValue = CategoryPage;
 
 export const CategoryPageContext =
   React.createContext<CategoryPageContextValue>({} as CategoryPageContextValue);
@@ -93,9 +96,9 @@ export const CategoriesPageProvider = (props: CategoryPageProviderProps) => {
 
   const categoryPage = new CategoryPage();
 
-  const categories = queryData?.data.map(
-    category => new Category(category, categoryPage),
-  );
+  const categories = queryData?.data.map(category => {
+    return new Category(category, categoryPage);
+  });
 
   categoryPage.setCategories(categories || []);
 
@@ -104,11 +107,7 @@ export const CategoriesPageProvider = (props: CategoryPageProviderProps) => {
   }
 
   return (
-    <CategoryPageContext.Provider
-      value={{
-        categoryPage,
-      }}
-    >
+    <CategoryPageContext.Provider value={categoryPage}>
       {props.children}
     </CategoryPageContext.Provider>
   );

@@ -7,12 +7,10 @@ import {
   HStack,
   Input,
   VStack,
-  authStore,
   getGetCategoriesQueryKey,
   useCreateCategory,
 } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   CategoriesPageProvider,
@@ -36,19 +34,36 @@ export default observer(Page);
 
 export const CategoriesPage = observer(() => {
   const state = useCategoriesPage();
-  console.log(state.categoryPage?.categoriesGroupedByParentId);
+  const ancestorIds = state.openedCategory?.ancestorIds || [];
+  const categoryIds = ['null', ...ancestorIds, state.openedCategory.id];
   return (
     <Container>
       <CategoryForm />
       <Spacer y={2} />
       <CategoryContainer>
-        <CategorySection>
-          {state.categoryPage?.categoriesGroupedByParentId['null'].map(
+        {/* <CategorySection>
+          {state.categoriesGroupedByParentId?.['null']?.map(category => {
+            return <CategoryCard category={category} />;
+          })}
+        </CategorySection> */}
+        {categoryIds?.map(ancestorId => {
+          return (
+            <CategorySection>
+              {state.categoriesGroupedByParentId?.[ancestorId]?.map(
+                category => {
+                  return <CategoryCard category={category} />;
+                },
+              )}
+            </CategorySection>
+          );
+        })}
+        {/* <CategorySection>
+          {state.categoriesGroupedByParentId?.[state.openedCategory.id]?.map(
             category => {
               return <CategoryCard category={category} />;
             },
           )}
-        </CategorySection>
+        </CategorySection> */}
       </CategoryContainer>
     </Container>
   );
@@ -86,8 +101,8 @@ export const CategoryCard = observer((props: CategoryProps) => {
   );
 });
 
-export const CategoryForm = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+export const CategoryForm = observer(() => {
+  const state = useCategoriesPage();
   const queryClient = useQueryClient();
   const { mutate } = useCreateCategory({
     mutation: {
@@ -101,27 +116,33 @@ export const CategoryForm = () => {
     },
   });
 
-  const state = useLocalObservable(() => ({
-    name: '',
+  const _state = useLocalObservable(() => ({
+    test: '',
   }));
 
   const onClickCreateCategory = () => {
+    const { form } = state;
+
     mutate({
       data: {
-        parentId: null,
-        ancestorIds: [],
-        spaceId: authStore.currentTenant?.id || '',
-        serviceId,
-        name: state.name,
+        ancestorIds: [
+          ...state.openedCategory?.ancestorIds,
+          state.openedCategory.id,
+        ],
+        name: form.name,
+        parentId: state.openedCategory.id,
+        serviceId: state.openedCategory.serviceId,
+        spaceId: state.openedCategory.spaceId,
       },
     });
   };
 
+  console.log(_state.test);
   return (
     <HStack>
-      <Input placeholder="카테고리명" state={state} path="name" />
+      <Input placeholder="카테고리명" state={_state} path="test" />
       <Spacer x={3} />
       <Button onClick={onClickCreateCategory}>생성</Button>
     </HStack>
   );
-};
+});
