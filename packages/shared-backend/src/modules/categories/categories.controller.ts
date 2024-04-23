@@ -25,7 +25,8 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    const category = await this.categoriesService.create(createCategoryDto);
+    const category =
+      await this.categoriesService.createCategory(createCategoryDto);
     return new ResponseEntity(
       ResponseStatus.CREATED,
       'Category created',
@@ -36,11 +37,11 @@ export class CategoriesController {
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Patch(':categoryId')
-  update(
+  updateCategory(
     @Param('service-name') serviceName: string,
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(id, updateCategoryDto);
+    return this.categoriesService.updateCategory(id, updateCategoryDto);
   }
 }

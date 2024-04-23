@@ -4,14 +4,15 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UpdateCategoryDtoDeletedAt } from './updateCategoryDtoDeletedAt';
-import type { UpdateCategoryDtoName } from './updateCategoryDtoName';
-import type { UpdateCategoryDtoUpdatedAt } from './updateCategoryDtoUpdatedAt';
 
 export interface UpdateCategoryDto {
+  ancestorIds?: string[];
   createdAt?: string;
-  deletedAt?: UpdateCategoryDtoDeletedAt;
+  deletedAt?: string | null;
   id?: string;
-  name?: UpdateCategoryDtoName;
-  updatedAt?: UpdateCategoryDtoUpdatedAt;
+  name?: string;
+  parentId?: string | null;
+  serviceId?: string;
+  spaceId?: string;
+  updatedAt?: string | null;
 }

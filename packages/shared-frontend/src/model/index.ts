@@ -44,6 +44,7 @@ export * from './tenantDtoUpdatedAt';
 export * from './tokenDto';
 export * from './update200AllOf';
 export * from './updateAuthzDto';
+export * from './updateCategory200AllOf';
 export * from './updateCategoryDto';
 export * from './updateCategoryDtoDeletedAt';
 export * from './updateCategoryDtoName';

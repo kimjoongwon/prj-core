@@ -9,7 +9,7 @@ import { CategoryEntity } from './entities/category.entity';
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createCategoryDto: CreateCategoryDto) {
+  async createCategory(createCategoryDto: CreateCategoryDto) {
     const services = await this.prisma.category.create({
       data: createCategoryDto,
     });
@@ -17,7 +17,7 @@ export class CategoriesService {
     return services;
   }
 
-  update(id: string, updateCategoryDto: UpdateCategoryDto) {
+  updateCategory(id: string, updateCategoryDto: UpdateCategoryDto) {
     return this.prisma.category.update({
       where: { id },
       data: updateCategoryDto,
@@ -25,7 +25,11 @@ export class CategoriesService {
   }
 
   async getCategoriesByServiceSpace({ serviceId, spaceId }: ServiceSpaceDto) {
-    const services = await this.prisma.category.findMany();
+    const services = await this.prisma.category.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
     return new ResponseEntity(
       ResponseStatus.OK,
       'Successfully fetched categories',

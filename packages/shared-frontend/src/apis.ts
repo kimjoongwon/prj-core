@@ -20,6 +20,7 @@ import type {
   LoginPayloadDto,
   ServiceFormDto,
   UpdateAuthzDto,
+  UpdateCategoryDto,
   UpdateServiceDto,
 } from './model';
 import { faker } from '@faker-js/faker';
@@ -33,6 +34,7 @@ import type {
   MenuDto,
   ServiceEntity,
   TokenDto,
+  UpdateCategory200AllOf,
   UserDto,
 } from './model';
 import { customInstance } from './libs/customAxios';
@@ -456,72 +458,72 @@ export const useCreateCategory = <
   return useMutation(mutationOptions);
 };
 
-export const update = (
-  id: string,
-  updateAuthzDto: BodyType<UpdateAuthzDto>,
+export const updateCategory = (
+  categoryId: string,
+  updateCategoryDto: BodyType<UpdateCategoryDto>,
   options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<void>(
+  return customInstance<UpdateCategory200AllOf>(
     {
-      url: `http://localhost:3005/api/v1/authz/${id}`,
+      url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`,
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      data: updateAuthzDto,
+      data: updateCategoryDto,
     },
     options,
   );
 };
 
-export const getUpdateMutationOptions = <
-  TError = ErrorType<unknown>,
+export const getUpdateCategoryMutationOptions = <
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof update>>,
+    Awaited<ReturnType<typeof updateCategory>>,
     TError,
-    { id: string; data: BodyType<UpdateAuthzDto> },
+    { categoryId: string; data: BodyType<UpdateCategoryDto> },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof update>>,
+  Awaited<ReturnType<typeof updateCategory>>,
   TError,
-  { id: string; data: BodyType<UpdateAuthzDto> },
+  { categoryId: string; data: BodyType<UpdateCategoryDto> },
   TContext
 > => {
   const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof update>>,
-    { id: string; data: BodyType<UpdateAuthzDto> }
+    Awaited<ReturnType<typeof updateCategory>>,
+    { categoryId: string; data: BodyType<UpdateCategoryDto> }
   > = props => {
-    const { id, data } = props ?? {};
+    const { categoryId, data } = props ?? {};
 
-    return update(id, data, requestOptions);
+    return updateCategory(categoryId, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type UpdateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof update>>
+export type UpdateCategoryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateCategory>>
 >;
-export type UpdateMutationBody = BodyType<UpdateAuthzDto>;
-export type UpdateMutationError = ErrorType<unknown>;
+export type UpdateCategoryMutationBody = BodyType<UpdateCategoryDto>;
+export type UpdateCategoryMutationError = ErrorType<void>;
 
-export const useUpdate = <
-  TError = ErrorType<unknown>,
+export const useUpdateCategory = <
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof update>>,
+    Awaited<ReturnType<typeof updateCategory>>,
     TError,
-    { id: string; data: BodyType<UpdateAuthzDto> },
+    { categoryId: string; data: BodyType<UpdateCategoryDto> },
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }) => {
-  const mutationOptions = getUpdateMutationOptions(options);
+  const mutationOptions = getUpdateCategoryMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
@@ -1287,6 +1289,76 @@ export const useFindOne = <
   return query;
 };
 
+export const update = (
+  id: string,
+  updateAuthzDto: BodyType<UpdateAuthzDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/authz/${id}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateAuthzDto,
+    },
+    options,
+  );
+};
+
+export const getUpdateMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof update>>,
+    TError,
+    { id: string; data: BodyType<UpdateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof update>>,
+  TError,
+  { id: string; data: BodyType<UpdateAuthzDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof update>>,
+    { id: string; data: BodyType<UpdateAuthzDto> }
+  > = props => {
+    const { id, data } = props ?? {};
+
+    return update(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof update>>
+>;
+export type UpdateMutationBody = BodyType<UpdateAuthzDto>;
+export type UpdateMutationError = ErrorType<unknown>;
+
+export const useUpdate = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof update>>,
+    TError,
+    { id: string; data: BodyType<UpdateAuthzDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getUpdateMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
 export const remove = (
   id: string,
   options?: SecondParameter<typeof customInstance>,
@@ -1375,6 +1447,38 @@ export const getGetCategoriesResponseMock = (
 export const getCreateCategoryResponseMock = (
   overrideResponse: any = {},
 ): CreateCategory200AllOf => ({
+  data: faker.helpers.arrayElement([
+    {
+      ancestorIds: Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => faker.word.sample()),
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      deletedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      id: faker.word.sample(),
+      name: faker.word.sample(),
+      parentId: faker.helpers.arrayElement([faker.word.sample(), null]),
+      serviceId: faker.word.sample(),
+      spaceId: faker.word.sample(),
+      updatedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      ...overrideResponse,
+    },
+    undefined,
+  ]),
+  message: faker.helpers.arrayElement([faker.word.sample(), undefined]),
+  statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]),
+  ...overrideResponse,
+});
+
+export const getUpdateCategoryResponseMock = (
+  overrideResponse: any = {},
+): UpdateCategory200AllOf => ({
   data: faker.helpers.arrayElement([
     {
       ancestorIds: Array.from(
@@ -1708,15 +1812,22 @@ export const getCreateCategoryMockHandler = (
   });
 };
 
-export const getUpdateMockHandler = () => {
-  return http.patch('*/api/v1/authz/:id', async () => {
+export const getUpdateCategoryMockHandler = (
+  overrideResponse?: UpdateCategory200AllOf,
+) => {
+  return http.patch('*/api/v1/admin/categories/:categoryId', async () => {
     await delay(1000);
-    return new HttpResponse(null, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getUpdateCategoryResponseMock(),
+      ),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
   });
 };
 
@@ -1886,6 +1997,18 @@ export const getFindOneMockHandler = () => {
   });
 };
 
+export const getUpdateMockHandler = () => {
+  return http.patch('*/api/v1/authz/:id', async () => {
+    await delay(1000);
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
+
 export const getRemoveMockHandler = () => {
   return http.delete('*/api/v1/authz/:id', async () => {
     await delay(1000);
@@ -1904,7 +2027,7 @@ export const getPROMISEServerMock = () => [
   getGetUpdateServiceSchemaMockHandler(),
   getGetCategoriesMockHandler(),
   getCreateCategoryMockHandler(),
-  getUpdateMockHandler(),
+  getUpdateCategoryMockHandler(),
   getGetMemusMockHandler(),
   getGetAccessibleAllSpaceMockHandler(),
   getLoginMockHandler(),
@@ -1916,5 +2039,6 @@ export const getPROMISEServerMock = () => [
   getCreateMockHandler(),
   getFindAllMockHandler(),
   getFindOneMockHandler(),
+  getUpdateMockHandler(),
   getRemoveMockHandler(),
 ];

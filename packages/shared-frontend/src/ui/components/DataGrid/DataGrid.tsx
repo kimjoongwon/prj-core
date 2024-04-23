@@ -11,14 +11,18 @@ import {
 } from '@nextui-org/react';
 
 import {
+  GroupingState,
   Row,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
+  getGroupedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { v4 } from 'uuid';
 import { useLocalObservable } from 'mobx-react-lite';
 import { action, toJS } from 'mobx';
+import React from 'react';
 
 export interface DataGridProps<T> {
   selectionMode: TableProps['selectionMode'];
@@ -38,10 +42,19 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
     ...rest
   } = props;
 
+  const [grouping, setGrouping] = React.useState<GroupingState>([]);
+
   const table = useReactTable({
     data: data as T[],
     columns,
+    state: {
+      grouping,
+    },
+    getExpandedRowModel: getExpandedRowModel(),
+    onGroupingChange: setGrouping,
+    getGroupedRowModel: getGroupedRowModel(),
     getCoreRowModel: getCoreRowModel(),
+    debugTable: true,
   });
 
   const rows = table.getRowModel().rows as Row<T & { id: string }>[];
@@ -88,10 +101,28 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
       <TableHeader>
         {headers?.map(header => (
           <TableColumn key={header.column.id} allowsSorting={!!onSortChange}>
-            {header.isPlaceholder ? (
-              <></>
-            ) : (
-              flexRender(header.column.columnDef.header, header.getContext())
+            {header.isPlaceholder ? null : (
+              <div>
+                {header.column.getCanGroup() ? (
+                  // If the header can be grouped, let's add a toggle
+                  <button
+                    {...{
+                      onClick: header.column.getToggleGroupingHandler(),
+                      style: {
+                        cursor: 'pointer',
+                      },
+                    }}
+                  >
+                    {header.column.getIsGrouped()
+                      ? `🛑(${header.column.getGroupedIndex()}) `
+                      : `👊 `}
+                  </button>
+                ) : null}{' '}
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+              </div>
             )}
           </TableColumn>
         ))}
@@ -101,13 +132,41 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
       >
         {rows?.map(row => (
           <TableRow key={row.original.id}>
-            {row
-              .getVisibleCells()
-              ?.map(cell => (
-                <TableCell key={v4()}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
+            {row?.getVisibleCells()?.map(cell => (
+              <TableCell key={v4()}>
+                {cell.getIsGrouped() ? (
+                  // If it's a grouped cell, add an expander and row count
+                  <>
+                    <button
+                      {...{
+                        onClick: row.getToggleExpandedHandler(),
+                        style: {
+                          cursor: row.getCanExpand() ? 'pointer' : 'normal',
+                        },
+                      }}
+                    >
+                      {row.getIsExpanded() ? '👇' : '👉'}{' '}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}{' '}
+                      ({row.subRows.length})
+                    </button>
+                  </>
+                ) : cell.getIsAggregated() ? (
+                  // If the cell is aggregated, use the Aggregated
+                  // renderer for cell
+                  flexRender(
+                    cell.column.columnDef.aggregatedCell ??
+                      cell.column.columnDef.cell,
+                    cell.getContext(),
+                  )
+                ) : cell.getIsPlaceholder() ? null : ( // For cells with repeated values, render null
+                  // Otherwise, just render the regular cell
+                  flexRender(cell.column.columnDef.cell, cell.getContext())
+                )}
+              </TableCell>
+            ))}
           </TableRow>
         ))}
       </TableBody>

@@ -2,14 +2,13 @@
 
 import { NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
-import { ModalMount } from '@modals';
 import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ModalProvider } from '@shared/frontend';
 import { AuthProvider } from '@providers';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { navStore } from './shared/stores/navStore';
+import { _Modal } from '@shared/frontend';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -48,10 +47,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <ModalProvider>{children}</ModalProvider>
+          <_Modal />
+          {children}
         </AuthProvider>
       </QueryClientProvider>
-      <ModalMount />
       <ToastContainer theme="dark" />
     </NextUIProvider>
   );

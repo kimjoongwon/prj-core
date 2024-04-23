@@ -1,4 +1,4 @@
-import { ServiceEntity } from '../../services/service.entity';
 import { PartialType } from '@nestjs/swagger';
+import { CategoryEntity } from '../entities/category.entity';
 
-export class UpdateCategoryDto extends PartialType(ServiceEntity) {}
+export class UpdateCategoryDto extends PartialType(CategoryEntity) {}

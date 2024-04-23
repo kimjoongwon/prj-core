@@ -49,4 +49,5 @@ export {
   DataGrid,
   Pagination,
 };
+export * from './Modal';
 export * from './User';
