@@ -1,20 +1,23 @@
 import { CategoryDto, CreateCategoryDto } from '@shared/frontend';
 import { groupBy } from 'lodash-es';
-import { extendObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { useGetCategories } from '@shared/frontend';
 import { navStore } from '../../../../shared/stores/navStore';
 import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
-interface CategoryPage {
+interface State {
   categories: CategoryDto[];
   openedCategory: CategoryDto;
   form: CreateCategoryDto;
+  categoriesGroupedByParentId: Record<string, CategoryDto[]>;
+  categoryIds: string[];
 }
 
 export const useCategoriesPage = () => {
   const queries = useQueries();
-  const state = useState(queries);
-  const handlers = useHandlers();
+  const state = useState({ queries });
+  const handlers = useHandlers({ state });
 
   return {
     queries,
@@ -31,41 +34,61 @@ const useQueries = () => {
   };
 };
 
-const useState = (props: ReturnType<typeof useQueries>) => {
-  const { categories } = props;
-  const state: CategoryPage = observable({
-    categories: categories || [],
-    openedCategory: {} as CategoryDto,
-    form: {
-      name: '',
-      ancestorIds: [],
-      parentId: null,
-      serviceId: '',
-      spaceId: '',
-    },
-  });
+const state: State = observable({
+  categories: [],
+  openedCategory: {} as CategoryDto,
+  form: {
+    name: '',
+    ancestorIds: [],
+    parentId: null,
+    serviceId: '',
+    spaceId: '',
+  },
+  categoriesGroupedByParentId: {},
+  categoryIds: [],
+});
 
-  const ancestorIds = state.openedCategory?.ancestorIds || [];
+const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
+  const {
+    queries: { categories },
+  } = props;
 
-  const extendState = extendObservable(state, {
-    ancestorIds,
-    categoryIds: ['null', ...ancestorIds, state.openedCategory.id],
-    categoriesGroupedByParentId: groupBy(state.categories, 'parentId'),
-  });
+  useEffect(() => {
+    state.categories = categories || [];
+    state.categoriesGroupedByParentId = groupBy(categories, 'parentId');
+    state.categoryIds = [
+      'null',
+      ...(state.openedCategory.ancestorIds || []),
+      state.openedCategory.id,
+    ];
+  }, [state.openedCategory.id]);
 
-  return extendState;
+  return state;
 };
 
-const useHandlers = () => {
+const useHandlers = (props: { state: ReturnType<typeof useState> }) => {
+  const { state } = props;
   const { serviceId } = useParams();
   return {
-    onClickCard: (category: CategoryDto) => {
+    onClickDetail: (category: CategoryDto) => {
       navStore.push({
         url: '/admin/services/:serviceId/categories/:categoryId',
         params: {
           categoryId: category.id,
           serviceId,
         },
+      });
+    },
+    onClickCard: (category: CategoryDto) => {
+      const categoriesByParentId =
+        state.categoriesGroupedByParentId?.[category.parentId!];
+
+      console.log('categoriesByParentId', categoriesByParentId);
+      categoriesByParentId?.forEach(_category => {
+        if (_category.id === category.id) {
+          console.log('category', _category);
+          state.openedCategory = category;
+        }
       });
     },
   };

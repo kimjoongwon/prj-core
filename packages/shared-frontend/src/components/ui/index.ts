@@ -16,7 +16,6 @@ export * from './Chip';
 export * from './ButtonGroup';
 export * from './Search';
 export * from './Select';
-export * from './Form';
 export * from './MultiSelect';
 export {
   CardHeader,

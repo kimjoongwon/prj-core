@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { CategoryCard, Container, HStack, List } from '@shared/frontend';
+import { CategoryCard, Container, List } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { useCategoriesPage } from './hook';
+import { uniqueId } from 'lodash-es';
 
 function Page() {
   return <CategoriesPage />;
@@ -14,7 +15,7 @@ export default observer(Page);
 export const CategoriesPage = observer(() => {
   const {
     state,
-    handlers: { onClickCard },
+    handlers: { onClickCard, onClickDetail },
   } = useCategoriesPage();
 
   return (
@@ -23,14 +24,18 @@ export const CategoriesPage = observer(() => {
         horizontal
         data={state.categoryIds}
         renderItem={categoryId => (
-          <HStack className="gap-2">
-            <List
-              data={state.categoriesGroupedByParentId?.[categoryId] || []}
-              renderItem={category => (
-                <CategoryCard category={category} onClick={onClickCard} />
-              )}
-            />
-          </HStack>
+          <List
+            key={categoryId}
+            data={state.categoriesGroupedByParentId?.[categoryId] || []}
+            renderItem={category => (
+              <CategoryCard
+                key={uniqueId()}
+                category={category}
+                onClickCard={onClickCard}
+                onClickDetail={onClickDetail}
+              />
+            )}
+          />
         )}
       />
     </Container>

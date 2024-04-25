@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { HStack } from '../HStack';
 import { VStack } from '../VStack';
+import { observer } from 'mobx-react-lite';
 
 interface ListProps<T> {
   data: T[];
@@ -8,7 +9,7 @@ interface ListProps<T> {
   horizontal?: boolean;
 }
 
-export const List = <T extends any>(props: ListProps<T>) => {
+export const List = observer(<T extends any>(props: ListProps<T>) => {
   const { data, renderItem } = props;
 
   const renderContainer = (children: ReactNode) => {
@@ -20,4 +21,4 @@ export const List = <T extends any>(props: ListProps<T>) => {
   };
 
   return renderContainer(data.map(renderItem));
-};
+});
