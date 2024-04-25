@@ -36,12 +36,32 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
+  @Get(':categoryId')
+  async getCategoryById(@Param('categoryId') categoryId: string) {
+    const category = await this.categoriesService.getCategoryById(categoryId);
+
+    return new ResponseEntity(
+      ResponseStatus.OK,
+      'Category found',
+      category ? new CategoryDto(category) : null,
+    );
+  }
+
+  @Auth()
+  @ApiResponseEntity(CategoryDto)
   @Patch(':categoryId')
-  updateCategory(
-    @Param('service-name') serviceName: string,
+  async updateCategory(
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.updateCategory(id, updateCategoryDto);
+    const category = await this.categoriesService.updateCategory(
+      id,
+      updateCategoryDto,
+    );
+    return new ResponseEntity(
+      ResponseStatus.OK,
+      'Category updated',
+      new CategoryDto(category),
+    );
   }
 }

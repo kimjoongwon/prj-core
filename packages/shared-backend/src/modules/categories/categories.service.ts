@@ -17,6 +17,12 @@ export class CategoriesService {
     return services;
   }
 
+  getCategoryById(id: string) {
+    return this.prisma.category.findUnique({
+      where: { id },
+    });
+  }
+
   updateCategory(id: string, updateCategoryDto: UpdateCategoryDto) {
     return this.prisma.category.update({
       where: { id },
