@@ -18,9 +18,8 @@ const _Input = observer(<T extends object>(props: InputProps<T>) => {
   const { path = '', state = {}, onChange, validation, type } = props;
 
   const initialValue = get(state, path) || '';
-  console.log('initialValue', initialValue);
+
   const { localState } = useMobxHookForm(initialValue, state, path);
-  console.log('localState', localState.value);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
     e => {

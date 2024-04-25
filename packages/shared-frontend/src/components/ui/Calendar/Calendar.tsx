@@ -111,8 +111,6 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
     ];
   });
 
-  console.log('localState.values', localState.values);
-
   return (
     <div className="w-full">
       <div className="flex justify-between">
