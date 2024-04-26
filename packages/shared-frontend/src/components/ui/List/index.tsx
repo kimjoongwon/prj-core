@@ -7,17 +7,18 @@ interface ListProps<T> {
   data: T[];
   renderItem: (item: T) => ReactNode;
   horizontal?: boolean;
+  className: string;
 }
 
 export const List = observer(<T extends any>(props: ListProps<T>) => {
-  const { data, renderItem } = props;
+  const { data, renderItem, className } = props;
 
   const renderContainer = (children: ReactNode) => {
     if (props.horizontal) {
-      return <HStack>{children}</HStack>;
+      return <HStack className={className}>{children}</HStack>;
     }
 
-    return <VStack>{children}</VStack>;
+    return <VStack className={className}>{children}</VStack>;
   };
 
   return renderContainer(data.map(renderItem));

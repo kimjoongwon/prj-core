@@ -9,6 +9,7 @@ import Skeleton from './Skeleton';
 import DataGrid from './DataGrid';
 import Pagination from './Pagination';
 export * from './Footer';
+export * from './Navbar';
 export * from './Checkbox';
 export * from './RadioGroup';
 export * from './Switch';
