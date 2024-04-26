@@ -14,7 +14,7 @@ export * from './createCategory200AllOf';
 export * from './createCategoryDto';
 export * from './createCategoryDtoParentId';
 export * from './createSignUpPayloadDto';
-export * from './form';
+// export * from './form';
 export * from './getAccessibleAllSpace200';
 export * from './getAccessibleAllSpace200AllOf';
 export * from './getCategories200';

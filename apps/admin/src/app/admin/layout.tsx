@@ -42,14 +42,11 @@ const AdminLayout = observer(({ children }: { children: React.ReactNode }) => {
     },
   ];
 
-  console.log(authStore.currentSpaceId);
-
   return (
     <Container>
       <HStack className="py-2">
         {navItems?.map(item => (
           <Button
-            isLoading={isLoading}
             key={item.pathname}
             className="font-bold"
             variant="bordered"
