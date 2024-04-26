@@ -7,7 +7,7 @@ interface ListProps<T> {
   data: T[];
   renderItem: (item: T) => ReactNode;
   horizontal?: boolean;
-  className: string;
+  className?: string;
 }
 
 export const List = observer(<T extends any>(props: ListProps<T>) => {

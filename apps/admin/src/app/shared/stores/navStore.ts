@@ -47,7 +47,7 @@ export class NavStore {
     queryString?: string,
   ) {
     const path = new Path(url);
-    let pathWithParams = path.build(params);
+    let pathWithParams = path?.build(params);
     if (queryString) {
       pathWithParams = pathWithParams + '?' + queryString;
     }

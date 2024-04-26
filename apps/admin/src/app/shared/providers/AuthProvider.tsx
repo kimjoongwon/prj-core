@@ -4,6 +4,7 @@ import { authStore, refreshToken } from '@shared/frontend';
 import { AxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
+import { navStore } from '../stores/navStore';
 type Dispatch = (Auth: string) => void;
 
 type AuthProviderProps = {
@@ -25,8 +26,12 @@ const AuthProvider = observer(({ children }: AuthProviderProps) => {
         } catch (error) {
           if (error instanceof AxiosError) {
             if (error.response?.status === 401) {
-              authStore.accessToken = null;
+              authStore.accessToken = '';
               authStore.user = undefined;
+              alert('??');
+              navStore.push({
+                url: '/admin/auth/login',
+              });
             }
           }
         }
