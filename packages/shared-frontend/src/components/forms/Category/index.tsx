@@ -17,7 +17,8 @@ export const CategoryForm = observer((props: CategoryFormProps) => {
   return (
     <VStack>
       <Input
-        readOnly={props.type === 'read'}
+        isReadOnly={props.type === 'read'}
+        label="카테고리명"
         placeholder="카테고리명"
         state={state}
         path="name"

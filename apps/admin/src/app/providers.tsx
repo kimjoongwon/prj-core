@@ -8,7 +8,11 @@ import { AuthProvider } from '@providers';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { navStore } from './shared/stores/navStore';
-import { _Modal } from '@shared/frontend';
+import {
+  _Modal,
+  getAllService,
+  getGetAllServiceQueryKey,
+} from '@shared/frontend';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -39,10 +43,18 @@ function getQueryClient() {
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
   const router = useRouter();
+  const prefetchAllService = async () => {
+    await queryClient.prefetchQuery({
+      queryKey: getGetAllServiceQueryKey(),
+      queryFn: getAllService,
+    });
+  };
 
   useEffect(() => {
+    prefetchAllService();
     navStore.router = router;
   }, []);
+
   return (
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>

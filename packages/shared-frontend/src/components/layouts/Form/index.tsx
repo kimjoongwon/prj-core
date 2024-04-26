@@ -1,16 +1,25 @@
 import { observer } from 'mobx-react-lite';
 import { FormHTMLAttributes } from 'react';
-import { CardBody, Card, CardHeader, CardFooter } from '@nextui-org/react';
+import {
+  CardBody,
+  Card,
+  CardHeader,
+  CardFooter,
+  ButtonProps,
+  Button,
+} from '@nextui-org/react';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   children: React.ReactNode;
   title: string;
-  leftButtons?: () => React.ReactNode[];
-  rightButtons?: () => React.ReactNode;
+  leftButtons?: ButtonProps[];
+  rightButtons?: ButtonProps[];
 }
 
 export const FormLayout = observer((props: FormProps) => {
-  const { children, title } = props;
+  const { children, title, leftButtons, rightButtons } = props;
+
+  const renderButton = (props: ButtonProps) => <Button {...props} />;
 
   return (
     <Card fullWidth>
@@ -19,8 +28,8 @@ export const FormLayout = observer((props: FormProps) => {
       </CardHeader>
       <CardBody>{children}</CardBody>
       <CardFooter className="space-x-2 justify-between">
-        <div>{props.leftButtons && props.leftButtons()}</div>
-        <div>{props.rightButtons && props.rightButtons()}</div>
+        <div>{leftButtons?.map(renderButton)}</div>
+        <div>{rightButtons?.map(renderButton)}</div>
       </CardFooter>
     </Card>
   );

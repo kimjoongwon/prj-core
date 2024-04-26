@@ -7,7 +7,7 @@ import {
 } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { usePathname, useRouter } from 'next/navigation';
-import { Paths } from '../../../stores/navStore';
+import { Paths } from '@stores';
 
 export interface NavItem {
   text: string;
@@ -27,11 +27,7 @@ interface NavbarProps {
 export const Navbar = observer((props: NavbarProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const {
-    state,
-    rightContents = <div>left</div>,
-    leftContents = <div>right</div>,
-  } = props;
+  const { state, rightContents = <div>left</div> } = props;
 
   const { navItems = [] } = props;
 
