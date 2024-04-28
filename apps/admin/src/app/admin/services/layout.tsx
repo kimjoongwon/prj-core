@@ -3,6 +3,7 @@
 import {
   Avatar,
   Button,
+  Container,
   NavItem,
   Navbar,
   authStore,
@@ -31,7 +32,7 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
       }
       navItems={navItems}
     >
-      {children}
+      <Container className="mx-auto px-4">{children}</Container>
     </Navbar>
   );
 };

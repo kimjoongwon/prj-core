@@ -4,7 +4,9 @@ import { ButtonProps } from '@nextui-org/react';
 import {
   CategoryDto,
   CategoryForm,
+  CreateCategoryDto,
   FormLayout,
+  useCreateCategory,
   useGetCategoryById,
   useUpdateCategory,
 } from '@shared/frontend';
@@ -12,11 +14,12 @@ import { router } from '@shared/frontend';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
+import { categoriesPage } from '../../_state';
 
 const CategoryDetailPage = observer(() => {
   const {
     state,
-    handlers: { onClickCancel, onClickEdit },
+    handlers: { onClickCancel, onClickSave },
   } = useCategoryPage();
 
   const leftButtons: ButtonProps[] = [
@@ -29,7 +32,7 @@ const CategoryDetailPage = observer(() => {
   const rightButtons: ButtonProps[] = [
     {
       children: '저장',
-      onClick: onClickEdit,
+      onClick: onClickSave,
     },
   ];
 
@@ -39,7 +42,7 @@ const CategoryDetailPage = observer(() => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <CategoryForm type="read" state={state.category!} />
+      <CategoryForm type="create" state={state.category!} />
     </FormLayout>
   );
 });
@@ -59,23 +62,43 @@ export const useCategoryPage = () => {
 
 const useState = (props: ReturnType<typeof useQueries>) => {
   const { category } = props;
-  const state = observable<{ category: CategoryDto | undefined }>({
-    category,
+
+  const { categoryId } = useParams<{ categoryId: string }>();
+  const isEditMode = categoryId !== 'new';
+
+  const createCategoryDto: CreateCategoryDto = {
+    ancestorIds: [],
+    name: '',
+    parentId: null,
+    serviceId: '',
+    spaceId: '',
+  };
+
+  const state = observable<{
+    category: CategoryDto | undefined | CreateCategoryDto;
+  }>({
+    category: isEditMode ? category : createCategoryDto,
   });
 
   return state;
 };
 
 const useQueries = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
+  const { categoryId, serviceId } = useParams<{
+    categoryId: string;
+    serviceId: string;
+  }>();
+
   const { data: queryData } = useGetCategoryById(categoryId, {
     query: {
-      enabled: !!categoryId,
+      enabled: categoryId !== 'new',
     },
   });
   const { mutateAsync: updateCategory } = useUpdateCategory();
+  const { mutateAsync: createCategory } = useCreateCategory();
 
   return {
+    createCategory,
     updateCategory,
     category: queryData?.data,
   };
@@ -86,8 +109,7 @@ const useHandlers = (props: {
   state: ReturnType<typeof useState>;
 }) => {
   const {
-    queries: { updateCategory },
-    state,
+    queries: { updateCategory, createCategory },
   } = props;
 
   const { categoryId } = useParams<{
@@ -95,16 +117,38 @@ const useHandlers = (props: {
     serviceId: string;
   }>();
 
-  const onClickEdit = async () => {
-    await updateCategory({
-      categoryId,
-      data: state.category!,
-    });
+  const isEditMode = categoryId !== 'new';
+
+  const onClickSave = async () => {
+    const parentCategory = categoriesPage.state.openedCategory.name;
+
+    // let createCategoryDto = {
+    //   ...parentCategory,
+    // } as CreateCategoryDto;
+
+    // if (parentCategory) {
+    //   createCategoryDto?.ancestorIds
+    //     ?.concat(parentCategory.ancestorIds)
+    //     ?.concat([parentCategory.id]);
+    // }
+
+    // if (isEditMode) {
+    //   await updateCategory({
+    //     categoryId,
+    //     data: state.category!,
+    //   });
+    //   return;
+    // }
+
+    // await createCategory({
+    //   data: createCategoryDto,
+    // });
   };
 
   const onClickCancel = () => router.back();
+
   return {
-    onClickEdit,
+    onClickSave,
     onClickCancel,
   };
 };
