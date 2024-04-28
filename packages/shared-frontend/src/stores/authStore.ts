@@ -22,6 +22,10 @@ export class AuthStore {
   currentTenant: TenantDto | undefined = undefined;
   user: UserDto | undefined = undefined;
   accessToken: string | undefined = undefined;
+
+  get isAuthenticated() {
+    return !!this.accessToken;
+  }
 }
 
 export const authStore = new AuthStore();

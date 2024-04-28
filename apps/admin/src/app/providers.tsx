@@ -7,12 +7,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@providers';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { navStore } from './shared/stores/navStore';
 import {
+  ServiceEntity,
   _Modal,
   getAllService,
   getGetAllServiceQueryKey,
+  router,
+  serviceStore,
 } from '@shared/frontend';
+import { get } from 'http';
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -42,17 +45,21 @@ function getQueryClient() {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
-  const router = useRouter();
-  const prefetchAllService = async () => {
-    await queryClient.prefetchQuery({
+  const _router = useRouter();
+
+  useEffect(() => {
+    queryClient.prefetchQuery({
       queryKey: getGetAllServiceQueryKey(),
       queryFn: getAllService,
     });
-  };
+    // const getServices = async () => {
+    //   const services = await getAllService();
+    //   // localStorage.setItem('services', JSON.stringify(services));
+    // };
 
-  useEffect(() => {
-    prefetchAllService();
-    navStore.router = router;
+    // getServices();
+
+    router.setRouter(_router);
   }, []);
 
   return (

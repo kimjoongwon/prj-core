@@ -5,9 +5,7 @@ interface ContainerProps {
 
 export const Container = (props: ContainerProps) => {
   return (
-    <div
-      className={`flex flex-col w-full px-2 items-center ${props.className}`}
-    >
+    <div className={`flex flex-col w-full items-center ${props.className}`}>
       {props.children}
     </div>
   );

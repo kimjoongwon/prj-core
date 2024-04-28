@@ -33,6 +33,8 @@ export class CategoriesService {
   async getCategoriesByServiceSpace({ serviceId, spaceId }: ServiceSpaceDto) {
     const services = await this.prisma.category.findMany({
       where: {
+        serviceId,
+        spaceId,
         deletedAt: null,
       },
     });

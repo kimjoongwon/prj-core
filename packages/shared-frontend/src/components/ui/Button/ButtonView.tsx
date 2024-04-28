@@ -1,14 +1,15 @@
-import {
-  ButtonProps,
-  Button as NextUIButton,
-} from '@nextui-org/react';
+import { ButtonProps, Button as NextUIButton } from '@nextui-org/react';
 
 export function ButtonView(props: ButtonProps) {
-  const { children, onClick, ...rest } = props;
-
+  const { children, onClick, className, size, ...rest } = props;
   return (
     <>
-      <NextUIButton onClick={onClick} size="sm" {...rest}>
+      <NextUIButton
+        className={'font-pretendard ' + className}
+        onClick={onClick}
+        size="sm"
+        {...rest}
+      >
         {children}
       </NextUIButton>
     </>

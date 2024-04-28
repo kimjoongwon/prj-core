@@ -4,15 +4,15 @@ import {
   Button,
   Container,
   LoginForm,
+  Logo,
   Spacer,
   authStore,
-  getCurrentUser,
-  useGetLoginFormSchema,
+  router,
+  serviceStore,
   useLogin,
 } from '@shared/frontend';
 import { AxiosError } from 'axios';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { getErrorMessages } from '@shared/frontend/src/libs/ajv';
 import { observable } from 'mobx';
 
 const defaultLoginFormObject = {
@@ -34,6 +34,14 @@ const LoginPage = observer(() => {
 
       authStore.accessToken = tokenDto?.accessToken;
       authStore.user = tokenDto?.user;
+
+      console.log('serviceId', serviceStore.getServices('USER')?.id);
+      router.push({
+        url: '/admin/services/:serviceId/categories',
+        params: {
+          serviceId: serviceStore.getServices('USER')?.id,
+        },
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -43,11 +51,12 @@ const LoginPage = observer(() => {
 
   return (
     <Container className="max-w-screen-sm">
-      {test.test}
+      <Spacer y={10} />
+      <Logo variants="text" alt="LOGO" />
       <Spacer y={10} />
       <LoginForm state={state} />
       <Spacer y={10} />
-      <Button fullWidth onClick={onClickLogin}>
+      <Button fullWidth size="lg" onClick={onClickLogin} color="primary">
         로그인
       </Button>
     </Container>

@@ -18,6 +18,9 @@ export * from './ButtonGroup';
 export * from './Search';
 export * from './Select';
 export * from './MultiSelect';
+export * from './Logo';
+export * from './Text';
+export * from './Avatar';
 export {
   CardHeader,
   CardBody,

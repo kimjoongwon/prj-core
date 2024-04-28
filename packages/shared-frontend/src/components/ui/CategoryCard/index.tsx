@@ -9,6 +9,7 @@ interface CategoryCardProps {
   onClickDelete?: (category: CategoryDto) => void;
   onClickCard?: (category: CategoryDto) => void;
   onClickDetail?: (category: CategoryDto) => void;
+  onClickCreate?: (category: CategoryDto) => void;
 }
 
 export const CategoryCard = observer((props: CategoryCardProps) => {
@@ -19,6 +20,7 @@ export const CategoryCard = observer((props: CategoryCardProps) => {
     onClickEdit = undefined,
     onClickCard = undefined,
     onClickDetail = undefined,
+    onClickCreate = undefined,
   } = props;
 
   return (
@@ -31,6 +33,9 @@ export const CategoryCard = observer((props: CategoryCardProps) => {
       <div>
         {onClickDetail && (
           <Button onClick={() => onClickDetail(category)}>상세</Button>
+        )}
+        {onClickCreate && (
+          <Button onClick={() => onClickCreate(category)}>생성</Button>
         )}
         {onClickEdit && (
           <Button color="default" onClick={() => onClickEdit(category)}>

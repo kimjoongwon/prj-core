@@ -23,7 +23,7 @@ export const LoginForm = observer((props: LoginFormProps) => {
           type="email"
         />
 
-        <Spacer y={2} />
+        <Spacer y={4} />
 
         <Input
           state={state}

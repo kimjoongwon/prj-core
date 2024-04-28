@@ -15,7 +15,11 @@ module.exports = {
     '../../packages/shared-frontend/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        pretendard: ['var(--font-pretendard)'],
+      },
+    },
   },
   darkMode: 'light',
   plugins: [nextui(), require('@tailwindcss/aspect-ratio')],
