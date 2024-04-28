@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { CategoryDto } from '../../../model/categoryDto';
 import Button from '../Button';
+import { ButtonGroup } from '@nextui-org/react';
 
 interface CategoryCardProps {
   category: CategoryDto;
@@ -30,7 +31,7 @@ export const CategoryCard = observer((props: CategoryCardProps) => {
       onClick={() => onClickCard && onClickCard(category)}
     >
       <div>{category.name}</div>
-      <div>
+      <ButtonGroup>
         {onClickDetail && (
           <Button onClick={() => onClickDetail(category)}>상세</Button>
         )}
@@ -47,7 +48,7 @@ export const CategoryCard = observer((props: CategoryCardProps) => {
             삭제
           </Button>
         )}
-      </div>
+      </ButtonGroup>
     </div>
   );
 });
