@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { HStack } from '../HStack';
 import { VStack } from '../VStack';
 import { observer } from 'mobx-react-lite';
+import { uniqueId } from 'lodash-es';
 
 interface ListProps<T> {
   data: T[];
@@ -15,10 +16,18 @@ export const List = observer(<T extends any>(props: ListProps<T>) => {
 
   const renderContainer = (children: ReactNode) => {
     if (props.horizontal) {
-      return <HStack className={className}>{children}</HStack>;
+      return (
+        <HStack key={uniqueId()} className={className}>
+          {children}
+        </HStack>
+      );
     }
 
-    return <VStack className={className}>{children}</VStack>;
+    return (
+      <VStack key={uniqueId()} className={className}>
+        {children}
+      </VStack>
+    );
   };
 
   return renderContainer(data.map(renderItem));

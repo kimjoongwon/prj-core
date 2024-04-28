@@ -5,6 +5,9 @@ import {
   PrefetchOptions,
 } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { Path } from 'path-parser';
+import { Paths } from '../constants/Paths';
+import { isEmpty } from 'lodash-es';
+import { isObjectEmpty } from '../utils';
 interface CoCRouterArgs<T> {
   url: Paths;
   params?: T;
@@ -13,32 +16,14 @@ interface CoCRouterArgs<T> {
   prefetchOptions?: PrefetchOptions | undefined;
 }
 
-export const ADMIN_PATH = '/admin' as const;
-export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard` as const;
-export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth` as const;
-export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login` as const;
-export const ADMIN_SERVICE_NAME_PATH =
-  `${ADMIN_PATH}/services/:serviceId` as const;
-export const ADMIN_AUTH_SERVICE_CATEGORIES_PATH =
-  `${ADMIN_SERVICE_NAME_PATH}/categories` as const;
-export const ADMIN_AUTH_SERVICE_CATEGORY_EDIT_PATH =
-  `${ADMIN_SERVICE_NAME_PATH}/categories/:categoryId/edit` as const;
-export const ADMIN_AUTH_SERVICE_CATEGORY_PATH =
-  `${ADMIN_SERVICE_NAME_PATH}/categories/:categoryId` as const;
-
-export type Paths =
-  | typeof DASHBOARD_PAGE_PATH
-  | typeof ADMIN_AUTH_PATH
-  | typeof ADMIN_AUTH_LOGIN_PATH
-  | typeof ADMIN_SERVICE_NAME_PATH
-  | typeof ADMIN_AUTH_SERVICE_CATEGORIES_PATH
-  | typeof ADMIN_AUTH_SERVICE_CATEGORY_EDIT_PATH
-  | typeof ADMIN_AUTH_SERVICE_CATEGORY_PATH;
-
-export class NavStore {
+export class routerStore {
   router: AppRouterInstance | null = null;
   constructor() {
     makeAutoObservable(this);
+  }
+
+  setRouter(router: AppRouterInstance) {
+    this.router = router;
   }
 
   getUrlWithParamsAndQueryString<T extends object>(
@@ -47,11 +32,18 @@ export class NavStore {
     queryString?: string,
   ) {
     const path = new Path(url);
-    let pathWithParams = path?.build(params);
+    let pathWithParams = '';
+
+    if (isObjectEmpty(params)) {
+      pathWithParams = url;
+    } else {
+      pathWithParams = path.build(params);
+    }
+
     if (queryString) {
       pathWithParams = pathWithParams + '?' + queryString;
     }
-    return pathWithParams;
+    return pathWithParams as Paths;
   }
 
   push<T extends object>(cocRouterArgs: CoCRouterArgs<T>) {
@@ -83,4 +75,4 @@ export class NavStore {
   }
 }
 
-export const navStore = new NavStore();
+export const router = new routerStore();

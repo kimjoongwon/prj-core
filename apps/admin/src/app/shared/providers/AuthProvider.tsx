@@ -1,10 +1,9 @@
 'use client';
 
-import { authStore, refreshToken } from '@shared/frontend';
+import { authStore, refreshToken, router } from '@shared/frontend';
 import { AxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
-import { navStore } from '../stores/navStore';
 type Dispatch = (Auth: string) => void;
 
 type AuthProviderProps = {
@@ -28,8 +27,7 @@ const AuthProvider = observer(({ children }: AuthProviderProps) => {
             if (error.response?.status === 401) {
               authStore.accessToken = '';
               authStore.user = undefined;
-              alert('??');
-              navStore.push({
+              router.push({
                 url: '/admin/auth/login',
               });
             }

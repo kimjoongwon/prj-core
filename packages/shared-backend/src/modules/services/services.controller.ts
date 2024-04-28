@@ -7,7 +7,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Public } from '../../decorators';
+import { Auth, Public } from '../../decorators';
 import { ServiceEntity } from './service.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { targetConstructorToSchema } from 'class-validator-jsonschema';
@@ -16,12 +16,11 @@ import { ServiceFormDto } from './dto/service-form.dto';
 @ApiTags('services')
 @Controller()
 export class ServicesController {
-  logger = new Logger(ServicesController.name)
-  constructor(private readonly servicesService: ServicesService) {
-    this.logger.debug('----------------------')
-  }
+  logger = new Logger(ServicesController.name);
+  constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
+  @Public()
   @ApiResponse({ type: ServiceEntity, isArray: true })
   getAllService() {
     return this.servicesService.findAllService();

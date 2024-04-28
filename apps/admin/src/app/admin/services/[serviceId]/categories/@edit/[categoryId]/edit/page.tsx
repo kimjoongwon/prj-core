@@ -8,7 +8,7 @@ import {
   useGetCategoryById,
   useUpdateCategory,
 } from '@shared/frontend';
-import { navStore } from '@stores';
+import { router } from '@shared/frontend';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
@@ -102,7 +102,7 @@ const useHandlers = (props: {
     });
   };
 
-  const onClickCancel = () => navStore.back();
+  const onClickCancel = () => router.back();
   return {
     onClickEdit,
     onClickCancel,

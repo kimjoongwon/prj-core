@@ -8,7 +8,7 @@ import {
   useGetCategoryById,
   useUpdateCategory,
 } from '@shared/frontend';
-import { navStore } from '@stores';
+import { router } from '@shared/frontend';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
@@ -78,7 +78,6 @@ const useHandlers = (props: {
 }) => {
   const {
     queries: { updateCategory },
-    state,
   } = props;
 
   const { categoryId, serviceId } = useParams<{
@@ -87,7 +86,7 @@ const useHandlers = (props: {
   }>();
 
   const onClickEdit = () => {
-    navStore.push({
+    router.push({
       url: '/admin/services/:serviceId/categories/:categoryId/edit',
       params: {
         categoryId,
