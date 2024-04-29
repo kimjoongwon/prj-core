@@ -1,5 +1,5 @@
 import { groupBy } from 'lodash-es';
-import { categoriesPage } from './_state';
+import { categroiesPageState } from './_state';
 import {
   CategoryDto,
   getGetCategoriesQueryKey,
@@ -43,7 +43,7 @@ const useQueries = () => {
 const useProps = ({ queries }: { queries: ReturnType<typeof useQueries> }) => {
   const { categories } = queries;
   const categoriesByParentId = groupBy(categories, 'parentId');
-  const openedCategory = categoriesPage.state.openedCategory;
+  const openedCategory = categroiesPageState.openedCategory;
   let relatedCategoryIds = ['null'];
 
   if (openedCategory.name) {
@@ -82,13 +82,14 @@ const useHandlers = (props: { queries: ReturnType<typeof useQueries> }) => {
 
     categoriesByParentId?.forEach(_category => {
       if (_category.id === category.id) {
-        categoriesPage.state.openedCategory = category;
+        categroiesPageState.openedCategory = category;
       }
     });
   };
 
   const onClickCreate = async (category: CategoryDto) => {
-    categoriesPage.state.form.parentId = category.id;
+    categroiesPageState.form.parentId = category.id;
+    categroiesPageState.openedCategory = category;
 
     router.push({
       url: '/admin/services/:serviceId/categories/:categoryId/edit',

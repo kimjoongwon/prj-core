@@ -5,6 +5,7 @@ interface State {
   openedCategory: CategoryDto;
   form: CreateCategoryDto;
 }
+
 export const createCategoryDto: CreateCategoryDto = {
   name: '',
   ancestorIds: [],
@@ -13,11 +14,7 @@ export const createCategoryDto: CreateCategoryDto = {
   spaceId: '',
 };
 
-export const state: State = observable({
+export const categroiesPageState: State = observable({
   openedCategory: {} as CategoryDto,
   form: { ...createCategoryDto },
 });
-
-export const categoriesPage = {
-  state,
-};

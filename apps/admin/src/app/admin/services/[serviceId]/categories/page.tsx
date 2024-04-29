@@ -5,12 +5,11 @@ import { CategoryCard, Container, List } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { uniqueId } from 'lodash-es';
 import { useCategoriesPage } from './_hooks';
-import { categoriesPage } from './_state';
+import { categroiesPageState } from './_state';
 
 const CategoriesPage = observer(() => {
   const {
     onClickCard,
-    onClickDetail,
     onClickCreate,
     onClickDelete,
     categoriesGroupedByParentId,
@@ -33,11 +32,10 @@ const CategoriesPage = observer(() => {
                 <CategoryCard
                   key={uniqueId()}
                   selected={
-                    categoriesPage.state.openedCategory.id === category.id
+                    categroiesPageState.openedCategory.id === category.id
                   }
                   category={category}
                   onClickCard={onClickCard}
-                  onClickDetail={onClickDetail}
                   onClickCreate={onClickCreate}
                   onClickDelete={onClickDelete}
                 />
