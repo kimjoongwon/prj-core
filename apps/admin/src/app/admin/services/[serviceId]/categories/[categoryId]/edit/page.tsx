@@ -11,10 +11,9 @@ import {
   useUpdateCategory,
 } from '@shared/frontend';
 import { router } from '@shared/frontend';
-import { observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
-import { categroiesPageState } from '../../_state';
+import { categroiesPageState } from '../../_hooks/state';
 
 const CategoryDetailPage = observer(() => {
   const {
@@ -120,12 +119,6 @@ const useHandlers = (props: {
 
   const onClickSave = async () => {
     const openedCategory = categroiesPageState.openedCategory;
-    // if (categroiesPageState.openedCategory) {
-    //   createCategoryDto.parentId = categroiesPageState.openedCategory.parentId;
-    //   createCategoryDto?.ancestorIds
-    //     ?.concat(categroiesPageState.openedCategory.ancestorIds)
-    //     ?.concat([categroiesPageState.openedCategory.id]);
-    // }
 
     if (isEditMode) {
       await updateCategory({
