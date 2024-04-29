@@ -24,14 +24,18 @@ export const useCategoriesPage = () => {
 };
 
 const useQueries = () => {
+  const { serviceId } = useParams<{ serviceId: string }>();
   const { data: queryData, isLoading } = useGetCategories();
   const { mutateAsync: createCategory, isSuccess } = useCreateCategory();
   const { mutateAsync: updateCategory } = useUpdateCategory();
+
   return {
     isSuccess,
     createCategory,
     updateCategory,
-    categories: queryData?.data,
+    categories: queryData?.data.filter(
+      category => category.serviceId === serviceId,
+    ),
     isLoading,
   };
 };

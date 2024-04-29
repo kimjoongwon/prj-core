@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite';
 import { authStore } from '../../../stores/authStore';
 
 export const User = observer(() => {
-  console.log('User Component Props', authStore);
   const email = authStore.user?.email;
   return (
     <Dropdown>

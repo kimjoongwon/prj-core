@@ -24,7 +24,6 @@ const CategoriesPage = observer(() => {
         horizontal
         data={relatedCategoryIds}
         renderItem={categoryId => {
-          console.log('categoryId', categoryId);
           return (
             <List
               className="gap-2"

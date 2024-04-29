@@ -35,7 +35,6 @@ const LoginPage = observer(() => {
       authStore.accessToken = tokenDto?.accessToken;
       authStore.user = tokenDto?.user;
 
-      console.log('serviceId', serviceStore.getServices('USER')?.id);
       router.push({
         url: '/admin/services/:serviceId/categories',
         params: {

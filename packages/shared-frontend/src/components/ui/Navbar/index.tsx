@@ -4,13 +4,14 @@ import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
 import { ButtonProps, Divider, Spacer } from '@nextui-org/react';
 import Button from '../Button';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
 import { Paths } from '../../../constants/Paths';
 import { Logo } from '../Logo';
 import { VStack } from '../VStack';
 
 export interface NavItem {
   button: ButtonProps;
+  link?: Omit<LinkProps, 'href'> & { href: Paths };
   children?: NavItem[];
 }
 
@@ -36,7 +37,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
   return (
     <VStack>
-      <HStack className="shadow-small h-[100px] px-4">
+      <HStack className="shadow-small h-[100px] px-2">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}

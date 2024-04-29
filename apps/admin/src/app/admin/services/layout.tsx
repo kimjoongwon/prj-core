@@ -10,18 +10,21 @@ import {
   ServiceEntity,
   VStack,
   authStore,
+  router,
   useGetAllService,
 } from '@shared/frontend';
 import { uniqueId } from 'lodash-es';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
 
 interface ServicesLayoutProps {
   children: React.ReactNode;
 }
 
-const state = observable({
+const servicesPageState = observable({
   currentService: {} as ServiceEntity,
+  sidebarNavItems: [] as NavItem[],
 });
 
 const ServicesLayout = (props: ServicesLayoutProps) => {
@@ -41,12 +44,16 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
       navItems={topNavItems}
     >
       <HStack className="gap-2">
-        {state.currentService.name && (
+        {servicesPageState.currentService.name && (
           <VStack className="flex-grow-0 basis-60">
             <Listbox>
               {sidebarNavItems?.map(navItem => {
                 return (
-                  <ListboxItem key={uniqueId()}>
+                  <ListboxItem
+                    key={uniqueId()}
+                    as={Link}
+                    href={navItem.link?.href}
+                  >
                     {navItem.button.children}
                   </ListboxItem>
                 );
@@ -70,7 +77,7 @@ export const useMeta = () => {
       return {
         button: {
           children: service.name,
-          onClick: () => (state.currentService = service),
+          onClick: () => (servicesPageState.currentService = service),
         },
       };
     }) || [];
@@ -81,6 +88,14 @@ export const useMeta = () => {
         button: {
           children: '유저 카테고리',
         },
+        link: {
+          href: router.getUrlWithParamsAndQueryString(
+            '/admin/services/:serviceId/categories',
+            {
+              serviceId: servicesPageState.currentService.id,
+            },
+          ),
+        },
       },
     ],
     SPACE: [
@@ -88,12 +103,20 @@ export const useMeta = () => {
         button: {
           children: '공간 카테고리',
         },
+        link: {
+          href: router.getUrlWithParamsAndQueryString(
+            '/admin/services/:serviceId/categories',
+            {
+              serviceId: servicesPageState.currentService.id,
+            },
+          ),
+        },
       },
     ],
   };
 
   return {
     topNavItems,
-    sidebarNavItems: sidebarNavItems[state.currentService.name],
+    sidebarNavItems: sidebarNavItems[servicesPageState.currentService.name],
   };
 };

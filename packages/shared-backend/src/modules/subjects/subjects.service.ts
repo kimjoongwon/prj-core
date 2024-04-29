@@ -25,8 +25,6 @@ export class SubjectsService {
       name: modelName,
     }));
 
-    console.log('createSubjectDtos', createSubjectDtos);
-
     return this.prisma.subject.createMany({
       data: createSubjectDtos,
     });

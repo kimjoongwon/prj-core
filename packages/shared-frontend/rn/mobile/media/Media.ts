@@ -1,16 +1,16 @@
-import {Serializerable, WVEventHandler} from '@model';
-import {isEmpty} from 'lodash';
-import {RefObject} from 'react';
+import { Serializerable, WVEventHandler } from '@model';
+import { isEmpty } from 'lodash';
+import { RefObject } from 'react';
 import {
   ImageLibraryOptions,
   launchCamera,
   launchImageLibrary,
 } from 'react-native-image-picker';
 import WebView from 'react-native-webview';
-import {MediaWVBridgeEvent} from 'src/model/bridge/MediaWVBridgeEvent';
+import { MediaWVBridgeEvent } from 'src/model/bridge/MediaWVBridgeEvent';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {fileSystem} from 'src/App';
-import {Platform} from 'react-native';
+import { fileSystem } from 'src/App';
+import { Platform } from 'react-native';
 import ImageSelector, {
   ImageSelectorErrorType,
 } from 'react-native-image-selector';
@@ -65,7 +65,6 @@ export class Media extends Serializerable implements WVEventHandler {
         if (isEmpty(result?.assets)) {
           return;
         }
-        // console.log('result', result.uri);
 
         const resizedImage = await ImageResizer.createResizedImage(
           result.assets?.[0]?.uri || '',
@@ -144,7 +143,7 @@ export class Media extends Serializerable implements WVEventHandler {
               );
 
               if (response?.uri) {
-                result.assets = [{base64: resizedBase64, type: 'image/jpeg'}];
+                result.assets = [{ base64: resizedBase64, type: 'image/jpeg' }];
               }
 
               payload = {
