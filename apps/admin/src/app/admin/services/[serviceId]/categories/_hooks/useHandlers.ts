@@ -1,63 +1,18 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { groupBy } from 'lodash-es';
-import { categroiesPageState } from './_state';
+import { useParams } from 'next/navigation';
+import { useQueries } from './useQueries';
 import {
   CategoryDto,
   getGetCategoriesQueryKey,
   router,
-  useCreateCategory,
-  useGetCategories,
-  useUpdateCategory,
 } from '@shared/frontend';
-import { useParams } from 'next/navigation';
+import { categroiesPageState } from './state';
 import { useCallback } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
-export const useCategoriesPage = () => {
-  const queries = useQueries();
-  const props = useProps({ queries });
-  const handlers = useHandlers({ queries });
-
-  return {
-    ...props,
-    ...handlers,
-  };
-};
-
-const useQueries = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
-  const { data: queryData, isLoading } = useGetCategories();
-  const { mutateAsync: createCategory, isSuccess } = useCreateCategory();
-  const { mutateAsync: updateCategory } = useUpdateCategory();
-
-  return {
-    isSuccess,
-    createCategory,
-    updateCategory,
-    categories: queryData?.data.filter(
-      category => category.serviceId === serviceId,
-    ),
-    isLoading,
-  };
-};
-
-const useProps = ({ queries }: { queries: ReturnType<typeof useQueries> }) => {
-  const { categories } = queries;
-  const categoriesByParentId = groupBy(categories, 'parentId');
-  const openedCategory = categroiesPageState.openedCategory;
-  let relatedCategoryIds = ['null'];
-
-  if (openedCategory.name) {
-    relatedCategoryIds.push(...(openedCategory.ancestorIds || []));
-    relatedCategoryIds.push(openedCategory.id);
-  }
-
-  return {
-    categoriesGroupedByParentId: categoriesByParentId,
-    relatedCategoryIds,
-  };
-};
-
-const useHandlers = (props: { queries: ReturnType<typeof useQueries> }) => {
+export const useHandlers = (props: {
+  queries: ReturnType<typeof useQueries>;
+}) => {
   const {
     queries: { categories, updateCategory },
   } = props;
