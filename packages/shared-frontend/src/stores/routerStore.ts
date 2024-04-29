@@ -6,7 +6,6 @@ import {
 } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { Path } from 'path-parser';
 import { Paths } from '../constants/Paths';
-import { isEmpty } from 'lodash-es';
 import { isObjectEmpty } from '../utils';
 interface CoCRouterArgs<T> {
   url: Paths;
@@ -18,6 +17,8 @@ interface CoCRouterArgs<T> {
 
 export class routerStore {
   router: AppRouterInstance | null = null;
+  pathname: string = '';
+
   constructor() {
     makeAutoObservable(this);
   }

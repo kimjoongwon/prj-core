@@ -12,9 +12,9 @@ import {
 } from '@shared/frontend';
 import { router } from '@shared/frontend';
 import { observable } from 'mobx';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
-import { categoriesPage } from '../../_state';
+import { categroiesPageState } from '../../_state';
 
 const CategoryDetailPage = observer(() => {
   const {
@@ -63,44 +63,42 @@ export const useCategoryPage = () => {
 const useState = (props: ReturnType<typeof useQueries>) => {
   const { category } = props;
 
-  const { categoryId } = useParams<{ categoryId: string }>();
-  const isEditMode = categoryId !== 'new';
-
-  const createCategoryDto: CreateCategoryDto = {
-    ancestorIds: [],
-    name: '',
-    parentId: null,
-    serviceId: '',
-    spaceId: '',
-  };
-
-  const state = observable<{
+  return useLocalObservable<{
     category: CategoryDto | undefined | CreateCategoryDto;
-  }>({
-    category: isEditMode ? category : createCategoryDto,
-  });
-
-  return state;
+  }>(() => ({
+    category: category,
+  }));
 };
 
 const useQueries = () => {
-  const { categoryId, serviceId } = useParams<{
+  const { categoryId } = useParams<{
     categoryId: string;
-    serviceId: string;
   }>();
+
+  const isEditMode = categoryId !== 'new';
 
   const { data: queryData } = useGetCategoryById(categoryId, {
     query: {
       enabled: categoryId !== 'new',
     },
   });
+
   const { mutateAsync: updateCategory } = useUpdateCategory();
+
   const { mutateAsync: createCategory } = useCreateCategory();
 
   return {
     createCategory,
     updateCategory,
-    category: queryData?.data,
+    category: isEditMode
+      ? queryData?.data
+      : {
+          ancestorIds: [],
+          name: '',
+          parentId: null,
+          serviceId: '',
+          spaceId: '',
+        },
   };
 };
 
@@ -109,6 +107,7 @@ const useHandlers = (props: {
   state: ReturnType<typeof useState>;
 }) => {
   const {
+    state,
     queries: { updateCategory, createCategory },
   } = props;
 
@@ -120,29 +119,33 @@ const useHandlers = (props: {
   const isEditMode = categoryId !== 'new';
 
   const onClickSave = async () => {
-    const parentCategory = categoriesPage.state.openedCategory.name;
-
-    // let createCategoryDto = {
-    //   ...parentCategory,
-    // } as CreateCategoryDto;
-
-    // if (parentCategory) {
+    const openedCategory = categroiesPageState.openedCategory;
+    // if (categroiesPageState.openedCategory) {
+    //   createCategoryDto.parentId = categroiesPageState.openedCategory.parentId;
     //   createCategoryDto?.ancestorIds
-    //     ?.concat(parentCategory.ancestorIds)
-    //     ?.concat([parentCategory.id]);
+    //     ?.concat(categroiesPageState.openedCategory.ancestorIds)
+    //     ?.concat([categroiesPageState.openedCategory.id]);
     // }
 
-    // if (isEditMode) {
-    //   await updateCategory({
-    //     categoryId,
-    //     data: state.category!,
-    //   });
-    //   return;
-    // }
+    if (isEditMode) {
+      await updateCategory({
+        categoryId,
+        data: state.category!,
+      });
+      return;
+    }
 
-    // await createCategory({
-    //   data: createCategoryDto,
-    // });
+    await createCategory({
+      data: {
+        name: state.category?.name || '',
+        ancestorIds: [...openedCategory.ancestorIds, openedCategory.id],
+        parentId: openedCategory.id,
+        serviceId: openedCategory.serviceId,
+        spaceId: openedCategory.spaceId,
+      },
+    });
+
+    router.back();
   };
 
   const onClickCancel = () => router.back();

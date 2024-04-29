@@ -43,7 +43,7 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
       }
       navItems={topNavItems}
     >
-      <HStack className="gap-2">
+      <HStack>
         {servicesPageState.currentService.name && (
           <VStack className="flex-grow-0 basis-60">
             <Listbox>
@@ -71,13 +71,24 @@ export default observer(ServicesLayout);
 
 export const useMeta = () => {
   const { data: services } = useGetAllService();
+  const setDefaultNavItem = () => {
+    router.push({
+      url: '/admin/services/:serviceId/categories',
+      params: {
+        serviceId: servicesPageState.currentService.id,
+      },
+    });
+  };
 
   const topNavItems: NavItem[] =
     services?.map(service => {
       return {
         button: {
           children: service.name,
-          onClick: () => (servicesPageState.currentService = service),
+          onClick: () => {
+            servicesPageState.currentService = service;
+            setDefaultNavItem();
+          },
         },
       };
     }) || [];
