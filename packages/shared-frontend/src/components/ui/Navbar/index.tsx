@@ -31,17 +31,19 @@ export const Navbar = observer((props: NavbarProps) => {
       return children?.map(renderNavItem);
     }
 
-    return <Button variant="ghost" {...button} />;
+    return <Button variant="light" className="font-semibold" {...button} />;
   };
 
   return (
     <VStack>
-      <HStack className="p-2">
-        <HStack>
+      <HStack className="shadow-small h-[100px] px-4">
+        <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
         </HStack>
-        <HStack className="gap-2">{navItems?.map(renderNavItem)}</HStack>
+        <HStack className="gap-2 items-center">
+          {navItems?.map(renderNavItem)}
+        </HStack>
         <HStack className="justify-end items-center gap-2">
           {rightContents}
         </HStack>

@@ -40,18 +40,20 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
       }
       navItems={topNavItems}
     >
-      <HStack>
-        <VStack className="flex-grow-0 basis-60">
-          <Listbox>
-            {sidebarNavItems?.map(navItem => {
-              return (
-                <ListboxItem key={uniqueId()}>
-                  {navItem.button.children}
-                </ListboxItem>
-              );
-            })}
-          </Listbox>
-        </VStack>
+      <HStack className="gap-2">
+        {state.currentService.name && (
+          <VStack className="flex-grow-0 basis-60">
+            <Listbox>
+              {sidebarNavItems?.map(navItem => {
+                return (
+                  <ListboxItem key={uniqueId()}>
+                    {navItem.button.children}
+                  </ListboxItem>
+                );
+              })}
+            </Listbox>
+          </VStack>
+        )}
         {children}
       </HStack>
     </Navbar>
