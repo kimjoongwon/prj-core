@@ -9,7 +9,7 @@ import {
 import { action } from 'mobx';
 import { modalStore } from '../../../stores/modalStore';
 
-export const _Modal = observer(() => {
+export const ModalMount = observer(() => {
   return (
     <NextUIModal
       isDismissable

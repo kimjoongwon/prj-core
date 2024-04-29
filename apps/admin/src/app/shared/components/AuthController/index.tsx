@@ -3,18 +3,14 @@
 import { authStore, refreshToken, router } from '@shared/frontend';
 import { AxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
-import { createContext, ReactNode, useContext, useEffect } from 'react';
-type Dispatch = (Auth: string) => void;
+import { ReactNode, useEffect } from 'react';
 
 type AuthProviderProps = {
   children: ReactNode;
   initialState?: string | null;
 };
 
-const AuthContext = createContext<string | null>(null);
-const AuthDispatchContext = createContext<Dispatch | null>(null);
-
-const AuthProvider = observer(({ children }: AuthProviderProps) => {
+export const AuthController = observer(({ children }: AuthProviderProps) => {
   useEffect(() => {
     (async function () {
       if (!authStore.accessToken) {
@@ -39,18 +35,3 @@ const AuthProvider = observer(({ children }: AuthProviderProps) => {
 
   return <>{children}</>;
 });
-
-const useAuth = (): string | null => {
-  return useContext<string | null>(AuthContext);
-};
-
-const useAuthDispatch = (): Dispatch => {
-  const context = useContext<Dispatch | null>(AuthDispatchContext);
-
-  if (context === null) {
-    throw new Error('useAuthDispatch must be used within a AuthProvider');
-  }
-  return context;
-};
-
-export { AuthProvider, useAuth, useAuthDispatch };
