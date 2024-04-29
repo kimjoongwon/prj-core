@@ -1,24 +1,32 @@
 'use client';
 
+import { Listbox, ListboxItem } from '@nextui-org/react';
 import {
   Avatar,
   Button,
-  Container,
+  HStack,
   NavItem,
   Navbar,
+  ServiceEntity,
+  VStack,
   authStore,
   useGetAllService,
 } from '@shared/frontend';
-import { router } from '@shared/frontend';
-import { find } from 'lodash-es';
+import { uniqueId } from 'lodash-es';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
 interface ServicesLayoutProps {
   children: React.ReactNode;
 }
 
+const state = observable({
+  currentService: {} as ServiceEntity,
+});
+
 const ServicesLayout = (props: ServicesLayoutProps) => {
   const { children } = props;
-  const { navItems } = useMeta();
+  const { topNavItems, sidebarNavItems } = useMeta();
 
   return (
     <Navbar
@@ -30,41 +38,60 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
           </Button>
         </>
       }
-      navItems={navItems}
+      navItems={topNavItems}
     >
-      <Container className="mx-auto px-4">{children}</Container>
+      <HStack>
+        <VStack className="flex-grow-0 basis-60">
+          <Listbox>
+            {sidebarNavItems?.map(navItem => {
+              return (
+                <ListboxItem key={uniqueId()}>
+                  {navItem.button.children}
+                </ListboxItem>
+              );
+            })}
+          </Listbox>
+        </VStack>
+        {children}
+      </HStack>
     </Navbar>
   );
 };
 
-export default ServicesLayout;
+export default observer(ServicesLayout);
 
 export const useMeta = () => {
   const { data: services } = useGetAllService();
 
-  const serviceId = find(services, { name: 'USER' })?.id;
-
-  const serviceNavItems: NavItem[] =
+  const topNavItems: NavItem[] =
     services?.map(service => {
-      const href = router.getUrlWithParamsAndQueryString(
-        '/admin/services/:serviceId/categories',
-        {
-          serviceId,
-        },
-      );
       return {
         button: {
           children: service.name,
-        },
-        link: {
-          href,
+          onClick: () => (state.currentService = service),
         },
       };
     }) || [];
 
-  const navItems: NavItem[] = serviceNavItems.concat([]);
+  const sidebarNavItems: Record<ServiceEntity['name'], NavItem[]> = {
+    USER: [
+      {
+        button: {
+          children: '유저 카테고리',
+        },
+      },
+    ],
+    SPACE: [
+      {
+        button: {
+          children: '공간 카테고리',
+        },
+      },
+    ],
+  };
 
   return {
-    navItems,
+    topNavItems,
+    sidebarNavItems: sidebarNavItems[state.currentService.name],
   };
 };

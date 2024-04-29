@@ -11,7 +11,6 @@ import { VStack } from '../VStack';
 
 export interface NavItem {
   button: ButtonProps;
-  link: Omit<LinkProps, 'href'> & { href: Paths };
   children?: NavItem[];
 }
 
@@ -26,17 +25,13 @@ export const Navbar = observer((props: NavbarProps) => {
   const { children, navItems = [], rightContents, leftContents } = props;
 
   const renderNavItem = (navItem: NavItem): React.ReactNode => {
-    const { button, link, children } = navItem;
+    const { button, children } = navItem;
 
     if (children) {
       return children?.map(renderNavItem);
     }
 
-    return (
-      <Link key={String(link.href)} {...link}>
-        <Button variant="ghost" {...button} />
-      </Link>
-    );
+    return <Button variant="ghost" {...button} />;
   };
 
   return (
@@ -46,7 +41,7 @@ export const Navbar = observer((props: NavbarProps) => {
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
         </HStack>
-        <HStack>{navItems?.map(renderNavItem)}</HStack>
+        <HStack className="gap-2">{navItems?.map(renderNavItem)}</HStack>
         <HStack className="justify-end items-center gap-2">
           {rightContents}
         </HStack>

@@ -21,6 +21,7 @@
     "@shared/frontend": "workspace:*",
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tanstack/react-query": "5.28.6",
+    "@tanstack/react-query-devtools": "^5.32.0",
     "@tanstack/react-table": "^8.15.0",
     "@vanilla-extract/css": "^1.14.1",
     "ajv": "8",
