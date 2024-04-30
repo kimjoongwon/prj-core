@@ -44,7 +44,7 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
     >
       <HStack>
         {servicesPageState.currentService.name && (
-          <Listbox className="w-64 h-screen overflow-y-auto">
+          <Listbox className="w-64">
             {sidebarNavItems?.map(navItem => {
               return (
                 <ListboxItem
@@ -86,7 +86,7 @@ export const useMeta = () => {
           children: service.name,
           onClick: () => {
             servicesPageState.currentService = service;
-            setDefaultNavItem();
+            // setDefaultNavItem();
           },
         },
       };
@@ -126,7 +126,7 @@ export const useMeta = () => {
     SETTING: [
       {
         button: {
-          children: '설정',
+          children: '서비스 관리',
         },
         link: {
           href: '/admin/services',

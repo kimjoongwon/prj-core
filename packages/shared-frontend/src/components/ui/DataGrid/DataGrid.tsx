@@ -104,7 +104,6 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
             {header.isPlaceholder ? null : (
               <div>
                 {header.column.getCanGroup() ? (
-                  // If the header can be grouped, let's add a toggle
                   <button
                     {...{
                       onClick: header.column.getToggleGroupingHandler(),
@@ -135,7 +134,6 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
             {row?.getVisibleCells()?.map(cell => (
               <TableCell key={v4()}>
                 {cell.getIsGrouped() ? (
-                  // If it's a grouped cell, add an expander and row count
                   <>
                     <button
                       {...{
@@ -154,15 +152,12 @@ export function DataGrid<T extends any>(props: DataGridProps<T>) {
                     </button>
                   </>
                 ) : cell.getIsAggregated() ? (
-                  // If the cell is aggregated, use the Aggregated
-                  // renderer for cell
                   flexRender(
                     cell.column.columnDef.aggregatedCell ??
                       cell.column.columnDef.cell,
                     cell.getContext(),
                   )
                 ) : cell.getIsPlaceholder() ? null : ( // For cells with repeated values, render null
-                  // Otherwise, just render the regular cell
                   flexRender(cell.column.columnDef.cell, cell.getContext())
                 )}
               </TableCell>
