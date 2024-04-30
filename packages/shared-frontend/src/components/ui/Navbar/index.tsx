@@ -37,12 +37,12 @@ export const Navbar = observer((props: NavbarProps) => {
 
   return (
     <VStack>
-      <HStack className="shadow-small h-[100px] px-2">
+      <HStack className="shadow-small px-2">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
         </HStack>
-        <HStack className="gap-2 items-center">
+        <HStack className="gap-2 items-center justify-center">
           {navItems?.map(renderNavItem)}
         </HStack>
         <HStack className="justify-end items-center gap-2">
