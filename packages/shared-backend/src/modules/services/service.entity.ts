@@ -5,6 +5,9 @@ export class ServiceEntity implements Service {
   @ApiProperty()
   id: string;
 
+  @ApiProperty({ nullable: true })
+  label: string;
+
   @ApiProperty({
     enum: $Enums.SERVICE_NAME,
   })

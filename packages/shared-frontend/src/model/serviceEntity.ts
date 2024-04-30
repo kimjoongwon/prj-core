@@ -12,6 +12,8 @@ export interface ServiceEntity {
   createdAt: string;
   deletedAt: ServiceEntityDeletedAt;
   id: string;
+  /** @nullable */
+  label: string | null;
   name: ServiceEntityName;
   updatedAt: ServiceEntityUpdatedAt;
 }

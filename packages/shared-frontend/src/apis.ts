@@ -1561,7 +1561,8 @@ export const getUpdateServiceResponseMock = (
   createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
   deletedAt: {},
   id: faker.word.sample(),
-  name: faker.helpers.arrayElement(['USER', 'SPACE'] as const),
+  label: faker.helpers.arrayElement([faker.word.sample(), null]),
+  name: faker.helpers.arrayElement(['USER', 'SPACE', 'SETTING'] as const),
   updatedAt: {},
   ...overrideResponse,
 });

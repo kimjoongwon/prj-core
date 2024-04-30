@@ -41,6 +41,21 @@ export class ServicesService {
         },
       });
     }
+
+    const setting = await this.prisma.service.findFirst({
+      where: {
+        name: SERVICE_NAME.SETTING,
+      },
+    });
+
+    if (!setting) {
+      this.logger.log('user service is not exist');
+      await this.prisma.service.create({
+        data: {
+          name: SERVICE_NAME.SETTING,
+        },
+      });
+    }
   }
 
   getServiceForm() {

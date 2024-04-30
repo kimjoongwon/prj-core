@@ -8,7 +8,6 @@ import {
   NavItem,
   Navbar,
   ServiceEntity,
-  VStack,
   authStore,
   router,
   useGetAllService,
@@ -45,21 +44,21 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
     >
       <HStack>
         {servicesPageState.currentService.name && (
-          <VStack className="flex-grow-0 basis-60">
-            <Listbox>
-              {sidebarNavItems?.map(navItem => {
-                return (
-                  <ListboxItem
-                    key={uniqueId()}
-                    as={Link}
-                    href={navItem.link?.href}
-                  >
-                    {navItem.button.children}
-                  </ListboxItem>
-                );
-              })}
-            </Listbox>
-          </VStack>
+          <Listbox className="w-64 h-screen overflow-y-auto">
+            {sidebarNavItems?.map(navItem => {
+              return (
+                <ListboxItem
+                  className="p-2 hover:bg-gray-200"
+                  variant="solid"
+                  key={uniqueId()}
+                  as={Link}
+                  href={navItem.link?.href}
+                >
+                  {navItem.button.children}
+                </ListboxItem>
+              );
+            })}
+          </Listbox>
         )}
         {children}
       </HStack>
@@ -121,6 +120,16 @@ export const useMeta = () => {
               serviceId: servicesPageState.currentService.id,
             },
           ),
+        },
+      },
+    ],
+    SETTING: [
+      {
+        button: {
+          children: '설정',
+        },
+        link: {
+          href: '/admin/services',
         },
       },
     ],

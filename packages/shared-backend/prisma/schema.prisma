@@ -56,11 +56,13 @@ model Group {
 enum SERVICE_NAME {
   USER
   SPACE
+  SETTING
 }
 
 model Service {
   id              String           @id @default(cuid())
   name            SERVICE_NAME
+  label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
   deletedAt       DateTime?        @db.Timestamptz(6)
@@ -115,12 +117,12 @@ model Classification {
 }
 
 model Space {
-  id         String     @id @default(cuid())
-  name       String     @unique
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime?  @db.Timestamptz(6)
-  tenants    Tenant[]
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
 }
 
 model EmailTemplate {

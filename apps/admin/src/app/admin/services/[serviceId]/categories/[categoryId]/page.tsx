@@ -1,20 +1,12 @@
 'use client';
 
-import { ButtonProps, Spinner } from '@nextui-org/react';
-import {
-  CategoryDto,
-  CategoryForm,
-  FormLayout,
-  useGetCategoryById,
-  useUpdateCategory,
-} from '@shared/frontend';
-import { router } from '@shared/frontend';
-import { observable } from 'mobx';
+import { Spinner } from '@nextui-org/react';
+import { Text, FormLayout } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'next/navigation';
+import { useCategoryPage } from './_hooks';
 
 const CategoryPage = observer(() => {
-  const { leftButtons, rightButtons, state, isLoading } = useCategoryPage();
+  const { leftButtons, rightButtons, isLoading, category } = useCategoryPage();
 
   if (isLoading) {
     return <Spinner />;
@@ -26,113 +18,9 @@ const CategoryPage = observer(() => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <CategoryForm type="read" state={state.category!} />
+      <Text>{category?.name}</Text>
     </FormLayout>
   );
 });
 
 export default CategoryPage;
-
-export const useCategoryPage = () => {
-  const queries = useQueries();
-  const state = useState({ queries });
-  const handlers = useHandlers({ queries, state });
-  const meta = useMeta({ handlers });
-
-  return {
-    isLoading: queries.isGetCategoryByIdLoading,
-    state,
-    ...meta,
-  };
-};
-
-const useState = ({ queries }: { queries: ReturnType<typeof useQueries> }) => {
-  const { category } = queries;
-  const state = observable<{ category: CategoryDto | undefined }>({
-    category,
-  });
-
-  return state;
-};
-
-const useQueries = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
-  const { data: queryData, isLoading: isGetCategoryByIdLoading } =
-    useGetCategoryById(categoryId, {
-      query: {
-        enabled: !!categoryId,
-      },
-    });
-  const { mutateAsync: updateCategory } = useUpdateCategory();
-
-  return {
-    isGetCategoryByIdLoading,
-    updateCategory,
-    category: queryData?.data,
-  };
-};
-
-const useHandlers = (props: {
-  queries: ReturnType<typeof useQueries>;
-  state: ReturnType<typeof useState>;
-}) => {
-  const {
-    queries: { updateCategory },
-  } = props;
-
-  const { categoryId, serviceId } = useParams<{
-    categoryId: string;
-    serviceId: string;
-  }>();
-
-  const onClickEdit = () => {
-    router.push({
-      url: '/admin/services/:serviceId/categories/:categoryId/edit',
-      params: {
-        categoryId,
-        serviceId,
-      },
-    });
-  };
-
-  const onClickDelete = () => {
-    updateCategory({
-      categoryId,
-      data: {
-        deletedAt: new Date().toString(),
-      },
-    });
-  };
-
-  return {
-    onClickEdit,
-    onClickDelete,
-  };
-};
-
-const useMeta = ({
-  handlers,
-}: {
-  handlers: ReturnType<typeof useHandlers>;
-}) => {
-  const { onClickDelete, onClickEdit } = handlers;
-  const leftButtons: ButtonProps[] = [
-    {
-      onClick: onClickDelete,
-      children: '삭제',
-      color: 'danger',
-    },
-  ];
-
-  const rightButtons: ButtonProps[] = [
-    {
-      children: '수정',
-      onClick: onClickEdit,
-    },
-  ];
-
-  return {
-    leftButtons,
-    rightButtons,
-  };
-};

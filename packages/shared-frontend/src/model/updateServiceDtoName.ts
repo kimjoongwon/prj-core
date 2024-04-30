@@ -12,4 +12,5 @@ export type UpdateServiceDtoName = typeof UpdateServiceDtoName[keyof typeof Upda
 export const UpdateServiceDtoName = {
   USER: 'USER',
   SPACE: 'SPACE',
+  SETTING: 'SETTING',
 } as const;

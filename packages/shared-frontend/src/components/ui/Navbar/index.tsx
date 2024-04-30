@@ -50,7 +50,6 @@ export const Navbar = observer((props: NavbarProps) => {
         </HStack>
       </HStack>
       <Divider />
-      <Spacer y={4} />
       {children}
     </VStack>
   );

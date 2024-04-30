@@ -12,4 +12,5 @@ export type ServiceEntityName = typeof ServiceEntityName[keyof typeof ServiceEnt
 export const ServiceEntityName = {
   USER: 'USER',
   SPACE: 'SPACE',
+  SETTING: 'SETTING',
 } as const;

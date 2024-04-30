@@ -4,12 +4,5 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceEntity } from './serviceEntity';
-import type { Form } from './form';
-import type { ServiceFormDtoSchema } from './serviceFormDtoSchema';
 
-export interface ServiceFormDto {
-  defaultObject: ServiceEntity;
-  form: Form;
-  schema: ServiceFormDtoSchema;
-}
+export interface ServiceFormDto { [key: string]: any }

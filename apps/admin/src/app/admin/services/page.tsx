@@ -1,12 +1,17 @@
 'use client';
 
-import { Text, VStack } from '@shared/frontend';
+import { DataGrid, ServiceEntity, useGetAllService } from '@shared/frontend';
+import { createColumnHelper } from '@tanstack/react-table';
 
 const ServicesPage = () => {
+  const { data: services } = useGetAllService();
+
+  const columnHelper = createColumnHelper<ServiceEntity>();
+
+  const colums = [columnHelper.accessor('name', { header: 'Name' })];
+
   return (
-    <VStack className="items-center">
-      <Text className="font-extrabold">Main!!</Text>
-    </VStack>
+    <DataGrid data={services || []} selectionMode={'single'} columns={colums} />
   );
 };
 

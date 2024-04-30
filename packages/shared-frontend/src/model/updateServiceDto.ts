@@ -12,6 +12,8 @@ export interface UpdateServiceDto {
   createdAt?: string;
   deletedAt?: UpdateServiceDtoDeletedAt;
   id?: string;
+  /** @nullable */
+  label?: string | null;
   name?: UpdateServiceDtoName;
   updatedAt?: UpdateServiceDtoUpdatedAt;
 }
