@@ -10,9 +10,7 @@ const ServicesPage = () => {
 
   const colums = [columnHelper.accessor('name', { header: 'Name' })];
 
-  return (
-    <DataGrid data={services || []} selectionMode={'single'} columns={colums} />
-  );
+  return <DataGrid data={services || []} columns={colums} />;
 };
 
 export default ServicesPage;
