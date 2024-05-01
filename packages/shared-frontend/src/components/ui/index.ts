@@ -6,7 +6,6 @@ import Textarea from './Textarea';
 import Input from './Input';
 import Button from './Button';
 import Skeleton from './Skeleton';
-import DataGrid from './DataGrid';
 import Pagination from './Pagination';
 export * from './Footer';
 export * from './Navbar';
@@ -37,6 +36,7 @@ export * from './HStack';
 export * from './VStack';
 export * from './Container';
 export * from './Layout';
+export * from './DataGrid';
 export {
   Textarea,
   Calendar,
@@ -46,7 +46,6 @@ export {
   Input,
   Button,
   Skeleton,
-  DataGrid,
   Pagination,
 };
 export * from './Modal';
