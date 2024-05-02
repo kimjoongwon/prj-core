@@ -17,38 +17,38 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 
-interface ServicesLayoutProps {
+interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const servicesPageState = observable({
+const mainPageState = observable({
   currentService: {} as ServiceEntity,
   sidebarNavItems: [] as NavItem[],
 });
 
-const ServicesLayout = (props: ServicesLayoutProps) => {
+const MainLayout = (props: MainLayoutProps) => {
   const { children } = props;
   const { topNavItems, sidebarNavItems } = useMeta();
 
   return (
-    <Navbar
-      rightContents={
-        <>
-          <Avatar name={authStore.user?.email || 'test!'} />
-          <Button color="danger" variant="flat">
-            나가기
-          </Button>
-        </>
-      }
-      navItems={topNavItems}
-    >
-      <HStack>
-        {servicesPageState.currentService.name && (
-          <Listbox className="w-64">
+    <>
+      <Navbar
+        rightContents={
+          <>
+            <Avatar name={authStore.user?.email || 'test!'} />
+            <Button color="danger" variant="flat">
+              나가기
+            </Button>
+          </>
+        }
+        navItems={topNavItems}
+      />
+      <HStack className="container">
+        {mainPageState.currentService.name && (
+          <Listbox>
             {sidebarNavItems?.map(navItem => {
               return (
                 <ListboxItem
-                  className="p-2 hover:bg-gray-200"
                   variant="solid"
                   key={uniqueId()}
                   as={Link}
@@ -62,19 +62,19 @@ const ServicesLayout = (props: ServicesLayoutProps) => {
         )}
         {children}
       </HStack>
-    </Navbar>
+    </>
   );
 };
 
-export default observer(ServicesLayout);
+export default observer(MainLayout);
 
 export const useMeta = () => {
   const { data: services } = useGetAllService();
   const setDefaultNavItem = () => {
     router.push({
-      url: '/admin/services/:serviceId/categories',
+      url: '/admin/main/services/:serviceId/categories',
       params: {
-        serviceId: servicesPageState.currentService.id,
+        serviceId: mainPageState.currentService.id,
       },
     });
   };
@@ -85,8 +85,7 @@ export const useMeta = () => {
         button: {
           children: service.name,
           onClick: () => {
-            servicesPageState.currentService = service;
-            // setDefaultNavItem();
+            mainPageState.currentService = service;
           },
         },
       };
@@ -100,9 +99,9 @@ export const useMeta = () => {
         },
         link: {
           href: router.getUrlWithParamsAndQueryString(
-            '/admin/services/:serviceId/categories',
+            '/admin/main/services/:serviceId/categories',
             {
-              serviceId: servicesPageState.currentService.id,
+              serviceId: mainPageState.currentService.id,
             },
           ),
         },
@@ -115,9 +114,9 @@ export const useMeta = () => {
         },
         link: {
           href: router.getUrlWithParamsAndQueryString(
-            '/admin/services/:serviceId/categories',
+            '/admin/main/services/:serviceId/categories',
             {
-              serviceId: servicesPageState.currentService.id,
+              serviceId: mainPageState.currentService.id,
             },
           ),
         },
@@ -129,7 +128,7 @@ export const useMeta = () => {
           children: '서비스 관리',
         },
         link: {
-          href: '/admin/services',
+          href: '/admin/main/services',
         },
       },
     ],
@@ -137,6 +136,6 @@ export const useMeta = () => {
 
   return {
     topNavItems,
-    sidebarNavItems: sidebarNavItems[servicesPageState.currentService.name],
+    sidebarNavItems: sidebarNavItems[mainPageState.currentService.name],
   };
 };
