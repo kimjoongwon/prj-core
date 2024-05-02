@@ -37,7 +37,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
   return (
     <Container className="h-16 border-b-1">
-      <HStack className="container">
+      <HStack className="container px-2">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}

@@ -8,6 +8,7 @@ import {
   NavItem,
   Navbar,
   ServiceEntity,
+  Sidebar,
   authStore,
   router,
   useGetAllService,
@@ -45,20 +46,7 @@ const MainLayout = (props: MainLayoutProps) => {
       />
       <HStack className="container">
         {mainPageState.currentService.name && (
-          <Listbox>
-            {sidebarNavItems?.map(navItem => {
-              return (
-                <ListboxItem
-                  variant="solid"
-                  key={uniqueId()}
-                  as={Link}
-                  href={navItem.link?.href}
-                >
-                  {navItem.button.children}
-                </ListboxItem>
-              );
-            })}
-          </Listbox>
+          <Sidebar navItems={sidebarNavItems} />
         )}
         {children}
       </HStack>

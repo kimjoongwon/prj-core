@@ -21,7 +21,7 @@ const servicesPageState = observable({
 const ServicesLayout = (props: ServicesLayoutProps) => {
   const { children } = props;
 
-  return <>{children}</>;
+  return <div className="p-4">{children}</div>;
 };
 
 export default observer(ServicesLayout);
