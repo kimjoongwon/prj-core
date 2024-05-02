@@ -51,7 +51,7 @@ export function DataGrid<T extends object>(props: DataGridProps<T>) {
   });
 
   return (
-    <table className="border-1">
+    <table className="font-pretendard border-1">
       <TableHead table={table} />
       <TableBody table={table} />
       <TableFooter table={table} />

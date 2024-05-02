@@ -16,7 +16,7 @@ export const TableHead = <T extends any>(props: TableHeaderProps<T>) => {
   return (
     <thead>
       {headerGroups.map(headerGroup => (
-        <TableRow>
+        <tr>
           {headerGroup.headers.map(header => (
             <TableHeaderCell
               className="relative"
@@ -37,7 +37,7 @@ export const TableHead = <T extends any>(props: TableHeaderProps<T>) => {
               <ColumnResizer header={header} />
             </TableHeaderCell>
           ))}
-        </TableRow>
+        </tr>
       ))}
     </thead>
   );
