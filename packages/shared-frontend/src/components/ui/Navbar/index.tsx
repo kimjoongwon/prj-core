@@ -37,7 +37,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
   return (
     <VStack>
-      <HStack className="shadow-small px-2">
+      <HStack>
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
@@ -49,7 +49,6 @@ export const Navbar = observer((props: NavbarProps) => {
           {rightContents}
         </HStack>
       </HStack>
-      <Divider />
       {children}
     </VStack>
   );
