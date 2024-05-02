@@ -1,7 +1,7 @@
 'use client';
 
-import { Listbox, ListboxItem } from '@nextui-org/react';
 import {
+  ADMIN_MAIN_PATH,
   Avatar,
   Button,
   HStack,
@@ -13,10 +13,9 @@ import {
   router,
   useGetAllService,
 } from '@shared/frontend';
-import { uniqueId } from 'lodash-es';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -30,6 +29,8 @@ const mainPageState = observable({
 const MainLayout = (props: MainLayoutProps) => {
   const { children } = props;
   const { topNavItems, sidebarNavItems } = useMeta();
+
+  const pathname = usePathname();
 
   return (
     <>
@@ -45,9 +46,7 @@ const MainLayout = (props: MainLayoutProps) => {
         navItems={topNavItems}
       />
       <HStack className="container">
-        {mainPageState.currentService.name && (
-          <Sidebar navItems={sidebarNavItems} />
-        )}
+        {pathname !== ADMIN_MAIN_PATH && <Sidebar navItems={sidebarNavItems} />}
         {children}
       </HStack>
     </>
@@ -58,14 +57,7 @@ export default observer(MainLayout);
 
 export const useMeta = () => {
   const { data: services } = useGetAllService();
-  const setDefaultNavItem = () => {
-    router.push({
-      url: '/admin/main/services/:serviceId/categories',
-      params: {
-        serviceId: mainPageState.currentService.id,
-      },
-    });
-  };
+  const pathname = usePathname();
 
   const topNavItems: NavItem[] =
     services?.map(service => {
@@ -73,11 +65,22 @@ export const useMeta = () => {
         button: {
           children: service.name,
           onClick: () => {
-            mainPageState.currentService = service;
+            const url = router.getUrlWithParamsAndQueryString(
+              '/admin/main/services/:serviceId',
+              {
+                serviceId: service.id,
+              },
+            );
+            router.push({ url });
           },
         },
+        active: pathname.includes(service.id),
       };
     }) || [];
+
+  const activeService = services?.find(service =>
+    pathname.includes(service.id),
+  );
 
   const sidebarNavItems: Record<ServiceEntity['name'], NavItem[]> = {
     USER: [
@@ -89,7 +92,7 @@ export const useMeta = () => {
           href: router.getUrlWithParamsAndQueryString(
             '/admin/main/services/:serviceId/categories',
             {
-              serviceId: mainPageState.currentService.id,
+              serviceId: activeService?.id,
             },
           ),
         },
@@ -104,7 +107,7 @@ export const useMeta = () => {
           href: router.getUrlWithParamsAndQueryString(
             '/admin/main/services/:serviceId/categories',
             {
-              serviceId: mainPageState.currentService.id,
+              serviceId: activeService?.id,
             },
           ),
         },
@@ -116,7 +119,12 @@ export const useMeta = () => {
           children: '서비스 관리',
         },
         link: {
-          href: '/admin/main/services',
+          href: router.getUrlWithParamsAndQueryString(
+            '/admin/main/services/:serviceId/services',
+            {
+              serviceId: activeService?.id,
+            },
+          ),
         },
       },
     ],
@@ -124,6 +132,6 @@ export const useMeta = () => {
 
   return {
     topNavItems,
-    sidebarNavItems: sidebarNavItems[mainPageState.currentService.name],
+    sidebarNavItems: sidebarNavItems[activeService?.name!],
   };
 };

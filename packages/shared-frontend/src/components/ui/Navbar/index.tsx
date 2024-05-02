@@ -14,6 +14,7 @@ export interface NavItem {
   button: ButtonProps;
   link?: Omit<LinkProps, 'href'> & { href: Paths };
   children?: NavItem[];
+  active?: boolean;
 }
 
 interface NavbarProps {

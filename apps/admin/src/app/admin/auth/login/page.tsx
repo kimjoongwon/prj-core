@@ -36,10 +36,7 @@ const LoginPage = observer(() => {
       authStore.user = tokenDto?.user;
 
       router.push({
-        url: '/admin/services/:serviceId/categories',
-        params: {
-          serviceId: serviceStore.getServices('USER')?.id,
-        },
+        url: '/admin/main',
       });
     } catch (error) {
       if (error instanceof AxiosError) {
