@@ -8,6 +8,7 @@ import { LinkProps } from 'next/link';
 import { Paths } from '../../../constants/Paths';
 import { Logo } from '../Logo';
 import { VStack } from '../VStack';
+import { Container } from '../Container';
 
 export interface NavItem {
   button: ButtonProps;
@@ -16,14 +17,13 @@ export interface NavItem {
 }
 
 interface NavbarProps {
-  children: React.ReactNode;
   navItems?: NavItem[];
   rightContents?: React.ReactNode;
   leftContents?: React.ReactNode;
 }
 
 export const Navbar = observer((props: NavbarProps) => {
-  const { children, navItems = [], rightContents, leftContents } = props;
+  const { navItems = [], rightContents, leftContents } = props;
 
   const renderNavItem = (navItem: NavItem): React.ReactNode => {
     const { button, children } = navItem;
@@ -36,8 +36,8 @@ export const Navbar = observer((props: NavbarProps) => {
   };
 
   return (
-    <VStack>
-      <HStack>
+    <Container className="h-16 border-b-1">
+      <HStack className="container">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
@@ -49,7 +49,6 @@ export const Navbar = observer((props: NavbarProps) => {
           {rightContents}
         </HStack>
       </HStack>
-      {children}
-    </VStack>
+    </Container>
   );
 });

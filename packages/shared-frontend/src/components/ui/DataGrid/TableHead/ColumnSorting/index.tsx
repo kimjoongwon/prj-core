@@ -19,10 +19,10 @@ export const ColumnSorting = <T extends unknown>(
       <div className="relative overflow-hidden">
         {{
           asc: (
-            <IoIosArrowRoundUp className="transform transition-transform duration-200 ease-in-out hover:scale-125 font-semibold" />
+            <IoIosArrowRoundUp className="transform transition-transform duration-200 ease-in-out hover:scale-125 font-semibold text-large" />
           ),
           desc: (
-            <IoIosArrowRoundDown className="transform transition-transform duration-200 ease-in-out hover:scale-125 font-semibold" />
+            <IoIosArrowRoundDown className="transform transition-transform duration-200 ease-in-out hover:scale-125 font-semibold text-large" />
           ),
         }[header.column.getIsSorted() as string] ?? ' '}
       </div>

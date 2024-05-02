@@ -12,7 +12,7 @@ interface AdminLayoutProps {
 const AdminLayout = observer((props: AdminLayoutProps) => {
   const { children } = props;
 
-  return <Container className="container">{children}</Container>;
+  return <>{children}</>;
 });
 
 export default AdminLayout;
