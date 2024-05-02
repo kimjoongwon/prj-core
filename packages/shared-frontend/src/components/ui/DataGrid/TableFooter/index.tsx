@@ -1,5 +1,7 @@
 import { Table, flexRender } from '@tanstack/react-table';
 import { getTableHeaderGroups } from '../TableHead';
+import { TableRow } from '../TableRow';
+import { TableHeaderCell } from '../TableHeaderCell';
 
 interface TableFooterProps<T> {
   table: Table<T>;
@@ -13,18 +15,18 @@ export const TableFooter = <T extends any>(props: TableFooterProps<T>) => {
   return (
     <tfoot>
       {footerGroup.map(footerGroup => (
-        <tr key={footerGroup.id}>
+        <TableRow>
           {footerGroup.headers.map(header => (
-            <th key={header.id} colSpan={header.colSpan}>
+            <TableHeaderCell>
               {header.isPlaceholder
                 ? null
                 : flexRender(
                     header.column.columnDef.footer,
                     header.getContext(),
                   )}
-            </th>
+            </TableHeaderCell>
           ))}
-        </tr>
+        </TableRow>
       ))}
     </tfoot>
   );

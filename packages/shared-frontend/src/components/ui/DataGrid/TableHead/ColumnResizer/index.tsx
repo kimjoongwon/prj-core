@@ -11,7 +11,7 @@ export const ColumnResizer = <T extends unknown>(
 
   return (
     <div
-      className="absolute right-0 top-0 h-3/4 w-3 hover:border-r-2 border-blue-500 select-none touch-none cursor-col-resize"
+      className="absolute right-0 top-0 h-full w-3 duration-200 ease-in-out hover:border-r-2 border-blue-500 select-none touch-none cursor-col-resize"
       onMouseDown={header.getResizeHandler()}
       onTouchStart={header.getResizeHandler()}
     />
