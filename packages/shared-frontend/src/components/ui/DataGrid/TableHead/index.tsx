@@ -1,5 +1,8 @@
 import { HeaderGroup, RowData, Table, flexRender } from '@tanstack/react-table';
 import { ColumnResizer } from './ColumnResizer';
+import { ColumnSorting } from './ColumnSorting';
+import { TableRow } from '../TableRow';
+import { TableHeaderCell } from '../TableHeaderCell';
 
 interface TableHeaderProps<T> {
   table: Table<T>;
@@ -13,9 +16,9 @@ export const TableHead = <T extends any>(props: TableHeaderProps<T>) => {
   return (
     <thead>
       {headerGroups.map(headerGroup => (
-        <tr key={headerGroup.id}>
+        <TableRow>
           {headerGroup.headers.map(header => (
-            <th
+            <TableHeaderCell
               className="relative"
               key={header.id}
               style={{
@@ -24,58 +27,17 @@ export const TableHead = <T extends any>(props: TableHeaderProps<T>) => {
               colSpan={header.colSpan}
             >
               {header.isPlaceholder ? null : (
-                <>
-                  <div>
-                    {header.column.getCanGroup() ? (
-                      // If the header can be grouped, let's add a toggle
-                      <button
-                        onClick={header.column.getToggleGroupingHandler()}
-                        style={{
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {header.column.getIsGrouped()
-                          ? `🛑(${header.column.getGroupedIndex()})`
-                          : `👊`}
-                      </button>
-                    ) : null}{' '}
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}{' '}
-                    <button
-                      onClick={header.column.getToggleSortingHandler()}
-                      className={
-                        header.column.getCanSort()
-                          ? 'cursor-pointer select-none'
-                          : ''
-                      }
-                    >
-                      {{
-                        asc: '🔼',
-                        desc: '🔽',
-                      }[header.column.getIsSorted() as string] ?? '📶'}
-                    </button>
-                  </div>
-                  {/* {header.column.getCanFilter() ? (
-                    <div>
-                      <Filter column={header.column} table={table} />
-                      filter영역
-                    </div>
-                  ) : null} */}
-                </>
+                <ColumnSorting header={header}>
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
+                  )}
+                </ColumnSorting>
               )}
               <ColumnResizer header={header} />
-              {/* {!header.isPlaceholder && header.column.getCanPin() && (
-                <div>tablePin 영역</div>
-                <TablePins
-                  isPinned={header.column.getIsPinned()}
-                  pin={header.column.pin}
-                />
-              )} */}
-            </th>
+            </TableHeaderCell>
           ))}
-        </tr>
+        </TableRow>
       ))}
     </thead>
   );

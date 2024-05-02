@@ -1,4 +1,6 @@
 import { Row, RowData, Table, flexRender } from '@tanstack/react-table';
+import { TableRow } from '../TableRow';
+import { TableCell } from '../TableCell';
 
 interface TableBodyProps<T> {
   table: Table<T>;
@@ -9,18 +11,18 @@ export const TableBody = <T extends any>(props: TableBodyProps<T>) => {
   return (
     <tbody>
       {table.getRowModel().rows.map(row => (
-        <tr key={row.id}>
+        <TableRow key={row.id}>
           {getRowGroup(row, 'center').map(cell => (
-            <td
+            <TableCell
               key={cell.id}
               style={{
                 width: cell.column.getSize(),
               }}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </td>
+            </TableCell>
           ))}
-        </tr>
+        </TableRow>
       ))}
     </tbody>
   );
