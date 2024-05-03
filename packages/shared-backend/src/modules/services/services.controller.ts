@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, Param, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Logger,
+  Post,
+} from '@nestjs/common';
 import { ServicesService } from './services.service';
 import {
   ApiBody,
@@ -12,6 +20,7 @@ import { ServiceEntity } from './service.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { targetConstructorToSchema } from 'class-validator-jsonschema';
 import { ServiceFormDto } from './dto/service-form.dto';
+import { CreateServiceDto } from './dto/create-service.dto';
 
 @ApiTags('services')
 @Controller()
@@ -24,6 +33,13 @@ export class ServicesController {
   @ApiResponse({ type: ServiceEntity, isArray: true })
   getAllService() {
     return this.servicesService.findAllService();
+  }
+
+  @Auth()
+  @ApiResponse({ type: ServiceEntity })
+  @Post()
+  createService(@Body() createServiceDto: CreateServiceDto) {
+    return this.servicesService.create(createServiceDto);
   }
 
   @Public()

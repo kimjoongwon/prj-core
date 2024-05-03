@@ -13,6 +13,8 @@ export * from './createAuthzDto';
 export * from './createCategory200AllOf';
 export * from './createCategoryDto';
 export * from './createCategoryDtoParentId';
+export * from './createServiceDto';
+export * from './createServiceDtoName';
 export * from './createSignUpPayloadDto';
 export * from './form';
 export * from './getAccessibleAllSpace200';

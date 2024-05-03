@@ -17,6 +17,7 @@ import type {
 import type {
   CreateAuthzDto,
   CreateCategoryDto,
+  CreateServiceDto,
   CreateSignUpPayloadDto,
   LoginPayloadDto,
   ServiceFormDto,
@@ -109,6 +110,80 @@ export const useGetAllService = <
   query.queryKey = queryOptions.queryKey;
 
   return query;
+};
+
+export const createService = (
+  createServiceDto: BodyType<CreateServiceDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<ServiceEntity>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createServiceDto,
+    },
+    options,
+  );
+};
+
+export const getCreateServiceMutationOptions = <
+  TError = ErrorType<void | ServiceEntity>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createService>>,
+    TError,
+    { data: BodyType<CreateServiceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createService>>,
+  TError,
+  { data: BodyType<CreateServiceDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createService>>,
+    { data: BodyType<CreateServiceDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return createService(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateServiceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createService>>
+>;
+export type CreateServiceMutationBody = BodyType<CreateServiceDto>;
+export type CreateServiceMutationError = ErrorType<void | ServiceEntity>;
+
+export const useCreateService = <
+  TError = ErrorType<void | ServiceEntity>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createService>>,
+    TError,
+    { data: BodyType<CreateServiceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createService>>,
+  TError,
+  { data: BodyType<CreateServiceDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateServiceMutationOptions(options);
+
+  return useMutation(mutationOptions);
 };
 
 export const getServiceForm = (
@@ -1896,6 +1971,18 @@ export const getGetAllServiceMockHandler = () => {
   });
 };
 
+export const getCreateServiceMockHandler = () => {
+  return http.post('*/api/v1/admin/services', async () => {
+    await delay(1000);
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
+
 export const getGetServiceFormMockHandler = () => {
   return http.get('*/api/v1/admin/services/form', async () => {
     await delay(1000);
@@ -2206,6 +2293,7 @@ export const getRemoveMockHandler = () => {
 };
 export const getPROMISEServerMock = () => [
   getGetAllServiceMockHandler(),
+  getCreateServiceMockHandler(),
   getGetServiceFormMockHandler(),
   getUpdateServiceMockHandler(),
   getGetUpdateServiceSchemaMockHandler(),
