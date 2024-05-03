@@ -19,6 +19,9 @@ export const ADMIN_SETTING_SERVICE_PATH =
 export const ADMIN_SERVICES_PATH =
   `${ADMIN_SETTING_SERVICE_PATH}/services` as const;
 
+export const ADMIN_SERVICE_EDIT_PATH =
+  `${ADMIN_SERVICES_PATH}/:serviceId/edit` as const;
+
 export type Paths =
   | typeof ADMIN_PATH
   | typeof ADMIN_MAIN_PATH
@@ -30,4 +33,5 @@ export type Paths =
   | typeof ADMIN_USER_CATEGORIES_PATH
   | typeof ADMIN_USER_CATEGORY_PATH
   | typeof ADMIN_SETTING_SERVICE_PATH
-  | typeof ADMIN_SERVICES_PATH;
+  | typeof ADMIN_SERVICES_PATH
+  | typeof ADMIN_SERVICE_EDIT_PATH;
