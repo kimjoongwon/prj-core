@@ -13,14 +13,22 @@ import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import React from 'react';
+import { ButtonProps } from '@nextui-org/react';
+import { TableContainer } from './TableContainer';
+import { HStack } from '../HStack';
+import { List } from '../List';
+import { Button } from '..';
+import { renderButton } from '../../renderer/renderButton';
 
 export interface DataGridProps<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
+  leftButtons?: ButtonProps[];
+  rightButtons?: ButtonProps[];
 }
 
 export function DataGrid<T extends object>(props: DataGridProps<T>) {
-  const { data, columns } = props;
+  const { data, columns, leftButtons, rightButtons } = props;
 
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [grouping, setGrouping] = React.useState<GroupingState>([]);
@@ -51,10 +59,16 @@ export function DataGrid<T extends object>(props: DataGridProps<T>) {
   });
 
   return (
-    <table className="font-pretendard border-1">
-      <TableHead table={table} />
-      <TableBody table={table} />
-      <TableFooter table={table} />
-    </table>
+    <TableContainer>
+      <HStack className="justify-between">
+        <HStack>{leftButtons?.map(renderButton)}</HStack>
+        <HStack>{rightButtons?.map(renderButton)}</HStack>
+      </HStack>
+      <table className="font-pretendard border-1">
+        <TableHead table={table} />
+        <TableBody table={table} />
+        <TableFooter table={table} />
+      </table>
+    </TableContainer>
   );
 }

@@ -8,10 +8,8 @@ interface UserServiceLayoutProps {
   children: React.ReactNode;
 }
 
-const UserServiceLayout = observer(
-  (props: UserServiceLayoutProps) => {
-    return <Container>{props.children}</Container>;
-  },
-);
+const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
+  return <Container className="h-full">{props.children}</Container>;
+});
 
 export default UserServiceLayout;
