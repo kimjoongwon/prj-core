@@ -7,7 +7,7 @@ export const useMeta = () => {
       children: '생성',
       onClick: () => {
         router.push({
-          url: '/admin/main/services/:serviceId/services/:serviceId/edit',
+          url: '/admin/main/settingService/services/:serviceId/edit',
           params: {
             serviceId: 'new',
           },
