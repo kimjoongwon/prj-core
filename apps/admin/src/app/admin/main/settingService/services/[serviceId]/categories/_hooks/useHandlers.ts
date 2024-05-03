@@ -1,0 +1,78 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { groupBy } from 'lodash-es';
+import { useParams } from 'next/navigation';
+import { useQueries } from './useQueries';
+import {
+  CategoryDto,
+  getGetCategoriesQueryKey,
+  router,
+} from '@shared/frontend';
+import { categroiesPageState } from './state';
+import { useCallback } from 'react';
+
+export const useHandlers = (props: {
+  queries: ReturnType<typeof useQueries>;
+}) => {
+  const {
+    queries: { categories, updateCategory },
+  } = props;
+  const { serviceId } = useParams();
+  const queryClient = useQueryClient();
+
+  const categoriesGroupedByParentId = groupBy(categories, 'parentId');
+
+  const onClickDetail = (category: CategoryDto) => {
+    router.push({
+      url: '/admin/services/:serviceId/categories/:categoryId',
+      params: {
+        categoryId: category.id,
+        serviceId,
+      },
+    });
+  };
+
+  const onClickCard = (category: CategoryDto) => {
+    const categoriesByParentId =
+      categoriesGroupedByParentId?.[category.parentId!];
+
+    categoriesByParentId?.forEach(_category => {
+      if (_category.id === category.id) {
+        categroiesPageState.openedCategory = category;
+      }
+    });
+  };
+
+  const onClickCreate = async (category: CategoryDto) => {
+    categroiesPageState.form.parentId = category.id;
+    categroiesPageState.openedCategory = category;
+
+    router.push({
+      url: '/admin/services/:serviceId/categories/:categoryId/edit',
+      params: {
+        serviceId,
+        categoryId: 'new',
+      },
+    });
+  };
+
+  const onClickDelete = async (category: CategoryDto) => {
+    await updateCategory({
+      categoryId: category.id,
+      data: {
+        ...category,
+        deletedAt: new Date() as any,
+      },
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: getGetCategoriesQueryKey(),
+    });
+  };
+
+  return {
+    onClickCreate,
+    onClickDetail: useCallback(onClickDetail, [serviceId]),
+    onClickCard: useCallback(onClickCard, [categoriesGroupedByParentId]),
+    onClickDelete,
+  };
+};

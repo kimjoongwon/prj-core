@@ -2,19 +2,20 @@
 
 import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
-import { ButtonProps, Divider, Spacer } from '@nextui-org/react';
+import { ButtonProps } from '@nextui-org/react';
 import Button from '../Button';
 import { LinkProps } from 'next/link';
 import { Paths } from '../../../constants/Paths';
 import { Logo } from '../Logo';
 import { VStack } from '../VStack';
-import { Container } from '../Container';
+import { router } from '../../../stores';
 
 export interface NavItem {
-  button: ButtonProps;
-  link?: Omit<LinkProps, 'href'> & { href: Paths };
+  url: Paths;
+  text: string;
   children?: NavItem[];
-  active?: boolean;
+  active: boolean;
+  params?: object;
 }
 
 interface NavbarProps {
@@ -27,18 +28,34 @@ export const Navbar = observer((props: NavbarProps) => {
   const { navItems = [], rightContents, leftContents } = props;
 
   const renderNavItem = (navItem: NavItem): React.ReactNode => {
-    const { button, children } = navItem;
+    const { children, url, text, params, active } = navItem;
 
     if (children) {
       return children?.map(renderNavItem);
     }
 
-    return <Button variant="light" className="font-semibold" {...button} />;
+    const onClickNavItem = () => {
+      router.push({
+        url,
+        params,
+      });
+    };
+
+    return (
+      <Button
+        variant="light"
+        className="font-semibold"
+        color={active ? 'primary' : 'default'}
+        onClick={onClickNavItem}
+      >
+        {text}
+      </Button>
+    );
   };
 
   return (
-    <Container className="h-16 border-b-1">
-      <HStack className="container px-2">
+    <VStack className="h-16 border-b-1 items-center justify-center">
+      <HStack className="container px-4 justify-between">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
@@ -46,10 +63,8 @@ export const Navbar = observer((props: NavbarProps) => {
         <HStack className="gap-2 items-center justify-center">
           {navItems?.map(renderNavItem)}
         </HStack>
-        <HStack className="justify-end items-center gap-2">
-          {rightContents}
-        </HStack>
+        <HStack className="items-center gap-2">{rightContents}</HStack>
       </HStack>
-    </Container>
+    </VStack>
   );
 });

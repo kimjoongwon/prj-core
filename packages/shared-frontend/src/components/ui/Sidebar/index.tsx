@@ -3,6 +3,8 @@ import { NavItem } from '../Navbar';
 import { observer } from 'mobx-react-lite';
 import { router } from '../../../stores/routerStore';
 import { Text } from '../Text';
+import { tv } from 'tailwind-variants';
+import Button from '../Button';
 
 interface SidebarProps {
   navItems?: NavItem[];
@@ -10,21 +12,28 @@ interface SidebarProps {
 
 export const Sidebar = observer((props: SidebarProps) => {
   const { navItems = [] } = props;
+
+  const item = tv({
+    base: 'text-gray-700 font-semibold',
+    variants: {
+      color: {
+        active: 'text-primary',
+        inactive: 'text-gray-700',
+      },
+    },
+  });
+
   return (
     <ol className="border-r-1 p-2">
       {navItems?.map(navItem => {
         return (
-          <li
-            className="w-36 transition-colors select-none duration-200 hover:bg-gray-200 py-2 px-4 rounded-md"
-            key={uniqueId()}
-            onClick={() =>
-              router.push({ url: navItem.link?.href || '/admin/main' })
-            }
+          <Button
+            variant="light"
+            color={navItem.active ? 'primary' : 'default'}
+            onClick={() => router.push({ url: navItem.url || '/admin/main' })}
           >
-            <Text className="text-gray-700 font-semibold">
-              {navItem.button.children}
-            </Text>
-          </li>
+            {navItem.text}
+          </Button>
         );
       })}
     </ol>
