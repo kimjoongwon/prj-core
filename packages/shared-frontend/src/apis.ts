@@ -253,6 +253,86 @@ export const useGetServiceForm = <
   return query;
 };
 
+export const getServiceById = (
+  serviceId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<ServiceEntity>(
+    {
+      url: `http://localhost:3005/api/v1/admin/services/${serviceId}`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
+
+export const getGetServiceByIdQueryKey = (serviceId: string) => {
+  return [`http://localhost:3005/api/v1/admin/services/${serviceId}`] as const;
+};
+
+export const getGetServiceByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceById>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getServiceById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetServiceByIdQueryKey(serviceId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceById>>> = ({
+    signal,
+  }) => getServiceById(serviceId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!serviceId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getServiceById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceById>>
+>;
+export type GetServiceByIdQueryError = ErrorType<unknown>;
+
+export const useGetServiceById = <
+  TData = Awaited<ReturnType<typeof getServiceById>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getServiceById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceByIdQueryOptions(serviceId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const updateService = (
   id: string,
   updateServiceDto: BodyType<UpdateServiceDto>,
@@ -1630,6 +1710,18 @@ export const useRemove = <
   return useMutation(mutationOptions);
 };
 
+export const getGetServiceByIdResponseMock = (
+  overrideResponse: any = {},
+): ServiceEntity => ({
+  createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  deletedAt: {},
+  id: faker.word.sample(),
+  label: faker.helpers.arrayElement([faker.word.sample(), null]),
+  name: faker.helpers.arrayElement(['SPACE', 'USER', 'SETTING'] as const),
+  updatedAt: {},
+  ...overrideResponse,
+});
+
 export const getUpdateServiceResponseMock = (
   overrideResponse: any = {},
 ): ServiceEntity => ({
@@ -1637,7 +1729,7 @@ export const getUpdateServiceResponseMock = (
   deletedAt: {},
   id: faker.word.sample(),
   label: faker.helpers.arrayElement([faker.word.sample(), null]),
-  name: faker.helpers.arrayElement(['USER', 'SPACE', 'SETTING'] as const),
+  name: faker.helpers.arrayElement(['SPACE', 'USER', 'SETTING'] as const),
   updatedAt: {},
   ...overrideResponse,
 });
@@ -1995,6 +2087,25 @@ export const getGetServiceFormMockHandler = () => {
   });
 };
 
+export const getGetServiceByIdMockHandler = (
+  overrideResponse?: ServiceEntity,
+) => {
+  return http.get('*/api/v1/admin/services/:serviceId', async () => {
+    await delay(1000);
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse ? overrideResponse : getGetServiceByIdResponseMock(),
+      ),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  });
+};
+
 export const getUpdateServiceMockHandler = (
   overrideResponse?: ServiceEntity,
 ) => {
@@ -2295,6 +2406,7 @@ export const getPROMISEServerMock = () => [
   getGetAllServiceMockHandler(),
   getCreateServiceMockHandler(),
   getGetServiceFormMockHandler(),
+  getGetServiceByIdMockHandler(),
   getUpdateServiceMockHandler(),
   getGetUpdateServiceSchemaMockHandler(),
   getGetCategoriesMockHandler(),

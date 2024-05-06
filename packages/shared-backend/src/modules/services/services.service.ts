@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { SERVICE_NAME } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
@@ -14,7 +13,7 @@ export class ServicesService {
 
     const space = await this.prisma.service.findFirst({
       where: {
-        name: SERVICE_NAME.SPACE,
+        name: 'SPACE',
       },
     });
 
@@ -22,14 +21,14 @@ export class ServicesService {
       this.logger.log('space service is not exist');
       await this.prisma.service.create({
         data: {
-          name: SERVICE_NAME.SPACE,
+          name: 'SPACE',
         },
       });
     }
 
     const user = await this.prisma.service.findFirst({
       where: {
-        name: SERVICE_NAME.USER,
+        name: 'USER',
       },
     });
 
@@ -37,14 +36,14 @@ export class ServicesService {
       this.logger.log('user service is not exist');
       await this.prisma.service.create({
         data: {
-          name: SERVICE_NAME.USER,
+          name: 'USER',
         },
       });
     }
 
     const setting = await this.prisma.service.findFirst({
       where: {
-        name: SERVICE_NAME.SETTING,
+        name: 'SETTING',
       },
     });
 
@@ -52,7 +51,7 @@ export class ServicesService {
       this.logger.log('user service is not exist');
       await this.prisma.service.create({
         data: {
-          name: SERVICE_NAME.SETTING,
+          name: 'SETTING',
         },
       });
     }
@@ -84,6 +83,12 @@ export class ServicesService {
       where: {
         deletedAt: null,
       },
+    });
+  }
+
+  getServiceById(id: string) {
+    return this.prisma.service.findUnique({
+      where: { id },
     });
   }
 

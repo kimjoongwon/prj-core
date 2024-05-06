@@ -50,12 +50,20 @@ export class ServicesController {
   }
 
   @Public()
+  @Get(':serviceId')
+  @ApiParam({ name: 'serviceId', type: 'string' })
+  @ApiOkResponse({ type: ServiceEntity })
+  getServiceById(@Param('serviceId') serviceId: string) {
+    return this.servicesService.getServiceById(serviceId);
+  }
+
+  @Public()
   @ApiParam({ name: 'id', type: 'string' })
   @ApiBody({ type: UpdateServiceDto })
   @ApiOkResponse({ type: ServiceEntity })
   @Patch(':id')
   updateService(
-    @Param() id: string,
+    @Param('id') id: string,
     @Body() updateServiceDto: UpdateServiceDto,
   ) {
     return this.servicesService.update(id, updateServiceDto);

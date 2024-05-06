@@ -2,9 +2,7 @@
 
 import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
-import { ButtonProps } from '@nextui-org/react';
 import Button from '../Button';
-import { LinkProps } from 'next/link';
 import { Paths } from '../../../constants/Paths';
 import { Logo } from '../Logo';
 import { VStack } from '../VStack';
@@ -54,7 +52,7 @@ export const Navbar = observer((props: NavbarProps) => {
   };
 
   return (
-    <VStack className="h-16 border-b-1 items-center justify-center">
+    <VStack className="w-full h-16 border-b-1 items-center justify-center">
       <HStack className="container px-4 justify-between">
         <HStack className="items-center">
           <Logo variants="text" alt={'LOGO'} />

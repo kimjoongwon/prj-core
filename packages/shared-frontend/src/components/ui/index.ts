@@ -57,3 +57,4 @@ export * from './FormGroup';
 export * from './FormController';
 export * from './ListBox';
 export * from './Text';
+export * from './Placeholder';

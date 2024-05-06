@@ -6,7 +6,9 @@ import {
   CategoryForm,
   CreateCategoryDto,
   FormLayout,
+  authStore,
   useCreateCategory,
+  useGetAllService,
   useGetCategoryById,
   useUpdateCategory,
 } from '@shared/frontend';
@@ -14,6 +16,7 @@ import { router } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
 import { categroiesPageState } from '../../_hooks/state';
+import { isEmpty } from 'lodash-es';
 
 const CategoryDetailPage = observer(() => {
   const {
@@ -115,10 +118,13 @@ const useHandlers = (props: {
     serviceId: string;
   }>();
 
+  const { data: services } = useGetAllService();
+
   const isEditMode = categoryId !== 'new';
 
   const onClickSave = async () => {
     const openedCategory = categroiesPageState.openedCategory;
+    const userService = services?.find(service => service.name === 'USER');
 
     if (isEditMode) {
       await updateCategory({
@@ -128,13 +134,17 @@ const useHandlers = (props: {
       return;
     }
 
+    console.log('authStore', authStore);
+
     await createCategory({
       data: {
         name: state.category?.name || '',
-        ancestorIds: [...openedCategory.ancestorIds, openedCategory.id],
-        parentId: openedCategory.id,
-        serviceId: openedCategory.serviceId,
-        spaceId: openedCategory.spaceId,
+        ancestorIds: isEmpty(openedCategory?.ancestorIds)
+          ? []
+          : [...openedCategory?.ancestorIds, openedCategory.id],
+        parentId: openedCategory.id || null,
+        serviceId: userService?.id!,
+        spaceId: authStore.currentTenant?.spaceId!,
       },
     });
 

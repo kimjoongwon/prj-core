@@ -13,6 +13,9 @@ export const ADMIN_USER_CATEGORIES_PATH =
 export const ADMIN_USER_CATEGORY_PATH =
   `${ADMIN_USER_CATEGORIES_PATH}/:categoryId` as const;
 
+export const ADMIN_USER_CATEGORY_EDIT_PATH =
+  `${ADMIN_USER_CATEGORIES_PATH}/:categoryId/edit` as const;
+
 export const ADMIN_SETTING_SERVICE_PATH =
   `${ADMIN_MAIN_PATH}/settingService` as const;
 
@@ -34,4 +37,5 @@ export type Paths =
   | typeof ADMIN_USER_CATEGORY_PATH
   | typeof ADMIN_SETTING_SERVICE_PATH
   | typeof ADMIN_SERVICES_PATH
-  | typeof ADMIN_SERVICE_EDIT_PATH;
+  | typeof ADMIN_SERVICE_EDIT_PATH
+  | typeof ADMIN_USER_CATEGORY_EDIT_PATH;
