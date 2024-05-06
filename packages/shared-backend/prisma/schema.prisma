@@ -61,7 +61,7 @@ enum SERVICE_NAME {
 
 model Service {
   id              String           @id @default(cuid())
-  name            SERVICE_NAME
+  name            String           @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
@@ -84,7 +84,7 @@ model Assignment {
 
 model Role {
   id        String    @id @default(cuid())
-  name      Roles     @unique @default(USER)
+  name      Roles     @default(USER)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)

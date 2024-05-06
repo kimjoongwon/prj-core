@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { $Enums, Service } from '@prisma/client';
+import { Service } from '@prisma/client';
+
+export enum SERVICE_NAME {
+  SPACE = 'SPACE',
+  USER = 'USER',
+  SETTING = 'SETTING',
+}
 
 export class ServiceEntity implements Service {
   @ApiProperty()
@@ -9,9 +15,9 @@ export class ServiceEntity implements Service {
   label: string;
 
   @ApiProperty({
-    enum: $Enums.SERVICE_NAME,
+    enum: SERVICE_NAME,
   })
-  name: $Enums.SERVICE_NAME;
+  name: SERVICE_NAME;
 
   @ApiProperty()
   createdAt: Date;

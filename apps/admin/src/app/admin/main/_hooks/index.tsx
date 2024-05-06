@@ -8,9 +8,24 @@ export const useMeta = () => {
 
   const topNavItems: NavItem[] = [
     {
-      text: '이용자 서비스',
+      text: '이용자 관리',
       url: '/admin/main/userService',
       active: pathname.includes('/admin/main/userService'),
+    },
+    {
+      text: '예약 관리',
+      url: '/admin/main/userService',
+      active: pathname.includes('/admin/main/userService-1'),
+    },
+    {
+      text: '매장 관리',
+      url: '/admin/main/userService',
+      active: pathname.includes('/admin/main/userService-2'),
+    },
+    {
+      text: '문의 관리',
+      url: '/admin/main/userService',
+      active: pathname.includes('/admin/main/userService-2'),
     },
     {
       text: '설정',
@@ -22,7 +37,7 @@ export const useMeta = () => {
   const activeNavItem = topNavItems?.find(navItem => navItem.active);
 
   const sidebarNavItems: Record<string, NavItem[]> = {
-    '이용자 서비스': [
+    '이용자 관리': [
       {
         text: '카테고리 관리',
         url: '/admin/main/userService/categories',

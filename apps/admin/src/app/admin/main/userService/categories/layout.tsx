@@ -7,7 +7,7 @@ interface CategoriesPageProps {
 
 const CategoriesLayout = (props: CategoriesPageProps) => {
   const { children } = props;
-  return <HStack>{children}</HStack>;
+  return children;
 };
 
 export default CategoriesLayout;

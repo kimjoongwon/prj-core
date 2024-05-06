@@ -13,11 +13,9 @@ import { TableHead } from './TableHead';
 import { TableBody } from './TableBody';
 import { TableFooter } from './TableFooter';
 import React from 'react';
-import { ButtonProps } from '@nextui-org/react';
+import { ButtonProps, Spacer } from '@nextui-org/react';
 import { TableContainer } from './TableContainer';
 import { HStack } from '../HStack';
-import { List } from '../List';
-import { Button } from '..';
 import { renderButton } from '../../renderer/renderButton';
 
 export interface DataGridProps<T> {
@@ -64,6 +62,7 @@ export function DataGrid<T extends object>(props: DataGridProps<T>) {
         <HStack>{leftButtons?.map(renderButton)}</HStack>
         <HStack>{rightButtons?.map(renderButton)}</HStack>
       </HStack>
+      <Spacer y={1} />
       <table className="font-pretendard border-1">
         <TableHead table={table} />
         <TableBody table={table} />

@@ -24,7 +24,7 @@ export const Sidebar = observer((props: SidebarProps) => {
   });
 
   return (
-    <ol className="border-r-1 p-2">
+    <ol className="border-1 mt-4 rounded-lg p-4">
       {navItems?.map(navItem => {
         return (
           <Button

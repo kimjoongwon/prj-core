@@ -8,7 +8,6 @@ import {
   Spacer,
   authStore,
   router,
-  serviceStore,
   useLogin,
 } from '@shared/frontend';
 import { AxiosError } from 'axios';

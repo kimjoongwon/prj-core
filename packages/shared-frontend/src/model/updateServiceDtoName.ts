@@ -10,7 +10,7 @@ export type UpdateServiceDtoName = typeof UpdateServiceDtoName[keyof typeof Upda
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateServiceDtoName = {
-  USER: 'USER',
   SPACE: 'SPACE',
+  USER: 'USER',
   SETTING: 'SETTING',
 } as const;

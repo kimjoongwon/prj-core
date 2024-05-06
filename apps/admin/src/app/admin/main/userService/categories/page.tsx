@@ -1,7 +1,14 @@
 'use client';
 
 import React from 'react';
-import { CategoryCard, Container, List } from '@shared/frontend';
+import {
+  Button,
+  CategoryCard,
+  HStack,
+  List,
+  Placeholder,
+  VStack,
+} from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { uniqueId } from 'lodash-es';
 import { useCategoriesPage } from './_hooks';
@@ -16,16 +23,18 @@ const CategoriesPage = observer(() => {
   } = useCategoriesPage();
 
   return (
-    <Container>
+    <VStack className="w-full">
+      <HStack>
+        <Button onClick={() => onClickCreate()}>생성</Button>
+      </HStack>
       <List
-        className="gap-2"
         horizontal
         data={relatedCategoryIds}
         renderItem={categoryId => {
           return (
             <List
-              className="gap-2"
-              key={categoryId}
+              placeholder={<Placeholder />}
+              key={uniqueId()}
               data={categoriesGroupedByParentId?.[categoryId] || []}
               renderItem={category => (
                 <CategoryCard
@@ -40,7 +49,7 @@ const CategoriesPage = observer(() => {
           );
         }}
       />
-    </Container>
+    </VStack>
   );
 });
 

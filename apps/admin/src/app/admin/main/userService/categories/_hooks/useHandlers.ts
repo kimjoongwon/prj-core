@@ -42,14 +42,15 @@ export const useHandlers = (props: {
     });
   };
 
-  const onClickCreate = async (category: CategoryDto) => {
-    categroiesPageState.form.parentId = category.id;
-    categroiesPageState.openedCategory = category;
+  const onClickCreate = async (category?: CategoryDto) => {
+    if (category) {
+      categroiesPageState.form.parentId = category.id;
+      categroiesPageState.openedCategory = category;
+    }
 
     router.push({
-      url: '/admin/services/:serviceId/categories/:categoryId/edit',
+      url: '/admin/main/userService/categories/:categoryId/edit',
       params: {
-        serviceId,
         categoryId: 'new',
       },
     });

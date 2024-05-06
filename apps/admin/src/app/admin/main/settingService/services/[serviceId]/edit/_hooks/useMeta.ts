@@ -1,39 +1,33 @@
 import { ButtonProps } from '@nextui-org/react';
-import {
-  getGetAllServiceQueryKey,
-  router,
-  useCreateService,
-} from '@shared/frontend';
-import { state } from '../page';
-import { useQueryClient } from '@tanstack/react-query';
+import { router } from '@shared/frontend';
+import { useHandlers } from './useHandlers';
 
-export const useMeta = () => {
-  const { mutateAsync: createService } = useCreateService();
-  const queryClient = useQueryClient();
+export const useMeta = ({
+  handlers: { onClickCancel, onClickSave },
+}: {
+  handlers: ReturnType<typeof useHandlers>;
+}) => {
+  const leftButtons: ButtonProps[] = [
+    {
+      children: '취소',
+      onClick: () => {
+        onClickCancel();
+      },
+    },
+  ];
 
   const rightButtons: ButtonProps[] = [
     {
-      children: '목록',
+      children: '저장',
+      color: 'primary',
       onClick: async () => {
-        createService({
-          data: { name: state.form.name!, label: state.form.label || '' },
-        });
-
-        queryClient.invalidateQueries({
-          queryKey: getGetAllServiceQueryKey(),
-        });
-
-        router.push({
-          url: '/admin/main/settingService/services',
-          params: {
-            serviceId: 'new',
-          },
-        });
+        onClickSave();
       },
     },
   ];
 
   return {
     rightButtons,
+    leftButtons,
   };
 };

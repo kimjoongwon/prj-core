@@ -9,10 +9,11 @@ interface ListProps<T> {
   renderItem: (item: T) => ReactNode;
   horizontal?: boolean;
   className?: string;
+  placeholder?: ReactNode;
 }
 
 export const List = observer(<T extends any>(props: ListProps<T>) => {
-  const { data, renderItem, className } = props;
+  const { data, renderItem, className, placeholder } = props;
 
   const renderContainer = (children: ReactNode) => {
     if (props.horizontal) {
@@ -29,6 +30,10 @@ export const List = observer(<T extends any>(props: ListProps<T>) => {
       </VStack>
     );
   };
+
+  if (data.length === 0) {
+    return placeholder;
+  }
 
   return renderContainer(data.map(renderItem));
 });

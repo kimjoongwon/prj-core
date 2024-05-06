@@ -10,7 +10,7 @@ export type CreateServiceDtoName = typeof CreateServiceDtoName[keyof typeof Crea
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateServiceDtoName = {
-  USER: 'USER',
   SPACE: 'SPACE',
+  USER: 'USER',
   SETTING: 'SETTING',
 } as const;

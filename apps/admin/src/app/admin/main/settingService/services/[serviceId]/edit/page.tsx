@@ -1,35 +1,28 @@
 'use client';
-import {
-  CreateServiceDto,
-  FormLayout,
-  ServiceForm,
-  UpdateServiceDto,
-} from '@shared/frontend';
-import { observable } from 'mobx';
+
+import { FormLayout, ServiceForm } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { usePage } from '../../_hooks';
+import { usePage } from './_hooks';
 
-const defaultFormObject: CreateServiceDto = {
-  label: '',
-  name: 'USER',
-};
-
-export const state = observable<{
-  form: CreateServiceDto | UpdateServiceDto;
-}>({
-  form: defaultFormObject,
-});
-
-const ServiceEditPage = () => {
+const ServiceEditPage = observer(() => {
   const {
-    meta: { rightButtons },
+    state,
+    meta: { rightButtons, leftButtons },
   } = usePage();
 
   return (
-    <FormLayout title={'서비스 생성'} leftButtons={rightButtons}>
-      <ServiceForm state={state.form} />
-    </FormLayout>
-  );
-};
+    <div>
+      <div>{state.form.name}</div>
 
-export default observer(ServiceEditPage);
+      <FormLayout
+        title={'서비스 생성'}
+        leftButtons={leftButtons}
+        rightButtons={rightButtons}
+      >
+        <ServiceForm state={state.form} />
+      </FormLayout>
+    </div>
+  );
+});
+
+export default ServiceEditPage;
