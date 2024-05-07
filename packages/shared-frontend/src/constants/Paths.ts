@@ -7,6 +7,9 @@ export const ADMIN_MAIN_PATH = `${ADMIN_PATH}/main` as const;
 export const ADMIN_USER_SERVICE_PATH =
   `${ADMIN_MAIN_PATH}/userService` as const;
 
+export const ADMIN_RESERVATION_SERVICE_PATH =
+  `${ADMIN_MAIN_PATH}/reservationService` as const;
+
 export const ADMIN_USER_CATEGORIES_PATH =
   `${ADMIN_USER_SERVICE_PATH}/categories` as const;
 
@@ -38,4 +41,5 @@ export type Paths =
   | typeof ADMIN_SETTING_SERVICE_PATH
   | typeof ADMIN_SERVICES_PATH
   | typeof ADMIN_SERVICE_EDIT_PATH
-  | typeof ADMIN_USER_CATEGORY_EDIT_PATH;
+  | typeof ADMIN_USER_CATEGORY_EDIT_PATH
+  | typeof ADMIN_RESERVATION_SERVICE_PATH;
