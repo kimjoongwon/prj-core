@@ -18,14 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { LoginPayloadDto } from './dto/login-payload.dto';
 import { TokenDto } from './dto/token.dto';
-import {
-  AccessToken,
-  ApiResponseEntity,
-  Public,
-  ResponseEntity,
-  ResponseStatus,
-  UserDto,
-} from '@shared/backend';
+import { AccessToken, Public, UserDto } from '@shared/backend';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
 
@@ -36,7 +29,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TokenDto)
+  @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Post('login')
   async login(
     @Body() loginDto: LoginPayloadDto,
@@ -47,11 +40,11 @@ export class AuthController {
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
 
-    return new ResponseEntity(
-      ResponseStatus.OK,
-      'Login success',
-      new TokenDto(accessToken, refreshToken, new UserDto(user)),
-    );
+    return {
+      accessToken,
+      refreshToken,
+      user,
+    };
   }
 
   @ApiBearerAuth()
