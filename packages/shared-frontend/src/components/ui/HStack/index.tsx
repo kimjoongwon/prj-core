@@ -6,7 +6,7 @@ interface HStackProps {
 export const HStack = (props: HStackProps) => {
   const { children, className, ...rest } = props;
   return (
-    <div className={`flex ${className || ''}`} {...rest}>
+    <div className={`flex flex-1 ${className || ''}`} {...rest}>
       {children}
     </div>
   );

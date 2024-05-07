@@ -52,7 +52,7 @@ export const Navbar = observer((props: NavbarProps) => {
   };
 
   return (
-    <VStack className="w-full h-16 border-b-1 items-center justify-center">
+    <VStack className="w-full h-24 border-b-1 items-center justify-center flex-grow-0">
       <HStack className="container px-4 justify-between">
         <HStack className="flex-1 items-center">
           <Logo variants="text" alt={'LOGO'} />

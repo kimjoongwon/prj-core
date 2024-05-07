@@ -29,6 +29,7 @@ export const Sidebar = observer((props: SidebarProps) => {
         return (
           <Button
             variant="light"
+            className="font-bold"
             color={navItem.active ? 'primary' : 'default'}
             onClick={() => router.push({ url: navItem.url || '/admin/main' })}
           >

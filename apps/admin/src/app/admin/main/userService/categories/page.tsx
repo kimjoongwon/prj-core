@@ -10,8 +10,8 @@ import {
   VStack,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { uniqueId } from 'lodash-es';
 import { useCategoriesPage } from './_hooks';
+import { v4 } from 'uuid';
 
 const CategoriesPage = observer(() => {
   const {
@@ -22,9 +22,10 @@ const CategoriesPage = observer(() => {
     relatedCategoryIds,
   } = useCategoriesPage();
 
+  console.log('categoriesGroupedByParentId', categoriesGroupedByParentId);
   return (
     <VStack className="w-full">
-      <HStack>
+      <HStack className="flex-grow-0 basis-16 items-center justify-end px-2">
         <Button onClick={() => onClickCreate()}>생성</Button>
       </HStack>
       <List
@@ -33,12 +34,12 @@ const CategoriesPage = observer(() => {
         renderItem={categoryId => {
           return (
             <List
+              key={v4()}
               placeholder={<Placeholder />}
-              key={uniqueId()}
               data={categoriesGroupedByParentId?.[categoryId] || []}
               renderItem={category => (
                 <CategoryCard
-                  key={uniqueId()}
+                  key={v4()}
                   category={category}
                   onClickCard={onClickCard}
                   onClickCreate={onClickCreate}
