@@ -38,8 +38,6 @@ const MainLayout = (props: MainLayoutProps) => {
     });
   };
 
-  console.log('authStore', authStore.currentSpaceId);
-
   return (
     <>
       <Navbar

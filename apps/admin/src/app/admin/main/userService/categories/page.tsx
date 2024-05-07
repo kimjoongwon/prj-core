@@ -12,6 +12,7 @@ import {
 import { observer } from 'mobx-react-lite';
 import { useCategoriesPage } from './_hooks';
 import { v4 } from 'uuid';
+import { isEmpty } from 'lodash-es';
 
 const CategoriesPage = observer(() => {
   const {
@@ -22,12 +23,13 @@ const CategoriesPage = observer(() => {
     relatedCategoryIds,
   } = useCategoriesPage();
 
-  console.log('categoriesGroupedByParentId', categoriesGroupedByParentId);
   return (
-    <VStack className="w-full">
-      <HStack className="flex-grow-0 basis-16 items-center justify-end px-2">
-        <Button onClick={() => onClickCreate()}>생성</Button>
-      </HStack>
+    <VStack className="w-full p-4 border-1">
+      {isEmpty(categoriesGroupedByParentId) && (
+        <HStack className="flex-grow-0 basis-16 items-center justify-end px-2">
+          <Button onClick={() => onClickCreate()}>생성</Button>
+        </HStack>
+      )}
       <List
         horizontal
         data={relatedCategoryIds}

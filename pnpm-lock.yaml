@@ -129,6 +129,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.22
         version: 18.2.22
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@vanilla-extract/next-plugin':
         specifier: ^2.3.7
         version: 2.3.7(@types/node@20.11.30)(next@14.2.2)(webpack@5.90.1)
