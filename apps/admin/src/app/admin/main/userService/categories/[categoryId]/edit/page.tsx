@@ -134,8 +134,6 @@ const useHandlers = (props: {
       return;
     }
 
-    console.log('authStore', authStore);
-
     await createCategory({
       data: {
         name: state.category?.name || '',
@@ -144,7 +142,7 @@ const useHandlers = (props: {
           : [...openedCategory?.ancestorIds, openedCategory.id],
         parentId: openedCategory.id || null,
         serviceId: userService?.id!,
-        spaceId: authStore.currentTenant?.spaceId!,
+        spaceId: authStore.currentSpaceId!,
       },
     });
 
