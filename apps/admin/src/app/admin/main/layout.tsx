@@ -10,6 +10,7 @@ import {
   Select,
   Sidebar,
   authStore,
+  router,
   useGetAccessibleAllSpace,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
@@ -27,11 +28,17 @@ const MainLayout = (props: MainLayoutProps) => {
   const { data: queryData } = useGetAccessibleAllSpace();
 
   const spaceOptions = queryData?.data?.map(space => ({
+    text: space.name,
     value: space.id,
-    label: space.name,
   }));
 
-  console.log('spaceOptions', spaceOptions);
+  const onClickLeave = () => {
+    router.replace({
+      url: '/admin/auth/login',
+    });
+  };
+
+  console.log('authStore', authStore.currentSpaceId);
 
   return (
     <>
@@ -39,12 +46,13 @@ const MainLayout = (props: MainLayoutProps) => {
         rightContents={
           <>
             <Select
+              className="w-40"
               options={spaceOptions}
               state={authStore}
               path="currentSpaceId"
             />
             <Avatar name={authStore.user?.email || 'test!'} />
-            <Button color="danger" variant="flat">
+            <Button onClick={onClickLeave} color="danger" variant="flat">
               나가기
             </Button>
           </>

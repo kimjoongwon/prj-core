@@ -8,12 +8,15 @@ export class AuthStore {
     reaction(
       () => this.currentSpaceId,
       newSpaceId => {
-        console.log('this.user', this.user);
-        const tenant = this.user?.tenants.find(
-          tenant => tenant.spaceId === newSpaceId,
-        );
+        try {
+          const tenant = this.user?.tenants.find(
+            tenant => tenant.spaceId === newSpaceId,
+          );
 
-        this.currentTenant = tenant;
+          this.currentTenant = tenant;
+        } catch (error) {
+          alert(error);
+        }
       },
     );
   }

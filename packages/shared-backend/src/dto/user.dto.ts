@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProfileDto, SpaceDto, TenantDto, UserEntity } from '../modules';
+import { ProfileDto, TenantDto, UserEntity } from '../modules';
 
 export class UserDto extends UserEntity {
   constructor(partial: Partial<UserDto>) {

@@ -1,6 +1,10 @@
 import {
+  getAccessibleAllSpace,
   getAllService,
+  getAllSpace,
+  getGetAccessibleAllSpaceQueryKey,
   getGetAllServiceQueryKey,
+  getGetAllSpaceQueryKey,
   router,
 } from '@shared/frontend';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -50,6 +54,16 @@ export const InitContainer = (props: InitContainerProps) => {
     queryClient.prefetchQuery({
       queryKey: getGetAllServiceQueryKey(),
       queryFn: getAllService,
+    });
+
+    // queryClient.prefetchQuery({
+    //   queryKey: getGetAccessibleAllSpaceQueryKey(),
+    //   queryFn: getAccessibleAllSpace,
+    // });
+
+    queryClient.prefetchQuery({
+      queryKey: getGetAllSpaceQueryKey(),
+      queryFn: getAllSpace,
     });
 
     // 초기 라우터

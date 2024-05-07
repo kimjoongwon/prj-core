@@ -54,14 +54,16 @@ export const Navbar = observer((props: NavbarProps) => {
   return (
     <VStack className="w-full h-16 border-b-1 items-center justify-center">
       <HStack className="container px-4 justify-between">
-        <HStack className="items-center">
+        <HStack className="flex-1 items-center">
           <Logo variants="text" alt={'LOGO'} />
           {leftContents}
         </HStack>
-        <HStack className="gap-2 items-center justify-center">
+        <HStack className="flex-1 gap-2 items-center justify-center">
           {navItems?.map(renderNavItem)}
         </HStack>
-        <HStack className="items-center gap-2">{rightContents}</HStack>
+        <HStack className="flex-1 items-center gap-2 justify-end">
+          {rightContents}
+        </HStack>
       </HStack>
     </VStack>
   );

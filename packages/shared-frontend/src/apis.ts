@@ -21,6 +21,7 @@ import type {
   CreateSignUpPayloadDto,
   LoginPayloadDto,
   ServiceFormDto,
+  SpaceDto,
   UpdateAuthzDto,
   UpdateCategoryDto,
   UpdateServiceDto,
@@ -32,7 +33,6 @@ import type {
   GetAccessibleAllSpace200,
   GetCategories200,
   GetCategoryById200AllOf,
-  Login200AllOf,
   LoginFormDto,
   MenuDto,
   ServiceEntity,
@@ -932,11 +932,74 @@ export const useGetAccessibleAllSpace = <
   return query;
 };
 
+export const getAllSpace = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<SpaceDto[]>(
+    { url: `http://localhost:3005/api/v1/admin/spaces`, method: 'GET', signal },
+    options,
+  );
+};
+
+export const getGetAllSpaceQueryKey = () => {
+  return [`http://localhost:3005/api/v1/admin/spaces`] as const;
+};
+
+export const getGetAllSpaceQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllSpace>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({
+    signal,
+  }) => getAllSpace(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAllSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllSpaceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllSpace>>
+>;
+export type GetAllSpaceQueryError = ErrorType<SpaceDto[]>;
+
+export const useGetAllSpace = <
+  TData = Awaited<ReturnType<typeof getAllSpace>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllSpaceQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const login = (
   loginPayloadDto: BodyType<LoginPayloadDto>,
   options?: SecondParameter<typeof customInstance>,
 ) => {
-  return customInstance<Login200AllOf>(
+  return customInstance<TokenDto>(
     {
       url: `http://localhost:3005/api/v1/auth/login`,
       method: 'POST',
@@ -1858,73 +1921,63 @@ export const getGetAccessibleAllSpaceResponseMock = (
   ...overrideResponse,
 });
 
-export const getLoginResponseMock = (
-  overrideResponse: any = {},
-): Login200AllOf => ({
-  data: faker.helpers.arrayElement([
-    {
-      accessToken: faker.word.sample(),
-      refreshToken: faker.word.sample(),
-      user: {
-        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
-        deletedAt: faker.helpers.arrayElement([
-          `${faker.date.past().toISOString().split('.')[0]}Z`,
-          null,
-        ]),
-        email: faker.word.sample(),
-        id: faker.word.sample(),
-        name: faker.word.sample(),
-        password: faker.word.sample(),
-        phone: faker.word.sample(),
-        profiles: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
-          deletedAt: faker.helpers.arrayElement([
-            `${faker.date.past().toISOString().split('.')[0]}Z`,
-            null,
-          ]),
-          id: faker.word.sample(),
-          nickname: faker.word.sample(),
-          updatedAt: faker.helpers.arrayElement([
-            `${faker.date.past().toISOString().split('.')[0]}Z`,
-            null,
-          ]),
-          userId: faker.word.sample(),
-          ...overrideResponse,
-        })),
-        tenants: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
-          deletedAt: faker.helpers.arrayElement([
-            `${faker.date.past().toISOString().split('.')[0]}Z`,
-            null,
-          ]),
-          id: faker.word.sample(),
-          roleId: faker.word.sample(),
-          spaceId: faker.word.sample(),
-          updatedAt: faker.helpers.arrayElement([
-            `${faker.date.past().toISOString().split('.')[0]}Z`,
-            null,
-          ]),
-          userId: faker.word.sample(),
-          ...overrideResponse,
-        })),
-        updatedAt: faker.helpers.arrayElement([
-          `${faker.date.past().toISOString().split('.')[0]}Z`,
-          null,
-        ]),
-        ...overrideResponse,
-      },
+export const getLoginResponseMock = (overrideResponse: any = {}): TokenDto => ({
+  accessToken: faker.word.sample(),
+  refreshToken: faker.word.sample(),
+  user: {
+    createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+    deletedAt: faker.helpers.arrayElement([
+      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      null,
+    ]),
+    email: faker.word.sample(),
+    id: faker.word.sample(),
+    name: faker.word.sample(),
+    password: faker.word.sample(),
+    phone: faker.word.sample(),
+    profiles: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      deletedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      id: faker.word.sample(),
+      nickname: faker.word.sample(),
+      updatedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      userId: faker.word.sample(),
       ...overrideResponse,
-    },
-    undefined,
-  ]),
-  message: faker.helpers.arrayElement([faker.word.sample(), undefined]),
-  statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]),
+    })),
+    tenants: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      deletedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      id: faker.word.sample(),
+      roleId: faker.word.sample(),
+      spaceId: faker.word.sample(),
+      updatedAt: faker.helpers.arrayElement([
+        `${faker.date.past().toISOString().split('.')[0]}Z`,
+        null,
+      ]),
+      userId: faker.word.sample(),
+      ...overrideResponse,
+    })),
+    updatedAt: faker.helpers.arrayElement([
+      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      null,
+    ]),
+    ...overrideResponse,
+  },
   ...overrideResponse,
 });
 
@@ -2251,7 +2304,19 @@ export const getGetAccessibleAllSpaceMockHandler = (
   });
 };
 
-export const getLoginMockHandler = (overrideResponse?: Login200AllOf) => {
+export const getGetAllSpaceMockHandler = () => {
+  return http.get('*/api/v1/admin/spaces', async () => {
+    await delay(1000);
+    return new HttpResponse(null, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+};
+
+export const getLoginMockHandler = (overrideResponse?: TokenDto) => {
   return http.post('*/api/v1/auth/login', async () => {
     await delay(1000);
     return new HttpResponse(
@@ -2415,6 +2480,7 @@ export const getPROMISEServerMock = () => [
   getUpdateCategoryMockHandler(),
   getGetMemusMockHandler(),
   getGetAccessibleAllSpaceMockHandler(),
+  getGetAllSpaceMockHandler(),
   getLoginMockHandler(),
   getGetCurrentUserMockHandler(),
   getRefreshTokenMockHandler(),

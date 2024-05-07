@@ -24,4 +24,12 @@ export class SpacesService {
       },
     });
   }
+
+  async getAllSpace() {
+    return this.prisma.space.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+  }
 }
