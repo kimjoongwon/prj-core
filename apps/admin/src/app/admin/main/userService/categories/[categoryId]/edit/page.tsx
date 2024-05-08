@@ -133,18 +133,21 @@ const useHandlers = (props: {
       });
       return;
     }
-
-    await createCategory({
-      data: {
-        name: state.category?.name || '',
-        ancestorIds: isEmpty(openedCategory?.ancestorIds)
-          ? []
-          : [...openedCategory?.ancestorIds, openedCategory.id],
-        parentId: openedCategory.id || null,
-        serviceId: userService?.id!,
-        spaceId: authStore.currentSpaceId!,
-      },
-    });
+    try {
+      await createCategory({
+        data: {
+          name: state.category?.name || '',
+          ancestorIds: isEmpty(openedCategory?.ancestorIds)
+            ? [openedCategory.id]
+            : [...openedCategory?.ancestorIds, openedCategory.id],
+          parentId: openedCategory.id || null,
+          serviceId: userService?.id!,
+          spaceId: authStore.currentSpaceId!,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     router.back();
   };

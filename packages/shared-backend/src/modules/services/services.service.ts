@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { SERVICE_NAME } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
@@ -13,7 +14,7 @@ export class ServicesService {
 
     const space = await this.prisma.service.findFirst({
       where: {
-        name: 'SPACE',
+        name: SERVICE_NAME.SPACE,
       },
     });
 

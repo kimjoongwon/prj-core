@@ -23,6 +23,8 @@ const CategoriesPage = observer(() => {
     relatedCategoryIds,
   } = useCategoriesPage();
 
+  console.log('relatedCategoryIds', relatedCategoryIds);
+
   return (
     <VStack className="w-full p-4 border-1">
       {isEmpty(categoriesGroupedByParentId) && (
