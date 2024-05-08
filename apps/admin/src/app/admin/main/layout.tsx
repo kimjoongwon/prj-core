@@ -33,10 +33,17 @@ const MainLayout = (props: MainLayoutProps) => {
   }));
 
   const onClickLeave = () => {
+    authStore.currentSpaceId = undefined;
+    authStore.currentTenant = undefined;
+    authStore.user = undefined;
+    authStore.accessToken = undefined;
+
     router.replace({
       url: '/admin/auth/login',
     });
   };
+
+  console.log('authStore.currentSpaceId', authStore.currentSpaceId);
 
   return (
     <>

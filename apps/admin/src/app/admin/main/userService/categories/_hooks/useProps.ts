@@ -12,10 +12,8 @@ export const useProps = ({
   const openedCategory = categroiesPageState.openedCategory;
   let relatedCategoryIds = ['null'];
 
-  if (openedCategory.name) {
-    relatedCategoryIds.push(...(openedCategory.ancestorIds || []));
-    relatedCategoryIds.push(openedCategory.id);
-  }
+  relatedCategoryIds.push(...(openedCategory.ancestorIds || []));
+  relatedCategoryIds.push(openedCategory.id);
 
   return {
     categoriesGroupedByParentId: categoriesByParentId,

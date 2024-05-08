@@ -9,12 +9,15 @@ import {
 } from '@shared/frontend';
 import { categroiesPageState } from './state';
 import { useCallback } from 'react';
+import { useProps } from './useProps';
 
 export const useHandlers = (props: {
   queries: ReturnType<typeof useQueries>;
+  props: ReturnType<typeof useProps>;
 }) => {
   const {
     queries: { categories, updateCategory },
+    props: { relatedCategoryIds },
   } = props;
   const { serviceId } = useParams();
   const queryClient = useQueryClient();
@@ -35,6 +38,10 @@ export const useHandlers = (props: {
     const categoriesByParentId =
       categoriesGroupedByParentId?.[category.parentId!];
 
+    if (relatedCategoryIds.length > 2) {
+      return;
+    }
+
     categoriesByParentId?.forEach(_category => {
       if (_category.id === category.id) {
         categroiesPageState.openedCategory = category;
@@ -43,6 +50,7 @@ export const useHandlers = (props: {
   };
 
   const onClickCreate = async (category?: CategoryDto) => {
+    console.log('생성', category);
     if (category) {
       categroiesPageState.form.parentId = category.id;
       categroiesPageState.openedCategory = category;
