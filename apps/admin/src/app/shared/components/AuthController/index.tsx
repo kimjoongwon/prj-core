@@ -15,9 +15,8 @@ export const AuthController = observer(({ children }: AuthProviderProps) => {
     (async function () {
       if (!authStore.accessToken) {
         try {
-          const { accessToken, user } = await refreshToken();
-          authStore.accessToken = accessToken;
-          authStore.user = user;
+          const tokenDto = await refreshToken();
+          authStore.login(tokenDto);
         } catch (error) {
           if (error instanceof AxiosError) {
             if (error.response?.status === 401) {

@@ -4,8 +4,14 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import type {
+  InfiniteData,
   MutationFunction,
   QueryFunction,
   QueryKey,
@@ -13,6 +19,10 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 import type {
   CreateAuthzDto,
@@ -106,6 +116,127 @@ export const useGetAllService = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetAllServiceSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllService>>,
+  TError = ErrorType<ServiceEntity[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAllService>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({
+    signal,
+  }) => getAllService(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAllService>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllServiceSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllService>>
+>;
+export type GetAllServiceSuspenseQueryError = ErrorType<ServiceEntity[]>;
+
+export const useGetAllServiceSuspense = <
+  TData = Awaited<ReturnType<typeof getAllService>>,
+  TError = ErrorType<ServiceEntity[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAllService>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllServiceSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetAllServiceSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>,
+  TError = ErrorType<ServiceEntity[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAllService>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({
+    signal,
+  }) => getAllService(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAllService>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllServiceSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllService>>
+>;
+export type GetAllServiceSuspenseInfiniteQueryError = ErrorType<
+  ServiceEntity[]
+>;
+
+export const useGetAllServiceSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>,
+  TError = ErrorType<ServiceEntity[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAllService>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllServiceSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -253,6 +384,126 @@ export const useGetServiceForm = <
   return query;
 };
 
+export const getGetServiceFormSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceForm>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetServiceFormQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceForm>>> = ({
+    signal,
+  }) => getServiceForm(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getServiceForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceFormSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceForm>>
+>;
+export type GetServiceFormSuspenseQueryError = ErrorType<ServiceFormDto>;
+
+export const useGetServiceFormSuspense = <
+  TData = Awaited<ReturnType<typeof getServiceForm>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceFormSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetServiceFormSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceForm>>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetServiceFormQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceForm>>> = ({
+    signal,
+  }) => getServiceForm(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getServiceForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceFormSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceForm>>
+>;
+export type GetServiceFormSuspenseInfiniteQueryError =
+  ErrorType<ServiceFormDto>;
+
+export const useGetServiceFormSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceForm>>>,
+  TError = ErrorType<ServiceFormDto>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceFormSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const getServiceById = (
   serviceId: string,
   options?: SecondParameter<typeof customInstance>,
@@ -327,6 +578,151 @@ export const useGetServiceById = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetServiceByIdSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceById>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getServiceById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetServiceByIdQueryKey(serviceId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceById>>> = ({
+    signal,
+  }) => getServiceById(serviceId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!serviceId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getServiceById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceByIdSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceById>>
+>;
+export type GetServiceByIdSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetServiceByIdSuspense = <
+  TData = Awaited<ReturnType<typeof getServiceById>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getServiceById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceByIdSuspenseQueryOptions(
+    serviceId,
+    options,
+  );
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetServiceByIdSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceById>>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getServiceById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetServiceByIdQueryKey(serviceId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceById>>> = ({
+    signal,
+  }) => getServiceById(serviceId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!serviceId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getServiceById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceByIdSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceById>>
+>;
+export type GetServiceByIdSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useGetServiceByIdSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceById>>>,
+  TError = ErrorType<unknown>,
+>(
+  serviceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getServiceById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetServiceByIdSuspenseInfiniteQueryOptions(
+    serviceId,
+    options,
+  );
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -484,6 +880,129 @@ export const useGetUpdateServiceSchema = <
   return query;
 };
 
+export const getGetUpdateServiceSchemaSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUpdateServiceSchemaQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>
+  > = ({ signal }) => getUpdateServiceSchema(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetUpdateServiceSchemaSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUpdateServiceSchema>>
+>;
+export type GetUpdateServiceSchemaSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetUpdateServiceSchemaSuspense = <
+  TData = Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetUpdateServiceSchemaSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetUpdateServiceSchemaSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getUpdateServiceSchema>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUpdateServiceSchemaQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>
+  > = ({ signal }) => getUpdateServiceSchema(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetUpdateServiceSchemaSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUpdateServiceSchema>>
+>;
+export type GetUpdateServiceSchemaSuspenseInfiniteQueryError =
+  ErrorType<unknown>;
+
+export const useGetUpdateServiceSchemaSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getUpdateServiceSchema>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getUpdateServiceSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions =
+    getGetUpdateServiceSchemaSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const getCategories = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
@@ -545,6 +1064,125 @@ export const useGetCategories = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetCategoriesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategories>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getCategories>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCategoriesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategories>>> = ({
+    signal,
+  }) => getCategories(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCategoriesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategories>>
+>;
+export type GetCategoriesSuspenseQueryError = ErrorType<void>;
+
+export const useGetCategoriesSuspense = <
+  TData = Awaited<ReturnType<typeof getCategories>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getCategories>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCategoriesSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetCategoriesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategories>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getCategories>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCategoriesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategories>>> = ({
+    signal,
+  }) => getCategories(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCategoriesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategories>>
+>;
+export type GetCategoriesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export const useGetCategoriesSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategories>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getCategories>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCategoriesSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -715,6 +1353,151 @@ export const useGetCategoryById = <
   return query;
 };
 
+export const getGetCategoryByIdSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({
+    signal,
+  }) => getCategoryById(categoryId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getCategoryById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCategoryByIdSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoryById>>
+>;
+export type GetCategoryByIdSuspenseQueryError = ErrorType<void>;
+
+export const useGetCategoryByIdSuspense = <
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCategoryByIdSuspenseQueryOptions(
+    categoryId,
+    options,
+  );
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetCategoryByIdSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({
+    signal,
+  }) => getCategoryById(categoryId, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getCategoryById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCategoryByIdSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoryById>>
+>;
+export type GetCategoryByIdSuspenseInfiniteQueryError = ErrorType<void>;
+
+export const useGetCategoryByIdSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCategoryByIdSuspenseInfiniteQueryOptions(
+    categoryId,
+    options,
+  );
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const updateCategory = (
   categoryId: string,
   updateCategoryDto: BodyType<UpdateCategoryDto>,
@@ -857,6 +1640,117 @@ export const useGetMemus = <
   return query;
 };
 
+export const getGetMemusSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMemusQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({
+    signal,
+  }) => getMemus(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getMemus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetMemusSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMemus>>
+>;
+export type GetMemusSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetMemusSuspense = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetMemusSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetMemusSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMemus>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getMemus>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMemusQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({
+    signal,
+  }) => getMemus(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMemus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetMemusSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMemus>>
+>;
+export type GetMemusSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useGetMemusSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMemus>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getMemus>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetMemusSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const getAccessibleAllSpace = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
@@ -932,6 +1826,127 @@ export const useGetAccessibleAllSpace = <
   return query;
 };
 
+export const getGetAccessibleAllSpaceSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAccessibleAllSpaceQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccessibleAllSpace>>
+  > = ({ signal }) => getAccessibleAllSpace(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAccessibleAllSpaceSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccessibleAllSpace>>
+>;
+export type GetAccessibleAllSpaceSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetAccessibleAllSpaceSuspense = <
+  TData = Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAccessibleAllSpaceSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetAccessibleAllSpaceSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleAllSpace>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAccessibleAllSpaceQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccessibleAllSpace>>
+  > = ({ signal }) => getAccessibleAllSpace(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAccessibleAllSpaceSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccessibleAllSpace>>
+>;
+export type GetAccessibleAllSpaceSuspenseInfiniteQueryError =
+  ErrorType<unknown>;
+
+export const useGetAccessibleAllSpaceSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleAllSpace>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions =
+    getGetAccessibleAllSpaceSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const getAllSpace = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
@@ -989,6 +2004,125 @@ export const useGetAllSpace = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetAllSpaceSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllSpace>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({
+    signal,
+  }) => getAllSpace(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAllSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllSpaceSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllSpace>>
+>;
+export type GetAllSpaceSuspenseQueryError = ErrorType<SpaceDto[]>;
+
+export const useGetAllSpaceSuspense = <
+  TData = Awaited<ReturnType<typeof getAllSpace>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllSpaceSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetAllSpaceSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAllSpace>>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({
+    signal,
+  }) => getAllSpace(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAllSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllSpaceSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllSpace>>
+>;
+export type GetAllSpaceSuspenseInfiniteQueryError = ErrorType<SpaceDto[]>;
+
+export const useGetAllSpaceSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAllSpace>>>,
+  TError = ErrorType<SpaceDto[]>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAllSpace>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetAllSpaceSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -1136,6 +2270,125 @@ export const useGetCurrentUser = <
   return query;
 };
 
+export const getGetCurrentUserSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCurrentUser>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getCurrentUser>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({
+    signal,
+  }) => getCurrentUser(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getCurrentUser>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCurrentUserSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCurrentUser>>
+>;
+export type GetCurrentUserSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetCurrentUserSuspense = <
+  TData = Awaited<ReturnType<typeof getCurrentUser>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getCurrentUser>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCurrentUserSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetCurrentUserSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getCurrentUser>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({
+    signal,
+  }) => getCurrentUser(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getCurrentUser>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetCurrentUserSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCurrentUser>>
+>;
+export type GetCurrentUserSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useGetCurrentUserSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getCurrentUser>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetCurrentUserSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const refreshToken = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
@@ -1203,6 +2456,125 @@ export const useRefreshToken = <
   return query;
 };
 
+export const getRefreshTokenSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof refreshToken>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof refreshToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getRefreshTokenQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof refreshToken>>> = ({
+    signal,
+  }) => refreshToken(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof refreshToken>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type RefreshTokenSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof refreshToken>>
+>;
+export type RefreshTokenSuspenseQueryError = ErrorType<unknown>;
+
+export const useRefreshTokenSuspense = <
+  TData = Awaited<ReturnType<typeof refreshToken>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof refreshToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getRefreshTokenSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getRefreshTokenSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof refreshToken>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof refreshToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getRefreshTokenQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof refreshToken>>> = ({
+    signal,
+  }) => refreshToken(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof refreshToken>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type RefreshTokenSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof refreshToken>>
+>;
+export type RefreshTokenSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useRefreshTokenSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof refreshToken>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof refreshToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getRefreshTokenSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const getLoginForm = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
@@ -1264,6 +2636,125 @@ export const useGetLoginForm = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetLoginFormSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLoginForm>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getLoginForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginForm>>> = ({
+    signal,
+  }) => getLoginForm(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getLoginForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLoginFormSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginForm>>
+>;
+export type GetLoginFormSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetLoginFormSuspense = <
+  TData = Awaited<ReturnType<typeof getLoginForm>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getLoginForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetLoginFormSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetLoginFormSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getLoginForm>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getLoginForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getLoginForm>>> = ({
+    signal,
+  }) => getLoginForm(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getLoginForm>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLoginFormSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginForm>>
+>;
+export type GetLoginFormSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useGetLoginFormSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getLoginForm>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getLoginForm>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetLoginFormSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -1339,6 +2830,126 @@ export const useGetLoginFormSchema = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetLoginFormSchemaSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getLoginFormSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormSchemaQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getLoginFormSchema>>
+  > = ({ signal }) => getLoginFormSchema(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getLoginFormSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLoginFormSchemaSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginFormSchema>>
+>;
+export type GetLoginFormSchemaSuspenseQueryError = ErrorType<unknown>;
+
+export const useGetLoginFormSchemaSuspense = <
+  TData = Awaited<ReturnType<typeof getLoginFormSchema>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetLoginFormSchemaSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getGetLoginFormSchemaSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getLoginFormSchema>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetLoginFormSchemaQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getLoginFormSchema>>
+  > = ({ signal }) => getLoginFormSchema(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getLoginFormSchema>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetLoginFormSchemaSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getLoginFormSchema>>
+>;
+export type GetLoginFormSchemaSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useGetLoginFormSchemaSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getLoginFormSchema>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getLoginFormSchema>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions =
+    getGetLoginFormSchemaSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -1556,6 +3167,117 @@ export const useFindAll = <
   return query;
 };
 
+export const getFindAllSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof findAll>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getFindAllQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findAll>>> = ({
+    signal,
+  }) => findAll(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof findAll>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type FindAllSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findAll>>
+>;
+export type FindAllSuspenseQueryError = ErrorType<unknown>;
+
+export const useFindAllSuspense = <
+  TData = Awaited<ReturnType<typeof findAll>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAll>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindAllSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getFindAllSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof findAll>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof findAll>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getFindAllQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findAll>>> = ({
+    signal,
+  }) => findAll(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof findAll>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type FindAllSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findAll>>
+>;
+export type FindAllSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useFindAllSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof findAll>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof findAll>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindAllSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
 export const findOne = (
   id: string,
   options?: SecondParameter<typeof customInstance>,
@@ -1623,6 +3345,143 @@ export const useFindOne = <
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getFindOneSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof findOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof findOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({
+    signal,
+  }) => findOne(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof findOne>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type FindOneSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findOne>>
+>;
+export type FindOneSuspenseQueryError = ErrorType<unknown>;
+
+export const useFindOneSuspense = <
+  TData = Awaited<ReturnType<typeof findOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof findOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindOneSuspenseQueryOptions(id, options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const getFindOneSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof findOne>>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof findOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({
+    signal,
+  }) => findOne(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof findOne>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type FindOneSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof findOne>>
+>;
+export type FindOneSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export const useFindOneSuspenseInfinite = <
+  TData = InfiniteData<Awaited<ReturnType<typeof findOne>>>,
+  TError = ErrorType<unknown>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof findOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getFindOneSuspenseInfiniteQueryOptions(id, options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 

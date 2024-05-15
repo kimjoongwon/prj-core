@@ -1,21 +1,22 @@
 import {
-  Avatar as BaseAvatar,
-  AvatarProps,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  User,
+  UserProps,
 } from '@nextui-org/react';
 
-export const Avatar = (props: AvatarProps) => {
-  const { size, ...rest } = props;
+export const Avatar = (props: UserProps) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <BaseAvatar {...rest} size={'sm'} />
+        <User {...props} />
       </DropdownTrigger>
       <DropdownMenu>
-        <DropdownItem>설정</DropdownItem>
+        <DropdownItem key="setting">
+          <p className="font-semibold">Signed in as</p>
+        </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );

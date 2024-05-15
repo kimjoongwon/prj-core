@@ -13,6 +13,7 @@ import { observer } from 'mobx-react-lite';
 import { useCategoriesPage } from './_hooks';
 import { v4 } from 'uuid';
 import { isEmpty } from 'lodash-es';
+import { toJS } from 'mobx';
 
 const CategoriesPage = observer(() => {
   const {
@@ -23,11 +24,10 @@ const CategoriesPage = observer(() => {
     relatedCategoryIds,
   } = useCategoriesPage();
 
-  console.log('relatedCategoryIds', relatedCategoryIds);
-
+  console.log('CategoriesPage rendering?', toJS(relatedCategoryIds));
   return (
     <VStack className="w-full p-4 border-1">
-      {isEmpty(categoriesGroupedByParentId) && (
+      {isEmpty(categoriesGroupedByParentId?.['null']) && (
         <HStack className="flex-grow-0 basis-16 items-center justify-end px-2">
           <Button onClick={() => onClickCreate()}>생성</Button>
         </HStack>

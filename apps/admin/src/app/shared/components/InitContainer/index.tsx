@@ -56,11 +56,6 @@ export const InitContainer = (props: InitContainerProps) => {
       queryFn: getAllService,
     });
 
-    // queryClient.prefetchQuery({
-    //   queryKey: getGetAccessibleAllSpaceQueryKey(),
-    //   queryFn: getAccessibleAllSpace,
-    // });
-
     queryClient.prefetchQuery({
       queryKey: getGetAllSpaceQueryKey(),
       queryFn: getAllSpace,

@@ -7,6 +7,7 @@ import { Paths } from '../../../constants/Paths';
 import { Logo } from '../Logo';
 import { VStack } from '../VStack';
 import { router } from '../../../stores';
+import { v4 } from 'uuid';
 
 export interface NavItem {
   url: Paths;
@@ -41,6 +42,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
     return (
       <Button
+        key={v4()}
         variant="light"
         className="font-semibold"
         color={active ? 'primary' : 'default'}
@@ -52,7 +54,7 @@ export const Navbar = observer((props: NavbarProps) => {
   };
 
   return (
-    <VStack className="w-full h-24 border-b-1 items-center justify-center flex-grow-0">
+    <VStack className="w-full border-b-1 items-center justify-center flex-grow-0 flex-shrink basis-16">
       <HStack className="container px-4 justify-between">
         <HStack className="flex-1 items-center">
           <Logo variants="text" alt={'LOGO'} />

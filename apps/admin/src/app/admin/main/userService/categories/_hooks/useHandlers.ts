@@ -26,7 +26,7 @@ export const useHandlers = (props: {
 
   const onClickDetail = (category: CategoryDto) => {
     router.push({
-      url: '/admin/services/:serviceId/categories/:categoryId',
+      url: '/admin/main/settingService/services/:serviceId/edit',
       params: {
         categoryId: category.id,
         serviceId,
@@ -50,7 +50,6 @@ export const useHandlers = (props: {
   };
 
   const onClickCreate = async (category?: CategoryDto) => {
-    console.log('생성', category);
     if (category) {
       categroiesPageState.form.parentId = category.id;
       categroiesPageState.openedCategory = category;
@@ -72,6 +71,8 @@ export const useHandlers = (props: {
         deletedAt: new Date() as any,
       },
     });
+
+    categroiesPageState.openedCategory = {} as CategoryDto;
 
     queryClient.invalidateQueries({
       queryKey: getGetCategoriesQueryKey(),
