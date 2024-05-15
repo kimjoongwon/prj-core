@@ -138,13 +138,17 @@ const useHandlers = (props: {
         data: {
           name: state.category?.name || '',
           ancestorIds: isEmpty(openedCategory?.ancestorIds)
-            ? [openedCategory.id]
+            ? openedCategory.id
+              ? [openedCategory.id]
+              : []
             : [...openedCategory?.ancestorIds, openedCategory.id],
           parentId: openedCategory.id || null,
           serviceId: userService?.id!,
           spaceId: authStore.currentSpaceId!,
         },
       });
+
+      categroiesPageState.openedCategory = {} as CategoryDto;
     } catch (error) {
       console.error(error);
     }

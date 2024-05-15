@@ -12,6 +12,12 @@ module.exports = {
           path: './src/libs/customAxios.ts',
           name: 'customInstance',
         },
+        query: {
+          useQuery: true,
+          useInfinite: false,
+          useSuspenseQuery: true,
+          useSuspenseInfiniteQuery: true,
+        },
       },
     },
   },

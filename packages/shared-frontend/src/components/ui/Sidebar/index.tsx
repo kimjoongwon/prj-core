@@ -1,10 +1,9 @@
-import { uniqueId } from 'lodash-es';
 import { NavItem } from '../Navbar';
 import { observer } from 'mobx-react-lite';
 import { router } from '../../../stores/routerStore';
-import { Text } from '../Text';
 import { tv } from 'tailwind-variants';
 import Button from '../Button';
+import { v4 } from 'uuid';
 
 interface SidebarProps {
   navItems?: NavItem[];
@@ -28,6 +27,7 @@ export const Sidebar = observer((props: SidebarProps) => {
       {navItems?.map(navItem => {
         return (
           <Button
+            key={v4()}
             variant="light"
             className="font-bold"
             color={navItem.active ? 'primary' : 'default'}

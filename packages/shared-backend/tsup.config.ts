@@ -2,10 +2,10 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig(option => ({
   entry: ['./index.ts'],
-  format: ['cjs'],
+  format: ['cjs', 'esm'],
   outDir: './dist',
-  clean: !option.watch,
-  minify: !option.watch,
+  clean: true,
+  minify: true,
   watch: option.watch,
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
