@@ -6,7 +6,7 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { CustomClassSerializerInterceptor } from '@shared/backend';
+import { CustomClassSerializerInterceptor } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 

@@ -18,5 +18,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["node_modules/@shared/backend/src/**/*.ts", "src/**/*.ts"]
+  "include": ["node_modules/@shared/src/**/*.ts", "src/**/*.ts"]
 }

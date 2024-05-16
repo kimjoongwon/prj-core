@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppConfig, RolesService, SpacesService } from '@shared/backend';
+import { AppConfig, RolesService, SpacesService } from '@shared';
 import { PrismaService } from 'nestjs-prisma';
 import { MenuDto } from './dto';
 import { ADMIN_PAGES } from './constants';

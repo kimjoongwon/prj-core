@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDto } from '@shared/backend';
+import { UserDto } from '@shared';
 import { Type } from 'class-transformer';
 
 export class TokenDto {

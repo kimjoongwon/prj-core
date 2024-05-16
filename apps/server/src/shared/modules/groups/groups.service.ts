@@ -16,6 +16,10 @@ export class GroupsService {
       where: {
         deletedAt: null,
       },
+      include: {
+        service: true,
+        space: true,
+      },
     });
   }
 

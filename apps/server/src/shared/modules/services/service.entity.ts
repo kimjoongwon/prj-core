@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Service } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 
 export enum SERVICE_NAME {
   SPACE = 'SPACE',

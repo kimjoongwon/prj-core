@@ -30,7 +30,7 @@ export class GroupsController {
   @Public()
   @Post('test')
   test() {
-    console.log('test4')
+    console.log('test4');
     return this.groupsService.create({
       name: 'test',
       serviceId: 'test333',
@@ -46,8 +46,9 @@ export class GroupsController {
   })
   @Public()
   @Get()
-  findAll() {
-    return this.groupsService.findAll();
+  async findAll() {
+    const groups = await this.groupsService.findAll();
+    return groups.map((group) => new GroupDto(group));
   }
 
   @ApiResponse({

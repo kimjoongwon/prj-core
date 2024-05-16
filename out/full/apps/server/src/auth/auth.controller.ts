@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { LoginPayloadDto } from './dto/login-payload.dto';
 import { TokenDto } from './dto/token.dto';
-import { AccessToken, Public, UserDto } from '@shared/backend';
+import { AccessToken, Public, UserDto } from '@shared';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
 

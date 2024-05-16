@@ -16,7 +16,7 @@ import {
   SpacesService,
   TokenType,
   UsersService,
-} from '@shared/backend';
+} from '@shared';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { loginFormJsonSchema } from './dto/login-form.dto';
 import { LoginPayloadDto } from './dto/login-payload.dto';

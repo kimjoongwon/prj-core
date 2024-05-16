@@ -37,7 +37,7 @@ import {
   databaseConfig,
   fileConfig,
   mailConfig,
-} from '@shared/backend';
+} from '@shared';
 import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { AuthzModule } from './authz/authz.module';

@@ -18,7 +18,6 @@ import {
 import { Auth, Public } from '../../decorators';
 import { ServiceEntity } from './service.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { targetConstructorToSchema } from 'class-validator-jsonschema';
 import { ServiceFormDto } from './dto/service-form.dto';
 import { CreateServiceDto } from './dto/create-service.dto';
 
@@ -69,10 +68,10 @@ export class ServicesController {
     return this.servicesService.update(id, updateServiceDto);
   }
 
-  @Public()
-  @ApiResponse({ type: typeof targetConstructorToSchema(UpdateServiceDto) })
-  @Get('schema')
-  getUpdateServiceSchema(): object {
-    return targetConstructorToSchema(UpdateServiceDto);
-  }
+  // @Public()
+  // @ApiResponse({ type: typeof targetConstructorToSchema(UpdateServiceDto) })
+  // @Get('schema')
+  // getUpdateServiceSchema(): object {
+  //   return targetConstructorToSchema(UpdateServiceDto);
+  // }
 }

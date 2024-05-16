@@ -17,19 +17,20 @@ import pino from 'pino';
 import {
   PrismaClientExceptionFilter,
   PrismaModule,
-  PrismaService,
   QueryInfo,
   loggingMiddleware,
 } from 'nestjs-prisma';
+import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
+import { AuthModule } from './auth/auth.module';
+import { AuthzModule } from './authz/authz.module';
+import { AdminModule } from './admin/admin.module';
 import {
+  GroupsModule,
   CaslModule,
   CategoriesModule,
-  GroupsModule,
   LoggerMiddleware,
   RolesModule,
-  RolesService,
   ServicesModule,
-  ServicesService,
   SpacesModule,
   appConfig,
   authConfig,
@@ -37,12 +38,7 @@ import {
   databaseConfig,
   fileConfig,
   mailConfig,
-} from '@shared/backend';
-import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
-import { AuthModule } from './auth/auth.module';
-import { AuthzModule } from './authz/authz.module';
-import { AdminModule } from './admin/admin.module';
-import { AdminService } from './admin/admin.service';
+} from '@shared';
 
 @Module({
   imports: [
@@ -163,60 +159,10 @@ import { AdminService } from './admin/admin.service';
 })
 export class AppModule implements OnModuleInit {
   logger = new Logger(AppModule.name);
-
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly prisma: PrismaService,
-    private readonly rolesService: RolesService,
-    private readonly servicesService: ServicesService,
-  ) {}
+  LOG_PREFIX = `${AppModule.name} INIT`;
 
   async onModuleInit() {
-    this.adminService.createSuperAdmin();
-
-    const superAdminRole = await this.prisma.role.findFirst({
-      where: {
-        name: 'SUPER_ADMIN',
-      },
-    });
-
-    const userRole = await this.prisma.role.findFirst({
-      where: {
-        name: 'USER',
-      },
-    });
-
-    if (!superAdminRole) {
-      this.logger.log('Create SUPER_ADMIN Role');
-      await this.rolesService.createSuperAdmin();
-    }
-
-    if (!userRole) {
-      this.logger.log('Create USER Role');
-      await this.rolesService.createUser();
-    }
-
-    const baseSpace = await this.prisma.space.findUnique({
-      where: {
-        name: '기본',
-      },
-    });
-
-    this.logger.log(baseSpace, 'BaseSpace Exist');
-
-    if (!baseSpace) {
-      await this.prisma.space.create({
-        data: {
-          name: '기본',
-        },
-      });
-    }
-
-    try {
-      await this.servicesService.createServices();
-    } catch (error) {
-      this.logger.error(error);
-    }
+    this.logger.log(`[${this.LOG_PREFIX}] APP_MODULE INITIALIZED`);
   }
 
   configure(consumer: MiddlewareConsumer) {

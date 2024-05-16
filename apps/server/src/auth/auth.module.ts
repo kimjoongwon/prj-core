@@ -15,7 +15,7 @@ import {
   SpacesModule,
   TenantsModule,
   UsersModule,
-} from '@shared/backend';
+} from '@shared';
 
 @Module({
   imports: [
