@@ -1,6 +1,6 @@
 import { z } from 'nestjs-zod/z';
 import { commonSchema } from '../../schema/common.schema';
-import { CommonEntity } from '../../entity';
+import { AbstractEntity } from '../../entity';
 import { Space } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -10,12 +10,7 @@ export const spaceEntitySchema = z
   })
   .merge(commonSchema);
 
-export class SpaceEntity extends CommonEntity implements Space {
+export class SpaceEntity extends AbstractEntity implements Space {
   @ApiProperty()
   name: string;
-
-  constructor(space: SpaceEntity) {
-    super();
-    Object.assign(this, space);
-  }
 }

@@ -1,8 +1,8 @@
 import { Profile } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { CommonEntity } from '../../../entity';
+import { AbstractEntity } from '../../../entity';
 
-export class ProfileEntity extends CommonEntity implements Profile {
+export class ProfileEntity extends AbstractEntity implements Profile {
   @ApiProperty()
   nickname: string;
 

@@ -1,41 +1,29 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { CommonEntity } from '../../../entity/common.entity';
-import { Exclude, Expose } from 'class-transformer';
+import { DateField, StringField } from '../../../decorators';
 import { GroupEntity } from '../entities/group.entity';
+import { AbstractDto } from '../../../dto/abstract.dto';
 
-export class GroupDto extends CommonEntity {
-  @Exclude() _name: string;
-  @Exclude() _spaceId: string;
-  @Exclude() _serviceId: string;
+export class GroupDto extends AbstractDto {
+  @StringField()
+  id: string;
 
-  constructor(group: GroupEntity) {
-    super(group.id, group.createdAt, group.updatedAt, group.deletedAt);
-    this._name = group.name;
-    this._spaceId = group.spaceId;
-    this._serviceId = group.serviceId;
-  }
+  @StringField()
+  name: string;
 
-  @ApiProperty({
-    type: String,
-  })
-  @Expose()
-  get name(): string {
-    return this._name;
-  }
+  @StringField()
+  spaceId: string;
 
-  @ApiProperty({
-    type: String,
-  })
-  @Expose()
-  get spaceId(): string {
-    return this._spaceId;
-  }
+  @StringField()
+  serviceId: string;
 
-  @ApiProperty({
-    type: String,
-  })
-  @Expose()
-  get serviceId(): string {
-    return this._serviceId;
+  @DateField()
+  createdAt: Date;
+
+  constructor(groupEntity: GroupEntity) {
+    super(groupEntity);
+    this.id = groupEntity.id;
+    this.name = groupEntity.name;
+    this.spaceId = groupEntity.spaceId;
+    this.serviceId = groupEntity.serviceId;
+    this.createdAt = groupEntity.createdAt;
   }
 }

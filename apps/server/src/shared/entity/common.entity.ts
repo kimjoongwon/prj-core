@@ -1,21 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { StringField } from '@shared';
 
 export class CommonEntity {
-  constructor(id: string, createdAt: Date, updatedAt: Date, deletedAt: Date) {
-    this.id = id;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.deletedAt = deletedAt;
-  }
-  @ApiProperty()
+  @StringField()
   id: string;
 
-  @ApiProperty()
+  @StringField()
   createdAt: Date;
 
-  @ApiProperty({ nullable: true })
+  @StringField()
   updatedAt: Date;
 
-  @ApiProperty({ nullable: true })
-  deletedAt: Date;
+  @StringField({ nullable: true })
+  deletedAt: Date | null;
 }

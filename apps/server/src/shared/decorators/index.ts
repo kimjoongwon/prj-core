@@ -4,3 +4,6 @@ export * from './tenant.decorator';
 export * from './access-token.decorator';
 export * from './api-response-entity.decorator';
 export * from './cookies.decorator';
+export * from './field.decorators';
+export * from './transform.decorators';
+export * from './validator.decorators';

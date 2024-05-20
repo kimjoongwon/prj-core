@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Group } from '@prisma/client';
-import { CommonEntity } from '../../../entity/common.entity';
+import { AbstractEntity } from '../../../entity/abstract.entity';
 
-export class GroupEntity extends CommonEntity implements Group {
+export class GroupEntity extends AbstractEntity implements Group {
   @ApiProperty()
   name: string;
 

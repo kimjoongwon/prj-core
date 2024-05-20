@@ -1,21 +1,21 @@
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import path from 'path';
 
 export default defineConfig({
   test: {
     include: ['**/*.e2e-spec.ts'],
     globals: true,
-    root: './',
     alias: {
-      '@src': './src',
-      '@test': './test',
+      '@shared': path.resolve(__dirname, './src/shared'),
     },
+    root: './',
   },
   resolve: {
     alias: {
-      '@src': './src',
-      '@test': './test',
+      '@shared': './src/shared/index',
     },
   },
-  plugins: [swc.vite()],
+  plugins: [swc.vite(), tsconfigPaths()],
 });
