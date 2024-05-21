@@ -7,7 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ServiceSpaceDto } from '../../dto';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { Auth } from '../../decorators';
-import { ResponseEntity, ResponseStatus } from '../../entity';
+import { ResponseEntity, ResponseStatus } from '../../entities';
 
 @ApiTags('categories')
 @Controller()

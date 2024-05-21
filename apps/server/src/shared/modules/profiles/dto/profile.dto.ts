@@ -1,6 +1,6 @@
 import { Profile } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { AbstractEntity } from '../../../entity';
+import { AbstractEntity } from '../../../entities';
 
 export class ProfileEntity extends AbstractEntity implements Profile {
   @ApiProperty()

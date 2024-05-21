@@ -1,4 +1,4 @@
-import { AbstractEntity } from '../../entity';
+import { AbstractEntity } from '../../entities';
 import { User } from '@prisma/client';
 import { TenantDto } from '../tenants/dto/tenant.dto';
 import { ProfileDto } from '../profiles/dto/profile.dto';

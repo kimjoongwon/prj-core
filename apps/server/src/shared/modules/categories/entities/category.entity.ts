@@ -1,29 +1,10 @@
 import { Category } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
-import { CommonEntity } from '../../../entity';
+import { AbstractEntity } from '@shared';
 
-export class CategoryEntity extends CommonEntity implements Category {
-  constructor(category: Category) {
-    super();
-    Object.assign(this, category);
-  }
-
-  @ApiProperty()
-  id: string;
-
-  @ApiProperty()
+export class CategoryEntity extends AbstractEntity implements Category {
   name: string;
-
-  @ApiProperty()
   ancestorIds: string[];
-
-  @ApiProperty({ nullable: true })
-  parentId: string;
-
-  @ApiProperty()
+  parentId: string | null;
   spaceId: string;
-
-  @ApiProperty()
   serviceId: string;
 }
