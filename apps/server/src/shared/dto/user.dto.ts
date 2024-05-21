@@ -7,7 +7,7 @@ import {
   PhoneField,
   StringField,
 } from '../decorators';
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 
 export class UserDto extends AbstractDto implements UserEntity {
   constructor(user: UserEntity) {
@@ -16,9 +16,12 @@ export class UserDto extends AbstractDto implements UserEntity {
     this.name = user.name;
     this.phone = user.phone;
     this.password = user.password;
+    this.tenants = user.tenants;
+    this.profiles = user.profiles;
   }
 
   @EmailField()
+  @Exclude()
   email: string;
 
   @StringField()
@@ -34,11 +37,11 @@ export class UserDto extends AbstractDto implements UserEntity {
   @ApiProperty({
     type: () => [TenantDto],
   })
-  tenants: TenantDto[];
+  tenants?: TenantDto[];
 
   @Type(() => ProfileDto)
   @ApiProperty({
     type: () => [ProfileDto],
   })
-  profiles: ProfileDto[];
+  profiles?: ProfileDto[];
 }

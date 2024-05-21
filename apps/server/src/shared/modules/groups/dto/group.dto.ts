@@ -1,4 +1,4 @@
-import { DateField, StringField } from '../../../decorators';
+import { StringField } from '../../../decorators';
 import { GroupEntity } from '../entities/group.entity';
 import { AbstractDto } from '../../../dto/abstract.dto';
 
@@ -14,9 +14,6 @@ export class GroupDto extends AbstractDto {
 
   @StringField()
   serviceId: string;
-
-  @DateField()
-  createdAt: Date;
 
   constructor(groupEntity: GroupEntity) {
     super(groupEntity);
