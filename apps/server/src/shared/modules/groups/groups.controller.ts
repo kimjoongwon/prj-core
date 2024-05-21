@@ -33,8 +33,8 @@ export class GroupsController {
     console.log('test4');
     return this.groupsService.create({
       name: 'test',
-      serviceId: 'test333',
-      spaceId: 'test',
+      serviceId: 'clvaarx8c0000ibsdqa47jolc',
+      spaceId: 'clvaai6jo000010p86j4hshjr',
     });
   }
 

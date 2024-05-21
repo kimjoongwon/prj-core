@@ -2,7 +2,7 @@ import { AbstractEntity, DateField, UUIDField } from '@shared';
 
 export class AbstractDto {
   @UUIDField()
-  id!: string;
+  id: string;
 
   @DateField()
   createdAt: Date;
