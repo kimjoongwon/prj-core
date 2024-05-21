@@ -3,7 +3,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ServiceSpaceDto } from '../../dto';
-import { ResponseEntity, ResponseStatus } from '../../entity';
+import { ResponseEntity, ResponseStatus } from '../../entities';
 import { CategoryEntity } from './entities/category.entity';
 
 @Injectable()

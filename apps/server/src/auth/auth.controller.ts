@@ -18,9 +18,10 @@ import {
 } from '@nestjs/swagger';
 import { LoginPayloadDto } from './dto/login-payload.dto';
 import { TokenDto } from './dto/token.dto';
-import { AccessToken, Public, UserDto } from '@shared';
+import { AccessToken, Public } from '@shared';
 import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
 import { LoginFormDto } from './dto/login-form.dto';
+import { UserDto } from './dto/user.dto';
 
 @ApiTags('auth')
 @Controller()

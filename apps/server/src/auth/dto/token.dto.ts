@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDto } from '@shared';
 import { Type } from 'class-transformer';
+import { UserDto } from './user.dto';
 
 export class TokenDto {
   @ApiProperty()

@@ -1,6 +1,6 @@
 import { z } from 'nestjs-zod/z';
 import { commonSchema } from '../../schema/common.schema';
-import { AbstractEntity } from '../../entity';
+import { AbstractEntity } from '../../entities';
 import { Space } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 

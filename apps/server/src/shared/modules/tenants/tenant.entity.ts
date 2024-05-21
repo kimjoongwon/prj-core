@@ -1,12 +1,12 @@
 import { Tenant } from '@prisma/client';
-import { CommonEntity } from '../../entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { AbstractEntity } from '../../entities';
 
-export abstract class TenantEntity extends CommonEntity implements Tenant {
-  @ApiProperty()
+export class TenantEntity extends AbstractEntity implements Tenant {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
   userId: string;
-  @ApiProperty()
   spaceId: string;
-  @ApiProperty()
   roleId: string;
 }
