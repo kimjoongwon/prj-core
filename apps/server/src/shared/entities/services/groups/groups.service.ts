@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateGroupDto } from '../../dtos/create/create-group.dto';
 import { UpdateGroupDto } from '../../dtos/update/update-group.dto';
+import { PageOptionsDto } from '../../dtos/common/page-option.dto';
+import { GroupPageOptionsDto } from 'src/domains/admin/groups/dtos/group-page-options.dto';
 
 @Injectable()
 export class GroupsService {
@@ -12,16 +14,28 @@ export class GroupsService {
     });
   }
 
-  findAll() {
-    return this.prisma.group.findMany({
+  async findByPageOptions(pageOptions: GroupPageOptionsDto) {
+    const groups = await this.prisma.group.findMany({
       where: {
+        name: pageOptions.name,
         deletedAt: null,
       },
+      orderBy: {
+        createdAt: pageOptions.order,
+      },
+      skip: pageOptions.skip,
+      take: pageOptions.limit,
       include: {
         service: true,
         space: true,
       },
     });
+    const count = await this.prisma.group.count({});
+
+    return {
+      count,
+      groups,
+    };
   }
 
   findOneById(groupId: string) {

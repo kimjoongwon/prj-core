@@ -4,6 +4,7 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
+  IsDefined,
   IsEmail,
   IsEnum,
   IsInt,
@@ -17,6 +18,7 @@ import {
   Min,
   MinLength,
   NotEquals,
+  ValidateNested,
 } from 'class-validator';
 
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
@@ -36,6 +38,7 @@ import {
   IsTmpKey as IsTemporaryKey,
   IsUndefinable,
 } from './validator.decorators';
+import { Constructor } from '../constants/types';
 
 interface IFieldOptions {
   each?: boolean;
@@ -422,4 +425,45 @@ export function DateFieldOptional(
     IsUndefinable(),
     DateField({ ...options, required: false }),
   );
+}
+
+type IClassFieldOptions = IFieldOptions;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function ClassField<TClass extends Constructor>(
+  getClass: () => TClass,
+  options: Omit<ApiPropertyOptions, 'type'> & IClassFieldOptions = {},
+): PropertyDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const classValue = getClass();
+
+  const decorators = [
+    Type(() => classValue),
+    ValidateNested({ each: options.each }),
+  ];
+
+  if (options.required !== false) {
+    decorators.push(IsDefined());
+  }
+
+  if (options.nullable) {
+    decorators.push(IsNullable());
+  } else {
+    decorators.push(NotEquals(null));
+  }
+
+  if (options.swagger !== false) {
+    decorators.push(
+      ApiProperty({
+        type: () => classValue,
+        ...options,
+      }),
+    );
+  }
+
+  // if (options.each) {
+  //   decorators.push(ToArray());
+  // }
+
+  return applyDecorators(...decorators);
 }
