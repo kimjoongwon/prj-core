@@ -7,3 +7,4 @@ export * from './cookies.decorator';
 export * from './field.decorators';
 export * from './transform.decorators';
 export * from './validator.decorators';
+export * from './user.decorator';

@@ -1,6 +1,6 @@
 import { ClsServiceManager } from 'nestjs-cls';
 
-import { type LanguageCode } from '../constant';
+import { type LanguageCode } from '../constants';
 import { User } from '@prisma/client';
 
 export class ContextProvider {

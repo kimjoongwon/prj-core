@@ -1,6 +1,6 @@
 import { Type, applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
-import { ResponseEntity } from '../entities/response.entity';
+import { ResponseEntity } from '../entities';
 
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   dataDto: DataDto,
