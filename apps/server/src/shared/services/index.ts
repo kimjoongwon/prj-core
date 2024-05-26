@@ -1,0 +1,9 @@
+export { AssignmentsService } from './assignments.service';
+export { CategoriesService } from './categories.service';
+export { GroupsService } from './groups.service';
+export { ServicesService } from './services.service';
+export { UsersService } from './users.service';
+export { RolesService } from './roles.service';
+export { SpacesService } from './spaces.service';
+export { ProfilesService } from './profiles.service';
+export { PasswordService } from './password.service';
