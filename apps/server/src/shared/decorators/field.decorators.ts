@@ -19,8 +19,8 @@ import {
   NotEquals,
 } from 'class-validator';
 
-// import { type Constructor } from '../types';
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
+
 import {
   PhoneNumberSerializer,
   ToArray,
@@ -28,6 +28,7 @@ import {
   ToLowerCase,
   ToUpperCase,
 } from './transform.decorators';
+
 import {
   IsNullable,
   IsPassword,

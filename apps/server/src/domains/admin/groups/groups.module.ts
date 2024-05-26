@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GroupsService } from '../../../shared/services/groups.service';
+import { GroupsService } from '../../../shared/entities/services/groups/groups.service';
 import { GroupsController } from './groups.controller';
 
 @Module({

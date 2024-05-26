@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { RoleType } from '../types';
+import { RoleType } from '../constants';
 import { Public } from './public.decorator';
 
 export function Auth(

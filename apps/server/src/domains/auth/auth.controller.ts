@@ -10,17 +10,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { LoginPayloadDto } from './dto/login-payload.dto';
-import { TokenDto } from './dto/token.dto';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessToken, Public, UserDto } from '@shared';
-import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
-import { LoginFormDto } from './dto/login-form.dto';
+import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 
 @ApiTags('auth')
 @Controller()
@@ -77,27 +69,12 @@ export class AuthController {
   }
 
   @Public()
-  @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: LoginFormDto })
-  @Get('login/form')
-  getLoginForm() {
-    return this.authService.getLoginForm();
-  }
-
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Get('login/schema')
-  getLoginFormSchema() {
-    return this.authService.getLoginFormJsonSchema();
-  }
-
-  @Public()
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
   @ApiResponse({
     status: HttpStatus.CREATED,
   })
-  async signUpUser(@Body() createSignUpPayload: CreateSignUpPayloadDto) {
-    return this.authService.signUpUser(createSignUpPayload);
+  async signUpUser(@Body() signUpDto: SignUpPayloadDto) {
+    return this.authService.signUpUser(signUpDto);
   }
 }

@@ -21,6 +21,7 @@ import {
   loggingMiddleware,
 } from 'nestjs-prisma';
 import {
+  JwtAuthGuard,
   LoggerMiddleware,
   appConfig,
   authConfig,
@@ -29,7 +30,6 @@ import {
   fileConfig,
   mailConfig,
 } from '@shared';
-import { JwtAuthGuard } from './auth/guards/jwt.auth-guard';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { ServicesModule } from './admin/services/services.module';

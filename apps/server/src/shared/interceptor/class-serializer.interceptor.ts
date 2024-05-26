@@ -16,7 +16,7 @@ export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor
     }
 
     return isArray
-      ? response.map(res => this.transformToPlain(res, options))
+      ? response.map((res) => this.transformToPlain(res, options))
       : this.transformToPlain(response, options);
   }
 

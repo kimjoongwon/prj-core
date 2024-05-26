@@ -1,41 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { PrismaService } from 'nestjs-prisma';
+import { RolesService, SpacesService, UsersService } from '@shared';
+import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import {
-  AuthConfig,
-  ProfilesModule,
-  RolesModule,
-  SpacesModule,
-  TenantsModule,
-  UsersModule,
-} from '@shared';
+import { PasswordService } from './services';
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        RolesModule,
-        SpacesModule,
-        TenantsModule,
-        UsersModule,
-        ProfilesModule,
-        PassportModule,
-        JwtModule.registerAsync({
-          useFactory: async (config: ConfigService) => {
-            const authConfig = await config.get<AuthConfig>('auth');
-            return {
-              secret: authConfig?.secret,
-              signOptions: { expiresIn: authConfig?.expires },
-            };
-          },
-          inject: [ConfigService],
-        }),
+      imports: [],
+      providers: [
+        PrismaService,
+        AuthService,
+        UsersService,
+        JwtService,
+        SpacesService,
+        RolesService,
+        PasswordService,
+        ConfigService,
       ],
-      providers: [AuthService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

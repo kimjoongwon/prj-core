@@ -4,10 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TokenPayloadDto } from './dto/token-payload.dto';
-import { PasswordService } from '../../shared/services/password.service';
+import { TokenPayloadDto } from './dtos/token-payload.dto';
+import { PasswordService } from './services/password.service';
 import { ConfigService } from '@nestjs/config';
-import { TokenDto } from './dto/token.dto';
+import { TokenDto } from './dtos/token.dto';
 import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
@@ -17,10 +17,8 @@ import {
   TokenType,
   UsersService,
 } from '@shared';
-import { CreateSignUpPayloadDto } from './dto/create-user-sign-up.dto';
-import { loginFormJsonSchema } from './dto/login-form.dto';
-import { LoginPayloadDto } from './dto/login-payload.dto';
 import bcrypt from 'bcrypt';
+import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
 
 @Injectable()
 export class AuthService {
@@ -60,8 +58,8 @@ export class AuthService {
     return user!;
   }
 
-  async signUpUser(createSignUpPayloadDto: CreateSignUpPayloadDto) {
-    const { profile, user } = createSignUpPayloadDto;
+  async signUpUser(signUpDto: SignUpPayloadDto) {
+    const { profile, user } = signUpDto;
 
     await this.prisma.$transaction(async (tx) => {
       const hashedPassword = await this.passwordService.hashPassword(
@@ -107,10 +105,6 @@ export class AuthService {
     };
 
     return loginFormDto;
-  }
-
-  getLoginFormJsonSchema() {
-    return loginFormJsonSchema;
   }
 
   async login({ email, password }: LoginPayloadDto): Promise<TokenDto> {
