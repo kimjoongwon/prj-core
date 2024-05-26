@@ -1,7 +1,8 @@
 import { ClsServiceManager } from 'nestjs-cls';
 
-import { type LanguageCode } from '../constants';
 import { User } from '@prisma/client';
+
+import { LanguageCode } from '../constants/language-code.constant';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';

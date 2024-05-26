@@ -31,7 +31,6 @@ import {
   mailConfig,
 } from '@shared';
 import { AuthModule } from './auth/auth.module';
-import { AdminModule } from './admin/admin.module';
 import { ServicesModule } from './admin/services/services.module';
 import { SpacesModule } from './admin/spaces/spaces.module';
 import { CategoriesModule } from './admin/categories/categories.module';
@@ -101,7 +100,6 @@ import { GroupsModule } from './admin/groups/groups.module';
         children: [
           {
             path: 'admin',
-            module: AdminModule,
             children: [
               {
                 path: 'categories',
@@ -128,7 +126,6 @@ import { GroupsModule } from './admin/groups/groups.module';
         ],
       },
     ]),
-    AdminModule,
     AuthModule,
   ],
   providers: [
