@@ -6,15 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  ApiResponseEntity,
   CreateGroupDto,
   GroupDto,
   GroupsService,
   Public,
+  ResponseEntity,
   UpdateGroupDto,
 } from '@shared';
+import { GroupPageOptionsDto } from './dtos/group-page-options.dto';
 
 @ApiTags('groups')
 @Controller()
@@ -31,17 +36,26 @@ export class GroupsController {
     return this.groupsService.create(createGroupDto);
   }
 
-  @ApiResponse({
-    status: 200,
-    description: 'The records have been successfully retrieved.',
-    type: GroupDto,
-    isArray: true,
-  })
   @Public()
+  @ApiResponseEntity(GroupDto, { isArray: true })
   @Get()
-  async findAll() {
-    const groups = await this.groupsService.findAll();
-    return groups.map((group) => new GroupDto(group));
+  async findByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
+    const { count, groups } =
+      await this.groupsService.findByPageOptions(pageOptions);
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '그룹 페이지 데이터 리턴 성공',
+      groups.map((group) => new GroupDto(group)),
+      {
+        page: pageOptions.page,
+        limit: pageOptions.limit,
+        hasNextPage: groups.length === pageOptions.limit,
+        hasPreviousPage: pageOptions.page > 1,
+        itemCount: count,
+        pageCount: 0,
+      },
+    );
   }
 
   @ApiResponse({
