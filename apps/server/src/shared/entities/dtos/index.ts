@@ -6,6 +6,7 @@ export {
   PageOptionsDto,
 } from './common';
 
+export * from './page-options';
 export * from './create';
 export * from './update';
 

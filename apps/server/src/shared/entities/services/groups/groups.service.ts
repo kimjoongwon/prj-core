@@ -3,7 +3,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateGroupDto } from '../../dtos/create/create-group.dto';
 import { UpdateGroupDto } from '../../dtos/update/update-group.dto';
 
-import { GroupPageOptionsDto } from '../../../../domains/admin/groups/dtos/group-page-options.dto';
+import { GroupPageOptionsDto } from '../../dtos/page-options/group-page-options.dto';
 import { GroupsRepository } from '../../repositories/groups/groups.repository';
 
 @Injectable()
@@ -12,29 +12,16 @@ export class GroupsService {
     private readonly prisma: PrismaService,
     private readonly groupsRepository: GroupsRepository,
   ) {}
+
   create(createGroupDto: CreateGroupDto) {
     return this.groupsRepository.create({ data: createGroupDto });
   }
 
-  async findPaginatedGroups(pageOptions: GroupPageOptionsDto) {
-    const { take, name, skip, orderByCreatedAt } = pageOptions;
-    const groups = await this.prisma.group.findMany({
-      where: {
-        name,
-        deletedAt: null,
-      },
-      orderBy: {
-        createdAt: orderByCreatedAt,
-      },
-      skip,
-      take,
-      include: {
-        service: true,
-        space: true,
-      },
+  async findByPageOptions(pageOptions: GroupPageOptionsDto) {
+    const groups = await this.groupsRepository.findByPageOptions(pageOptions);
+    const count = await this.groupsRepository.count({
+      where: { deletedAt: null, name: pageOptions.name },
     });
-
-    const count = await this.prisma.group.count({});
 
     return {
       count,

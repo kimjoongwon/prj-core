@@ -15,11 +15,12 @@ import {
   CreateGroupDto,
   GroupDto,
   GroupsService,
+  PageMetaDto,
   Public,
   ResponseEntity,
   UpdateGroupDto,
 } from '@shared';
-import { GroupPageOptionsDto } from './dtos/group-page-options.dto';
+import { GroupPageOptionsDto } from '../../../shared/entities/dtos/page-options/group-page-options.dto';
 
 @ApiTags('groups')
 @Controller()
@@ -41,20 +42,16 @@ export class GroupsController {
   @Get()
   async findByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
     const { count, groups } =
-      await this.groupsService.findPaginatedGroups(pageOptions);
+      await this.groupsService.findByPageOptions(pageOptions);
 
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
       groups.map((group) => new GroupDto(group)),
-      {
-        page: pageOptions.page,
-        take: pageOptions.take,
-        hasNextPage: groups.length === pageOptions.take,
-        hasPreviousPage: pageOptions.page > 1,
+      new PageMetaDto({
+        pageOptionsDto: pageOptions,
         itemCount: count,
-        pageCount: 0,
-      },
+      }),
     );
   }
 
