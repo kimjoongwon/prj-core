@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GroupsController } from './groups.controller';
 import { PrismaService } from 'nestjs-prisma';
-import { GroupsService } from '@shared';
+import { GroupsRepository, GroupsService } from '@shared';
 
 describe('GroupsController', () => {
   let controller: GroupsController;
@@ -9,7 +9,7 @@ describe('GroupsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [GroupsController],
-      providers: [GroupsService, PrismaService],
+      providers: [GroupsService, PrismaService, GroupsRepository],
     }).compile();
 
     controller = module.get<GroupsController>(GroupsController);

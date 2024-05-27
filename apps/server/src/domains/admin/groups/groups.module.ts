@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { GroupsService } from '../../../shared/entities/services/groups/groups.service';
 import { GroupsController } from './groups.controller';
-import { GroupsRepository } from '../../../shared/entities/repositories/groups/groups.repository';
+import { GroupsRepository, GroupsService } from '@shared';
 
 @Module({
   controllers: [GroupsController],
-  providers: [GroupsService, GroupsRepository],
+  providers: [GroupsRepository, GroupsService],
 })
 export class GroupsModule {}

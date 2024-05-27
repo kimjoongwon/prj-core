@@ -1,9 +1,9 @@
+import { Order } from '../../../constants/order.constant';
 import {
   EnumFieldOptional,
-  Order,
-  PageOptionsDto,
   StringFieldOptional,
-} from '@shared';
+} from '../../../decorators/field.decorators';
+import { PageOptionsDto } from '../common/page-option.dto';
 
 export class GroupPageOptionsDto extends PageOptionsDto {
   @StringFieldOptional()

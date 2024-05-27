@@ -3,6 +3,7 @@ import { GroupsService } from './groups.service';
 import { PrismaService } from 'nestjs-prisma';
 import { GroupDto } from '../../dtos';
 import { vitest } from 'vitest';
+import { GroupsRepository } from '../../repositories';
 
 const mockCreateGroupDto = {
   name: 'Test Group',
@@ -23,7 +24,7 @@ describe('GroupsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GroupsService, PrismaService],
+      providers: [GroupsService, PrismaService, GroupsRepository],
     }).compile();
 
     service = module.get<GroupsService>(GroupsService);
