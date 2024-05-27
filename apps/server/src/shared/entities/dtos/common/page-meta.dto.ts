@@ -11,7 +11,7 @@ export class PageMetaDto {
   readonly page: number;
 
   @NumberField()
-  readonly limit: number;
+  readonly take: number;
 
   @NumberField()
   readonly itemCount: number;
@@ -27,7 +27,7 @@ export class PageMetaDto {
 
   constructor({ pageOptionsDto, itemCount }: IPageMetaDtoParameters) {
     this.page = pageOptionsDto.page;
-    this.limit = pageOptionsDto.limit;
+    this.take = pageOptionsDto.take;
     this.itemCount = itemCount;
     this.pageCount = Math.ceil(this.itemCount / this.take);
     this.hasPreviousPage = this.page > 1;

@@ -49,7 +49,7 @@ export class GroupsController {
       groups.map((group) => new GroupDto(group)),
       {
         page: pageOptions.page,
-        limit: pageOptions.take,
+        take: pageOptions.take,
         hasNextPage: groups.length === pageOptions.take,
         hasPreviousPage: pageOptions.page > 1,
         itemCount: count,

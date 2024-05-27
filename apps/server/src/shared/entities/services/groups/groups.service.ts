@@ -3,8 +3,8 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateGroupDto } from '../../dtos/create/create-group.dto';
 import { UpdateGroupDto } from '../../dtos/update/update-group.dto';
 
-import { GroupsRepository } from '../../repositories/groups/groups.repository';
 import { GroupPageOptionsDto } from '../../../../domains/admin/groups/dtos/group-page-options.dto';
+import { GroupsRepository } from '../../repositories/groups/groups.repository';
 
 @Injectable()
 export class GroupsService {
