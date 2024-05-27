@@ -1,6 +1,14 @@
-import { PageOptionsDto, StringField } from '@shared';
+import {
+  EnumFieldOptional,
+  Order,
+  PageOptionsDto,
+  StringFieldOptional,
+} from '@shared';
 
 export class GroupPageOptionsDto extends PageOptionsDto {
-  @StringField({ nullable: true })
-  name?: string;
+  @StringFieldOptional()
+  name: string;
+
+  @EnumFieldOptional(() => Order, { default: Order.ASC })
+  orderByCreatedAt: Order;
 }

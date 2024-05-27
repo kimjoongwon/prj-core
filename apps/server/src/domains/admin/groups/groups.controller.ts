@@ -41,7 +41,7 @@ export class GroupsController {
   @Get()
   async findByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
     const { count, groups } =
-      await this.groupsService.findByPageOptions(pageOptions);
+      await this.groupsService.findPaginatedGroups(pageOptions);
 
     return new ResponseEntity(
       HttpStatus.OK,
@@ -49,8 +49,8 @@ export class GroupsController {
       groups.map((group) => new GroupDto(group)),
       {
         page: pageOptions.page,
-        limit: pageOptions.limit,
-        hasNextPage: groups.length === pageOptions.limit,
+        limit: pageOptions.take,
+        hasNextPage: groups.length === pageOptions.take,
         hasPreviousPage: pageOptions.page > 1,
         itemCount: count,
         pageCount: 0,
