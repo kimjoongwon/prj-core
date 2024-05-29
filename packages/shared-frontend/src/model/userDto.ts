@@ -14,10 +14,10 @@ export interface UserDto {
   email: string;
   id: string;
   name: string;
+  /** @minLength 6 */
   password: string;
   phone: string;
   profiles: ProfileDto[];
   tenants: TenantDto[];
-  /** @nullable */
-  updatedAt: string | null;
+  updatedAt: string;
 }

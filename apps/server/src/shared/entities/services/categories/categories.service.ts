@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { ResponseEntity } from '../../models/common/response.entity';
-import { CreateCategoryDto } from '../../dtos/create/create-category.dto';
-import { UpdateCategoryDto } from '../../dtos/update/update-category.dto';
-import { CategoryDto } from '../../dtos/category.dto';
+import { CreateCategoryDto } from '../../dtos/categories/create-category.dto';
+import { UpdateCategoryDto } from '../../dtos/categories/update-category.dto';
+import { CategoryDto } from '../../dtos/categories/category.dto';
 
 @Injectable()
 export class CategoriesService {

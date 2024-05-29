@@ -1,13 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { StringField } from '../../decorators';
-import { AbstractDto } from './common/abstract.dto';
-import { CategoryEntity } from '../models/category.entity';
+import { StringField } from '../../../decorators/field.decorators';
+import { AbstractDto } from '../common/abstract.dto';
+import { CategoryEntity } from '../../models/category.entity';
 
 export class CategoryDto extends AbstractDto {
   @StringField()
   name: string;
 
-  @ApiProperty({ type: String, isArray: true })
+  @StringField({ isArray: true })
   ancestorIds: string[];
 
   @StringField({ nullable: true })

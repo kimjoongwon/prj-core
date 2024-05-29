@@ -4,12 +4,12 @@ import {
   PasswordField,
   PhoneField,
   StringField,
-} from '../../decorators';
+} from '../../../decorators';
 import { Exclude } from 'class-transformer';
-import { TenantDto } from './tenant.dto';
-import { ProfileDto } from './profile.dto';
-import { AbstractDto } from './common/abstract.dto';
-import { UserEntity } from '../models/user.entity';
+import { AbstractDto } from '../common/abstract.dto';
+import { UserEntity } from '../../models/user.entity';
+import { TenantDto } from '../tenants/tenant.dto';
+import { ProfileDto } from '../profiles/profile.dto';
 
 export class UserDto extends AbstractDto {
   constructor(user: UserEntity) {

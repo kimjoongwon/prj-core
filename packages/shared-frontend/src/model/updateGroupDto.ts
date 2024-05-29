@@ -5,6 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface SpaceDto {
-  name: string;
+export interface UpdateGroupDto {
+  name?: string;
+  serviceId?: string;
+  spaceId?: string;
 }

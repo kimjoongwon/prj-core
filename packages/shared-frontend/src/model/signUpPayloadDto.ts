@@ -5,6 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface SpaceDto {
-  name: string;
-}
+export interface SignUpPayloadDto { [key: string]: any }

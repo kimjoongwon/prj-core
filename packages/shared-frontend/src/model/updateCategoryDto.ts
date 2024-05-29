@@ -5,17 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface UpdateCategoryDto {
-  ancestorIds?: string[];
-  createdAt?: string;
-  /** @nullable */
-  deletedAt?: string | null;
-  id?: string;
-  name?: string;
-  /** @nullable */
-  parentId?: string | null;
-  serviceId?: string;
-  spaceId?: string;
-  /** @nullable */
-  updatedAt?: string | null;
-}
+export interface UpdateCategoryDto { [key: string]: any }

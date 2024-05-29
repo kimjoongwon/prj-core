@@ -5,11 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateCategoryDto {
-  ancestorIds: string[];
-  name: string;
-  /** @nullable */
-  parentId: string | null;
-  serviceId: string;
-  spaceId: string;
-}
+export interface CreateCategoryDto { [key: string]: any }

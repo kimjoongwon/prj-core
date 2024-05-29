@@ -12,7 +12,6 @@ export interface TenantDto {
   id: string;
   roleId: string;
   spaceId: string;
-  /** @nullable */
-  updatedAt: string | null;
+  updatedAt: string;
   userId: string;
 }

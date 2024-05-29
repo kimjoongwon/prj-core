@@ -1,6 +1,6 @@
-import { StringField } from '../../decorators';
-import { TenantEntity } from '../models/tenant.entity';
-import { AbstractDto } from './common/abstract.dto';
+import { StringField } from '../../../decorators';
+import { TenantEntity } from '../../models/tenant.entity';
+import { AbstractDto } from './../common/abstract.dto';
 
 export class TenantDto extends AbstractDto {
   @StringField()

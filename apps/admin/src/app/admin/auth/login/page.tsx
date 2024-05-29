@@ -8,7 +8,7 @@ import {
   Spacer,
   authStore,
   router,
-  useGetAccessibleAllSpace,
+  useFindByPageOptions,
   useGetAllSpace,
   useLogin,
 } from '@shared/frontend';
@@ -26,6 +26,10 @@ export const test = observable({ test: '' });
 const LoginPage = observer(() => {
   const { mutateAsync: login } = useLogin();
   const state = useLocalObservable(() => defaultLoginFormObject);
+
+  const query = useFindByPageOptions();
+
+  query.data?.data;
 
   const { data: spaces } = useGetAllSpace();
 

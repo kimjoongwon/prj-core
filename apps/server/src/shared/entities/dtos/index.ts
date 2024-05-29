@@ -6,12 +6,15 @@ export {
   PageOptionsDto,
 } from './common';
 
-export * from './create';
-export * from './update';
+export * from './categories';
+export * from './groups';
 
-export { ProfileDto } from './profile.dto';
-export { SpaceDto } from './space.dto';
-export { GroupDto } from './group.dto';
-export { TenantDto } from './tenant.dto';
-export { CategoryDto } from './category.dto';
-export { UserDto } from './user.dto';
+export * from './profiles';
+
+export * from './services';
+
+export * from './spaces';
+
+export * from './tenants';
+
+export * from './users';

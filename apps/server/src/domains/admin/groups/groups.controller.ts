@@ -14,12 +14,12 @@ import {
   ApiResponseEntity,
   CreateGroupDto,
   GroupDto,
+  GroupPageOptionsDto,
   GroupsService,
   Public,
   ResponseEntity,
   UpdateGroupDto,
 } from '@shared';
-import { GroupPageOptionsDto } from './dtos/group-page-options.dto';
 
 @ApiTags('groups')
 @Controller()
@@ -41,7 +41,7 @@ export class GroupsController {
   @Get()
   async findByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
     const { count, groups } =
-      await this.groupsService.findPaginatedGroups(pageOptions);
+      await this.groupsService.findGroupsByPageOptions(pageOptions);
 
     return new ResponseEntity(
       HttpStatus.OK,

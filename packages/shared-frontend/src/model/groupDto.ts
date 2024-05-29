@@ -5,15 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CategoryDto {
-  ancestorIds: string[];
+export interface GroupDto {
   createdAt: string;
   /** @nullable */
   deletedAt: string | null;
   id: string;
   name: string;
-  /** @nullable */
-  parentId: string | null;
   serviceId: string;
   spaceId: string;
   updatedAt: string;

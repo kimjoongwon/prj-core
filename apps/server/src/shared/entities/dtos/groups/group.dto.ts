@@ -1,6 +1,6 @@
-import { StringField } from '../../decorators';
-import { GroupEntity } from '../models/group.entity';
-import { AbstractDto } from './common/abstract.dto';
+import { StringField } from '../../../decorators';
+import { GroupEntity } from '../../models/group.entity';
+import { AbstractDto } from './../common/abstract.dto';
 
 export class GroupDto extends AbstractDto {
   @StringField()

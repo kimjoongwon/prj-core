@@ -1,13 +1,42 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { GroupPageOptionsDto } from 'src/shared/entities/dtos/groups/group-page-options.dto';
 
 @Injectable()
 export class GroupsRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return [];
+  async findGroupsByPageOptions(pageOptions: GroupPageOptionsDto) {
+    const { take, name, skip, orderByCreatedAt } = pageOptions;
+    const groups = await this.prisma.group.findMany({
+      where: {
+        name,
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: orderByCreatedAt,
+      },
+      skip,
+      take,
+      include: {
+        service: true,
+        space: true,
+      },
+    });
+
+    return groups;
+  }
+
+  async count(pageOptions: GroupPageOptionsDto) {
+    const { take, name, skip } = pageOptions;
+    return this.prisma.group.count({
+      where: {
+        name,
+      },
+      take,
+      skip,
+    });
   }
 
   async findOne() {
