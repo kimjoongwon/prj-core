@@ -43,6 +43,11 @@ export const useMeta = () => {
         url: '/admin/main/userService/categories',
         active: pathname === '/admin/main/userService/categories',
       },
+      {
+        text: '그룹 관리',
+        url: '/admin/main/userService/groups',
+        active: pathname === '/admin/main/userService/groups',
+      },
     ],
     설정: [
       {

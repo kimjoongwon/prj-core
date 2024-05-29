@@ -13,6 +13,9 @@ export const ADMIN_RESERVATION_SERVICE_PATH =
 export const ADMIN_USER_CATEGORIES_PATH =
   `${ADMIN_USER_SERVICE_PATH}/categories` as const;
 
+export const ADMIN_USER_GROUPS_PATH =
+  `${ADMIN_USER_SERVICE_PATH}/groups` as const;
+
 export const ADMIN_USER_CATEGORY_PATH =
   `${ADMIN_USER_CATEGORIES_PATH}/:categoryId` as const;
 
@@ -36,6 +39,7 @@ export type Paths =
   | typeof ADMIN_AUTH_LOGIN_PATH
   | typeof ADMIN_MAIN_PATH
   | typeof ADMIN_USER_SERVICE_PATH
+  | typeof ADMIN_USER_GROUPS_PATH
   | typeof ADMIN_USER_CATEGORIES_PATH
   | typeof ADMIN_USER_CATEGORY_PATH
   | typeof ADMIN_SETTING_SERVICE_PATH

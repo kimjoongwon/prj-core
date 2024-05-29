@@ -10,6 +10,4 @@ export type GetCategoryById200AllOf = {
   data?: CategoryDto;
   /** */
   message?: string;
-  /** */
-  statusCode?: string;
 };

@@ -13,7 +13,6 @@ import {
   authStore,
   router,
   useGetAccessibleAllSpace,
-  useGetAccessibleAllSpaceSuspense,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
@@ -64,8 +63,7 @@ const MainLayout = (props: MainLayoutProps) => {
 };
 
 const AccessibleSpaceSelect = observer(() => {
-  const { data: queryData } = useGetAccessibleAllSpaceSuspense();
-
+  const { data: queryData } = useGetAccessibleAllSpace();
   const spaceOptions = queryData?.data?.map(space => ({
     text: space.name,
     value: space.id,

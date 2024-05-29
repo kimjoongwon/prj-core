@@ -7,7 +7,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   options?: { isArray?: boolean },
 ) => {
   const properties = {
-    statusCode: { type: 'string', nullable: false },
     message: { type: 'string', nullable: false },
     data: { $ref: getSchemaPath(dataDto) },
   };
@@ -16,7 +15,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
         { $ref: getSchemaPath(ResponseEntity) },
         {
           properties: {
-            statusCode: { type: 'string', nullable: false },
             message: { type: 'string', nullable: false },
             data: {
               type: 'array',

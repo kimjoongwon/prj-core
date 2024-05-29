@@ -35,6 +35,7 @@ const LoginPage = observer(() => {
         data: state,
       });
 
+      authStore.user = user;
       authStore.accessToken = accessToken;
       const baseSpace = spaces?.find(space => space.name === '기본');
       const baseTenant = user?.tenants.find(

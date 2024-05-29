@@ -10,6 +10,4 @@ export type UpdateCategory200AllOf = {
   data?: CategoryDto;
   /** */
   message?: string;
-  /** */
-  statusCode?: string;
 };

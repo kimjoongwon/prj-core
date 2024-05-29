@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable, observable, reaction } from 'mobx';
 import { UserDto } from '../model/userDto';
 import { TenantDto, TokenDto } from '../model';
 

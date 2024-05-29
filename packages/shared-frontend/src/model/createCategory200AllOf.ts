@@ -10,6 +10,4 @@ export type CreateCategory200AllOf = {
   data?: CategoryDto;
   /** */
   message?: string;
-  /** */
-  statusCode?: string;
 };

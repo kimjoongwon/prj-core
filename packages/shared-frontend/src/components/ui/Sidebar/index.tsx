@@ -1,9 +1,9 @@
 import { NavItem } from '../Navbar';
 import { observer } from 'mobx-react-lite';
 import { router } from '../../../stores/routerStore';
-import { tv } from 'tailwind-variants';
 import Button from '../Button';
 import { v4 } from 'uuid';
+import { VStack } from '../VStack';
 
 interface SidebarProps {
   navItems?: NavItem[];
@@ -12,18 +12,8 @@ interface SidebarProps {
 export const Sidebar = observer((props: SidebarProps) => {
   const { navItems = [] } = props;
 
-  const item = tv({
-    base: 'text-gray-700 font-semibold',
-    variants: {
-      color: {
-        active: 'text-primary',
-        inactive: 'text-gray-700',
-      },
-    },
-  });
-
   return (
-    <ol className="border-1 mt-4 rounded-lg p-4">
+    <VStack className="flex-grow-0 basis-44 border-1 mt-4 p-2">
       {navItems?.map(navItem => {
         return (
           <Button
@@ -37,6 +27,6 @@ export const Sidebar = observer((props: SidebarProps) => {
           </Button>
         );
       })}
-    </ol>
+    </VStack>
   );
 });

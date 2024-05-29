@@ -10,6 +10,4 @@ export type GetAccessibleAllSpace200AllOf = {
   data?: SpaceDto[];
   /** */
   message?: string;
-  /** */
-  statusCode?: string;
 };

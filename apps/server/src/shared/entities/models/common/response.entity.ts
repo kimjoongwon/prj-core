@@ -29,4 +29,15 @@ export class ResponseEntity<T> {
     this.data = data;
     this.meta = meta;
   }
+
+  static WITH_SUCCESS<T>(message: string): ResponseEntity<T> {
+    return new ResponseEntity(HttpStatus.OK, message || '성공');
+  }
+
+  static WITH_ERROR<T>(message: string): ResponseEntity<T> {
+    return new ResponseEntity(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      message || '실패',
+    );
+  }
 }

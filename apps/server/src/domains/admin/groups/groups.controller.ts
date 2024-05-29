@@ -32,7 +32,7 @@ export class GroupsController {
     type: GroupDto,
   })
   @Post()
-  create(@Body() createGroupDto: CreateGroupDto) {
+  createGroup(@Body() createGroupDto: CreateGroupDto) {
     return this.groupsService.create(createGroupDto);
   }
 
@@ -64,7 +64,7 @@ export class GroupsController {
     type: GroupDto,
   })
   @Get(':groupId')
-  findOneById(@Param('groupId') id: string) {
+  findGroupById(@Param('groupId') id: string) {
     return this.groupsService.findOneById(id);
   }
 
@@ -74,7 +74,7 @@ export class GroupsController {
     type: GroupDto,
   })
   @Patch(':groupId')
-  updateById(
+  updateGroupById(
     @Param('groupId') groupId: string,
     @Body() updateGroupDto: UpdateGroupDto,
   ) {
@@ -86,8 +86,8 @@ export class GroupsController {
     description: 'The record has been successfully removed.',
     type: GroupDto,
   })
-  @Delete(':id')
-  removeById(@Param('id') groupId: string) {
+  @Delete(':groupId')
+  removeGroupById(@Param('groupId') groupId: string) {
     return this.groupsService.removeById(groupId);
   }
 }

@@ -10,6 +10,4 @@ export type FindGroupsByPageOptions200AllOf = {
   data?: GroupDto[];
   /** */
   message?: string;
-  /** */
-  statusCode?: string;
 };
