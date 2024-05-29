@@ -6,7 +6,7 @@
  */
 
 export interface CategoryDto {
-  ancestorIds: string[];
+  ancestorIds: string;
   createdAt: string;
   /** @nullable */
   deletedAt: string | null;
