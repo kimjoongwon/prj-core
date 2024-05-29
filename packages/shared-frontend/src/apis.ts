@@ -28,7 +28,7 @@ import type {
   CreateCategoryDto,
   CreateGroupDto,
   CreateServiceDto,
-  FindByPageOptionsParams,
+  FindGroupsByPageOptionsParams,
   LoginPayloadDto,
   SignUpPayloadDto,
   SpaceDto,
@@ -46,7 +46,7 @@ import {
 } from 'msw'
 import type {
   CreateCategory200AllOf,
-  FindByPageOptions200,
+  FindGroupsByPageOptions200,
   GetAccessibleAllSpace200,
   GetCategories200,
   GetCategoryById200AllOf,
@@ -1106,13 +1106,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const findByPageOptions = (
-    params?: FindByPageOptionsParams,
+export const findGroupsByPageOptions = (
+    params?: FindGroupsByPageOptionsParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<FindByPageOptions200>(
+      return customInstance<FindGroupsByPageOptions200>(
       {url: `http://localhost:3005/api/v1/admin/groups`, method: 'GET',
         params, signal
     },
@@ -1120,38 +1120,38 @@ export const findByPageOptions = (
     }
   
 
-export const getFindByPageOptionsQueryKey = (params?: FindByPageOptionsParams,) => {
+export const getFindGroupsByPageOptionsQueryKey = (params?: FindGroupsByPageOptionsParams,) => {
     return [`http://localhost:3005/api/v1/admin/groups`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getFindByPageOptionsQueryOptions = <TData = Awaited<ReturnType<typeof findByPageOptions>>, TError = ErrorType<unknown>>(params?: FindByPageOptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindGroupsByPageOptionsQueryOptions = <TData = Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError = ErrorType<unknown>>(params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindByPageOptionsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getFindGroupsByPageOptionsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findByPageOptions>>> = ({ signal }) => findByPageOptions(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findGroupsByPageOptions>>> = ({ signal }) => findGroupsByPageOptions(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindByPageOptionsQueryResult = NonNullable<Awaited<ReturnType<typeof findByPageOptions>>>
-export type FindByPageOptionsQueryError = ErrorType<unknown>
+export type FindGroupsByPageOptionsQueryResult = NonNullable<Awaited<ReturnType<typeof findGroupsByPageOptions>>>
+export type FindGroupsByPageOptionsQueryError = ErrorType<unknown>
 
-export const useFindByPageOptions = <TData = Awaited<ReturnType<typeof findByPageOptions>>, TError = ErrorType<unknown>>(
- params?: FindByPageOptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useFindGroupsByPageOptions = <TData = Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError = ErrorType<unknown>>(
+ params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindByPageOptionsQueryOptions(params,options)
+  const queryOptions = getFindGroupsByPageOptionsQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1162,33 +1162,33 @@ export const useFindByPageOptions = <TData = Awaited<ReturnType<typeof findByPag
 
 
 
-export const getFindByPageOptionsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findByPageOptions>>, TError = ErrorType<unknown>>(params?: FindByPageOptionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindGroupsByPageOptionsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError = ErrorType<unknown>>(params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindByPageOptionsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getFindGroupsByPageOptionsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findByPageOptions>>> = ({ signal }) => findByPageOptions(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findGroupsByPageOptions>>> = ({ signal }) => findGroupsByPageOptions(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindByPageOptionsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof findByPageOptions>>>
-export type FindByPageOptionsSuspenseQueryError = ErrorType<unknown>
+export type FindGroupsByPageOptionsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof findGroupsByPageOptions>>>
+export type FindGroupsByPageOptionsSuspenseQueryError = ErrorType<unknown>
 
-export const useFindByPageOptionsSuspense = <TData = Awaited<ReturnType<typeof findByPageOptions>>, TError = ErrorType<unknown>>(
- params?: FindByPageOptionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useFindGroupsByPageOptionsSuspense = <TData = Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError = ErrorType<unknown>>(
+ params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindByPageOptionsSuspenseQueryOptions(params,options)
+  const queryOptions = getFindGroupsByPageOptionsSuspenseQueryOptions(params,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1199,33 +1199,33 @@ export const useFindByPageOptionsSuspense = <TData = Awaited<ReturnType<typeof f
 
 
 
-export const getFindByPageOptionsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findByPageOptions>>>, TError = ErrorType<unknown>>(params?: FindByPageOptionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindGroupsByPageOptionsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findGroupsByPageOptions>>>, TError = ErrorType<unknown>>(params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindByPageOptionsQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getFindGroupsByPageOptionsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findByPageOptions>>> = ({ signal }) => findByPageOptions(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findGroupsByPageOptions>>> = ({ signal }) => findGroupsByPageOptions(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindByPageOptionsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof findByPageOptions>>>
-export type FindByPageOptionsSuspenseInfiniteQueryError = ErrorType<unknown>
+export type FindGroupsByPageOptionsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof findGroupsByPageOptions>>>
+export type FindGroupsByPageOptionsSuspenseInfiniteQueryError = ErrorType<unknown>
 
-export const useFindByPageOptionsSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof findByPageOptions>>>, TError = ErrorType<unknown>>(
- params?: FindByPageOptionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useFindGroupsByPageOptionsSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof findGroupsByPageOptions>>>, TError = ErrorType<unknown>>(
+ params?: FindGroupsByPageOptionsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findGroupsByPageOptions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindByPageOptionsSuspenseInfiniteQueryOptions(params,options)
+  const queryOptions = getFindGroupsByPageOptionsSuspenseInfiniteQueryOptions(params,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1838,11 +1838,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
 export const getGetCategoriesResponseMock = (overrideResponse: any = {}): GetCategories200 => ({data: {}, httpStatus: faker.number.int({min: undefined, max: undefined}), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined}), ...overrideResponse}, ...overrideResponse,statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
 
-export const getCreateCategoryResponseMock = (overrideResponse: any = {}): CreateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
+export const getCreateCategoryResponseMock = (overrideResponse: any = {}): CreateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
 
-export const getGetCategoryByIdResponseMock = (overrideResponse: any = {}): GetCategoryById200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
+export const getGetCategoryByIdResponseMock = (overrideResponse: any = {}): GetCategoryById200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
 
-export const getUpdateCategoryResponseMock = (overrideResponse: any = {}): UpdateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
+export const getUpdateCategoryResponseMock = (overrideResponse: any = {}): UpdateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined]), statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
 
 export const getGetServiceByIdResponseMock = (overrideResponse: any = {}): ServiceEntity => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: {}, id: faker.word.sample(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(['SPACE','USER','SETTING'] as const), updatedAt: {}, ...overrideResponse})
 
@@ -1852,7 +1852,7 @@ export const getGetAccessibleAllSpaceResponseMock = (overrideResponse: any = {})
 
 export const getCreateResponseMock = (overrideResponse: any = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
-export const getFindByPageOptionsResponseMock = (overrideResponse: any = {}): FindByPageOptions200 => ({data: {}, httpStatus: faker.number.int({min: undefined, max: undefined}), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined}), ...overrideResponse}, ...overrideResponse,statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
+export const getFindGroupsByPageOptionsResponseMock = (overrideResponse: any = {}): FindGroupsByPageOptions200 => ({data: {}, httpStatus: faker.number.int({min: undefined, max: undefined}), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined}), ...overrideResponse}, ...overrideResponse,statusCode: faker.helpers.arrayElement([faker.word.sample(), undefined]), ...overrideResponse})
 
 export const getFindOneByIdResponseMock = (overrideResponse: any = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
@@ -2021,10 +2021,10 @@ export const getCreateMockHandler = (overrideResponse?: GroupDto) => {
   })
 }
 
-export const getFindByPageOptionsMockHandler = (overrideResponse?: FindByPageOptions200) => {
+export const getFindGroupsByPageOptionsMockHandler = (overrideResponse?: FindGroupsByPageOptions200) => {
   return http.get('*/api/v1/admin/groups', async () => {
     await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getFindByPageOptionsResponseMock()),
+    return new HttpResponse(JSON.stringify(overrideResponse ? overrideResponse : getFindGroupsByPageOptionsResponseMock()),
       {
         status: 200,
         headers: {
@@ -2144,7 +2144,7 @@ export const getPROMISEServerMock = () => [
   getGetAccessibleAllSpaceMockHandler(),
   getGetAllSpaceMockHandler(),
   getCreateMockHandler(),
-  getFindByPageOptionsMockHandler(),
+  getFindGroupsByPageOptionsMockHandler(),
   getFindOneByIdMockHandler(),
   getUpdateByIdMockHandler(),
   getRemoveByIdMockHandler(),

@@ -6,5 +6,10 @@
  */
 
 export interface SpaceDto {
+  createdAt: string;
+  /** @nullable */
+  deletedAt: string | null;
+  id: string;
   name: string;
+  updatedAt: string;
 }
