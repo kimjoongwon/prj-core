@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GroupsRepository } from './groups.repository';
 import { PrismaService } from 'nestjs-prisma';
 
-describe('AssignmentsService', () => {
+describe('groups.repository', () => {
   let groupsRepository: GroupsRepository;
 
   beforeEach(async () => {
