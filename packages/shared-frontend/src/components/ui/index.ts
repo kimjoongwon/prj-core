@@ -8,7 +8,6 @@ import Button from './Button';
 import Skeleton from './Skeleton';
 import Pagination from './Pagination';
 export * from './Footer';
-export * from './Sidebar';
 export * from './Navbar';
 export * from './Checkbox';
 export * from './RadioGroup';

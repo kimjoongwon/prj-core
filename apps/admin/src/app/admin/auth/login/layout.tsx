@@ -1,4 +1,4 @@
-import { Container, Layout } from '@shared/frontend';
+import { Container } from '@shared/frontend';
 
 type LayoutProps = {
   children: React.ReactNode;

@@ -39,17 +39,24 @@ export class Auth {
     reaction(
       () => this._status,
       status => {
-        console.log('status', status);
         switch (status) {
           case AuthStatus.LoggedOut:
             this.logout();
             this.app.router.push({ url: '/admin/auth/login' });
             break;
           case AuthStatus.LoggedIn:
-            this.app.modal.openSpaceSelectModal();
+            if (!this.app.auth.accessToken) {
+              this.app.modal.openSpaceSelectModal();
+              return;
+            }
+            this.status = AuthStatus.Authenticated;
             break;
           case AuthStatus.TokenRefreshing:
-            this.app.modal.openSpaceSelectModal();
+            if (!this.app.auth.accessToken) {
+              this.app.modal.openSpaceSelectModal();
+              return;
+            }
+            this.status = AuthStatus.Authenticated;
             break;
           case AuthStatus.Authenticated:
             this.app.router.push({ url: '/admin/main' });

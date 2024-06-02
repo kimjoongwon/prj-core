@@ -27,8 +27,8 @@ export const AppProvider = observer(({ children }: AppProviderProps) => {
   useEffect(() => {
     myUniv = new MyUniv(nextRouter);
 
+    console.log('refreshing');
     myUniv.auth.refreshing();
-  
   }, [nextRouter]);
 
   if (!myUniv.isInitialized) {
