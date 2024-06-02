@@ -1,16 +1,5 @@
-import {
-  getAccessibleAllSpace,
-  getAllService,
-  getAllSpace,
-  getGetAccessibleAllSpaceQueryKey,
-  getGetAllServiceQueryKey,
-  getGetAllSpaceQueryKey,
-  router,
-} from '@shared/frontend';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface InitContainerProps {
   children: React.ReactNode;
@@ -44,27 +33,9 @@ function getQueryClient() {
   }
 }
 
-export const InitContainer = (props: InitContainerProps) => {
+export const ReactQueryProvider = (props: InitContainerProps) => {
   const { children } = props;
   const queryClient = getQueryClient();
-  const nextRouter = useRouter();
-
-  useEffect(() => {
-    // 초기 Prefetch
-    queryClient.prefetchQuery({
-      queryKey: getGetAllServiceQueryKey(),
-      queryFn: getAllService,
-    });
-
-    queryClient.prefetchQuery({
-      queryKey: getGetAllSpaceQueryKey(),
-      queryFn: getAllSpace,
-    });
-
-    // 초기 라우터
-    router.setRouter(nextRouter);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       {children}

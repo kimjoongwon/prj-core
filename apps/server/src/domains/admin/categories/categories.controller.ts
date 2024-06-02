@@ -48,13 +48,13 @@ export class CategoriesController {
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Get(':categoryId')
-  async getCategoryById(@Param('categoryId') categoryId: string) {
-    const category = await this.categoriesService.getCategoryById(categoryId);
+  async findCategoryById(@Param('categoryId') categoryId: string) {
+    const category = await this.categoriesService.findCategoryById(categoryId);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'Category found',
-      category ? new CategoryDto(category) : null,
+      category ? new CategoryDto(category) : category,
     );
   }
 

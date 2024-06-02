@@ -1,27 +1,58 @@
-import { NavItem } from '../Navbar';
 import { observer } from 'mobx-react-lite';
-import { router } from '../../../stores/routerStore';
-import Button from '../Button';
 import { v4 } from 'uuid';
+import { usePathname } from 'next/navigation';
+import { NavItem, getTopNavItems } from '../Navbar';
+
 import { VStack } from '../VStack';
+import Button from '../Button';
+import { myUniv } from '../../../providers/App';
 
-interface SidebarProps {
-  navItems?: NavItem[];
-}
+export const Sidebar = observer(() => {
+  const pathname = usePathname();
+  const activeNavItem = getTopNavItems(pathname)?.find(
+    navItem => navItem.active,
+  );
 
-export const Sidebar = observer((props: SidebarProps) => {
-  const { navItems = [] } = props;
-
+  const sidebarNavItems: Record<string, NavItem[]> = {
+    '이용자 관리': [
+      {
+        text: '카테고리 관리',
+        url: '/admin/main/userService/categories',
+        active: pathname === '/admin/main/userService/categories',
+      },
+      {
+        text: '그룹 관리',
+        url: '/admin/main/userService/groups',
+        active: pathname === '/admin/main/userService/groups',
+      },
+    ],
+    설정: [
+      {
+        text: '서비스 관리',
+        url: '/admin/main/settingService/services',
+        active: pathname === '/admin/main/settingService/services',
+      },
+    ],
+    '예약 관리': [
+      {
+        text: '타임라인 관리',
+        url: '/admin/main/userService/categories',
+        active: pathname === '/admin/main/userService/categories',
+      },
+    ],
+  };
   return (
     <VStack className="flex-grow-0 basis-44 border-1 mt-4 p-2">
-      {navItems?.map(navItem => {
+      {sidebarNavItems['이용자 관리'].map(navItem => {
         return (
           <Button
             key={v4()}
             variant="light"
             className="font-bold"
             color={navItem.active ? 'primary' : 'default'}
-            onClick={() => router.push({ url: navItem.url || '/admin/main' })}
+            onClick={() =>
+              myUniv?.router.push({ url: navItem.url || '/admin/main' })
+            }
           >
             {navItem.text}
           </Button>

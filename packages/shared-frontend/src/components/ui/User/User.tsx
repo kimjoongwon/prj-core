@@ -6,10 +6,11 @@ import {
   User as BaseUser,
 } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { authStore } from '../../../stores/authStore';
+import { useApp } from '../../../providers/App';
 
 export const User = observer(() => {
-  const email = authStore.user?.email;
+  const { auth } = useApp();
+  const email = auth.user?.email;
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -32,7 +33,7 @@ export const User = observer(() => {
         <DropdownItem key="space" className="h-14 gap-2">
           <p className="font-semibold">
             {/* @ts-ignore */}
-            소속: {authStore.user?.tenants?.[0]?.space?.name}
+            소속: {auth.user?.tenants?.[0]?.space?.name}
           </p>
           <DropdownItem>설정</DropdownItem>
         </DropdownItem>

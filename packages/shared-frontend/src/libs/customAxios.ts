@@ -1,5 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { authStore } from '../stores/authStore';
+import { myUniv } from '../providers/App';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: 'http://localhost:3005/api',
@@ -10,11 +10,12 @@ export const customInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
 ): Promise<T> => {
+  console.log('auth.accessToken', myUniv?.auth?.accessToken);
   const source = Axios.CancelToken.source();
   const headers = {
-    Authorization: `Bearer ${authStore.accessToken}`,
+    Authorization: `Bearer ${myUniv?.auth?.accessToken}`,
     // @ts-ignore
-    tenantId: authStore.user?.tenants?.[0]?.id || '',
+    tenantId: myUniv?.auth.user?.tenants?.[0]?.id || '',
     ...config.headers,
     ...options?.headers,
   };

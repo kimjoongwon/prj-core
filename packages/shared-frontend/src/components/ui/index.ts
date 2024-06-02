@@ -58,3 +58,4 @@ export * from './FormController';
 export * from './ListBox';
 export * from './Text';
 export * from './Placeholder';
+export { Message } from './Message';
