@@ -5,7 +5,7 @@ import { useQueries } from './useQueries';
 import {
   CategoryDto,
   getGetCategoriesQueryKey,
-  router,
+  myUniv,
 } from '@shared/frontend';
 import { categroiesPageState } from './state';
 import { useCallback } from 'react';
@@ -25,7 +25,7 @@ export const useHandlers = (props: {
   const categoriesGroupedByParentId = groupBy(categories, 'parentId');
 
   const onClickDetail = (category: CategoryDto) => {
-    router.push({
+    myUniv.router.push({
       url: '/admin/main/settingService/services/:serviceId/edit',
       params: {
         categoryId: category.id,

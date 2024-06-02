@@ -18,6 +18,7 @@ interface SimpleItemsProps {
   state: any;
   path: string;
   options: { text: string; value: any }[];
+  onSelectionChange?: (values: any) => void;
 }
 
 export const ListBox = observer((props: SimpleItemsProps) => {
@@ -26,6 +27,7 @@ export const ListBox = observer((props: SimpleItemsProps) => {
     path = '',
     options = [],
     selectionMode = 'multiple',
+    onSelectionChange,
   } = props;
 
   const initialValues = get(state, path);
@@ -62,6 +64,7 @@ export const ListBox = observer((props: SimpleItemsProps) => {
 
   const handleSelectionChange: ListboxProps['onSelectionChange'] = keys => {
     const values = Array.from(keys);
+    onSelectionChange && onSelectionChange(values);
     localState.value = selectionMode === 'multiple' ? values : values[0];
     return values;
   };

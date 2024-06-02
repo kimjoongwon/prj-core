@@ -18,28 +18,29 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const MainLayout = (props: MainLayoutProps) => {
+const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
-  const app = useApp();
+  // const app = useApp();
 
   const onClickLeave = () => {
-    app.auth.logout();
+    myUniv.auth.logout();
 
-    app.router.replace({
+    myUniv.router.replace({
       url: '/admin/auth/login',
     });
   };
 
-  if (app.auth.status != AuthStatus.Authenticated) return <div>loading..</div>;
+  if (myUniv.auth.status != AuthStatus.Authenticated)
+    return <div>loading..</div>;
 
   return (
     <Navbar
       rightContents={
         <>
-          {/* <Suspense fallback={<Skeleton />}>
+          <Suspense fallback={<Skeleton />}>
             <AccessibleSpaceSelect />
-          </Suspense> */}
-          <Avatar name={app.auth.user?.email || 'test!'} />
+          </Suspense>
+          <Avatar name={myUniv.auth.user?.email || 'test!'} />
           <Button onClick={onClickLeave} color="danger" variant="flat">
             나가기
           </Button>
@@ -49,7 +50,7 @@ const MainLayout = (props: MainLayoutProps) => {
       {children}
     </Navbar>
   );
-};
+});
 
 const AccessibleSpaceSelect = observer(() => {
   const { data: queryData } = useGetAccessibleAllSpaceSuspense();
@@ -69,4 +70,4 @@ const AccessibleSpaceSelect = observer(() => {
   );
 });
 
-export default observer(MainLayout);
+export default MainLayout;

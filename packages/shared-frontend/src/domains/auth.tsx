@@ -3,6 +3,8 @@ import { LoginPayloadDto, TenantDto, TokenDto, UserDto } from '../model';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { login, refreshToken } from '../apis';
 import { MyUniv } from './myUniv';
+import { SpaceSelectModalContent } from '../components/modal/contents/SpaceSelect';
+import Button from '../components/ui/Button';
 
 export enum AuthStatus {
   LoggedOut = 'LoggedOut',
@@ -16,7 +18,7 @@ export enum AuthStatus {
 export class Auth {
   app: MyUniv;
   accessToken: string | undefined = undefined;
-  currentSpaceId: string | undefined = undefined;
+  currentSpaceId: string = localStorage.getItem('currentSpaceId') || '';
   currentTenant: TenantDto | undefined = undefined;
   user: UserDto | undefined = undefined;
   private _status: AuthStatus = AuthStatus.LoggedOut;
@@ -24,7 +26,6 @@ export class Auth {
   constructor(app: MyUniv) {
     makeAutoObservable(this, {}, { autoBind: true });
     this.app = app;
-    this.reactionOnChangeStatus();
   }
 
   set status(status: AuthStatus) {
@@ -35,50 +36,17 @@ export class Auth {
     return this._status;
   }
 
-  reactionOnChangeStatus() {
-    reaction(
-      () => this._status,
-      status => {
-        switch (status) {
-          case AuthStatus.LoggedOut:
-            this.logout();
-            this.app.router.push({ url: '/admin/auth/login' });
-            break;
-          case AuthStatus.LoggedIn:
-            if (!this.app.auth.accessToken) {
-              this.app.modal.openSpaceSelectModal();
-              return;
-            }
-            this.status = AuthStatus.Authenticated;
-            break;
-          case AuthStatus.TokenRefreshing:
-            if (!this.app.auth.accessToken) {
-              this.app.modal.openSpaceSelectModal();
-              return;
-            }
-            this.status = AuthStatus.Authenticated;
-            break;
-          case AuthStatus.Authenticated:
-            this.app.router.push({ url: '/admin/main' });
-            break;
-        }
-      },
-    );
-  }
-
   reactionOnSpaceIdChange() {
     reaction(
       () => this.currentSpaceId,
       newSpaceId => {
-        console.log('newSpaceId', newSpaceId);
-        try {
+        const currentSpaceId = localStorage.getItem('currentSpaceId');
+
+        if (!currentSpaceId) {
           const tenant = this.user?.tenants.find(
             tenant => tenant.spaceId === newSpaceId,
           );
-
           this.currentTenant = tenant;
-        } catch (error) {
-          alert(error);
         }
       },
     );
@@ -92,6 +60,7 @@ export class Auth {
     this.status = AuthStatus.TokenRefreshing;
     this.user = tokenDto.user;
     this.accessToken = tokenDto.accessToken;
+    this.status = AuthStatus.Authenticated;
   }
 
   onErrorRefreshToken(error: unknown) {
@@ -120,6 +89,19 @@ export class Auth {
     this.accessToken = tokenDto?.accessToken || '';
     this.user = tokenDto?.user;
     this._status = AuthStatus.LoggedIn;
+    this.app.modal.open = true;
+    this.app.modal.body = <SpaceSelectModalContent />;
+    this.app.modal.footer = (
+      <Button
+        onClick={() => {
+          this.app.modal.close();
+          this.app.auth.status = AuthStatus.Authenticated;
+          this.app.router.push({ url: '/admin/main' });
+        }}
+      >
+        완료
+      </Button>
+    );
   }
 
   onLoginError(error: unknown) {
@@ -131,7 +113,7 @@ export class Auth {
 
   logout() {
     this._status = AuthStatus.LoggedOut;
-    this.currentSpaceId = undefined;
+    this.currentSpaceId = '';
     this.currentTenant = undefined;
     this.user = undefined;
     this.accessToken = undefined;
