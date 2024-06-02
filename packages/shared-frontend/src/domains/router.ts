@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
   AppRouterInstance,
   NavigateOptions,
@@ -7,6 +7,8 @@ import {
 import { Path } from 'path-parser';
 import { Paths } from '../constants/Paths';
 import { isObjectEmpty } from '../utils';
+import { MyUniv } from './myUniv';
+
 interface CoCRouterArgs<T> {
   url: Paths;
   params?: T;
@@ -15,16 +17,21 @@ interface CoCRouterArgs<T> {
   prefetchOptions?: PrefetchOptions | undefined;
 }
 
-export class routerStore {
-  router: AppRouterInstance | null = null;
-  pathname: string = '';
+export class Router {
+  pathname: string = window.location.pathname;
 
-  constructor() {
+  constructor(
+    readonly app: MyUniv,
+    readonly nextRouter: AppRouterInstance,
+  ) {
     makeAutoObservable(this);
-  }
+    this.app = app;
+    this.nextRouter = nextRouter;
 
-  setRouter(router: AppRouterInstance) {
-    this.router = router;
+    reaction(
+      () => this.pathname,
+      pathname => this.setPathname(pathname),
+    );
   }
 
   getUrlWithParamsAndQueryString<T extends object>(
@@ -33,6 +40,7 @@ export class routerStore {
     queryString?: string,
   ) {
     const path = new Path(url);
+
     let pathWithParams = '';
 
     if (isObjectEmpty(params)) {
@@ -44,6 +52,9 @@ export class routerStore {
     if (queryString) {
       pathWithParams = pathWithParams + '?' + queryString;
     }
+
+    this.pathname = pathWithParams;
+
     return pathWithParams as Paths;
   }
 
@@ -55,8 +66,15 @@ export class routerStore {
       queryString,
     );
 
-    this.router?.push(urlWithParamsAndQueryString, options);
+    this.setPathname(urlWithParamsAndQueryString);
+
+    this.nextRouter?.push(urlWithParamsAndQueryString, options);
   }
+
+  setPathname(pathname: string) {
+    this.pathname = pathname;
+  }
+
   replace<T extends object>(cocRouterArgs: CoCRouterArgs<T>) {
     const { params, url, queryString, options } = cocRouterArgs;
 
@@ -66,14 +84,21 @@ export class routerStore {
       queryString,
     );
 
-    this.router?.replace(urlWithParamsAndQueryString, options);
+    this.setPathname(urlWithParamsAndQueryString);
+    this.nextRouter?.replace(urlWithParamsAndQueryString, options);
   }
+
   back() {
-    this.router?.back();
+    this.nextRouter?.back();
+    setTimeout(() => {
+      this.setPathname(window.location.pathname);
+    }, 500);
   }
+
   forward() {
-    this.router?.forward();
+    this.nextRouter?.forward();
+    setTimeout(() => {
+      this.setPathname(window.location.pathname);
+    }, 500);
   }
 }
-
-export const router = new routerStore();

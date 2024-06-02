@@ -4,19 +4,19 @@ import { ButtonProps } from '@nextui-org/react';
 import {
   CategoryDto,
   CategoryForm,
-  CreateCategoryDto,
+  CreateCategoryDto,ß
   FormLayout,
-  authStore,
+  myUniv,
   useCreateCategory,
+  useFindCategoryById,
   useGetAllService,
-  useGetCategoryById,
   useUpdateCategory,
 } from '@shared/frontend';
-import { router } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useParams } from 'next/navigation';
 import { categroiesPageState } from '../../_hooks/state';
 import { isEmpty } from 'lodash-es';
+import { Path } from 'path-parser';
 
 const CategoryDetailPage = observer(() => {
   const {
@@ -79,11 +79,13 @@ const useQueries = () => {
 
   const isEditMode = categoryId !== 'new';
 
-  const { data: queryData } = useGetCategoryById(categoryId, {
+  const { data: findCategoryByIdQueryData } = useFindCategoryById(categoryId, {
     query: {
       enabled: categoryId !== 'new',
     },
   });
+
+  const category = findCategoryByIdQueryData?.data;
 
   const { mutateAsync: updateCategory } = useUpdateCategory();
 
@@ -93,7 +95,7 @@ const useQueries = () => {
     createCategory,
     updateCategory,
     category: isEditMode
-      ? queryData?.data
+      ? category
       : {
           ancestorIds: [],
           name: '',
@@ -144,7 +146,7 @@ const useHandlers = (props: {
             : [...openedCategory?.ancestorIds, openedCategory.id],
           parentId: openedCategory.id || null,
           serviceId: userService?.id!,
-          spaceId: authStore.currentSpaceId!,
+          spaceId: myUniv?.auth.currentSpaceId!,
         },
       });
 
@@ -153,10 +155,12 @@ const useHandlers = (props: {
       console.error(error);
     }
 
-    router.back();
+    myUniv?.router.back();
   };
 
-  const onClickCancel = () => router.back();
+  const onClickCancel = () => {
+    myUniv?.router.back();
+  };
 
   return {
     onClickSave,

@@ -13,7 +13,6 @@ import { observer } from 'mobx-react-lite';
 import { useCategoriesPage } from './_hooks';
 import { v4 } from 'uuid';
 import { isEmpty } from 'lodash-es';
-import { toJS } from 'mobx';
 
 const CategoriesPage = observer(() => {
   const {

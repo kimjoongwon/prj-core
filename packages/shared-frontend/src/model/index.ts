@@ -20,6 +20,7 @@ export * from './createSignUpPayloadDto';
 export * from './findByPageOptions200';
 export * from './findByPageOptions200AllOf';
 export * from './findByPageOptionsParams';
+export * from './findCategoryById200AllOf';
 export * from './findGroupsByPageOptions200';
 export * from './findGroupsByPageOptions200AllOf';
 export * from './findGroupsByPageOptionsParams';

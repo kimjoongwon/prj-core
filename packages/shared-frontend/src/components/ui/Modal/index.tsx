@@ -6,20 +6,19 @@ import {
   ModalHeader,
   Modal as NextUIModal,
 } from '@nextui-org/react';
-import { action } from 'mobx';
-import { modalStore } from '../../../stores/modalStore';
+
+import { useApp } from '../../../providers/App';
 
 export const ModalMount = observer(() => {
+  const app = useApp();
+  const modal = app?.modal!;
+
   return (
-    <NextUIModal
-      isDismissable
-      onClose={action(() => (modalStore.open = false))}
-      isOpen={modalStore.open}
-    >
+    <NextUIModal isDismissable onClose={modal?.close} isOpen={modal?.open}>
       <ModalContent>
-        <ModalHeader>{modalStore.header}</ModalHeader>
-        <ModalBody>{modalStore.body}</ModalBody>
-        <ModalFooter>{modalStore.footer}</ModalFooter>
+        <ModalHeader>{modal?.header}</ModalHeader>
+        <ModalBody>{modal?.body}</ModalBody>
+        <ModalFooter>{modal?.footer}</ModalFooter>
       </ModalContent>
     </NextUIModal>
   );

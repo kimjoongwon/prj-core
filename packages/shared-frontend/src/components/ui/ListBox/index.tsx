@@ -4,27 +4,37 @@ import {
   ListboxItem,
   ListboxProps,
   ScrollShadow,
+  SelectionMode,
 } from '@nextui-org/react';
 import { get } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
 import { ReactNode } from 'react';
 import React from 'react';
 import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
+import { Message } from '../Message';
 
 interface SimpleItemsProps {
+  selectionMode?: SelectionMode;
   state: any;
   path: string;
   options: { text: string; value: any }[];
 }
 
 export const ListBox = observer((props: SimpleItemsProps) => {
-  const { state = {}, path = '', options = [] } = props;
+  const {
+    state = {},
+    path = '',
+    options = [],
+    selectionMode = 'multiple',
+  } = props;
+
   const initialValues = get(state, path);
+
   const { localState } = useMobxHookForm(initialValues, state, path);
 
   const topContent = React.useMemo(() => {
     if (!localState.value?.length) {
-      return null;
+      return <Message title="Info" message="선택된 항목이 없습니다." />;
     }
 
     return (
@@ -33,20 +43,26 @@ export const ListBox = observer((props: SimpleItemsProps) => {
         className="w-full flex py-0.5 px-2 gap-1"
         orientation="horizontal"
       >
-        {localState.value?.map((itemValue: any) => {
-          return (
-            <Chip key={itemValue}>
-              {options?.find(option => option.value === itemValue)?.text}
-            </Chip>
-          );
-        })}
+        {selectionMode === 'multiple' &&
+          localState.value?.map((itemValue: any) => {
+            return (
+              <Chip key={itemValue}>
+                {options?.find(option => option.value === itemValue)?.text}
+              </Chip>
+            );
+          })}
+        {selectionMode === 'single' && (
+          <Chip>
+            {options.find(option => option.value === localState.value)?.text}
+          </Chip>
+        )}
       </ScrollShadow>
     );
   }, [localState.value?.length]);
 
   const handleSelectionChange: ListboxProps['onSelectionChange'] = keys => {
     const values = Array.from(keys);
-    localState.value = values;
+    localState.value = selectionMode === 'multiple' ? values : values[0];
     return values;
   };
 
@@ -55,7 +71,7 @@ export const ListBox = observer((props: SimpleItemsProps) => {
       <Listbox
         className="w-full"
         topContent={topContent}
-        selectionMode="multiple"
+        selectionMode={selectionMode}
         items={options}
         variant="flat"
         classNames={{
@@ -72,7 +88,7 @@ export const ListBox = observer((props: SimpleItemsProps) => {
               textValue={item.value}
             >
               <div className="flex gap-2 items-center">
-                <span className="text-small">{item.value}</span>
+                <span className="text-small">{item.text}</span>
               </div>
             </ListboxItem>
           );
