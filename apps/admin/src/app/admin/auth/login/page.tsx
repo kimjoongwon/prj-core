@@ -22,7 +22,6 @@ const LoginPage = observer(() => {
   const state = useLocalObservable(() => defaultLoginFormObject);
 
   function onClickLogin() {
-    console.log(myUniv.auth);
     myUniv?.auth.login(state);
   }
 
