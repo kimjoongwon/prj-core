@@ -1,35 +1,12 @@
 'use client';
 
-import { ButtonProps } from '@nextui-org/react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import {
-  CategoryDto,
-  CategoryForm,
-  CreateCategoryDto,
-  FormLayout,
-} from '@shared/frontend';
+import { observer } from 'mobx-react-lite';
+import { CategoryForm, FormLayout } from '@shared/frontend';
 
 import { usePage } from './_hooks/usePage';
 
 const CategoryDetailPage = observer(() => {
-  const {
-    state,
-    handlers: { onClickCancel, onClickSave },
-  } = usePage();
-
-  const leftButtons: ButtonProps[] = [
-    {
-      onClick: onClickCancel,
-      children: '취소',
-    },
-  ];
-
-  const rightButtons: ButtonProps[] = [
-    {
-      children: '저장',
-      onClick: onClickSave,
-    },
-  ];
+  const { state, leftButtons, rightButtons } = usePage();
 
   return (
     <FormLayout
