@@ -55,11 +55,14 @@ export const useHandlers = (props: {
       categroiesPageState.openedCategory = category;
     }
 
-    router.push({
+    myUniv.router.push({
       url: '/admin/main/userService/categories/:categoryId/edit',
       params: {
         categoryId: 'new',
       },
+      queryString: JSON.stringify({
+        parentCategoryId: category?.id,
+      }),
     });
   };
 

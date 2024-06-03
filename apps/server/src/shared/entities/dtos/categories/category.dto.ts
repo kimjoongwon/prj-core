@@ -6,7 +6,7 @@ export class CategoryDto extends AbstractDto {
   @StringField()
   name: string;
 
-  @StringField({ isArray: true })
+  @StringField({ isArray: true, each: true })
   ancestorIds: string[];
 
   @StringField({ nullable: true })

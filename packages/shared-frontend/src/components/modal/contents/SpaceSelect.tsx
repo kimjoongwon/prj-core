@@ -18,14 +18,12 @@ export const SpaceSelectModalContent = observer(() => {
   };
 
   return (
-    <div>
-      <ListBox
-        onSelectionChange={handleSelectionChange}
-        selectionMode="single"
-        options={spaceOptions}
-        state={myUniv.auth}
-        path={'currentSpaceId'}
-      />
-    </div>
+    <ListBox
+      onSelectionChange={handleSelectionChange}
+      selectionMode="single"
+      options={spaceOptions}
+      state={myUniv.auth}
+      path={'currentSpaceId'}
+    />
   );
 });
