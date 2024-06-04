@@ -1,9 +1,11 @@
 import {
+  myUniv,
   useCreateCategory,
-  useFindCategoryById,
-  useGetAllService,
+  useFindCategoryByIdSuspense,
+  useGetAllServiceSuspense,
   useUpdateCategory,
 } from '@shared/frontend';
+
 import { useContext } from './useContext';
 
 interface Props {
@@ -12,34 +14,44 @@ interface Props {
 
 export const useQueries = (props: Props) => {
   const {
-    context: {
-      categoryId,
-      isEditMode,
-      isExistParentCategory,
-      parentCategoryId,
-    },
+    context: { categoryId, parentCategoryId },
   } = props;
 
-  const { data: findCategoryByIdQueryData } = useFindCategoryById(categoryId, {
-    query: { enabled: isEditMode },
-  });
+  const { data: findCategoryByIdQueryData } =
+    useFindCategoryByIdSuspense(categoryId);
 
-  const { data: findParentCategoryByIdQueryData } = useFindCategoryById(
+  const { data: findParentCategoryByIdQueryData } = useFindCategoryByIdSuspense(
     parentCategoryId || '',
-    { query: { enabled: isExistParentCategory } },
   );
+
+  const { data: services } = useGetAllServiceSuspense();
 
   const { mutateAsync: updateCategory } = useUpdateCategory();
 
   const { mutateAsync: createCategory } = useCreateCategory();
 
-  const { data: services } = useGetAllService();
+  const parentCategory = findParentCategoryByIdQueryData?.data;
+
+  const parentCategoryAncestorIds = parentCategory?.ancestorIds || [];
+
+  const ancestorIds = parentCategory?.id
+    ? parentCategoryAncestorIds.concat([parentCategory.id])
+    : [];
+
+  const userService = services?.find(service => service.name === 'USER');
+
+  const category = findCategoryByIdQueryData?.data || {
+    name: '',
+    ancestorIds,
+    parentId: parentCategory?.id,
+    serviceId: userService?.id,
+    spaceId: myUniv.auth.currentSpaceId,
+  };
 
   return {
-    userService: services?.find(service => service.name === 'USER'),
     createCategory,
     updateCategory,
+    category,
     parentCategory: findParentCategoryByIdQueryData?.data,
-    category: findCategoryByIdQueryData?.data,
   };
 };

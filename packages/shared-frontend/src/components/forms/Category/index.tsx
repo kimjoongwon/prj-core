@@ -14,6 +14,7 @@ interface CategoryFormProps {
 export const CategoryForm = observer((props: CategoryFormProps) => {
   const { state } = props;
 
+  console.log('state', state.name)
   return (
     <VStack>
       <Input

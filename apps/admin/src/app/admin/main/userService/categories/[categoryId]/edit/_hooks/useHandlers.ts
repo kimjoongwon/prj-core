@@ -1,8 +1,8 @@
 import { myUniv } from '@shared/frontend';
+
 import { useContext } from './useContext';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
-import { isEmpty } from 'lodash-es';
 
 export const useHandlers = (context: {
   queries: ReturnType<typeof useQueries>;
@@ -11,41 +11,18 @@ export const useHandlers = (context: {
 }) => {
   const {
     state,
-    queries: {
-      updateCategory,
-      createCategory,
-      userService,
-      category,
-      parentCategory,
-    },
-    context: { categoryId, isEditMode, isExistParentCategory },
+    queries: { updateCategory, createCategory },
+    context: { categoryId, isEditMode },
   } = context;
 
-  const onClickSave = async () => {
-    if (isEditMode) {
-      await updateCategory({
-        categoryId,
-        data: state.category!,
-      });
-      return;
-    }
+  const editNew = () => updateCategory({ categoryId, data: state.category! });
 
-    const parentCategoryAncestorIds = parentCategory?.ancestorIds || [];
-    const ancestorIds = parentCategory?.id
-      ? parentCategoryAncestorIds.concat([parentCategory.id])
-      : [];
+  const edit = () => createCategory({ data: state.category! });
 
-    await createCategory({
-      data: {
-        name: state.category?.name || '',
-        ancestorIds,
-        parentId: parentCategory?.id || null,
-        serviceId: userService?.id,
-        spaceId: myUniv?.auth.currentSpaceId,
-      },
-    });
+  const onClickSave = () => {
+    isEditMode ? editNew() : edit();
 
-    myUniv?.router.back();
+    myUniv.router.back();
   };
 
   const onClickCancel = () => {

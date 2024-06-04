@@ -55,14 +55,15 @@ export const useHandlers = (props: {
       categroiesPageState.openedCategory = category;
     }
 
+    const searchParams = new URLSearchParams();
+    searchParams.set('parentCategoryId', category?.id || '');
+
     myUniv.router.push({
       url: '/admin/main/userService/categories/:categoryId/edit',
       params: {
         categoryId: 'new',
       },
-      queryString: JSON.stringify({
-        parentCategoryId: category?.id,
-      }),
+      queryString: searchParams.toString(),
     });
   };
 

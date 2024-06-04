@@ -6,15 +6,19 @@ import { CategoryForm, FormLayout } from '@shared/frontend';
 import { usePage } from './_hooks/usePage';
 
 const CategoryDetailPage = observer(() => {
-  const { state, leftButtons, rightButtons } = usePage();
+  const { state, meta } = usePage();
+
+  if (!state.category) {
+    return;
+  }
 
   return (
     <FormLayout
       title="카테고리"
-      leftButtons={leftButtons}
-      rightButtons={rightButtons}
+      leftButtons={meta.form.leftButtons}
+      rightButtons={meta.form.rightButtons}
     >
-      <CategoryForm type="create" state={state.category!} />
+      <CategoryForm type="create" state={state.category} />
     </FormLayout>
   );
 });

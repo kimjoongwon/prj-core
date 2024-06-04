@@ -31,11 +31,13 @@ const CategoriesPage = observer(() => {
         </HStack>
       )}
       <List
+        className="p-2 space-x-1"
         horizontal
         data={relatedCategoryIds}
         renderItem={categoryId => {
           return (
             <List
+              className="p-2 border-1"
               key={v4()}
               placeholder={<Placeholder />}
               data={categoriesGroupedByParentId?.[categoryId] || []}
