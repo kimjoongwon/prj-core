@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { AXIOS_INSTANCE } from '../../libs/customAxios';
+import { myUniv } from '../App';
 
 interface InitContainerProps {
   children: React.ReactNode;
@@ -33,9 +35,27 @@ function getQueryClient() {
   }
 }
 
+AXIOS_INSTANCE.interceptors.request.use(
+  function (config) {
+    console.log('앙?');
+    const token = `Bearer ${myUniv?.auth?.accessToken}`;
+    const tenantId = myUniv?.auth?.user?.tenants?.[0]?.id || '';
+    // Do something before request is sent
+    config.headers.Authorization = token;
+    config.headers.tenantId = tenantId;
+
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  },
+);
+
 export const ReactQueryProvider = (props: InitContainerProps) => {
   const { children } = props;
   const queryClient = getQueryClient();
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}
