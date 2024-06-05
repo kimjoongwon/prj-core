@@ -3,7 +3,6 @@ import React, { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { MyUniv } from '../../domains/myUniv';
-import { isEmpty } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
 import { usePrefechInitialData } from '../../hooks';
 
@@ -32,8 +31,6 @@ export const AppProvider = observer(({ children }: AppProviderProps) => {
   if (!myUniv.isInitialized) {
     return <div>app initializing....</div>;
   }
-
-  console.log('안일어나겠지?')
 
   return <AppContext.Provider value={myUniv}>{children}</AppContext.Provider>;
 });
