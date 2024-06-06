@@ -10,18 +10,16 @@ import {
   VStack,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { useCategoriesPage } from './_hooks';
 import { v4 } from 'uuid';
 import { isEmpty } from 'lodash-es';
+import { usePage } from './_hooks/usePage';
 
 const CategoriesPage = observer(() => {
   const {
-    onClickCard,
-    onClickCreate,
-    onClickDelete,
     categoriesGroupedByParentId,
     relatedCategoryIds,
-  } = useCategoriesPage();
+    meta: { onClickCard, onClickCreate, onClickDelete },
+  } = usePage();
 
   return (
     <VStack className="w-full p-4 border-1">

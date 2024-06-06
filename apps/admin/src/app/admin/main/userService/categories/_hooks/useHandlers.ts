@@ -1,28 +1,21 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { groupBy } from 'lodash-es';
-import { useParams } from 'next/navigation';
 import { useQueries } from './useQueries';
-import {
-  CategoryDto,
-  getGetCategoriesQueryKey,
-  myUniv,
-} from '@shared/frontend';
-import { categroiesPageState } from './state';
-import { useCallback } from 'react';
+import { CategoryDto, myUniv } from '@shared/frontend';
+import { useContext } from './useContext';
 import { useProps } from './useProps';
+import { useState } from './useState';
 
 export const useHandlers = (props: {
+  context: ReturnType<typeof useContext>;
   queries: ReturnType<typeof useQueries>;
   props: ReturnType<typeof useProps>;
+  state: ReturnType<typeof useState>;
 }) => {
   const {
-    queries: { categories, updateCategory },
-    props: { relatedCategoryIds },
+    queries: { updateCategory, invalidateGetCategories },
+    props: { relatedCategoryIds, categoriesGroupedByParentId },
+    state,
+    context: { serviceId, queryString },
   } = props;
-  const { serviceId } = useParams();
-  const queryClient = useQueryClient();
-
-  const categoriesGroupedByParentId = groupBy(categories, 'parentId');
 
   const onClickDetail = (category: CategoryDto) => {
     myUniv.router.push({
@@ -34,36 +27,30 @@ export const useHandlers = (props: {
     });
   };
 
-  const onClickCard = (category: CategoryDto) => {
+  const onClickCard = (selectedCategory: CategoryDto) => {
     const categoriesByParentId =
-      categoriesGroupedByParentId?.[category.parentId!];
+      categoriesGroupedByParentId?.[selectedCategory.parentId!];
 
     if (relatedCategoryIds.length > 2) {
       return;
     }
 
-    categoriesByParentId?.forEach(_category => {
-      if (_category.id === category.id) {
-        categroiesPageState.openedCategory = category;
+    categoriesByParentId?.forEach(category => {
+      if (category.id === selectedCategory.id) {
+        state.selectedCategory = selectedCategory;
       }
     });
   };
 
   const onClickCreate = async (category?: CategoryDto) => {
     if (category) {
-      categroiesPageState.form.parentId = category.id;
-      categroiesPageState.openedCategory = category;
+      state.selectedCategory = category;
     }
-
-    const searchParams = new URLSearchParams();
-    searchParams.set('parentCategoryId', category?.id || '');
 
     myUniv.router.push({
       url: '/admin/main/userService/categories/:categoryId/edit',
-      params: {
-        categoryId: 'new',
-      },
-      queryString: searchParams.toString(),
+      params: { categoryId: 'new' },
+      queryString,
     });
   };
 
@@ -76,17 +63,13 @@ export const useHandlers = (props: {
       },
     });
 
-    categroiesPageState.openedCategory = {} as CategoryDto;
-
-    queryClient.invalidateQueries({
-      queryKey: getGetCategoriesQueryKey(),
-    });
+    invalidateGetCategories();
   };
 
   return {
     onClickCreate,
-    onClickDetail: useCallback(onClickDetail, [serviceId]),
-    onClickCard: useCallback(onClickCard, [categoriesGroupedByParentId]),
+    onClickDetail,
+    onClickCard,
     onClickDelete,
   };
 };

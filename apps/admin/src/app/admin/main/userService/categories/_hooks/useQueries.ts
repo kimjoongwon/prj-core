@@ -1,25 +1,27 @@
 import {
+  getGetCategoriesQueryKey,
   useCreateCategory,
-  useGetAllService,
-  useGetCategories,
+  useGetAllServiceSuspense,
+  useGetCategoriesSuspense,
   useUpdateCategory,
 } from '@shared/frontend';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useQueries = () => {
-  const { data: services } = useGetAllService();
-  const { data: queryData, isLoading } = useGetCategories();
-  const { mutateAsync: createCategory, isSuccess } = useCreateCategory();
+  const queryClient = useQueryClient();
+  const { data: services } = useGetAllServiceSuspense();
+  const { data: queryData } = useGetCategoriesSuspense();
+  const { mutateAsync: createCategory } = useCreateCategory();
   const { mutateAsync: updateCategory } = useUpdateCategory();
-  const userService = services?.find(service => service.name === 'USER');
-  console.log('queryData', queryData);
 
   return {
-    isSuccess,
     createCategory,
     updateCategory,
-    categories: queryData?.data.filter(
-      category => category.serviceId === userService?.id,
-    ),
-    isLoading,
+    services,
+    categories: queryData.data || [],
+    invalidateGetCategories: () =>
+      queryClient.invalidateQueries({
+        queryKey: getGetCategoriesQueryKey(),
+      }),
   };
 };
