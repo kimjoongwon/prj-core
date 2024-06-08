@@ -21,7 +21,7 @@ function makeQueryClient() {
   });
 }
 
-function getQueryClient() {
+export function getQueryClient() {
   if (typeof window === 'undefined') {
     // Server: always make a new query client
     return makeQueryClient();
@@ -37,7 +37,6 @@ function getQueryClient() {
 
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
-    console.log('앙?');
     const token = `Bearer ${myUniv?.auth?.accessToken}`;
     const tenantId = myUniv?.auth?.user?.tenants?.[0]?.id || '';
     // Do something before request is sent

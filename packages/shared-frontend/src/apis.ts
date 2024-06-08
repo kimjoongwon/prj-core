@@ -1718,7 +1718,6 @@ export const useFindGroupsByPageOptions = <
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getFindGroupsByPageOptionsQueryOptions(params, options);
-
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
   };

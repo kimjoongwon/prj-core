@@ -12,13 +12,12 @@ export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
     const setterDisposer = reaction(
       () => localState.value,
       value => {
-        eval(`state.${path} = value`);
-        // set(state, path, value);
+        set(state, path, value);
       },
     );
 
     const getterDisposer = reaction(
-      () => eval(`state.${path}`),
+      () => get(state, path),
       value => {
         localState.value = value;
       },

@@ -1,33 +1,16 @@
 'use client';
 
-import {
-  DataGrid,
-  DateCell,
-  GroupDto,
-  useFindGroupsByPageOptions,
-} from '@shared/frontend';
-import { createColumnHelper } from '@tanstack/react-table';
+import { DataGrid } from '@shared/frontend';
+
 import { observer } from 'mobx-react-lite';
+import { usePage } from './_hooks/usePage';
 
 const UserGroupsPage = () => {
-  const { data: findGroupsByPageOptionsQueryData } =
-    useFindGroupsByPageOptions();
+  const {
+    dataGrid: { columns, data },
+  } = usePage();
 
-  const groups = findGroupsByPageOptionsQueryData?.data || [];
-
-  const columnHelper = createColumnHelper<GroupDto>();
-
-  const columns = [
-    columnHelper.accessor('name', {
-      header: '그룹명',
-    }),
-    columnHelper.accessor('createdAt', {
-      header: '생성일',
-      cell: DateCell,
-    }),
-  ];
-
-  return <DataGrid data={groups} columns={columns} />;
+  return <DataGrid data={data} columns={columns} />;
 };
 
 export default observer(UserGroupsPage);
