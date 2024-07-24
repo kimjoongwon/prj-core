@@ -31,6 +31,7 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
   } = props;
   const localState = useLocalObservable<CalendarLocalState>(() => ({
     calendarDate: dayjs().startOf('D').toDate(),
+    // @ts-ignore
     values: get(state, path) || [],
   }));
 
@@ -49,6 +50,7 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
     const disposer = reaction(
       () => get(state, path),
       values => {
+        // @ts-ignore
         localState.values = values || [];
       },
     );

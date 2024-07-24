@@ -19,9 +19,10 @@ export const MultiSelect = observer(
   <T extends object>(props: SelectProps<T>) => {
     const { state = {}, path = '', options = [], ...rest } = props;
 
-    const defaultValues = get(state, path) || [];
+    const defaultValues = get(state, path) || ([] as string[]);
 
     const localState = useLocalObservable<{ value: string[] }>(() => ({
+      // @ts-ignore
       value: defaultValues,
     }));
 

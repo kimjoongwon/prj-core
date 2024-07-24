@@ -19,6 +19,7 @@ import {
 } from '@shared';
 import bcrypt from 'bcrypt';
 import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
+import { match } from 'ts-pattern';
 
 @Injectable()
 export class AuthService {

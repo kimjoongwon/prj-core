@@ -3,7 +3,6 @@ export * from './decorators';
 export * from './entities';
 export * from './filters';
 export * from './middlewares';
-export * from './pipes';
 export * from './constants';
 export * from './interceptor';
 export * from './providers';
