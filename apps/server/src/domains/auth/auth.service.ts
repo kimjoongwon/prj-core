@@ -1,9 +1,10 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { TokenPayloadDto } from './dtos/token-payload.dto';
 import { PasswordService } from './services/password.service';
 import { ConfigService } from '@nestjs/config';
@@ -16,6 +17,7 @@ import {
   SpacesService,
   TokenType,
   UsersService,
+  goTryRawSync,
 } from '@shared';
 import bcrypt from 'bcrypt';
 import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
@@ -179,6 +181,7 @@ export class AuthService {
 
   private generateRefreshToken(payload: { userId: string }): string {
     const authConfig = this.config.get<AuthConfig>('auth');
+    // @ts-ignore
     return this.jwtService.sign(payload, {
       secret: authConfig?.secret,
       expiresIn: authConfig?.refresh,
@@ -186,26 +189,44 @@ export class AuthService {
   }
 
   async validateToken(token: string) {
-    let payload = null;
+    const { secret } = this.config.get<AuthConfig>('auth');
 
-    const authConfig = this.config.get<AuthConfig>('auth');
+    const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(
+      () => this.jwtService.verify(token, { secret }),
+    );
 
-    try {
-      payload = this.jwtService.verify(token, {
-        secret: authConfig.secret,
-      });
-    } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        throw new BadRequestException(error.message);
-      }
-      throw new BadRequestException('Invalid token');
-    }
+    match(err.name)
+      .with(
+        'TokenExpiredError',
+        () => new BadRequestException('토튼 만료 에러'),
+      )
+      .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
+      .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
+      .otherwise(
+        () =>
+          new InternalServerErrorException(`알 수 없는 에러: ${err.message}`),
+      );
 
-    const user = await this.usersService.findById(payload.userId);
+    // err;
+    // if (err) throw new BadRequestException('Invalid token');
 
-    return {
-      ...this.generateTokens({ userId: payload.userId }),
-      user,
-    };
+    // if (err)
+    //   try {
+    //     payload = this.jwtService.verify(token, {
+    //       secret: authConfig.secret,
+    //     });
+    //   } catch (error) {
+    //     if (error.name === 'TokenExpiredError') {
+    //       throw new BadRequestException(error.message);
+    //     }
+    //     throw new BadRequestException('Invalid token');
+    //   }
+
+    // const user = await this.usersService.findById(payload.userId);
+
+    // return {
+    //   ...this.generateTokens({ userId: payload.userId }),
+    //   user,
+    // };
   }
 }
