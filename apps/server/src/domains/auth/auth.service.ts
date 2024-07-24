@@ -65,9 +65,7 @@ export class AuthService {
     const { profile, user } = signUpDto;
 
     await this.prisma.$transaction(async (tx) => {
-      const hashedPassword = await this.passwordService.hashPassword(
-        user.password,
-      );
+      const hashedPassword = await this.passwordService.hashPassword(user.password);
 
       const newUser = await tx.user.create({
         data: {
@@ -123,10 +121,7 @@ export class AuthService {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
 
-    const passwordValid = await this.passwordService.validatePassword(
-      password,
-      user.password,
-    );
+    const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {
       throw new BadRequestException('Invalid password');
@@ -143,10 +138,7 @@ export class AuthService {
     };
   }
 
-  validateHash(
-    password: string | undefined,
-    hash: string | undefined | null,
-  ): Promise<boolean> {
+  validateHash(password: string | undefined, hash: string | undefined | null): Promise<boolean> {
     if (!password || !hash) {
       return Promise.resolve(false);
     }
@@ -154,10 +146,7 @@ export class AuthService {
     return bcrypt.compare(password, hash);
   }
 
-  async createAccessToken(data: {
-    role: RoleType;
-    userId: string;
-  }): Promise<TokenPayloadDto> {
+  async createAccessToken(data: { role: RoleType; userId: string }): Promise<TokenPayloadDto> {
     return {
       expiresIn: 3,
       accessToken: await this.jwtService.signAsync({
@@ -191,21 +180,17 @@ export class AuthService {
   async validateToken(token: string) {
     const { secret } = this.config.get<AuthConfig>('auth');
 
-    const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(
-      () => this.jwtService.verify(token, { secret }),
+    const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(() =>
+      this.jwtService.verify(token, { secret }),
     );
 
-    match(err.name)
-      .with(
-        'TokenExpiredError',
-        () => new BadRequestException('토튼 만료 에러'),
-      )
+    const error = match(err.name)
+      .with('TokenExpiredError', () => new BadRequestException('토튼 만료 에러'))
       .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
       .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
-      .otherwise(
-        () =>
-          new InternalServerErrorException(`알 수 없는 에러: ${err.message}`),
-      );
+      .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err.message}`));
+
+    if (error instanceof Error) throw error;
 
     // err;
     // if (err) throw new BadRequestException('Invalid token');
