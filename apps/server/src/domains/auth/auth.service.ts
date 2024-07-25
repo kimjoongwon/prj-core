@@ -5,18 +5,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
-import { TokenPayloadDto } from './dtos/token-payload.dto';
 import { PasswordService } from './services/password.service';
 import { ConfigService } from '@nestjs/config';
 import { TokenDto } from './dtos/token.dto';
 import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
-  RoleType,
   RolesService,
   SpacesService,
   TokenService,
-  TokenType,
   UsersService,
   goTryRawSync,
 } from '@shared';
@@ -178,24 +175,5 @@ export class AuthService {
       .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err.message}`));
 
     return payload;
-
-    // if (err)
-    //   try {
-    //     payload = this.jwtService.verify(token, {
-    //       secret: authConfig.secret,
-    //     });
-    //   } catch (error) {
-    //     if (error.name === 'TokenExpiredError') {
-    //       throw new BadRequestException(error.message);
-    //     }
-    //     throw new BadRequestException('Invalid token');
-    //   }
-
-    // const user = await this.usersService.findById(payload.userId);
-
-    // return {
-    //   ...this.generateTokens({ userId: payload.userId }),
-    //   user,
-    // };
   }
 }
