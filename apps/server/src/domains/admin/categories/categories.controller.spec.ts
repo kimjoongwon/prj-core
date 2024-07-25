@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoriesController } from './categories.controller';
-import { CategoriesService } from '../../../shared/entities/services/categories/categories.service';
+import { CategoriesService } from '../../../shared/entities/_services/categories/categories.service';
 import { PrismaService } from 'nestjs-prisma';
 
 describe('CategoriesController', () => {

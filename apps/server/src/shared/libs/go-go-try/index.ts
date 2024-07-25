@@ -45,7 +45,7 @@ export function goTrySync<T>(value: () => T) {
 
 export function goTryRaw<E = unknown, T = unknown>(value: PromiseLike<T>) {
   return Promise.resolve(value)
-    .then((value) => [undefined, value] as const)
+    .then((value) => [undefined as E, value] as const)
     .catch((err) => [err as E, undefined] as const);
 }
 

@@ -1,36 +1,24 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpStatus,
-  HttpCode,
-  Get,
-  Res,
-  Req,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AccessToken, Public, UserDto } from '@shared';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
+import { AccessToken, Public, TokenService, UserDto } from '@shared';
 
 @ApiTags('auth')
 @Controller()
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+  ) {}
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Post('login')
-  async login(
-    @Body() loginDto: LoginPayloadDto,
-    @Res({ passthrough: true }) res,
-  ) {
-    const { accessToken, refreshToken, user } =
-      await this.authService.login(loginDto);
-
-    res.cookie('refreshToken', refreshToken, { httpOnly: true });
+  async login(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
+    const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+    this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
 
     return {
       accessToken,
@@ -48,22 +36,22 @@ export class AuthController {
 
   @Public()
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
-  @Get('refresh-token')
-  async refreshToken(@Req() req) {
-    const oldRefreshToken = req.cookies?.refreshToken;
-    if (!oldRefreshToken) {
-      throw new UnauthorizedException('Invalid token');
-    }
+  @Get('token')
+  async getToken(@Req() req) {
+    const refreshToken = this.tokenService.getTokenFromRequest(req, 'refreshToken');
 
-    const { accessToken, refreshToken, user } =
-      await this.authService.validateToken(oldRefreshToken);
+    const { userId } = await this.authService.validateToken(refreshToken);
 
-    req.res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-    });
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      this.tokenService.generateTokens({
+        userId,
+      });
+
+    const user = await this.getCurrentUser(newAccessToken);
 
     return {
-      accessToken,
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
       user,
     };
   }
@@ -71,9 +59,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-  })
+  @ApiResponse({ status: HttpStatus.CREATED })
   async signUpUser(@Body() signUpDto: SignUpPayloadDto) {
     return this.authService.signUpUser(signUpDto);
   }

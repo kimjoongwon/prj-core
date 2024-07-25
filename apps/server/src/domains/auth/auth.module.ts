@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
-import { AuthConfig, RolesService, SpacesService, UsersService } from '@shared';
+import { AuthConfig, RolesService, SpacesService, TokenService, UsersService } from '@shared';
 
 import { PasswordService } from './services';
 
@@ -28,6 +28,7 @@ import { JwtStrategy, LocalStrategy } from './strategies';
   ],
   controllers: [AuthController],
   providers: [
+    TokenService,
     PasswordService,
     RolesService,
     UsersService,

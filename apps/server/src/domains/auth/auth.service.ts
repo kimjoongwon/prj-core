@@ -15,6 +15,7 @@ import {
   RoleType,
   RolesService,
   SpacesService,
+  TokenService,
   TokenType,
   UsersService,
   goTryRawSync,
@@ -33,7 +34,28 @@ export class AuthService {
     private passwordService: PasswordService,
     private config: ConfigService,
     private prisma: PrismaService,
+    private tokenService: TokenService,
   ) {}
+
+  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user'> {
+    return {
+      accessToken: this.generateAccessToken(payload),
+      refreshToken: this.generateRefreshToken(payload),
+    };
+  }
+
+  generateAccessToken(payload: { userId: string }): string {
+    return this.jwtService.sign(payload);
+  }
+
+  generateRefreshToken(payload: { userId: string }): string {
+    const authConfig = this.config.get<AuthConfig>('auth');
+    // @ts-ignore
+    return this.jwtService.sign(payload, {
+      secret: authConfig?.secret,
+      expiresIn: authConfig?.refresh,
+    });
+  }
 
   async getCurrentUser(accessToken: string) {
     let userId: string;
@@ -93,9 +115,7 @@ export class AuthService {
         },
       });
 
-      return this.generateTokens({
-        userId: newUser.id,
-      });
+      return this.tokenService.generateTokens({ userId: newUser.id });
     });
   }
 
@@ -127,9 +147,7 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    const { accessToken, refreshToken } = this.generateTokens({
-      userId: user.id,
-    });
+    const { accessToken, refreshToken } = this.generateTokens({ userId: user.id });
 
     return {
       accessToken,
@@ -146,54 +164,20 @@ export class AuthService {
     return bcrypt.compare(password, hash);
   }
 
-  async createAccessToken(data: { role: RoleType; userId: string }): Promise<TokenPayloadDto> {
-    return {
-      expiresIn: 3,
-      accessToken: await this.jwtService.signAsync({
-        userId: data.userId,
-        type: TokenType.ACCESS_TOKEN,
-        role: data.role,
-      }),
-    };
-  }
-
-  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user'> {
-    return {
-      accessToken: this.generateAccessToken(payload),
-      refreshToken: this.generateRefreshToken(payload),
-    };
-  }
-
-  private generateAccessToken(payload: { userId: string }): string {
-    return this.jwtService.sign(payload);
-  }
-
-  private generateRefreshToken(payload: { userId: string }): string {
-    const authConfig = this.config.get<AuthConfig>('auth');
-    // @ts-ignore
-    return this.jwtService.sign(payload, {
-      secret: authConfig?.secret,
-      expiresIn: authConfig?.refresh,
-    });
-  }
-
-  async validateToken(token: string) {
+  validateToken(token: string) {
     const { secret } = this.config.get<AuthConfig>('auth');
 
     const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(() =>
       this.jwtService.verify(token, { secret }),
     );
 
-    const error = match(err.name)
+    match(err.name)
       .with('TokenExpiredError', () => new BadRequestException('토튼 만료 에러'))
       .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
       .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
       .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err.message}`));
 
-    if (error instanceof Error) throw error;
-
-    // err;
-    // if (err) throw new BadRequestException('Invalid token');
+    return payload;
 
     // if (err)
     //   try {
