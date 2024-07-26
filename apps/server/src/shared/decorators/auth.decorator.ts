@@ -4,7 +4,6 @@ import { RoleType } from '../constants';
 import { Public } from './public.decorator';
 
 export function Auth(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   roles: RoleType[] = [],
   options?: Partial<{ public: boolean }>,
 ): MethodDecorator {

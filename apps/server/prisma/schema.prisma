@@ -212,6 +212,15 @@ model Ability {
   subject   Subject        @relation(fields: [subjectId], references: [id])
 }
 
+model Presence {
+  id        String    @id @default(cuid())
+  userId    String
+  tenantId  String
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
 // 특정 role과 특정 subject(page)의 가지고 ability를 전부 가져옵니다.
 // 그리고 sujectId를 가진 모든 subject의 pages를 가져옵니다.
 // const abilities = findByRoleId(user.roleId)
