@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoriesController } from './categories.controller';
-import { CategoriesService } from '../../../shared/entities/_services/categories/categories.service';
 import { PrismaService } from 'nestjs-prisma';
+import { CategoriesService } from '@shared';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CategoriesController', () => {
   let controller: CategoriesController;

@@ -1,10 +1,11 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 model User {
@@ -43,19 +44,6 @@ model Category {
   classifications Classification[]
 }
 
-model Group {
-  id          String       @id @default(cuid())
-  name        String
-  spaceId     String
-  serviceId   String
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?    @db.Timestamptz(6)
-  service     Service      @relation(fields: [serviceId], references: [id])
-  space       Space        @relation(fields: [spaceId], references: [id])
-  assignments Assignment[]
-}
-
 enum SERVICE_NAME {
   USER
   SPACE
@@ -74,40 +62,6 @@ model Service {
   groups          Group[]
 }
 
-model Assignment {
-  id            String    @id @default(cuid())
-  groupId       String
-  serviceId     String
-  serviceItemId String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt     DateTime? @db.Timestamptz(6)
-  group         Group     @relation(fields: [groupId], references: [id])
-  service       Service   @relation(fields: [serviceId], references: [id])
-}
-
-model Role {
-  id        String    @id @default(cuid())
-  name      Roles     @default(USER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-  tenants   Tenant[]
-}
-
-model Tenant {
-  id        String    @id @default(cuid())
-  userId    String
-  spaceId   String
-  roleId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-  role      Role      @relation(fields: [roleId], references: [id])
-  space     Space     @relation(fields: [spaceId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
-}
-
 model Classification {
   id            String    @id @default(cuid())
   serviceId     String
@@ -120,20 +74,9 @@ model Classification {
   category      Category  @relation(fields: [categoryId], references: [id])
 }
 
-model Space {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-  tenants   Tenant[]
-  groups    Group[]
-}
-
 model EmailTemplate {
   id        String    @id @default(cuid())
   name      String    @unique
-  subject   String
   content   String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -191,9 +134,26 @@ model Reservation {
   deletedAt      DateTime?    @db.Timestamptz(6)
 }
 
+model Presence {
+  id       String @id @default(cuid())
+  tenantId String
+  userId   String
+}
+
+model Role {
+  id        String    @id @default(cuid())
+  name      Roles     @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
+  abilities Ability[]
+}
+
 model Subject {
   id        String    @id @default(cuid())
   name      String    @unique
+  fields    Json[]    @db.JsonB()
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
@@ -201,55 +161,71 @@ model Subject {
 }
 
 model Ability {
-  id        String         @id @default(cuid())
-  type      AbilityTypes
-  roleId    String
-  action    AbilityActions
-  subjectId String
-  createdAt DateTime       @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?      @updatedAt @db.Timestamptz(6)
-  deletedAt DateTime?      @db.Timestamptz(6)
-  subject   Subject        @relation(fields: [subjectId], references: [id])
+  id          String         @id @default(cuid())
+  type        AbilityTypes
+  roleId      String
+  action      AbilityActions
+  subjectId   String
+  description String?
+  conditions  Json?          @db.JsonB()
+  createdAt   DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?      @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?      @db.Timestamptz(6)
+  subject     Subject        @relation(fields: [subjectId], references: [id])
+  role        Role           @relation(fields: [roleId], references: [id])
 }
 
-model Presence {
-  id      String @id @default(cuid())
-  spaceId String
-  userId  String
-}
-
-// 특정 role과 특정 subject(page)의 가지고 ability를 전부 가져옵니다.
-// 그리고 sujectId를 가진 모든 subject의 pages를 가져옵니다.
-// const abilities = findByRoleId(user.roleId)
-// const subjectIds = abilities.find((ability) => ability.subjectId === page.subjectId)
-// const pages = findByIds(subjectIds)
-// pages.map((page) => can('READ', Page, {path: page.path}))
-
-// 이렇게 능력을 만든다.
-
-// 만약 get요청이 오면
-// ability = createForUser(user)
-// const paths = path.filter(path => ability.can('READ', Page, {path: page.path}))
-
-// return paths
-
-model Page {
+model Tenant {
   id        String    @id @default(cuid())
-  name      String    @unique
-  pathname  String    @unique
-  subjectId String
+  userId    String
+  spaceId   String
+  roleId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
+  space     Space     @relation(fields: [spaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  role      Role      @relation(fields: [roleId], references: [id])
 }
 
-enum SubjectConditions {
-  Equal
-  GreaterThan
-  GreaterThanOrEqual
-  LessThan
-  LessThanOrEqual
-  In
+model Space {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+  tenants   Tenant[]
+  groups    Group[]
+}
+
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  spaceId     String
+  serviceId   String
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime?    @db.Timestamptz(6)
+  service     Service      @relation(fields: [serviceId], references: [id])
+  space       Space        @relation(fields: [spaceId], references: [id])
+  assignments Assignment[]
+}
+
+model Assignment {
+  id            String    @id @default(cuid())
+  groupId       String
+  serviceId     String
+  serviceItemId String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt     DateTime? @db.Timestamptz(6)
+  group         Group     @relation(fields: [groupId], references: [id])
+  service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+enum EmailTemplates {
+  REGISTER
+  FORGET_PASSWORD
 }
 
 enum AbilityActions {
@@ -263,11 +239,6 @@ enum AbilityActions {
 enum AbilityTypes {
   CAN
   CAN_NOT
-}
-
-enum EmailTemplates {
-  REGISTER
-  FORGET_PASSWORD
 }
 
 enum Roles {

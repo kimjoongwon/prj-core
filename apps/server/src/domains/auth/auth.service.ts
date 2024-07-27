@@ -13,8 +13,10 @@ import {
   AuthConfig,
   RolesService,
   SpacesService,
+  TokenPayloadDto,
   TokenService,
   UsersService,
+  goTryRaw,
   goTryRawSync,
 } from '@shared';
 import bcrypt from 'bcrypt';
@@ -47,7 +49,6 @@ export class AuthService {
 
   generateRefreshToken(payload: { userId: string }): string {
     const authConfig = this.config.get<AuthConfig>('auth');
-    // @ts-ignore
     return this.jwtService.sign(payload, {
       secret: authConfig?.secret,
       expiresIn: authConfig?.refresh,
@@ -55,21 +56,16 @@ export class AuthService {
   }
 
   async getCurrentUser(accessToken: string) {
-    let userId: string;
+    const [err, { userId }] = goTryRawSync<Error, TokenPayloadDto>(() =>
+      this.jwtService.verify<{ userId: string }>(accessToken),
+    );
+    if (err) throw new BadRequestException('Invalid token');
 
-    try {
-      userId = this.jwtService.verify<{ userId: string }>(accessToken)?.userId;
-    } catch (error) {
-      throw new BadRequestException('Invalid token');
-    }
-
-    const user = await this.usersService.findById(userId);
-
-    return user;
+    return this.usersService.findById(userId);
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findOneByEmail(email);
+    const user = await this.usersService.findUniqueByEmail(email);
 
     const isPasswordValid = await this.validateHash(password, user?.password);
 

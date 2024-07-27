@@ -15,7 +15,7 @@ export class GroupsService {
     return this.groupsRepository.create({ data: createGroupDto });
   }
 
-  async findGroupsByPageOptions(pageOptions: GroupPageOptionsDto) {
+  async getGroupsByPageOptions(pageOptions: GroupPageOptionsDto) {
     const groups = await this.groupsRepository.findGroupsByPageOptions(pageOptions);
 
     const count = await this.groupsRepository.count(pageOptions);

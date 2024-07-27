@@ -39,9 +39,8 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, { isArray: true })
   @Get()
-  async findGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
-    const { count, groups } =
-      await this.groupsService.findGroupsByPageOptions(pageOptions);
+  async getGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
+    const { count, groups } = await this.groupsService.getGroupsByPageOptions(pageOptions);
 
     return new ResponseEntity(
       HttpStatus.OK,
@@ -74,10 +73,7 @@ export class GroupsController {
     type: GroupDto,
   })
   @Patch(':groupId')
-  updateGroupById(
-    @Param('groupId') groupId: string,
-    @Body() updateGroupDto: UpdateGroupDto,
-  ) {
+  updateGroupById(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupsService.updateById(groupId, updateGroupDto);
   }
 

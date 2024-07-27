@@ -5,7 +5,7 @@ import { PrismaService } from 'nestjs-prisma';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findOneByEmail(email: string) {
+  async findUniqueByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
     });
