@@ -34,6 +34,7 @@ export * from './findAll200';
 export * from './findAll200AllOf';
 export * from './findAllAblity200';
 export * from './findAllAblity200AllOf';
+export * from './findAllAblityParams';
 export * from './findAllParams';
 export * from './findByPageOptions200';
 export * from './findByPageOptions200AllOf';

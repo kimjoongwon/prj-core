@@ -18,7 +18,7 @@ export class AbilityDto extends AbstractDto implements Ability {
   subjectId: string;
 
   @ApiProperty({
-    nullable: true,
+    required: false,
     description: 'A JSON object with a nested structure',
     type: Object,
     example: { createdBy: '1' },

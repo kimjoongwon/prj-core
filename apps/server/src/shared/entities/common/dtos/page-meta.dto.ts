@@ -1,3 +1,4 @@
+import { PaginationMananger } from 'src/shared/utils';
 import { NumberField, BooleanField } from '../../../decorators';
 import { PageOptionsDto } from './page-option.dto';
 
@@ -8,7 +9,7 @@ interface IPageMetaDtoParameters {
 
 export class PageMetaDto {
   @NumberField()
-  readonly page: number;
+  readonly skip: number;
 
   @NumberField()
   readonly take: number;
@@ -26,11 +27,13 @@ export class PageMetaDto {
   readonly hasNextPage: boolean;
 
   constructor({ pageOptionsDto, itemCount }: IPageMetaDtoParameters) {
-    this.page = pageOptionsDto.page;
-    this.take = pageOptionsDto.take;
+    const { skip, take } = pageOptionsDto;
+    const page = PaginationMananger.getPage({ skip, take });
+    this.skip = skip;
+    this.take = take;
     this.itemCount = itemCount;
     this.pageCount = Math.ceil(this.itemCount / this.take);
-    this.hasPreviousPage = this.page > 1;
-    this.hasNextPage = this.page < this.pageCount;
+    this.hasPreviousPage = page > 1;
+    this.hasNextPage = page < this.pageCount;
   }
 }

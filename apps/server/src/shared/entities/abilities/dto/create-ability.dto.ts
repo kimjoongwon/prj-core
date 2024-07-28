@@ -1,4 +1,9 @@
 import { OmitType } from '@nestjs/swagger';
-import { Ability } from '../ability.entity';
+import { AbilityDto } from './ability.dto';
 
-export class CreateAbilityDto extends OmitType(Ability, ['createdAt', 'updatedAt', 'deletedAt']) {}
+export class CreateAbilityDto extends OmitType(AbilityDto, [
+  'createdAt',
+  'updatedAt',
+  'deletedAt',
+  'id',
+]) {}

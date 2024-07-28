@@ -153,7 +153,6 @@ model Role {
 model Subject {
   id        String    @id @default(cuid())
   name      String    @unique
-  fields    Json[]    @db.JsonB()
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)

@@ -1,10 +1,6 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './domains/app.module';
-import {
-  DocumentBuilder,
-  SwaggerDocumentOptions,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { CustomClassSerializerInterceptor } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
@@ -15,9 +11,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalInterceptors(
-    new CustomClassSerializerInterceptor(app.get(Reflector)),
-  );
+  app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
     .setVersion('1.0.0')

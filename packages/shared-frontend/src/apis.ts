@@ -25,11 +25,11 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import type {
-  AbilityPageQuery,
   CreateAbilityDto,
   CreateCategoryDto,
   CreateGroupDto,
   CreateServiceDto,
+  FindAllAblityParams,
   GetGroupsByPageOptionsParams,
   LoginPayloadDto,
   SignUpPayloadDto,
@@ -1532,34 +1532,34 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     }
     
 export const findAllAblity = (
-    abilityPageQuery: BodyType<AbilityPageQuery>,
+    params?: FindAllAblityParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<FindAllAblity200>(
       {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'GET',
-      headers: {'Content-Type': 'application/json', }, signal
+        params, signal
     },
       options);
     }
   
 
-export const getFindAllAblityQueryKey = (abilityPageQuery: AbilityPageQuery,) => {
-    return [`http://localhost:3005/api/v1/admin/abilities`, abilityPageQuery] as const;
+export const getFindAllAblityQueryKey = (params?: FindAllAblityParams,) => {
+    return [`http://localhost:3005/api/v1/admin/abilities`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getFindAllAblityQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindAllAblityQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(abilityPageQuery);
+  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(abilityPageQuery, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
 
       
 
@@ -1572,11 +1572,11 @@ export type FindAllAblityQueryResult = NonNullable<Awaited<ReturnType<typeof fin
 export type FindAllAblityQueryError = ErrorType<unknown>
 
 export const useFindAllAblity = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(
- abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: FindAllAblityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblityQueryOptions(abilityPageQuery,options)
+  const queryOptions = getFindAllAblityQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1587,16 +1587,16 @@ export const useFindAllAblity = <TData = Awaited<ReturnType<typeof findAllAblity
 
 
 
-export const getFindAllAblitySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindAllAblitySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(abilityPageQuery);
+  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(abilityPageQuery, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
 
       
 
@@ -1609,11 +1609,11 @@ export type FindAllAblitySuspenseQueryResult = NonNullable<Awaited<ReturnType<ty
 export type FindAllAblitySuspenseQueryError = ErrorType<unknown>
 
 export const useFindAllAblitySuspense = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(
- abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblitySuspenseQueryOptions(abilityPageQuery,options)
+  const queryOptions = getFindAllAblitySuspenseQueryOptions(params,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1624,16 +1624,16 @@ export const useFindAllAblitySuspense = <TData = Awaited<ReturnType<typeof findA
 
 
 
-export const getFindAllAblitySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findAllAblity>>>, TError = ErrorType<unknown>>(abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getFindAllAblitySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findAllAblity>>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(abilityPageQuery);
+  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(abilityPageQuery, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
 
       
 
@@ -1646,11 +1646,11 @@ export type FindAllAblitySuspenseInfiniteQueryResult = NonNullable<Awaited<Retur
 export type FindAllAblitySuspenseInfiniteQueryError = ErrorType<unknown>
 
 export const useFindAllAblitySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof findAllAblity>>>, TError = ErrorType<unknown>>(
- abilityPageQuery: AbilityPageQuery, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblitySuspenseInfiniteQueryOptions(abilityPageQuery,options)
+  const queryOptions = getFindAllAblitySuspenseInfiniteQueryOptions(params,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
