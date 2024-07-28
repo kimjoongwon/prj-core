@@ -1,0 +1,30 @@
+import { $Enums, Prisma } from '@prisma/client';
+import { EnumField, StringFieldOptional, UUIDField } from '../../../decorators';
+import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { Ability } from '../ability.entity';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class AbilityDto extends AbstractDto implements Ability {
+  @EnumField(() => $Enums.AbilityTypes)
+  type: $Enums.AbilityTypes;
+
+  @UUIDField()
+  roleId: string;
+
+  @EnumField(() => $Enums.AbilityActions)
+  action: $Enums.AbilityActions;
+
+  @UUIDField()
+  subjectId: string;
+
+  @ApiProperty({
+    nullable: true,
+    description: 'A JSON object with a nested structure',
+    type: Object,
+    example: { createdBy: '1' },
+  })
+  conditions: Prisma.JsonValue | null;
+
+  @StringFieldOptional()
+  description: string | null;
+}

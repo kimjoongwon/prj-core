@@ -16,7 +16,6 @@ import {
   TokenPayloadDto,
   TokenService,
   UsersService,
-  goTryRaw,
   goTryRawSync,
 } from '@shared';
 import bcrypt from 'bcrypt';

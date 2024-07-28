@@ -5,7 +5,7 @@ import { Providers } from './providers';
 import localFont from 'next/font/local';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { ModalMount } from '@shared/frontend';
+import { ModalMount, useFindAll, useFindAllAblity } from '@shared/frontend';
 import { isServer } from '@tanstack/react-query';
 
 const pretendard = localFont({
@@ -34,6 +34,11 @@ export default function RootLayout(props: {
   children: React.ReactNode;
   modal: React.ReactNode;
 }) {
+  useFindAllAblity({
+    where: {
+      action: 'ACCESS',
+    },
+  });
   return (
     <html lang="kr" className={`light ${pretendard.variable}`}>
       <head>

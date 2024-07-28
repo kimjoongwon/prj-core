@@ -1,17 +1,6 @@
-import {
-  HttpStatus,
-  Logger,
-  MiddlewareConsumer,
-  Module,
-  OnModuleInit,
-} from '@nestjs/common';
+import { HttpStatus, Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import {
-  APP_FILTER,
-  APP_GUARD,
-  HttpAdapterHost,
-  RouterModule,
-} from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, HttpAdapterHost, RouterModule } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import pino from 'pino';
 import {
@@ -35,6 +24,7 @@ import { ServicesModule } from './admin/services/services.module';
 import { SpacesModule } from './admin/spaces/spaces.module';
 import { CategoriesModule } from './admin/categories/categories.module';
 import { GroupsModule } from './admin/groups/groups.module';
+import { AbilitiesModule } from './admin/abilities/abilities.module';
 
 @Module({
   imports: [
@@ -76,14 +66,7 @@ import { GroupsModule } from './admin/groups/groups.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        databaseConfig,
-        authConfig,
-        appConfig,
-        mailConfig,
-        fileConfig,
-        corsConfig,
-      ],
+      load: [databaseConfig, authConfig, appConfig, mailConfig, fileConfig, corsConfig],
       envFilePath: '.env',
     }),
     ConfigModule.forRoot({
@@ -94,6 +77,7 @@ import { GroupsModule } from './admin/groups/groups.module';
     ServicesModule,
     SpacesModule,
     GroupsModule,
+    AbilitiesModule,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -101,6 +85,10 @@ import { GroupsModule } from './admin/groups/groups.module';
           {
             path: 'admin',
             children: [
+              {
+                path: 'abilities',
+                module: AbilitiesModule,
+              },
               {
                 path: 'categories',
                 module: CategoriesModule,

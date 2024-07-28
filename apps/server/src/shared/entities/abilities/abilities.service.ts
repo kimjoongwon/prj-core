@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
+import { AbilitiesRepository } from './abilities.repository';
+import { AbilityPageQuery } from './dto/ability-page-options.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AbilitiesService {
+  constructor(private repository: AbilitiesRepository) {}
   create(createAbilityDto: CreateAbilityDto) {
-    return 'This action adds a new ability';
+    return this.repository.create(createAbilityDto);
   }
 
-  findAll() {
-    return `This action returns all abilities`;
+  getAbilitiesByPageOptions(pageQuery: AbilityPageQuery) {
+    const query = pageQuery.toArgs() as Prisma.AbilityFindManyArgs;
+    console.log('query', query);
+    return this.repository.findMany(query);
   }
 
   findOne(id: number) {

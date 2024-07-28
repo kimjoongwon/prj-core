@@ -1,6 +1,19 @@
+import { DateField, DateFieldOptional, UUIDField } from 'src/shared/decorators';
+
 export abstract class AbstractEntity {
-  id!: string;
+  @UUIDField()
+  id: string;
+
+  @DateField()
   createdAt: Date;
-  updatedAt: Date;
+
+  @DateField({
+    nullable: true,
+  })
+  updatedAt: Date | null;
+
+  @DateField({
+    nullable: true,
+  })
   deletedAt: Date | null;
 }
