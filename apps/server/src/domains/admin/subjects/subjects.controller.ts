@@ -50,7 +50,7 @@ export class SubjectsController {
 
   @Delete(':subjectId')
   async removeSubjectById(@Param('subjectId') id: string) {
-    const subject = await this.subjectsService.remove(id);
+    const subject = await this.subjectsService.removeById(id);
     return new ResponseEntity(HttpStatus.OK, '삭제 성공', new SubjectDto(subject));
   }
 }

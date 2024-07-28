@@ -222,6 +222,17 @@ model Assignment {
   service       Service   @relation(fields: [serviceId], references: [id])
 }
 
+model Qna {
+  id           String    @id @default(cuid())
+  title        String
+  questionText String
+  answerText   String
+  answererId   String
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
+  deletedAt    DateTime? @db.Timestamptz(6)
+}
+
 enum EmailTemplates {
   REGISTER
   FORGET_PASSWORD

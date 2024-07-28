@@ -35,7 +35,7 @@ export class AbilitiesController {
   @Get()
   @ApiResponseEntity(AbilityDto, { isArray: true })
   async findAllAblity(@Query() pageQuery: AbilityPageQueryDto) {
-    const abilities = await this.abilitiesService.getAbilitiesByPageOptions(pageQuery);
+    const abilities = await this.abilitiesService.getManyByPageQuery(pageQuery);
     return new ResponseEntity(
       HttpStatus.OK,
       '조회 성공',
@@ -46,7 +46,7 @@ export class AbilitiesController {
   @Get(':abilityId')
   @ApiResponseEntity(AbilityDto)
   async getAbilityById(@Param('abilityId') id: string) {
-    const ability = await this.abilitiesService.getAbilityById(id);
+    const ability = await this.abilitiesService.getOneById(id);
     return new ResponseEntity(HttpStatus.OK, '조회 성공', new AbilityDto(ability));
   }
 
@@ -56,14 +56,14 @@ export class AbilitiesController {
     @Param('abilityId') id: string,
     @Body() updateAbilityDto: UpdateAbilityDto,
   ) {
-    const ability = await this.abilitiesService.update(id, updateAbilityDto);
+    const ability = await this.abilitiesService.updateById(id, updateAbilityDto);
     return new ResponseEntity(HttpStatus.OK, '수정 성공', new AbilityDto(ability));
   }
 
   @Delete(':abilityId')
   @ApiResponseEntity(AbilityDto)
   async removeAbilityById(@Param('abilityId') id: string) {
-    const abilityDto = await this.abilitiesService.remove(id);
+    const abilityDto = await this.abilitiesService.removeById(id);
     return new ResponseEntity(HttpStatus.OK, '삭제 성공', new AbilityDto(abilityDto));
   }
 }
