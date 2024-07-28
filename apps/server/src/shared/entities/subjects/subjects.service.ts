@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
+import { SubjectsRepository } from './subjects.repository';
+import { SubjectPageQueryDto } from './dto/subject-page-query.dto';
 
 @Injectable()
 export class SubjectsService {
+  constructor(private readonly repository: SubjectsRepository) {}
+
   create(createSubjectDto: CreateSubjectDto) {
-    return 'This action adds a new subject';
+    return this.repository.create(createSubjectDto);
   }
 
-  findAll() {
-    return `This action returns all subjects`;
+  getManyByPageQuery(args: SubjectPageQueryDto) {
+    return this.repository.findMany(args);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subject`;
+  getOneById(id: string) {
+    return this.repository.findUnique(id);
   }
 
-  update(id: number, updateSubjectDto: UpdateSubjectDto) {
-    return `This action updates a #${id} subject`;
+  updateById(id: string, updateSubjectDto: UpdateSubjectDto) {
+    return this.repository.update({ where: { id }, data: updateSubjectDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subject`;
+  removeById(id: string) {
+    return this.repository.delete({ where: { id } });
   }
 }

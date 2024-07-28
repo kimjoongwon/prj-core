@@ -7,7 +7,7 @@
 import type { Order } from './order';
 
 export type GetGroupsByPageOptionsParams = {
-page?: number;
+skip?: number;
 take?: number;
 name?: string;
 orderByCreatedAt?: Order;

@@ -1,10 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { AbilitiesService } from '../../../shared/entities/abilities/abilities.service';
-import { CreateAbilityDto } from '../../../shared/entities/abilities/dto/create-ability.dto';
-import { UpdateAbilityDto } from '../../../shared/entities/abilities/dto/update-ability.dto';
-import { AbilityDto, ApiResponseEntity, Auth, Public, ResponseEntity } from '@shared';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  HttpStatus,
+} from '@nestjs/common';
+import {
+  AbilitiesService,
+  AbilityDto,
+  AbilityPageQueryDto,
+  ApiResponseEntity,
+  CreateAbilityDto,
+  ResponseEntity,
+  UpdateAbilityDto,
+} from '@shared';
 import { ApiTags } from '@nestjs/swagger';
-import { AbilityPageQuery } from 'src/shared/entities/abilities/dto/ability-page-options.dto';
 
 @ApiTags('abilities')
 @Controller()
@@ -13,31 +27,43 @@ export class AbilitiesController {
 
   @Post()
   @ApiResponseEntity(AbilityDto)
-  async create(@Body() createAbilityDto: CreateAbilityDto) {
+  async createAbility(@Body() createAbilityDto: CreateAbilityDto) {
     const abilityDto = await this.abilitiesService.create(createAbilityDto);
-    return abilityDto;
+    return new ResponseEntity(HttpStatus.CREATED, '생성 성공', new AbilityDto(abilityDto));
   }
 
   @Get()
-  @Public()
   @ApiResponseEntity(AbilityDto, { isArray: true })
-  async findAllAblity(@Query() pageQuery: AbilityPageQuery) {
+  async findAllAblity(@Query() pageQuery: AbilityPageQueryDto) {
     const abilities = await this.abilitiesService.getAbilitiesByPageOptions(pageQuery);
-    return abilities;
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '조회 성공',
+      abilities.map((ability) => new AbilityDto(ability)),
+    );
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.abilitiesService.findOne(+id);
+  @Get(':abilityId')
+  @ApiResponseEntity(AbilityDto)
+  async getAbilityById(@Param('abilityId') id: string) {
+    const ability = await this.abilitiesService.getAbilityById(id);
+    return new ResponseEntity(HttpStatus.OK, '조회 성공', new AbilityDto(ability));
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAbilityDto: UpdateAbilityDto) {
-    return this.abilitiesService.update(+id, updateAbilityDto);
+  @Patch(':abilityId')
+  @ApiResponseEntity(AbilityDto)
+  async updateAbilityById(
+    @Param('abilityId') id: string,
+    @Body() updateAbilityDto: UpdateAbilityDto,
+  ) {
+    const ability = await this.abilitiesService.update(id, updateAbilityDto);
+    return new ResponseEntity(HttpStatus.OK, '수정 성공', new AbilityDto(ability));
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.abilitiesService.remove(+id);
+  @Delete(':abilityId')
+  @ApiResponseEntity(AbilityDto)
+  async removeAbilityById(@Param('abilityId') id: string) {
+    const abilityDto = await this.abilitiesService.remove(id);
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new AbilityDto(abilityDto));
   }
 }

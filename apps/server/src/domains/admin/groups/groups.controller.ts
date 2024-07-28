@@ -16,6 +16,7 @@ import {
   GroupDto,
   GroupPageOptionsDto,
   GroupsService,
+  PaginationMananger,
   Public,
   ResponseEntity,
   UpdateGroupDto,
@@ -41,16 +42,16 @@ export class GroupsController {
   @Get()
   async getGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
     const { count, groups } = await this.groupsService.getGroupsByPageOptions(pageOptions);
-
+    const { skip, take } = pageOptions;
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
       groups.map((group) => new GroupDto(group)),
       {
-        page: pageOptions.page,
-        take: pageOptions.take,
-        hasNextPage: groups.length === pageOptions.take,
-        hasPreviousPage: pageOptions.page > 1,
+        skip,
+        take,
+        hasNextPage: groups.length === take,
+        hasPreviousPage: PaginationMananger.getPage({ skip, take }) > 1,
         itemCount: count,
         pageCount: 0,
       },

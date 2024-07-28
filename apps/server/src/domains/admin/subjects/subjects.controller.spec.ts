@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SubjectsController } from './subjects.controller';
-import { SubjectsService } from '../../shared/entities/subjects/subjects.service';
 import { describe, beforeEach, it, expect } from 'vitest';
+import { SubjectsService } from '@shared';
 
 describe('SubjectsController', () => {
   let controller: SubjectsController;

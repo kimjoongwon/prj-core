@@ -4,7 +4,6 @@ import { EnumFieldOptional } from 'src/shared/decorators';
 import { OrderByDto } from '../../common/dtos/order-by.dto';
 import { AbilityDto } from './ability.dto';
 import { PageOptionsDto } from '../../common';
-import { toPrismaArgs } from '../../common/dtos/page-option.dto';
 
 class AbilityOrderBy extends OrderByDto {
   @EnumFieldOptional(() => Prisma.SortOrder)
@@ -21,14 +20,8 @@ class AbilityOrderBy extends OrderByDto {
   descriptionSortOrder?: Prisma.SortOrder;
 }
 
-class AbilityQuery extends IntersectionType(
+export class AbilityPageQueryDto extends IntersectionType(
   PartialType(AbilityDto),
   AbilityOrderBy,
   PageOptionsDto,
 ) {}
-
-export class AbilityPageQuery extends AbilityQuery {
-  toArgs(): Prisma.AbilityFindManyArgs {
-    return toPrismaArgs(this);
-  }
-}
