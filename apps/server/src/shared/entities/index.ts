@@ -11,3 +11,4 @@ export * from './profiles';
 export * from './tokens';
 export * from './abilities';
 export * from './subjects';
+export * from './presences';
