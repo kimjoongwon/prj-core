@@ -4,7 +4,7 @@ export * from './entities';
 export * from './filters';
 export * from './middlewares';
 export * from './constants';
-export * from './interceptor';
+export * from './interceptors';
 export * from './providers';
 export * from './guards';
 export * from './libs';
