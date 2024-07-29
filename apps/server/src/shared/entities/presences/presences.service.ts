@@ -12,4 +12,8 @@ export class PresencesService {
       update: createPresenceDto,
     });
   }
+
+  findManyByUserId(userId: string) {
+    return this.repository.findMany({ where: { id: userId } });
+  }
 }
