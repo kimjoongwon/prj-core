@@ -9,7 +9,7 @@ export class PresencesRepository {
     return this.prisma.presence.upsert(args);
   }
 
-  findAll(args: Prisma.PresenceFindManyArgs) {
+  findMany(args: Prisma.PresenceFindManyArgs) {
     return this.prisma.presence.findMany(args);
   }
 
