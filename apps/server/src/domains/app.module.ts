@@ -26,6 +26,7 @@ import { CategoriesModule } from './admin/categories/categories.module';
 import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
+import { PresencesModule } from './admin/presences/presences.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { SubjectsModule } from './admin/subjects/subjects.module';
     GroupsModule,
     AbilitiesModule,
     SubjectsModule,
+    PresencesModule,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -90,6 +92,10 @@ import { SubjectsModule } from './admin/subjects/subjects.module';
               {
                 path: 'abilities',
                 module: AbilitiesModule,
+              },
+              {
+                path: 'presences',
+                module: PresencesModule,
               },
               {
                 path: 'categories',
