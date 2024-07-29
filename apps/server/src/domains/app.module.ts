@@ -27,6 +27,7 @@ import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
 import { PresencesModule } from './admin/presences/presences.module';
+import { CaslModule } from 'src/casl/casl.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { PresencesModule } from './admin/presences/presences.module';
     AbilitiesModule,
     SubjectsModule,
     PresencesModule,
+    CaslModule,
     RouterModule.register([
       {
         path: 'api/v1',
