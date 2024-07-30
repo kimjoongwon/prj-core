@@ -1,0 +1,66 @@
+model Tenancy {
+    id        String    @id @default(cuid())
+    userId    String
+    spaceId   String
+    roleId    String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    deletedAt DateTime? @db.Timestamptz(6)
+    space     Space     @relation(fields: [spaceId], references: [id])
+    user      User      @relation(fields: [userId], references: [id])
+    role      Role      @relation(fields: [roleId], references: [id])
+    tenants   Tenant[]
+}
+
+model Profile {
+    id        String    @id @default(cuid())
+    nickname  String
+    userId    String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    deletedAt DateTime? @db.Timestamptz(6)
+    user      User      @relation(fields: [userId], references: [id])
+}
+
+model User {
+    id        String    @id @default(cuid())
+    email     String    @unique
+    name      String    @unique
+    phone     String    @unique
+    password  String
+    deletedAt DateTime? @db.Timestamptz(6)
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    createdAt DateTime  @default(now()) @db.Timestamptz(6)
+    profiles  Profile[]
+    tenancies Tenancy[]
+}
+
+model Tenant {
+    id        String      @id @default(cuid())
+    tenancyId String
+    userId    String
+    name      String      @unique
+    active    Boolean     @default(false)
+    type      TenantTypes @default(PHYSICAL)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime?   @updatedAt @db.Timestamptz(6)
+    deletedAt DateTime?   @db.Timestamptz(6)
+    tenancy   Tenancy     @relation(fields: [tenancyId], references: [id])
+
+    @@unique([tenancyId, userId])
+}
+
+enum TenantTypes {
+    PHYSICAL
+    ABSTRACT
+}
+
+model Space {
+    id        String    @id @default(cuid())
+    name      String    @unique
+    createdAt DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    deletedAt DateTime? @db.Timestamptz(6)
+    tenancies Tenancy[]
+    groups    Group[]
+}

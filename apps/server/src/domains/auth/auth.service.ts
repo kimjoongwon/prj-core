@@ -27,7 +27,6 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private space: SpacesService,
     private rolesService: RolesService,
     private passwordService: PasswordService,
     private config: ConfigService,
@@ -88,14 +87,12 @@ export class AuthService {
         },
       });
 
-      const baseSpace = await this.space.findBaseSpace();
-
       const userRole = await this.rolesService.findUserRole();
 
-      await tx.tenant.create({
+      await tx.tenancy.create({
         data: {
           roleId: userRole!.id,
-          spaceId: baseSpace!.id,
+          spaceId: user.spaceId,
           userId: newUser.id,
         },
       });
@@ -125,7 +122,7 @@ export class AuthService {
       where: { email },
       include: {
         profiles: true,
-        tenants: true,
+        tenancies: true,
       },
     });
 

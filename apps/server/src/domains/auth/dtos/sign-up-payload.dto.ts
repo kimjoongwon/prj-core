@@ -15,6 +15,7 @@ class UserDto implements User {
   name: string;
   phone: string;
   password: string;
+  spaceId: string;
   deletedAt: Date;
   updatedAt: Date;
   createdAt: Date;

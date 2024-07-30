@@ -1,0 +1,50 @@
+model Session {
+    id        String     @id @default(cuid())
+    name      String
+    tenancyId String
+    dates     DateTime[] @db.Timestamptz(6)
+    createdAt DateTime   @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+    deletedAt DateTime?  @db.Timestamptz(6)
+    timelines Timeline[]
+}
+
+model Timeline {
+    id            String         @id @default(cuid())
+    name          String
+    sessionId     String
+    date          DateTime       @db.Date()
+    session       Session        @relation(fields: [sessionId], references: [id])
+    createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+    updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+    deletedAt     DateTime?      @db.Timestamptz(6)
+    timelineItems TimelineItem[]
+}
+
+model TimelineItem {
+    id            String        @id @default(cuid())
+    timelineId    String?
+    sessionId     String
+    title         String
+    startDateTime DateTime      @db.Timestamptz(6)
+    endDateTime   DateTime      @db.Timestamptz(6)
+    description   String
+    address       String?
+    maxCapacity   Int
+    minCapacity   Int
+    createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+    updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
+    deletedAt     DateTime?     @db.Timestamptz(6)
+    reservations  Reservation[]
+    timeline      Timeline?     @relation(fields: [timelineId], references: [id])
+}
+
+model Reservation {
+    id             String       @id @default(cuid())
+    status         String
+    timelineItemId String
+    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+    createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
+    deletedAt      DateTime?    @db.Timestamptz(6)
+}
