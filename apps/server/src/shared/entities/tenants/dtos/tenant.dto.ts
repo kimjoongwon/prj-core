@@ -23,4 +23,3 @@ export class TenantDto extends AbstractDto {
     this.roleId = tenant.roleId;
   }
 }
-Presence;
