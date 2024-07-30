@@ -12,7 +12,6 @@ import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
   RolesService,
-  SpacesService,
   TokenPayloadDto,
   TokenService,
   UsersService,
