@@ -1,3 +1,13 @@
+model Reservation {
+    id             String       @id @default(cuid())
+    status         String
+    timelineItemId String
+    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+    createdAt      DateTime     @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
+    deletedAt      DateTime?    @db.Timestamptz(6)
+}
+
 model Session {
     id        String     @id @default(cuid())
     name      String
@@ -37,14 +47,4 @@ model TimelineItem {
     deletedAt     DateTime?     @db.Timestamptz(6)
     reservations  Reservation[]
     timeline      Timeline?     @relation(fields: [timelineId], references: [id])
-}
-
-model Reservation {
-    id             String       @id @default(cuid())
-    status         String
-    timelineItemId String
-    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
-    createdAt      DateTime     @default(now()) @db.Timestamptz(6)
-    updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
-    deletedAt      DateTime?    @db.Timestamptz(6)
 }

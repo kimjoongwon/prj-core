@@ -26,7 +26,6 @@ import { CategoriesModule } from './admin/categories/categories.module';
 import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
-import { PresencesModule } from './admin/presences/presences.module';
 import { CaslModule } from 'src/casl/casl.module';
 
 @Module({
@@ -82,7 +81,6 @@ import { CaslModule } from 'src/casl/casl.module';
     GroupsModule,
     AbilitiesModule,
     SubjectsModule,
-    PresencesModule,
     CaslModule,
     RouterModule.register([
       {
@@ -94,10 +92,6 @@ import { CaslModule } from 'src/casl/casl.module';
               {
                 path: 'abilities',
                 module: AbilitiesModule,
-              },
-              {
-                path: 'presences',
-                module: PresencesModule,
               },
               {
                 path: 'categories',

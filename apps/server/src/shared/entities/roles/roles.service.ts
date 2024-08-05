@@ -29,4 +29,19 @@ export class RolesService {
       },
     });
   }
+  async getSuperAdminRole() {
+    return this.prisma.role.findUnique({
+      where: {
+        name: Roles.SUPER_ADMIN,
+      },
+    });
+  }
+
+  async getUserRole() {
+    return this.prisma.role.findUnique({
+      where: {
+        name: Roles.USER,
+      },
+    });
+  }
 }

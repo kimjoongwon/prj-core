@@ -1,11 +1,11 @@
 model Role {
     id        String    @id @default(cuid())
-    name      Roles     @default(USER)
+    name      Roles     @unique @default(USER)
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt @db.Timestamptz(6)
     deletedAt DateTime? @db.Timestamptz(6)
-    tenancies Tenancy[]
     abilities Ability[]
+    tenant    Tenant[]
 }
 
 model Subject {

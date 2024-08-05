@@ -22,7 +22,6 @@ export class CaslAbilityFactory {
         userId: user.id,
       },
       include: {
-        presence: true,
         role: {
           include: {
             abilities: {
@@ -35,7 +34,7 @@ export class CaslAbilityFactory {
       },
     });
 
-    const tenant = tenants.find((tenant) => !tenant.presence.absence);
+    const tenant = tenants.find((tenant) => !tenant.active);
     tenant.role.abilities.forEach((ability) => {
       if (ability.type === 'CAN') {
         // @ts-ignore

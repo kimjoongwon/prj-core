@@ -1,12 +1,10 @@
-import { Tenant } from '@prisma/client';
+import { $Enums, Tenant } from '@prisma/client';
 import { AbstractEntity } from '../common/abstract.entity';
 
 export class TenantEntity extends AbstractEntity implements Tenant {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
   userId: string;
-  spaceId: string;
   roleId: string;
+  tenancyId: string;
+  active: boolean;
+  type: $Enums.TenantTypes;
 }
