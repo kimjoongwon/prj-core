@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
@@ -23,6 +24,8 @@ import { match } from 'ts-pattern';
 
 @Injectable()
 export class AuthService {
+  logger: Logger = new Logger(AuthService.name);
+  LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -33,7 +36,7 @@ export class AuthService {
     private tokenService: TokenService,
   ) {}
 
-  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user'> {
+  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
@@ -88,11 +91,19 @@ export class AuthService {
 
       const userRole = await this.rolesService.findUserRole();
 
-      await tx.tenancy.create({
+      const tenancy = await tx.tenancy.create({
         data: {
-          roleId: userRole!.id,
           spaceId: user.spaceId,
+        },
+      });
+
+      await tx.tenant.create({
+        data: {
+          type: 'PHYSICAL',
+          active: true,
           userId: newUser.id,
+          tenancyId: tenancy.id,
+          roleId: userRole.id,
         },
       });
 
@@ -116,18 +127,27 @@ export class AuthService {
     return loginFormDto;
   }
 
-  async login({ email, password }: LoginPayloadDto): Promise<TokenDto> {
+  async login({ email, password }: LoginPayloadDto) {
     const user = await this.prisma.user.findUnique({
       where: { email },
       include: {
         profiles: true,
-        tenancies: true,
       },
     });
 
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
+
+    const tenant = await this.prisma.tenant.findUnique({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        role: true,
+        tenancy: true,
+      },
+    });
 
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
@@ -141,6 +161,7 @@ export class AuthService {
       accessToken,
       refreshToken,
       user,
+      tenant,
     };
   }
 
@@ -166,5 +187,43 @@ export class AuthService {
       .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err.message}`));
 
     return payload;
+  }
+
+  async createInitRoles() {
+    this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
+
+    const superAdminRole = await this.rolesService.getSuperAdminRole();
+
+    this.logger.log(`[${this.LOG_PREFIX}] Create USER Role`);
+
+    const userRole = await this.rolesService.getUserRole();
+
+    if (!superAdminRole) {
+      this.logger.log('Create SUPER_ADMIN Role');
+      await this.rolesService.createSuperAdmin();
+    }
+
+    if (!userRole) {
+      this.logger.log('Create USER Role');
+      await this.rolesService.createUser();
+    }
+  }
+
+  async createInitSpace() {
+    const baseSpace = await this.prisma.space.findUnique({
+      where: {
+        name: '기본',
+      },
+    });
+
+    return await this.prisma.space.upsert({
+      where: {
+        name: '기본',
+      },
+      update: baseSpace,
+      create: {
+        name: '기본',
+      },
+    });
   }
 }

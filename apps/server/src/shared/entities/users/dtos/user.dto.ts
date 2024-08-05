@@ -5,6 +5,7 @@ import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
 import { TenantDto } from '../../tenants/dtos/tenant.dto';
+import { TenancyDto } from '../../tenancies/dto/tenancy.dto';
 
 export class UserDto extends AbstractDto {
   constructor(user: UserEntity) {
@@ -31,7 +32,7 @@ export class UserDto extends AbstractDto {
   @ApiProperty({
     type: () => [TenantDto],
   })
-  tenants?: TenantDto[];
+  tenants?: TenancyDto[];
 
   @ApiProperty({
     type: () => [ProfileDto],

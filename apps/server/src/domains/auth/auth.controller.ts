@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@ne
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
-import { AccessToken, Public, TokenService, UserDto } from '@shared';
+import { AccessToken, Public, ResponseEntity, TenantDto, TokenService, UserDto } from '@shared';
 
 @ApiTags('auth')
 @Controller()
@@ -17,14 +17,15 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Post('login')
   async login(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
-    const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+    const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
     this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
 
-    return {
+    return new ResponseEntity(HttpStatus.OK, '로그인 성공', {
       accessToken,
       refreshToken,
-      user,
-    };
+      user: new UserDto(user),
+      tenant: new TenantDto(tenant),
+    });
   }
 
   @ApiBearerAuth()

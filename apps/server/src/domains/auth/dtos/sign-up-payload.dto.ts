@@ -1,24 +1,17 @@
 import { Profile, User } from '@prisma/client';
 
-class ProfileDto implements Profile {
-  id: string;
+class ProfileDto
+  implements Omit<Profile, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'userId'>
+{
   nickname: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
 }
 
-class UserDto implements User {
-  id: string;
+class UserDto implements Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'> {
   email: string;
   name: string;
   phone: string;
   password: string;
   spaceId: string;
-  deletedAt: Date;
-  updatedAt: Date;
-  createdAt: Date;
 }
 
 export class SignUpPayloadDto {

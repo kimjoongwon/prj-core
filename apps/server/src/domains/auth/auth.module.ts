@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -11,6 +11,8 @@ import { AuthConfig, RolesService, SpacesService, TokenService, UsersService } f
 import { PasswordService } from './services';
 
 import { JwtStrategy, LocalStrategy } from './strategies';
+import { SignUpPayloadDto } from './dtos';
+import { PrismaService } from 'nestjs-prisma';
 
 @Module({
   imports: [
@@ -38,4 +40,34 @@ import { JwtStrategy, LocalStrategy } from './strategies';
     AuthService,
   ],
 })
-export class AuthModule {}
+export class AuthModule implements OnModuleInit {
+  logger: Logger = new Logger(AuthModule.name);
+  LOG_PREFIX = `${AuthModule.name} DB_INIT`;
+  constructor(
+    private readonly authService: AuthService,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  async onModuleInit() {
+    this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
+    await this.authService.createInitRoles();
+
+    this.logger.log(`[${this.LOG_PREFIX}] Create Base Space`);
+    const baseSpace = await this.authService.createInitSpace();
+
+    const signUpPayloadDto: SignUpPayloadDto = {
+      user: {
+        email: 'galaxy@gmail.com',
+        name: '관리자',
+        phone: '01073162347',
+        password: 'rkdmf12!@',
+        spaceId: baseSpace?.id,
+      },
+      profile: {
+        nickname: 'Wally',
+      },
+    };
+
+    this.authService.signUpUser(signUpPayloadDto);
+  }
+}

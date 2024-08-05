@@ -7,19 +7,10 @@ export class TenantDto extends AbstractDto {
   userId: string;
 
   @StringField()
-  spaceId: string;
-
-  @StringField()
   roleId: string;
 
   constructor(tenant: TenantEntity) {
     super(tenant);
-    this.id = tenant.id;
-    this.createdAt = tenant.createdAt;
-    this.updatedAt = tenant.updatedAt;
-    this.deletedAt = tenant.deletedAt;
-    this.userId = tenant.userId;
-    this.spaceId = tenant.spaceId;
-    this.roleId = tenant.roleId;
+    Object.assign(this, tenant);
   }
 }

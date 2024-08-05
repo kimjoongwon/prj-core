@@ -18,7 +18,8 @@ export class UsersService {
         profiles: true,
         tenants: {
           include: {
-            space: true,
+            tenancy: true,
+            role: true,
           },
         },
       },
