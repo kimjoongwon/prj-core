@@ -1,13 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { EmailField, PasswordField, PhoneField, StringField } from '../../../decorators';
 import { Exclude } from 'class-transformer';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
-import { TenantDto } from '../../tenants/dtos/tenant.dto';
-import { TenancyDto } from '../../tenancies/dto/tenancy.dto';
 
-export class UserDto extends AbstractDto {
+export class UserDto extends AbstractDto implements UserEntity {
   constructor(user: UserEntity) {
     super(user);
     this.email = user.email;
@@ -29,12 +27,7 @@ export class UserDto extends AbstractDto {
   @PasswordField()
   password: string;
 
-  @ApiProperty({
-    type: () => [TenantDto],
-  })
-  tenants?: TenancyDto[];
-
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: () => [ProfileDto],
   })
   profiles?: ProfileDto[];

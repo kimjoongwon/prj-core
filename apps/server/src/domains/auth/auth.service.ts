@@ -13,6 +13,8 @@ import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
   RolesService,
+  TenanciesService,
+  TenantsService,
   TokenPayloadDto,
   TokenService,
   UsersService,
@@ -34,6 +36,8 @@ export class AuthService {
     private config: ConfigService,
     private prisma: PrismaService,
     private tokenService: TokenService,
+    private tenanciesService: TenanciesService,
+    private tenantsService: TenantsService,
   ) {}
 
   generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
@@ -76,15 +80,17 @@ export class AuthService {
     return user!;
   }
 
-  async signUpUser(signUpDto: SignUpPayloadDto) {
-    const { profile, user } = signUpDto;
+  async signUpUser(signUpPayloadDto: SignUpPayloadDto) {
+    const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
 
     await this.prisma.$transaction(async (tx) => {
-      const hashedPassword = await this.passwordService.hashPassword(user.password);
+      const hashedPassword = await this.passwordService.hashPassword(password);
 
       const newUser = await tx.user.create({
         data: {
-          ...user,
+          email,
+          name,
+          phone,
           password: hashedPassword,
         },
       });
@@ -93,7 +99,7 @@ export class AuthService {
 
       const tenancy = await tx.tenancy.create({
         data: {
-          spaceId: user.spaceId,
+          spaceId,
         },
       });
 
@@ -109,7 +115,7 @@ export class AuthService {
 
       await tx.profile.create({
         data: {
-          ...profile,
+          nickname,
           userId: newUser.id,
         },
       });
@@ -224,6 +230,44 @@ export class AuthService {
       create: {
         name: '기본',
       },
+    });
+  }
+  async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
+    const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
+
+    const hashedPassword = await this.passwordService.hashPassword(password);
+
+    const newUser = await this.usersService.upsert({
+      email,
+      name,
+      phone,
+      password: hashedPassword,
+    });
+
+    await this.prisma.profile.upsert({
+      where: {
+        userId: newUser.id,
+      },
+      update: {
+        userId: newUser.id,
+        nickname,
+      },
+      create: {
+        nickname,
+        userId: newUser.id,
+      },
+    });
+
+    const superAdminRole = await this.rolesService.findSuperAdminRole();
+
+    const tenancy = await this.tenanciesService.createOrUpdate({ spaceId });
+
+    await this.tenantsService.createOrUpdate({
+      roleId: superAdminRole.id,
+      type: 'PHYSICAL',
+      active: true,
+      userId: newUser.id,
+      tenancyId: tenancy.id,
     });
   }
 }

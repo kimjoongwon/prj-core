@@ -6,7 +6,15 @@ import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
-import { AuthConfig, RolesService, SpacesService, TokenService, UsersService } from '@shared';
+import {
+  AuthConfig,
+  RolesService,
+  SpacesService,
+  TenanciesService,
+  TenantsService,
+  TokenService,
+  UsersService,
+} from '@shared';
 
 import { PasswordService } from './services';
 
@@ -30,6 +38,8 @@ import { PrismaService } from 'nestjs-prisma';
   ],
   controllers: [AuthController],
   providers: [
+    TenanciesService,
+    TenantsService,
     TokenService,
     PasswordService,
     RolesService,
@@ -49,25 +59,21 @@ export class AuthModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
+    this.logger.verbose(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
     await this.authService.createInitRoles();
 
-    this.logger.log(`[${this.LOG_PREFIX}] Create Base Space`);
+    this.logger.verbose(`[${this.LOG_PREFIX}] Create Base Space`);
     const baseSpace = await this.authService.createInitSpace();
 
     const signUpPayloadDto: SignUpPayloadDto = {
-      user: {
-        email: 'galaxy@gmail.com',
-        name: '관리자',
-        phone: '01073162347',
-        password: 'rkdmf12!@',
-        spaceId: baseSpace?.id,
-      },
-      profile: {
-        nickname: 'Wally',
-      },
+      email: 'galaxy@gmail.com',
+      name: '관리자',
+      phone: '01073162347',
+      password: 'rkdmf12!@',
+      spaceId: baseSpace.id,
+      nickname: 'Wally',
     };
 
-    this.authService.signUpUser(signUpPayloadDto);
+    this.authService.createSuperAdmin(signUpPayloadDto);
   }
 }

@@ -1,16 +1,31 @@
-import { StringField } from 'src/shared/decorators/field.decorators';
-import { TenantEntity } from '../tenant.entity';
+import {
+  BooleanField,
+  EnumField,
+  StringField,
+  UUIDField,
+} from 'src/shared/decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { Tenant } from '../tenant.entity';
+import { $Enums } from '@prisma/client';
 
-export class TenantDto extends AbstractDto {
+export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
   userId: string;
 
   @StringField()
   roleId: string;
 
-  constructor(tenant: TenantEntity) {
+  constructor(tenant: Tenant) {
     super(tenant);
     Object.assign(this, tenant);
   }
+
+  @UUIDField()
+  tenancyId: string;
+
+  @BooleanField()
+  active: boolean;
+
+  @EnumField(() => $Enums.TenantTypes)
+  type: $Enums.TenantTypes;
 }

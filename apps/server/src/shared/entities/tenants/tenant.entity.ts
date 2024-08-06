@@ -1,7 +1,7 @@
-import { $Enums, Tenant } from '@prisma/client';
+import { $Enums, Tenant as TenantEntity } from '@prisma/client';
 import { AbstractEntity } from '../common/abstract.entity';
 
-export class TenantEntity extends AbstractEntity implements Tenant {
+export class Tenant extends AbstractEntity implements TenantEntity {
   userId: string;
   roleId: string;
   tenancyId: string;

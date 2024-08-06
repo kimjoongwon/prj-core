@@ -12,6 +12,7 @@ import {
 import {
   JwtAuthGuard,
   LoggerMiddleware,
+  TenanciesService,
   appConfig,
   authConfig,
   corsConfig,
@@ -27,6 +28,7 @@ import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
 import { CaslModule } from 'src/casl/casl.module';
+import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module';
 
 @Module({
   imports: [

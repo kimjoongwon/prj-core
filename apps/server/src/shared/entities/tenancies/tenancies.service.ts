@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTenancyDto } from './dto/create-tenancy.dto';
-import { UpdateTenancyDto } from './dto/update-tenancy.dto';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class TenanciesService {
-  create(createTenancyDto: CreateTenancyDto) {
-    return 'This action adds a new tenancy';
+  constructor(private readonly prisma: PrismaService) {}
+  createOrUpdate(createTenancyDto: CreateTenancyDto) {
+    const { spaceId } = createTenancyDto;
+    return this.prisma.tenancy.upsert({
+      where: {
+        spaceId,
+      },
+      create: createTenancyDto,
+      update: createTenancyDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all tenancies`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} tenancy`;
-  }
-
-  update(id: number, updateTenancyDto: UpdateTenancyDto) {
-    return `This action updates a #${id} tenancy`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tenancy`;
+  findOneBySpaceId(spaceId: string) {
+    return this.prisma.tenancy.findUnique({
+      where: { id: spaceId },
+    });
   }
 }
