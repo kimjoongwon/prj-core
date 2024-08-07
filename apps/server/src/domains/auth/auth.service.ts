@@ -65,7 +65,7 @@ export class AuthService {
     );
     if (err) throw new BadRequestException('Invalid token');
 
-    return this.usersService.findById(userId);
+    return this.usersService.getUniqueById(userId);
   }
 
   async validateUser(email: string, password: string) {
@@ -263,6 +263,14 @@ export class AuthService {
     const superAdminRole = await this.rolesService.findSuperAdminRole();
 
     const tenancy = await this.tenanciesService.createOrUpdate({ spaceId });
+
+    await this.tenantsService.createOrUpdate({
+      tenancyId: tenancy.id,
+      userId: newUser.id,
+      active: true,
+      roleId: superAdminRole.id,
+      type: 'PHYSICAL',
+    });
 
     await this.tenantsService.createOrUpdate({
       roleId: superAdminRole.id,

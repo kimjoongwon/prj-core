@@ -6,4 +6,5 @@ export class UpsertTenantDto extends OmitType(TenantDto, [
   'createdAt',
   'deletedAt',
   'updatedAt',
+  'tenancy',
 ]) {}

@@ -28,9 +28,16 @@ import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
 import { CaslModule } from 'src/casl/casl.module';
+import { ClsModule } from 'nestjs-cls';
 
 @Module({
   imports: [
+    ClsModule.forRoot({
+      global: true,
+      middleware: {
+        mount: true,
+      },
+    }),
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {

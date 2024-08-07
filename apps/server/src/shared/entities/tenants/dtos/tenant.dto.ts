@@ -1,5 +1,6 @@
 import {
   BooleanField,
+  ClassField,
   EnumField,
   StringField,
   UUIDField,
@@ -7,6 +8,7 @@ import {
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Tenant } from '../tenant.entity';
 import { $Enums } from '@prisma/client';
+import { TenancyDto } from '../../tenancies';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
@@ -28,4 +30,7 @@ export class TenantDto extends AbstractDto implements Tenant {
 
   @EnumField(() => $Enums.TenantTypes)
   type: $Enums.TenantTypes;
+
+  @ClassField(() => TenancyDto)
+  tenancy?: TenancyDto;
 }

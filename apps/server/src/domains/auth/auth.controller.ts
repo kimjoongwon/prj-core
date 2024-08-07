@@ -14,6 +14,8 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 import {
   AccessToken,
+  Auth,
+  ContextProvider,
   LocalAuthGuard,
   Public,
   ResponseEntity,
@@ -31,7 +33,6 @@ export class AuthController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
-  @Public()
   @UseGuards(LocalAuthGuard)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Post('login')
@@ -49,9 +50,12 @@ export class AuthController {
 
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
+  @Auth([], { public: false })
   @Get('current-user')
   getCurrentUser(@Req() request) {
-    return request;
+    const tenant = ContextProvider.getTenant();
+    console.log('tenant', tenant);
+    return request.user;
   }
 
   @Public()

@@ -1,8 +1,7 @@
 import { ClsServiceManager } from 'nestjs-cls';
-
-import { User } from '@prisma/client';
-
 import { LanguageCode } from '../constants/language-code.constant';
+import { UserDto } from '../entities/users/dtos/user.dto';
+import { TenantDto } from '../entities/tenants/dtos/tenant.dto';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';
@@ -10,6 +9,8 @@ export class ContextProvider {
   private static readonly authUserKey = 'user_key';
 
   private static readonly languageKey = 'language_key';
+
+  private static readonly tenantKey = 'tenant_key';
 
   private static get<T>(key: string) {
     const store = ClsServiceManager.getClsService();
@@ -28,7 +29,7 @@ export class ContextProvider {
     return `${ContextProvider.nameSpace}.${key}`;
   }
 
-  static setAuthUser(user: User): void {
+  static setAuthUser(user: UserDto): void {
     ContextProvider.set(ContextProvider.authUserKey, user);
   }
 
@@ -36,11 +37,19 @@ export class ContextProvider {
     ContextProvider.set(ContextProvider.languageKey, language);
   }
 
+  static setTenant(tenant: TenantDto): void {
+    ContextProvider.set(ContextProvider.tenantKey, tenant);
+  }
+
   static getLanguage(): LanguageCode | undefined {
     return ContextProvider.get<LanguageCode>(ContextProvider.languageKey);
   }
 
-  static getAuthUser(): User | undefined {
-    return ContextProvider.get<User>(ContextProvider.authUserKey);
+  static getAuthUser(): UserDto | undefined {
+    return ContextProvider.get<UserDto>(ContextProvider.authUserKey);
+  }
+
+  static getTenant(): UserDto | undefined {
+    return ContextProvider.get<UserDto>(ContextProvider.tenantKey);
   }
 }

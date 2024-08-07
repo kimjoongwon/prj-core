@@ -24,7 +24,6 @@ export {
 } from './field.decorators';
 export { IS_PUBLIC_KEY, Public } from './public.decorator';
 export { Auth } from './auth.decorator';
-export { Tenant } from './tenant.decorator';
 export { AccessToken } from './access-token.decorator';
 export { ApiResponseEntity } from './api-response-entity.decorator';
 export { Cookies } from './cookies.decorator';

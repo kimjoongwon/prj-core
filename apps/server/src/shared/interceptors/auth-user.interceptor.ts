@@ -4,17 +4,18 @@ import {
   Injectable,
   type NestInterceptor,
 } from '@nestjs/common';
-
 import { ContextProvider } from '../providers';
-import { User } from '@prisma/client';
+import { UserDto } from '../entities/users/dtos/user.dto';
 
 @Injectable()
 export class AuthUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): any {
     const request = context.switchToHttp().getRequest();
 
-    const user = <User>request.user;
+    const user = <UserDto>request.user;
+    const tenant = user.tenants?.find((tenant) => tenant.active);
     ContextProvider.setAuthUser(user);
+    ContextProvider.setTenant(tenant);
 
     return next.handle();
   }

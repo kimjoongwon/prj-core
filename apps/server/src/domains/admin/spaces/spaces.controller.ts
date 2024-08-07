@@ -18,7 +18,7 @@ export class SpacesController {
   @Get('accessible')
   @ApiResponseEntity(SpaceDto, { isArray: true })
   async getAccessibleAllSpace(@User() user: UserDto) {
-    const spaceIds = user.tenants?.map((tenant) => tenant.spaceId);
+    const spaceIds = user.tenants.map((tenant) => tenant.tenancy.spaceId);
     const spaces = await this.spacesService.getAccessibleSpacesByIds(spaceIds);
     return new ResponseEntity(HttpStatus.OK, 'success', spaces);
   }

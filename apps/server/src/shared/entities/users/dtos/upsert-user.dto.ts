@@ -13,6 +13,7 @@ export class UpsertUserDto extends OmitType(UserDto, [
   'updatedAt',
   'deletedAt',
   'profiles',
+  'tenants',
 ]) {
   @EmailField()
   email: string;

@@ -4,6 +4,8 @@ import { Exclude } from 'class-transformer';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
+import { ClassField } from 'src/shared/decorators/field.decorators';
+import { TenantDto } from '../../tenants';
 
 export class UserDto extends AbstractDto implements UserEntity {
   constructor(user: UserEntity) {
@@ -31,4 +33,7 @@ export class UserDto extends AbstractDto implements UserEntity {
     type: () => [ProfileDto],
   })
   profiles?: ProfileDto[];
+
+  @ClassField(() => TenantDto, { isArray: true, each: true })
+  tenants?: TenantDto[];
 }
