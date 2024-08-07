@@ -12,7 +12,7 @@ import {
 import {
   JwtAuthGuard,
   LoggerMiddleware,
-  TenanciesService,
+  TenantsModule,
   appConfig,
   authConfig,
   corsConfig,
@@ -28,7 +28,6 @@ import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
 import { CaslModule } from 'src/casl/casl.module';
-import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module';
 
 @Module({
   imports: [
@@ -84,6 +83,7 @@ import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module'
     AbilitiesModule,
     SubjectsModule,
     CaslModule,
+    AuthModule,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -124,7 +124,7 @@ import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module'
         ],
       },
     ]),
-    AuthModule,
+    TenantsModule,
   ],
   providers: [
     {

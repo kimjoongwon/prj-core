@@ -1,3 +1,4 @@
 export * from './dtos';
-export { TenantEntity } from './tenant.entity';
+export { Tenant } from './tenant.entity';
 export { TenantsService } from './tenants.service';
+export { TenantsModule } from './tenants.module';

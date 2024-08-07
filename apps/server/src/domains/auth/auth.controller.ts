@@ -1,8 +1,26 @@
-import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  HttpCode,
+  Get,
+  Res,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
-import { AccessToken, Public, ResponseEntity, TenantDto, TokenService, UserDto } from '@shared';
+import {
+  AccessToken,
+  LocalAuthGuard,
+  Public,
+  ResponseEntity,
+  TenantDto,
+  TokenService,
+  UserDto,
+} from '@shared';
 
 @ApiTags('auth')
 @Controller()
@@ -12,8 +30,9 @@ export class AuthController {
     private tokenService: TokenService,
   ) {}
 
-  @Public()
   @HttpCode(HttpStatus.OK)
+  @Public()
+  @UseGuards(LocalAuthGuard)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Post('login')
   async login(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
@@ -31,8 +50,8 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
   @Get('current-user')
-  getCurrentUser(@AccessToken() accessToken: string) {
-    return this.authService.getCurrentUser(accessToken);
+  getCurrentUser(@Req() request) {
+    return request;
   }
 
   @Public()
