@@ -186,11 +186,11 @@ export class AuthService {
       this.jwtService.verify(token, { secret }),
     );
 
-    match(err.name)
+    match(err?.name)
       .with('TokenExpiredError', () => new BadRequestException('토튼 만료 에러'))
       .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
       .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
-      .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err.message}`));
+      .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err?.message}`));
 
     return payload;
   }
@@ -215,20 +215,22 @@ export class AuthService {
     }
   }
 
-  async createInitSpace() {
-    const baseSpace = await this.prisma.space.findUnique({
+  async createGalaxySpace() {
+    const galaxySpace = await this.prisma.space.findUnique({
       where: {
-        name: '기본',
+        name: 'Galaxy',
       },
     });
 
     return await this.prisma.space.upsert({
       where: {
-        name: '기본',
+        name: 'Galaxy',
       },
-      update: baseSpace,
+      update: {
+        ...galaxySpace,
+      },
       create: {
-        name: '기본',
+        name: 'Galaxy',
       },
     });
   }

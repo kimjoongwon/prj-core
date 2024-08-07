@@ -11,19 +11,18 @@ import {
   RolesService,
   SpacesService,
   TenanciesService,
-  TenantsService,
+  TenantsModule,
   TokenService,
   UsersService,
 } from '@shared';
 
 import { PasswordService } from './services';
-
 import { JwtStrategy, LocalStrategy } from './strategies';
 import { SignUpPayloadDto } from './dtos';
-import { PrismaService } from 'nestjs-prisma';
 
 @Module({
   imports: [
+    TenantsModule,
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => {
@@ -39,7 +38,6 @@ import { PrismaService } from 'nestjs-prisma';
   controllers: [AuthController],
   providers: [
     TenanciesService,
-    TenantsService,
     TokenService,
     PasswordService,
     RolesService,
@@ -53,24 +51,21 @@ import { PrismaService } from 'nestjs-prisma';
 export class AuthModule implements OnModuleInit {
   logger: Logger = new Logger(AuthModule.name);
   LOG_PREFIX = `${AuthModule.name} DB_INIT`;
-  constructor(
-    private readonly authService: AuthService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   async onModuleInit() {
     this.logger.verbose(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
     await this.authService.createInitRoles();
 
     this.logger.verbose(`[${this.LOG_PREFIX}] Create Base Space`);
-    const baseSpace = await this.authService.createInitSpace();
+    const galaxySpace = await this.authService.createGalaxySpace();
 
     const signUpPayloadDto: SignUpPayloadDto = {
       email: 'galaxy@gmail.com',
       name: '관리자',
       phone: '01073162347',
       password: 'rkdmf12!@',
-      spaceId: baseSpace.id,
+      spaceId: galaxySpace.id,
       nickname: 'Wally',
     };
 

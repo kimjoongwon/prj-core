@@ -21,7 +21,7 @@ export class UserDto extends AbstractDto implements UserEntity {
   @StringField()
   name: string;
 
-  @PhoneField()
+  @StringField()
   phone: string;
 
   @PasswordField()

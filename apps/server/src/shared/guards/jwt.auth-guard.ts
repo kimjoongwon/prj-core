@@ -1,11 +1,16 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { TenantDto, TenantsService } from '@shared';
+import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/shared/decorators/public.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private tenantsService: TenantsService,
+  ) {
     super();
   }
 
@@ -21,10 +26,22 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err, user) {
-    if (err || !user) {
+  handleRequest(err, req) {
+    if (err || !req.tenant) {
       throw err || new UnauthorizedException();
     }
-    return user;
+    return req.tenant;
+  }
+
+  async getRequest(context: ExecutionContext): Promise<Request> {
+    const request = context.switchToHttp().getRequest() as Request & { tenant: TenantDto };
+    const tenantId = request.headers['tenantId'];
+
+    if (typeof tenantId === 'string') {
+      const tenant = await this.tenantsService.getUniqueById(tenantId);
+      request.tenant = tenant;
+    }
+
+    return request;
   }
 }

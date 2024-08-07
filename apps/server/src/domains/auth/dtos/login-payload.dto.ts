@@ -3,7 +3,7 @@ import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 export class LoginPayloadDto {
   @ApiProperty({
-    example: 'PROMISE@gmail.com',
+    example: 'galaxy@gmail.com',
   })
   @Expose()
   @IsString()

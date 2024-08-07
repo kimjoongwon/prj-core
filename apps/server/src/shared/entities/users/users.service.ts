@@ -23,14 +23,18 @@ export class UsersService {
     });
   }
 
-  async findById(id: string) {
+  async getUniqueById(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
       include: {
         profiles: true,
         tenants: {
           include: {
-            tenancy: true,
+            tenancy: {
+              include: {
+                tenants: true,
+              },
+            },
             role: true,
           },
         },
