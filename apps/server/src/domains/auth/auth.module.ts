@@ -37,7 +37,6 @@ import { SignUpPayloadDto } from './dtos';
   ],
   controllers: [AuthController],
   providers: [
-    TenanciesService,
     TokenService,
     PasswordService,
     RolesService,

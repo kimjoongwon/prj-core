@@ -12,6 +12,14 @@ export class SubjectsService {
     return this.repository.create(createSubjectDto);
   }
 
+  createOrUpdate(createSubjectDto: CreateSubjectDto) {
+    return this.repository.upsert({
+      where: { name: createSubjectDto.name },
+      create: createSubjectDto,
+      update: createSubjectDto,
+    });
+  }
+
   getManyByPageQuery(args: SubjectPageQueryDto) {
     return this.repository.findMany(args);
   }

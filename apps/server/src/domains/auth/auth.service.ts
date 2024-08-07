@@ -216,19 +216,11 @@ export class AuthService {
   }
 
   async createGalaxySpace() {
-    const galaxySpace = await this.prisma.space.findUnique({
-      where: {
-        name: 'Galaxy',
-      },
-    });
-
     return await this.prisma.space.upsert({
       where: {
         name: 'Galaxy',
       },
-      update: {
-        ...galaxySpace,
-      },
+      update: undefined,
       create: {
         name: 'Galaxy',
       },
@@ -245,18 +237,18 @@ export class AuthService {
       phone,
       password: hashedPassword,
     });
-
+    const userId = newUser.id;
     await this.prisma.profile.upsert({
       where: {
-        userId: newUser.id,
+        userId,
       },
       update: {
-        userId: newUser.id,
+        userId,
         nickname,
       },
       create: {
+        userId,
         nickname,
-        userId: newUser.id,
       },
     });
 
