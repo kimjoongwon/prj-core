@@ -215,17 +215,6 @@ export class AuthService {
     }
   }
 
-  async createGalaxySpace() {
-    return await this.prisma.space.upsert({
-      where: {
-        name: 'Galaxy',
-      },
-      update: undefined,
-      create: {
-        name: 'Galaxy',
-      },
-    });
-  }
   async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
     const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
 

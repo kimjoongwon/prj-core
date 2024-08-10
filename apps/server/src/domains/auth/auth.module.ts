@@ -19,10 +19,14 @@ import {
 import { PasswordService } from './services';
 import { JwtStrategy, LocalStrategy } from './strategies';
 import { SignUpPayloadDto } from './dtos';
+import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module';
+import { SpacesModule } from '../admin/spaces/spaces.module';
 
 @Module({
   imports: [
+    SpacesModule,
     TenantsModule,
+    TenanciesModule,
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => {
@@ -50,14 +54,18 @@ import { SignUpPayloadDto } from './dtos';
 export class AuthModule implements OnModuleInit {
   logger: Logger = new Logger(AuthModule.name);
   LOG_PREFIX = `${AuthModule.name} DB_INIT`;
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly spacesService: SpacesService,
+  ) {}
 
   async onModuleInit() {
     this.logger.verbose(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
     await this.authService.createInitRoles();
 
     this.logger.verbose(`[${this.LOG_PREFIX}] Create Base Space`);
-    const galaxySpace = await this.authService.createGalaxySpace();
+
+    const galaxySpace = await this.spacesService.createOrUpdateGalaxySpace();
 
     const signUpPayloadDto: SignUpPayloadDto = {
       email: 'galaxy@gmail.com',
