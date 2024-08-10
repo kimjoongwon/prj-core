@@ -5,6 +5,15 @@ import { PrismaService } from 'nestjs-prisma';
 export class SpacesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async createOrUpdateGalaxySpace() {
+    const name = 'Galaxy';
+    return await this.prisma.space.upsert({
+      where: { name },
+      update: { name },
+      create: { name },
+    });
+  }
+
   async getAccessibleSpacesByIds(spaceIds: string[]) {
     return this.prisma.space.findMany({ where: { id: { in: spaceIds } } });
   }

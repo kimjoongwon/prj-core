@@ -1,25 +1,7 @@
 import { HttpStatus, Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, HttpAdapterHost, RouterModule } from '@nestjs/core';
-import { LoggerModule } from 'nestjs-pino';
-import pino from 'pino';
-import {
-  PrismaClientExceptionFilter,
-  PrismaModule,
-  QueryInfo,
-  loggingMiddleware,
-} from 'nestjs-prisma';
-import {
-  JwtAuthGuard,
-  LoggerMiddleware,
-  TenantsModule,
-  appConfig,
-  authConfig,
-  corsConfig,
-  databaseConfig,
-  fileConfig,
-  mailConfig,
-} from '@shared';
+import { PrismaClientExceptionFilter } from 'nestjs-prisma';
+import { JwtAuthGuard, LoggerMiddleware } from '@shared';
 import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './admin/services/services.module';
 import { SpacesModule } from './admin/spaces/spaces.module';
@@ -27,70 +9,12 @@ import { CategoriesModule } from './admin/categories/categories.module';
 import { GroupsModule } from './admin/groups/groups.module';
 import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
-import { CaslModule } from 'src/casl/casl.module';
-import { ClsModule } from 'nestjs-cls';
+import { domainModules, libModules } from '../main.config';
 
 @Module({
   imports: [
-    ClsModule.forRoot({
-      global: true,
-      middleware: {
-        mount: true,
-      },
-    }),
-    PrismaModule.forRoot({
-      isGlobal: true,
-      prismaServiceOptions: {
-        middlewares: [
-          loggingMiddleware({
-            logger: new Logger('PrismaMiddleware'),
-            logLevel: 'log', // default is `debug`
-            logMessage: (query: QueryInfo) =>
-              `[Prisma Query] ${query.model}.${query.action} - ${query.executionTime}ms`,
-          }),
-          async (params, next) => {
-            const result = await next(params);
-
-            return result;
-          },
-        ],
-      },
-    }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        customProps: () => ({
-          context: 'HTTP',
-        }),
-        stream: pino.destination({
-          dest: './logs',
-          minLength: 4096,
-          sync: false,
-        }),
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-          },
-        },
-      },
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [databaseConfig, authConfig, appConfig, mailConfig, fileConfig, corsConfig],
-      envFilePath: '.env',
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    CategoriesModule,
-    ServicesModule,
-    SpacesModule,
-    GroupsModule,
-    AbilitiesModule,
-    SubjectsModule,
-    CaslModule,
-    AuthModule,
+    ...libModules,
+    ...domainModules,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -131,7 +55,6 @@ import { ClsModule } from 'nestjs-cls';
         ],
       },
     ]),
-    TenantsModule,
   ],
   providers: [
     {
