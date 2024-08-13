@@ -1,11 +1,18 @@
+enum ReservationStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+}
+
 model Reservation {
-    id             String       @id @default(cuid())
-    status         String
-    timelineItemId String
-    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
-    createdAt      DateTime     @default(now()) @db.Timestamptz(6)
-    updatedAt      DateTime?    @updatedAt @db.Timestamptz(6)
-    deletedAt      DateTime?    @db.Timestamptz(6)
+    id             String            @id @default(cuid())
+    status         ReservationStatus @default(CONFIRMED)
+    userId         String            @unique
+    timelineItemId String            @unique
+    timelineItem   TimelineItem      @relation(fields: [timelineItemId], references: [id])
+    createdAt      DateTime          @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
+    deletedAt      DateTime?         @db.Timestamptz(6)
 }
 
 model Session {

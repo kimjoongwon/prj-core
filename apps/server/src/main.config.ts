@@ -26,6 +26,7 @@ export const domainModules = [
 ];
 
 export const libModules = [
+  CaslModule,
   ClsModule.forRoot({
     global: true,
     middleware: {

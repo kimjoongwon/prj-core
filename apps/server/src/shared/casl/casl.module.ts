@@ -5,5 +5,6 @@ import { PrismaService } from 'nestjs-prisma';
 @Global()
 @Module({
   providers: [PrismaService, CaslAbilityFactory],
+  exports: [CaslAbilityFactory],
 })
 export class CaslModule {}
