@@ -5,6 +5,8 @@ import { AuthUserInterceptor } from '../interceptors';
 import { Roles } from './roles.decorator';
 import { AuthGuard } from '../guards/auth.guard';
 import { PublicRoute } from './public-route.decorator';
+import { RolesGuard } from '../guards/roles.guard';
+import { PoliciesGuard } from '../guards/poilicies.guard';
 
 export function Auth(
   roles: RoleType[] = [],
@@ -14,7 +16,7 @@ export function Auth(
 
   return applyDecorators(
     Roles(roles),
-    UseGuards(AuthGuard({ public: isPublicRoute })),
+    UseGuards(AuthGuard({ public: isPublicRoute }), RolesGuard, PoliciesGuard),
     ApiBearerAuth(),
     UseInterceptors(AuthUserInterceptor),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),

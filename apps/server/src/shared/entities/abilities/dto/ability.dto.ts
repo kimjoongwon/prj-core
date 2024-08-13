@@ -3,6 +3,8 @@ import { EnumField, StringFieldOptional, UUIDField } from '../../../decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Ability } from '../ability.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { ClassField } from 'src/shared/decorators/field.decorators';
+import { SubjectDto } from '../../subjects/dto/subject.dto';
 
 export class AbilityDto extends AbstractDto implements Ability {
   @EnumField(() => $Enums.AbilityTypes)
@@ -27,4 +29,7 @@ export class AbilityDto extends AbstractDto implements Ability {
 
   @StringFieldOptional()
   description: string | null;
+
+  @ClassField(() => SubjectDto, { nullable: true })
+  subject?: SubjectDto;
 }

@@ -6,4 +6,5 @@ export class CreateAbilityDto extends OmitType(AbilityDto, [
   'updatedAt',
   'deletedAt',
   'id',
+  'subject',
 ]) {}

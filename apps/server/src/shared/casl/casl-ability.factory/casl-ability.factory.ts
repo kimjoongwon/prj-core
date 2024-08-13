@@ -4,13 +4,13 @@ import { createPrismaAbility, PrismaQuery, Subjects } from '@casl/prisma';
 import { PureAbility, AbilityBuilder } from '@casl/ability';
 import { PrismaService } from 'nestjs-prisma';
 import { UserDto } from '@shared';
-type AppSubjects =
+export type AppSubjects =
   | 'all'
   | Subjects<{
       User: User;
     }>;
 
-type AppAbility = PureAbility<[$Enums.AbilityActions, AppSubjects], PrismaQuery>;
+export type AppAbility = PureAbility<[$Enums.AbilityActions, AppSubjects], PrismaQuery>;
 
 @Injectable()
 export class CaslAbilityFactory {
@@ -34,7 +34,7 @@ export class CaslAbilityFactory {
       },
     });
 
-    const tenant = tenants.find((tenant) => !tenant.active);
+    const tenant = tenants.find((tenant) => tenant.active);
     tenant.role.abilities.forEach((ability) => {
       if (ability.type === 'CAN') {
         // @ts-ignore
@@ -45,7 +45,6 @@ export class CaslAbilityFactory {
       }
     });
 
-    can('CREATE', 'User', { id: user.id });
     return build();
   }
 }
