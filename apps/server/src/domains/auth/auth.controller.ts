@@ -13,7 +13,6 @@ import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 import {
-  AccessToken,
   Auth,
   ContextProvider,
   LocalAuthGuard,

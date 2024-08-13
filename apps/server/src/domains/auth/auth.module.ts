@@ -10,7 +10,6 @@ import {
   AuthConfig,
   RolesService,
   SpacesService,
-  TenanciesService,
   TenantsModule,
   TokenService,
   UsersService,

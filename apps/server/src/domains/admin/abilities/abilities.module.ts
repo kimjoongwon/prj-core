@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AbilitiesService } from '../../../shared/entities/abilities/abilities.service';
 import { AbilitiesController } from './abilities.controller';
 import { AbilitiesRepository } from 'src/shared/entities/abilities/abilities.repository';
@@ -7,6 +7,4 @@ import { AbilitiesRepository } from 'src/shared/entities/abilities/abilities.rep
   controllers: [AbilitiesController],
   providers: [AbilitiesService, AbilitiesRepository],
 })
-export class AbilitiesModule implements OnModuleInit {
-  onModuleInit() {}
-}
+export class AbilitiesModule {}
