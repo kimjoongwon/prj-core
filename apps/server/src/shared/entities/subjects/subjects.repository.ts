@@ -13,7 +13,7 @@ export class SubjectsRepository {
     });
   }
 
-  upsert(args: Prisma.SubjectUpsertArgs) {
+  async upsert(args: Prisma.SubjectUpsertArgs) {
     return this.prisma.subject.upsert(args);
   }
 

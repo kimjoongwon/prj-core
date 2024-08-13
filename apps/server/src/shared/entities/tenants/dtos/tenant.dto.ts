@@ -9,6 +9,7 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Tenant } from '../tenant.entity';
 import { $Enums } from '@prisma/client';
 import { TenancyDto } from '../../tenancies';
+import { RoleDto } from '../../roles/dto/role.dto';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
@@ -31,6 +32,9 @@ export class TenantDto extends AbstractDto implements Tenant {
   @EnumField(() => $Enums.TenantTypes)
   type: $Enums.TenantTypes;
 
-  @ClassField(() => TenancyDto)
+  @ClassField(() => TenancyDto, { nullable: true })
   tenancy?: TenancyDto;
+
+  @ClassField(() => RoleDto, { nullable: true })
+  role?: RoleDto;
 }
