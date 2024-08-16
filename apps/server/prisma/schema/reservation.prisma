@@ -16,41 +16,56 @@ model Reservation {
 }
 
 enum SessionTypes {
-    MONTHLY
-    WEEKLY
-    DAILY
+    ONE_TIME
+    RECURRING
+}
+
+enum RepeatCycleTypes {
+    DAY
+    WEEK
+    MONTH
+    YEAR
+}
+
+enum SessionEndTypes {
+    NEVER
+    ON_DATE
+    AFTER_OCCURRENCES
 }
 
 model Session {
-    id        String     @id @default(cuid())
-    name      String
-    tenancyId String
-    dates     DateTime[] @db.Timestamptz(6)
-    createdAt DateTime   @default(now()) @db.Timestamptz(6)
-    updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-    deletedAt DateTime?  @db.Timestamptz(6)
-    timelines Timeline[]
+    id                    String           @id @default(cuid())
+    name                  String
+    tenancyId             String
+    type                  SessionTypes     @default(ONE_TIME)
+    repeatCycle           Int              @default(1)
+    repeatCycleType       RepeatCycleTypes @default(DAY)
+    recurringDayOfTheWeek Int?
+    endType               SessionEndTypes  @default(NEVER)
+    createdAt             DateTime         @default(now()) @db.Timestamptz(6)
+    updatedAt             DateTime?        @updatedAt @db.Timestamptz(6)
+    deletedAt             DateTime?        @db.Timestamptz(6)
+    timelines             Timeline[]
 }
 
 model Timeline {
-    id            String         @id @default(cuid())
-    name          String
-    sessionId     String
-    date          DateTime       @db.Date()
-    session       Session        @relation(fields: [sessionId], references: [id])
-    createdAt     DateTime       @default(now()) @db.Timestamptz(6)
-    updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
-    deletedAt     DateTime?      @db.Timestamptz(6)
-    timelineItems TimelineItem[]
+    id           String        @id @default(cuid())
+    name         String
+    sessionId    String
+    date         DateTime      @db.Date()
+    session      Session       @relation(fields: [sessionId], references: [id])
+    createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+    updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
+    deletedAt    DateTime?     @db.Timestamptz(6)
+    timelineItem TimelineItem?
 }
 
 model TimelineItem {
     id            String        @id @default(cuid())
-    timelineId    String?
-    sessionId     String
     title         String
     startDateTime DateTime      @db.Timestamptz(6)
     endDateTime   DateTime      @db.Timestamptz(6)
+    timelineId    String        @unique
     description   String
     address       String?
     maxCapacity   Int
@@ -58,6 +73,6 @@ model TimelineItem {
     createdAt     DateTime      @default(now()) @db.Timestamptz(6)
     updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
     deletedAt     DateTime?     @db.Timestamptz(6)
+    timeline      Timeline      @relation(fields: [timelineId], references: [id])
     reservations  Reservation[]
-    timeline      Timeline?     @relation(fields: [timelineId], references: [id])
 }
