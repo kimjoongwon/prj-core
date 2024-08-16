@@ -33,18 +33,28 @@ enum SessionEndTypes {
     AFTER_OCCURRENCES
 }
 
+enum RecurringDayOfTheWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}
+
 model Session {
-    id                    String           @id @default(cuid())
+    id                    String                  @id @default(cuid())
     name                  String
     tenancyId             String
-    type                  SessionTypes     @default(ONE_TIME)
-    repeatCycle           Int              @default(1)
-    repeatCycleType       RepeatCycleTypes @default(DAY)
-    recurringDayOfTheWeek Int?
-    endType               SessionEndTypes  @default(NEVER)
-    createdAt             DateTime         @default(now()) @db.Timestamptz(6)
-    updatedAt             DateTime?        @updatedAt @db.Timestamptz(6)
-    deletedAt             DateTime?        @db.Timestamptz(6)
+    type                  SessionTypes            @default(ONE_TIME)
+    repeatCycle           Int                     @default(1)
+    repeatCycleType       RepeatCycleTypes        @default(DAY)
+    recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+    endType               SessionEndTypes         @default(NEVER)
+    createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+    updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
+    deletedAt             DateTime?               @db.Timestamptz(6)
     timelines             Timeline[]
 }
 
