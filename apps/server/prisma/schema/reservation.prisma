@@ -52,6 +52,8 @@ model Session {
     repeatCycleType       RepeatCycleTypes        @default(DAY)
     recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
     endType               SessionEndTypes         @default(NEVER)
+    endOnDate             DateTime?               @db.Date()
+    endAfterOccurrences   Int?                    @default(0)
     createdAt             DateTime                @default(now()) @db.Timestamptz(6)
     updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
     deletedAt             DateTime?               @db.Timestamptz(6)
