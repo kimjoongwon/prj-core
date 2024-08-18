@@ -5,4 +5,4 @@ import { RoleService } from '@shared';
   providers: [RoleService],
   exports: [RoleService],
 })
-export class RoleModule {}
+export class RolesModule {}
