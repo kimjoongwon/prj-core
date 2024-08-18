@@ -4,7 +4,7 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Ability } from '../ability.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { ClassField } from 'src/shared/decorators/field.decorators';
-import { SubjectDto } from '../../subjects/dto/subject.dto';
+import { SubjectDto } from '../../subject/dto/subject.dto';
 
 export class AbilityDto extends AbstractDto implements Ability {
   @EnumField(() => $Enums.AbilityTypes)

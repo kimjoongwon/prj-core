@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AbilitiesController } from './abilities.controller';
-import { AbilitiesService } from '../../../shared/entities/ability/ability.service';
 import { describe, beforeEach, it, expect } from 'vitest';
+import { AbilityService } from '@shared';
 
 describe('AbilitiesController', () => {
   let controller: AbilitiesController;
@@ -9,7 +9,7 @@ describe('AbilitiesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AbilitiesController],
-      providers: [AbilitiesService],
+      providers: [AbilityService],
     }).compile();
 
     controller = module.get<AbilitiesController>(AbilitiesController);

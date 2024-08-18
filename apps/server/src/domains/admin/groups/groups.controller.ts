@@ -11,21 +11,22 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  ApiEndpoints,
   ApiResponseEntity,
   CreateGroupDto,
   GroupDto,
   GroupPageOptionsDto,
-  GroupsService,
+  GroupService,
   PaginationMananger,
   Public,
   ResponseEntity,
   UpdateGroupDto,
 } from '@shared';
 
-@ApiTags('groups')
-@Controller()
+@ApiTags('ADMIN_GROUPS')
+@Controller(ApiEndpoints.ADMIN_GROUPS)
 export class GroupsController {
-  constructor(private readonly groupsService: GroupsService) {}
+  constructor(private readonly groupService: GroupService) {}
 
   @ApiResponse({
     status: 201,
@@ -34,14 +35,14 @@ export class GroupsController {
   })
   @Post()
   createGroup(@Body() createGroupDto: CreateGroupDto) {
-    return this.groupsService.create(createGroupDto);
+    return this.groupService.create(createGroupDto);
   }
 
   @Public()
   @ApiResponseEntity(GroupDto, { isArray: true })
   @Get()
   async getGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
-    const { count, groups } = await this.groupsService.getGroupsByPageOptions(pageOptions);
+    const { count, groups } = await this.groupService.getGroupsByPageOptions(pageOptions);
     const { skip, take } = pageOptions;
     return new ResponseEntity(
       HttpStatus.OK,
@@ -65,7 +66,7 @@ export class GroupsController {
   })
   @Get(':groupId')
   findGroupById(@Param('groupId') id: string) {
-    return this.groupsService.findOneById(id);
+    return this.groupService.findOneById(id);
   }
 
   @ApiResponse({
@@ -75,7 +76,7 @@ export class GroupsController {
   })
   @Patch(':groupId')
   updateGroupById(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupsService.updateById(groupId, updateGroupDto);
+    return this.groupService.updateById(groupId, updateGroupDto);
   }
 
   @ApiResponse({
@@ -85,6 +86,6 @@ export class GroupsController {
   })
   @Delete(':groupId')
   removeGroupById(@Param('groupId') groupId: string) {
-    return this.groupsService.removeById(groupId);
+    return this.groupService.removeById(groupId);
   }
 }

@@ -1,33 +1,20 @@
-import {
-  Controller,
-  Get,
-  Body,
-  Patch,
-  Param,
-  Logger,
-  Post,
-} from '@nestjs/common';
-import {
-  ApiBody,
-  ApiOkResponse,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get, Body, Patch, Param, Logger, Post } from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   Auth,
   Public,
   CreateServiceDto,
   ServiceEntity,
-  ServicesService,
+  ServiceService,
   UpdateServiceDto,
+  ApiEndpoints,
 } from '@shared';
 
-@ApiTags('services')
-@Controller()
+@ApiTags('ADMIN_SERVICES')
+@Controller(ApiEndpoints.ADMIN_SERVICES)
 export class ServicesController {
   logger = new Logger(ServicesController.name);
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(private readonly servicesService: ServiceService) {}
 
   @Get()
   @Public()
@@ -56,10 +43,7 @@ export class ServicesController {
   @ApiBody({ type: UpdateServiceDto })
   @ApiOkResponse({ type: ServiceEntity })
   @Patch(':id')
-  updateService(
-    @Param('id') id: string,
-    @Body() updateServiceDto: UpdateServiceDto,
-  ) {
+  updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.servicesService.update(id, updateServiceDto);
   }
 }

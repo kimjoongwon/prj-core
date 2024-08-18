@@ -1,25 +1,26 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
+  ApiEndpoints,
   ApiResponseEntity,
   Public,
   ResponseEntity,
   SpaceDto,
-  SpacesService,
+  SpaceService,
   User,
   UserDto,
 } from '@shared';
 
-@ApiTags('spaces')
-@Controller()
+@ApiTags('ADMIN_SPACES')
+@Controller(ApiEndpoints.ADMIN_SPACES)
 export class SpacesController {
-  constructor(private readonly spacesService: SpacesService) {}
+  constructor(private readonly spaceService: SpaceService) {}
 
   @Get('accessible')
   @ApiResponseEntity(SpaceDto, { isArray: true })
   async getAccessibleAllSpace(@User() user: UserDto) {
     const spaceIds = user.tenants.map((tenant) => tenant.tenancy.spaceId);
-    const spaces = await this.spacesService.getAccessibleSpacesByIds(spaceIds);
+    const spaces = await this.spaceService.getAccessibleSpacesByIds(spaceIds);
     return new ResponseEntity(HttpStatus.OK, 'success', spaces);
   }
 
@@ -27,6 +28,6 @@ export class SpacesController {
   @ApiResponse({ type: SpaceDto, isArray: true })
   @Get()
   async getAllSpace() {
-    return this.spacesService.getAllSpace();
+    return this.spaceService.getAllSpace();
   }
 }

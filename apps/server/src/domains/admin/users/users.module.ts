@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from '@shared';
+import { UserService } from '@shared';
 
 @Module({
-  providers: [UsersService],
-  exports: [UsersService],
+  providers: [UserService],
+  exports: [UserService],
 })
 export class UsersModule {}

@@ -12,12 +12,12 @@ import { TokenDto } from './dtos/token.dto';
 import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
-  RolesService,
-  TenanciesService,
-  TenantsService,
+  RoleService,
+  TenancyService,
+  TenantService,
   TokenPayloadDto,
   TokenService,
-  UsersService,
+  UserService,
   goTryRawSync,
 } from '@shared';
 import bcrypt from 'bcrypt';
@@ -29,15 +29,15 @@ export class AuthService {
   logger: Logger = new Logger(AuthService.name);
   LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
-    private rolesService: RolesService,
+    private roleService: RoleService,
     private passwordService: PasswordService,
     private config: ConfigService,
     private prisma: PrismaService,
     private tokenService: TokenService,
-    private tenanciesService: TenanciesService,
-    private tenantsService: TenantsService,
+    private tenancyService: TenancyService,
+    private tenantService: TenantService,
   ) {}
 
   generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
@@ -65,11 +65,11 @@ export class AuthService {
     );
     if (err) throw new BadRequestException('Invalid token');
 
-    return this.usersService.getUniqueById(userId);
+    return this.userService.getUniqueById(userId);
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findUniqueByEmail(email);
+    const user = await this.userService.findUniqueByEmail(email);
 
     const isPasswordValid = await this.validateHash(password, user?.password);
 
@@ -95,7 +95,7 @@ export class AuthService {
         },
       });
 
-      const userRole = await this.rolesService.findUserRole();
+      const userRole = await this.roleService.findUserRole();
 
       const tenancy = await tx.tenancy.create({
         data: {
@@ -198,20 +198,20 @@ export class AuthService {
   async createInitRoles() {
     this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
 
-    const superAdminRole = await this.rolesService.getSuperAdminRole();
+    const superAdminRole = await this.roleService.getSuperAdminRole();
 
     this.logger.log(`[${this.LOG_PREFIX}] Create USER Role`);
 
-    const userRole = await this.rolesService.getUserRole();
+    const userRole = await this.roleService.getUserRole();
 
     if (!superAdminRole) {
       this.logger.log('Create SUPER_ADMIN Role');
-      await this.rolesService.createSuperAdmin();
+      await this.roleService.createSuperAdmin();
     }
 
     if (!userRole) {
       this.logger.log('Create USER Role');
-      await this.rolesService.createUser();
+      await this.roleService.createUser();
     }
   }
 
@@ -220,7 +220,7 @@ export class AuthService {
 
     const hashedPassword = await this.passwordService.hashPassword(password);
 
-    const newUser = await this.usersService.upsert({
+    const newUser = await this.userService.upsert({
       email,
       name,
       phone,
@@ -242,11 +242,10 @@ export class AuthService {
       },
     });
 
-    const superAdminRole = await this.rolesService.findSuperAdminRole();
+    const superAdminRole = await this.roleService.findSuperAdminRole();
+    const tenancy = await this.tenancyService.createOrUpdate({ spaceId });
 
-    const tenancy = await this.tenanciesService.createOrUpdate({ spaceId });
-
-    await this.tenantsService.createOrUpdate({
+    await this.tenantService.createOrUpdate({
       tenancyId: tenancy.id,
       userId: newUser.id,
       active: true,
@@ -254,7 +253,7 @@ export class AuthService {
       type: 'PHYSICAL',
     });
 
-    await this.tenantsService.createOrUpdate({
+    await this.tenantService.createOrUpdate({
       roleId: superAdminRole.id,
       type: 'PHYSICAL',
       active: true,

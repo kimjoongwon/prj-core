@@ -1,29 +1,30 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
+  ApiEndpoints,
   ApiResponseEntity,
   CreateSubjectDto,
   ResponseEntity,
   SubjectDto,
   SubjectPageQueryDto,
-  SubjectsService,
+  SubjectService,
   UpdateSubjectDto,
 } from '@shared';
 
-@ApiTags('subjects')
-@Controller()
+@ApiTags('ADMIN_SUBJECTS')
+@Controller(ApiEndpoints.ADMIN_SUBJECTS)
 export class SubjectsController {
-  constructor(private readonly subjectsService: SubjectsService) {}
+  constructor(private readonly subjectService: SubjectService) {}
 
   @Post()
   createSubject(@Body() createSubjectDto: CreateSubjectDto) {
-    return this.subjectsService.create(createSubjectDto);
+    return this.subjectService.create(createSubjectDto);
   }
 
   @Get()
   @ApiResponseEntity(SubjectDto, { isArray: true })
   async getSubjectsByPageQuery(pageQuery: SubjectPageQueryDto) {
-    const subjects = await this.subjectsService.getManyByPageQuery(pageQuery);
+    const subjects = await this.subjectService.getManyByPageQuery(pageQuery);
     return new ResponseEntity(
       HttpStatus.OK,
       '조회 성공',
@@ -34,7 +35,7 @@ export class SubjectsController {
   @Get(':subjectId')
   @ApiResponseEntity(SubjectDto)
   async getSubjectById(@Param('subjectId') id: string) {
-    const subject = await this.subjectsService.getOneById(id);
+    const subject = await this.subjectService.getOneById(id);
     return new ResponseEntity(HttpStatus.OK, '조회 성공', new SubjectDto(subject));
   }
 
@@ -44,13 +45,13 @@ export class SubjectsController {
     @Param('subjectId') id: string,
     @Body() updateSubjectDto: UpdateSubjectDto,
   ) {
-    const subject = await this.subjectsService.updateById(id, updateSubjectDto);
+    const subject = await this.subjectService.updateById(id, updateSubjectDto);
     return new ResponseEntity(HttpStatus.OK, '수정 성공', new SubjectDto(subject));
   }
 
   @Delete(':subjectId')
   async removeSubjectById(@Param('subjectId') id: string) {
-    const subject = await this.subjectsService.removeById(id);
+    const subject = await this.subjectService.removeById(id);
     return new ResponseEntity(HttpStatus.OK, '삭제 성공', new SubjectDto(subject));
   }
 }

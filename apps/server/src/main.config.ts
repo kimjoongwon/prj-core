@@ -9,13 +9,13 @@ import { AuthModule } from './domains/auth/auth.module';
 import { Logger } from '@nestjs/common';
 import { AbilitiesModule } from './domains/admin/abilities/abilities.module';
 import {
-  AbilityModule,
   appConfig,
   authConfig,
   corsConfig,
   databaseConfig,
   fileConfig,
   mailConfig,
+  TenancyModule,
 } from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
@@ -23,12 +23,12 @@ import { ConfigModule } from '@nestjs/config';
 import pino from 'pino';
 
 export const domainModules = [
+  AbilitiesModule,
   CategoriesModule,
   ServicesModule,
   SpacesModule,
   GroupsModule,
   SubjectsModule,
-  AbilitiesModule,
   CaslModule,
   AuthModule,
 ];
