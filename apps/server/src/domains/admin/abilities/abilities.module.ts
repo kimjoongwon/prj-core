@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AbilitiesService } from '../../../shared/entities/abilities/abilities.service';
-import { AbilitiesController } from './abilities.controller';
-import { AbilitiesRepository } from '../../../shared/entities/abilities/abilities.repository';
+import { AbilityModule } from '@shared';
 
 @Module({
-  controllers: [AbilitiesController],
-  providers: [AbilitiesService, AbilitiesRepository],
+  imports: [AbilityModule],
+  controllers: [],
 })
 export class AbilitiesModule {}

@@ -9,16 +9,11 @@ import {
   Query,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  AbilityDto,
-  AbilityPageQueryDto,
-  AbilityService,
-  ApiResponseEntity,
-  CreateAbilityDto,
-  ResponseEntity,
-  UpdateAbilityDto,
-} from '@shared';
 import { ApiTags } from '@nestjs/swagger';
+import { AbilityService } from './ability.service';
+import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
+import { ResponseEntity } from '../common/response.entity';
+import { AbilityDto, AbilityPageQueryDto, CreateAbilityDto, UpdateAbilityDto } from './dto';
 
 @ApiTags('abilities')
 @Controller()

@@ -1,6 +1,5 @@
 import { ClsModule } from 'nestjs-cls';
 import { CaslModule } from './shared/casl/casl.module';
-import { AbilitiesModule } from './domains/admin/abilities/abilities.module';
 import { CategoriesModule } from './domains/admin/categories/categories.module';
 import { GroupsModule } from './domains/admin/groups/groups.module';
 import { ServicesModule } from './domains/admin/services/services.module';
@@ -8,7 +7,16 @@ import { SpacesModule } from './domains/admin/spaces/spaces.module';
 import { SubjectsModule } from './domains/admin/subjects/subjects.module';
 import { AuthModule } from './domains/auth/auth.module';
 import { Logger } from '@nestjs/common';
-import { appConfig, authConfig, corsConfig, databaseConfig, fileConfig, mailConfig } from '@shared';
+import { AbilitiesModule } from './domains/admin/abilities/abilities.module';
+import {
+  AbilityModule,
+  appConfig,
+  authConfig,
+  corsConfig,
+  databaseConfig,
+  fileConfig,
+  mailConfig,
+} from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule } from '@nestjs/config';
@@ -19,8 +27,8 @@ export const domainModules = [
   ServicesModule,
   SpacesModule,
   GroupsModule,
-  AbilitiesModule,
   SubjectsModule,
+  AbilitiesModule,
   CaslModule,
   AuthModule,
 ];

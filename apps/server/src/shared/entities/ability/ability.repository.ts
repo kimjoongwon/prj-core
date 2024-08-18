@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AbilitiesRepository {
+export class AbilityRepository {
   constructor(private readonly prisma: PrismaService) {}
   create(createAbilityDto: CreateAbilityDto) {
     return this.prisma.ability.create({

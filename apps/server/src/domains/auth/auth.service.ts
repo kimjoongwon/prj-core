@@ -227,6 +227,7 @@ export class AuthService {
       password: hashedPassword,
     });
     const userId = newUser.id;
+
     await this.prisma.profile.upsert({
       where: {
         userId,

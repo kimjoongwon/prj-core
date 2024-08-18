@@ -1,13 +1,12 @@
 import { HttpStatus, Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, HttpAdapterHost, RouterModule } from '@nestjs/core';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
-import { JwtAuthGuard, LoggerMiddleware } from '@shared';
+import { AbilityModule, JwtAuthGuard, LoggerMiddleware } from '@shared';
 import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './admin/services/services.module';
 import { SpacesModule } from './admin/spaces/spaces.module';
 import { CategoriesModule } from './admin/categories/categories.module';
 import { GroupsModule } from './admin/groups/groups.module';
-import { AbilitiesModule } from './admin/abilities/abilities.module';
 import { SubjectsModule } from './admin/subjects/subjects.module';
 import { domainModules, libModules } from '../main.config';
 
@@ -24,7 +23,7 @@ import { domainModules, libModules } from '../main.config';
             children: [
               {
                 path: 'abilities',
-                module: AbilitiesModule,
+                module: AbilityModule,
               },
               {
                 path: 'categories',
