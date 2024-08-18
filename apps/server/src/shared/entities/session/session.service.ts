@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSessionDto } from './dto/create-session.dto';
-import { UpdateSessionDto } from './dto/update-session.dto';
+import { CreateSessionDto } from './dtos/create-session.dto';
+import { UpdateSessionDto } from './dtos/update-session.dto';
+import { SessionRepository } from './session.repository';
+import { SessionPageQueryDto } from './dtos/session-page-query.dto';
+import { PaginationMananger } from 'src/shared/utils';
 
 @Injectable()
 export class SessionService {
+  constructor(private readonly repository: SessionRepository) {}
+
   create(createSessionDto: CreateSessionDto) {
-    return 'This action adds a new session';
+    return this.repository.create({ data: createSessionDto });
   }
 
-  findAll() {
-    return `This action returns all session`;
+  getSessionsByPageQuery(pageQuery: SessionPageQueryDto) {
+    const args = PaginationMananger.toArgs(pageQuery);
+    return this.repository.findMany(args);
   }
 
   findOne(id: number) {

@@ -6,3 +6,4 @@ export { ServicesModule } from './services/services.module';
 export { SpacesModule } from './spaces/spaces.module';
 export { SubjectsModule } from './subjects/subjects.module';
 export { UsersModule } from './users/users.module';
+export { SessionsModule } from './sessions/sessions.module';
