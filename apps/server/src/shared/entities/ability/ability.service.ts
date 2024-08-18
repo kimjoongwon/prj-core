@@ -13,7 +13,7 @@ export class AbilityService {
     return this.repository.create(createAbilityDto);
   }
 
-  getManyByPageQuery(pageQuery: AbilityPageQueryDto) {
+  getAbilitiesByPageQuery(pageQuery: AbilityPageQueryDto) {
     const args = PaginationMananger.toArgs(pageQuery);
     return this.repository.findMany(args);
   }
