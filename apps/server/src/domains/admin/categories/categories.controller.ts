@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Get,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   ResponseEntity,
@@ -15,41 +7,35 @@ import {
   CategoryDto,
   CreateCategoryDto,
   UpdateCategoryDto,
-  CategoriesService,
+  CategoryService,
+  ApiEndpoints,
 } from '@shared';
 
-@ApiTags('categories')
-@Controller()
+@ApiTags('ADMIN_CATEGORY')
+@Controller(ApiEndpoints.ADMIN_CATEGORIES)
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Auth()
   @ApiResponseEntity(CategoryDto, { isArray: true })
   @Get()
-  getCategories(
-    @Param() serviceSpaceDto: { spaceId: string; serviceId: string },
-  ) {
-    return this.categoriesService.getCategoriesByServiceSpace(serviceSpaceDto);
+  getCategories(@Param() serviceSpaceDto: { spaceId: string; serviceId: string }) {
+    return this.categoryService.getCategoriesByServiceSpace(serviceSpaceDto);
   }
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    const category =
-      await this.categoriesService.createCategory(createCategoryDto);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'Category created',
-      new CategoryDto(category),
-    );
+    const category = await this.categoryService.createCategory(createCategoryDto);
+    return new ResponseEntity(HttpStatus.OK, 'Category created', new CategoryDto(category));
   }
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Get(':categoryId')
   async findCategoryById(@Param('categoryId') categoryId: string) {
-    const category = await this.categoriesService.findCategoryById(categoryId);
+    const category = await this.categoryService.findCategoryById(categoryId);
 
     return new ResponseEntity(
       HttpStatus.OK,
@@ -65,14 +51,7 @@ export class CategoriesController {
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const category = await this.categoriesService.updateCategory(
-      id,
-      updateCategoryDto,
-    );
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'Category updated',
-      new CategoryDto(category),
-    );
+    const category = await this.categoryService.updateCategory(id, updateCategoryDto);
+    return new ResponseEntity(HttpStatus.OK, 'Category updated', new CategoryDto(category));
   }
 }

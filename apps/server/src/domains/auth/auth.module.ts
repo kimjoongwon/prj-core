@@ -8,24 +8,25 @@ import { AuthService } from './auth.service';
 
 import {
   AuthConfig,
-  RolesService,
-  SpacesService,
-  TenantsModule,
+  RoleModule,
+  SpaceModule,
+  SpaceService,
+  TenancyModule,
+  TenantModule,
   TokenService,
-  UsersService,
+  UserModule,
 } from '@shared';
 
 import { PasswordService } from './services';
-import { JwtStrategy, LocalStrategy } from './strategies';
 import { SignUpPayloadDto } from './dtos';
-import { TenanciesModule } from 'src/shared/entities/tenancies/tenancies.module';
-import { SpacesModule } from '../admin/spaces/spaces.module';
 
 @Module({
   imports: [
-    SpacesModule,
-    TenantsModule,
-    TenanciesModule,
+    UserModule,
+    RoleModule,
+    TenancyModule,
+    SpaceModule,
+    TenantModule,
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => {
@@ -39,23 +40,14 @@ import { SpacesModule } from '../admin/spaces/spaces.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    TokenService,
-    PasswordService,
-    RolesService,
-    UsersService,
-    LocalStrategy,
-    JwtStrategy,
-    SpacesService,
-    AuthService,
-  ],
+  providers: [TokenService, PasswordService, AuthService],
 })
 export class AuthModule implements OnModuleInit {
   logger: Logger = new Logger(AuthModule.name);
   LOG_PREFIX = `${AuthModule.name} DB_INIT`;
   constructor(
     private readonly authService: AuthService,
-    private readonly spacesService: SpacesService,
+    private readonly spaceService: SpaceService,
   ) {}
 
   async onModuleInit() {
@@ -64,7 +56,7 @@ export class AuthModule implements OnModuleInit {
 
     this.logger.verbose(`[${this.LOG_PREFIX}] Create Base Space`);
 
-    const galaxySpace = await this.spacesService.createOrUpdateGalaxySpace();
+    const galaxySpace = await this.spaceService.createOrUpdateGalaxySpace();
 
     const signUpPayloadDto: SignUpPayloadDto = {
       email: 'galaxy@gmail.com',

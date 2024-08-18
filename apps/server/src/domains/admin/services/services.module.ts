@@ -1,12 +1,12 @@
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { SERVICE_NAME } from '@prisma/client';
-import { ServicesService } from '@shared';
+import { ServiceModule } from '@shared';
 import { ServicesController } from './services.controller';
 
 @Module({
+  imports: [ServiceModule],
   controllers: [ServicesController],
-  providers: [ServicesService],
 })
 export class ServicesModule implements OnModuleInit {
   logger: Logger = new Logger(ServicesModule.name);

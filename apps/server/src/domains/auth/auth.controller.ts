@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 import {
+  ApiEndpoints,
   Auth,
   ContextProvider,
   LocalAuthGuard,
@@ -23,8 +24,8 @@ import {
   UserDto,
 } from '@shared';
 
-@ApiTags('auth')
-@Controller()
+@ApiTags('AUTH')
+@Controller(ApiEndpoints.AUTH)
 export class AuthController {
   constructor(
     private authService: AuthService,

@@ -13,6 +13,7 @@ import {
   AbilityDto,
   AbilityPageQueryDto,
   AbilityService,
+  ApiEndpoints,
   ApiResponseEntity,
   CreateAbilityDto,
   ResponseEntity,
@@ -20,8 +21,8 @@ import {
 } from '@shared';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('abilities')
-@Controller()
+@ApiTags('ADMIN_ABILITIES')
+@Controller(ApiEndpoints.ADMIN_ABILITIES)
 export class AbilitiesController {
   constructor(private readonly abilityService: AbilityService) {}
 

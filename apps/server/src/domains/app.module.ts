@@ -1,60 +1,11 @@
 import { HttpStatus, Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, HttpAdapterHost, RouterModule } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, HttpAdapterHost } from '@nestjs/core';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
-import { AbilityModule, JwtAuthGuard, LoggerMiddleware } from '@shared';
-import { AuthModule } from './auth/auth.module';
-import { ServicesModule } from './admin/services/services.module';
-import { SpacesModule } from './admin/spaces/spaces.module';
-import { CategoriesModule } from './admin/categories/categories.module';
-import { GroupsModule } from './admin/groups/groups.module';
-import { SubjectsModule } from './admin/subjects/subjects.module';
+import { JwtAuthGuard, LoggerMiddleware } from '@shared';
 import { domainModules, libModules } from '../main.config';
 
 @Module({
-  imports: [
-    ...libModules,
-    ...domainModules,
-    RouterModule.register([
-      {
-        path: 'api/v1',
-        children: [
-          {
-            path: 'admin',
-            children: [
-              {
-                path: 'abilities',
-                module: AbilityModule,
-              },
-              {
-                path: 'categories',
-                module: CategoriesModule,
-              },
-              {
-                path: 'services',
-                module: ServicesModule,
-              },
-              {
-                path: 'spaces',
-                module: SpacesModule,
-              },
-              {
-                path: 'groups',
-                module: GroupsModule,
-              },
-              {
-                path: 'subjects',
-                module: SubjectsModule,
-              },
-            ],
-          },
-          {
-            path: 'auth',
-            module: AuthModule,
-          },
-        ],
-      },
-    ]),
-  ],
+  imports: [...libModules, ...domainModules],
   providers: [
     {
       provide: APP_GUARD,
