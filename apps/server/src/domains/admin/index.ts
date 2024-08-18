@@ -1,0 +1,8 @@
+export { AbilitiesModule } from './abilities/abilities.module';
+export { CategoriesModule } from './categories/categories.module';
+export { GroupsModule } from './groups/groups.module';
+export { RolesModule } from './roles/roles.module';
+export { ServicesModule } from './services/services.module';
+export { SpacesModule } from './spaces/spaces.module';
+export { SubjectsModule } from './subjects/subjects.module';
+export { UsersModule } from './users/users.module';

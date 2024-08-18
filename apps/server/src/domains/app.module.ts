@@ -2,10 +2,10 @@ import { HttpStatus, Logger, MiddlewareConsumer, Module, OnModuleInit } from '@n
 import { APP_FILTER, APP_GUARD, HttpAdapterHost } from '@nestjs/core';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { JwtAuthGuard, LoggerMiddleware } from '@shared';
-import { domainModules, libModules } from '../main.config';
+import { adminModules, libModules } from '../main.config';
 
 @Module({
-  imports: [...libModules, ...domainModules],
+  imports: [...libModules, ...adminModules],
   providers: [
     {
       provide: APP_GUARD,
