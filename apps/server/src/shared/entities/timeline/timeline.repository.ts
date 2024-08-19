@@ -9,6 +9,10 @@ export class TimelineRepository {
     return this.prisma.timeline.create(args);
   }
 
+  createMany(args: Prisma.TimelineCreateManyArgs) {
+    return this.prisma.timeline.createMany(args);
+  }
+
   findManyBySessionId(sessionId: string) {
     return this.prisma.timeline.findMany({
       where: {
