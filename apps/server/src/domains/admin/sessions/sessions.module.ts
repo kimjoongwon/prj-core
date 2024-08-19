@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { SessionModule } from 'src/shared/entities/session';
 import { SessionController } from './sessions.controller';
+import { SessionModule } from '../../../shared/entities/session/session.module';
 
 @Module({
   imports: [SessionModule],

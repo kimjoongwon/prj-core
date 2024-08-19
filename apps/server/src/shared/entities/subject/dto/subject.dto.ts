@@ -1,4 +1,4 @@
-import { StringField } from 'src/shared/decorators';
+import { StringField } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Subject } from '../subject.entity';
 

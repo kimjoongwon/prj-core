@@ -1,7 +1,7 @@
 import { Space } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { StringField } from 'src/shared/decorators/field.decorators';
 import { SpaceEntity } from '../space.entity';
+import { StringField } from '../../../decorators/field.decorators';
 
 export class SpaceDto extends AbstractDto implements Space {
   @StringField()

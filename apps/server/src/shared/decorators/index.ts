@@ -21,6 +21,7 @@ export {
   URLField,
   URLFieldOptional,
   UUIDFieldOptional,
+  ClassField,
 } from './field.decorators';
 export { IS_PUBLIC_KEY, Public } from './public.decorator';
 export { Auth } from './auth.decorator';

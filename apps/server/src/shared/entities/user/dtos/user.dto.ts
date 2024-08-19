@@ -1,10 +1,9 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { EmailField, PasswordField, PhoneField, StringField } from '../../../decorators';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
 import { Exclude } from 'class-transformer';
 import { ProfileDto } from '../../profile/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
-import { ClassField } from 'src/shared/decorators/field.decorators';
 import { TenantDto } from '../../tenant';
 
 export class UserDto extends AbstractDto implements UserEntity {

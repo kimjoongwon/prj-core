@@ -1,5 +1,4 @@
-import { TenantDto, UserDto } from '@shared';
-import { ClassField, StringField } from 'src/shared/decorators/field.decorators';
+import { ClassField, StringField, TenantDto, UserDto } from '@shared';
 
 export class TokenDto {
   @StringField()

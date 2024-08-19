@@ -3,8 +3,8 @@ import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
 import { AbilityPageQueryDto } from './dto/ability-page-query.dto';
 import { AbilityRepository } from './ability.repository';
-import { PaginationMananger } from 'src/shared/utils';
 import { Prisma } from '@prisma/client';
+import { PaginationMananger } from '../../utils';
 
 @Injectable()
 export class AbilityService {

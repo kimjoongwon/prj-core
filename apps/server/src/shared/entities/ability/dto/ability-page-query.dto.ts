@@ -1,9 +1,9 @@
 import { IntersectionType, PartialType } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { EnumFieldOptional } from 'src/shared/decorators';
 import { OrderByDto } from '../../common/dtos/order-by.dto';
 import { AbilityDto } from './ability.dto';
 import { PageOptionsDto } from '../../common';
+import { EnumFieldOptional } from '../../../decorators/field.decorators';
 
 class AbilityOrderBy extends OrderByDto {
   @EnumFieldOptional(() => Prisma.SortOrder)

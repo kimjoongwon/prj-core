@@ -1,5 +1,5 @@
-import { PaginationMananger } from 'src/shared/utils';
 import { NumberField, BooleanField } from '../../../decorators';
+import { PaginationMananger } from '../../../utils';
 import { PageOptionsDto } from './page-option.dto';
 
 interface IPageMetaDtoParameters {
