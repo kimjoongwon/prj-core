@@ -7,6 +7,5 @@
 
 /**
  * A JSON object with a nested structure
- * @nullable
  */
-export type AbilityDtoConditions = { [key: string]: unknown } | null;
+export type AbilityDtoConditions = { [key: string]: unknown };

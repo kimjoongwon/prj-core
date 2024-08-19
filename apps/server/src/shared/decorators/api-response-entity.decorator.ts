@@ -12,7 +12,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   };
   const allOf = options?.isArray
     ? [
-        { $ref: getSchemaPath(ResponseEntity) },
         {
           properties: {
             message: { type: 'string', nullable: false },

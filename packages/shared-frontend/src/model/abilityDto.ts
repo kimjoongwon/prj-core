@@ -10,16 +10,13 @@ import type { AbilityTypes } from './abilityTypes';
 
 export interface AbilityDto {
   action: AbilityActions;
-  /**
-   * A JSON object with a nested structure
-   * @nullable
-   */
-  conditions: AbilityDtoConditions;
+  /** A JSON object with a nested structure */
+  conditions?: AbilityDtoConditions;
   createdAt: string;
-  /** @nullable */
-  deletedAt: string | null;
   description?: string;
   id: string;
+  /** @nullable */
+  removedAt: string | null;
   roleId: string;
   subjectId: string;
   type: AbilityTypes;

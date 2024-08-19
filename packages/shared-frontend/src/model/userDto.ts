@@ -9,15 +9,15 @@ import type { TenantDto } from './tenantDto';
 
 export interface UserDto {
   createdAt: string;
-  /** @nullable */
-  deletedAt: string | null;
   email: string;
   id: string;
   name: string;
   /** @minLength 6 */
   password: string;
   phone: string;
-  profiles: ProfileDto[];
+  profiles?: ProfileDto[];
+  /** @nullable */
+  removedAt: string | null;
   tenants: TenantDto[];
   updatedAt: string;
 }

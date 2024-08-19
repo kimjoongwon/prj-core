@@ -4,14 +4,13 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { Roles } from './roles';
 
-export interface GroupDto {
+export interface RoleDto {
   createdAt: string;
   id: string;
-  name: string;
+  name: Roles;
   /** @nullable */
   removedAt: string | null;
-  serviceId: string;
-  spaceId: string;
   updatedAt: string;
 }

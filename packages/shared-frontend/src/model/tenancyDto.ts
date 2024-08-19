@@ -5,13 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface GroupDto {
+export interface TenancyDto {
   createdAt: string;
   id: string;
-  name: string;
   /** @nullable */
   removedAt: string | null;
-  serviceId: string;
   spaceId: string;
   updatedAt: string;
 }

@@ -7,9 +7,9 @@
 
 export interface UpdateCategoryDto {
   createdAt?: string;
-  /** @nullable */
-  deletedAt?: string | null;
   id?: string;
+  /** @nullable */
+  removedAt?: string | null;
   /** @nullable */
   updatedAt?: string | null;
 }

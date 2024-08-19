@@ -4,16 +4,16 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { ServiceEntityDeletedAt } from './serviceEntityDeletedAt';
 import type { ServiceEntityName } from './serviceEntityName';
+import type { ServiceEntityRemovedAt } from './serviceEntityRemovedAt';
 import type { ServiceEntityUpdatedAt } from './serviceEntityUpdatedAt';
 
 export interface ServiceEntity {
   createdAt: string;
-  deletedAt: ServiceEntityDeletedAt;
   id: string;
   /** @nullable */
   label: string | null;
   name: ServiceEntityName;
+  removedAt: ServiceEntityRemovedAt;
   updatedAt: ServiceEntityUpdatedAt;
 }

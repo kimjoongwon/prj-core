@@ -4,16 +4,16 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UpdateServiceDtoDeletedAt } from './updateServiceDtoDeletedAt';
 import type { UpdateServiceDtoName } from './updateServiceDtoName';
+import type { UpdateServiceDtoRemovedAt } from './updateServiceDtoRemovedAt';
 import type { UpdateServiceDtoUpdatedAt } from './updateServiceDtoUpdatedAt';
 
 export interface UpdateServiceDto {
   createdAt?: string;
-  deletedAt?: UpdateServiceDtoDeletedAt;
   id?: string;
   /** @nullable */
   label?: string | null;
   name?: UpdateServiceDtoName;
+  removedAt?: UpdateServiceDtoRemovedAt;
   updatedAt?: UpdateServiceDtoUpdatedAt;
 }
