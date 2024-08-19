@@ -12,7 +12,7 @@ model Reservation {
     timelineItem   TimelineItem      @relation(fields: [timelineItemId], references: [id])
     createdAt      DateTime          @default(now()) @db.Timestamptz(6)
     updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
-    deletedAt      DateTime?         @db.Timestamptz(6)
+    removedAt      DateTime?         @db.Timestamptz(6)
 
     @@unique([userId, timelineItemId])
 }
@@ -58,19 +58,20 @@ model Session {
     endAfterOccurrences   Int?                    @default(0)
     createdAt             DateTime                @default(now()) @db.Timestamptz(6)
     updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-    deletedAt             DateTime?               @db.Timestamptz(6)
+    removedAt             DateTime?               @db.Timestamptz(6)
     timelines             Timeline[]
 }
 
 model Timeline {
-    id           String        @id @default(cuid())
-    sessionId    String
-    date         DateTime      @db.Date()
-    createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-    updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
-    deletedAt    DateTime?     @db.Timestamptz(6)
-    session      Session       @relation(fields: [sessionId], references: [id])
-    timelineItem TimelineItem?
+    id             String         @id @default(cuid())
+    sessionId      String
+    timelineItemId String?
+    date           DateTime       @db.Date()
+    createdAt      DateTime       @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?      @updatedAt @db.Timestamptz(6)
+    removedAt      DateTime?      @db.Timestamptz(6)
+    session        Session        @relation(fields: [sessionId], references: [id])
+    timelineItems  TimelineItem[]
 }
 
 model TimelineItem {
@@ -78,14 +79,14 @@ model TimelineItem {
     title         String
     startDateTime DateTime      @db.Timestamptz(6)
     endDateTime   DateTime      @db.Timestamptz(6)
-    timelineId    String        @unique
     description   String
     address       String?
     maxCapacity   Int
     minCapacity   Int
     createdAt     DateTime      @default(now()) @db.Timestamptz(6)
     updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
-    deletedAt     DateTime?     @db.Timestamptz(6)
-    timeline      Timeline      @relation(fields: [timelineId], references: [id])
+    removedAt     DateTime?     @db.Timestamptz(6)
     reservations  Reservation[]
+    timelineId    String?
+    timeline      Timeline?     @relation(fields: [timelineId], references: [id])
 }

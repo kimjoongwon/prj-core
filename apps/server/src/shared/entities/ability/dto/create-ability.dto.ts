@@ -1,10 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
 import { AbilityDto } from './ability.dto';
+import { COMMON_ENTITY_FIELDS } from 'src/shared/constants';
 
-export class CreateAbilityDto extends OmitType(AbilityDto, [
-  'createdAt',
-  'updatedAt',
-  'deletedAt',
-  'id',
-  'subject',
-]) {}
+export class CreateAbilityDto extends OmitType(AbilityDto, [...COMMON_ENTITY_FIELDS, 'subject']) {}

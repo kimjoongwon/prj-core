@@ -1,26 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTimelineDto } from './dto/create-timeline.dto';
-import { UpdateTimelineDto } from './dto/update-timeline.dto';
+import { TimelineRepository } from './timeline.repository';
 
 @Injectable()
 export class TimelineService {
+  constructor(private readonly repository: TimelineRepository) {}
   create(createTimelineDto: CreateTimelineDto) {
-    return 'This action adds a new timeline';
+    return this.repository.create({ data: createTimelineDto });
   }
 
-  findAll() {
-    return `This action returns all timeline`;
+  getManyBySessionId(sessionId: string) {
+    return this.repository.findManyBySessionId(sessionId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} timeline`;
+  removeById(timelineId: string) {
+    return this.repository.removeById(timelineId);
   }
 
-  update(id: number, updateTimelineDto: UpdateTimelineDto) {
-    return `This action updates a #${id} timeline`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} timeline`;
+  removeManyById(timelineIds: string[]) {
+    return this.repository.removeManyByIds(timelineIds);
   }
 }

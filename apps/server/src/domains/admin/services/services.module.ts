@@ -17,7 +17,7 @@ export class ServicesModule implements OnModuleInit {
   async onModuleInit() {
     this.logger.log(`[${this.LOG_PREFIX}] Create Services`);
 
-    const space = await this.prisma.service.findFirst({
+    const space = await this.prisma.service.findUnique({
       where: {
         name: SERVICE_NAME.SPACE,
       },
@@ -32,7 +32,7 @@ export class ServicesModule implements OnModuleInit {
       });
     }
 
-    const user = await this.prisma.service.findFirst({
+    const user = await this.prisma.service.findUnique({
       where: {
         name: SERVICE_NAME.USER,
       },

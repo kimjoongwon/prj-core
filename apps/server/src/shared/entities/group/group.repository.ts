@@ -12,7 +12,7 @@ export class GroupRepository {
     const groups = await this.prisma.group.findMany({
       where: {
         name,
-        deletedAt: null,
+        removedAt: null,
       },
       orderBy: {
         createdAt: orderByCreatedAt,

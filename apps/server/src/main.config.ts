@@ -12,6 +12,7 @@ import {
   CategoriesModule,
   GroupsModule,
   ServicesModule,
+  SessionsModule,
   SpacesModule,
   SubjectsModule,
 } from './domains/admin';
@@ -25,6 +26,7 @@ export const adminModules = [
   SubjectsModule,
   CaslModule,
   AuthModule,
+  SessionsModule,
 ];
 
 export const libModules = [

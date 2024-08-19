@@ -40,7 +40,7 @@ export class CategoryService {
       where: {
         serviceId,
         spaceId,
-        deletedAt: null,
+        removedAt: null,
       },
     });
     return new ResponseEntity(

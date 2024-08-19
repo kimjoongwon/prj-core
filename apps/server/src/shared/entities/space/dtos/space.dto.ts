@@ -13,6 +13,6 @@ export class SpaceDto extends AbstractDto implements Space {
     this.name = entity.name;
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
-    this.deletedAt = entity.deletedAt;
+    this.removedAt = entity.removedAt;
   }
 }

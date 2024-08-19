@@ -15,5 +15,5 @@ export abstract class AbstractEntity {
   @DateField({
     nullable: true,
   })
-  deletedAt: Date | null;
+  removedAt: Date | null;
 }

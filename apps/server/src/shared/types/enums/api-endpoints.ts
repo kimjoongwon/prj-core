@@ -12,5 +12,7 @@ export enum ApiEndpoints {
   ADMIN_SPACES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/spaces`,
   ADMIN_GROUPS = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/groups`,
   ADMIN_SUBJECTS = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/subjects`,
+  ADMIN_SESSIONS = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/sessions`,
+  ADMIN_TIMELINES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/timelines`,
   AUTH = `${ApiEndpoints.PREFIX}/auth`,
 }

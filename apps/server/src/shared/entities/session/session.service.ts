@@ -13,17 +13,13 @@ export class SessionService {
     return this.repository.create({ data: createSessionDto });
   }
 
-  getSessionsByPageQuery(pageQuery: SessionPageQueryDto) {
+  getManyByPageQuery(pageQuery: SessionPageQueryDto) {
     const args = PaginationMananger.toArgs(pageQuery);
     return this.repository.findMany(args);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} session`;
-  }
-
-  update(id: number, updateSessionDto: UpdateSessionDto) {
-    return `This action updates a #${id} session`;
+  update(updateSessionDto: UpdateSessionDto) {
+    return 'test';
   }
 
   remove(id: number) {

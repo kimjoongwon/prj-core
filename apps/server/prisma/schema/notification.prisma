@@ -4,7 +4,7 @@ model Template {
   htmlContent String
   createdAt   DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?     @updatedAt @db.Timestamptz(6)
-  deletedAt   DateTime?     @db.Timestamptz(6)
+  removedAt   DateTime?     @db.Timestamptz(6)
 }
 
 enum TemplateNames {
@@ -25,7 +25,7 @@ model SMS {
   sentAt     DateTime?
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime? @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
 }
 
 model Email {
@@ -37,7 +37,7 @@ model Email {
   sentAt     DateTime?
   createdAt  DateTime    @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
-  deletedAt  DateTime?   @db.Timestamptz(6)
+  removedAt  DateTime?   @db.Timestamptz(6)
 }
 
 enum EmailStatus {

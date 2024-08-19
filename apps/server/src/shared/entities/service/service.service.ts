@@ -32,7 +32,7 @@ export class ServiceService {
   findAllService() {
     return this.prisma.service.findMany({
       where: {
-        deletedAt: null,
+        removedAt: null,
       },
     });
   }

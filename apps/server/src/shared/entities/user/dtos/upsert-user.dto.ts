@@ -6,12 +6,10 @@ import {
   StringField,
 } from '../../../decorators/field.decorators';
 import { UserDto } from './user.dto';
+import { COMMON_ENTITY_FIELDS } from '../../../constants';
 
 export class UpsertUserDto extends OmitType(UserDto, [
-  'id',
-  'createdAt',
-  'updatedAt',
-  'deletedAt',
+  ...COMMON_ENTITY_FIELDS,
   'profiles',
   'tenants',
 ]) {

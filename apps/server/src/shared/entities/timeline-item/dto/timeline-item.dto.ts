@@ -1,8 +1,6 @@
-import { ClassField } from 'src/shared/decorators/field.decorators';
-import { DateField, NumberField, StringField } from '../../../decorators';
+import { DateField, NumberField, StringField } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { TimelineItem } from '../timeline-item.entity';
-import { TimelineDto } from '../../timeline/dto';
 
 export class TimelineItemDto extends AbstractDto implements TimelineItem {
   @StringField()
@@ -28,7 +26,4 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
 
   @NumberField()
   minCapacity: number;
-
-  @ClassField(() => TimelineDto, { nullable: true })
-  timeline: TimelineDto | null;
 }

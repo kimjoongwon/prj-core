@@ -12,5 +12,5 @@ export class OrderByDto {
   updatedAtSortOrder?: Prisma.SortOrder;
 
   @EnumFieldOptional(() => Prisma.SortOrder)
-  deletedAtSortOrder?: Prisma.SortOrder;
+  removedAtSortOrder?: Prisma.SortOrder;
 }

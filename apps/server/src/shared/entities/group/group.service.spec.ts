@@ -17,7 +17,7 @@ const mockGroupDto: GroupDto = {
   ...mockCreateGroupDto,
   createdAt: undefined,
   updatedAt: undefined,
-  deletedAt: undefined,
+  removedAt: undefined,
 };
 
 describe('GroupService', () => {

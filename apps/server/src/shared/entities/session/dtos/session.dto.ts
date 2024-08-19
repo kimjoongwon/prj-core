@@ -38,6 +38,6 @@ export class SessionDto extends AbstractDto implements Session {
   @NumberField({ nullable: true })
   endAfterOccurrences: number | null;
 
-  @ClassField(() => TimelineDto, { isArray: true, nullable: true })
+  @ClassField(() => TimelineDto, { isArray: true, nullable: true, each: true })
   timelines: TimelineDto[] | null;
 }

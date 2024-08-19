@@ -30,5 +30,5 @@ export class ServiceEntity implements Service {
   @ApiProperty({
     example: null,
   })
-  deletedAt: Date | null;
+  removedAt: Date | null;
 }

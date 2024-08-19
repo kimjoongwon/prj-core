@@ -37,7 +37,7 @@ export class SpaceService {
   async getAllSpace() {
     return this.prisma.space.findMany({
       where: {
-        deletedAt: null,
+        removedAt: null,
       },
     });
   }
