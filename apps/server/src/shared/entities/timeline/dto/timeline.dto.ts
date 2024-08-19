@@ -5,9 +5,6 @@ import { ClassField, UUIDFieldOptional } from 'src/shared/decorators/field.decor
 import { TimelineItemDto } from '../../timeline-item/dto/timeline-item.dto';
 
 export class TimelineDto extends AbstractDto implements Timeline {
-  @StringField()
-  name: string;
-
   @UUIDField()
   sessionId: string;
 
@@ -15,7 +12,7 @@ export class TimelineDto extends AbstractDto implements Timeline {
   date: Date;
 
   @UUIDFieldOptional()
-  timelineItemId: string;
+  timelineItemId: string | null;
 
   @ClassField(() => TimelineItemDto, { nullable: true })
   timelineItem: TimelineItemDto | null;

@@ -13,3 +13,4 @@ export * from './ability';
 export * from './subject';
 export * from './tenancy';
 export * from './session';
+export * from './timeline';
