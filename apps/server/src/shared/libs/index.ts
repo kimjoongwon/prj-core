@@ -1,1 +1,2 @@
-export * from './go-go-try/index';
+export * from './go-go-try';
+export * from './remeda';

@@ -3,9 +3,10 @@ import { CreateSessionDto } from './dtos/create-session.dto';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { SessionRepository } from './session.repository';
 import { SessionPageQueryDto } from './dtos/session-page-query.dto';
-import { PaginationMananger } from 'src/shared/utils';
 import { TimelineService } from '../timeline/timeline.service';
 import { CreateTimelineDto } from '../timeline/dto';
+import { PaginationMananger } from '../../utils';
+import { R } from '../../libs/remeda';
 
 @Injectable()
 export class SessionService {
@@ -39,9 +40,9 @@ export class SessionService {
 
     await this.timelineService.createMany(createTimelineDtos);
 
-    const { timelineDates, ...rest } = updateSessionDto;
+    const omittedUpdateSessionDto = R.omit(updateSessionDto, ['timelineDates']);
 
-    return this.repository.update({ where: { id: sessionId }, data: rest });
+    return this.repository.update({ where: { id: sessionId }, data: omittedUpdateSessionDto });
   }
 
   remove(id: number) {
