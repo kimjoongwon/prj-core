@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction } from 'mobx';
 import { LoginPayloadDto, TenantDto, TokenDto, UserDto } from '../model';
 import { AxiosError, HttpStatusCode } from 'axios';
-import { login, refreshToken } from '../apis';
+import { getToken, login } from '../apis';
 import { MyUniv } from './myUniv';
 import { SpaceSelectModalContent } from '../components/modal/contents/SpaceSelect';
 import Button from '../components/ui/Button';
@@ -53,7 +53,7 @@ export class Auth {
   }
 
   refreshing() {
-    refreshToken().then(this.onRefreshTokenSuccess, this.onErrorRefreshToken);
+    getToken().then(this.onRefreshTokenSuccess, this.onErrorRefreshToken);
   }
 
   onRefreshTokenSuccess(tokenDto: TokenDto) {

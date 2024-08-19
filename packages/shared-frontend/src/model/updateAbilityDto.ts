@@ -4,7 +4,21 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { AbilityActions } from './abilityActions';
+import type { UpdateAbilityDtoConditions } from './updateAbilityDtoConditions';
+import type { AbilityTypes } from './abilityTypes';
 
 export interface UpdateAbilityDto {
+  action?: AbilityActions;
+  /** A JSON object with a nested structure */
+  conditions?: UpdateAbilityDtoConditions;
+  createdAt?: string;
+  description?: string;
   id?: string;
+  /** @nullable */
+  removedAt?: string | null;
+  roleId?: string;
+  subjectId?: string;
+  type?: AbilityTypes;
+  updatedAt?: string;
 }

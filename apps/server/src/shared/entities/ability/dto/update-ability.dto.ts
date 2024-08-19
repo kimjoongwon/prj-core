@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateAbilityDto } from './create-ability.dto';
+import { OmitType, PartialType } from '@nestjs/swagger';
+import { AbilityDto } from './ability.dto';
 
-export class UpdateAbilityDto extends PartialType(CreateAbilityDto) {}
+export class UpdateAbilityDto extends PartialType(OmitType(AbilityDto, ['subject'])) {}

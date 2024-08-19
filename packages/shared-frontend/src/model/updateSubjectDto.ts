@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * A JSON object with a nested structure
- */
-export type CreateAbilityDtoConditions = { [key: string]: unknown };
+export interface UpdateSubjectDto {
+  name?: string;
+}

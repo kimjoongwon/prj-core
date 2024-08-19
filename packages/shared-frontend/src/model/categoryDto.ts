@@ -8,12 +8,12 @@
 export interface CategoryDto {
   ancestorIds: string[];
   createdAt: string;
-  /** @nullable */
-  deletedAt: string | null;
   id: string;
   name: string;
   /** @nullable */
   parentId: string | null;
+  /** @nullable */
+  removedAt: string | null;
   serviceId: string;
   spaceId: string;
   updatedAt: string;

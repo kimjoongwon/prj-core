@@ -29,6 +29,6 @@ export class AbilityDto extends AbstractDto implements Ability {
   @StringFieldOptional()
   description: string | null;
 
-  @ClassField(() => SubjectDto, { nullable: true })
+  @ClassField(() => SubjectDto, { nullable: true, swagger: false })
   subject?: SubjectDto;
 }

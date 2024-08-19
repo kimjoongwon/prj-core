@@ -7,10 +7,10 @@
 
 export interface ProfileDto {
   createdAt: string;
-  /** @nullable */
-  deletedAt: string | null;
   id: string;
   nickname: string;
+  /** @nullable */
+  removedAt: string | null;
   /** @nullable */
   updatedAt: string | null;
   userId: string;

@@ -5,13 +5,18 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface GroupDto {
+export interface TimelineItemDto {
+  address: string;
   createdAt: string;
+  description: string;
+  endDateTime: string;
   id: string;
-  name: string;
+  maxCapacity: number;
+  minCapacity: number;
   /** @nullable */
   removedAt: string | null;
-  serviceId: string;
-  spaceId: string;
+  startDateTime: string;
+  timelineId: string;
+  title: string;
   updatedAt: string;
 }

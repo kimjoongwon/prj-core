@@ -4,14 +4,23 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { TenantDtoRole } from './tenantDtoRole';
+import type { TenantDtoTenancy } from './tenantDtoTenancy';
+import type { TenantTypes } from './tenantTypes';
 
 export interface TenantDto {
+  active: boolean;
   createdAt: string;
-  /** @nullable */
-  deletedAt: string | null;
   id: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** @nullable */
+  role: TenantDtoRole;
   roleId: string;
-  spaceId: string;
+  /** @nullable */
+  tenancy: TenantDtoTenancy;
+  tenancyId: string;
+  type: TenantTypes;
   updatedAt: string;
   userId: string;
 }

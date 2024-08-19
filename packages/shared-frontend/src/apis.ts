@@ -29,7 +29,9 @@ import type {
   CreateCategoryDto,
   CreateGroupDto,
   CreateServiceDto,
-  FindAllAblityParams,
+  CreateSessionDto,
+  CreateSubjectDto,
+  GetAbilitiesByPageQueryParams,
   GetGroupsByPageOptionsParams,
   LoginPayloadDto,
   SignUpPayloadDto,
@@ -37,7 +39,9 @@ import type {
   UpdateAbilityDto,
   UpdateCategoryDto,
   UpdateGroupDto,
-  UpdateServiceDto
+  UpdateServiceDto,
+  UpdateSessionDto,
+  UpdateSubjectDto
 } from './model'
 import {
   faker
@@ -49,20 +53,34 @@ import {
 } from 'msw'
 import {
   AbilityActions,
-  AbilityTypes
+  AbilityTypes,
+  RecurringDayOfTheWeek,
+  RepeatCycleTypes,
+  Roles,
+  SessionEndTypes,
+  SessionTypes,
+  TenantTypes
 } from './model'
 import type {
-  Create200AllOf,
+  CreateAbility200AllOf,
   CreateCategory200AllOf,
-  FindAllAblity200,
+  CreateSession200AllOf,
   FindCategoryById200AllOf,
-  GetAccessibleAllSpace200,
-  GetCategories200,
-  GetGroupsByPageOptions200,
+  GetAbilitiesByPageQuery200AllOf,
+  GetAbilityById200AllOf,
+  GetAccessibleAllSpace200AllOf,
+  GetCategories200AllOf,
+  GetGroupsByPageOptions200AllOf,
+  GetSubjectById200AllOf,
+  GetSubjectsByPageQuery200AllOf,
   GroupDto,
+  RemoveAbilityById200AllOf,
   ServiceEntity,
   TokenDto,
+  UpdateAbilityById200AllOf,
   UpdateCategory200AllOf,
+  UpdateSesson200AllOf,
+  UpdateSubjectById200AllOf,
   UserDto
 } from './model'
 import { customInstance } from './libs/customAxios';
@@ -73,13 +91,429 @@ import type { ErrorType, BodyType } from './libs/customAxios';
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
 
+export const createAbility = (
+    createAbilityDto: BodyType<CreateAbilityDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateAbility200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAbilityDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateAbilityMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAbility>>, {data: BodyType<CreateAbilityDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAbility(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof createAbility>>>
+    export type CreateAbilityMutationBody = BodyType<CreateAbilityDto>
+    export type CreateAbilityMutationError = ErrorType<unknown>
+
+    export const useCreateAbility = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createAbility>>,
+        TError,
+        {data: BodyType<CreateAbilityDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateAbilityMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getAbilitiesByPageQuery = (
+    params?: GetAbilitiesByPageQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAbilitiesByPageQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetAbilitiesByPageQueryQueryKey = (params?: GetAbilitiesByPageQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/abilities`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetAbilitiesByPageQueryQueryOptions = <TData = Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByPageQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>> = ({ signal }) => getAbilitiesByPageQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilitiesByPageQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>>
+export type GetAbilitiesByPageQueryQueryError = ErrorType<unknown>
+
+export const useGetAbilitiesByPageQuery = <TData = Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError = ErrorType<unknown>>(
+ params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilitiesByPageQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAbilitiesByPageQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByPageQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>> = ({ signal }) => getAbilitiesByPageQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilitiesByPageQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>>
+export type GetAbilitiesByPageQuerySuspenseQueryError = ErrorType<unknown>
+
+export const useGetAbilitiesByPageQuerySuspense = <TData = Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError = ErrorType<unknown>>(
+ params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilitiesByPageQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAbilitiesByPageQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByPageQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>> = ({ signal }) => getAbilitiesByPageQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilitiesByPageQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>>
+export type GetAbilitiesByPageQuerySuspenseInfiniteQueryError = ErrorType<unknown>
+
+export const useGetAbilitiesByPageQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>>, TError = ErrorType<unknown>>(
+ params?: GetAbilitiesByPageQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilitiesByPageQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAbilityById = (
+    abilityId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAbilityById200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAbilityByIdQueryKey = (abilityId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/abilities/${abilityId}`] as const;
+    }
+
+    
+export const getGetAbilityByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(abilityId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(abilityId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilityByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
+export type GetAbilityByIdQueryError = ErrorType<unknown>
+
+export const useGetAbilityById = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<unknown>>(
+ abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilityByIdQueryOptions(abilityId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAbilityByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(abilityId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(abilityId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilityByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
+export type GetAbilityByIdSuspenseQueryError = ErrorType<unknown>
+
+export const useGetAbilityByIdSuspense = <TData = Awaited<ReturnType<typeof getAbilityById>>, TError = ErrorType<unknown>>(
+ abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilityByIdSuspenseQueryOptions(abilityId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAbilityByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAbilityByIdQueryKey(abilityId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilityById>>> = ({ signal }) => getAbilityById(abilityId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAbilityByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilityById>>>
+export type GetAbilityByIdSuspenseInfiniteQueryError = ErrorType<unknown>
+
+export const useGetAbilityByIdSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilityById>>>, TError = ErrorType<unknown>>(
+ abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilityById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAbilityByIdSuspenseInfiniteQueryOptions(abilityId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateAbilityById = (
+    abilityId: string,
+    updateAbilityDto: BodyType<UpdateAbilityDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateAbilityById200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAbilityDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateAbilityByIdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAbilityById>>, TError,{abilityId: string;data: BodyType<UpdateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAbilityById>>, TError,{abilityId: string;data: BodyType<UpdateAbilityDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAbilityById>>, {abilityId: string;data: BodyType<UpdateAbilityDto>}> = (props) => {
+          const {abilityId,data} = props ?? {};
+
+          return  updateAbilityById(abilityId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAbilityByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateAbilityById>>>
+    export type UpdateAbilityByIdMutationBody = BodyType<UpdateAbilityDto>
+    export type UpdateAbilityByIdMutationError = ErrorType<unknown>
+
+    export const useUpdateAbilityById = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAbilityById>>, TError,{abilityId: string;data: BodyType<UpdateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateAbilityById>>,
+        TError,
+        {abilityId: string;data: BodyType<UpdateAbilityDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateAbilityByIdMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeAbilityById = (
+    abilityId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveAbilityById200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveAbilityByIdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbilityById>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeAbilityById>>, TError,{abilityId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAbilityById>>, {abilityId: string}> = (props) => {
+          const {abilityId} = props ?? {};
+
+          return  removeAbilityById(abilityId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveAbilityByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeAbilityById>>>
+    
+    export type RemoveAbilityByIdMutationError = ErrorType<unknown>
+
+    export const useRemoveAbilityById = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbilityById>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeAbilityById>>,
+        TError,
+        {abilityId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveAbilityByIdMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const getCategories = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetCategories200>(
+      return customInstance<GetCategories200AllOf>(
       {url: `http://localhost:3005/api/v1/admin/categories`, method: 'GET', signal
     },
       options);
@@ -809,7 +1243,7 @@ export const getAccessibleAllSpace = (
 ) => {
       
       
-      return customInstance<GetAccessibleAllSpace200>(
+      return customInstance<GetAccessibleAllSpace200AllOf>(
       {url: `http://localhost:3005/api/v1/admin/spaces/accessible`, method: 'GET', signal
     },
       options);
@@ -1121,7 +1555,7 @@ export const getGroupsByPageOptions = (
 ) => {
       
       
-      return customInstance<GetGroupsByPageOptions200>(
+      return customInstance<GetGroupsByPageOptions200AllOf>(
       {url: `http://localhost:3005/api/v1/admin/groups`, method: 'GET',
         params, signal
     },
@@ -1479,33 +1913,33 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const create = (
-    createAbilityDto: BodyType<CreateAbilityDto>,
+export const createSubject = (
+    createSubjectDto: BodyType<CreateSubjectDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<Create200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'POST',
+      return customInstance<void>(
+      {url: `http://localhost:3005/api/v1/admin/subjects`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: createAbilityDto
+      data: createSubjectDto
     },
       options);
     }
   
 
 
-export const getCreateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: BodyType<CreateAbilityDto>}, TContext> => {
+export const getCreateSubjectMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof create>>, {data: BodyType<CreateAbilityDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSubject>>, {data: BodyType<CreateSubjectDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  create(data,requestOptions)
+          return  createSubject(data,requestOptions)
         }
 
         
@@ -1513,70 +1947,69 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CreateMutationResult = NonNullable<Awaited<ReturnType<typeof create>>>
-    export type CreateMutationBody = BodyType<CreateAbilityDto>
-    export type CreateMutationError = ErrorType<unknown>
+    export type CreateSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof createSubject>>>
+    export type CreateSubjectMutationBody = BodyType<CreateSubjectDto>
+    export type CreateSubjectMutationError = ErrorType<unknown>
 
-    export const useCreate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useCreateSubject = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
-        Awaited<ReturnType<typeof create>>,
+        Awaited<ReturnType<typeof createSubject>>,
         TError,
-        {data: BodyType<CreateAbilityDto>},
+        {data: BodyType<CreateSubjectDto>},
         TContext
       > => {
 
-      const mutationOptions = getCreateMutationOptions(options);
+      const mutationOptions = getCreateSubjectMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
     
-export const findAllAblity = (
-    params?: FindAllAblityParams,
+export const getSubjectsByPageQuery = (
+    
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<FindAllAblity200>(
-      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'GET',
-        params, signal
+      return customInstance<GetSubjectsByPageQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/subjects`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getFindAllAblityQueryKey = (params?: FindAllAblityParams,) => {
-    return [`http://localhost:3005/api/v1/admin/abilities`, ...(params ? [params]: [])] as const;
+export const getGetSubjectsByPageQueryQueryKey = () => {
+    return [`http://localhost:3005/api/v1/admin/subjects`] as const;
     }
 
     
-export const getFindAllAblityQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectsByPageQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindAllAblityQueryResult = NonNullable<Awaited<ReturnType<typeof findAllAblity>>>
-export type FindAllAblityQueryError = ErrorType<unknown>
+export type GetSubjectsByPageQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
+export type GetSubjectsByPageQueryQueryError = ErrorType<unknown>
 
-export const useFindAllAblity = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(
- params?: FindAllAblityParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectsByPageQuery = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblityQueryOptions(params,options)
+  const queryOptions = getGetSubjectsByPageQueryQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1587,33 +2020,33 @@ export const useFindAllAblity = <TData = Awaited<ReturnType<typeof findAllAblity
 
 
 
-export const getFindAllAblitySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectsByPageQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindAllAblitySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof findAllAblity>>>
-export type FindAllAblitySuspenseQueryError = ErrorType<unknown>
+export type GetSubjectsByPageQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
+export type GetSubjectsByPageQuerySuspenseQueryError = ErrorType<unknown>
 
-export const useFindAllAblitySuspense = <TData = Awaited<ReturnType<typeof findAllAblity>>, TError = ErrorType<unknown>>(
- params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectsByPageQuerySuspense = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblitySuspenseQueryOptions(params,options)
+  const queryOptions = getGetSubjectsByPageQuerySuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1624,33 +2057,33 @@ export const useFindAllAblitySuspense = <TData = Awaited<ReturnType<typeof findA
 
 
 
-export const getFindAllAblitySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findAllAblity>>>, TError = ErrorType<unknown>>(params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindAllAblityQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findAllAblity>>> = ({ signal }) => findAllAblity(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindAllAblitySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof findAllAblity>>>
-export type FindAllAblitySuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetSubjectsByPageQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
+export type GetSubjectsByPageQuerySuspenseInfiniteQueryError = ErrorType<unknown>
 
-export const useFindAllAblitySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof findAllAblity>>>, TError = ErrorType<unknown>>(
- params?: FindAllAblityParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findAllAblity>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectsByPageQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindAllAblitySuspenseInfiniteQueryOptions(params,options)
+  const queryOptions = getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1662,51 +2095,51 @@ export const useFindAllAblitySuspenseInfinite = <TData = InfiniteData<Awaited<Re
 
 
 
-export const findOne = (
-    id: string,
+export const getSubjectById = (
+    subjectId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<void>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${id}`, method: 'GET', signal
+      return customInstance<GetSubjectById200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getFindOneQueryKey = (id: string,) => {
-    return [`http://localhost:3005/api/v1/admin/abilities/${id}`] as const;
+export const getGetSubjectByIdQueryKey = (subjectId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/subjects/${subjectId}`] as const;
     }
 
     
-export const getFindOneQueryOptions = <TData = Awaited<ReturnType<typeof findOne>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindOneQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({ signal }) => findOne(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindOneQueryResult = NonNullable<Awaited<ReturnType<typeof findOne>>>
-export type FindOneQueryError = ErrorType<unknown>
+export type GetSubjectByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
+export type GetSubjectByIdQueryError = ErrorType<unknown>
 
-export const useFindOne = <TData = Awaited<ReturnType<typeof findOne>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectById = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
+ subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindOneQueryOptions(id,options)
+  const queryOptions = getGetSubjectByIdQueryOptions(subjectId,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1717,33 +2150,33 @@ export const useFindOne = <TData = Awaited<ReturnType<typeof findOne>>, TError =
 
 
 
-export const getFindOneSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof findOne>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindOneQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({ signal }) => findOne(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindOneSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof findOne>>>
-export type FindOneSuspenseQueryError = ErrorType<unknown>
+export type GetSubjectByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
+export type GetSubjectByIdSuspenseQueryError = ErrorType<unknown>
 
-export const useFindOneSuspense = <TData = Awaited<ReturnType<typeof findOne>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectByIdSuspense = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindOneSuspenseQueryOptions(id,options)
+  const queryOptions = getGetSubjectByIdSuspenseQueryOptions(subjectId,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1754,33 +2187,33 @@ export const useFindOneSuspense = <TData = Awaited<ReturnType<typeof findOne>>, 
 
 
 
-export const getFindOneSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof findOne>>>, TError = ErrorType<unknown>>(id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getFindOneQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof findOne>>> = ({ signal }) => findOne(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type FindOneSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof findOne>>>
-export type FindOneSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetSubjectByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
+export type GetSubjectByIdSuspenseInfiniteQueryError = ErrorType<unknown>
 
-export const useFindOneSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof findOne>>>, TError = ErrorType<unknown>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof findOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetSubjectByIdSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getFindOneSuspenseInfiniteQueryOptions(id,options)
+  const queryOptions = getGetSubjectByIdSuspenseInfiniteQueryOptions(subjectId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1792,34 +2225,34 @@ export const useFindOneSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnTy
 
 
 
-export const update = (
-    id: string,
-    updateAbilityDto: BodyType<UpdateAbilityDto>,
+export const updateSubjectById = (
+    subjectId: string,
+    updateSubjectDto: BodyType<UpdateSubjectDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<void>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${id}`, method: 'PATCH',
+      return customInstance<UpdateSubjectById200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: updateAbilityDto
+      data: updateSubjectDto
     },
       options);
     }
   
 
 
-export const getUpdateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: BodyType<UpdateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: BodyType<UpdateAbilityDto>}, TContext> => {
+export const getUpdateSubjectByIdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof update>>, {id: string;data: BodyType<UpdateAbilityDto>}> = (props) => {
-          const {id,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSubjectById>>, {subjectId: string;data: BodyType<UpdateSubjectDto>}> = (props) => {
+          const {subjectId,data} = props ?? {};
 
-          return  update(id,data,requestOptions)
+          return  updateSubjectById(subjectId,data,requestOptions)
         }
 
         
@@ -1827,49 +2260,49 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateMutationResult = NonNullable<Awaited<ReturnType<typeof update>>>
-    export type UpdateMutationBody = BodyType<UpdateAbilityDto>
-    export type UpdateMutationError = ErrorType<unknown>
+    export type UpdateSubjectByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubjectById>>>
+    export type UpdateSubjectByIdMutationBody = BodyType<UpdateSubjectDto>
+    export type UpdateSubjectByIdMutationError = ErrorType<unknown>
 
-    export const useUpdate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{id: string;data: BodyType<UpdateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useUpdateSubjectById = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
-        Awaited<ReturnType<typeof update>>,
+        Awaited<ReturnType<typeof updateSubjectById>>,
         TError,
-        {id: string;data: BodyType<UpdateAbilityDto>},
+        {subjectId: string;data: BodyType<UpdateSubjectDto>},
         TContext
       > => {
 
-      const mutationOptions = getUpdateMutationOptions(options);
+      const mutationOptions = getUpdateSubjectByIdMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
     
-export const remove = (
-    id: string,
+export const removeSubjectById = (
+    subjectId: string,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<void>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${id}`, method: 'DELETE'
+      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'DELETE'
     },
       options);
     }
   
 
 
-export const getRemoveMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext> => {
+export const getRemoveSubjectByIdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof remove>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSubjectById>>, {subjectId: string}> = (props) => {
+          const {subjectId} = props ?? {};
 
-          return  remove(id,requestOptions)
+          return  removeSubjectById(subjectId,requestOptions)
         }
 
         
@@ -1877,20 +2310,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type RemoveMutationResult = NonNullable<Awaited<ReturnType<typeof remove>>>
+    export type RemoveSubjectByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeSubjectById>>>
     
-    export type RemoveMutationError = ErrorType<unknown>
+    export type RemoveSubjectByIdMutationError = ErrorType<unknown>
 
-    export const useRemove = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof remove>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useRemoveSubjectById = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
-        Awaited<ReturnType<typeof remove>>,
+        Awaited<ReturnType<typeof removeSubjectById>>,
         TError,
-        {id: string},
+        {subjectId: string},
         TContext
       > => {
 
-      const mutationOptions = getRemoveMutationOptions(options);
+      const mutationOptions = getRemoveSubjectByIdMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -1965,7 +2398,7 @@ export const getGetCurrentUserQueryKey = () => {
     }
 
     
-export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -1984,9 +2417,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetCurrentUserQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-export type GetCurrentUserQueryError = ErrorType<unknown>
+export type GetCurrentUserQueryError = ErrorType<void>
 
-export const useGetCurrentUser = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>(
+export const useGetCurrentUser = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -2002,7 +2435,7 @@ export const useGetCurrentUser = <TData = Awaited<ReturnType<typeof getCurrentUs
 
 
 
-export const getGetCurrentUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCurrentUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -2021,9 +2454,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetCurrentUserSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-export type GetCurrentUserSuspenseQueryError = ErrorType<unknown>
+export type GetCurrentUserSuspenseQueryError = ErrorType<void>
 
-export const useGetCurrentUserSuspense = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<unknown>>(
+export const useGetCurrentUserSuspense = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -2039,7 +2472,7 @@ export const useGetCurrentUserSuspense = <TData = Awaited<ReturnType<typeof getC
 
 
 
-export const getGetCurrentUserSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCurrentUserSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -2058,9 +2491,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetCurrentUserSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-export type GetCurrentUserSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetCurrentUserSuspenseInfiniteQueryError = ErrorType<void>
 
-export const useGetCurrentUserSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>, TError = ErrorType<unknown>>(
+export const useGetCurrentUserSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentUser>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -2259,44 +2692,239 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
+export const createSession = (
+    createSessionDto: BodyType<CreateSessionDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateSession200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSessionDto
+    },
+      options);
+    }
+  
 
 
-export const getGetCategoriesResponseMock = (): GetCategories200 => ({data: {}, httpStatus: faker.helpers.arrayElement([100,101,102,103,200,201,202,203,204,205,206,300,301,302,303,304,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,424,428,429,500,501,502,503,504,505] as const), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined})},})
+export const getCreateSessionMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
-export const getCreateCategoryResponseMock = (): CreateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getFindCategoryByIdResponseMock = (): FindCategoryById200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateCategoryResponseMock = (): UpdateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetServiceByIdResponseMock = (overrideResponse: Partial< ServiceEntity > = {}): ServiceEntity => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: {}, id: faker.word.sample(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(['SPACE','USER','SETTING'] as const), updatedAt: {}, ...overrideResponse})
-
-export const getUpdateServiceResponseMock = (overrideResponse: Partial< ServiceEntity > = {}): ServiceEntity => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: {}, id: faker.word.sample(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(['SPACE','USER','SETTING'] as const), updatedAt: {}, ...overrideResponse})
-
-export const getGetAccessibleAllSpaceResponseMock = (): GetAccessibleAllSpace200 => ({data: {}, httpStatus: faker.helpers.arrayElement([100,101,102,103,200,201,202,203,204,205,206,300,301,302,303,304,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,424,428,429,500,501,502,503,504,505] as const), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined})},})
-
-export const getCreateGroupResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getGetGroupsByPageOptionsResponseMock = (): GetGroupsByPageOptions200 => ({data: {}, httpStatus: faker.helpers.arrayElement([100,101,102,103,200,201,202,203,204,205,206,300,301,302,303,304,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,424,428,429,500,501,502,503,504,505] as const), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined})},})
-
-export const getFindGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getUpdateGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getRemoveGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getCreateResponseMock = (): Create200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: {}, createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getFindAllAblityResponseMock = (): FindAllAblity200 => ({data: {}, httpStatus: faker.helpers.arrayElement([100,101,102,103,200,201,202,203,204,205,206,300,301,302,303,304,307,308,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,421,422,424,428,429,500,501,502,503,504,505] as const), message: faker.word.sample(), meta: {hasNextPage: faker.datatype.boolean(), hasPreviousPage: faker.datatype.boolean(), itemCount: faker.number.int({min: undefined, max: undefined}), page: faker.number.int({min: undefined, max: undefined}), pageCount: faker.number.int({min: undefined, max: undefined}), take: faker.number.int({min: undefined, max: undefined})},})
-
-export const getLoginResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), nickname: faker.word.sample(), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), roleId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getGetCurrentUserResponseMock = (overrideResponse: Partial< UserDto > = {}): UserDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), nickname: faker.word.sample(), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), roleId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getGetTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), nickname: faker.word.sample(), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, deletedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), roleId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+      
 
 
-export const getGetCategoriesMockHandler = (overrideResponse?: GetCategories200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetCategories200> | GetCategories200)) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSession>>, {data: BodyType<CreateSessionDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSession(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof createSession>>>
+    export type CreateSessionMutationBody = BodyType<CreateSessionDto>
+    export type CreateSessionMutationError = ErrorType<void>
+
+    export const useCreateSession = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createSession>>,
+        TError,
+        {data: BodyType<CreateSessionDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSessionMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const updateSesson = (
+    updateSessionDto: BodyType<UpdateSessionDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateSesson200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSessionDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateSessonMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSesson>>, {data: BodyType<UpdateSessionDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateSesson(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSessonMutationResult = NonNullable<Awaited<ReturnType<typeof updateSesson>>>
+    export type UpdateSessonMutationBody = BodyType<UpdateSessionDto>
+    export type UpdateSessonMutationError = ErrorType<void>
+
+    export const useUpdateSesson = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateSesson>>,
+        TError,
+        {data: BodyType<UpdateSessionDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSessonMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+
+
+export const getCreateAbilityResponseMock = (): CreateAbility200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetAbilitiesByPageQueryResponseMock = (): GetAbilitiesByPageQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetAbilityByIdResponseMock = (): GetAbilityById200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateAbilityByIdResponseMock = (): UpdateAbilityById200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveAbilityByIdResponseMock = (): RemoveAbilityById200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetCategoriesResponseMock = (): GetCategories200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getCreateCategoryResponseMock = (): CreateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getFindCategoryByIdResponseMock = (): FindCategoryById200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateCategoryResponseMock = (): UpdateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetServiceByIdResponseMock = (overrideResponse: Partial< ServiceEntity > = {}): ServiceEntity => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.word.sample(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(['SPACE','USER','SETTING'] as const), removedAt: {}, updatedAt: {}, ...overrideResponse})
+
+export const getUpdateServiceResponseMock = (overrideResponse: Partial< ServiceEntity > = {}): ServiceEntity => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.word.sample(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(['SPACE','USER','SETTING'] as const), removedAt: {}, updatedAt: {}, ...overrideResponse})
+
+export const getGetAccessibleAllSpaceResponseMock = (): GetAccessibleAllSpace200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getCreateGroupResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+
+export const getGetGroupsByPageOptionsResponseMock = (): GetGroupsByPageOptions200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getFindGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+
+export const getUpdateGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+
+export const getRemoveGroupByIdResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+
+export const getGetSubjectsByPageQueryResponseMock = (): GetSubjectsByPageQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetSubjectByIdResponseMock = (): GetSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateSubjectByIdResponseMock = (): UpdateSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getLoginResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+
+export const getGetCurrentUserResponseMock = (overrideResponse: Partial< UserDto > = {}): UserDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+
+export const getGetTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+
+export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), timelineItem: {address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, timelineId: faker.word.sample(), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateSessonResponseMock = (): UpdateSesson200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), timelineItem: {address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, timelineId: faker.word.sample(), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+
+export const getCreateAbilityMockHandler = (overrideResponse?: CreateAbility200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateAbility200AllOf> | CreateAbility200AllOf)) => {
+  return http.post('*/api/v1/admin/abilities', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateAbilityResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetAbilitiesByPageQueryMockHandler = (overrideResponse?: GetAbilitiesByPageQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAbilitiesByPageQuery200AllOf> | GetAbilitiesByPageQuery200AllOf)) => {
+  return http.get('*/api/v1/admin/abilities', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetAbilitiesByPageQueryResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetAbilityByIdMockHandler = (overrideResponse?: GetAbilityById200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAbilityById200AllOf> | GetAbilityById200AllOf)) => {
+  return http.get('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetAbilityByIdResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateAbilityByIdMockHandler = (overrideResponse?: UpdateAbilityById200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateAbilityById200AllOf> | UpdateAbilityById200AllOf)) => {
+  return http.patch('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateAbilityByIdResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveAbilityByIdMockHandler = (overrideResponse?: RemoveAbilityById200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<RemoveAbilityById200AllOf> | RemoveAbilityById200AllOf)) => {
+  return http.delete('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveAbilityByIdResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetCategoriesMockHandler = (overrideResponse?: GetCategories200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetCategories200AllOf> | GetCategories200AllOf)) => {
   return http.get('*/api/v1/admin/categories', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
@@ -2412,7 +3040,7 @@ export const getUpdateServiceMockHandler = (overrideResponse?: ServiceEntity | (
   })
 }
 
-export const getGetAccessibleAllSpaceMockHandler = (overrideResponse?: GetAccessibleAllSpace200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAccessibleAllSpace200> | GetAccessibleAllSpace200)) => {
+export const getGetAccessibleAllSpaceMockHandler = (overrideResponse?: GetAccessibleAllSpace200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAccessibleAllSpace200AllOf> | GetAccessibleAllSpace200AllOf)) => {
   return http.get('*/api/v1/admin/spaces/accessible', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
@@ -2455,7 +3083,7 @@ export const getCreateGroupMockHandler = (overrideResponse?: GroupDto | ((info: 
   })
 }
 
-export const getGetGroupsByPageOptionsMockHandler = (overrideResponse?: GetGroupsByPageOptions200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetGroupsByPageOptions200> | GetGroupsByPageOptions200)) => {
+export const getGetGroupsByPageOptionsMockHandler = (overrideResponse?: GetGroupsByPageOptions200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetGroupsByPageOptions200AllOf> | GetGroupsByPageOptions200AllOf)) => {
   return http.get('*/api/v1/admin/groups', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
@@ -2515,41 +3143,11 @@ export const getRemoveGroupByIdMockHandler = (overrideResponse?: GroupDto | ((in
   })
 }
 
-export const getCreateMockHandler = (overrideResponse?: Create200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Create200AllOf> | Create200AllOf)) => {
-  return http.post('*/api/v1/admin/abilities', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getFindAllAblityMockHandler = (overrideResponse?: FindAllAblity200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FindAllAblity200> | FindAllAblity200)) => {
-  return http.get('*/api/v1/admin/abilities', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getFindAllAblityResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getFindOneMockHandler = () => {
-  return http.get('*/api/v1/admin/abilities/:id', async () => {await delay(1000);
+export const getCreateSubjectMockHandler = () => {
+  return http.post('*/api/v1/admin/subjects', async () => {await delay(1000);
     return new HttpResponse(null,
       {
-        status: 200,
+        status: 201,
         headers: {
           'Content-Type': 'application/json',
         }
@@ -2558,9 +3156,11 @@ export const getFindOneMockHandler = () => {
   })
 }
 
-export const getUpdateMockHandler = () => {
-  return http.patch('*/api/v1/admin/abilities/:id', async () => {await delay(1000);
-    return new HttpResponse(null,
+export const getGetSubjectsByPageQueryMockHandler = (overrideResponse?: GetSubjectsByPageQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSubjectsByPageQuery200AllOf> | GetSubjectsByPageQuery200AllOf)) => {
+  return http.get('*/api/v1/admin/subjects', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetSubjectsByPageQueryResponseMock()),
       {
         status: 200,
         headers: {
@@ -2571,8 +3171,38 @@ export const getUpdateMockHandler = () => {
   })
 }
 
-export const getRemoveMockHandler = () => {
-  return http.delete('*/api/v1/admin/abilities/:id', async () => {await delay(1000);
+export const getGetSubjectByIdMockHandler = (overrideResponse?: GetSubjectById200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSubjectById200AllOf> | GetSubjectById200AllOf)) => {
+  return http.get('*/api/v1/admin/subjects/:subjectId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetSubjectByIdResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateSubjectByIdMockHandler = (overrideResponse?: UpdateSubjectById200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSubjectById200AllOf> | UpdateSubjectById200AllOf)) => {
+  return http.patch('*/api/v1/admin/subjects/:subjectId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateSubjectByIdResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveSubjectByIdMockHandler = () => {
+  return http.delete('*/api/v1/admin/subjects/:subjectId', async () => {await delay(1000);
     return new HttpResponse(null,
       {
         status: 200,
@@ -2641,7 +3271,42 @@ export const getSignUpUserMockHandler = () => {
     )
   })
 }
+
+export const getCreateSessionMockHandler = (overrideResponse?: CreateSession200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateSession200AllOf> | CreateSession200AllOf)) => {
+  return http.post('*/api/v1/admin/sessions', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateSessionResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateSessonMockHandler = (overrideResponse?: UpdateSesson200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSesson200AllOf> | UpdateSesson200AllOf)) => {
+  return http.patch('*/api/v1/admin/sessions', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateSessonResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
 export const getPROMISEServerMock = () => [
+  getCreateAbilityMockHandler(),
+  getGetAbilitiesByPageQueryMockHandler(),
+  getGetAbilityByIdMockHandler(),
+  getUpdateAbilityByIdMockHandler(),
+  getRemoveAbilityByIdMockHandler(),
   getGetCategoriesMockHandler(),
   getCreateCategoryMockHandler(),
   getFindCategoryByIdMockHandler(),
@@ -2657,13 +3322,15 @@ export const getPROMISEServerMock = () => [
   getFindGroupByIdMockHandler(),
   getUpdateGroupByIdMockHandler(),
   getRemoveGroupByIdMockHandler(),
-  getCreateMockHandler(),
-  getFindAllAblityMockHandler(),
-  getFindOneMockHandler(),
-  getUpdateMockHandler(),
-  getRemoveMockHandler(),
+  getCreateSubjectMockHandler(),
+  getGetSubjectsByPageQueryMockHandler(),
+  getGetSubjectByIdMockHandler(),
+  getUpdateSubjectByIdMockHandler(),
+  getRemoveSubjectByIdMockHandler(),
   getLoginMockHandler(),
   getGetCurrentUserMockHandler(),
   getGetTokenMockHandler(),
-  getSignUpUserMockHandler()
+  getSignUpUserMockHandler(),
+  getCreateSessionMockHandler(),
+  getUpdateSessonMockHandler()
 ]

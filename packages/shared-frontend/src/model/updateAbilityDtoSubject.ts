@@ -4,8 +4,9 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { SubjectDto } from './subjectDto';
 
 /**
- * A JSON object with a nested structure
+ * @nullable
  */
-export type CreateAbilityDtoConditions = { [key: string]: unknown };
+export type UpdateAbilityDtoSubject = SubjectDto | null;
