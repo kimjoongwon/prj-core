@@ -4,20 +4,17 @@ import { Modal } from './modal';
 import { Router } from './router';
 import { makeAutoObservable } from 'mobx';
 
-export class MyUniv {
-  _isInitialized = false;
-  readonly auth: Auth;
-  readonly router: Router;
-  readonly modal: Modal;
+export class Galaxy {
+  isInitialized = false;
+  auth: Auth;
+  router: Router;
+  modal: Modal;
+
   constructor(nextRouter: AppRouterInstance) {
-    makeAutoObservable(this);
     this.auth = new Auth(this);
     this.router = new Router(this, nextRouter);
     this.modal = new Modal(this);
-    this._isInitialized = true;
-  }
-
-  get isInitialized() {
-    return this._isInitialized;
+    this.isInitialized = true;
+    makeAutoObservable(this);
   }
 }

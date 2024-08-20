@@ -3,14 +3,14 @@ import { observer } from 'mobx-react-lite';
 
 import Button from '../../Button';
 
-import { myUniv } from '../../../../providers/App';
+import { galaxy } from '../../../../providers/App';
 import { NavbarItemProps } from './index';
 
 export const NavbarItemView = observer((props: NavbarItemProps) => {
   const { children, text, active, url, params } = props;
 
   const onClickNavItem = () => {
-    myUniv?.router.push({
+    galaxy?.router.push({
       url,
       params,
     });

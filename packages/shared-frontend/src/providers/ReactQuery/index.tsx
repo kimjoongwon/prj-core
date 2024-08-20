@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AXIOS_INSTANCE } from '../../libs/customAxios';
-import { myUniv } from '../App';
+import { galaxy } from '../App';
 
 interface InitContainerProps {
   children: React.ReactNode;
@@ -37,8 +37,8 @@ export function getQueryClient() {
 
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
-    const token = `Bearer ${myUniv?.auth?.accessToken}`;
-    const tenantId = myUniv?.auth?.user?.tenants?.[0]?.id || '';
+    const token = `Bearer ${galaxy?.auth?.accessToken}`;
+    const tenantId = galaxy?.auth?.user?.tenants?.[0]?.id || '';
     // Do something before request is sent
     config.headers.Authorization = token;
     config.headers.tenantId = tenantId;

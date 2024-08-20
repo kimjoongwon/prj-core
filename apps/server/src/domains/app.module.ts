@@ -3,13 +3,15 @@ import { APP_FILTER, APP_GUARD, HttpAdapterHost } from '@nestjs/core';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 import { JwtAuthGuard, LoggerMiddleware } from '@shared';
 import { adminModules, libModules } from '../main.config';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [...libModules, ...adminModules],
   providers: [
+    JwtStrategy,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useValue: JwtAuthGuard,
     },
     {
       provide: APP_FILTER,

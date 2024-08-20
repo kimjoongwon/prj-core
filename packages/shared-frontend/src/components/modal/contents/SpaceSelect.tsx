@@ -2,8 +2,8 @@
 
 import { observer } from 'mobx-react-lite';
 import { useGetAllSpace } from '../../../apis';
-import { myUniv } from '../../../providers';
 import { ListBox } from '../../ui';
+import { galaxy } from '../../../providers/App';
 
 export const SpaceSelectModalContent = observer(() => {
   const { data: spaces = [] } = useGetAllSpace();
@@ -22,7 +22,7 @@ export const SpaceSelectModalContent = observer(() => {
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
       options={spaceOptions}
-      state={myUniv.auth}
+      state={galaxy.auth}
       path={'currentSpaceId'}
     />
   );

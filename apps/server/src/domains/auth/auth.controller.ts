@@ -16,6 +16,7 @@ import {
   ApiEndpoints,
   Auth,
   ContextProvider,
+  JwtAuthGuard,
   LocalAuthGuard,
   Public,
   ResponseEntity,
@@ -23,6 +24,7 @@ import {
   TokenService,
   UserDto,
 } from '@shared';
+import { Roles } from '@prisma/client';
 
 @ApiTags('AUTH')
 @Controller(ApiEndpoints.AUTH)
@@ -48,9 +50,8 @@ export class AuthController {
     });
   }
 
-  @ApiBearerAuth()
+  @Auth([])
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
-  @Auth([], { public: false })
   @Get('current-user')
   getCurrentUser(@Req() request) {
     const tenant = ContextProvider.getTenant();

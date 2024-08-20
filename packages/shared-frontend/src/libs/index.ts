@@ -1,2 +1,2 @@
 export * from './ajv';
-export * from './myUnivSearchParams';
+export * from './GalaxySearchParams';

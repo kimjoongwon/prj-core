@@ -3,10 +3,19 @@ import { CaslModule } from './shared/casl/casl.module';
 import { AuthModule } from './domains/auth/auth.module';
 import { Logger } from '@nestjs/common';
 import { AbilitiesModule } from './domains/admin/abilities/abilities.module';
-import { appConfig, authConfig, corsConfig, databaseConfig, fileConfig, mailConfig } from '@shared';
+import {
+  appConfig,
+  AuthConfig,
+  authConfig,
+  corsConfig,
+  databaseConfig,
+  fileConfig,
+  mailConfig,
+  UserModule,
+} from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import pino from 'pino';
 import {
   CategoriesModule,
@@ -16,6 +25,7 @@ import {
   SpacesModule,
   SubjectsModule,
 } from './domains/admin';
+import { JwtModule } from '@nestjs/jwt';
 
 export const adminModules = [
   AbilitiesModule,
@@ -27,6 +37,7 @@ export const adminModules = [
   CaslModule,
   AuthModule,
   SessionsModule,
+  UserModule,
 ];
 
 export const libModules = [
@@ -36,6 +47,17 @@ export const libModules = [
     middleware: {
       mount: true,
     },
+  }),
+  JwtModule.registerAsync({
+    global: true,
+    useFactory: async (config: ConfigService) => {
+      const authConfig = await config.get<AuthConfig>('auth');
+      return {
+        secret: authConfig?.secret,
+        signOptions: { expiresIn: authConfig?.expires },
+      };
+    },
+    inject: [ConfigService],
   }),
   PrismaModule.forRoot({
     isGlobal: true,

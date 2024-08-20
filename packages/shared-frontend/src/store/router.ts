@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable, reaction } from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import {
   AppRouterInstance,
   NavigateOptions,
@@ -7,7 +7,7 @@ import {
 import { Path } from 'path-parser';
 import { Paths } from '../constants/Paths';
 import { isObjectEmpty } from '../utils';
-import { MyUniv } from './myUniv';
+import { Galaxy } from './galaxy';
 
 interface CoCRouterArgs<T> {
   url: Paths;
@@ -21,11 +21,11 @@ export class Router {
   pathname: string = window.location.pathname;
 
   constructor(
-    readonly app: MyUniv,
+    readonly galaxy: Galaxy,
     readonly nextRouter: AppRouterInstance,
   ) {
     makeAutoObservable(this);
-    this.app = app;
+    this.galaxy = galaxy;
     this.nextRouter = nextRouter;
 
     reaction(

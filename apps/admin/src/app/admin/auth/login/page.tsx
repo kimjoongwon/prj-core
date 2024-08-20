@@ -6,13 +6,15 @@ import {
   LoginForm,
   Logo,
   Spacer,
-  myUniv,
+  galaxy,
 } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { observable } from 'mobx';
+import { Effect } from 'effect';
+import { AuthStatus } from '@shared/frontend/src/store/auth';
 
 const defaultLoginFormObject = {
-  email: 'PROMISE@gmail.com',
+  email: 'galaxy@gmail.com',
   password: 'rkdmf12!@',
 };
 
@@ -21,8 +23,8 @@ export const test = observable({ test: '' });
 const LoginPage = observer(() => {
   const state = useLocalObservable(() => defaultLoginFormObject);
 
-  function onClickLogin() {
-    myUniv?.auth.login(state);
+  async function onClickLogin() {
+    await Effect.runPromise(galaxy?.auth.login(state));
   }
 
   return (
@@ -32,7 +34,14 @@ const LoginPage = observer(() => {
       <Spacer y={10} />
       <LoginForm state={state} />
       <Spacer y={10} />
-      <Button fullWidth size="lg" onClick={onClickLogin} color="primary">
+      <div>{galaxy.auth.status}</div>
+      <Button
+        disabled={status === 'pending'}
+        fullWidth
+        size="lg"
+        onClick={onClickLogin}
+        color="primary"
+      >
         로그인
       </Button>
     </Container>
