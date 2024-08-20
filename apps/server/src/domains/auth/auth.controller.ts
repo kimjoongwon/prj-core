@@ -10,13 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 import {
   ApiEndpoints,
   Auth,
   ContextProvider,
-  JwtAuthGuard,
   LocalAuthGuard,
   Public,
   ResponseEntity,
@@ -24,7 +23,6 @@ import {
   TokenService,
   UserDto,
 } from '@shared';
-import { Roles } from '@prisma/client';
 
 @ApiTags('AUTH')
 @Controller(ApiEndpoints.AUTH)
@@ -34,6 +32,7 @@ export class AuthController {
     private tokenService: TokenService,
   ) {}
 
+  @Auth([], { public: true })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
