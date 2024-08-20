@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Auth } from '../domains';
+import { Auth } from '../store';
 
 const useRefreshAuth = (auth: Auth) => {
   useEffect(() => {

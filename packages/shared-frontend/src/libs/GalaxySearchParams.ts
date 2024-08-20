@@ -1,4 +1,4 @@
-export class MyUnivSearchParams extends URLSearchParams {
+export class GalaxySearchParams extends URLSearchParams {
   constructor(init?: string | URLSearchParams) {
     super(init);
   }

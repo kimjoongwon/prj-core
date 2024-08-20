@@ -1,4 +1,5 @@
 export { Auth } from './auth';
 export { Modal } from './modal';
 export { Router } from './router';
-export { MyUniv } from './myUniv';
+export { Galaxy } from './galaxy';
+export { Storage } from './storage';

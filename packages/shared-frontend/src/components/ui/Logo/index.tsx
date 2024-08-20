@@ -1,6 +1,6 @@
 import Image, { ImageProps } from 'next/image';
 import Button from '../Button';
-import { myUniv } from '../../../providers/App';
+import { galaxy } from '../../../providers/App';
 
 interface LogoProps extends Omit<ImageProps, 'src'> {
   variants: 'text' | 'icon';
@@ -9,7 +9,7 @@ interface LogoProps extends Omit<ImageProps, 'src'> {
 
 export const Logo = (props: LogoProps) => {
   const onClickLogo = () => {
-    myUniv?.router.push({
+    galaxy?.router.push({
       url: '/admin/main',
     });
   };

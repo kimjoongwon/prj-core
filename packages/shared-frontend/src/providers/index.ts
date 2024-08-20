@@ -1,2 +1,2 @@
-export { AppProvider, useApp, myUniv } from './App';
+export { AppProvider, useApp, galaxy } from './App';
 export { ReactQueryProvider } from './ReactQuery';

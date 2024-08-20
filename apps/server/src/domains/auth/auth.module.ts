@@ -1,13 +1,9 @@
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 import {
-  AuthConfig,
   RoleModule,
   SpaceModule,
   SpaceService,
@@ -19,28 +15,12 @@ import {
 
 import { PasswordService } from './services';
 import { SignUpPayloadDto } from './dtos';
+import { LocalStrategy } from './strategies';
 
 @Module({
-  imports: [
-    UserModule,
-    RoleModule,
-    TenancyModule,
-    SpaceModule,
-    TenantModule,
-    PassportModule,
-    JwtModule.registerAsync({
-      useFactory: async (config: ConfigService) => {
-        const authConfig = await config.get<AuthConfig>('auth');
-        return {
-          secret: authConfig?.secret,
-          signOptions: { expiresIn: authConfig?.expires },
-        };
-      },
-      inject: [ConfigService],
-    }),
-  ],
+  imports: [UserModule, RoleModule, TenancyModule, SpaceModule, TenantModule, PassportModule],
   controllers: [AuthController],
-  providers: [TokenService, PasswordService, AuthService],
+  providers: [TokenService, PasswordService, AuthService, LocalStrategy],
 })
 export class AuthModule implements OnModuleInit {
   logger: Logger = new Logger(AuthModule.name);

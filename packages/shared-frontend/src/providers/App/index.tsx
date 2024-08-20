@@ -2,21 +2,22 @@ import React, { useContext, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { MyUniv } from '../../domains/myUniv';
+import { Galaxy } from '../../store/galaxy';
 import { observer } from 'mobx-react-lite';
 import { usePrefechInitialData } from '../../hooks';
+import { Spinner } from '@nextui-org/react';
 
 interface AppProviderProps {
   children: React.ReactNode;
 }
 
-const AppContext = React.createContext<MyUniv>({} as MyUniv);
+const AppContext = React.createContext<Galaxy>({} as Galaxy);
 
 export const useApp = () => {
   return useContext(AppContext);
 };
 
-export let myUniv: MyUniv = {} as MyUniv;
+export let galaxy: Galaxy = {} as Galaxy;
 
 export const AppProvider = observer(({ children }: AppProviderProps) => {
   const nextRouter = useRouter();
@@ -24,13 +25,12 @@ export const AppProvider = observer(({ children }: AppProviderProps) => {
   usePrefechInitialData();
 
   useEffect(() => {
-    myUniv = new MyUniv(nextRouter);
-    myUniv.auth.refreshing();
+    galaxy = new Galaxy(nextRouter);
   }, [nextRouter]);
 
-  if (!myUniv.isInitialized) {
-    return <div>app initializing....</div>;
+  if (!galaxy.isInitialized) {
+    return <Spinner />;
   }
 
-  return <AppContext.Provider value={myUniv}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={galaxy}>{children}</AppContext.Provider>;
 });
