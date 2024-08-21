@@ -32,6 +32,7 @@ export class AuthController {
     private tokenService: TokenService,
   ) {}
 
+  @Auth([], { public: true })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })

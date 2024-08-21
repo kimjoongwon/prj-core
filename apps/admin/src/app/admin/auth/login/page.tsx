@@ -11,11 +11,10 @@ import {
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { observable } from 'mobx';
 import { Effect } from 'effect';
-import { AuthStatus } from '@shared/frontend/src/store/auth';
 
 const defaultLoginFormObject = {
   email: 'galaxy@gmail.com',
-  password: 'rkdmf12!@',
+  password: 'rkdmf123!@',
 };
 
 export const test = observable({ test: '' });

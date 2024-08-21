@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { PasswordService } from './services/password.service';
@@ -23,6 +24,7 @@ import {
 import bcrypt from 'bcrypt';
 import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
 import { match } from 'ts-pattern';
+import { AUTH_ERRORS } from './constants/error.constant';
 
 @Injectable()
 export class AuthService {
@@ -74,10 +76,10 @@ export class AuthService {
     const isPasswordValid = await this.validateHash(password, user?.password);
 
     if (!isPasswordValid) {
-      throw new NotFoundException('User not found');
+      throw new UnauthorizedException(AUTH_ERRORS.INVALID_PASSWORD);
     }
 
-    return user!;
+    return user;
   }
 
   async signUpUser(signUpPayloadDto: SignUpPayloadDto) {
