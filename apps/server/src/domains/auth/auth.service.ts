@@ -24,7 +24,7 @@ import {
 import bcrypt from 'bcrypt';
 import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
 import { match } from 'ts-pattern';
-import { AUTH_ERRORS } from './constants/error.constant';
+import { AUTH_ERORR_MESSAGES } from './auth.constant';
 
 @Injectable()
 export class AuthService {
@@ -76,7 +76,7 @@ export class AuthService {
     const isPasswordValid = await this.validateHash(password, user?.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(AUTH_ERRORS.INVALID_PASSWORD);
+      throw new UnauthorizedException(AUTH_ERORR_MESSAGES.INVALID_PASSWORD);
     }
 
     return user;

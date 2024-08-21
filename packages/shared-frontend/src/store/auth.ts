@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { LoginPayloadDto, TenantDto, UserDto } from '../model';
 import { Galaxy } from './galaxy';
-import { Effect } from 'effect';
+import { Effect, Either, pipe } from 'effect';
 import { AxiosError } from 'axios';
 import { getToken } from '../apis';
 import { match } from 'effect/Option';
@@ -44,8 +44,6 @@ export class Auth {
         }
       },
     });
-
-    const result = Effect.runPromise(program);
     return program;
   }
 }

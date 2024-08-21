@@ -1,5 +1,5 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ClassField, EmailField, EnumField, PasswordField, StringField } from '../../../decorators';
 import { Exclude } from 'class-transformer';
 import { ProfileDto } from '../../profile/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
