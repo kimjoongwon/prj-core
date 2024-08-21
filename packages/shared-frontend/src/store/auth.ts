@@ -1,15 +1,14 @@
-import { makeAutoObservable } from 'mobx';
-import { LoginPayloadDto, TenantDto, UserDto } from '../model';
+import { action, makeAutoObservable } from 'mobx';
+import { LoginPayloadDto, TenantDto, TokenDto, UserDto } from '../model';
 import { Galaxy } from './galaxy';
-import { Effect, Either, pipe } from 'effect';
+import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
 import { getToken } from '../apis';
-import { match } from 'effect/Option';
 
 export enum AuthStatus {
   LoggedOut = 'LoggedOut',
   LoggingIn = 'LoggingIn',
-  LogInFail = '로그인 실패',
+  LoggedInFailed = 'LoggedInFailed',
   InvalidPassword = 'InvalidPassword',
   LoggedIn = 'LoggedIn',
   Authenticating = 'Authenticating',
@@ -21,29 +20,53 @@ export class InvalidPasswordError {
   readonly _tag = 'InvalidPasswordError';
 }
 
+export class _AxiosError {
+  readonly _tag = 'AxiosError';
+}
+
 export class Auth {
   galaxy: Galaxy;
   accessToken: string | undefined = undefined;
-  currentSpaceId: string = localStorage.getItem('currentSpaceId') || '';
-  currentTenant: TenantDto | undefined = undefined;
   user: UserDto | undefined = undefined;
-  status: AuthStatus = AuthStatus.LoggedOut;
+  status: InvalidPasswordError['_tag'] | _AxiosError['_tag'];
 
   constructor(galaxy: Galaxy) {
-    makeAutoObservable(this, undefined, { autoBind: true });
+    makeAutoObservable(
+      this,
+      {
+        login: action,
+      },
+      { autoBind: true },
+    );
     this.galaxy = galaxy;
   }
 
-  async login(loginPayloadDto: LoginPayloadDto) {
-    this.status = AuthStatus.LoggingIn;
-    const program = Effect.tryPromise({
+  test(loginPayloadDto: LoginPayloadDto) {
+    return Effect.tryPromise({
       try: () => getToken(loginPayloadDto),
       catch: (err: AxiosError) => {
         if (err.message === 'INVALID_PASSWORD') {
-          Effect.fail(new InvalidPasswordError());
+          return new InvalidPasswordError();
         }
+        // this.status = AuthStatus.LoggedInFailed;
+        return new _AxiosError();
       },
     });
-    return program;
+  }
+
+  login(loginPayloadDto: LoginPayloadDto) {
+    // this.status = AuthStatus.LoggingIn;
+    pipe(
+      this.test(loginPayloadDto),
+      Effect.match({
+        onSuccess: this.afterLogin,
+        onFailure: error => (this.status = error._tag),
+      }),
+    );
+  }
+
+  afterLogin({ user, accessToken }: TokenDto) {
+    this.accessToken = accessToken;
+    this.user = user;
   }
 }

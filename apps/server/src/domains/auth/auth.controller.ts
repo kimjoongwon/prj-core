@@ -32,7 +32,6 @@ export class AuthController {
     private tokenService: TokenService,
   ) {}
 
-  @Auth([], { public: true })
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiResponseEntity(TokenDto, HttpStatus.ACCEPTED, { isArray: true })

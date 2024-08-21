@@ -10,10 +10,6 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
   providers: [
     JwtStrategy,
     {
-      provide: APP_GUARD,
-      useValue: JwtAuthGuard,
-    },
-    {
       provide: APP_FILTER,
       useFactory: ({ httpAdapter }: HttpAdapterHost) =>
         new PrismaClientExceptionFilter(httpAdapter, {
