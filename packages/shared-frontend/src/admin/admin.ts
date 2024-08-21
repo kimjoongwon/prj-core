@@ -4,77 +4,82 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query';
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query'
-import type {
-  MenuDto
-} from '.././model'
+  UseQueryResult,
+} from '@tanstack/react-query';
+import type { MenuDto } from '.././model';
 import { customInstance } from '.././libs/customAxios';
 import type { ErrorType } from '.././libs/customAxios';
 
-
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
-
 export const getMemus = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<MenuDto[]>(
-      {url: `http://localhost:3005/api/v1/admin/admin/menus`, method: 'GET', signal
+  return customInstance<MenuDto[]>(
+    {
+      url: `http://localhost:3005/api/v1/admin/admin/menus`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
 export const getGetMemusQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/admin/menus`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/admin/menus`] as const;
+};
 
-    
-export const getGetMemusQueryOptions = <TData = Awaited<ReturnType<typeof getMemus>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getGetMemusQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetMemusQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMemusQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({
+    signal,
+  }) => getMemus(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMemus>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMemus>>> = ({ signal }) => getMemus(requestOptions, signal);
+export type GetMemusQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMemus>>
+>;
+export type GetMemusQueryError = ErrorType<unknown>;
 
-      
+export const useGetMemus = <
+  TData = Awaited<ReturnType<typeof getMemus>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetMemusQueryOptions(options);
 
-      
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetMemusQueryResult = NonNullable<Awaited<ReturnType<typeof getMemus>>>
-export type GetMemusQueryError = ErrorType<unknown>
-
-export const useGetMemus = <TData = Awaited<ReturnType<typeof getMemus>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMemus>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetMemusQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
-}
-
-
-
+};

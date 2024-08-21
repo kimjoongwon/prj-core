@@ -10,6 +10,7 @@ export enum AuthStatus {
   LoggedOut = 'LoggedOut',
   LoggingIn = 'LoggingIn',
   LogInFail = '로그인 실패',
+  InvalidPassword = 'InvalidPassword',
   LoggedIn = 'LoggedIn',
   Authenticating = 'Authenticating',
   Authenticated = 'Authenticated',
@@ -39,7 +40,8 @@ export class Auth {
       try: () => getToken(loginPayloadDto),
       catch: (err: AxiosError) => {
         if (err.message === 'INVALID_PASSWORD') {
-        Effect.fail(new InvalidPasswordError());
+          Effect.fail(new InvalidPasswordError());
+        }
       },
     });
 
