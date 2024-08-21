@@ -116,6 +116,9 @@ importers:
       tailwind-variants:
         specifier: 0.2.1
         version: 0.2.1(tailwindcss@3.4.6)
+      ts-pattern:
+        specifier: ^5.2.0
+        version: 5.2.0
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -149,7 +152,7 @@ importers:
         version: 10.0.0
       '@vanilla-extract/next-plugin':
         specifier: ^2.4.3
-        version: 2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))
+        version: 2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0))
       '@vitejs/plugin-react':
         specifier: ^4.3.1
         version: 4.3.1(vite@5.3.4(@types/node@20.14.12)(terser@5.31.3))
@@ -303,7 +306,7 @@ importers:
     devDependencies:
       '@nestjs/cli':
         specifier: ^10.4.2
-        version: 10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))
+        version: 10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)
       '@nestjs/schematics':
         specifier: ^10.1.3
         version: 10.1.3(chokidar@3.6.0)(typescript@5.5.4)
@@ -454,6 +457,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.6
         version: 3.4.6
+      ts-pattern:
+        specifier: ^5.2.0
+        version: 5.2.0
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -8895,7 +8901,7 @@ snapshots:
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
 
-  '@nestjs/cli@10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))':
+  '@nestjs/cli@10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)':
     dependencies:
       '@angular-devkit/core': 17.3.8(chokidar@3.6.0)
       '@angular-devkit/schematics': 17.3.8(chokidar@3.6.0)
@@ -8905,7 +8911,7 @@ snapshots:
       chokidar: 3.6.0
       cli-table3: 0.6.5
       commander: 4.1.1
-      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.3.3)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12)))
+      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.3.3)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0))
       glob: 10.4.2
       inquirer: 8.2.6
       node-emoji: 1.11.0
@@ -8914,7 +8920,7 @@ snapshots:
       tsconfig-paths: 4.2.0
       tsconfig-paths-webpack-plugin: 4.1.0
       typescript: 5.3.3
-      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))
+      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)
       webpack-node-externals: 3.0.0
     optionalDependencies:
       '@swc/cli': 0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0)
@@ -11931,9 +11937,9 @@ snapshots:
       - supports-color
       - terser
 
-  '@vanilla-extract/next-plugin@2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))':
+  '@vanilla-extract/next-plugin@2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0))':
     dependencies:
-      '@vanilla-extract/webpack-plugin': 2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))
+      '@vanilla-extract/webpack-plugin': 2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0))
       next: 14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     transitivePeerDependencies:
       - '@types/node'
@@ -11949,13 +11955,13 @@ snapshots:
 
   '@vanilla-extract/private@1.0.5': {}
 
-  '@vanilla-extract/webpack-plugin@2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))':
+  '@vanilla-extract/webpack-plugin@2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0))':
     dependencies:
       '@vanilla-extract/integration': 7.1.7(@types/node@20.14.12)(terser@5.31.3)
       debug: 4.3.5
       loader-utils: 2.0.4
       picocolors: 1.0.1
-      webpack: 5.92.1(@swc/core@1.7.1)
+      webpack: 5.92.1(@swc/core@1.7.1)(esbuild@0.23.0)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -13505,7 +13511,7 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
-  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.3.3)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))):
+  fork-ts-checker-webpack-plugin@9.0.2(typescript@5.3.3)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)):
     dependencies:
       '@babel/code-frame': 7.24.7
       chalk: 4.1.2
@@ -13520,7 +13526,7 @@ snapshots:
       semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.3.3
-      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))
+      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)
 
   form-data@4.0.0:
     dependencies:
@@ -15921,27 +15927,29 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.7.1(@swc/helpers@0.5.12))(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))):
+  terser-webpack-plugin@5.3.10(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.31.3
-      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))
+      webpack: 5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)
     optionalDependencies:
       '@swc/core': 1.7.1(@swc/helpers@0.5.12)
+      esbuild: 0.23.0
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.7.1)(webpack@5.92.1(@swc/core@1.7.1)):
+  terser-webpack-plugin@5.3.10(@swc/core@1.7.1)(esbuild@0.23.0)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.31.3
-      webpack: 5.92.1(@swc/core@1.7.1)
+      webpack: 5.92.1(@swc/core@1.7.1)(esbuild@0.23.0)
     optionalDependencies:
       '@swc/core': 1.7.1(@swc/helpers@0.5.12)
+      esbuild: 0.23.0
 
   terser@5.31.3:
     dependencies:
@@ -16411,7 +16419,7 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
-  webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12)):
+  webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.5
@@ -16434,7 +16442,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.7.1(@swc/helpers@0.5.12))(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12)))
+      terser-webpack-plugin: 5.3.10(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0)(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(esbuild@0.23.0))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:
@@ -16442,7 +16450,7 @@ snapshots:
       - esbuild
       - uglify-js
 
-  webpack@5.92.1(@swc/core@1.7.1):
+  webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.5
@@ -16465,7 +16473,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.7.1)(webpack@5.92.1(@swc/core@1.7.1))
+      terser-webpack-plugin: 5.3.10(@swc/core@1.7.1)(esbuild@0.23.0)(webpack@5.92.1(@swc/core@1.7.1)(esbuild@0.23.0))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:

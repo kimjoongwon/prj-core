@@ -2328,13 +2328,13 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const login = (
+export const getToken = (
     loginPayloadDto: BodyType<LoginPayloadDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<TokenDto>(
-      {url: `http://localhost:3005/api/v1/auth/login`, method: 'POST',
+      {url: `http://localhost:3005/api/v1/auth/token`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: loginPayloadDto
     },
@@ -2343,18 +2343,18 @@ export const login = (
   
 
 
-export const getLoginMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: BodyType<LoginPayloadDto>}, TContext> => {
+export const getGetTokenMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: BodyType<LoginPayloadDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getToken>>, {data: BodyType<LoginPayloadDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  login(data,requestOptions)
+          return  getToken(data,requestOptions)
         }
 
         
@@ -2362,20 +2362,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
-    export type LoginMutationBody = BodyType<LoginPayloadDto>
-    export type LoginMutationError = ErrorType<unknown>
+    export type GetTokenMutationResult = NonNullable<Awaited<ReturnType<typeof getToken>>>
+    export type GetTokenMutationBody = BodyType<LoginPayloadDto>
+    export type GetTokenMutationError = ErrorType<unknown>
 
-    export const useLogin = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useGetToken = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
-        Awaited<ReturnType<typeof login>>,
+        Awaited<ReturnType<typeof getToken>>,
         TError,
         {data: BodyType<LoginPayloadDto>},
         TContext
       > => {
 
-      const mutationOptions = getLoginMutationOptions(options);
+      const mutationOptions = getGetTokenMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -2510,51 +2510,51 @@ export const useGetCurrentUserSuspenseInfinite = <TData = InfiniteData<Awaited<R
 
 
 
-export const getToken = (
+export const getNewToken = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<TokenDto>(
-      {url: `http://localhost:3005/api/v1/auth/token`, method: 'GET', signal
+      {url: `http://localhost:3005/api/v1/auth/new-token`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetTokenQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/token`] as const;
+export const getGetNewTokenQueryKey = () => {
+    return [`http://localhost:3005/api/v1/auth/new-token`] as const;
     }
 
     
-export const getGetTokenQueryOptions = <TData = Awaited<ReturnType<typeof getToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTokenQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getToken>>> = ({ signal }) => getToken(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetTokenQueryResult = NonNullable<Awaited<ReturnType<typeof getToken>>>
-export type GetTokenQueryError = ErrorType<unknown>
+export type GetNewTokenQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
+export type GetNewTokenQueryError = ErrorType<unknown>
 
-export const useGetToken = <TData = Awaited<ReturnType<typeof getToken>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetNewToken = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetTokenQueryOptions(options)
+  const queryOptions = getGetNewTokenQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -2565,33 +2565,33 @@ export const useGetToken = <TData = Awaited<ReturnType<typeof getToken>>, TError
 
 
 
-export const getGetTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTokenQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getToken>>> = ({ signal }) => getToken(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getToken>>>
-export type GetTokenSuspenseQueryError = ErrorType<unknown>
+export type GetNewTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
+export type GetNewTokenSuspenseQueryError = ErrorType<unknown>
 
-export const useGetTokenSuspense = <TData = Awaited<ReturnType<typeof getToken>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetNewTokenSuspense = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetTokenSuspenseQueryOptions(options)
+  const queryOptions = getGetNewTokenSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -2602,33 +2602,33 @@ export const useGetTokenSuspense = <TData = Awaited<ReturnType<typeof getToken>>
 
 
 
-export const getGetTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getToken>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTokenQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getToken>>> = ({ signal }) => getToken(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getToken>>>
-export type GetTokenSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetNewTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
+export type GetNewTokenSuspenseInfiniteQueryError = ErrorType<unknown>
 
-export const useGetTokenSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getToken>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const useGetNewTokenSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryOptions = getGetTokenSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetNewTokenSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -2838,11 +2838,11 @@ export const getGetSubjectByIdResponseMock = (): GetSubjectById200AllOf => ({dat
 
 export const getUpdateSubjectByIdResponseMock = (): UpdateSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getLoginResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+export const getGetTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
 
 export const getGetCurrentUserResponseMock = (overrideResponse: Partial< UserDto > = {}): UserDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
-export const getGetTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+export const getGetNewTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
 
 export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), timelineItem: {address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, timelineId: faker.word.sample(), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
@@ -3214,11 +3214,11 @@ export const getRemoveSubjectByIdMockHandler = () => {
   })
 }
 
-export const getLoginMockHandler = (overrideResponse?: TokenDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenDto> | TokenDto)) => {
-  return http.post('*/api/v1/auth/login', async (info) => {await delay(1000);
+export const getGetTokenMockHandler = (overrideResponse?: TokenDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenDto> | TokenDto)) => {
+  return http.post('*/api/v1/auth/token', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getLoginResponseMock()),
+            : getGetTokenResponseMock()),
       {
         status: 200,
         headers: {
@@ -3244,11 +3244,11 @@ export const getGetCurrentUserMockHandler = (overrideResponse?: UserDto | ((info
   })
 }
 
-export const getGetTokenMockHandler = (overrideResponse?: TokenDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<TokenDto> | TokenDto)) => {
-  return http.get('*/api/v1/auth/token', async (info) => {await delay(1000);
+export const getGetNewTokenMockHandler = (overrideResponse?: TokenDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<TokenDto> | TokenDto)) => {
+  return http.get('*/api/v1/auth/new-token', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTokenResponseMock()),
+            : getGetNewTokenResponseMock()),
       {
         status: 200,
         headers: {
@@ -3327,9 +3327,9 @@ export const getPROMISEServerMock = () => [
   getGetSubjectByIdMockHandler(),
   getUpdateSubjectByIdMockHandler(),
   getRemoveSubjectByIdMockHandler(),
-  getLoginMockHandler(),
-  getGetCurrentUserMockHandler(),
   getGetTokenMockHandler(),
+  getGetCurrentUserMockHandler(),
+  getGetNewTokenMockHandler(),
   getSignUpUserMockHandler(),
   getCreateSessionMockHandler(),
   getUpdateSessonMockHandler()

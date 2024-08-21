@@ -10,13 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
 import {
   ApiEndpoints,
   Auth,
   ContextProvider,
-  JwtAuthGuard,
   LocalAuthGuard,
   Public,
   ResponseEntity,
@@ -24,7 +23,6 @@ import {
   TokenService,
   UserDto,
 } from '@shared';
-import { Roles } from '@prisma/client';
 
 @ApiTags('AUTH')
 @Controller(ApiEndpoints.AUTH)
@@ -37,8 +35,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
-  @Post('login')
-  async login(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
+  @Post('token')
+  async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
     const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
     this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
 
@@ -50,19 +48,17 @@ export class AuthController {
     });
   }
 
-  @Auth([])
+  @Auth()
   @ApiResponse({ status: HttpStatus.OK, type: UserDto })
   @Get('current-user')
   getCurrentUser(@Req() request) {
-    const tenant = ContextProvider.getTenant();
-    console.log('tenant', tenant);
     return request.user;
   }
 
   @Public()
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
-  @Get('token')
-  async getToken(@Req() req) {
+  @Get('new-token')
+  async getNewToken(@Req() req) {
     const refreshToken = this.tokenService.getTokenFromRequest(req, 'refreshToken');
 
     const { userId } = await this.authService.validateToken(refreshToken);

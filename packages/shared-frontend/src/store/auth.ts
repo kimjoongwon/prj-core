@@ -2,8 +2,9 @@ import { makeAutoObservable } from 'mobx';
 import { LoginPayloadDto, TenantDto, UserDto } from '../model';
 import { Galaxy } from './galaxy';
 import { Effect } from 'effect';
-import { login as loginApi } from '../apis';
 import { AxiosError } from 'axios';
+import { getToken } from '../apis';
+import { match } from 'effect/Option';
 
 export enum AuthStatus {
   LoggedOut = 'LoggedOut',
@@ -13,6 +14,10 @@ export enum AuthStatus {
   Authenticating = 'Authenticating',
   Authenticated = 'Authenticated',
   TokenRefreshing = 'TokenRefreshing',
+}
+
+export class InvalidPasswordError {
+  readonly _tag = 'InvalidPasswordError';
 }
 
 export class Auth {
@@ -28,19 +33,17 @@ export class Auth {
     this.galaxy = galaxy;
   }
 
-  login(loginPayloadDto: LoginPayloadDto) {
+  async login(loginPayloadDto: LoginPayloadDto) {
     this.status = AuthStatus.LoggingIn;
-    return Effect.tryPromise({
-      try: () => loginApi(loginPayloadDto),
-      catch: err => {
-        if (err instanceof AxiosError) {
-          console.log(err.response.data);
-        }
-        this.status = AuthStatus.LogInFail;
-        return new Error(`something went wrong ${err}`);
+    const program = Effect.tryPromise({
+      try: () => getToken(loginPayloadDto),
+      catch: (err: AxiosError) => {
+        if (err.message === 'INVALID_PASSWORD') {
+        Effect.fail(new InvalidPasswordError());
       },
     });
-  }
 
-  afterLogin() {}
+    const result = Effect.runPromise(program);
+    return program;
+  }
 }
