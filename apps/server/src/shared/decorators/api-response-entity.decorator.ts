@@ -41,7 +41,7 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
     ApiExtraModels(ResponseEntity, dataDto),
     ApiOkResponse({
       schema: {
-        oneOf: allOf,
+        allOf,
       },
     }),
   );
