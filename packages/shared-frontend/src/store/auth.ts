@@ -58,6 +58,7 @@ export class Auth {
     // this.status = AuthStatus.LoggingIn;
     pipe(
       this.test(loginPayloadDto),
+      Effect.tap(console.log),
       Effect.match({
         onSuccess: this.afterLogin,
         onFailure: error => (this.status = error._tag),
