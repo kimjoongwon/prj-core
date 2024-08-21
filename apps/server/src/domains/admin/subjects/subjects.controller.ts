@@ -22,7 +22,7 @@ export class SubjectsController {
   }
 
   @Get()
-  @ApiResponseEntity(SubjectDto, { isArray: true })
+  @ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
   async getSubjectsByPageQuery(pageQuery: SubjectPageQueryDto) {
     const subjects = await this.subjectService.getManyByPageQuery(pageQuery);
     return new ResponseEntity(

@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiEndpoints,
@@ -17,7 +17,8 @@ export class SpacesController {
   constructor(private readonly spaceService: SpaceService) {}
 
   @Get('accessible')
-  @ApiResponseEntity(SpaceDto, { isArray: true })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
   async getAccessibleAllSpace(@User() user: UserDto) {
     const spaceIds = user.tenants.map((tenant) => tenant.tenancy.spaceId);
     const spaces = await this.spaceService.getAccessibleSpacesByIds(spaceIds);
