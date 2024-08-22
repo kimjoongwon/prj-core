@@ -2,11 +2,13 @@
 
 import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import { LoginMutationBody } from '../../../apis';
 import Input from '../../ui/Input';
 
 export interface LoginFormProps {
-  state: LoginMutationBody;
+  state: {
+    email: string;
+    password: string;
+  };
 }
 
 export const LoginForm = observer((props: LoginFormProps) => {

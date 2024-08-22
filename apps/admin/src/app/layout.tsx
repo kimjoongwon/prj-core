@@ -5,8 +5,7 @@ import { Providers } from './providers';
 import localFont from 'next/font/local';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { ModalMount } from '@shared/frontend';
-import { isServer } from '@tanstack/react-query';
+import { AppLayout, ModalMount } from '@shared/frontend';
 
 const pretendard = localFont({
   src: '../../static/fonts/PretendardVariable.woff2',
@@ -40,11 +39,13 @@ export default function RootLayout(props: {
         <title>라프첼라</title>
       </head>
       <body>
-        <Providers>
-          {props.children}
-          <ModalMount />
-          <ToastContainer />
-        </Providers>
+        <AppLayout>
+          <Providers>
+            {props.children}
+            <ModalMount />
+            <ToastContainer />
+          </Providers>
+        </AppLayout>
       </body>
     </html>
   );

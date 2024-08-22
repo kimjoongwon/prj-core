@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Galaxy } from '../../store/galaxy';
+import { Galaxy } from '../../services/galaxy';
 import { observer } from 'mobx-react-lite';
 import { usePrefechInitialData } from '../../hooks';
 import { Spinner } from '@nextui-org/react';
