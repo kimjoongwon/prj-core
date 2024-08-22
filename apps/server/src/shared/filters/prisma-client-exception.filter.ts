@@ -1,12 +1,7 @@
-import {
-  ArgumentsHost,
-  Catch,
-  HttpException,
-  HttpServer,
-  HttpStatus,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, HttpServer, HttpStatus } from '@nestjs/common';
 import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
+import { ResponseEntity } from '../entities';
 
 export declare type GqlContextType = 'graphql';
 
@@ -42,10 +37,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
    * @param applicationRef
    * @param errorCodesStatusMapping
    */
-  constructor(
-    applicationRef?: HttpServer,
-    errorCodesStatusMapping?: ErrorCodesStatusMapping,
-  ) {
+  constructor(applicationRef?: HttpServer, errorCodesStatusMapping?: ErrorCodesStatusMapping) {
     super(applicationRef);
 
     // use custom error codes mapping (overwrite)
@@ -81,13 +73,10 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     exception: Prisma.PrismaClientKnownRequestError,
     host: ArgumentsHost,
   ) {
-    const statusCode =
-      this.userDefinedStatusCode(exception) ||
-      this.defaultStatusCode(exception);
+    const statusCode = this.userDefinedStatusCode(exception) || this.defaultStatusCode(exception);
 
     const message =
-      this.userDefinedExceptionMessage(exception) ||
-      this.defaultExceptionMessage(exception);
+      this.userDefinedExceptionMessage(exception) || this.defaultExceptionMessage(exception);
 
     if (host.getType() === 'http') {
       if (statusCode === undefined) {
@@ -95,7 +84,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
       }
 
       return super.catch(
-        new HttpException({ statusCode, message }, statusCode),
+        new HttpException(ResponseEntity.WITH_ERROR(statusCode, message), statusCode),
         host,
       );
     } else if (host.getType<GqlContextType>() === 'graphql') {
@@ -112,14 +101,10 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     exception: Prisma.PrismaClientKnownRequestError,
   ): number | undefined {
     const userDefinedValue = this.userDefinedMapping?.[exception.code];
-    return typeof userDefinedValue === 'number'
-      ? userDefinedValue
-      : userDefinedValue?.statusCode;
+    return typeof userDefinedValue === 'number' ? userDefinedValue : userDefinedValue?.statusCode;
   }
 
-  private defaultStatusCode(
-    exception: Prisma.PrismaClientKnownRequestError,
-  ): number | undefined {
+  private defaultStatusCode(exception: Prisma.PrismaClientKnownRequestError): number | undefined {
     return this.defaultMapping[exception.code];
   }
 
@@ -127,23 +112,14 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     exception: Prisma.PrismaClientKnownRequestError,
   ): string | undefined {
     const userDefinedValue = this.userDefinedMapping?.[exception.code];
-    return typeof userDefinedValue === 'number'
-      ? undefined
-      : userDefinedValue?.errorMessage;
+    return typeof userDefinedValue === 'number' ? undefined : userDefinedValue?.errorMessage;
   }
 
-  private defaultExceptionMessage(
-    exception: Prisma.PrismaClientKnownRequestError,
-  ): string {
-    const shortMessage = exception.message.substring(
-      exception.message.indexOf('→'),
-    );
+  private defaultExceptionMessage(exception: Prisma.PrismaClientKnownRequestError): string {
+    const shortMessage = exception.message.substring(exception.message.indexOf('→'));
     return (
       `[${exception.code}]: ` +
-      shortMessage
-        .substring(shortMessage.indexOf('\n'))
-        .replace(/\n/g, '')
-        .trim()
+      shortMessage.substring(shortMessage.indexOf('\n')).replace(/\n/g, '').trim()
     );
   }
 }
@@ -154,10 +130,7 @@ export function providePrismaClientExceptionFilter(
   return {
     provide: APP_FILTER,
     useFactory: ({ httpAdapter }: HttpAdapterHost) => {
-      return new PrismaClientExceptionFilter(
-        httpAdapter,
-        errorCodesStatusMapping,
-      );
+      return new PrismaClientExceptionFilter(httpAdapter, errorCodesStatusMapping);
     },
     inject: [HttpAdapterHost],
   };

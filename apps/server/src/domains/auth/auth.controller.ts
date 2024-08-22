@@ -33,14 +33,13 @@ export class AuthController {
   ) {}
 
   @UseGuards(LocalAuthGuard)
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiResponseEntity(TokenDto, HttpStatus.ACCEPTED, { isArray: true })
+  @ApiResponseEntity(TokenDto, HttpStatus.OK, { isArray: true })
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
     const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
     this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
 
-    return new ResponseEntity(HttpStatus.ACCEPTED, '로그인 성공', {
+    return new ResponseEntity(HttpStatus.OK, '로그인 성공', {
       accessToken,
       refreshToken,
       user: new UserDto(user),

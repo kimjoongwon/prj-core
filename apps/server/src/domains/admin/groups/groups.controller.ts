@@ -39,7 +39,7 @@ export class GroupsController {
   }
 
   @Public()
-  @ApiResponseEntity(GroupDto, { isArray: true })
+  @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
   async getGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
     const { count, groups } = await this.groupService.getGroupsByPageOptions(pageOptions);

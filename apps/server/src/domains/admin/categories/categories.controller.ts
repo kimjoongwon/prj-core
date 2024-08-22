@@ -17,7 +17,7 @@ export class CategoriesController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Auth()
-  @ApiResponseEntity(CategoryDto, { isArray: true })
+  @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
   getCategories(@Param() serviceSpaceDto: { spaceId: string; serviceId: string }) {
     return this.categoryService.getCategoriesByServiceSpace(serviceSpaceDto);
