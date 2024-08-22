@@ -43,7 +43,8 @@ export class Auth {
     return Effect.tryPromise({
       try: () => getToken(loginPayloadDto),
       catch: (err: AxiosError) => {
-        if (err.message === 'INVALID_PASSWORD') {
+        console.log(err.response.data);
+        if (err.message === '패스워드가 일치하지 않습니다.') {
           return new InvalidPasswordError();
         }
         return new Error();

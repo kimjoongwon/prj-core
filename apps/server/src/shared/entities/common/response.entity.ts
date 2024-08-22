@@ -12,8 +12,8 @@ export class ResponseEntity<T> {
   @ApiProperty()
   message: string;
 
-  @ApiProperty()
-  data?: T;
+  @ApiProperty({ nullable: true })
+  data: T | null = null;
 
   @ClassField(() => PageMetaDto)
   readonly meta: PageMetaDto;
@@ -29,7 +29,7 @@ export class ResponseEntity<T> {
     return new ResponseEntity(HttpStatus.OK, message || '성공');
   }
 
-  static WITH_ERROR<T>(message: string): ResponseEntity<T> {
-    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, message || '실패');
+  static WITH_ERROR<T>(httpStatus: HttpStatus, message: string): ResponseEntity<T> {
+    return new ResponseEntity(httpStatus, message || '실패', null);
   }
 }

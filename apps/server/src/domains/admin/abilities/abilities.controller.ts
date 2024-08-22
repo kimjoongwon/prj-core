@@ -34,7 +34,7 @@ export class AbilitiesController {
   }
 
   @Get()
-  @ApiResponseEntity(AbilityDto, { isArray: true })
+  @ApiResponseEntity(AbilityDto, HttpStatus.OK, { isArray: true })
   async getAbilitiesByPageQuery(@Query() pageQuery: AbilityPageQueryDto) {
     const abilities = await this.abilityService.getAbilitiesByPageQuery(pageQuery);
     return new ResponseEntity(

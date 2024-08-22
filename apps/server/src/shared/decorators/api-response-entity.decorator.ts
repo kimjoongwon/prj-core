@@ -1,5 +1,11 @@
-import { HttpStatus, Type, applyDecorators } from '@nestjs/common';
-import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import { HttpCode, HttpStatus, Type, applyDecorators } from '@nestjs/common';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiResponse,
+  ApiResponseProperty,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { ResponseEntity } from '../entities/common/response.entity';
 
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
@@ -39,10 +45,12 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
 
   return applyDecorators(
     ApiExtraModels(ResponseEntity, dataDto),
-    ApiOkResponse({
+    ApiResponse({
+      status: httpStatus,
       schema: {
         allOf,
       },
     }),
+    HttpCode(httpStatus),
   );
 };

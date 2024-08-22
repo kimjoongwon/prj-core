@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -13,6 +14,7 @@ import { TokenDto } from './dtos/token.dto';
 import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
+  ResponseEntity,
   RoleService,
   TenancyService,
   TenantService,
@@ -76,7 +78,9 @@ export class AuthService {
     const isPasswordValid = await this.validateHash(password, user?.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(AUTH_ERORR_MESSAGES.INVALID_PASSWORD);
+      throw new UnauthorizedException(
+        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, AUTH_ERORR_MESSAGES.INVALID_PASSWORD),
+      );
     }
 
     return user;
