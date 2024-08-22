@@ -31,10 +31,7 @@ export const User = observer(() => {
           <p className="font-semibold">{email}</p>
         </DropdownItem>
         <DropdownItem key="space" className="h-14 gap-2">
-          <p className="font-semibold">
-            {/* @ts-ignore */}
-            소속: {auth.user?.tenants?.[0]?.space?.name}
-          </p>
+          <p className="font-semibold">소속: {auth.user?.tenants[0].id}</p>
           <DropdownItem>설정</DropdownItem>
         </DropdownItem>
         <DropdownItem color="danger" className="text-danger">

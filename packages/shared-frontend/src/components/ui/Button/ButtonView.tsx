@@ -21,7 +21,6 @@ export const ButtonView = observer((props: ButtonViewProps) => {
       <NextUIButton
         className={'font-pretendard ' + className}
         onClick={onClick}
-        size="sm"
         isDisabled={getDisabled?.()}
         isLoading={getLoading?.()}
         {...rest}

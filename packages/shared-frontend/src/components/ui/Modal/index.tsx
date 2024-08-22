@@ -7,14 +7,13 @@ import {
   Modal as NextUIModal,
 } from '@nextui-org/react';
 
-import { useApp } from '../../../providers/App';
+import { galaxy, useApp } from '../../../providers/App';
 
 export const ModalMount = observer(() => {
-  const app = useApp();
-  const modal = app?.modal!;
+  const { modal } = galaxy;
 
   return (
-    <NextUIModal isDismissable onClose={modal?.close} isOpen={modal?.open}>
+    <NextUIModal isDismissable onClose={modal.destory} isOpen={modal.open}>
       <ModalContent>
         <ModalHeader>{modal?.header}</ModalHeader>
         <ModalBody>{modal?.body}</ModalBody>

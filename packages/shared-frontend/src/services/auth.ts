@@ -4,25 +4,8 @@ import { Galaxy } from './galaxy';
 import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
 import { getToken } from '../apis';
-
-export enum AuthStatus {
-  LoggedOut = 'LoggedOut',
-  LoggingIn = 'LoggingIn',
-  LoggedInFailed = 'LoggedInFailed',
-  InvalidPassword = 'InvalidPassword',
-  LoggedIn = 'LoggedIn',
-  Authenticating = 'Authenticating',
-  Authenticated = 'Authenticated',
-  TokenRefreshing = 'TokenRefreshing',
-}
-
-export class InvalidPasswordError {
-  readonly _tag = 'InvalidPasswordError';
-}
-
-export class Error extends AxiosError {
-  readonly _tag = 'AxiosError';
-}
+import { AuthStatus } from '../types';
+import { GalaxyError, InvalidPasswordError } from '../errors';
 
 export class Auth {
   galaxy: Galaxy;
@@ -43,39 +26,50 @@ export class Auth {
     return Effect.tryPromise({
       try: () => getToken(loginPayloadDto),
       catch: (err: AxiosError) => {
-        console.log(err.response.data);
         if (err.message === '패스워드가 일치하지 않습니다.') {
           return new InvalidPasswordError();
         }
-        return new Error();
+        return new GalaxyError();
       },
     });
   }
 
   beforeLogin() {
     this.status = AuthStatus.LoggingIn;
+    this.galaxy.router.push({
+      url: '/admin/main',
+    });
   }
 
   login(loginPayloadDto: LoginPayloadDto) {
-    return pipe(
-      this.beforeLogin(),
-      () => this.getToken(loginPayloadDto),
-      Effect.match({
-        onSuccess: this.afterLogin,
-        onFailure: error => {
-          if (error._tag === 'InvalidPasswordError') {
-            this.status = AuthStatus.InvalidPassword;
-          }
-          if (error._tag === 'AxiosError') {
-            this.status = AuthStatus.LoggedInFailed;
-          }
-        },
-      }),
+    return Effect.runPromise(
+      pipe(
+        this.beforeLogin(),
+        () => this.getToken(loginPayloadDto),
+        Effect.match({
+          onSuccess: this.afterLogin,
+          onFailure: error => {
+            if (error._tag === 'InvalidPasswordError') {
+              this.status = AuthStatus.InvalidPassword;
+            }
+            if (error._tag === 'GalaxyError') {
+              this.status = AuthStatus.LoggedInFailed;
+            }
+          },
+        }),
+      ),
     );
   }
+
   afterLogin({ user, accessToken }: TokenDto) {
     this.accessToken = accessToken;
     this.user = user;
     this.status = AuthStatus.LoggedIn;
+  }
+
+  logout() {
+    this.accessToken = undefined;
+    this.user = undefined;
+    this.status = AuthStatus.LoggedOut;
   }
 }
