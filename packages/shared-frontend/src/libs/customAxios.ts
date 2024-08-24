@@ -1,4 +1,5 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { galaxy } from '../providers/App';
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: 'http://localhost:3005/api',

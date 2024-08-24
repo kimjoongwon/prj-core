@@ -3,7 +3,7 @@ import { get, isUndefined, set } from 'lodash-es';
 import { MobxProps } from '../types';
 import { KeyboardEventHandler } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import Input from '../Input';
+import { Input } from '../Input';
 
 interface SearchProps<T> extends MobxProps<T> {
   queryState: any;

@@ -9,5 +9,7 @@ import type { SessionDto } from './sessionDto';
 export type UpdateSesson200AllOf = {
   data?: SessionDto;
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

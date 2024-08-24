@@ -37,7 +37,7 @@ export function getQueryClient() {
 
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
-    const token = `Bearer ${galaxy?.auth?.accessToken}`;
+    const token = `Bearer ${localStorage.getItem('accessToken')}`;
     const tenantId = galaxy?.auth?.user?.tenants?.[0]?.id || '';
     // Do something before request is sent
     config.headers.Authorization = token;

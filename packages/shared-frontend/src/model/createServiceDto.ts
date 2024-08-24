@@ -4,10 +4,8 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateServiceDtoName } from './createServiceDtoName';
 
 export interface CreateServiceDto {
-  /** @nullable */
-  label: string | null;
-  name: CreateServiceDtoName;
+  label: string;
+  name: string;
 }

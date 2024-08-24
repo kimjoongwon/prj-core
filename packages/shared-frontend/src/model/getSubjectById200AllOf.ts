@@ -9,5 +9,7 @@ import type { SubjectDto } from './subjectDto';
 export type GetSubjectById200AllOf = {
   data?: SubjectDto;
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

@@ -7,7 +7,7 @@ export class SpaceDto extends AbstractDto implements Space {
   @StringField()
   name: string;
 
-  constructor(entity: SpaceEntity, options?: { excludeFields?: boolean }) {
+  constructor(entity: SpaceDto, options?: { excludeFields?: boolean }) {
     super(entity, options);
     this.id = entity.id;
     this.name = entity.name;

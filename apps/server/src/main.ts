@@ -1,17 +1,19 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './domains/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { CustomClassSerializerInterceptor } from '@shared';
+import { CustomClassSerializerInterceptor, PrismaClientExceptionFilter } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const httpAdapterHost = app.get(HttpAdapterHost);
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 
   const config = new DocumentBuilder()
     .setVersion('1.0.0')

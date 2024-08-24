@@ -1,4 +1,4 @@
-export { CreateGroupDto } from './create-group.dto';
-export { GroupPageOptionsDto } from './group-page-options.dto';
-export { GroupDto } from './group.dto';
-export { UpdateGroupDto } from './update-group.dto';
+export * from './create-group.dto';
+export * from './group-query.dto';
+export * from './group.dto';
+export * from './update-group.dto';

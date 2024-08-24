@@ -1,53 +1,68 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
 import { GroupRepository } from './group.repository';
 import { CreateGroupDto } from './dtos/create-group.dto';
-import { GroupPageOptionsDto } from './dtos/group-page-options.dto';
+import { GroupQueryDto } from './dtos/group-query.dto';
 import { UpdateGroupDto } from './dtos/update-group.dto';
+import { PaginationMananger } from 'src/shared/utils';
 
 @Injectable()
 export class GroupService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly groupRepository: GroupRepository,
-  ) {}
+  constructor(private readonly repository: GroupRepository) {}
   create(createGroupDto: CreateGroupDto) {
-    return this.groupRepository.create({ data: createGroupDto });
+    return this.repository.create({ data: createGroupDto });
   }
 
-  async getGroupsByPageOptions(pageOptions: GroupPageOptionsDto) {
-    const groups = await this.groupRepository.findGroupsByPageOptions(pageOptions);
-
-    const count = await this.groupRepository.count(pageOptions);
-
+  async getManyByQuery(query: GroupQueryDto) {
+    const args = PaginationMananger.toArgs(query);
+    const groups = await this.repository.findManyByQuery(args);
+    const count = await this.repository.count(query);
     return {
       count,
       groups,
     };
   }
 
-  findOneById(groupId: string) {
-    return this.prisma.group.findUnique({
+  get(id: string) {
+    return this.repository.findUnique({
+      where: { id },
+    });
+  }
+
+  update(id: string, updateDto: UpdateGroupDto) {
+    return this.repository.update({
       where: {
-        id: groupId,
+        id: id,
+      },
+      data: updateDto,
+    });
+  }
+
+  updateMany(ids: string[], updateDto: UpdateGroupDto) {
+    return this.repository.updateMany({
+      where: { id: { in: ids } },
+      data: updateDto,
+    });
+  }
+
+  remove(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: {
+        removedAt: new Date(),
       },
     });
   }
 
-  updateById(groupId: string, updateGroupDto: UpdateGroupDto) {
-    return this.prisma.group.update({
-      where: {
-        id: groupId,
-      },
-      data: updateGroupDto,
+  removeMany(ids: string[]) {
+    return this.repository.updateMany({
+      where: { id: { in: ids } },
+      data: { removedAt: new Date() },
     });
   }
 
-  removeById(groupId: string) {
-    return this.prisma.group.delete({
-      where: {
-        id: groupId,
-      },
+  delete(id: string) {
+    return this.repository.delete({
+      where: { id },
     });
   }
 }

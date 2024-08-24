@@ -5,4 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateGroupDto { [key: string]: unknown }
+export interface CreateGroupDto {
+  name: string;
+  serviceId: string;
+  spaceId: string;
+}

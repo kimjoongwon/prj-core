@@ -1,4 +1,5 @@
 export * from './dtos';
-export { type SERVICE_NAME, ServiceEntity } from './service.entity';
-export { ServiceService } from './service.service';
-export { ServiceModule } from './service.module';
+export * from './service.repository';
+export * from './service.entity';
+export * from './service.service';
+export * from './service.module';

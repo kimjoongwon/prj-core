@@ -33,7 +33,7 @@ export class AuthController {
   ) {}
 
   @UseGuards(LocalAuthGuard)
-  @ApiResponseEntity(TokenDto, HttpStatus.OK, { isArray: true })
+  @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
     const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);

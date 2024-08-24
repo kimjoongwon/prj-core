@@ -9,5 +9,7 @@ import type { SpaceDto } from './spaceDto';
 export type GetAccessibleAllSpace200AllOf = {
   data?: SpaceDto[];
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

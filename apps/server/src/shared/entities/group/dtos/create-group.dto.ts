@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { GroupEntity } from '../group.entity';
 import { COMMON_ENTITY_FIELDS } from '../../../constants/entity-common-fields';
+import { GroupDto } from './group.dto';
 
-export class CreateGroupDto extends OmitType(GroupEntity, COMMON_ENTITY_FIELDS) {}
+export class CreateGroupDto extends OmitType(GroupDto, COMMON_ENTITY_FIELDS) {}

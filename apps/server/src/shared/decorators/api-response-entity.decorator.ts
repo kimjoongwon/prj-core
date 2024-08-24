@@ -16,7 +16,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   const properties = {
     httpStatus: {
       type: 'number',
-      enum: Object.values(HttpStatus),
       nullable: false,
       example: httpStatus,
     },

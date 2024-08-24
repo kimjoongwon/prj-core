@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { LoginPayloadDto, TokenDto, UserDto } from '../model';
+import { GetToken200AllOf, LoginPayloadDto, UserDto } from '../model';
 import { Galaxy } from './galaxy';
 import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
@@ -61,9 +61,9 @@ export class Auth {
     );
   }
 
-  afterLogin({ user, accessToken }: TokenDto) {
-    this.accessToken = accessToken;
-    this.user = user;
+  afterLogin(res: GetToken200AllOf) {
+    localStorage.setItem('accessToken', res.data.accessToken);
+    this.user = res.data.user;
     this.status = AuthStatus.LoggedIn;
   }
 

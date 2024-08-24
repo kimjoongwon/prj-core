@@ -2,7 +2,7 @@
 
 import { Card, CardBody, Spacer } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
-import Input from '../../ui/Input';
+import { Input } from '../../ui/Input';
 
 export interface LoginFormProps {
   state: {

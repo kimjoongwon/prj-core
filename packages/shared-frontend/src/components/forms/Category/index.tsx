@@ -1,20 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import {
-  CategoryDto,
-  CreateCategoryDto,
-  UpdateCategoryDto,
-} from '../../../model';
 import { Input, VStack } from '../../ui';
 
 interface CategoryFormProps {
   type: 'create' | 'update' | 'read';
-  state: CreateCategoryDto | UpdateCategoryDto | CategoryDto;
+  state: any;
 }
 
 export const CategoryForm = observer((props: CategoryFormProps) => {
   const { state } = props;
 
-  console.log('state', state.name)
   return (
     <VStack>
       <Input

@@ -2,21 +2,24 @@
 
 import { ChangeEventHandler } from 'react';
 import { MobxProps } from '../types';
-import { Input, InputProps as NextUIInputProps } from '@nextui-org/react';
+import { InputProps as NextUIInputProps } from '@nextui-org/react';
 import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { ValidationState } from '../FormController/FormControl';
+import { InputView } from './InputView';
 
 export type InputProps<T> = MobxProps<T> &
   NextUIInputProps & {
     validation?: ValidationState;
   };
 
-const _Input = observer(<T extends object>(props: InputProps<T>) => {
+export const Input = observer(<T extends object>(props: InputProps<T>) => {
   const { path = '', state = {}, onChange, validation, type } = props;
 
+  console.log('state', state);
+  console.log('path', path);
   const initialValue = get(state, path) || '';
 
   const { localState } = useMobxHookForm(initialValue, state, path);
@@ -34,7 +37,7 @@ const _Input = observer(<T extends object>(props: InputProps<T>) => {
   );
 
   return (
-    <Input
+    <InputView
       {...props}
       onChange={handleChange}
       value={String(localState.value)}
@@ -44,4 +47,4 @@ const _Input = observer(<T extends object>(props: InputProps<T>) => {
   );
 });
 
-export default _Input;
+Input.displayName = 'Input';

@@ -9,5 +9,7 @@ import type { AbilityDto } from './abilityDto';
 export type UpdateAbilityById200AllOf = {
   data?: AbilityDto;
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

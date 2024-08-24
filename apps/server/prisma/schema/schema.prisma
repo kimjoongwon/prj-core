@@ -29,7 +29,7 @@ enum SERVICE_NAME {
 
 model Service {
   id              String           @id @default(cuid())
-  name            SERVICE_NAME     @unique
+  name            String           @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)

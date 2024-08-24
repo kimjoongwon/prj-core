@@ -32,4 +32,8 @@ export class ResponseEntity<T> {
   static WITH_ERROR<T>(httpStatus: HttpStatus, message: string): ResponseEntity<T> {
     return new ResponseEntity(httpStatus, message || '실패', null);
   }
+
+  from(data: T): ResponseEntity<T> {
+    return new ResponseEntity(this.httpStatus, '성공', data, this.meta);
+  }
 }

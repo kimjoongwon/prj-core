@@ -15,7 +15,7 @@ import {
   ApiResponseEntity,
   CreateGroupDto,
   GroupDto,
-  GroupPageOptionsDto,
+  GroupQueryDto,
   GroupService,
   PaginationMananger,
   Public,
@@ -41,9 +41,9 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByPageOptions(@Query() pageOptions: GroupPageOptionsDto) {
-    const { count, groups } = await this.groupService.getGroupsByPageOptions(pageOptions);
-    const { skip, take } = pageOptions;
+  async getGroupsByQuery(@Query() query: GroupQueryDto) {
+    const { count, groups } = await this.groupService.getManyByQuery(query);
+    const { skip, take } = query;
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
@@ -59,33 +59,36 @@ export class GroupsController {
     );
   }
 
-  @ApiResponse({
-    status: 200,
-    description: 'The record has been successfully retrieved.',
-    type: GroupDto,
-  })
+  @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Get(':groupId')
-  findGroupById(@Param('groupId') id: string) {
-    return this.groupService.findOneById(id);
+  async getGroup(@Param('groupId') groupId: string) {
+    const group = await this.groupService.get(groupId);
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '그룹 데이터 리턴 성공',
+      group ? new GroupDto(group) : null,
+    );
   }
 
-  @ApiResponse({
-    status: 200,
-    description: 'The record has been successfully updated.',
-    type: GroupDto,
-  })
+  @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Patch(':groupId')
-  updateGroupById(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.updateById(groupId, updateGroupDto);
+  async updateGroup(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
+    const group = await this.groupService.update(groupId, updateGroupDto);
+    return new ResponseEntity(HttpStatus.OK, '그룹 데이터 업데이트 성공', new GroupDto(group));
   }
 
-  @ApiResponse({
-    status: 200,
-    description: 'The record has been successfully removed.',
-    type: GroupDto,
-  })
+  @ApiResponseEntity(Number, HttpStatus.OK)
+  @Patch(':groupIds')
+  async removeGroups(@Param('groupIds') ids: string[]) {
+    const groups = await this.groupService.removeMany(ids);
+    return new ResponseEntity(HttpStatus.OK, '그룹 데이터 제거 성공', groups.count);
+  }
+
+  @ApiResponseEntity(Number, HttpStatus.OK)
   @Delete(':groupId')
-  removeGroupById(@Param('groupId') groupId: string) {
-    return this.groupService.removeById(groupId);
+  async deleteGroup(@Param('groupId') groupId: string) {
+    const group = await this.groupService.delete(groupId);
+    return new ResponseEntity(HttpStatus.OK, '그룹 데이터 삭제 성공', new GroupDto(group));
   }
 }

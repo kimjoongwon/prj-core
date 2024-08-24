@@ -1,13 +1,24 @@
-import { Controller, Get, Body, Patch, Param, Logger, Post } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Logger,
+  Post,
+  HttpStatus,
+  Delete,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   Auth,
-  Public,
   CreateServiceDto,
-  ServiceEntity,
+  ServiceDto,
   ServiceService,
   UpdateServiceDto,
   ApiEndpoints,
+  ApiResponseEntity,
+  ResponseEntity,
 } from '@shared';
 
 @ApiTags('ADMIN_SERVICES')
@@ -17,33 +28,64 @@ export class ServicesController {
   constructor(private readonly servicesService: ServiceService) {}
 
   @Get()
-  @Public()
-  @ApiResponse({ type: ServiceEntity, isArray: true })
-  getAllService() {
-    return this.servicesService.findAllService();
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK, { isArray: true })
+  async getAllService() {
+    const services = await this.servicesService.getAll();
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      services.map((service) => new ServiceDto(service)),
+    );
   }
 
-  @Auth()
-  @ApiResponse({ type: ServiceEntity })
   @Post()
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.CREATED)
   createService(@Body() createServiceDto: CreateServiceDto) {
     return this.servicesService.create(createServiceDto);
   }
 
-  @Public()
   @Get(':serviceId')
-  @ApiParam({ name: 'serviceId', type: 'string' })
-  @ApiOkResponse({ type: ServiceEntity })
-  getServiceById(@Param('serviceId') serviceId: string) {
-    return this.servicesService.getServiceById(serviceId);
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK)
+  async getService(@Param('serviceId') serviceId: string) {
+    const service = await this.servicesService.getUnqiue(serviceId);
+    return new ResponseEntity(HttpStatus.OK, '성공', new ServiceDto(service));
   }
 
-  @Public()
-  @ApiParam({ name: 'id', type: 'string' })
-  @ApiBody({ type: UpdateServiceDto })
-  @ApiOkResponse({ type: ServiceEntity })
-  @Patch(':id')
-  updateService(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.servicesService.update(id, updateServiceDto);
+  @Patch(':serviceId')
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK)
+  async updateService(
+    @Param('serviceId') serviceId: string,
+    @Body() updateServiceDto: UpdateServiceDto,
+  ) {
+    const service = await this.servicesService.update(serviceId, updateServiceDto);
+    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
+  }
+
+  @Patch(':serviceId/removedBy')
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK)
+  async removeService(@Param('serviceId') serviceId: string) {
+    const service = await this.servicesService.remove(serviceId);
+    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
+  }
+
+  @Patch(':serviceIds/removedBy')
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK)
+  async removeServices(@Param('serviceIds') serviceIds: string[]) {
+    const serviceBatched = await this.servicesService.removeMany(serviceIds);
+    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', serviceBatched.count);
+  }
+
+  @Delete(':serviceId')
+  @Auth()
+  @ApiResponseEntity(ServiceDto, HttpStatus.OK)
+  async deleteService(@Param('serviceId') serviceId: string) {
+    const service = await this.servicesService.delete(serviceId);
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new ServiceDto(service));
   }
 }

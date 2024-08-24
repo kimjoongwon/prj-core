@@ -9,5 +9,7 @@ import type { CategoryDto } from './categoryDto';
 export type FindCategoryById200AllOf = {
   data?: CategoryDto;
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

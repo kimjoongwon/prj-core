@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { ServiceEntity } from '../service.entity';
 import { COMMON_ENTITY_FIELDS } from '../../../constants';
+import { ServiceDto } from './service.dto';
 
-export class CreateServiceDto extends OmitType(ServiceEntity, COMMON_ENTITY_FIELDS) {}
+export class CreateServiceDto extends OmitType(ServiceDto, COMMON_ENTITY_FIELDS) {}

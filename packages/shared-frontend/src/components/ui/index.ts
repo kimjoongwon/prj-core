@@ -3,10 +3,10 @@ import AutoComplete from './AutoComplete';
 import PageModal from './PageModal';
 import Editor from './Editor';
 import Textarea from './Textarea';
-import Input from './Input';
 import Button from './Button';
 import Skeleton from './Skeleton';
 import Pagination from './Pagination';
+export * from './Input';
 export * from './Footer';
 export * from './Navbar';
 export * from './Checkbox';
@@ -43,7 +43,6 @@ export {
   PageModal,
   AutoComplete,
   Editor,
-  Input,
   Button,
   Skeleton,
   Pagination,

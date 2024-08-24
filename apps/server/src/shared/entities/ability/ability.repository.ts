@@ -24,6 +24,10 @@ export class AbilityRepository {
     return this.prisma.ability.update(args);
   }
 
+  updateMany(args: Prisma.AbilityUpdateManyArgs) {
+    return this.prisma.ability.updateMany(args);
+  }
+
   delete(args: Prisma.AbilityDeleteArgs) {
     return this.prisma.ability.delete(args);
   }

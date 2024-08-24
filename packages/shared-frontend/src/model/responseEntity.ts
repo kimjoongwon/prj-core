@@ -9,6 +9,7 @@ import type { ResponseEntityHttpStatus } from './responseEntityHttpStatus';
 import type { PageMetaDto } from './pageMetaDto';
 
 export interface ResponseEntity {
+  /** @nullable */
   data: ResponseEntityData;
   httpStatus: ResponseEntityHttpStatus;
   message: string;

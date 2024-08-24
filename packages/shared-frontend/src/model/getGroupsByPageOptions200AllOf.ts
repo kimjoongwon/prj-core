@@ -9,5 +9,7 @@ import type { GroupDto } from './groupDto';
 export type GetGroupsByPageOptions200AllOf = {
   data?: GroupDto[];
   /** */
+  httpStatus?: number;
+  /** */
   message?: string;
 };

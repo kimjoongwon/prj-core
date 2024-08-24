@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
+import { ContextProvider } from 'src/shared/providers';
 
 @Injectable()
 export class SpaceService {
@@ -14,7 +15,9 @@ export class SpaceService {
     });
   }
 
-  async getAccessibleSpacesByIds(spaceIds: string[]) {
+  getAccessibleSpaces() {
+    const tenant = ContextProvider.getTenant();
+    const spaceIds = tenant.tenants.map((tenant) => tenant.tenancy.spaceId);
     return this.prisma.space.findMany({ where: { id: { in: spaceIds } } });
   }
 

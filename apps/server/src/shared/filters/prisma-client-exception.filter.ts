@@ -29,6 +29,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     P2000: HttpStatus.BAD_REQUEST,
     P2002: HttpStatus.CONFLICT,
     P2025: HttpStatus.NOT_FOUND,
+    P2003: HttpStatus.BAD_REQUEST,
   };
 
   private readonly userDefinedMapping?: ErrorCodesStatusMapping;
@@ -79,6 +80,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
       this.userDefinedExceptionMessage(exception) || this.defaultExceptionMessage(exception);
 
     if (host.getType() === 'http') {
+      console.log('statusCode', statusCode);
       if (statusCode === undefined) {
         return super.catch(exception, host);
       }
