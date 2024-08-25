@@ -27,7 +27,7 @@ export const ADMIN_SETTING_SERVICE_PATH =
   `${ADMIN_MAIN_PATH}/settingService` as const;
 
 export const ADMIN_SERVICE_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/:serviceId/edit` as const;
+  `${ADMIN_SERVICE_PATH}/edit` as const;
 
 export type Paths =
   | typeof ADMIN_PATH
