@@ -1,6 +1,14 @@
 'use client';
 
-import { Avatar, Button, galaxy, Navbar, NavbarItem } from '@shared/frontend';
+import {
+  Avatar,
+  Button,
+  galaxy,
+  Navbar,
+  NavbarItem,
+  useGetAllService,
+  useGetAllServiceSuspense,
+} from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 
@@ -9,8 +17,9 @@ interface MainLayoutProps {
 }
 
 const MainLayout = observer((props: MainLayoutProps) => {
-  const pathnname = usePathname();
   const { children } = props;
+  const getAllService = useGetAllServiceSuspense();
+  const services = getAllService.data?.data;
 
   const onClickLeave = () => {
     galaxy.auth.logout();
@@ -19,7 +28,20 @@ const MainLayout = observer((props: MainLayoutProps) => {
     });
   };
 
-  const navbarItems: NavbarItem[] = [
+  const navbarItems = services?.map(service => ({
+    name: service.label,
+    url: `/admin/main/services/${service.id}`,
+    onClick: () => {
+      galaxy.router.push({
+        url: '/admin/main/services/:serviceId',
+        params: {
+          serviceId: service.id,
+        },
+      });
+    },
+  })) as NavbarItem[];
+
+  const defaultNavItems: NavbarItem[] = [
     {
       name: '서비스 관리',
       url: '/admin/main/services',
@@ -29,23 +51,11 @@ const MainLayout = observer((props: MainLayoutProps) => {
         });
       },
     },
-    {
-      name: '매장 관리',
-      url: '/admin/main/services/:serviceId',
-    },
-    {
-      name: '문의 관리',
-      url: '/admin/main/services/:serviceId',
-    },
-    {
-      name: '설정',
-      url: '/admin/main/services/:serviceId',
-    },
   ];
 
   return (
     <Navbar
-      navbarItems={navbarItems}
+      navbarItems={[...defaultNavItems, ...navbarItems]}
       rightContents={
         <>
           <Avatar name={galaxy.auth.user?.email || 'test!'} />

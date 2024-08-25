@@ -1,4 +1,4 @@
-import { VStack } from '../../VStack';
+import { Container } from '../../Container';
 
 interface TableContainerProps {
   children: React.ReactNode;
@@ -6,5 +6,5 @@ interface TableContainerProps {
 
 export const TableContainer = (props: TableContainerProps) => {
   const { children } = props;
-  return <VStack className="w-full p-4 space-y-3">{children}</VStack>;
+  return <Container className="p-4 space-y-3">{children}</Container>;
 };
