@@ -109,7 +109,6 @@ export const DataGrid = observer(
           defaultSelectedKeys={state.selectedKeys}
           onSelectionChange={selection => {
             if (selection instanceof Set) {
-              console.log(Array.from(selection));
               // @ts-ignore
               state.selectedKeys = Array.from(selection);
               return;
@@ -139,12 +138,7 @@ export const DataGrid = observer(
             {rows?.map(row => (
               <TableRow key={row.original?.[selectedKey as string]}>
                 {row.getAllCells().map(cell => (
-                  <TableCell
-                    key={cell.id}
-                    style={{
-                      width: cell.column.getSize(),
-                    }}
-                  >
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
