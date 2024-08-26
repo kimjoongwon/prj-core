@@ -6,8 +6,9 @@ import {
   User,
   UserProps,
 } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
 
-export const Avatar = (props: UserProps) => {
+export const Avatar = observer((props: UserProps) => {
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -15,9 +16,9 @@ export const Avatar = (props: UserProps) => {
       </DropdownTrigger>
       <DropdownMenu>
         <DropdownItem key="setting">
-          <p className="font-semibold">Signed in as</p>
+          <p className="font-semibold">프로필 정보</p>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   );
-};
+});

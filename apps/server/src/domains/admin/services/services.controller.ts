@@ -46,8 +46,8 @@ export class ServicesController {
     return this.servicesService.create(createServiceDto);
   }
 
-  @Get(':serviceId')
   @Auth()
+  @Get(':serviceId')
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async getService(@Param('serviceId') serviceId: string) {
     const service = await this.servicesService.getUnqiue(serviceId);

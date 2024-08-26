@@ -62,6 +62,7 @@ export class Auth {
   }
 
   afterLogin(res: GetToken200AllOf) {
+    console.log('afterLogin', res.data.user);
     localStorage.setItem('accessToken', res.data.accessToken);
     this.user = res.data.user;
     this.status = AuthStatus.LoggedIn;

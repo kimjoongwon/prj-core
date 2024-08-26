@@ -1,4 +1,4 @@
-import { Service as ServiceEntity } from '@prisma/client';
+import { $Enums, Service as ServiceEntity } from '@prisma/client';
 
 export enum SERVICE_NAME {
   SPACE = 'SPACE',
@@ -7,9 +7,9 @@ export enum SERVICE_NAME {
 }
 
 export class Service implements ServiceEntity {
+  name: $Enums.SERVICE_NAME;
   id: string;
   label: string | null;
-  name: string;
   createdAt: Date;
   updatedAt: Date | null;
   removedAt: Date | null;

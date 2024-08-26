@@ -73,6 +73,7 @@ export * from './serviceEntity';
 export * from './serviceEntityName';
 export * from './serviceEntityRemovedAt';
 export * from './serviceEntityUpdatedAt';
+export * from './serviceName';
 export * from './sessionDto';
 export * from './sessionEndTypes';
 export * from './sessionTypes';

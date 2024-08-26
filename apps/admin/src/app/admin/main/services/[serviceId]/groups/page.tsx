@@ -9,7 +9,15 @@ const UserGroupsPage = () => {
     dataGrid: { columns, data },
   } = usePage();
 
-  return <DataGrid data={data} columns={columns} />;
+  return (
+    <DataGrid
+      data={data}
+      columns={columns}
+      state={{
+        selectedKeys: [],
+      }}
+    />
+  );
 };
 
 export default observer(UserGroupsPage);

@@ -23,13 +23,13 @@ model Category {
 
 enum SERVICE_NAME {
   USER
+  RESERVATION
   SPACE
-  SETTING
 }
 
 model Service {
   id              String           @id @default(cuid())
-  name            String           @unique
+  name            SERVICE_NAME     @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)

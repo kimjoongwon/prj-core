@@ -6,11 +6,9 @@ import {
   galaxy,
   Navbar,
   NavbarItem,
-  useGetAllService,
   useGetAllServiceSuspense,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
-import { usePathname } from 'next/navigation';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -53,12 +51,13 @@ const MainLayout = observer((props: MainLayoutProps) => {
     },
   ];
 
+  console.log(galaxy.auth.user);
   return (
     <Navbar
       navbarItems={[...defaultNavItems, ...navbarItems]}
       rightContents={
         <>
-          <Avatar name={galaxy.auth.user?.email || 'test!'} />
+          <Avatar name={galaxy.auth.user?.name} />
           <Button onClick={onClickLeave} color="danger" variant="flat">
             나가기
           </Button>

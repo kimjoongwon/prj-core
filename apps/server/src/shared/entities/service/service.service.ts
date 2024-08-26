@@ -4,6 +4,7 @@ import { CreateServiceDto } from './dtos/create-service.dto';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ServiceQueryDto } from './dtos';
 import { PaginationMananger } from 'src/shared/utils';
+import { UpsertServiceDto } from './dtos/upsert-service.dto';
 
 @Injectable()
 export class ServiceService {
@@ -13,6 +14,14 @@ export class ServiceService {
   create(createServiceDto: CreateServiceDto) {
     return this.prisma.service.create({
       data: createServiceDto,
+    });
+  }
+
+  upsert(upsertServiceDto: UpsertServiceDto) {
+    return this.prisma.service.upsert({
+      where: { name: upsertServiceDto.name },
+      create: upsertServiceDto,
+      update: upsertServiceDto,
     });
   }
 

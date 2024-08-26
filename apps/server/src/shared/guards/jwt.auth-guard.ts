@@ -17,10 +17,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (isPublic) {
       return true;
     }
+
+    console.log('2');
     return super.canActivate(context);
   }
 
   handleRequest(err, req) {
+    console.log('1', err);
     if (err || !req.user) {
       throw err || new UnauthorizedException();
     }

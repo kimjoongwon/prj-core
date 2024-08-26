@@ -22,7 +22,7 @@ export let galaxy: Galaxy = {} as Galaxy;
 export const AppProvider = observer(({ children }: AppProviderProps) => {
   const nextRouter = useRouter();
 
-  usePrefechInitialData();
+  // usePrefechInitialData();
 
   useEffect(() => {
     galaxy = new Galaxy(nextRouter);
