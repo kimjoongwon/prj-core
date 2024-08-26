@@ -4,6 +4,6 @@ import { SpaceRepository } from './space.repository';
 
 @Module({
   providers: [SpaceService, SpaceRepository],
-  exports: [SpaceService],
+  exports: [SpaceService, SpaceRepository],
 })
 export class SpaceModule {}

@@ -1,15 +1,28 @@
-import { Controller, Delete, Get, HttpCode, HttpStatus, Patch, Post, Query } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   ApiEndpoints,
   ApiResponseEntity,
   Auth,
   CreateSpaceDto,
   PageMetaDto,
+  RemoveManySpaceDto,
   ResponseEntity,
   SpaceDto,
   SpaceQueryDto,
   SpaceService,
+  UpdateSpaceDto,
 } from '@shared';
 
 @ApiTags('ADMIN_SPACES')
@@ -21,7 +34,7 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async createSpace(createSpaceDto: CreateSpaceDto) {
+  async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
     const space = await this.spaceService.create(createSpaceDto);
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
@@ -30,16 +43,26 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async getSpace(spaceId: string) {
+  async getSpace(@Param('spaceId') spaceId: string) {
     const space = await this.spaceService.getUnique(spaceId);
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+  }
+
+  @Patch('removedAt')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(SpaceDto, HttpStatus.OK)
+  async removeSpaces(@Body() { spaceIds }: RemoveManySpaceDto) {
+    console.log('spaceIds', spaceIds);
+    const spaces = await this.spaceService.removeMany(spaceIds);
+    return new ResponseEntity(HttpStatus.OK, '성공', spaces.count);
   }
 
   @Patch(':spaceId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async updateSpace(spaceId: string, updateSpaceDto: CreateSpaceDto) {
+  async updateSpace(@Param('spaceId') spaceId: string, @Body() updateSpaceDto: UpdateSpaceDto) {
     const space = await this.spaceService.update({ id: spaceId, ...updateSpaceDto });
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
@@ -48,7 +71,7 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async removeSpace(spaceId: string) {
+  async removeSpace(@Param('spaceId') spaceId: string) {
     const space = await this.spaceService.remove(spaceId);
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
@@ -57,12 +80,12 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async deleteSpace(spaceId: string) {
+  async deleteSpace(@Param('spaceId') spaceId: string) {
     const space = await this.spaceService.delete(spaceId);
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
 
-  @Get('spaces')
+  @Get()
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
@@ -86,18 +109,6 @@ export class SpacesController {
   @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
   async getAccessibleSpaces() {
     const spaces = await this.spaceService.getAccessibleSpaces();
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'success',
-      spaces.map((space) => new SpaceDto(space)),
-    );
-  }
-
-  @Auth([])
-  @ApiResponse({ type: SpaceDto, isArray: true })
-  @Get()
-  async getAllSpace() {
-    const spaces = await this.spaceService.getAllSpace();
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
