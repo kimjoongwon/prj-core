@@ -12,7 +12,7 @@ export class ServiceDto extends AbstractDto implements Service {
 
   constructor(service: Service) {
     super(service);
-    this.label = service.label;
     this.name = service.name;
+    this.label = service.label;
   }
 }

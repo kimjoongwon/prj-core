@@ -3,7 +3,7 @@ import { GroupRepository } from './group.repository';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import { GroupQueryDto } from './dtos/group-query.dto';
 import { UpdateGroupDto } from './dtos/update-group.dto';
-import { PaginationMananger } from 'src/shared/utils';
+import { PaginationMananger } from '../../../shared/utils';
 
 @Injectable()
 export class GroupService {

@@ -1,13 +1,20 @@
-import { Space } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { SpaceEntity } from '../space.entity';
-import { StringField } from '../../../decorators/field.decorators';
+import { ClassField, StringField } from '../../../decorators/field.decorators';
+import { Space } from '../space.entity';
+import { Tenancy } from '../../tenancy';
+import { GroupDto } from '../../group';
 
 export class SpaceDto extends AbstractDto implements Space {
   @StringField()
   name: string;
 
-  constructor(entity: SpaceDto, options?: { excludeFields?: boolean }) {
+  @ClassField(() => Tenancy, { isArray: true, nullable: true })
+  tenancies?: Tenancy[];
+
+  @ClassField(() => GroupDto, { nullable: true })
+  groups?: GroupDto[];
+
+  constructor(entity: Space, options?: { excludeFields?: boolean }) {
     super(entity, options);
     this.id = entity.id;
     this.name = entity.name;

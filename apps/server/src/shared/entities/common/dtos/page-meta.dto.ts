@@ -1,9 +1,9 @@
 import { NumberField, BooleanField } from '../../../decorators';
 import { PaginationMananger } from '../../../utils';
-import { PageOptionsDto } from './page-option.dto';
+import { PageQueryDto } from './page-query.dto';
 
 interface IPageMetaDtoParameters {
-  pageOptionsDto: PageOptionsDto;
+  pageQueryDto: PageQueryDto;
   itemCount: number;
 }
 
@@ -26,8 +26,8 @@ export class PageMetaDto {
   @BooleanField()
   readonly hasNextPage: boolean;
 
-  constructor({ pageOptionsDto, itemCount }: IPageMetaDtoParameters) {
-    const { skip, take } = pageOptionsDto;
+  constructor({ pageQueryDto, itemCount }: IPageMetaDtoParameters) {
+    const { skip, take } = pageQueryDto;
     const page = PaginationMananger.getPage({ skip, take });
     this.skip = skip;
     this.take = take;

@@ -1,6 +1,6 @@
 import { NumberFieldOptional } from '../../../decorators';
 
-export class PageOptionsDto {
+export class PageQueryDto {
   @NumberFieldOptional({
     minimum: 1,
     default: 1,

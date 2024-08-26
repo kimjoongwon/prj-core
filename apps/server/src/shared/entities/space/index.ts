@@ -1,4 +1,5 @@
 export * from './dtos';
-export { SpaceEntity } from './space.entity';
-export { SpaceService } from './space.service';
-export { SpaceModule } from './space.module';
+export * from './space.service';
+export * from './space.module';
+export * from './space.entity';
+export * from './space.repository';

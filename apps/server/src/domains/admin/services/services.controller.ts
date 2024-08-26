@@ -65,7 +65,7 @@ export class ServicesController {
     return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
   }
 
-  @Patch(':serviceId/removedBy')
+  @Patch(':serviceId/removedAt')
   @Auth()
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async removeService(@Param('serviceId') serviceId: string) {
@@ -73,7 +73,7 @@ export class ServicesController {
     return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
   }
 
-  @Patch(':serviceIds/removedBy')
+  @Patch(':serviceIds/removedAt')
   @Auth()
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async removeServices(@Param('serviceIds') serviceIds: string[]) {

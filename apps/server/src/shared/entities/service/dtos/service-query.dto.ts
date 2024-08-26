@@ -1,11 +1,16 @@
-import { EnumFieldOptional, StringFieldOptional } from '../../../decorators/field.decorators';
-import { Order } from '../../../constants/order.constant';
-import { PageOptionsDto } from '../../common/dtos/page-option.dto';
+import { EnumFieldOptional } from '../../../decorators/field.decorators';
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { IntersectionType } from '@nestjs/swagger';
+import { UpdateServiceDto } from './update-service.dto';
+import { Prisma } from '@prisma/client';
 
-export class ServiceQueryDto extends PageOptionsDto {
-  @StringFieldOptional()
-  name: string;
-
-  @EnumFieldOptional(() => Order, { default: Order.ASC })
-  orderByCreatedAt: Order;
+class ServiceSortOrder {
+  @EnumFieldOptional(() => Prisma.SortOrder, { default: Prisma.SortOrder })
+  nameSortOrder?: Prisma.SortOrder;
 }
+
+export class ServiceQueryDto extends IntersectionType(
+  UpdateServiceDto,
+  PageQueryDto,
+  ServiceSortOrder,
+) {}
