@@ -4,12 +4,18 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { SpaceDtoGroups } from './spaceDtoGroups';
+import type { Tenancy } from './tenancy';
 
 export interface SpaceDto {
   createdAt: string;
+  /** @nullable */
+  groups: SpaceDtoGroups;
   id: string;
   name: string;
   /** @nullable */
   removedAt: string | null;
+  /** @nullable */
+  tenancies: Tenancy[] | null;
   updatedAt: string;
 }

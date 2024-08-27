@@ -9,6 +9,16 @@ export const ADMIN_SERVICE_PATH =
 
 export const ADMIN_SERVICES_PATH = `${ADMIN_MAIN_PATH}/services` as const;
 
+// 매장관리 > 공간 관리
+export const ADMIN_SERVICE_SPACES_PATH =
+  `${ADMIN_SERVICE_PATH}/spaces` as const;
+
+export const ADMIN_SERVICE_SPACE_PATH =
+  `${ADMIN_SERVICE_PATH}/spaces/:spaceId` as const;
+
+export const ADMIN_SERVICE_SPACE_EDIT_PATH =
+  `${ADMIN_SERVICE_PATH}/spaces/:spaceId/edit` as const;
+
 export const ADMIN_RESERVATION_SERVICE_PATH =
   `${ADMIN_MAIN_PATH}/reservationService` as const;
 
@@ -26,8 +36,7 @@ export const ADMIN_USER_CATEGORY_EDIT_PATH =
 export const ADMIN_SETTING_SERVICE_PATH =
   `${ADMIN_MAIN_PATH}/settingService` as const;
 
-export const ADMIN_SERVICE_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/edit` as const;
+export const ADMIN_SERVICE_EDIT_PATH = `${ADMIN_SERVICE_PATH}/edit` as const;
 
 export type Paths =
   | typeof ADMIN_PATH
@@ -43,5 +52,9 @@ export type Paths =
   | typeof ADMIN_SETTING_SERVICE_PATH
   | typeof ADMIN_SERVICES_PATH
   | typeof ADMIN_SERVICE_EDIT_PATH
+  // 매장
+  | typeof ADMIN_SERVICE_SPACES_PATH
+  | typeof ADMIN_SERVICE_SPACE_PATH
+  | typeof ADMIN_SERVICE_SPACE_EDIT_PATH
   | typeof ADMIN_USER_CATEGORY_EDIT_PATH
   | typeof ADMIN_RESERVATION_SERVICE_PATH;

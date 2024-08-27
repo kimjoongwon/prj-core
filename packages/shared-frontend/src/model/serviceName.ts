@@ -12,4 +12,5 @@ export type ServiceName = typeof ServiceName[keyof typeof ServiceName];
 export const ServiceName = {
   USER: 'USER',
   RESERVATION: 'RESERVATION',
+  SPACE: 'SPACE',
 } as const;

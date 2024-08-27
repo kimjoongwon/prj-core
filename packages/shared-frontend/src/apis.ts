@@ -30,16 +30,19 @@ import type {
   CreateGroupDto,
   CreateServiceDto,
   CreateSessionDto,
+  CreateSpaceDto,
   CreateSubjectDto,
   GetAbilitiesByQueryParams,
   GetGroupsByQueryParams,
+  GetSpacesByQueryParams,
   LoginPayloadDto,
+  RemoveManySpaceDto,
   SignUpPayloadDto,
-  SpaceDto,
   UpdateCategoryDto,
   UpdateGroupDto,
   UpdateServiceDto,
   UpdateSessionDto,
+  UpdateSpaceDto,
   UpdateSubjectDto
 } from './model'
 import {
@@ -66,9 +69,11 @@ import type {
   CreateCategory200AllOf,
   CreateService201AllOf,
   CreateSession200AllOf,
+  CreateSpace200AllOf,
   DeleteAbility200AllOf,
   DeleteGroup200AllOf,
   DeleteService200AllOf,
+  DeleteSpace200AllOf,
   FindCategoryById200AllOf,
   GetAbilitiesByQuery200AllOf,
   GetAbility200AllOf,
@@ -78,6 +83,8 @@ import type {
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetService200AllOf,
+  GetSpace200AllOf,
+  GetSpacesByQuery200AllOf,
   GetSubjectById200AllOf,
   GetSubjectsByPageQuery200AllOf,
   GetToken200AllOf,
@@ -87,11 +94,14 @@ import type {
   RemoveGroups200AllOf,
   RemoveService200AllOf,
   RemoveServices200AllOf,
+  RemoveSpace200AllOf,
+  RemoveSpaces200AllOf,
   TokenDto,
   UpdateCategory200AllOf,
   UpdateGroup200AllOf,
   UpdateService200AllOf,
   UpdateSesson200AllOf,
+  UpdateSpace200AllOf,
   UpdateSubjectById200AllOf,
   UserDto
 } from './model'
@@ -1352,7 +1362,7 @@ export const removeService = (
       
       
       return customInstance<RemoveService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}/removedBy`, method: 'PATCH'
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -1402,7 +1412,7 @@ export const removeServices = (
       
       
       return customInstance<RemoveServices200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceIds}/removedBy`, method: 'PATCH'
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceIds}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -1442,6 +1452,524 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemoveServicesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createSpace = (
+    createSpaceDto: BodyType<CreateSpaceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSpaceDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSpace>>, {data: BodyType<CreateSpaceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSpace(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof createSpace>>>
+    export type CreateSpaceMutationBody = BodyType<CreateSpaceDto>
+    export type CreateSpaceMutationError = ErrorType<void>
+
+    export const useCreateSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createSpace>>,
+        TError,
+        {data: BodyType<CreateSpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getSpacesByQuery = (
+    params?: GetSpacesByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSpacesByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetSpacesByQueryQueryKey = (params?: GetSpacesByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/spaces`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSpacesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQueryQueryError = ErrorType<void>
+
+export const useGetSpacesByQuery = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpacesByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpacesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQuerySuspenseQueryError = ErrorType<void>
+
+export const useGetSpacesByQuerySuspense = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpacesByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpacesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetSpacesByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpacesByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetSpaceQueryKey = (spaceId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/spaces/${spaceId}`] as const;
+    }
+
+    
+export const getGetSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceQueryError = ErrorType<void>
+
+export const useGetSpace = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpaceQueryOptions(spaceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceSuspenseQueryError = ErrorType<void>
+
+export const useGetSpaceSuspense = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpaceSuspenseQueryOptions(spaceId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetSpaceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSpaceSuspenseInfiniteQueryOptions(spaceId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateSpace = (
+    spaceId: string,
+    updateSpaceDto: BodyType<UpdateSpaceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSpaceDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSpace>>, {spaceId: string;data: BodyType<UpdateSpaceDto>}> = (props) => {
+          const {spaceId,data} = props ?? {};
+
+          return  updateSpace(spaceId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof updateSpace>>>
+    export type UpdateSpaceMutationBody = BodyType<UpdateSpaceDto>
+    export type UpdateSpaceMutationError = ErrorType<void>
+
+    export const useUpdateSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateSpace>>,
+        TError,
+        {spaceId: string;data: BodyType<UpdateSpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSpace>>, {spaceId: string}> = (props) => {
+          const {spaceId} = props ?? {};
+
+          return  deleteSpace(spaceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSpace>>>
+    
+    export type DeleteSpaceMutationError = ErrorType<void>
+
+    export const useDeleteSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSpace>>,
+        TError,
+        {spaceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpace>>, {spaceId: string}> = (props) => {
+          const {spaceId} = props ?? {};
+
+          return  removeSpace(spaceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpace>>>
+    
+    export type RemoveSpaceMutationError = ErrorType<void>
+
+    export const useRemoveSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSpace>>,
+        TError,
+        {spaceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSpaces = (
+    removeManySpaceDto: BodyType<RemoveManySpaceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSpaces200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removeManySpaceDto
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSpacesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpaces>>, {data: BodyType<RemoveManySpaceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeSpaces(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSpacesMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpaces>>>
+    export type RemoveSpacesMutationBody = BodyType<RemoveManySpaceDto>
+    export type RemoveSpacesMutationError = ErrorType<void>
+
+    export const useRemoveSpaces = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSpaces>>,
+        TError,
+        {data: BodyType<RemoveManySpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSpacesMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -1565,136 +2093,6 @@ export const useGetAccessibleSpacesSuspenseInfinite = <TData = InfiniteData<Awai
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
   const queryOptions = getGetAccessibleSpacesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getAllSpace = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<SpaceDto[]>(
-      {url: `http://localhost:3005/api/v1/admin/spaces`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-export const getGetAllSpaceQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/spaces`] as const;
-    }
-
-    
-export const getGetAllSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpace>>, TError = ErrorType<SpaceDto[]>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({ signal }) => getAllSpace(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getAllSpace>>>
-export type GetAllSpaceQueryError = ErrorType<SpaceDto[]>
-
-export const useGetAllSpace = <TData = Awaited<ReturnType<typeof getAllSpace>>, TError = ErrorType<SpaceDto[]>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllSpaceQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAllSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpace>>, TError = ErrorType<SpaceDto[]>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({ signal }) => getAllSpace(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAllSpace>>>
-export type GetAllSpaceSuspenseQueryError = ErrorType<SpaceDto[]>
-
-export const useGetAllSpaceSuspense = <TData = Awaited<ReturnType<typeof getAllSpace>>, TError = ErrorType<SpaceDto[]>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllSpaceSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAllSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAllSpace>>>, TError = ErrorType<SpaceDto[]>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllSpaceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpace>>> = ({ signal }) => getAllSpace(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAllSpace>>>
-export type GetAllSpaceSuspenseInfiniteQueryError = ErrorType<SpaceDto[]>
-
-export const useGetAllSpaceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAllSpace>>>, TError = ErrorType<SpaceDto[]>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllSpaceSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -3091,7 +3489,21 @@ export const getRemoveServiceResponseMock = (): RemoveService200AllOf => ({data:
 
 export const getRemoveServicesResponseMock = (): RemoveServices200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getGetAccessibleSpacesResponseMock = (): GetAccessibleSpaces200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getCreateSpaceResponseMock = (): CreateSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetSpacesByQueryResponseMock = (): GetSpacesByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetSpaceResponseMock = (): GetSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateSpaceResponseMock = (): UpdateSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getDeleteSpaceResponseMock = (): DeleteSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveSpaceResponseMock = (): RemoveSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveSpacesResponseMock = (): RemoveSpaces200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetAccessibleSpacesResponseMock = (): GetAccessibleSpaces200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
 export const getCreateGroupResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
@@ -3348,7 +3760,7 @@ export const getDeleteServiceMockHandler = (overrideResponse?: DeleteService200A
 }
 
 export const getRemoveServiceMockHandler = (overrideResponse?: RemoveService200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveService200AllOf> | RemoveService200AllOf)) => {
-  return http.patch('*/api/v1/admin/services/:serviceId/removedBy', async (info) => {await delay(1000);
+  return http.patch('*/api/v1/admin/services/:serviceId/removedAt', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
             : getRemoveServiceResponseMock()),
@@ -3363,10 +3775,115 @@ export const getRemoveServiceMockHandler = (overrideResponse?: RemoveService200A
 }
 
 export const getRemoveServicesMockHandler = (overrideResponse?: RemoveServices200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveServices200AllOf> | RemoveServices200AllOf)) => {
-  return http.patch('*/api/v1/admin/services/:serviceIds/removedBy', async (info) => {await delay(1000);
+  return http.patch('*/api/v1/admin/services/:serviceIds/removedAt', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
             : getRemoveServicesResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getCreateSpaceMockHandler = (overrideResponse?: CreateSpace200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateSpace200AllOf> | CreateSpace200AllOf)) => {
+  return http.post('*/api/v1/admin/spaces', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateSpaceResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetSpacesByQueryMockHandler = (overrideResponse?: GetSpacesByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSpacesByQuery200AllOf> | GetSpacesByQuery200AllOf)) => {
+  return http.get('*/api/v1/admin/spaces', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetSpacesByQueryResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetSpaceMockHandler = (overrideResponse?: GetSpace200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSpace200AllOf> | GetSpace200AllOf)) => {
+  return http.get('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetSpaceResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateSpaceMockHandler = (overrideResponse?: UpdateSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSpace200AllOf> | UpdateSpace200AllOf)) => {
+  return http.patch('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateSpaceResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getDeleteSpaceMockHandler = (overrideResponse?: DeleteSpace200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteSpace200AllOf> | DeleteSpace200AllOf)) => {
+  return http.delete('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteSpaceResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveSpaceMockHandler = (overrideResponse?: RemoveSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpace200AllOf> | RemoveSpace200AllOf)) => {
+  return http.patch('*/api/v1/admin/spaces/:spaceId/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveSpaceResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveSpacesMockHandler = (overrideResponse?: RemoveSpaces200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpaces200AllOf> | RemoveSpaces200AllOf)) => {
+  return http.patch('*/api/v1/admin/spaces/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveSpacesResponseMock()),
       {
         status: 200,
         headers: {
@@ -3382,19 +3899,6 @@ export const getGetAccessibleSpacesMockHandler = (overrideResponse?: GetAccessib
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
             : getGetAccessibleSpacesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetAllSpaceMockHandler = () => {
-  return http.get('*/api/v1/admin/spaces', async () => {await delay(1000);
-    return new HttpResponse(null,
       {
         status: 200,
         headers: {
@@ -3671,8 +4175,14 @@ export const getPROMISEServerMock = () => [
   getDeleteServiceMockHandler(),
   getRemoveServiceMockHandler(),
   getRemoveServicesMockHandler(),
+  getCreateSpaceMockHandler(),
+  getGetSpacesByQueryMockHandler(),
+  getGetSpaceMockHandler(),
+  getUpdateSpaceMockHandler(),
+  getDeleteSpaceMockHandler(),
+  getRemoveSpaceMockHandler(),
+  getRemoveSpacesMockHandler(),
   getGetAccessibleSpacesMockHandler(),
-  getGetAllSpaceMockHandler(),
   getCreateGroupMockHandler(),
   getGetGroupsByQueryMockHandler(),
   getGetGroupMockHandler(),

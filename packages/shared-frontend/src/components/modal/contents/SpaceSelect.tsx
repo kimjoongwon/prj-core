@@ -1,14 +1,17 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { useGetAllSpace } from '../../../apis';
 import { ListBox } from '../../ui';
 import { galaxy } from '../../../providers/App';
+import {
+  useGetSpacesByQuery,
+  useGetSpacesByQuerySuspense,
+} from '../../../apis';
 
 export const SpaceSelectModalContent = observer(() => {
-  const { data: spaces = [] } = useGetAllSpace();
+  const { data } = useGetSpacesByQuerySuspense();
 
-  const spaceOptions = spaces?.map(space => ({
+  const spaceOptions = data.data?.map(space => ({
     text: space.name,
     value: space.id,
   }));
