@@ -1,5 +1,3 @@
 'use client';
 
-import { ButtonView } from './ButtonView';
-
-export default ButtonView;
+export { ButtonView as Button } from './ButtonView';

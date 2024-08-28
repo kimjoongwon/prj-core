@@ -1,4 +1,4 @@
-import { myUniv } from '@shared/frontend';
+import { galaxy } from '@shared/frontend';
 
 import { useContext } from './useContext';
 import { useQueries } from './useQueries';
@@ -17,16 +17,16 @@ export const useHandlers = (context: {
 
   const editNew = () => updateCategory({ categoryId, data: state.category! });
 
-  const edit = () => createCategory({ data: state.category! });
+  const edit = () => {};
 
   const onClickSave = () => {
     isEditMode ? editNew() : edit();
 
-    myUniv.router.back();
+    galaxy.router.back();
   };
 
   const onClickCancel = () => {
-    myUniv?.router.back();
+    galaxy?.router.back();
   };
 
   return {

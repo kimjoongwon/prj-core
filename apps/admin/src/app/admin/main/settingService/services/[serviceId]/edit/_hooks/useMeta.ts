@@ -1,5 +1,4 @@
 import { ButtonProps } from '@nextui-org/react';
-import { router } from '@shared/frontend';
 import { useHandlers } from './useHandlers';
 
 export const useMeta = ({

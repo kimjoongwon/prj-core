@@ -1,11 +1,4 @@
-import Calendar from './Calendar';
-import AutoComplete from './AutoComplete';
-import PageModal from './PageModal';
-import Editor from './Editor';
-import Textarea from './Textarea';
-import Button from './Button';
-import Skeleton from './Skeleton';
-import Pagination from './Pagination';
+export * from './Pagination';
 export * from './Input';
 export * from './Footer';
 export * from './Navbar';
@@ -37,16 +30,13 @@ export * from './VStack';
 export * from './Container';
 export * from './Layout';
 export * from './DataGrid';
-export {
-  Textarea,
-  Calendar,
-  PageModal,
-  AutoComplete,
-  Editor,
-  Button,
-  Skeleton,
-  Pagination,
-};
+export * from './Textarea';
+export * from './Calendar';
+export * from './PageModal';
+export * from './AutoComplete';
+export * from './Editor';
+export * from './Skeleton';
+export * from './Button';
 export * from './Modal';
 export * from './User';
 export * from './List';

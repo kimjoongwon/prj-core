@@ -10,7 +10,7 @@ import { FcNext, FcPrevious } from 'react-icons/fc';
 import { action, reaction } from 'mobx';
 import { useEffect } from 'react';
 import { MobxProps } from '../types';
-import Button from '../Button';
+import { Button } from '../Button';
 
 export interface CalendarProps<T> extends MobxProps<T> {
   readOnly?: boolean;

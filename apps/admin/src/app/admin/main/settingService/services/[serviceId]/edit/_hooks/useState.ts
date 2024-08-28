@@ -11,6 +11,6 @@ export const useState = ({
   return useLocalObservable<{
     form: CreateServiceDto | UpdateServiceDto;
   }>(() => ({
-    form: { ...service },
+    form: { ...service?.data },
   }));
 };

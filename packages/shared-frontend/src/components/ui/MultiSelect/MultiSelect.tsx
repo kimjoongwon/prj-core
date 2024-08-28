@@ -43,6 +43,7 @@ export const MultiSelect = observer(
       const disposer = reaction(
         () => get(state, path),
         value => {
+          // @ts-ignore
           localState.value = value || [];
         },
       );

@@ -25,9 +25,11 @@ export class Auth {
   getToken(loginPayloadDto: LoginPayloadDto) {
     return Effect.tryPromise({
       try: () => getToken(loginPayloadDto),
-      catch: (err: AxiosError) => {
-        if (err.message === '패스워드가 일치하지 않습니다.') {
-          return new InvalidPasswordError();
+      catch: (err: unknown) => {
+        if (err instanceof AxiosError) {
+          if (err.message === '패스워드가 일치하지 않습니다.') {
+            return new InvalidPasswordError();
+          }
         }
         return new GalaxyError();
       },
@@ -62,10 +64,12 @@ export class Auth {
   }
 
   afterLogin(res: GetToken200AllOf) {
-    console.log('afterLogin', res.data.user);
-    localStorage.setItem('accessToken', res.data.accessToken);
-    this.user = res.data.user;
-    this.status = AuthStatus.LoggedIn;
+    if (res?.data) {
+      console.log('afterLogin', res.data.user);
+      localStorage.setItem('accessToken', res.data.accessToken);
+      this.user = res.data.user;
+      this.status = AuthStatus.LoggedIn;
+    }
   }
 
   logout() {

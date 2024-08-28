@@ -33,7 +33,7 @@ export const useProps = () => {
       color: 'danger',
       onClick: async () => {
         await removeServices.mutateAsync({
-          serviceIds: state.selection.toString(),
+          serviceIds: state.selectedKeys,
         });
       },
     },

@@ -1,5 +1,5 @@
 import {
-  myUniv,
+  galaxy,
   useCreateCategory,
   useFindCategoryByIdSuspense,
   useGetAllServiceSuspense,
@@ -7,6 +7,7 @@ import {
 } from '@shared/frontend';
 
 import { useContext } from './useContext';
+import { useParams } from 'next/navigation';
 
 interface Props {
   context: ReturnType<typeof useContext>;
@@ -16,7 +17,7 @@ export const useQueries = (props: Props) => {
   const {
     context: { categoryId, parentCategoryId },
   } = props;
-
+  const { serviceId } = useParams();
   const { data: findCategoryByIdQueryData } =
     useFindCategoryByIdSuspense(categoryId);
 
@@ -38,14 +39,13 @@ export const useQueries = (props: Props) => {
     ? parentCategoryAncestorIds.concat([parentCategory.id])
     : [];
 
-  const userService = services?.find(service => service.name === 'USER');
-
   const category = findCategoryByIdQueryData?.data || {
     name: '',
     ancestorIds,
     parentId: parentCategory?.id,
-    serviceId: userService?.id,
-    spaceId: myUniv.auth.currentSpaceId,
+    serviceId,
+    spaceId: galaxy.auth.user?.tenants.find(tenant => tenant.active)?.tenancy
+      ?.spaceId,
   };
 
   return {

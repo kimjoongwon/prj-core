@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { ListBox } from '../../ui';
 import { galaxy } from '../../../providers/App';
 import {
+  getSpacesByQuery,
   useGetSpacesByQuery,
   useGetSpacesByQuerySuspense,
 } from '../../../apis';
@@ -24,7 +25,7 @@ export const SpaceSelectModalContent = observer(() => {
     <ListBox
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
-      options={spaceOptions}
+      options={spaceOptions || []}
       state={galaxy.auth}
       path={'currentSpaceId'}
     />

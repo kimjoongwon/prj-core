@@ -2,6 +2,7 @@ import { groupBy, isEmpty } from 'lodash-es';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
 import { ServiceEntity } from '@shared/frontend';
+import { useParams } from 'next/navigation';
 
 export const useProps = ({
   state,
@@ -10,10 +11,11 @@ export const useProps = ({
   state: ReturnType<typeof useState>;
   queries: ReturnType<typeof useQueries>;
 }) => {
-  const { categories, services } = queries;
-  
+  const { serviceId } = useParams();
+  const { categories } = queries;
+
   const selectedCategory = state.selectedCategory;
-  
+
   let relatedCategoryIds = ['null'];
 
   if (!isEmpty(selectedCategory)) {
@@ -21,10 +23,8 @@ export const useProps = ({
     relatedCategoryIds.push(selectedCategory?.id);
   }
 
-  const service = getUserService(services);
-
   const categoriesByFilteredByServiceId = categories?.filter(
-    category => category.serviceId === service?.id,
+    category => category.serviceId === serviceId,
   );
 
   return {

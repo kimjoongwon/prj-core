@@ -1,7 +1,7 @@
 import {
   getGetAllServiceQueryKey,
   useCreateService,
-  useGetServiceById,
+  useGetService,
   useUpdateService,
 } from '@shared/frontend';
 import { useQueryClient } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ export const useQueries = () => {
   const { serviceId } = useParams<{ serviceId: string }>();
   const { mutateAsync: createService } = useCreateService();
   const { mutateAsync: updateService } = useUpdateService();
-  const { data: service, isLoading } = useGetServiceById(serviceId, {
+  const { data: service, isLoading } = useGetService(serviceId, {
     query: {
       enabled: !!serviceId,
     },
