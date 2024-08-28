@@ -1872,56 +1872,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const removeSpace = (
-    spaceId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpace>>, {spaceId: string}> = (props) => {
-          const {spaceId} = props ?? {};
-
-          return  removeSpace(spaceId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpace>>>
-    
-    export type RemoveSpaceMutationError = ErrorType<void>
-
-    export const useRemoveSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSpace>>,
-        TError,
-        {spaceId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeSpaces = (
     removeManySpaceDto: BodyType<RemoveManySpaceDto>,
  options?: SecondParameter<typeof customInstance>,) => {
@@ -1970,6 +1920,56 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemoveSpacesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpace>>, {spaceId: string}> = (props) => {
+          const {spaceId} = props ?? {};
+
+          return  removeSpace(spaceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpace>>>
+    
+    export type RemoveSpaceMutationError = ErrorType<void>
+
+    export const useRemoveSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSpace>>,
+        TError,
+        {spaceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSpaceMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -3499,9 +3499,9 @@ export const getUpdateSpaceResponseMock = (): UpdateSpace200AllOf => ({data: fak
 
 export const getDeleteSpaceResponseMock = (): DeleteSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getRemoveSpaceResponseMock = (): RemoveSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
 export const getRemoveSpacesResponseMock = (): RemoveSpaces200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveSpaceResponseMock = (): RemoveSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
 export const getGetAccessibleSpacesResponseMock = (): GetAccessibleSpaces200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
@@ -3864,11 +3864,11 @@ export const getDeleteSpaceMockHandler = (overrideResponse?: DeleteSpace200AllOf
   })
 }
 
-export const getRemoveSpaceMockHandler = (overrideResponse?: RemoveSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpace200AllOf> | RemoveSpace200AllOf)) => {
-  return http.patch('*/api/v1/admin/spaces/:spaceId/removedAt', async (info) => {await delay(1000);
+export const getRemoveSpacesMockHandler = (overrideResponse?: RemoveSpaces200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpaces200AllOf> | RemoveSpaces200AllOf)) => {
+  return http.patch('*/api/v1/admin/spaces/removedAt', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSpaceResponseMock()),
+            : getRemoveSpacesResponseMock()),
       {
         status: 200,
         headers: {
@@ -3879,11 +3879,11 @@ export const getRemoveSpaceMockHandler = (overrideResponse?: RemoveSpace200AllOf
   })
 }
 
-export const getRemoveSpacesMockHandler = (overrideResponse?: RemoveSpaces200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpaces200AllOf> | RemoveSpaces200AllOf)) => {
-  return http.patch('*/api/v1/admin/spaces/removedAt', async (info) => {await delay(1000);
+export const getRemoveSpaceMockHandler = (overrideResponse?: RemoveSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpace200AllOf> | RemoveSpace200AllOf)) => {
+  return http.patch('*/api/v1/admin/spaces/:spaceId/removedAt', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSpacesResponseMock()),
+            : getRemoveSpaceResponseMock()),
       {
         status: 200,
         headers: {
@@ -4180,8 +4180,8 @@ export const getPROMISEServerMock = () => [
   getGetSpaceMockHandler(),
   getUpdateSpaceMockHandler(),
   getDeleteSpaceMockHandler(),
-  getRemoveSpaceMockHandler(),
   getRemoveSpacesMockHandler(),
+  getRemoveSpaceMockHandler(),
   getGetAccessibleSpacesMockHandler(),
   getCreateGroupMockHandler(),
   getGetGroupsByQueryMockHandler(),

@@ -38,6 +38,7 @@ export class AuthController {
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
     const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
     this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
+    this.tokenService.setTokenToHTTPOnlyCookie(res, 'accessToken', accessToken);
 
     return new ResponseEntity(HttpStatus.OK, '로그인 성공', {
       accessToken,

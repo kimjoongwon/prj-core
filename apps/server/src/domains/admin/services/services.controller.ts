@@ -28,7 +28,7 @@ export class ServicesController {
   constructor(private readonly servicesService: ServiceService) {}
 
   @Get()
-  @Auth()
+  @Auth([])
   @ApiResponseEntity(ServiceDto, HttpStatus.OK, { isArray: true })
   async getAllService() {
     const services = await this.servicesService.getAll();
