@@ -1,6 +1,6 @@
 import Image, { ImageProps } from 'next/image';
-import Button from '../Button';
 import { galaxy } from '../../../providers/App';
+import { Button } from '../Button';
 
 interface LogoProps extends Omit<ImageProps, 'src'> {
   variants: 'text' | 'icon';

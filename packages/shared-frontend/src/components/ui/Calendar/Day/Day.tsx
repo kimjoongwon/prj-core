@@ -1,5 +1,5 @@
 import { Spacer } from '@nextui-org/react';
-import Button from '../../Button';
+import { Button } from '../../Button';
 
 export interface DayProps {
   day: number;

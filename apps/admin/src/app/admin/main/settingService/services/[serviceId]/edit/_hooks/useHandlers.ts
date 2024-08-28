@@ -1,7 +1,7 @@
-import { router } from '@shared/frontend';
 import { useQueries } from './useQueries';
 import { useParams } from 'next/navigation';
 import { useState } from './useState';
+import { galaxy } from '@shared/frontend';
 export const useHandlers = ({
   queries: { createService, refreshService, updateService, service },
   state,
@@ -16,7 +16,7 @@ export const useHandlers = ({
   const onClickSave = () => {
     if (isEditMode) {
       updateService({
-        id: serviceId,
+        serviceId: serviceId,
         data: { ...state.form },
       });
     } else {
@@ -27,8 +27,8 @@ export const useHandlers = ({
 
     refreshService();
 
-    router.push({
-      url: '/admin/main/settingService/services',
+    galaxy.router.push({
+      url: '/admin/auth',
       params: {
         serviceId: 'new',
       },
@@ -36,7 +36,7 @@ export const useHandlers = ({
   };
 
   const onClickCancel = () => {
-    router.back();
+    galaxy.router.back();
   };
 
   return {

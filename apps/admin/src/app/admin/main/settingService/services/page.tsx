@@ -5,8 +5,9 @@ import {
   useGetAllService,
   ServiceEntity,
   DataGrid,
-  getServiceById,
-  getGetServiceByIdQueryKey,
+  getGetServiceQueryKey,
+  getService,
+  ServiceDto,
 } from '@shared/frontend';
 import { createColumnHelper } from '@tanstack/react-table';
 import { observer } from 'mobx-react-lite';
@@ -22,7 +23,7 @@ const ServicesPage = observer(() => {
 
   const queryClient = useQueryClient();
 
-  const columnHelper = createColumnHelper<ServiceEntity>();
+  const columnHelper = createColumnHelper<ServiceDto>();
 
   const colums = [
     columnHelper.accessor('name', {
@@ -32,8 +33,8 @@ const ServicesPage = observer(() => {
           href={`/admin/main/settingService/services/${props.row.original.id}/edit`}
           onClick={() => {
             queryClient.prefetchQuery({
-              queryKey: getGetServiceByIdQueryKey(props.row.original.id),
-              queryFn: () => getServiceById(props.row.original.id),
+              queryKey: getGetServiceQueryKey(props.row.original.id),
+              queryFn: () => getService(props.row.original.id),
             });
           }}
         >
@@ -45,9 +46,12 @@ const ServicesPage = observer(() => {
 
   return (
     <DataGrid
-      data={services || []}
+      data={services?.data! || []}
       columns={colums}
       rightButtons={rightButtons}
+      state={{
+        selectedKeys: [],
+      }}
     />
   );
 });

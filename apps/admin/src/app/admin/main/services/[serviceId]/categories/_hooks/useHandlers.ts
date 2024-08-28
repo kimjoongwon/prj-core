@@ -1,5 +1,5 @@
 import { useQueries } from './useQueries';
-import { CategoryDto, myUniv } from '@shared/frontend';
+import { CategoryDto, galaxy } from '@shared/frontend';
 import { useContext } from './useContext';
 import { useProps } from './useProps';
 import { useState } from './useState';
@@ -18,8 +18,8 @@ export const useHandlers = (props: {
   } = props;
 
   const onClickDetail = (category: CategoryDto) => {
-    myUniv.router.push({
-      url: '/admin/main/settingService/services/:serviceId/edit',
+    galaxy.router.push({
+      url: '/admin/main/services/:serviceId/categories/:categoryId',
       params: {
         categoryId: category.id,
         serviceId,
@@ -47,8 +47,8 @@ export const useHandlers = (props: {
       state.selectedCategory = category;
     }
 
-    myUniv.router.push({
-      url: '/admin/main/userService/categories/:categoryId/edit',
+    galaxy.router.push({
+      url: '/admin/main/services/:serviceId/categories/:categoryId',
       params: { categoryId: 'new' },
       queryString,
     });
@@ -59,7 +59,7 @@ export const useHandlers = (props: {
       categoryId: category.id,
       data: {
         ...category,
-        deletedAt: new Date() as any,
+        removedAt: new Date() as any,
       },
     });
 

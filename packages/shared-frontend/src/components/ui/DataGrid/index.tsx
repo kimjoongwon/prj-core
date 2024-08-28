@@ -33,7 +33,7 @@ export type DataGridState = {
 };
 
 export interface DataGridProps<T> extends TableProps {
-  state: DataGridState;
+  state?: DataGridState;
   data: T[];
   columns: ColumnDef<T, any>[];
   leftButtons?: ButtonProps[];
@@ -106,7 +106,7 @@ export const DataGrid = observer(
         <Spacer y={1} />
         <Table
           {...rest}
-          defaultSelectedKeys={state.selectedKeys}
+          defaultSelectedKeys={state?.selectedKeys || []}
           onSelectionChange={selection => {
             if (selection instanceof Set) {
               // @ts-ignore
@@ -115,10 +115,12 @@ export const DataGrid = observer(
             }
             if (selection === 'all') {
               const allKey =
+                // @ts-ignore
                 data?.map(row => row?.[selectedKey as string]) || [];
+              // @ts-ignore
               state.selectedKeys = uniq([state.selectedKeys, ...allKey]);
             } else {
-              difference(state.selectedKeys, Array.from(selection));
+              difference(state?.selectedKeys || [], Array.from(selection));
             }
           }}
         >
@@ -136,6 +138,7 @@ export const DataGrid = observer(
           </TableHeader>
           <TableBody>
             {rows?.map(row => (
+              // @ts-ignore
               <TableRow key={row.original?.[selectedKey as string]}>
                 {row.getAllCells().map(cell => (
                   <TableCell key={cell.id}>

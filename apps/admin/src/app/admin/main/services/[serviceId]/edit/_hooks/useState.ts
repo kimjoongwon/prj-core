@@ -12,7 +12,9 @@ export const useState = (props: {
     data: { getService },
   } = props;
 
-  const form = isEditMode ? getService.data?.data! : { name: '', label: '' };
+  const form = isEditMode
+    ? getService.data?.data!
+    : { name: undefined, label: '' };
 
   const state = useLocalObservable<{
     form: CreateServiceDto | UpdateServiceDto;
