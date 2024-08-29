@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  Container,
-  getGetSpacesByQueryQueryKey,
-  getSpacesByQuery,
-} from '@shared/frontend';
+import { Container } from '@shared/frontend';
 import { ServicePageParams } from '../page';
-import { cookies, headers } from 'next/headers';
-import { QueryClient } from '@tanstack/react-query';
 
 interface SpaceLayoutProps {
   children: React.ReactNode;
@@ -15,22 +9,23 @@ interface SpaceLayoutProps {
 export type SpacesPageParams = ServicePageParams;
 
 const SpacesLayout = async (props: SpaceLayoutProps) => {
-  const cookieStore = cookies();
-  const access_token = cookieStore.get('accessToken');
-  const authorization = headers().get('authorization');
+  console.log('server redender spaces');
+  // const cookieStore = cookies();
+  // const accessToken = cookieStore.get('accessToken');
+  // const queryClient = new QueryClient();
 
-  const queryClient = new QueryClient();
+  // // await fetch('http://localhost:3005/api/admin/spaces', {
+  // //   headers: { Authorization: `bearer ${access_token?.value}` },
+  // // });
 
-  await queryClient.fetchQuery({
-    queryKey: [getGetSpacesByQueryQueryKey()],
-    queryFn: () =>
-      getSpacesByQuery(
-        {},
-        { headers: { authorization: `bearer ${access_token}` } },
-      ),
-  });
+  // // console.log('???');
 
-  return <Container className="h-full">{props.children}</Container>;
+  // await queryClient.prefetchQuery({
+  //   queryKey: [getGetSpacesByQueryQueryKey()],
+  //   queryFn: () => getSpacesByQuery(),
+  // });
+
+  return <Container className="h-full">test</Container>;
 };
 
 export default SpacesLayout;
