@@ -7,7 +7,7 @@ import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
-import { ValidationState } from '../FormController/FormControl';
+import { ValidationState } from '../FormController/FormControlView';
 import { InputView } from './InputView';
 
 export type InputProps<T> = MobxProps<T> &

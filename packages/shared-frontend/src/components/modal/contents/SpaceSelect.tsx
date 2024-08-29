@@ -3,11 +3,7 @@
 import { observer } from 'mobx-react-lite';
 import { ListBox } from '../../ui';
 import { galaxy } from '../../../providers/App';
-import {
-  getSpacesByQuery,
-  useGetSpacesByQuery,
-  useGetSpacesByQuerySuspense,
-} from '../../../apis';
+import { useGetSpacesByQuerySuspense } from '../../../apis';
 
 export const SpaceSelectModalContent = observer(() => {
   const { data } = useGetSpacesByQuerySuspense();

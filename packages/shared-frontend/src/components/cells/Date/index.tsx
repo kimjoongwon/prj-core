@@ -1,1 +1,2 @@
-export * from './DateCell'
+'use client';
+export * from './DateCell';

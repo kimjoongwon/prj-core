@@ -1,6 +1,5 @@
 export * from './Pagination';
 export * from './Input';
-export * from './Footer';
 export * from './Navbar';
 export * from './Checkbox';
 export * from './RadioGroup';
@@ -13,13 +12,6 @@ export * from './MultiSelect';
 export * from './Logo';
 export * from './Text';
 export * from './Avatar';
-export {
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Card,
-  Spacer,
-} from '@nextui-org/react';
 export * from './PageModal';
 export * from './TimePicker';
 export * from './TimeRangePicker';
@@ -46,4 +38,5 @@ export * from './FormController';
 export * from './ListBox';
 export * from './Text';
 export * from './Placeholder';
-export { Message } from './Message';
+export * from './Message';
+export * from './NextUI';

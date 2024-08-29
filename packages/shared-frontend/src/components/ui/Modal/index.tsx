@@ -1,3 +1,4 @@
+'use client';
 import { observer } from 'mobx-react-lite';
 import {
   ModalBody,
@@ -7,7 +8,7 @@ import {
   Modal as NextUIModal,
 } from '@nextui-org/react';
 
-import { galaxy, useApp } from '../../../providers/App';
+import { galaxy } from '../../../providers/App';
 
 export const ModalMount = observer(() => {
   const { modal } = galaxy;

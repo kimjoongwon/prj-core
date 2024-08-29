@@ -1,12 +1,16 @@
-import { Autocomplete, AutocompleteItem, AutocompleteProps } from '@nextui-org/react';
+import {
+  Autocomplete,
+  AutocompleteItem,
+  AutocompleteProps,
+} from '@nextui-org/react';
 import { cloneDeep, get } from 'lodash-es';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MobxProps } from '../types';
-import { useLocalObservable } from 'mobx-react-lite';
-import { reaction, set } from 'mobx';
 import { useMobxHookForm } from '../../../hooks';
 
-export interface BaseAutoCompleteProps<T> extends Omit<AutocompleteProps, 'children'>, MobxProps<T> {
+export interface BaseAutoCompleteProps<T>
+  extends Omit<AutocompleteProps, 'children'>,
+    MobxProps<T> {
   options: {
     text: string;
     value: any;
@@ -14,11 +18,15 @@ export interface BaseAutoCompleteProps<T> extends Omit<AutocompleteProps, 'child
   }[];
 }
 
-export const BaseAutoComplete = <T extends object>(props: BaseAutoCompleteProps<T>) => {
+export const BaseAutoComplete = <T extends object>(
+  props: BaseAutoCompleteProps<T>,
+) => {
   const { options, state = {}, path = '', label = 'label' } = props;
   const _options = cloneDeep(options);
 
-  const initialValue = _options?.find(option => option.value === get(state, path))?.value || undefined;
+  const initialValue =
+    _options?.find(option => option.value === get(state, path))?.value ||
+    undefined;
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
@@ -33,7 +41,9 @@ export const BaseAutoComplete = <T extends object>(props: BaseAutoCompleteProps<
         selectedKey={localState.value}
         onSelectionChange={(value: any) => (localState.value = value)}
       >
-        {item => <AutocompleteItem key={item.value}>{item.text}</AutocompleteItem>}
+        {item => (
+          <AutocompleteItem key={item.value}>{item.text}</AutocompleteItem>
+        )}
       </Autocomplete>
     </div>
   );

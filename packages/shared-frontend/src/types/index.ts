@@ -1,5 +1,3 @@
-import { AxiosError } from 'axios';
-
 export enum AuthStatus {
   LoggedOut = 'LoggedOut',
   LoggingIn = 'LoggingIn',

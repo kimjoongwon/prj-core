@@ -1,3 +1,4 @@
+'use client';
 import Image, { ImageProps } from 'next/image';
 import { galaxy } from '../../../providers/App';
 import { Button } from '../Button';

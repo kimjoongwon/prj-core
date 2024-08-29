@@ -1,3 +1,5 @@
+'use client';
+
 import { observer } from 'mobx-react-lite';
 import { CategoryDto } from '../../../model/categoryDto';
 import { Button } from '../Button';

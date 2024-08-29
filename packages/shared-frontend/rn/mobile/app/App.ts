@@ -1,12 +1,12 @@
-import {Serializerable, WVEventHandler} from '@model';
-import {Alert, Linking, Platform} from 'react-native';
-import {AppWVBridgeEvent} from 'src/model/bridge/AppWVBridgeEvent';
+import { Serializerable, WVEventHandler } from '@model';
+import { Alert, Linking, Platform } from 'react-native';
+import { AppWVBridgeEvent } from 'src/model/bridge/AppWVBridgeEvent';
 import PipHandler from '../pipHandler';
 import TouchID from 'react-native-touch-id';
 import RNExitApp from 'react-native-exit-app';
 import CookieManager from '@react-native-cookies/cookies';
-import {reset} from '@utils';
-import {storage} from 'src/App';
+import { reset } from '@utils';
+import { storage } from 'src/App';
 import Orientation from 'react-native-orientation-locker';
 
 export class MySUNI extends Serializerable implements WVEventHandler {
@@ -57,7 +57,7 @@ export class MySUNI extends Serializerable implements WVEventHandler {
       cancelText: '취소',
     })
       .then(() => {
-        reset('Gateway', {link, type: 'CONVENIENT'});
+        reset('Gateway', { link, type: 'CONVENIENT' });
       })
       .catch((e: any) => {
         if (e.code === 'NOT_ENROLLED' || e.code === 'NOT_AVAILABLE') {
@@ -79,13 +79,13 @@ export class MySUNI extends Serializerable implements WVEventHandler {
           storage.resetMultiFactor();
           storage.set('access_token', '');
           storage.set('refresh_token', '');
-          reset('Gateway', {link, type: 'DEFAULT'});
+          reset('Gateway', { link, type: 'DEFAULT' });
           return;
         }
         storage.resetMultiFactor();
         storage.set('access_token', '');
         storage.set('refresh_token', '');
-        reset('Gateway', {link, type: 'DEFAULT'});
+        reset('Gateway', { link, type: 'DEFAULT' });
       });
   }
 

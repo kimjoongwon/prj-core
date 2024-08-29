@@ -3,7 +3,7 @@ import { get } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
 import { MobxProps } from '../types';
-import { FormControl } from '../FormController/FormControl';
+import { FormControl } from '../FormController/FormControlView';
 
 interface TimeRangePickerProps<T> extends MobxProps<T> {
   startTimePath?: string;

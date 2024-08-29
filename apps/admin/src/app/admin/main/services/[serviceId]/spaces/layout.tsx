@@ -1,8 +1,12 @@
 import React from 'react';
-import { Container } from '@shared/frontend';
+import {
+  Container,
+  getGetSpacesByQueryQueryKey,
+  getSpacesByQuery,
+} from '@shared/frontend';
 import { ServicePageParams } from '../page';
-import { revalidatePath, revalidateTag } from 'next/cache';
 import { cookies, headers } from 'next/headers';
+import { QueryClient } from '@tanstack/react-query';
 
 interface SpaceLayoutProps {
   children: React.ReactNode;
@@ -14,46 +18,19 @@ const SpacesLayout = async (props: SpaceLayoutProps) => {
   const cookieStore = cookies();
   const access_token = cookieStore.get('accessToken');
   const authorization = headers().get('authorization');
-  // console.log('header', header);
-  console.log('access_token', access_token);
-  let data = null;
-  try {
-    data = await fetch('http://localhost:3005/api/v1/admin/spaces', {
-      headers: {
-        Authorization: authorization!,
-      },
-      next: {
-        tags: ['test'],
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  }
-  let test = await data?.json();
-  if (!data?.ok) {
-    return <div>data.headers['Authorization']</div>;
-  }
 
-  async function invalidate() {
-    'use server';
-    // try {
-    //   await fetch('http://localhost:3005/api/v1/admin/spaces');
-    // } catch (error) {
-    //   return false;
-    //   console.error(error);
-    // }
-    revalidateTag('test');
-  }
+  const queryClient = new QueryClient();
 
-  return (
-    <Container className="h-full">
-      <form action={invalidate}>
-        <div>{test.data.length}</div>
-        <button>test</button>
-        {/* {props.children} */}
-      </form>
-    </Container>
-  );
+  await queryClient.fetchQuery({
+    queryKey: [getGetSpacesByQueryQueryKey()],
+    queryFn: () =>
+      getSpacesByQuery(
+        {},
+        { headers: { authorization: `bearer ${access_token}` } },
+      ),
+  });
+
+  return <Container className="h-full">{props.children}</Container>;
 };
 
 export default SpacesLayout;

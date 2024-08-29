@@ -1,3 +1,4 @@
+'use client';
 import { observer } from 'mobx-react-lite';
 import { CreateServiceDto } from '../../../model/createServiceDto';
 import { UpdateServiceDto } from '../../../model/updateServiceDto';

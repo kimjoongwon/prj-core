@@ -1,5 +1,6 @@
 module.exports = {
   store: {
+    mode: 'tags-split',
     input: 'http://localhost:3005/api-json',
     output: {
       target: 'src/apis.ts',

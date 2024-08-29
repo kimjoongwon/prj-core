@@ -1,3 +1,4 @@
+'use client';
 import { observer } from 'mobx-react-lite';
 import { Input, VStack } from '../../ui';
 

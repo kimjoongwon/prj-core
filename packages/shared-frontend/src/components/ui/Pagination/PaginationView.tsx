@@ -1,3 +1,5 @@
+'use client';
+
 import { Pagination, PaginationProps } from '@nextui-org/react';
 import { useMobxHookForm } from '../../../hooks';
 import { MobxProps } from '../types';

@@ -5,8 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type CreateServiceDtoName = typeof CreateServiceDtoName[keyof typeof CreateServiceDtoName];
-
+export type CreateServiceDtoName =
+  (typeof CreateServiceDtoName)[keyof typeof CreateServiceDtoName];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateServiceDtoName = {

@@ -1,3 +1,4 @@
+'use client';
 import { Link } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
