@@ -1,13 +1,14 @@
-import { galaxy } from '@shared/frontend';
 import { useState } from './useState';
 import { useContext } from './useContext';
-import { useData } from './useData';
 import { toJS } from 'mobx';
+import { galaxy } from '../../../../providers/App';
+import { SpaceDto } from '../../../../model';
+import { useMutations } from './useMutations';
 
 export const useHandlers = (props: {
   state: ReturnType<typeof useState>;
   context: ReturnType<typeof useContext>;
-  data: ReturnType<typeof useData>;
+  data: ReturnType<typeof useMutations>;
 }) => {
   const {
     state,

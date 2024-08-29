@@ -1,5 +1,6 @@
-import { DateCell, SpaceDto } from '@shared/frontend';
 import { createColumnHelper } from '@tanstack/react-table';
+import { DateCell } from '../../../cells/Date/DateCell';
+import { SpaceDto } from '../../../../model/spaceDto';
 
 export const useColumns = () => {
   const columnHelper = createColumnHelper<SpaceDto>();

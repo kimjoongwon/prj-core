@@ -9,23 +9,9 @@ interface SpaceLayoutProps {
 export type SpacesPageParams = ServicePageParams;
 
 const SpacesLayout = async (props: SpaceLayoutProps) => {
-  console.log('server redender spaces');
-  // const cookieStore = cookies();
-  // const accessToken = cookieStore.get('accessToken');
-  // const queryClient = new QueryClient();
+  const { children } = props;
 
-  // // await fetch('http://localhost:3005/api/admin/spaces', {
-  // //   headers: { Authorization: `bearer ${access_token?.value}` },
-  // // });
-
-  // // console.log('???');
-
-  // await queryClient.prefetchQuery({
-  //   queryKey: [getGetSpacesByQueryQueryKey()],
-  //   queryFn: () => getSpacesByQuery(),
-  // });
-
-  return <Container className="h-full">test</Container>;
+  return <Container className="h-full">{children}</Container>;
 };
 
 export default SpacesLayout;

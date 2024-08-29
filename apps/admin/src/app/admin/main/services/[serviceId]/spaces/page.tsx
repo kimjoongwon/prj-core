@@ -1,29 +1,25 @@
-'use client';
+export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Button, Container, DataGrid } from '@shared/frontend';
-import { useProps } from './_hooks/useProps';
-import { createPost } from './invalidate';
+import { Container, getSpacesByQuery, SpacesTable } from '@shared/frontend';
+import { cookies } from 'next/headers';
 
-const ServicesPage = observer(() => {
-  const { state, data = [], columns, leftButtons, rightButtons } = useProps();
+const SpacesPage = async () => {
+  const accessToken = cookies().get('accessToken');
+  const spacesByQuery = await getSpacesByQuery(
+    {},
+    {
+      headers: {
+        authorization: `Bearer ${accessToken?.value}`,
+      },
+    },
+  );
 
   return (
     <Container className="max-w-screen-xl">
-      <Button formAction={createPost}>test</Button>
-      <DataGrid
-        color={'primary'}
-        selectionMode="multiple"
-        selectedKey="id"
-        data={data}
-        columns={columns}
-        leftButtons={leftButtons}
-        rightButtons={rightButtons}
-        state={state}
-      />
+      <SpacesTable spaces={spacesByQuery.data || []} />
     </Container>
   );
-});
+};
 
-export default ServicesPage;
+export default SpacesPage;

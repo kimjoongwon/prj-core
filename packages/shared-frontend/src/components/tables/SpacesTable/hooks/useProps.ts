@@ -1,14 +1,15 @@
 import { ButtonProps } from '@nextui-org/react';
 import { useColumns } from './useColumns';
-import { useData } from './useData';
 import { useState } from './useState';
 import { useHandlers } from './useHandlers';
 import { useContext } from './useContext';
+import { useMutations } from './useMutations';
 
 export const useProps = () => {
   const state = useState();
-  const data = useData();
   const context = useContext();
+  const data = useMutations();
+
   const { onClickCreate, onClickRemove } = useHandlers({
     state,
     data,
@@ -38,6 +39,5 @@ export const useProps = () => {
     rightButtons,
     state,
     columns,
-    data: data.getSpacesByQuery.data.data,
   };
 };
