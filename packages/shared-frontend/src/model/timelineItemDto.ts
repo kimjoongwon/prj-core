@@ -20,7 +20,7 @@ export interface TimelineItemDto {
   reservations: ReservationDto[] | null;
   startDateTime: string;
   tenantId: string;
-  timelineId: string;
+  timelineId?: string;
   title: string;
   updatedAt: string;
 }

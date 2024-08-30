@@ -14,7 +14,7 @@ const TimelineItemEditPage = observer(() => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <TimelineItemForm />
+      <TimelineItemForm state={state.form} />
     </FormLayout>
   );
 });

@@ -10,5 +10,5 @@ export class TimelineItem extends AbstractEntity implements TimelineEntity {
   address: string;
   maxCapacity: number;
   minCapacity: number;
-  timelineId: string;
+  timelineId: string | null;
 }

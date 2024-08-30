@@ -13,6 +13,6 @@ export interface CreateTimelineItemDto {
   minCapacity: number;
   startDateTime: string;
   tenantId: string;
-  timelineId: string;
+  timelineId?: string;
   title: string;
 }

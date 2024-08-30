@@ -7,10 +7,10 @@
 import type { SortOrder } from './sortOrder';
 
 export type GetTimelineItemsByQueryParams = {
+timelineId?: string;
 title?: string;
 startDateTime?: string;
 endDateTime?: string;
-timelineId?: string;
 description?: string;
 address?: string;
 maxCapacity?: number;

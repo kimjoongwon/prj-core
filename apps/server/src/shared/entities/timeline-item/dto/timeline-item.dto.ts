@@ -4,6 +4,7 @@ import {
   NumberField,
   StringField,
   UUIDField,
+  UUIDFieldOptional,
 } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { ReservationDto } from '../../reservation/dto';
@@ -11,6 +12,9 @@ import { TimelineDto } from '../../timeline/dto';
 import { TimelineItem } from '../timeline-item.entity';
 
 export class TimelineItemDto extends AbstractDto implements TimelineItem {
+  @UUIDFieldOptional()
+  timelineId: string | null;
+
   @StringField()
   title: string;
 
@@ -19,9 +23,6 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
 
   @DateField()
   endDateTime: Date;
-
-  @StringField()
-  timelineId: string;
 
   @StringField()
   description: string;
