@@ -42,10 +42,13 @@ AXIOS_INSTANCE.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      window.location.href = '/auth/login';
+    if (!window.location.pathname.includes('/auth')) {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.href = '/admin/auth/login';
+        return undefined;
+      }
     }
     return Promise.reject(error);
   },

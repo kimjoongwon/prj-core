@@ -7,7 +7,6 @@ import { useProps } from './_hooks/useProps';
 
 const ServicesPage = observer(() => {
   const { state, data = [], columns, leftButtons, rightButtons } = useProps();
-  console.log(state.selectedKeys);
   return (
     <Container className='max-w-screen-xl'>
       <DataGrid

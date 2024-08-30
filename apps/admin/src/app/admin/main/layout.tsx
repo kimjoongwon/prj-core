@@ -51,6 +51,7 @@ const MainLayout = observer((props: MainLayoutProps) => {
     },
   ];
 
+  console.log('galaxy.auth.user', galaxy.auth.user);
   return (
     <Navbar
       navbarItems={[...defaultNavItems, ...navbarItems]}

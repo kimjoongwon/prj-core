@@ -3,12 +3,13 @@ import {
   GetToken200AllOf,
   LoginPayloadDto,
   TenantDto,
+  TokenDto,
   UserDto,
 } from '../model';
 import { Galaxy } from './galaxy';
 import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
-import { getToken } from '../apis';
+import { getNewToken, getToken } from '../apis';
 import { AuthStatus } from '../types';
 import { GalaxyError, InvalidPasswordError } from '../errors';
 import { clearTokenCookie } from '../actions';
@@ -72,17 +73,25 @@ export class Auth {
 
   afterLogin(res: GetToken200AllOf) {
     if (res?.data) {
-      localStorage.setItem('accessToken', res.data.accessToken);
-      this.tenant = res.data.user.tenants.find(tenant => tenant.active);
-      this.user = res.data.user;
-      this.status = AuthStatus.LoggedIn;
+      this.setAuth(res?.data);
     }
+    this.status = AuthStatus.LoggedIn;
   }
 
   logout() {
     clearTokenCookie();
-    this.accessToken = undefined;
+    localStorage.clear();
     this.user = undefined;
     this.status = AuthStatus.LoggedOut;
+  }
+
+  setAuth({ tenant, user, accessToken }: TokenDto) {
+    localStorage.setItem('accessToken', accessToken);
+    this.tenant = tenant;
+    this.user = user;
+  }
+
+  reAuthenticate() {
+    return getNewToken().then(this.setAuth);
   }
 }

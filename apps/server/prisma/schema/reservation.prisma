@@ -1,95 +1,95 @@
-enum ReservationStatus {
-    PENDING
-    CONFIRMED
-    CANCELLED
-}
-
 model Reservation {
-    id             String            @id @default(cuid())
-    status         ReservationStatus @default(CONFIRMED)
-    userId         String            @unique
-    timelineItemId String            @unique
-    tenantId       String
-    timelineItem   TimelineItem      @relation(fields: [timelineItemId], references: [id])
-    createdAt      DateTime          @default(now()) @db.Timestamptz(6)
-    updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
-    removedAt      DateTime?         @db.Timestamptz(6)
+  id             String            @id @default(uuid())
+  timelineItemId String            @unique
+  createdAt      DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?         @db.Timestamptz(6)
+  tenantId       String
+  userId         String            @unique
+  status         ReservationStatus @default(CONFIRMED)
+  timelineItem   TimelineItem      @relation(fields: [timelineItemId], references: [id])
 
-    @@unique([userId, timelineItemId])
-}
-
-enum SessionTypes {
-    ONE_TIME
-    RECURRING
-}
-
-enum RepeatCycleTypes {
-    DAY
-    WEEK
-    MONTH
-    YEAR
-}
-
-enum SessionEndTypes {
-    NEVER
-    ON_DATE
-    AFTER_OCCURRENCES
-}
-
-enum RecurringDayOfTheWeek {
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-    SATURDAY
-    SUNDAY
+  @@unique([userId, timelineItemId])
 }
 
 model Session {
-    id                    String                  @id @default(cuid())
-    name                  String
-    type                  SessionTypes            @default(ONE_TIME)
-    repeatCycle           Int                     @default(1)
-    repeatCycleType       RepeatCycleTypes        @default(DAY)
-    recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
-    endType               SessionEndTypes         @default(NEVER)
-    endOnDate             DateTime?               @db.Date()
-    endAfterOccurrences   Int?                    @default(0)
-    tenantId              String
-    createdAt             DateTime                @default(now()) @db.Timestamptz(6)
-    updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-    removedAt             DateTime?               @db.Timestamptz(6)
-    timelines             Timeline[]
+  id                    String                  @id @default(uuid())
+  name                  String
+  tenantId              String
+  createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
+  endAfterOccurrences   Int?                    @default(0)
+  endOnDate             DateTime?               @db.Date
+  endType               SessionEndTypes         @default(NEVER)
+  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+  removedAt             DateTime?               @db.Timestamptz(6)
+  repeatCycle           Int                     @default(1)
+  repeatCycleType       RepeatCycleTypes        @default(DAY)
+  type                  SessionTypes            @default(ONE_TIME)
+  timelines             Timeline[]
 }
 
 model Timeline {
-    id             String         @id @default(cuid())
-    sessionId      String
-    timelineItemId String?
-    date           DateTime       @db.Date()
-    createdAt      DateTime       @default(now()) @db.Timestamptz(6)
-    updatedAt      DateTime?      @updatedAt @db.Timestamptz(6)
-    removedAt      DateTime?      @db.Timestamptz(6)
-    tenantId       String
-    session        Session        @relation(fields: [sessionId], references: [id])
-    timelineItems  TimelineItem[]
+  id             String         @id @default(uuid())
+  sessionId      String
+  date           DateTime       @db.Date
+  createdAt      DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?      @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?      @db.Timestamptz(6)
+  tenantId       String
+  timelineItemId String?
+  session        Session        @relation(fields: [sessionId], references: [id])
+  timelineItems  TimelineItem[]
 }
 
 model TimelineItem {
-    id            String        @id @default(cuid())
-    title         String
-    startDateTime DateTime      @db.Timestamptz(6)
-    endDateTime   DateTime      @db.Timestamptz(6)
-    description   String
-    address       String?
-    maxCapacity   Int
-    minCapacity   Int
-    createdAt     DateTime      @default(now()) @db.Timestamptz(6)
-    updatedAt     DateTime?     @updatedAt @db.Timestamptz(6)
-    removedAt     DateTime?     @db.Timestamptz(6)
-    tenantId      String
-    reservations  Reservation[]
-    timelineId    String?
-    timeline      Timeline?     @relation(fields: [timelineId], references: [id])
+  id            String       @id @default(uuid())
+  timelineId    String?
+  title         String
+  startDateTime DateTime     @db.Timestamptz(6)
+  endDateTime   DateTime     @db.Timestamptz(6)
+  description   String
+  address       String?
+  maxCapacity   Int
+  minCapacity   Int
+  createdAt     DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?    @updatedAt @db.Timestamptz(6)
+  removedAt     DateTime?    @db.Timestamptz(6)
+  tenantId      String
+  reservations  Reservation?
+  timeline      Timeline?    @relation(fields: [timelineId], references: [id])
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum SessionTypes {
+  ONE_TIME
+  RECURRING
+}
+
+enum RepeatCycleTypes {
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+enum SessionEndTypes {
+  NEVER
+  ON_DATE
+  AFTER_OCCURRENCES
+}
+
+enum RecurringDayOfTheWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }

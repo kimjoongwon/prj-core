@@ -1,5 +1,5 @@
 model Template {
-  id          String        @id @default(cuid())
+  id          String        @id @default(uuid())
   name        TemplateNames @default(WELCOME)
   htmlContent String
   createdAt   DateTime      @default(now()) @db.Timestamptz(6)
@@ -7,18 +7,8 @@ model Template {
   removedAt   DateTime?     @db.Timestamptz(6)
 }
 
-enum TemplateNames {
-  WELCOME
-  RESET_PASSWORD
-  INVITATION
-  INVITATION_ACCEPTED
-  INVITATION_REJECTED
-  INVITATION_EXPIRED
-  INVITATION_REMINDER
-}
-
 model SMS {
-  id         String    @id @default(cuid())
+  id         String    @id @default(uuid())
   toUserIds  String[]
   fromUserId String?
   status     SMSStatus @default(PROGRESS)
@@ -29,7 +19,7 @@ model SMS {
 }
 
 model Email {
-  id         String      @id @default(cuid())
+  id         String      @id @default(uuid())
   title      String
   toUserIds  String[]
   fromUserId String?
@@ -38,6 +28,16 @@ model Email {
   createdAt  DateTime    @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
   removedAt  DateTime?   @db.Timestamptz(6)
+}
+
+enum TemplateNames {
+  WELCOME
+  RESET_PASSWORD
+  INVITATION
+  INVITATION_ACCEPTED
+  INVITATION_REJECTED
+  INVITATION_EXPIRED
+  INVITATION_REMINDER
 }
 
 enum EmailStatus {

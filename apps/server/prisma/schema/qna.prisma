@@ -1,5 +1,5 @@
 model Qna {
-  id           String    @id @default(cuid())
+  id           String    @id @default(uuid())
   title        String
   questionText String
   answerText   String

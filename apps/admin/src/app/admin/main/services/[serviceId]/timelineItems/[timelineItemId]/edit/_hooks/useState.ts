@@ -28,6 +28,7 @@ export const useState = (props: {
     title: '인듀어런스',
   };
 
+  console.log('galaxy.auth.tenant?.id', galaxy.auth.tenant?.id);
   const form = isEditMode ? getTimelineItem.data?.data! : defaultForm;
 
   const state = useLocalObservable<{

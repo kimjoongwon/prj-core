@@ -8,6 +8,7 @@ import {
   HStack,
   NavbarItem,
   ServiceName,
+  useGetService,
   useGetServiceSuspense,
   VStack,
 } from '@shared/frontend';
@@ -24,8 +25,8 @@ export type UserServicePageParams = {
 
 const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
   const { serviceId } = useParams<UserServicePageParams>();
-  const getService = useGetServiceSuspense(serviceId);
-  const serviceName = getService.data.data?.name;
+  const getService = useGetService(serviceId);
+  const serviceName = getService?.data?.data?.name;
 
   const navItems: Record<ServiceName, NavbarItem[]> = {
     RESERVATION: [
