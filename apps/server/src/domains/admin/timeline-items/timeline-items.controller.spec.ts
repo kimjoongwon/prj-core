@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TimelineItemService } from './timeline-item.service';
+import { TimelineItemsController } from './timeline-items.controller';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TimelineItemController } from './timeline-item.controller';
+import { TimelineItemService } from '@shared';
 
-describe('TimelineItemController', () => {
-  let controller: TimelineItemController;
+describe('TimelineItemsController', () => {
+  let controller: TimelineItemsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TimelineItemController],
+      controllers: [TimelineItemsController],
       providers: [TimelineItemService],
     }).compile();
 
-    controller = module.get<TimelineItemController>(TimelineItemController);
+    controller = module.get<TimelineItemsController>(TimelineItemsController);
   });
 
   it('should be defined', () => {

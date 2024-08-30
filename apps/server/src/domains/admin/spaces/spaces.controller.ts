@@ -22,6 +22,7 @@ import {
   SpaceDto,
   SpaceQueryDto,
   SpaceService,
+  TenancyDto,
   UpdateSpaceDto,
 } from '@shared';
 
@@ -33,10 +34,10 @@ export class SpacesController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceDto, HttpStatus.OK)
+  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
-    const space = await this.spaceService.create(createSpaceDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    const tenancy = await this.spaceService.create(createSpaceDto);
+    return new ResponseEntity(HttpStatus.OK, '성공', new TenancyDto(tenancy));
   }
 
   @Get(':spaceId')

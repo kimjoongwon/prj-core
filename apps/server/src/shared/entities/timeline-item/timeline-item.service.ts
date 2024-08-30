@@ -1,26 +1,61 @@
 import { Injectable } from '@nestjs/common';
+import { IService } from '../../types/interfaces/service.interface';
+import { PaginationMananger } from '../../utils';
 import { CreateTimelineItemDto } from './dto/create-timeline-item.dto';
+import { TimelineItemRepository } from './timeline-item.repository';
 import { UpdateTimelineItemDto } from './dto/update-timeline-item.dto';
+import { TimelineItemQueryDto } from './dto/timeline-item-query.dto';
 
 @Injectable()
-export class TimelineItemService {
+export class TimelineItemService implements IService {
+  constructor(private readonly repository: TimelineItemRepository) {}
+
   create(createTimelineItemDto: CreateTimelineItemDto) {
-    return 'This action adds a new timelineItem';
+    return this.repository.create({ data: { ...createTimelineItemDto } });
   }
 
-  findAll() {
-    return `This action returns all timelineItem`;
+  update(updateTimelineItemDto: UpdateTimelineItemDto) {
+    return this.repository.update({
+      where: { id: updateTimelineItemDto.id },
+      data: updateTimelineItemDto,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} timelineItem`;
+  getUnique(timelineItemId: string) {
+    return this.repository.findUnique({ where: { id: timelineItemId } });
   }
 
-  update(id: number, updateTimelineItemDto: UpdateTimelineItemDto) {
-    return `This action updates a #${id} timelineItem`;
+  getFirst(timelineItemId: string) {
+    return this.repository.findFirst({
+      where: { id: timelineItemId },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} timelineItem`;
+  remove(timelineItemId: string) {
+    return this.repository.update({
+      where: { id: timelineItemId },
+      data: { removedAt: new Date() },
+    });
+  }
+
+  removeMany(timelineItemIds: string[]) {
+    return this.repository.updateMany({
+      where: { id: { in: timelineItemIds } },
+      data: { removedAt: new Date() },
+    });
+  }
+
+  delete(timelineItemId: string) {
+    return this.repository.delete({ where: { id: timelineItemId } });
+  }
+
+  async getManyByQuery(query: TimelineItemQueryDto) {
+    const args = PaginationMananger.toArgs(query);
+    const timelineItemCount = await this.repository.count(args);
+    const timelineItems = await this.repository.findMany(args);
+    return {
+      count: timelineItemCount,
+      timelineItems,
+    };
   }
 }

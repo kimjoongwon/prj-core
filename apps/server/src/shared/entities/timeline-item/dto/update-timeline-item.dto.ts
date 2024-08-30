@@ -1,4 +1,8 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateTimelineItemDto } from './create-timeline-item.dto';
+import { StringField } from 'src/shared/decorators/field.decorators';
 
-export class UpdateTimelineItemDto extends PartialType(CreateTimelineItemDto) {}
+export class UpdateTimelineItemDto extends PartialType(CreateTimelineItemDto) {
+  @StringField()
+  id: string;
+}

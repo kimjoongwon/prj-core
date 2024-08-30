@@ -32,6 +32,7 @@ export class SessionService {
 
     const createTimelineDtos: CreateTimelineDto[] = updateSessionDto.timelineDates.map(
       (timelineDate) => ({
+        tenantId: 'hihih',
         timelineItemId: null,
         date: timelineDate,
         sessionId,

@@ -5,15 +5,17 @@ import { CreateSpaceDto } from './dtos/create-space.dto';
 import { IService } from '../../types/interfaces/service.interface';
 import { SpaceQueryDto, UpdateSpaceDto } from './dtos';
 import { PaginationMananger } from '../../utils';
+import { TenancyService } from '../tenancy';
 
 @Injectable()
 export class SpaceService implements IService {
-  constructor(private readonly repository: SpaceRepository) {}
+  constructor(
+    private readonly repository: SpaceRepository,
+    private readonly tenancyService: TenancyService,
+  ) {}
 
   create(createSpaceDto: CreateSpaceDto) {
-    return this.repository.create({
-      data: createSpaceDto,
-    });
+    return this.tenancyService.create(createSpaceDto);
   }
 
   update(updateSpaceDto: UpdateSpaceDto) {

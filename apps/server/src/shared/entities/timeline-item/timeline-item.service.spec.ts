@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TimelineItemService } from './timeline-item.service';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('TimelineItemService', () => {
   let service: TimelineItemService;

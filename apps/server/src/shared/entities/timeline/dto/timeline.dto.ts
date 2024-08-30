@@ -9,6 +9,9 @@ import { Timeline } from '../timeline.entity';
 import { TimelineItemDto } from '../../timeline-item/dto/timeline-item.dto';
 export class TimelineDto extends AbstractDto implements Timeline {
   @UUIDField()
+  tenantId: string;
+
+  @UUIDField()
   sessionId: string;
 
   @DateField()
@@ -17,6 +20,6 @@ export class TimelineDto extends AbstractDto implements Timeline {
   @UUIDFieldOptional()
   timelineItemId: string | null;
 
-  @ClassField(() => TimelineItemDto, { nullable: true })
-  timelineItem: TimelineItemDto | null;
+  @ClassField(() => TimelineItemDto, { nullable: true, each: true, isArray: true })
+  timelineItem: TimelineItemDto[] | null;
 }

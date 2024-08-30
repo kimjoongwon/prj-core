@@ -6,6 +6,9 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class TenancyRepository {
   constructor(private readonly prisma: PrismaService) {}
+  create(args: Prisma.TenancyCreateArgs) {
+    return this.prisma.tenancy.create(args);
+  }
 
   upsert(createTenancyDto: CreateTenancyDto) {
     const { spaceId } = createTenancyDto;
