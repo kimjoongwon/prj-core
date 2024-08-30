@@ -103,9 +103,9 @@ export class AuthService {
 
       const userRole = await this.roleService.findUserRole();
 
-      const tenancy = await tx.tenancy.create({
-        data: {
-          spaceId,
+      const tenancy = await tx.tenancy.findUnique({
+        where: {
+          id: spaceId,
         },
       });
 

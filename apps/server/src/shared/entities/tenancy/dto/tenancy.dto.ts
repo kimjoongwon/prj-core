@@ -1,5 +1,6 @@
-import { StringField } from '../../../decorators/field.decorators';
+import { ClassField, StringField } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { SpaceDto } from '../../space/dtos/space.dto';
 import { Tenancy } from '../tenancy.entity';
 
 export class TenancyDto extends AbstractDto implements Tenancy {
@@ -9,4 +10,7 @@ export class TenancyDto extends AbstractDto implements Tenancy {
   }
   @StringField()
   spaceId: string;
+
+  @ClassField(() => SpaceDto)
+  space: SpaceDto;
 }

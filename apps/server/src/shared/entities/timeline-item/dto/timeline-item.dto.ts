@@ -1,5 +1,13 @@
-import { DateField, NumberField, StringField } from '../../../decorators/field.decorators';
+import {
+  ClassField,
+  DateField,
+  NumberField,
+  StringField,
+  UUIDField,
+} from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { ReservationDto } from '../../reservation/dto';
+import { TimelineDto } from '../../timeline/dto';
 import { TimelineItem } from '../timeline-item.entity';
 
 export class TimelineItemDto extends AbstractDto implements TimelineItem {
@@ -26,4 +34,13 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
 
   @NumberField()
   minCapacity: number;
+
+  @UUIDField()
+  tenantId: string;
+
+  @ClassField(() => TimelineDto, { nullable: true, each: true, swagger: false })
+  timeline: TimelineDto | null;
+
+  @ClassField(() => ReservationDto, { each: true, isArray: true, nullable: true })
+  reservations: ReservationDto[] | null;
 }

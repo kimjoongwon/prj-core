@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SpacesController } from './spaces.controller';
-import { SpaceModule } from '@shared';
+import { SpaceModule, TenancyModule } from '@shared';
 
 @Module({
   imports: [SpaceModule],

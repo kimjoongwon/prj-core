@@ -24,10 +24,12 @@ import {
   SessionsModule,
   SpacesModule,
   SubjectsModule,
+  TimelineItemsModule,
 } from './domains/admin';
 import { JwtModule } from '@nestjs/jwt';
 
 export const adminModules = [
+  TimelineItemsModule,
   AbilitiesModule,
   CategoriesModule,
   ServicesModule,
