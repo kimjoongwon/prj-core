@@ -6,11 +6,10 @@ export class TenantService {
   constructor(private readonly repository: TenantRepository) {}
 
   createOrUpdate(upsertTenantDto: UpsertTenantDto) {
-    const { userId, tenancyId } = upsertTenantDto;
+    const { userId } = upsertTenantDto;
     return this.repository.upsert({
       where: {
         userId,
-        tenancyId,
       },
       create: upsertTenantDto,
       update: upsertTenantDto,

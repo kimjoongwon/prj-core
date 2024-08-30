@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Galaxy } from '../../services/galaxy';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@nextui-org/react';
+import { getNewToken } from '../../apis';
+import { Effect } from 'effect';
+import { reaction } from 'mobx';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -21,10 +24,14 @@ export let galaxy: Galaxy = {} as Galaxy;
 export const AppProvider = observer(({ children }: AppProviderProps) => {
   const nextRouter = useRouter();
 
-  // usePrefechInitialData();
-
   useEffect(() => {
-    galaxy = new Galaxy(nextRouter);
+    const init = async () => {
+      galaxy = new Galaxy(nextRouter);
+      if (!window.location.pathname.includes('/auth')) {
+        await galaxy.auth.reAuthenticate();
+      }
+    };
+    init();
   }, [nextRouter]);
 
   if (!galaxy.isInitialized) {

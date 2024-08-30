@@ -20,6 +20,7 @@ import {
   TenantService,
   TokenPayloadDto,
   TokenService,
+  UserDto,
   UserService,
   goTryRawSync,
 } from '@shared';
@@ -144,6 +145,7 @@ export class AuthService {
       where: { email },
       include: {
         profiles: true,
+        tenants: true,
       },
     });
 
@@ -154,6 +156,7 @@ export class AuthService {
     const tenant = await this.prisma.tenant.findUnique({
       where: {
         userId: user.id,
+        active: true,
       },
       include: {
         role: true,
@@ -251,20 +254,14 @@ export class AuthService {
     const superAdminRole = await this.roleService.findSuperAdminRole();
     const tenancy = await this.tenancyService.createOrUpdate({ spaceId });
 
+    console.log(newUser.id);
+    console.log(tenancy.id);
     await this.tenantService.createOrUpdate({
       tenancyId: tenancy.id,
       userId: newUser.id,
       active: true,
       roleId: superAdminRole.id,
       type: 'PHYSICAL',
-    });
-
-    await this.tenantService.createOrUpdate({
-      roleId: superAdminRole.id,
-      type: 'PHYSICAL',
-      active: true,
-      userId: newUser.id,
-      tenancyId: tenancy.id,
     });
   }
 }

@@ -18,6 +18,7 @@ import {
   Auth,
   LocalAuthGuard,
   Public,
+  R,
   ResponseEntity,
   TenantDto,
   TokenService,
@@ -55,10 +56,10 @@ export class AuthController {
     return request.user;
   }
 
-  @Public()
+  @Auth([])
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Get('new-token')
-  async getNewToken(@Req() req) {
+  async getNewToken(@Req() req, @Res({ passthrough: true }) res) {
     const refreshToken = this.tokenService.getTokenFromRequest(req, 'refreshToken');
 
     const { userId } = await this.authService.validateToken(refreshToken);
@@ -67,13 +68,16 @@ export class AuthController {
       this.tokenService.generateTokens({
         userId,
       });
-
-    const user = await this.getCurrentUser(newAccessToken);
+    this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
+    this.tokenService.setTokenToHTTPOnlyCookie(res, 'accessToken', newAccessToken);
+    const user = req.user as UserDto;
+    const tenant = user.tenants.map((tenant) => tenant.active);
 
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
-      user,
+      user: req.user,
+      tenant,
     };
   }
 

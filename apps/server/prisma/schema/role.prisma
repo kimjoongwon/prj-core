@@ -1,51 +1,51 @@
 model Role {
-    id        String    @id @default(cuid())
-    name      Roles     @unique @default(USER)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-    removedAt DateTime? @db.Timestamptz(6)
-    abilities Ability[]
-    tenant    Tenant[]
+  id        String    @id @default(uuid())
+  name      Roles     @unique @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  abilities Ability[]
+  tenant    Tenant[]
 }
 
 model Subject {
-    id        String    @id @default(cuid())
-    name      String    @unique
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-    removedAt DateTime? @db.Timestamptz(6)
-    abilities Ability[]
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  abilities Ability[]
 }
 
 model Ability {
-    id          String         @id @default(cuid())
-    type        AbilityTypes
-    roleId      String
-    action      AbilityActions
-    subjectId   String
-    description String?
-    conditions  Json?          @db.JsonB()
-    createdAt   DateTime       @default(now()) @db.Timestamptz(6)
-    updatedAt   DateTime?      @updatedAt @db.Timestamptz(6)
-    removedAt   DateTime?      @db.Timestamptz(6)
-    subject     Subject        @relation(fields: [subjectId], references: [id])
-    role        Role           @relation(fields: [roleId], references: [id])
+  id          String         @id @default(uuid())
+  type        AbilityTypes
+  roleId      String
+  action      AbilityActions
+  subjectId   String
+  description String?
+  conditions  Json?
+  createdAt   DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?      @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime?      @db.Timestamptz(6)
+  role        Role           @relation(fields: [roleId], references: [id])
+  subject     Subject        @relation(fields: [subjectId], references: [id])
 }
 
 enum AbilityActions {
-    CREATE
-    READ
-    UPDATE
-    DELETE
-    ACCESS
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  ACCESS
 }
 
 enum AbilityTypes {
-    CAN
-    CAN_NOT
+  CAN
+  CAN_NOT
 }
 
 enum Roles {
-    USER
-    SUPER_ADMIN
+  USER
+  SUPER_ADMIN
 }

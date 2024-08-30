@@ -12,10 +12,12 @@ export class AuthUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): any {
     const request = context.switchToHttp().getRequest();
 
-    const user = <UserDto>request.user;
-    const tenant = user.tenants?.find((tenant) => tenant.active);
-    ContextProvider.setAuthUser(user);
-    ContextProvider.setTenant(tenant);
+    if (request?.user?.id && request?.user?.tenants) {
+      const user = <UserDto>request.user;
+      // const tenant = user?.tenants?.find((tenant) => tenant.active);
+      ContextProvider.setAuthUser(user);
+      // ContextProvider.setTenant(tenant);
+    }
 
     return next.handle();
   }

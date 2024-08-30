@@ -1,15 +1,15 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model Category {
-  id              String           @id @default(cuid())
+  id              String           @id @default(uuid())
   name            String           @unique
   ancestorIds     String[]
   parentId        String?
@@ -21,51 +21,45 @@ model Category {
   classifications Classification[]
 }
 
-enum SERVICE_NAME {
-  USER
-  RESERVATION
-  SPACE
-}
-
 model Service {
-  id              String           @id @default(cuid())
+  id              String           @id @default(uuid())
   name            SERVICE_NAME     @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
   removedAt       DateTime?        @db.Timestamptz(6)
-  classifications Classification[]
   assignments     Assignment[]
+  classifications Classification[]
   groups          Group[]
 }
 
 model Classification {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   serviceId     String
   serviceItemId String
   categoryId    String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
   removedAt     DateTime? @db.Timestamptz(6)
-  service       Service   @relation(fields: [serviceId], references: [id])
   category      Category  @relation(fields: [categoryId], references: [id])
+  service       Service   @relation(fields: [serviceId], references: [id])
 }
 
 model Group {
-  id          String       @id @default(cuid())
+  id          String       @id @default(uuid())
   name        String
   spaceId     String
   serviceId   String
   createdAt   DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
   removedAt   DateTime?    @db.Timestamptz(6)
+  assignments Assignment[]
   service     Service      @relation(fields: [serviceId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
-  assignments Assignment[]
 }
 
 model Assignment {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   groupId       String
   serviceId     String
   serviceItemId String
@@ -74,4 +68,10 @@ model Assignment {
   removedAt     DateTime? @db.Timestamptz(6)
   group         Group     @relation(fields: [groupId], references: [id])
   service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+enum SERVICE_NAME {
+  USER
+  RESERVATION
+  SPACE
 }

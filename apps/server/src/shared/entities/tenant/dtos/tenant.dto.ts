@@ -10,6 +10,7 @@ import {
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
+import { UserDto } from '../../user';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
@@ -33,8 +34,11 @@ export class TenantDto extends AbstractDto implements Tenant {
   type: $Enums.TenantTypes;
 
   @ClassField(() => TenancyDto, { nullable: true })
-  tenancy?: TenancyDto;
+  tenancy: TenancyDto | null;
 
   @ClassField(() => RoleDto, { nullable: true })
-  role?: RoleDto;
+  role: RoleDto | null;
+
+  @ClassField(() => UserDto, { nullable: true })
+  user: UserDto | null;
 }

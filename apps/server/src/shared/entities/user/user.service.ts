@@ -20,6 +20,19 @@ export class UserService {
   async findUniqueByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
+      include: {
+        profiles: true,
+        tenants: {
+          include: {
+            tenancy: {
+              include: {
+                tenants: true,
+              },
+            },
+            role: true,
+          },
+        },
+      },
     });
   }
 
