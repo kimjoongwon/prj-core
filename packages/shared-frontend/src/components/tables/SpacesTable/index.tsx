@@ -15,6 +15,7 @@ export const SpacesTable = observer((props: SpacesTableProps) => {
 
   return (
     <DataGrid
+      selectionMode="multiple"
       data={spaces}
       columns={columns}
       state={state}

@@ -1,16 +1,23 @@
 import { makeAutoObservable } from 'mobx';
-import { GetToken200AllOf, LoginPayloadDto, UserDto } from '../model';
+import {
+  GetToken200AllOf,
+  LoginPayloadDto,
+  TenantDto,
+  UserDto,
+} from '../model';
 import { Galaxy } from './galaxy';
 import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
 import { getToken } from '../apis';
 import { AuthStatus } from '../types';
 import { GalaxyError, InvalidPasswordError } from '../errors';
+import { clearTokenCookie } from '../actions';
 
 export class Auth {
   galaxy: Galaxy;
   accessToken: string | undefined = undefined;
   user: UserDto | undefined = undefined;
+  tenant: TenantDto | undefined = undefined;
   status: AuthStatus = AuthStatus.LoggedOut;
 
   constructor(galaxy: Galaxy) {
@@ -65,14 +72,15 @@ export class Auth {
 
   afterLogin(res: GetToken200AllOf) {
     if (res?.data) {
-      console.log('afterLogin', res.data.user);
       localStorage.setItem('accessToken', res.data.accessToken);
+      this.tenant = res.data.user.tenants.find(tenant => tenant.active);
       this.user = res.data.user;
       this.status = AuthStatus.LoggedIn;
     }
   }
 
   logout() {
+    clearTokenCookie();
     this.accessToken = undefined;
     this.user = undefined;
     this.status = AuthStatus.LoggedOut;

@@ -25,6 +25,7 @@ export interface SessionDto {
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
   tenancyId: string;
+  tenantId: string;
   /** @nullable */
   timelines: TimelineDto[] | null;
   type: SessionTypes;

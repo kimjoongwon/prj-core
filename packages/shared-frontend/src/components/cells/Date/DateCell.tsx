@@ -5,5 +5,10 @@ export const DateCell = <T extends unknown>(
   cellContext: CellContext<T, string>,
 ) => {
   const { getValue } = cellContext;
-  return <p>{dayjs(getValue()).format('YYYY-MM-DD HH:mm:ss')}</p>;
+
+  if (!getValue()) {
+    return <p>-</p>;
+  }
+
+  return <p>{dayjs(getValue()).format('YY.MM.DD HH:mm:ss')}</p>;
 };

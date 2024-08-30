@@ -10,7 +10,9 @@ interface ReservationServiceLayoutProps {
 
 const ReservationServiceLayout = observer(
   (props: ReservationServiceLayoutProps) => {
-    return <Container className="h-full">{props.children}</Container>;
+    const { children } = props;
+
+    return <Container className="h-full">{children}</Container>;
   },
 );
 

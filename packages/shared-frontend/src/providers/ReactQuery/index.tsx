@@ -37,18 +37,30 @@ export function getQueryClient() {
   }
 }
 
+AXIOS_INSTANCE.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      window.location.href = '/auth/login';
+    }
+    return Promise.reject(error);
+  },
+);
+
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
     const token = `Bearer ${localStorage.getItem('accessToken')}`;
-    const tenantId = galaxy?.auth?.user?.tenants?.[0]?.id || '';
-    // Do something before request is sent
+    const tenantId = galaxy?.auth?.tenant?.id;
     config.headers.Authorization = token;
-    config.headers.tenantId = tenantId;
+    config.headers.TenantId = tenantId;
 
     return config;
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error);
   },
 );

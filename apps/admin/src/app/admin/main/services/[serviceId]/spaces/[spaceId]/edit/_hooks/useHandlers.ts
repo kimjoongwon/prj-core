@@ -1,4 +1,9 @@
-import { CreateSpaceDto, galaxy, UpdateSpaceDto } from '@shared/frontend';
+import {
+  CreateSpaceDto,
+  galaxy,
+  revalidatePathGetSpacesByQuery,
+  UpdateSpaceDto,
+} from '@shared/frontend';
 import { useData } from './useData';
 import { useState } from './useState';
 import { useContext } from './useContext';
@@ -10,7 +15,7 @@ export const useHandlers = (props: {
 }) => {
   const {
     context: {
-      params: { serviceId, spaceId },
+      params: { spaceId },
       isEditMode,
     },
     state,
@@ -26,6 +31,7 @@ export const useHandlers = (props: {
 
   const create = () => {
     createSpace.mutateAsync({ data: state.form as CreateSpaceDto });
+    revalidatePathGetSpacesByQuery({});
   };
 
   const goBack = () => {
@@ -38,7 +44,6 @@ export const useHandlers = (props: {
     } else {
       create();
     }
-
     goBack();
   };
 

@@ -18,10 +18,17 @@ export const ADMIN_SERVICE_SPACE_PATH =
 
 export const ADMIN_SERVICE_SPACE_EDIT_PATH =
   `${ADMIN_SERVICE_PATH}/spaces/:spaceId/edit` as const;
+//
+// 예약관리 > 타임라인관리
+export const ADMIN_SERVICE_TIMELINE_ITEMS_PATH =
+  `${ADMIN_SERVICE_PATH}/timelineItems` as const;
 
-export const ADMIN_RESERVATION_SERVICE_PATH =
-  `${ADMIN_MAIN_PATH}/reservationService` as const;
+export const ADMIN_SERVICE_TIMELINE_ITEM_PATH =
+  `${ADMIN_SERVICE_PATH}/timelineItems/:timelineItemId` as const;
 
+export const ADMIN_SERVICE_TIMELINE_ITEM_EDIT_PATH =
+  `${ADMIN_SERVICE_PATH}/timelineItems/:timelineItemId/edit` as const;
+//
 export const ADMIN_USER_CATEGORIES_PATH =
   `${ADMIN_SERVICE_PATH}/categories` as const;
 
@@ -56,5 +63,8 @@ export type Paths =
   | typeof ADMIN_SERVICE_SPACES_PATH
   | typeof ADMIN_SERVICE_SPACE_PATH
   | typeof ADMIN_SERVICE_SPACE_EDIT_PATH
-  | typeof ADMIN_USER_CATEGORY_EDIT_PATH
-  | typeof ADMIN_RESERVATION_SERVICE_PATH;
+  // 에약
+  | typeof ADMIN_SERVICE_TIMELINE_ITEMS_PATH
+  | typeof ADMIN_SERVICE_TIMELINE_ITEM_PATH
+  | typeof ADMIN_SERVICE_TIMELINE_ITEM_EDIT_PATH
+  | typeof ADMIN_USER_CATEGORY_EDIT_PATH;

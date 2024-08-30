@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   galaxy,
+  HStack,
   NavbarItem,
   ServiceName,
   useGetServiceSuspense,
@@ -27,7 +28,23 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
   const serviceName = getService.data.data?.name;
 
   const navItems: Record<ServiceName, NavbarItem[]> = {
-    RESERVATION: [],
+    RESERVATION: [
+      {
+        name: '예약 관리',
+        url: '/admin/main/services/:serviceId/timelineItems',
+        onClick: () => {
+          galaxy.router.push({
+            url: '/admin/main/services/:serviceId/timelineItems',
+            params: { serviceId },
+          });
+        },
+      },
+      {
+        name: '세션 관리',
+        url: '/admin/main/services/:serviceId/timelineItems',
+        onClick: () => {},
+      },
+    ],
     USER: [],
     SPACE: [
       {
@@ -46,11 +63,13 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
   return (
     <Container className="h-full">
       <VStack className="items-start">
-        {navItems[serviceName || 'USER']?.map(item => (
-          <Button variant="light" onClick={() => item.onClick?.()}>
-            {item.name}
-          </Button>
-        ))}
+        <HStack className="space-x-2">
+          {navItems[serviceName || 'USER']?.map(item => (
+            <Button variant="bordered" onClick={() => item.onClick?.()}>
+              {item.name}
+            </Button>
+          ))}
+        </HStack>
       </VStack>
       {props.children}
     </Container>

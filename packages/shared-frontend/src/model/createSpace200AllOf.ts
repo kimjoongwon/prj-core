@@ -4,10 +4,10 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
+import type { TenancyDto } from './tenancyDto';
 
 export type CreateSpace200AllOf = {
-  data?: SpaceDto;
+  data?: TenancyDto;
   /** */
   httpStatus?: number;
   /** */

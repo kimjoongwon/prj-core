@@ -20,6 +20,7 @@ export interface CreateSessionDto {
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
   tenancyId: string;
+  tenantId: string;
   timelineDates: string;
   type: SessionTypes;
 }

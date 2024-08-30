@@ -9,3 +9,4 @@ export * from './src/providers';
 export * from './src/services';
 export * from './src/types';
 export * from './src/errors';
+export * from './src/actions';

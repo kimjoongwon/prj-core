@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import { Container, getSpacesByQuery, SpacesTable } from '@shared/frontend';
 import { cookies } from 'next/headers';
@@ -15,6 +13,9 @@ const SpacesPage = async () => {
     },
   );
 
+  // if (spacesByQuery.httpStatus === 401) {
+  //   redirect('admin/auth/login');
+  // }
   return (
     <Container className="max-w-screen-xl">
       <SpacesTable spaces={spacesByQuery.data || []} />

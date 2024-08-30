@@ -4,7 +4,7 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineDtoTimelineItem } from './timelineDtoTimelineItem';
+import type { TimelineItemDto } from './timelineItemDto';
 
 export interface TimelineDto {
   createdAt: string;
@@ -13,8 +13,9 @@ export interface TimelineDto {
   /** @nullable */
   removedAt: string | null;
   sessionId: string;
+  tenantId: string;
   /** @nullable */
-  timelineItem: TimelineDtoTimelineItem;
+  timelineItem: TimelineItemDto[] | null;
   timelineItemId?: string;
   updatedAt: string;
 }

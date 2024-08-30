@@ -4,6 +4,7 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
+import type { ReservationDto } from './reservationDto';
 
 export interface TimelineItemDto {
   address: string;
@@ -15,7 +16,10 @@ export interface TimelineItemDto {
   minCapacity: number;
   /** @nullable */
   removedAt: string | null;
+  /** @nullable */
+  reservations: ReservationDto[] | null;
   startDateTime: string;
+  tenantId: string;
   timelineId: string;
   title: string;
   updatedAt: string;

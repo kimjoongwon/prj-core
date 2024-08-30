@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation';
 import { useState } from './useState';
 import { galaxy } from '@shared/frontend';
 export const useHandlers = ({
-  queries: { createService, refreshService, updateService, service },
+  queries: { createService, refreshService, updateService },
   state,
 }: {
   state: ReturnType<typeof useState>;
