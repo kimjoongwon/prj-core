@@ -4,10 +4,10 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TenancyDto } from './tenancyDto';
+import type { SessionDto } from './sessionDto';
 
-export type CreateSession200AllOf = {
-  data?: TenancyDto;
+export type RemoveSession200AllOf = {
+  data?: SessionDto;
   /** */
   httpStatus?: number;
   /** */

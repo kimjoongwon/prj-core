@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { SessionController } from './sessions.controller';
 import { SessionModule } from '../../../shared/entities/session/session.module';
+import { SessionsController } from './sessions.controller';
 
 @Module({
   imports: [SessionModule],
-  controllers: [SessionController],
+  controllers: [SessionsController],
 })
 export class SessionsModule {}

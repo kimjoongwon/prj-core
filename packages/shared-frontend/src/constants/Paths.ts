@@ -29,6 +29,16 @@ export const ADMIN_SERVICE_TIMELINE_ITEM_PATH =
 export const ADMIN_SERVICE_TIMELINE_ITEM_EDIT_PATH =
   `${ADMIN_SERVICE_PATH}/timelineItems/:timelineItemId/edit` as const;
 //
+// 예약관리 > 세션 관리
+export const ADMIN_SERVICE_SESSIONS_PATH =
+  `${ADMIN_SERVICE_PATH}/sessions` as const;
+
+export const ADMIN_SERVICE_SESSION_PATH =
+  `${ADMIN_SERVICE_PATH}/sessions/:sessionId` as const;
+
+export const ADMIN_SERVICE_SESSION_EDIT_PATH =
+  `${ADMIN_SERVICE_PATH}/sessions/:sessionId/edit` as const;
+//
 export const ADMIN_USER_CATEGORIES_PATH =
   `${ADMIN_SERVICE_PATH}/categories` as const;
 

@@ -7,7 +7,7 @@ export const usePage = () => {
 
   return {
     dataGrid: {
-      data: getGroupsByQuery.data?.data || [],
+      data: getGroupsByQuery?.data?.data || [],
       columns,
     },
   };

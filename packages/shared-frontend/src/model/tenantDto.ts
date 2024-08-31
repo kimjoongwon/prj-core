@@ -7,6 +7,7 @@
 import type { TenantDtoRole } from './tenantDtoRole';
 import type { TenantDtoTenancy } from './tenantDtoTenancy';
 import type { TenantTypes } from './tenantTypes';
+import type { TenantDtoUser } from './tenantDtoUser';
 
 export interface TenantDto {
   active: boolean;
@@ -22,5 +23,7 @@ export interface TenantDto {
   tenancyId: string;
   type: TenantTypes;
   updatedAt: string;
+  /** @nullable */
+  user: TenantDtoUser;
   userId: string;
 }

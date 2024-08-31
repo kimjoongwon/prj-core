@@ -10,5 +10,7 @@ export const revalidatePathGetTimelineItemsByQuery = (
   // @ts-ignore
   const searchParams = new URLSearchParams(params).toString();
   const [queryKey] = getGetTimelineItemsByQueryQueryKey(params);
-  revalidatePath(queryKey + searchParams);
+  const path = queryKey + searchParams;
+  console.log(path);
+  revalidatePath(path);
 };

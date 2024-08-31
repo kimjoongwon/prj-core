@@ -22,6 +22,7 @@ import {
   UpdateTimelineItemDto,
   TimelineItemQueryDto,
 } from './dto';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_TIMELINE_ITEMS')
 @Controller(ApiEndpoints.ADMIN_TIMELINE_ITEMS)
@@ -34,7 +35,7 @@ export class TimelineItemController {
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createTimelineItem(@Body() createTimelineItemDto: CreateTimelineItemDto) {
     const timelineItem = await this.timelineItemService.create(createTimelineItemDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToClass(TimelineItemDto, timelineItem));
   }
 
   @Get(':timelineItemId')
@@ -43,7 +44,11 @@ export class TimelineItemController {
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async getTimelineItem(@Param('timelineItemId') timelineItemId: string) {
     const timelineItem = await this.timelineItemService.getUnique(timelineItemId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(TimelineItemDto, timelineItem),
+    );
   }
 
   @Patch('removedAt')
@@ -98,7 +103,7 @@ export class TimelineItemController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      timelineItems.map((timelineItem) => new TimelineItemDto(timelineItem)),
+      timelineItems.map((timelineItem) => plainToInstance(TimelineItemDto, timelineItem)),
       new PageMetaDto({
         pageQueryDto,
         itemCount: count,

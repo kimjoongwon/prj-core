@@ -35,6 +35,7 @@ import type {
   CreateTimelineItemDto,
   GetAbilitiesByQueryParams,
   GetGroupsByQueryParams,
+  GetSessionsByQueryParams,
   GetSpacesByQueryParams,
   GetTimelineItemsByQueryParams,
   LoginPayloadDto,
@@ -78,6 +79,7 @@ import type {
   DeleteAbility200AllOf,
   DeleteGroup200AllOf,
   DeleteService200AllOf,
+  DeleteSession200AllOf,
   DeleteSpace200AllOf,
   DeleteTimelineItem200AllOf,
   FindCategoryById200AllOf,
@@ -89,6 +91,8 @@ import type {
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetService200AllOf,
+  GetSession200AllOf,
+  GetSessionsByQuery200AllOf,
   GetSpace200AllOf,
   GetSpacesByQuery200AllOf,
   GetSubjectById200AllOf,
@@ -102,6 +106,8 @@ import type {
   RemoveGroups200AllOf,
   RemoveService200AllOf,
   RemoveServices200AllOf,
+  RemoveSession200AllOf,
+  RemoveSessions200AllOf,
   RemoveSpace200AllOf,
   RemoveSpaces200AllOf,
   RemoveTimelineItem200AllOf,
@@ -110,7 +116,7 @@ import type {
   UpdateCategory200AllOf,
   UpdateGroup200AllOf,
   UpdateService200AllOf,
-  UpdateSesson200AllOf,
+  UpdateSession200AllOf,
   UpdateSpace200AllOf,
   UpdateSubjectById200AllOf,
   UpdateTimelineItem200AllOf,
@@ -3714,7 +3720,7 @@ export const getGetNewTokenQueryKey = () => {
     }
 
     
-export const getGetNewTokenQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -3733,9 +3739,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetNewTokenQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenQueryError = ErrorType<unknown>
+export type GetNewTokenQueryError = ErrorType<void>
 
-export const useGetNewToken = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>(
+export const useGetNewToken = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -3751,7 +3757,7 @@ export const useGetNewToken = <TData = Awaited<ReturnType<typeof getNewToken>>, 
 
 
 
-export const getGetNewTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -3770,9 +3776,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetNewTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenSuspenseQueryError = ErrorType<unknown>
+export type GetNewTokenSuspenseQueryError = ErrorType<void>
 
-export const useGetNewTokenSuspense = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<unknown>>(
+export const useGetNewTokenSuspense = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -3788,7 +3794,7 @@ export const useGetNewTokenSuspense = <TData = Awaited<ReturnType<typeof getNewT
 
 
 
-export const getGetNewTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetNewTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -3807,9 +3813,9 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetNewTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetNewTokenSuspenseInfiniteQueryError = ErrorType<void>
 
-export const useGetNewTokenSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<unknown>>(
+export const useGetNewTokenSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -3930,13 +3936,275 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const updateSesson = (
+export const getSessionsByQuery = (
+    params?: GetSessionsByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSessionsByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetSessionsByQueryQueryKey = (params?: GetSessionsByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/sessions`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSessionsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
+export type GetSessionsByQueryQueryError = ErrorType<void>
+
+export const useGetSessionsByQuery = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionsByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSessionsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
+export type GetSessionsByQuerySuspenseQueryError = ErrorType<void>
+
+export const useGetSessionsByQuerySuspense = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionsByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSessionsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
+export type GetSessionsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetSessionsByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionsByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getSession = (
+    sessionId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSession200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetSessionQueryKey = (sessionId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/sessions/${sessionId}`] as const;
+    }
+
+    
+export const getGetSessionQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type GetSessionQueryError = ErrorType<void>
+
+export const useGetSession = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
+ sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionQueryOptions(sessionId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSessionSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type GetSessionSuspenseQueryError = ErrorType<void>
+
+export const useGetSessionSuspense = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
+ sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionSuspenseQueryOptions(sessionId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSessionSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSessionSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
+export type GetSessionSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetSessionSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(
+ sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetSessionSuspenseInfiniteQueryOptions(sessionId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateSession = (
+    sessionId: string,
     updateSessionDto: BodyType<UpdateSessionDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<UpdateSesson200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'PATCH',
+      return customInstance<UpdateSession200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateSessionDto
     },
@@ -3945,18 +4213,18 @@ export const updateSesson = (
   
 
 
-export const getUpdateSessonMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext> => {
+export const getUpdateSessionMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSesson>>, {data: BodyType<UpdateSessionDto>}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSession>>, {sessionId: string;data: BodyType<UpdateSessionDto>}> = (props) => {
+          const {sessionId,data} = props ?? {};
 
-          return  updateSesson(data,requestOptions)
+          return  updateSession(sessionId,data,requestOptions)
         }
 
         
@@ -3964,20 +4232,172 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateSessonMutationResult = NonNullable<Awaited<ReturnType<typeof updateSesson>>>
-    export type UpdateSessonMutationBody = BodyType<UpdateSessionDto>
-    export type UpdateSessonMutationError = ErrorType<void>
+    export type UpdateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSession>>>
+    export type UpdateSessionMutationBody = BodyType<UpdateSessionDto>
+    export type UpdateSessionMutationError = ErrorType<void>
 
-    export const useUpdateSesson = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSesson>>, TError,{data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useUpdateSession = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
-        Awaited<ReturnType<typeof updateSesson>>,
+        Awaited<ReturnType<typeof updateSession>>,
         TError,
-        {data: BodyType<UpdateSessionDto>},
+        {sessionId: string;data: BodyType<UpdateSessionDto>},
         TContext
       > => {
 
-      const mutationOptions = getUpdateSessonMutationOptions(options);
+      const mutationOptions = getUpdateSessionMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteSession = (
+    sessionId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteSession200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteSessionMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSession>>, {sessionId: string}> = (props) => {
+          const {sessionId} = props ?? {};
+
+          return  deleteSession(sessionId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSessionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSession>>>
+    
+    export type DeleteSessionMutationError = ErrorType<void>
+
+    export const useDeleteSession = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSession>>,
+        TError,
+        {sessionId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSessionMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSessions = (
+    removeSessionsBody: BodyType<string[]>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSessions200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removeSessionsBody
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSessionsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSessions>>, {data: BodyType<string[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeSessions(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSessionsMutationResult = NonNullable<Awaited<ReturnType<typeof removeSessions>>>
+    export type RemoveSessionsMutationBody = BodyType<string[]>
+    export type RemoveSessionsMutationError = ErrorType<void>
+
+    export const useRemoveSessions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSessions>>,
+        TError,
+        {data: BodyType<string[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSessionsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSession = (
+    sessionId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSession200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSessionMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSession>>, {sessionId: string}> = (props) => {
+          const {sessionId} = props ?? {};
+
+          return  removeSession(sessionId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSessionMutationResult = NonNullable<Awaited<ReturnType<typeof removeSession>>>
+    
+    export type RemoveSessionMutationError = ErrorType<void>
+
+    export const useRemoveSession = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSession>>,
+        TError,
+        {sessionId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSessionMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -4066,15 +4486,25 @@ export const getGetSubjectByIdResponseMock = (): GetSubjectById200AllOf => ({dat
 
 export const getUpdateSubjectByIdResponseMock = (): UpdateSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getGetTokenResponseMock = (): GetToken200AllOf => ({data: faker.helpers.arrayElement([{accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getGetTokenResponseMock = (): GetToken200AllOf => ({data: faker.helpers.arrayElement([{accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getGetCurrentUserResponseMock = (overrideResponse: Partial< UserDto > = {}): UserDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+export const getGetCurrentUserResponseMock = (overrideResponse: Partial< UserDto > = {}): UserDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
-export const getGetNewTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), undefined]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenants: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.word.sample()})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
+export const getGetNewTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
 
-export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getUpdateSessonResponseMock = (): UpdateSesson200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getGetSessionsByQueryResponseMock = (): GetSessionsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetSessionResponseMock = (): GetSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateSessionResponseMock = (): UpdateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getDeleteSessionResponseMock = (): DeleteSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveSessionsResponseMock = (): RemoveSessions200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveSessionResponseMock = (): RemoveSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endAfterOccurrences: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), null]), endOnDate: faker.helpers.arrayElement([faker.word.sample(), null]), endType: faker.helpers.arrayElement(Object.values(SessionEndTypes)), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
 
 export const getCreateTimelineItemMockHandler = (overrideResponse?: CreateTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateTimelineItem200AllOf> | CreateTimelineItem200AllOf)) => {
@@ -4791,11 +5221,86 @@ export const getCreateSessionMockHandler = (overrideResponse?: CreateSession200A
   })
 }
 
-export const getUpdateSessonMockHandler = (overrideResponse?: UpdateSesson200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSesson200AllOf> | UpdateSesson200AllOf)) => {
-  return http.patch('*/api/v1/admin/sessions', async (info) => {await delay(1000);
+export const getGetSessionsByQueryMockHandler = (overrideResponse?: GetSessionsByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSessionsByQuery200AllOf> | GetSessionsByQuery200AllOf)) => {
+  return http.get('*/api/v1/admin/sessions', async (info) => {await delay(1000);
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
             ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateSessonResponseMock()),
+            : getGetSessionsByQueryResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetSessionMockHandler = (overrideResponse?: GetSession200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSession200AllOf> | GetSession200AllOf)) => {
+  return http.get('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetSessionResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateSessionMockHandler = (overrideResponse?: UpdateSession200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSession200AllOf> | UpdateSession200AllOf)) => {
+  return http.patch('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateSessionResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getDeleteSessionMockHandler = (overrideResponse?: DeleteSession200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteSession200AllOf> | DeleteSession200AllOf)) => {
+  return http.delete('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteSessionResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveSessionsMockHandler = (overrideResponse?: RemoveSessions200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSessions200AllOf> | RemoveSessions200AllOf)) => {
+  return http.patch('*/api/v1/admin/sessions/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveSessionsResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveSessionMockHandler = (overrideResponse?: RemoveSession200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSession200AllOf> | RemoveSession200AllOf)) => {
+  return http.patch('*/api/v1/admin/sessions/:sessionId/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveSessionResponseMock()),
       {
         status: 200,
         headers: {
@@ -4854,5 +5359,10 @@ export const getPROMISEServerMock = () => [
   getGetNewTokenMockHandler(),
   getSignUpUserMockHandler(),
   getCreateSessionMockHandler(),
-  getUpdateSessonMockHandler()
+  getGetSessionsByQueryMockHandler(),
+  getGetSessionMockHandler(),
+  getUpdateSessionMockHandler(),
+  getDeleteSessionMockHandler(),
+  getRemoveSessionsMockHandler(),
+  getRemoveSessionMockHandler()
 ]
