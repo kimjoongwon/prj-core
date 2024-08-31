@@ -142,11 +142,16 @@ export const DataGrid = observer(
             {rows?.map(row => (
               // @ts-ignore
               <TableRow key={row.original?.[selectedKey as string]}>
-                {row.getAllCells().map(cell => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getAllCells().map(cell => {
+                  return (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           </TableBody>

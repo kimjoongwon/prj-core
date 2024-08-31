@@ -7,21 +7,52 @@ import { TimelineService } from '../timeline/timeline.service';
 import { CreateTimelineDto } from '../timeline/dto';
 import { PaginationMananger } from '../../utils';
 import { R } from '../../libs/remeda';
+import { IService } from 'src/shared/types';
 
 @Injectable()
-export class SessionService {
+export class SessionService implements IService {
   constructor(
     private readonly repository: SessionRepository,
     private readonly timelineService: TimelineService,
   ) {}
 
+  getUnique(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
+
+  getFirst(id: string) {
+    return this.repository.findFirst({ where: { id } });
+  }
+
+  removeMany(ids: string[]) {
+    return this.repository.updateMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      data: {
+        removedAt: new Date(),
+      },
+    });
+  }
+
+  delete(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
+
   create(createSessionDto: CreateSessionDto) {
     return this.repository.create({ data: createSessionDto });
   }
 
-  getManyByPageQuery(pageQuery: SessionPageQueryDto) {
+  async getManyByQuery(pageQuery: SessionPageQueryDto) {
     const args = PaginationMananger.toArgs(pageQuery);
-    return this.repository.findMany(args);
+    const sessions = await this.repository.findMany(args);
+    const count = await this.repository.count(args);
+    return {
+      sessions,
+      count,
+    };
   }
 
   async update(updateSessionDto: UpdateSessionDto) {
@@ -46,7 +77,10 @@ export class SessionService {
     return this.repository.update({ where: { id: sessionId }, data: omittedUpdateSessionDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} session`;
+  remove(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
   }
 }

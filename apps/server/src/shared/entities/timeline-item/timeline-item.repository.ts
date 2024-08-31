@@ -28,7 +28,17 @@ export class TimelineItemRepository implements IRepository {
   }
 
   findMany(args: Prisma.TimelineItemFindManyArgs) {
-    return this.prisma.timelineItem.findMany(args);
+    return this.prisma.timelineItem.findMany({
+      ...args,
+      where: {
+        removedAt: null,
+        ...args.where,
+      },
+      orderBy: {
+        createdAt: 'desc',
+        ...args.orderBy,
+      },
+    });
   }
 
   findUnique(args: Prisma.TimelineItemFindUniqueArgs) {

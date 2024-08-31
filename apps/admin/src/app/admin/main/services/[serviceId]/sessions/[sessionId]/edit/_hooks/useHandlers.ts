@@ -1,8 +1,8 @@
 import {
-  CreateTimelineItemDto,
+  CreateSessionDto,
   galaxy,
-  revalidatePathGetTimelineItemsByQuery,
-  UpdateTimelineItemDto,
+  revalidatePathGetSessionsByQuery,
+  UpdateSessionDto,
 } from '@shared/frontend';
 import { useData } from './useData';
 import { useState } from './useState';
@@ -15,25 +15,25 @@ export const useHandlers = (props: {
 }) => {
   const {
     context: {
-      params: { timelineItemId },
+      params: { sessionId },
       isEditMode,
     },
     state,
-    data: { createTimelineItem, updateTimelineItem },
+    data: { createSession, updateSession },
   } = props;
 
   const update = () => {
-    updateTimelineItem.mutateAsync({
-      timelineItemId,
-      data: state.form as UpdateTimelineItemDto,
+    updateSession.mutateAsync({
+      sessionId,
+      data: state.form as UpdateSessionDto,
     });
   };
 
   const create = async () => {
-    await createTimelineItem.mutateAsync({
-      data: state.form as CreateTimelineItemDto,
+    await createSession.mutateAsync({
+      data: state.form as CreateSessionDto,
     });
-    revalidatePathGetTimelineItemsByQuery({});
+    revalidatePathGetSessionsByQuery({});
   };
 
   const goBack = () => {

@@ -305,7 +305,7 @@ export function PhoneFieldOptional(
 export function UUIDField(
   options: Omit<ApiPropertyOptions, 'type' | 'format' | 'isArray'> & IFieldOptions = {},
 ): PropertyDecorator {
-  const decorators = [Type(() => String), IsUUID('all', { each: options.each })];
+  const decorators = [Type(() => String)];
 
   if (options.nullable) {
     decorators.push(IsNullable());

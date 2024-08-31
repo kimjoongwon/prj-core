@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ProfileDto } from './profileDto';
-import type { TenantDto } from './tenantDto';
 
 export interface UserDto {
   createdAt: string;
@@ -15,9 +14,9 @@ export interface UserDto {
   /** @minLength 6 */
   password: string;
   phone: string;
-  profiles?: ProfileDto[];
+  /** @nullable */
+  profiles: ProfileDto[] | null;
   /** @nullable */
   removedAt: string | null;
-  tenants: TenantDto[];
   updatedAt: string;
 }

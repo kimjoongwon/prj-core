@@ -51,6 +51,7 @@ export class TimelineItemService implements IService {
 
   async getManyByQuery(query: TimelineItemQueryDto) {
     const args = PaginationMananger.toArgs(query);
+    console.log(args);
     const timelineItemCount = await this.repository.count(args);
     const timelineItems = await this.repository.findMany(args);
     return {

@@ -6,7 +6,7 @@ export class PageQueryDto {
     default: 1,
     int: true,
   })
-  readonly skip: number = 1;
+  readonly skip: number = 0;
 
   @NumberFieldOptional({
     minimum: 1,
