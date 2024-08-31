@@ -14,7 +14,7 @@ const SessionEditPage = observer(() => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <SessionForm />
+      <SessionForm state={state.form} />
     </FormLayout>
   );
 });

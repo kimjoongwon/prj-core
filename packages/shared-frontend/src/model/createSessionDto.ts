@@ -16,11 +16,12 @@ export interface CreateSessionDto {
   endOnDate: string | null;
   endType: SessionEndTypes;
   name: string;
+  oneTimeDate: string;
   recurringDayOfTheWeek: RecurringDayOfTheWeek[];
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
   tenancyId: string;
   tenantId: string;
-  timelineDates: string;
+  timelineDates: string[];
   type: SessionTypes;
 }

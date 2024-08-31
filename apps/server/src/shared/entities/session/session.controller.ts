@@ -94,15 +94,15 @@ export class SessionController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
-  async getSessionsByQuery(@Query() pageQueryDto: SessionQueryDto) {
-    const { count, sessions } = await this.sessionService.getManyByQuery(pageQueryDto);
+  async getSessionsByQuery(@Query() sessionQueryDto: SessionQueryDto) {
+    const { count, sessions } = await this.sessionService.getManyByQuery(sessionQueryDto);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       sessions.map((session) => plainToInstance(SessionDto, session)),
-      plainToInstance(PageMetaDto, {
-        pageQueryDto,
+      new PageMetaDto({
+        pageQueryDto: sessionQueryDto,
         itemCount: count,
       }),
     );

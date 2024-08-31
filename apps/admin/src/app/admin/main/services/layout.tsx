@@ -42,8 +42,13 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
       },
       {
         name: '세션 관리',
-        url: '/admin/main/services/:serviceId/timelineItems',
-        onClick: () => {},
+        url: '/admin/main/services/:serviceId/sessions',
+        onClick: () => {
+          galaxy.router.push({
+            url: '/admin/main/services/:serviceId/sessions',
+            params: { serviceId },
+          });
+        },
       },
     ],
     USER: [],

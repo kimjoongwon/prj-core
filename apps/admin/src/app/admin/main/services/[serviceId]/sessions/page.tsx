@@ -12,8 +12,6 @@ const SessionsPage = async () => {
     },
   );
 
-  console.log('sessionsQuery', sessionsQuery);
-
   return <SessionsTable sessions={sessionsQuery.data || []} />;
 };
 

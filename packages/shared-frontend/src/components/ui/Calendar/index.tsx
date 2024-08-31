@@ -1,6 +1,7 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
-import { Calendar } from './Calendar';
+import { CalendarView } from './CalendarView';
 
-export default observer(Calendar);
+export const Calendar = () => {
+  return <CalendarView />;
+};

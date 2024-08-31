@@ -1,4 +1,4 @@
-import { CreateSessionDto, galaxy, UpdateSessionDto } from '@shared/frontend';
+import { CreateSessionDto, UpdateSessionDto } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useData } from './useData';
 import { useContext } from './useContext';
@@ -15,7 +15,7 @@ export const useState = (props: {
 
   const defaultForm: CreateSessionDto = {
     endAfterOccurrences: null,
-    endOnDate: null,
+    endOnDate: '',
     endType: 'NEVER',
     name: '',
     recurringDayOfTheWeek: [],
@@ -23,8 +23,9 @@ export const useState = (props: {
     repeatCycleType: 'DAY',
     tenancyId: '',
     tenantId: '',
-    timelineDates: '',
+    timelineDates: [],
     type: 'ONE_TIME',
+    oneTimeDate: new Date().toISOString(),
   };
 
   const form = isEditMode ? getSession.data?.data! : defaultForm;

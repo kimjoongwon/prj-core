@@ -17,11 +17,12 @@ export interface UpdateSessionDto {
   endType?: SessionEndTypes;
   id: string;
   name?: string;
+  oneTimeDate?: string;
   recurringDayOfTheWeek?: RecurringDayOfTheWeek[];
   repeatCycle?: number;
   repeatCycleType?: RepeatCycleTypes;
   tenancyId?: string;
   tenantId?: string;
-  timelineDates?: string;
+  timelineDates?: string[];
   type?: SessionTypes;
 }

@@ -5,7 +5,7 @@ import { getGetSessionsByQueryQueryKey } from '../apis';
 import { GetSessionsByQueryParams } from '../model/getSessionsByQueryParams';
 
 export const revalidatePathGetSessionsByQuery = (
-  params: GetSessionsByQueryParams,
+  params?: GetSessionsByQueryParams,
 ) => {
   // @ts-ignore
   const searchParams = new URLSearchParams(params).toString();
