@@ -30,7 +30,7 @@ export const DatePicker = observer(
       }),
     );
 
-    const { localState } = useMobxHookForm<string>(initialISODate, state, path);
+    const { localState } = useMobxHookForm(initialISODate, state, path);
 
     const onChangeDate: DatePickerProps<T>['onChange'] = (
       dateValue: DateValue,
