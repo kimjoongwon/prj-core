@@ -5,11 +5,11 @@ import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
 import { MobxProps } from '../types';
 import { DatePickerView, DatePickerViewProps } from './DatePickerView';
 import {
+  CalendarDate,
   DateValue,
   getLocalTimeZone,
-  parseDate,
 } from '@internationalized/date';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import dayjs from 'dayjs';
 
 interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
@@ -17,24 +17,33 @@ interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
 export const DatePicker = observer(
   <T extends object>(props: DatePickerProps<T>) => {
     const { state, path } = props;
-    const initialValue: any = get(state, path);
-    const initialDate = dayjs(initialValue).format('YYYY-MM-DD').toString();
-    const { localState } = useMobxHookForm(initialDate, state, path);
+    //
+    const initialISODate: any = get(state, path);
+    const initialDateTime = new CalendarDate(
+      new Date(initialISODate).getFullYear(),
+      new Date(initialISODate).getMonth() + 1,
+      new Date(initialISODate).getDate(),
+    );
+    const dateTimePickerState = useLocalObservable<{ value: DateValue }>(
+      () => ({
+        value: initialDateTime,
+      }),
+    );
+
+    const { localState } = useMobxHookForm<string>(initialISODate, state, path);
 
     const onChangeDate: DatePickerProps<T>['onChange'] = (
       dateValue: DateValue,
     ) => {
-      const date = dayjs(dateValue.toDate(getLocalTimeZone()).toISOString())
-        .format('YYYY-MM-DD')
-        .toString();
-      localState.value = date;
+      localState.value = dateValue.toDate(getLocalTimeZone()).toISOString();
+      dateTimePickerState.value = dateValue;
     };
 
     return (
       <DatePickerView
         {...props}
         onChange={onChangeDate}
-        value={parseDate(localState.value)}
+        value={dateTimePickerState.value}
       />
     );
   },

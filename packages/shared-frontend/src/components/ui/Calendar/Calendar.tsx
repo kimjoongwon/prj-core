@@ -31,8 +31,12 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
   } = props;
   const localState = useLocalObservable<CalendarLocalState>(() => ({
     calendarDate: dayjs().startOf('D').toDate(),
-    // @ts-ignore
-    values: get(state, path) || [],
+    values:
+      // @ts-ignore
+      get(state, path)?.length > 0
+        ? // @ts-ignore
+          get(state, path)?.map(value => new Date(value))
+        : [],
   }));
 
   useEffect(() => {
@@ -114,13 +118,13 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full">
       <div className="flex justify-between">
         <div className="flex space-x-2">
-          <div className="text-2xl lg:text-4xl font-bold">
+          <div className="text-2xl lg:text-2xl font-bold">
             {dayjs(localState.calendarDate).year()}년
           </div>
-          <div className="text-2xl lg:text-4xl font-bold">
+          <div className="text-2xl lg:text-2xl font-bold">
             {dayjs(localState.calendarDate).month() + 1}월
           </div>
         </div>
@@ -143,9 +147,7 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
           </Button>
         </ButtonGroup>
       </div>
-      <div className="grid grid-cols-7 mt-4">
-        <DaysOfWeek />
-      </div>
+      <DaysOfWeek />
       <div className="grid grid-cols-7 grid-rows-6 gap-1">
         {prevMonthRange.map(value => (
           <Day readOnly={readOnly} key={value} day={value} />
@@ -157,7 +159,7 @@ export const Calendar = <T extends object>(props: CalendarProps<T>) => {
               key={value}
               active
               selected={
-                !!localState.values.find((date: Date) =>
+                !!localState.values?.find((date: Date) =>
                   dayjs(date).isSame(
                     dayjs(localState.calendarDate).set('D', value),
                     'date',
