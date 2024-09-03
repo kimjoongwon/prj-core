@@ -5,18 +5,25 @@ import { useLocalObservable } from 'mobx-react-lite';
 import { reaction } from 'mobx';
 import { get, set } from 'lodash-es';
 
-export const useMobxHookForm = <V extends Partial<any>>(
-  initialValue: any,
-  state: any,
-  path: any,
-) => {
-  const localState = useLocalObservable(() => ({
-    value: initialValue,
+interface InputState<T> {
+  extendState: T;
+  state: object;
+  path: any;
+}
+
+export const useInputState = <T extends object, V>({
+  extendState,
+  path,
+  state,
+}: InputState<T>) => {
+  const inputState = useLocalObservable<T & { value: V }>(() => ({
+    ...extendState,
+    value: get(state, path),
   }));
 
   useEffect(() => {
     const setterDisposer = reaction(
-      () => localState.value,
+      () => inputState.value,
       value => {
         set(state, path, value);
       },
@@ -25,7 +32,7 @@ export const useMobxHookForm = <V extends Partial<any>>(
     const getterDisposer = reaction(
       () => get(state, path),
       value => {
-        localState.value = value;
+        inputState.value = value;
       },
     );
 
@@ -35,7 +42,5 @@ export const useMobxHookForm = <V extends Partial<any>>(
     };
   }, []);
 
-  return {
-    localState,
-  };
+  return { ...state, ...inputState };
 };

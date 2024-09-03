@@ -27,7 +27,6 @@ export const SessionFormView = observer((props: SessionFormViewProps) => {
     },
   ];
 
-  console.log(state.type);
   return (
     <VStack className="space-y-2">
       <Input label="세센명" state={state} path="name" />
@@ -38,7 +37,7 @@ export const SessionFormView = observer((props: SessionFormViewProps) => {
         path="type"
       />
       {state.type === 'ONE_TIME' && (
-        <DatePicker label='날짜 선택' state={state} path="oneTimeDate" />
+        <DatePicker label="날짜 선택" state={state} path="oneTimeDate" />
       )}
     </VStack>
   );
