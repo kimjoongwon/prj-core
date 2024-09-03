@@ -1,7 +1,10 @@
 'use client';
+import 'react-calendar/dist/Calendar.css';
 
-import { CalendarView } from './CalendarView';
+import { CalendarView, CalendarViewProps } from './CalendarView';
 
-export const Calendar = () => {
-  return <CalendarView />;
+interface CalendarProps extends CalendarViewProps {}
+
+export const Calendar = (props: CalendarProps) => {
+  return <CalendarView {...props} />;
 };
