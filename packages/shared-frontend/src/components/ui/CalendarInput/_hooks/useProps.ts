@@ -19,7 +19,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
   const startDayOfMonthDay = dayjs().startOf('month').day();
   const prevMonth = dayjs().subtract(1, 'month');
 
-  const prevMontRange = range(
+  const prevMonthRange = range(
     prevMonth.daysInMonth() - startDayOfMonthDay,
     prevMonth.daysInMonth(),
   );
@@ -29,15 +29,19 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
   const nextMonthRange = range(
     1,
     DAY_OF_WEEK * WEEK_OF_MONTH -
-      (prevMontRange.length + currentMonth.length) +
+      (prevMonthRange.length + currentMonth.length) +
       1,
   );
 
   return {
     state,
+    year: state.calendarDate.getFullYear(),
+    month: state.calendarDate.getMonth() + 1,
+    selectedDates: state.value,
     onClickNextMonth,
     onClickPrevMonth,
-    prevMontRange,
+    onClickDay,
+    prevMonthRange,
     currentMonth,
     nextMonthRange,
   };

@@ -7,22 +7,22 @@ import { ButtonGroup } from '@nextui-org/react';
 import { FcNext, FcPrevious } from 'react-icons/fc';
 import { Button } from '../Button';
 import { CalendarInputPropsView } from './_types';
+import { useProps } from './_hooks/useProps';
 
 export const CalendarInputView = <T extends object>(
   props: CalendarInputPropsView<T>,
 ) => {
   const {
-    readOnly = false,
     onClickDay,
-    currentMonthRange,
-    month,
-    year,
-    prevMonthRange,
-    nextMonthRange,
-    onClickPrevMonth,
     onClickNextMonth,
+    onClickPrevMonth,
+    month,
+    prevMonthRange,
+    currentMonth,
+    nextMonthRange,
     selectedDates,
-  } = props;
+    year,
+  } = useProps(props);
 
   return (
     <div className="w-full">
@@ -55,12 +55,12 @@ export const CalendarInputView = <T extends object>(
       </div>
       <div className="grid grid-cols-7 grid-rows-6 gap-1">
         {prevMonthRange.map(value => (
-          <Day readOnly={readOnly} key={value} day={value} />
+          <Day readOnly={false} key={value} day={value} />
         ))}
-        {currentMonthRange.map(value => {
+        {currentMonth.map(value => {
           return (
             <Day
-              readOnly={readOnly}
+              readOnly={false}
               key={value}
               active
               selected={
@@ -74,7 +74,7 @@ export const CalendarInputView = <T extends object>(
           );
         })}
         {nextMonthRange.map(value => {
-          return <Day readOnly={readOnly} key={value} day={value} />;
+          return <Day readOnly={false} key={value} day={value} />;
         })}
       </div>
     </div>
