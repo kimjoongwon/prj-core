@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@nextui-org/react';
+import { CalendarInput } from '@shared/frontend';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 const PlayGroundPage = observer(() => {
@@ -14,10 +15,7 @@ const PlayGroundPage = observer(() => {
 
   return (
     <div className="w-[300px]">
-      <Button onClick={() => state._count++}>UP</Button>
-      <Button onClick={() => state._count--}>Down</Button>
-      {state.count}
-      {state._count}
+      <CalendarInput />
     </div>
   );
 });
