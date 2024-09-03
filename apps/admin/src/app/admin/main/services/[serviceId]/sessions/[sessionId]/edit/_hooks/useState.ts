@@ -25,7 +25,7 @@ export const useState = (props: {
     tenantId: '',
     timelineDates: [],
     type: 'ONE_TIME',
-    oneTimeDate: new Date().toISOString(),
+    oneTimeDate: dayjs('2002-10-17').toISOString(),
   };
 
   const form = isEditMode ? getSession.data?.data! : defaultForm;
