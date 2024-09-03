@@ -20,10 +20,10 @@ export const useState = (props: {
   const defaultForm: CreateTimelineItemDto = {
     address: '강남구 논현동 교보문구 빌딩 지하 2층',
     description: '유산소 운동',
-    endDateTime: dayjs().add(1, 'hour').toISOString(),
+    endDateTime: dayjs().toISOString(),
     maxCapacity: 30,
     minCapacity: 10,
-    startDateTime: dayjs().add(4, 'hour').toISOString(),
+    startDateTime: dayjs().toISOString(),
     tenantId: galaxy.auth.tenant?.id || '',
     title: '인듀어런스',
   };
