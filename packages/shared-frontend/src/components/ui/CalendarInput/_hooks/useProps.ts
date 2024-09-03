@@ -1,9 +1,10 @@
 import { useHandlers } from './useHandlers';
+import { useContext } from './useContext';
 import { CalendarInputProps } from '../_types';
 import { useState } from './useState';
-import { useContext } from './useContext';
 import dayjs from 'dayjs';
 import { range } from 'lodash-es';
+import { DAY_OF_WEEK, WEEK_OF_MONTH } from '../_constants';
 
 export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
   const context = useContext<T>(props);
@@ -37,6 +38,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
     state,
     year: state.calendarDate.getFullYear(),
     month: state.calendarDate.getMonth() + 1,
+    date: state.calendarDate.getDate(),
     selectedDates: state.value,
     onClickNextMonth,
     onClickPrevMonth,

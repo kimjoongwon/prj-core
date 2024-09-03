@@ -64,7 +64,7 @@ export const CalendarInputView = <T extends object>(
               key={value}
               active
               selected={
-                !!selectedDates.find((date: Date) =>
+                !!selectedDates?.find((date: Date) =>
                   dayjs(date).isSame(dayjs(date).set('D', value), 'date'),
                 )
               }
