@@ -5,20 +5,22 @@ import { useLocalObservable } from 'mobx-react-lite';
 import { reaction } from 'mobx';
 import { get, set } from 'lodash-es';
 
-interface InputState<T> {
-  extendState: T;
+interface InputState<S, V> {
+  extendState?: S;
+  defaultValue: V;
   state: object;
   path: any;
 }
 
-export const useInputState = <T extends object, V>({
+export const useInputState = <S extends object, V>({
   extendState,
+  defaultValue,
   path,
   state,
-}: InputState<T>) => {
-  const inputState = useLocalObservable<T & { value: V }>(() => ({
+}: InputState<S, V>) => {
+  const inputState = useLocalObservable<S & { value: V }>(() => ({
     ...extendState,
-    value: get(state, path),
+    value: get(state, path) || defaultValue,
   }));
 
   useEffect(() => {
@@ -42,5 +44,5 @@ export const useInputState = <T extends object, V>({
     };
   }, []);
 
-  return { ...state, ...inputState };
+  return inputState;
 };

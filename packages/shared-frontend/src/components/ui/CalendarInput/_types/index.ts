@@ -1,7 +1,7 @@
 import { MobxProps } from '../../types';
+import { useProps } from '../_hooks/useProps';
 
-export interface CalendarInputProps<T>
-  extends Partial<CalendarInputPropsView<T>> {}
+export interface CalendarInputProps<T> extends MobxProps<T> {}
 
 export enum Months {
   January = 0,
@@ -18,16 +18,26 @@ export enum Months {
   December = 11,
 }
 
-export interface CalendarInputPropsView<T> extends MobxProps<T> {
+export interface CalendarInputPropsView {
   readOnly?: boolean;
-  onClickDay?: (day: number) => void;
-  currentMonthRange: number[];
-  prevMonthRange: number[];
-  nextMonthRange: number[];
-  onClickPrevMonth: () => void;
-  onClickNextMonth: () => void;
-  year: number;
-  month: number;
-  date: number;
-  selectedDates: Date[];
+  state: ReturnType<typeof useProps>['state'];
+}
+
+export interface DateModel {
+  value: Date;
+  selected: boolean;
+  selectDate: () => void;
+  className?: string;
+  isPressable?: boolean;
+}
+
+export interface State {
+  calendarInput: {
+    header: {
+      date: Date;
+      increaseMonth: () => void;
+      decreaseMonth: () => void;
+    };
+    dates: DateModel[];
+  };
 }
