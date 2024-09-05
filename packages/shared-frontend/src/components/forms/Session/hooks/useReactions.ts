@@ -6,9 +6,26 @@ import dayjs from 'dayjs';
 export const useReactions = ({
   state,
 }: {
-  state: CreateSessionDto | UpdateSessionDto;
+  state: (CreateSessionDto | UpdateSessionDto) & {
+    rangeMode: boolean;
+    oneTImeDate: string | undefined;
+    oneTimeStartDate: string | undefined;
+    oneTimeEndDate: string | undefined;
+  };
 }) => {
   useEffect(() => {
+    const rangeModeDisposer = reaction(
+      () => state.rangeMode,
+      () => {
+        if (state.rangeMode) {
+          state.oneTimeDate = undefined;
+        } else {
+          state.oneTimeStartDate = undefined;
+          state.oneTimeEndDate = undefined;
+        }
+      },
+    );
+
     const disposer = reaction(
       () => state.type,
       () => {
@@ -27,6 +44,9 @@ export const useReactions = ({
         }
       },
     );
-    return disposer;
+    return () => {
+      disposer();
+      rangeModeDisposer();
+    };
   }, []);
 };

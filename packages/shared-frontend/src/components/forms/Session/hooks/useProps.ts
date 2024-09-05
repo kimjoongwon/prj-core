@@ -15,10 +15,6 @@ export const useProps = (props: {
     oneTimeEndDate: new Date().toISOString(),
   }));
 
-  useReactions({
-    state,
-  });
-
   return {
     state: inputState,
     sessionTypeOptions,
