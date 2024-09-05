@@ -1,21 +1,21 @@
 'use client';
 
-import { Button } from '@nextui-org/react';
 import { CalendarInput } from '@shared/frontend';
+import dayjs from 'dayjs';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 const PlayGroundPage = observer(() => {
-  const _state = useLocalObservable(() => ({
-    _count: 0,
-  }));
   const state = useLocalObservable(() => ({
-    count: 0,
-    ..._state,
+    dates: [
+      dayjs().add(1, 'd').startOf('d').toDate(),
+      dayjs().add(2, 'd').startOf('d').toDate(),
+      dayjs().add(3, 'd').startOf('d').toDate(),
+    ],
   }));
 
   return (
-    <div className="w-[300px]">
-      <CalendarInput />
+    <div className="w-full">
+      <CalendarInput state={state} path="dates" />
     </div>
   );
 });

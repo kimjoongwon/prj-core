@@ -4,7 +4,7 @@ import { CreateSessionDto, UpdateSessionDto } from '../../../model';
 import { Select } from '../../ui/Select';
 import { Input } from '../../ui/Input';
 import { VStack } from '../../ui/VStack';
-import { DatePicker, HStack, Text } from '../../ui';
+import { CalendarInput, DatePicker, HStack, Text } from '../../ui';
 import { observer } from 'mobx-react-lite';
 import { Divider } from '@nextui-org/react';
 import { useProps } from './hooks/useProps';
@@ -19,8 +19,8 @@ export const SessionFormView = observer((props: SessionFormViewProps) => {
   console.log({ ...state });
   return (
     <VStack className="space-y-4">
-      <div className="w-[400px] h-[450px]">
-        {/* <Calendar state={state} path="timelineDates" /> */}
+      <div className="w-full">
+        <CalendarInput state={state} path="timelineDates" />
       </div>
       <Divider />
       <HStack className="space-x-2">

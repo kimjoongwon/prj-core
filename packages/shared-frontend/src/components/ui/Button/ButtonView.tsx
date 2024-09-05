@@ -11,7 +11,7 @@ export const ButtonView = observer((props: ButtonViewProps) => {
   const {
     children,
     onClick,
-    className,
+    className = '',
     size,
     getDisabled,
     getLoading,

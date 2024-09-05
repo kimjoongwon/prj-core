@@ -1,22 +1,22 @@
-import { TableRow } from '@nextui-org/react';
+import { Button } from '../../Button';
+import { Chip } from '../../Chip';
 
 export const DaysOfWeek = () => {
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
-
+  ['SAT', 'SUN'];
   return (
-    <TableRow>
+    <>
       {daysOfWeek.map(dayOfWeek => {
         return (
-          <div
-            key={dayOfWeek}
-            className={`${
-              ['SAT', 'SUN'].includes(dayOfWeek) ? 'text-danger-400' : undefined
-            } text-large font-bold text-right`}
+          <Chip
+            variant="light"
+            color={['SAT', 'SUN'].includes(dayOfWeek) ? 'danger' : 'default'}
+            className="place-self-center"
           >
             {dayOfWeek}
-          </div>
+          </Chip>
         );
       })}
-    </TableRow>
+    </>
   );
 };
