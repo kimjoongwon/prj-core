@@ -20,9 +20,9 @@ export const DatePicker = observer(
     //
     const initialISODate: any = get(state, path);
     const initialDateTime = new CalendarDate(
-      new Date(initialISODate).getFullYear(),
-      new Date(initialISODate).getMonth() + 1,
-      new Date(initialISODate).getDate(),
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      new Date().getDate(),
     );
     const dateTimePickerState = useLocalObservable<{ value: DateValue }>(
       () => ({

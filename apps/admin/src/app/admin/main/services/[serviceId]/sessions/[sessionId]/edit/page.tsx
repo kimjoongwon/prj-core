@@ -10,7 +10,7 @@ const SessionEditPage = observer(() => {
 
   return (
     <FormLayout
-      title="타인라인아이템"
+      title="세션"
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >

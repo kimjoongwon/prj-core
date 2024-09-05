@@ -23,8 +23,9 @@ export interface CalendarInputPropsView {
   state: ReturnType<typeof useProps>['state'];
 }
 
+export type ISOString = string;
 export interface DateModel {
-  value: Date;
+  value: string;
   selected: boolean;
   selectDate: () => void;
   className?: string;

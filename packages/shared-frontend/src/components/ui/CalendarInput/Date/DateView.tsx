@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { Card, CardBody, CardHeader } from '../../NextUI';
 import { DateModel } from '../_types';
 import { Text } from '../../Text';
+import dayjs from 'dayjs';
 
 interface DateViewProps {
   state: DateModel;
@@ -9,6 +10,7 @@ interface DateViewProps {
 
 export const DateView = observer((props: DateViewProps) => {
   const { state } = props;
+  const date = dayjs(state.value).get('date');
   return (
     <Card
       isPressable={state.isPressable}
@@ -22,7 +24,7 @@ export const DateView = observer((props: DateViewProps) => {
       }
     >
       <CardBody className="text-right">
-        <Text>{state.value.getDate()}일</Text>
+        <Text>{date}일</Text>
       </CardBody>
     </Card>
   );

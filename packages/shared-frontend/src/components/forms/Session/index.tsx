@@ -1,12 +1,9 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { useProps } from './hooks/useProps';
-import { SessionFormView, SessionFormViewProps } from './SessionFormView';
-
-interface SessionFormProps extends SessionFormViewProps {}
+import { SessionFormView } from './SessionFormView';
+import { SessionFormProps } from './types';
 
 export const SessionForm = observer((props: SessionFormProps) => {
-  const _props = useProps();
-  return <SessionFormView {...props} {..._props} />;
+  return <SessionFormView {...props} />;
 });

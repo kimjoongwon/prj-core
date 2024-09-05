@@ -4,10 +4,8 @@ import { useState } from './useState';
 import dayjs from 'dayjs';
 import { range, uniq } from 'lodash-es';
 import { DAY_OF_WEEK, WEEK_OF_MONTH } from '../_constants';
-import { observable } from 'mobx';
 
 export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
-  console.log('useProps');
   const context = useContext<T>(props);
   const state = useState({
     context,
@@ -56,7 +54,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
     });
 
     return {
-      value: date,
+      value: date.toISOString(),
       selected: isSelected,
       selectDate() {
         const isSelected = state.value.some(date => {

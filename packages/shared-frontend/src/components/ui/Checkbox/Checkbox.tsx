@@ -6,6 +6,7 @@ import {
   CheckboxProps as NextUICheckboxProps,
 } from '@nextui-org/react';
 import { get } from 'lodash-es';
+import { Text } from '../Text';
 
 export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 
@@ -22,8 +23,10 @@ export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
     <NextUICheckbox
       {...rest}
       onChange={onChange}
-      size='lg'
+      size="lg"
       isSelected={localState.value}
-    />
+    >
+      <Text className="font-bold">{props.children}</Text>
+    </NextUICheckbox>
   );
 }
