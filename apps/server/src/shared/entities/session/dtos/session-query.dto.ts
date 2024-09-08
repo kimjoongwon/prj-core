@@ -1,8 +1,8 @@
-import { EnumFieldOptional } from 'src/shared/decorators';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { IntersectionType, PartialType } from '@nestjs/swagger';
 import { UpdateSessionDto } from './update-session.dto';
 import { Prisma } from '@prisma/client';
+import { EnumFieldOptional } from '../../../decorators/field.decorators';
 
 class SessionSortOrder {
   @EnumFieldOptional(() => Prisma.SortOrder)

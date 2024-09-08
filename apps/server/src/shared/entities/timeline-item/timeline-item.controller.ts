@@ -11,9 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiEndpoints } from 'src/shared/types/enums/api-endpoints';
 import { TimelineItemService } from './timeline-item.service';
-import { Auth, ApiResponseEntity } from 'src/shared/decorators';
 import { ResponseEntity, PageMetaDto } from '../common';
 import { TenancyDto } from '../tenancy';
 import {
@@ -23,6 +21,9 @@ import {
   TimelineItemQueryDto,
 } from './dto';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { ApiEndpoints } from '../../types/enums/api-endpoints';
+import { Auth } from '../../decorators/auth.decorator';
+import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 
 @ApiTags('ADMIN_TIMELINE_ITEMS')
 @Controller(ApiEndpoints.ADMIN_TIMELINE_ITEMS)

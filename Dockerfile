@@ -14,25 +14,25 @@ RUN turbo prune --scope=server --docker
 FROM base AS builder
 RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
 COPY .gitignore .gitignore
-COPY --from=setup /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=setup /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm fetch
-
-COPY --from=setup /app/out/json/ ./
-
 
 COPY --from=setup /app/out/full/ ./ 
+RUN pnpm install
 COPY turbo.json turbo.json
-
-RUN ls -al
-# RUN pnpm add -g turbo
-# RUN pnpm add -g @nestjs/cli
+ENV CACHEBUST=1
+RUN pnpm add -g turbo
+RUN pnpm add -g @nestjs/cli
 # RUN pnpm install
-# RUN pnpm run build --filter=server
+RUN ls -al
+WORKDIR /app/apps/server
+RUN pnpm prisma generate
+RUN pnpm prisma db push
+RUN pnpm run build
 
-# FROM base AS dev
-# COPY --from=builder /app/ ./
-# WORKDIR /app/apps/server
+FROM base AS dev
+COPY --from=builder /app/ ./
+WORKDIR /app/apps/server
+# RUN pnpm prisma generate
+# RUN pnpm prisma db push
 
 # FROM builder AS pruned
 # RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
@@ -43,9 +43,9 @@ RUN ls -al
 # COPY --from=pruned /app/pruned/ ./
 
 # # Don't run production as root
-# RUN addgroup --system --gid 1001 nodejs
-# RUN adduser --system --uid 1001 nodejs
-# USER nodejs
-# EXPOSE 8080
+# RUN addgroup --system --gid 0 nodejs
+# RUN adduser --system --uid 0 nodejs
+USER root
+EXPOSE 8080
 
-# CMD ["node", "./dist/server.js"]
+CMD ["node", "./dist/main"]

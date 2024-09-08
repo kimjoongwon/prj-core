@@ -3,7 +3,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateServiceDto } from './dtos/create-service.dto';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ServiceQueryDto } from './dtos';
-import { PaginationMananger } from 'src/shared/utils';
+import { PaginationMananger } from '../../utils';
 import { UpsertServiceDto } from './dtos/upsert-service.dto';
 
 @Injectable()

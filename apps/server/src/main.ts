@@ -1,9 +1,9 @@
-import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './domains/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { CustomClassSerializerInterceptor, PrismaClientExceptionFilter } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {

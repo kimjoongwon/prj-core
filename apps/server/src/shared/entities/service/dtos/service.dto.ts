@@ -1,4 +1,4 @@
-import { EnumField, StringField } from 'src/shared/decorators';
+import { EnumField, StringField } from '../../../decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Service } from '../service.entity';
 import { $Enums } from '@prisma/client';

@@ -1,26 +1,24 @@
 version: "5"
 
 services:
-  admin:
-    container_name: admin
-    build:
-      context: .
-      dockerfile: ./apps/admin/Dockerfile
-    restart: always
-    ports:
-      - 3000:3000
-    depends_on:
-      - server
-    networks:
-      - app_network
+  # admin:
+  #   container_name: admin
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/admin/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - server
+  #   networks:
+  #     - app_network
   server:
     container_name: server
     build:
       context: .
       dockerfile: ./apps/server/Dockerfile
     restart: always
-    environment:
-      - NODE_ENV=production
     env_file:
       - ./apps/server/.env
     ports:

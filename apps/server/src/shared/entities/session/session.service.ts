@@ -7,7 +7,7 @@ import { TimelineService } from '../timeline/timeline.service';
 import { CreateTimelineDto } from '../timeline/dto';
 import { PaginationMananger } from '../../utils';
 import { R } from '../../libs/remeda';
-import { IService } from 'src/shared/types';
+import { IService } from '../../types/interfaces/service.interface';
 
 @Injectable()
 export class SessionService implements IService {

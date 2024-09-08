@@ -12,7 +12,7 @@
   "devDependencies": {
     "prettier": "3.2.2",
     "tsup": "^8.0.2",
-    "turbo": "latest"
+    "prisma": "latest"
   },
   "workspaces": [
     "apps/*",

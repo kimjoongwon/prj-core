@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import { IRepository } from 'src/shared/types';
+import { IRepository } from '../../types/interfaces/repository.interface';
 
 @Injectable()
 export class SessionRepository implements IRepository {

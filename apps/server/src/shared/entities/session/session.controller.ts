@@ -11,8 +11,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth, ApiResponseEntity } from 'src/shared/decorators';
-import { ApiEndpoints } from 'src/shared/types';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
@@ -24,6 +22,9 @@ import {
   UpdateSessionDto,
   SessionQueryDto,
 } from '../session';
+import { ApiEndpoints } from '../../types/enums/api-endpoints';
+import { Auth } from '../../decorators/auth.decorator';
+import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 
 @ApiTags('ADMIN_SESSIONS')
 @Controller(ApiEndpoints.ADMIN_SESSIONS)
