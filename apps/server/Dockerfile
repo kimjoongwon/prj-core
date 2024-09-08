@@ -24,28 +24,20 @@ COPY --from=setup /app/out/json/ ./
 COPY --from=setup /app/out/full/ ./ 
 COPY turbo.json turbo.json
 
-RUN ls -al
-# RUN pnpm add -g turbo
-# RUN pnpm add -g @nestjs/cli
-# RUN pnpm install
-# RUN pnpm run build --filter=server
 
-# FROM base AS dev
-# COPY --from=builder /app/ ./
-# WORKDIR /app/apps/server
+FROM base AS dev
+COPY --from=builder /app/ ./
+WORKDIR /app/apps/server
+RUN pnpm install
+RUN pnpm prisma generate
+RUN pnpm prisma db push
+RUN pnpm run build --filter=server
 
-# FROM builder AS pruned
-# RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-#   pnpm --filter=server --prod deploy pruned --config.ignore-scripts=true
+FROM node:22-alpine AS runner
+WORKDIR /app
+COPY ./dist .
+# Don't run production as root
+USER root
+EXPOSE 8080
 
-# FROM node:22-alpine AS runner
-# WORKDIR /app
-# COPY --from=pruned /app/pruned/ ./
-
-# # Don't run production as root
-# RUN addgroup --system --gid 1001 nodejs
-# RUN adduser --system --uid 1001 nodejs
-# USER nodejs
-# EXPOSE 8080
-
-# CMD ["node", "./dist/server.js"]
+CMD ["node", "./server.js"]
