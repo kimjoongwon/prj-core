@@ -9,11 +9,6 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "turbo test"
   },
-  "devDependencies": {
-    "prettier": "3.2.2",
-    "tsup": "^8.0.2",
-    "prisma": "latest"
-  },
   "workspaces": [
     "apps/*",
     "packages/*"

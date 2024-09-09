@@ -10,9 +10,7 @@ enum Environment {
 
 const environmentVariablesValidatorSchema = z.object({
   ADMIN_EMAIL: z.string().email().optional(),
-  NODE_ENV: z
-    .enum([Environment.Development, Environment.Production, Environment.Test])
-    .optional(),
+  NODE_ENV: z.enum([Environment.Development, Environment.Production, Environment.Test]).optional(),
   APP_NAME: z.string(),
   APP_ADMIN_EMAIL: z.string().email(),
   APP_PORT: z.string().transform(Number),
@@ -27,7 +25,7 @@ export default registerAs<AppConfig>('app', () => {
   // const parsedEnv = environmentVariablesValidatorSchema.parse(process.env);
 
   const result = environmentVariablesValidatorSchema.parse(process.env);
-  console.log(result);
+
   return {
     adminEmail: result.APP_ADMIN_EMAIL,
     nodeEnv: result.NODE_ENV || 'development',

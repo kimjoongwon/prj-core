@@ -6,17 +6,7 @@ settings:
 
 importers:
 
-  .:
-    devDependencies:
-      prettier:
-        specifier: 3.2.2
-        version: 3.2.2
-      prisma:
-        specifier: latest
-        version: 5.19.1
-      tsup:
-        specifier: ^8.0.2
-        version: 8.2.2(@swc/core@1.7.1)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.5.0)
+  .: {}
 
   apps/admin:
     dependencies:
@@ -158,7 +148,7 @@ importers:
         version: 10.0.0
       '@vanilla-extract/next-plugin':
         specifier: ^2.4.3
-        version: 2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))
+        version: 2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1)
       '@vitejs/plugin-react':
         specifier: ^4.3.1
         version: 4.3.1(vite@5.3.4(@types/node@20.14.12)(terser@5.31.3))
@@ -195,9 +185,6 @@ importers:
       '@casl/prisma':
         specifier: ^1.4.1
         version: 1.4.1(@casl/ability@6.7.1)(@prisma/client@5.17.0(prisma@5.17.0))
-      '@nestjs/cli':
-        specifier: ^10.4.2
-        version: 10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))
       '@nestjs/common':
         specifier: ^10.3.10
         version: 10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -231,9 +218,18 @@ importers:
       '@prisma/client':
         specifier: 5.17.0
         version: 5.17.0(prisma@5.17.0)
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.1
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.6
@@ -273,9 +269,6 @@ importers:
       nestjs-zod:
         specifier: ^3.0.0
         version: 3.0.0(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.10(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/swagger@7.4.0(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.10(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2))(zod@3.23.8)
-      parse-duration:
-        specifier: ^1.1.0
-        version: 1.1.0
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -294,9 +287,6 @@ importers:
       pino-pretty:
         specifier: ^11.2.1
         version: 11.2.1
-      prisma:
-        specifier: ^5.17.0
-        version: 5.17.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -309,13 +299,13 @@ importers:
       ts-pattern:
         specifier: ^5.2.0
         version: 5.2.0
-      unplugin-swc:
-        specifier: ^1.5.1
-        version: 1.5.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(rollup@4.19.0)
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
     devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.4.2
+        version: 10.4.2(@swc/cli@0.4.0(@swc/core@1.7.1(@swc/helpers@0.5.12))(chokidar@3.6.0))(@swc/core@1.7.1(@swc/helpers@0.5.12))
       '@nestjs/schematics':
         specifier: ^10.1.3
         version: 10.1.3(chokidar@3.6.0)(typescript@5.5.4)
@@ -331,9 +321,6 @@ importers:
       '@types/cookie-parser':
         specifier: ^1.4.7
         version: 1.4.7
-      '@types/express':
-        specifier: ^4.17.21
-        version: 4.17.21
       '@types/node':
         specifier: 20.14.12
         version: 20.14.12
@@ -352,12 +339,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: 2.0.4
         version: 2.0.4(vitest@2.0.4(@types/node@20.14.12)(jsdom@24.1.1)(terser@5.31.3))
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: ^0.14.1
-        version: 0.14.1
       eslint:
         specifier: ^8.0.1
         version: 8.57.0
@@ -370,6 +351,9 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
+      prisma:
+        specifier: ^5.17.0
+        version: 5.17.0
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
@@ -379,6 +363,9 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
+      unplugin-swc:
+        specifier: ^1.5.1
+        version: 1.5.1(@swc/core@1.7.1(@swc/helpers@0.5.12))(rollup@4.19.0)
       vite-tsconfig-paths:
         specifier: ^4.3.2
         version: 4.3.2(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.12)(terser@5.31.3))
@@ -532,7 +519,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       tsup:
         specifier: ^8.2.2
-        version: 8.2.2(@swc/core@1.7.1)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.5.0)
+        version: 8.2.2(@swc/core@1.7.1(@swc/helpers@0.5.12))(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.5.0)
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
@@ -2364,32 +2351,17 @@ packages:
   '@prisma/debug@5.17.0':
     resolution: {integrity: sha512-l7+AteR3P8FXiYyo496zkuoiJ5r9jLQEdUuxIxNCN1ud8rdbH3GTxm+f+dCyaSv9l9WY+29L9czaVRXz9mULfg==}
 
-  '@prisma/debug@5.19.1':
-    resolution: {integrity: sha512-lAG6A6QnG2AskAukIEucYJZxxcSqKsMK74ZFVfCTOM/7UiyJQi48v6TQ47d6qKG3LbMslqOvnTX25dj/qvclGg==}
-
   '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053':
     resolution: {integrity: sha512-tUuxZZysZDcrk5oaNOdrBnnkoTtmNQPkzINFDjz7eG6vcs9AVDmA/F6K5Plsb2aQc/l5M2EnFqn3htng9FA4hg==}
-
-  '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3':
-    resolution: {integrity: sha512-xR6rt+z5LnNqTP5BBc+8+ySgf4WNMimOKXRn6xfNRDSpHvbOEmd7+qAOmzCrddEc4Cp8nFC0txU14dstjH7FXA==}
 
   '@prisma/engines@5.17.0':
     resolution: {integrity: sha512-+r+Nf+JP210Jur+/X8SIPLtz+uW9YA4QO5IXA+KcSOBe/shT47bCcRMTYCbOESw3FFYFTwe7vU6KTWHKPiwvtg==}
 
-  '@prisma/engines@5.19.1':
-    resolution: {integrity: sha512-kR/PoxZDrfUmbbXqqb8SlBBgCjvGaJYMCOe189PEYzq9rKqitQ2fvT/VJ8PDSe8tTNxhc2KzsCfCAL+Iwm/7Cg==}
-
   '@prisma/fetch-engine@5.17.0':
     resolution: {integrity: sha512-ESxiOaHuC488ilLPnrv/tM2KrPhQB5TRris/IeIV4ZvUuKeaicCl4Xj/JCQeG9IlxqOgf1cCg5h5vAzlewN91Q==}
 
-  '@prisma/fetch-engine@5.19.1':
-    resolution: {integrity: sha512-pCq74rtlOVJfn4pLmdJj+eI4P7w2dugOnnTXpRilP/6n5b2aZiA4ulJlE0ddCbTPkfHmOL9BfaRgA8o+1rfdHw==}
-
   '@prisma/get-platform@5.17.0':
     resolution: {integrity: sha512-UlDgbRozCP1rfJ5Tlkf3Cnftb6srGrEQ4Nm3og+1Se2gWmCZ0hmPIi+tQikGDUVLlvOWx3Gyi9LzgRP+HTXV9w==}
-
-  '@prisma/get-platform@5.19.1':
-    resolution: {integrity: sha512-sCeoJ+7yt0UjnR+AXZL7vXlg5eNxaFOwC23h0KvW1YIXUoa7+W2ZcAUhoEQBmJTW4GrFqCuZ8YSP0mkDa4k3Zg==}
 
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -6268,9 +6240,6 @@ packages:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
 
-  parse-duration@1.1.0:
-    resolution: {integrity: sha512-z6t9dvSJYaPoQq7quMzdEagSFtpGu+utzHqqxmpVWNNZRIXnvqyCvn9XsTdh7c/w0Bqmdz3RB3YnRaKtpRtEXQ==}
-
   parse-json@5.2.0:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
@@ -6485,11 +6454,6 @@ packages:
     resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
     engines: {node: '>=6.0.0'}
 
-  prettier@3.2.2:
-    resolution: {integrity: sha512-HTByuKZzw7utPiDO523Tt2pLtEyK7OibUD9suEJQrPUCYQqrHr74GGX6VidMrovbf/I50mPqr8j/II6oBAuc5A==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.3.3:
     resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
     engines: {node: '>=14'}
@@ -6501,11 +6465,6 @@ packages:
 
   prisma@5.17.0:
     resolution: {integrity: sha512-m4UWkN5lBE6yevqeOxEvmepnL5cNPEjzMw2IqDB59AcEV6w7D8vGljDLd1gPFH+W6gUxw9x7/RmN5dCS/WTPxA==}
-    engines: {node: '>=16.13'}
-    hasBin: true
-
-  prisma@5.19.1:
-    resolution: {integrity: sha512-c5K9MiDaa+VAAyh1OiYk76PXOme9s3E992D7kvvIOhCrNsBQfy2mP2QAQtX0WNj140IgG++12kwZpYB9iIydNQ==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -10241,11 +10200,7 @@ snapshots:
 
   '@prisma/debug@5.17.0': {}
 
-  '@prisma/debug@5.19.1': {}
-
   '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053': {}
-
-  '@prisma/engines-version@5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3': {}
 
   '@prisma/engines@5.17.0':
     dependencies:
@@ -10254,32 +10209,15 @@ snapshots:
       '@prisma/fetch-engine': 5.17.0
       '@prisma/get-platform': 5.17.0
 
-  '@prisma/engines@5.19.1':
-    dependencies:
-      '@prisma/debug': 5.19.1
-      '@prisma/engines-version': 5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3
-      '@prisma/fetch-engine': 5.19.1
-      '@prisma/get-platform': 5.19.1
-
   '@prisma/fetch-engine@5.17.0':
     dependencies:
       '@prisma/debug': 5.17.0
       '@prisma/engines-version': 5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053
       '@prisma/get-platform': 5.17.0
 
-  '@prisma/fetch-engine@5.19.1':
-    dependencies:
-      '@prisma/debug': 5.19.1
-      '@prisma/engines-version': 5.19.1-2.69d742ee20b815d88e17e54db4a2a7a3b30324e3
-      '@prisma/get-platform': 5.19.1
-
   '@prisma/get-platform@5.17.0':
     dependencies:
       '@prisma/debug': 5.17.0
-
-  '@prisma/get-platform@5.19.1':
-    dependencies:
-      '@prisma/debug': 5.19.1
 
   '@protobufjs/aspromise@1.1.2': {}
 
@@ -11997,9 +11935,9 @@ snapshots:
       - supports-color
       - terser
 
-  '@vanilla-extract/next-plugin@2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))':
+  '@vanilla-extract/next-plugin@2.4.3(@types/node@20.14.12)(next@14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(terser@5.31.3)(webpack@5.92.1)':
     dependencies:
-      '@vanilla-extract/webpack-plugin': 2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))
+      '@vanilla-extract/webpack-plugin': 2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1)
       next: 14.2.5(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     transitivePeerDependencies:
       - '@types/node'
@@ -12015,13 +11953,13 @@ snapshots:
 
   '@vanilla-extract/private@1.0.5': {}
 
-  '@vanilla-extract/webpack-plugin@2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1(@swc/core@1.7.1))':
+  '@vanilla-extract/webpack-plugin@2.3.11(@types/node@20.14.12)(terser@5.31.3)(webpack@5.92.1)':
     dependencies:
       '@vanilla-extract/integration': 7.1.7(@types/node@20.14.12)(terser@5.31.3)
       debug: 4.3.5
       loader-utils: 2.0.4
       picocolors: 1.0.1
-      webpack: 5.92.1(@swc/core@1.7.1)
+      webpack: 5.92.1
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -14986,8 +14924,6 @@ snapshots:
     dependencies:
       callsites: 3.1.0
 
-  parse-duration@1.1.0: {}
-
   parse-json@5.2.0:
     dependencies:
       '@babel/code-frame': 7.24.7
@@ -15188,8 +15124,6 @@ snapshots:
     dependencies:
       fast-diff: 1.3.0
 
-  prettier@3.2.2: {}
-
   prettier@3.3.3: {}
 
   pretty-format@27.5.1:
@@ -15201,12 +15135,6 @@ snapshots:
   prisma@5.17.0:
     dependencies:
       '@prisma/engines': 5.17.0
-
-  prisma@5.19.1:
-    dependencies:
-      '@prisma/engines': 5.19.1
-    optionalDependencies:
-      fsevents: 2.3.3
 
   process-nextick-args@2.0.1: {}
 
@@ -16034,16 +15962,14 @@ snapshots:
     optionalDependencies:
       '@swc/core': 1.7.1(@swc/helpers@0.5.12)
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.7.1)(webpack@5.92.1(@swc/core@1.7.1)):
+  terser-webpack-plugin@5.3.10(webpack@5.92.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
       terser: 5.31.3
-      webpack: 5.92.1(@swc/core@1.7.1)
-    optionalDependencies:
-      '@swc/core': 1.7.1(@swc/helpers@0.5.12)
+      webpack: 5.92.1
 
   terser@5.31.3:
     dependencies:
@@ -16164,7 +16090,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.2.2(@swc/core@1.7.1)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.5.0):
+  tsup@8.2.2(@swc/core@1.7.1(@swc/helpers@0.5.12))(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.5.0):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -16490,6 +16416,37 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
+  webpack@5.92.1:
+    dependencies:
+      '@types/eslint-scope': 3.7.7
+      '@types/estree': 1.0.5
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/wasm-edit': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
+      acorn: 8.12.1
+      acorn-import-attributes: 1.9.5(acorn@8.12.1)
+      browserslist: 4.23.2
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.17.1
+      es-module-lexer: 1.5.4
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.10(webpack@5.92.1)
+      watchpack: 2.4.1
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+
   webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12)):
     dependencies:
       '@types/eslint-scope': 3.7.7
@@ -16514,37 +16471,6 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.2.1
       terser-webpack-plugin: 5.3.10(@swc/core@1.7.1(@swc/helpers@0.5.12))(webpack@5.92.1(@swc/core@1.7.1(@swc/helpers@0.5.12)))
-      watchpack: 2.4.1
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
-  webpack@5.92.1(@swc/core@1.7.1):
-    dependencies:
-      '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.5
-      '@webassemblyjs/ast': 1.12.1
-      '@webassemblyjs/wasm-edit': 1.12.1
-      '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.12.1
-      acorn-import-attributes: 1.9.5(acorn@8.12.1)
-      browserslist: 4.23.2
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.17.1
-      es-module-lexer: 1.5.4
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.7.1)(webpack@5.92.1(@swc/core@1.7.1))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:

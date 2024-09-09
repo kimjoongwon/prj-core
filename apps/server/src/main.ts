@@ -15,6 +15,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 
+  console.log('hi?');
   const config = new DocumentBuilder()
     .setVersion('1.0.0')
     .setTitle('PROMISE Server')

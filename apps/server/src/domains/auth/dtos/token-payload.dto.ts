@@ -1,9 +1,8 @@
-import { createZodDto } from 'nestjs-zod';
-import { z } from 'nestjs-zod/z';
+import { NumberField, StringField } from '@shared';
 
-export const TokenPayloadSchema = z.object({
-  expiresIn: z.number(),
-  accessToken: z.string(),
-});
-
-export class TokenPayloadDto extends createZodDto(TokenPayloadSchema) {}
+export class TokenPayloadDto {
+  @NumberField()
+  expiresIn: number;
+  @StringField()
+  accessToken: string;
+}
