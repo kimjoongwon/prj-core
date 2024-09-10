@@ -1,12 +1,3 @@
-model Template {
-  id          String        @id @default(uuid())
-  name        TemplateNames @default(WELCOME)
-  htmlContent String
-  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?     @db.Timestamptz(6)
-}
-
 model SMS {
   id         String    @id @default(uuid())
   toUserIds  String[]
@@ -30,15 +21,6 @@ model Email {
   removedAt  DateTime?   @db.Timestamptz(6)
 }
 
-enum TemplateNames {
-  WELCOME
-  RESET_PASSWORD
-  INVITATION
-  INVITATION_ACCEPTED
-  INVITATION_REJECTED
-  INVITATION_EXPIRED
-  INVITATION_REMINDER
-}
 
 enum EmailStatus {
   PROGRESS

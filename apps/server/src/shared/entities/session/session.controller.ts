@@ -66,10 +66,7 @@ export class SessionController {
     @Param('sessionId') sessionId: string,
     @Body() updateSessionDto: UpdateSessionDto,
   ) {
-    const session = await this.sessionService.update({
-      id: sessionId,
-      ...updateSessionDto,
-    });
+    const session = await this.sessionService.update(sessionId, updateSessionDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
   }
 

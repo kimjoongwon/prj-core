@@ -18,9 +18,9 @@ export class SpaceService implements IService {
     return this.tenancyService.create(createSpaceDto);
   }
 
-  update(updateSpaceDto: UpdateSpaceDto) {
+  update(spaceId: string, updateSpaceDto: UpdateSpaceDto) {
     return this.repository.update({
-      where: { id: updateSpaceDto.id },
+      where: { id: spaceId },
       data: updateSpaceDto,
     });
   }
