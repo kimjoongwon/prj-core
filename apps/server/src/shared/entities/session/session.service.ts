@@ -63,9 +63,8 @@ export class SessionService implements IService {
 
     const createTimelineDtos: CreateTimelineDto[] = updateSessionDto.timelineDates.map(
       (timelineDate) => ({
+        name: 'Timeline',
         tenantId: 'hihih',
-        timelineItemId: null,
-        date: timelineDate,
         sessionId,
       }),
     );

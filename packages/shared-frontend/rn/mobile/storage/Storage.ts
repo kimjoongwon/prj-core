@@ -1,4 +1,4 @@
-import {Serializerable} from '../../model/bridge/Serializerable';
+import { Serializerable } from '../../model/bridge/Serializerable';
 import {
   MultiFactor,
   StorageKeys,
@@ -6,10 +6,10 @@ import {
   WVEventHandler,
 } from '@model';
 import WebView from 'react-native-webview';
-import {RefObject} from 'react';
-import {MMKV} from 'react-native-mmkv';
-import {isJSONString} from '@utils';
-import {end} from 'src/components/ui/webview/injectedJavascripts';
+import { RefObject } from 'react';
+import { MMKV } from 'react-native-mmkv';
+import { isJSONString } from '@utils';
+import { end } from 'src/components/ui/webview/injectedJavascripts';
 export const storageKeys = [
   'aosAccessAuth',
   'iosAccessAuth',
@@ -137,7 +137,6 @@ export class Storage extends Serializerable implements WVEventHandler {
   async syncLocalStorageFromRNStorage() {
     const injectedLocalStroage = await this.init();
     if (this.webviewRef && this.webviewRef.current) {
-      console.log('동기화!');
       this.webviewRef.current.injectJavaScript(injectedLocalStroage + end);
     }
 

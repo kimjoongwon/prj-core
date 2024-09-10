@@ -4,19 +4,17 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionEndTypes } from './sessionEndTypes';
 import type { RecurringDayOfTheWeek } from './recurringDayOfTheWeek';
 import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { TimelineDto } from './timelineDto';
 import type { SessionTypes } from './sessionTypes';
 
 export interface SessionDto {
+  /** @nullable */
+  baseDate: string | null;
   createdAt: string;
   /** @nullable */
-  endAfterOccurrences: number | null;
-  /** @nullable */
-  endOnDate: string | null;
-  endType: SessionEndTypes;
+  endDate: string | null;
   id: string;
   name: string;
   recurringDayOfTheWeek: RecurringDayOfTheWeek[];

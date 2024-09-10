@@ -8,7 +8,6 @@ import type { SortOrder } from './sortOrder';
 import type { SessionTypes } from './sessionTypes';
 import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { RecurringDayOfTheWeek } from './recurringDayOfTheWeek';
-import type { SessionEndTypes } from './sessionEndTypes';
 
 export type GetSessionsByQueryParams = {
 tenantId?: string;
@@ -18,9 +17,8 @@ type?: SessionTypes;
 repeatCycle?: number;
 repeatCycleType?: RepeatCycleTypes;
 recurringDayOfTheWeek?: RecurringDayOfTheWeek[];
-endType?: SessionEndTypes;
-endOnDate?: string | null;
-endAfterOccurrences?: number | null;
+endDate?: string | null;
+baseDate?: string | null;
 timelineDates?: string[];
 oneTimeDate?: string;
 id?: string;

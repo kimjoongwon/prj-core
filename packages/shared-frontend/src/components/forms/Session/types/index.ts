@@ -1,8 +1,12 @@
-import { CreateSessionDto } from '../../../../model/createSessionDto';
-import { UpdateSessionDto } from '../../../../model/updateSessionDto';
+import { UpdateSessionDto } from '../../../../model';
 
 export interface SessionFormProps extends SessionFormViewProps {}
 
 export interface SessionFormViewProps {
-  state: CreateSessionDto | UpdateSessionDto;
+  state: UpdateSessionDto & {
+    rangeMode: boolean;
+    oneTImeDate: string | undefined;
+    oneTimeStartDate: string | undefined;
+    oneTimeEndDate: string | undefined;
+  };
 }

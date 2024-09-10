@@ -18,9 +18,8 @@ model Session {
   tenantId              String
   createdAt             DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-  endAfterOccurrences   Int?                    @default(0)
-  endOnDate             DateTime?               @db.Date
-  endType               SessionEndTypes         @default(NEVER)
+  baseDate              DateTime                @db.Date
+  endDate               DateTime?               @db.Date
   recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
   removedAt             DateTime?               @db.Timestamptz(6)
   repeatCycle           Int                     @default(1)
@@ -30,21 +29,20 @@ model Session {
 }
 
 model Timeline {
-  id             String         @id @default(uuid())
-  sessionId      String
-  date           DateTime       @db.Date
-  createdAt      DateTime       @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?      @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?      @db.Timestamptz(6)
-  tenantId       String
-  timelineItemId String?
-  session        Session        @relation(fields: [sessionId], references: [id])
-  timelineItems  TimelineItem[]
+  id            String         @id @default(uuid())
+  name          String
+  sessionId     String
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+  removedAt     DateTime?      @db.Timestamptz(6)
+  tenantId      String
+  session       Session        @relation(fields: [sessionId], references: [id])
+  timelineItems TimelineItem[]
 }
 
 model TimelineItem {
   id            String       @id @default(uuid())
-  timelineId    String?
+  timelineId    String
   title         String
   startDateTime DateTime     @db.Timestamptz(6)
   endDateTime   DateTime     @db.Timestamptz(6)

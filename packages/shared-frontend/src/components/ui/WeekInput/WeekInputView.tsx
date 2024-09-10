@@ -60,7 +60,7 @@ export const WeekInputView = (props: WeekInputViewProps) => {
       <HStack className="space-x-2">
         {dayOptions.map(day => {
           return (
-            <Chip key={day.value} onChange={() => onChange(day.value)}>
+            <Chip onClick={() => onChange(day.value)} key={day.value}>
               {day.text}
             </Chip>
           );

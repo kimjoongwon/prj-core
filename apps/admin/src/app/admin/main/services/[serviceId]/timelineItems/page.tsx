@@ -12,8 +12,6 @@ const TimelineItemsPage = async () => {
     },
   );
 
-  console.log('timelineItemsQuery', timelineItemsQuery);
-
   return <TimelineItemsTable timelineItems={timelineItemsQuery.data || []} />;
 };
 

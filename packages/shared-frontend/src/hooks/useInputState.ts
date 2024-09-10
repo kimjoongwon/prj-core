@@ -8,7 +8,7 @@ import { get, set } from 'lodash-es';
 interface InputState<S, V> {
   extendState?: S;
   defaultValue: V;
-  state: object;
+  state: S;
   path: any;
 }
 

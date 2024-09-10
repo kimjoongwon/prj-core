@@ -10,7 +10,6 @@ test('actionManager', () => {
     },
     () => ['test'],
   );
-  console.log(result);
 
   expect(result).toBe('test?skip=0&take=10');
 });

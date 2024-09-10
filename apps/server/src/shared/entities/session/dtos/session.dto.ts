@@ -3,6 +3,7 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Session } from '../session.entity';
 import {
   ClassField,
+  DateField,
   EnumField,
   NumberField,
   StringField,
@@ -32,14 +33,11 @@ export class SessionDto extends AbstractDto implements Session {
   @EnumField(() => $Enums.RecurringDayOfTheWeek, { each: true })
   recurringDayOfTheWeek: $Enums.RecurringDayOfTheWeek[];
 
-  @EnumField(() => $Enums.SessionEndTypes)
-  endType: $Enums.SessionEndTypes;
+  @DateField({ nullable: true })
+  endDate: Date | null;
 
-  @StringField({ nullable: true })
-  endOnDate: Date | null;
-
-  @NumberField({ nullable: true })
-  endAfterOccurrences: number | null;
+  @DateField({ nullable: true })
+  baseDate: Date | null;
 
   @ClassField(() => TimelineDto, { isArray: true, nullable: true, each: true })
   timelines: TimelineDto[] | null;
