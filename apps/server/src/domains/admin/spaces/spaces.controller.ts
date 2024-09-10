@@ -64,7 +64,7 @@ export class SpacesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async updateSpace(@Param('spaceId') spaceId: string, @Body() updateSpaceDto: UpdateSpaceDto) {
-    const space = await this.spaceService.update({ id: spaceId, ...updateSpaceDto });
+    const space = await this.spaceService.update(spaceId, updateSpaceDto);
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
 

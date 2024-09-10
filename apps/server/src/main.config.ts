@@ -27,8 +27,10 @@ import {
   TimelineItemsModule,
 } from './domains/admin';
 import { JwtModule } from '@nestjs/jwt';
+import { TemplatesModule } from './domains/admin/templates/templates.module';
 
 export const adminModules = [
+  TemplatesModule,
   TimelineItemsModule,
   AbilitiesModule,
   CategoriesModule,

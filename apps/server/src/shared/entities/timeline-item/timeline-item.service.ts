@@ -14,9 +14,9 @@ export class TimelineItemService implements IService {
     return this.repository.create({ data: { ...createTimelineItemDto } });
   }
 
-  update(updateTimelineItemDto: UpdateTimelineItemDto) {
+  update(timelineItemId: string, updateTimelineItemDto: UpdateTimelineItemDto) {
     return this.repository.update({
-      where: { id: updateTimelineItemDto.id },
+      where: { id: timelineItemId },
       data: updateTimelineItemDto,
     });
   }

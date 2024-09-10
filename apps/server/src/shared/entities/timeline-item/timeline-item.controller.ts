@@ -69,10 +69,10 @@ export class TimelineItemController {
     @Param('timelineItemId') timelineItemId: string,
     @Body() updateTimelineItemDto: UpdateTimelineItemDto,
   ) {
-    const timelineItem = await this.timelineItemService.update({
-      id: timelineItemId,
-      ...updateTimelineItemDto,
-    });
+    const timelineItem = await this.timelineItemService.update(
+      timelineItemId,
+      updateTimelineItemDto,
+    );
     return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
   }
 

@@ -15,5 +15,6 @@ export enum ApiEndpoints {
   ADMIN_SESSIONS = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/sessions`,
   ADMIN_TIMELINES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/timelines`,
   ADMIN_TIMELINE_ITEMS = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/timeline-items`,
+  ADMIN_TEMPLATES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/templates`,
   AUTH = `${ApiEndpoints.PREFIX}/auth`,
 }

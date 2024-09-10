@@ -55,8 +55,7 @@ export class SessionService implements IService {
     };
   }
 
-  async update(updateSessionDto: UpdateSessionDto) {
-    const { id: sessionId } = updateSessionDto;
+  async update(sessionId: string, updateSessionDto: UpdateSessionDto) {
     const timelines = await this.timelineService.getManyById(sessionId);
     const timelineIds = timelines.map((timeline) => timeline.id);
     await this.timelineService.removeManyByIds(timelineIds);
