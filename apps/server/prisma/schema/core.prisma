@@ -1,0 +1,398 @@
+model Category {
+    id              String           @id @default(uuid())
+    name            String           @unique
+    ancestorIds     String[]
+    parentId        String?
+    spaceId         String
+    serviceId       String
+    createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+    updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+    removedAt       DateTime?        @db.Timestamptz(6)
+    classifications Classification[]
+}
+
+model Service {
+    id              String           @id @default(uuid())
+    name            SERVICE_NAME     @unique
+    label           String?
+    createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+    updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+    removedAt       DateTime?        @db.Timestamptz(6)
+    assignments     Assignment[]
+    classifications Classification[]
+    groups          Group[]
+    template        Template[]
+}
+
+model Classification {
+    id            String    @id @default(uuid())
+    serviceId     String
+    serviceItemId String
+    categoryId    String
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt     DateTime? @db.Timestamptz(6)
+    category      Category  @relation(fields: [categoryId], references: [id])
+    service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+model Group {
+    id          String       @id @default(uuid())
+    name        String
+    spaceId     String
+    serviceId   String
+    createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+    updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+    removedAt   DateTime?    @db.Timestamptz(6)
+    assignments Assignment[]
+    service     Service      @relation(fields: [serviceId], references: [id])
+    space       Space        @relation(fields: [spaceId], references: [id])
+}
+
+model Assignment {
+    id            String    @id @default(uuid())
+    groupId       String
+    serviceId     String
+    serviceItemId String
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt     DateTime? @db.Timestamptz(6)
+    group         Group     @relation(fields: [groupId], references: [id])
+    service       Service   @relation(fields: [serviceId], references: [id])
+}
+
+enum SERVICE_NAME {
+    USER
+    RESERVATION
+    SPACE
+}
+
+model Tenancy {
+    id        String    @id @default(uuid())
+    spaceId   String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    space     Space     @relation(fields: [spaceId], references: [id])
+    tenants   Tenant[]
+}
+
+model Profile {
+    id        String    @id @default(uuid())
+    nickname  String
+    userId    String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    user      User      @relation(fields: [userId], references: [id])
+}
+
+model User {
+    id        String    @id @default(uuid())
+    email     String    @unique
+    name      String    @unique
+    phone     String    @unique
+    password  String
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    createdAt DateTime  @default(now()) @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    profiles  Profile?
+    tenants   Tenant[]
+    Post      Post[]
+}
+
+model Tenant {
+    id        String      @id @default(uuid())
+    userId    String      @unique
+    roleId    String
+    createdAt DateTime    @default(now())
+    updatedAt DateTime?   @updatedAt @db.Timestamptz(6)
+    active    Boolean     @default(false)
+    removedAt DateTime?   @db.Timestamptz(6)
+    tenancyId String
+    type      TenantTypes @default(PHYSICAL)
+    role      Role        @relation(fields: [roleId], references: [id])
+    tenancy   Tenancy     @relation(fields: [tenancyId], references: [id])
+    user      User        @relation(fields: [userId], references: [id])
+}
+
+model Space {
+    id        String    @id @default(uuid())
+    name      String    @unique
+    createdAt DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    groups    Group[]
+    tenancies Tenancy?
+}
+
+enum TenantTypes {
+    PHYSICAL
+    ABSTRACT
+}
+
+model SMS {
+    id         String    @id @default(uuid())
+    toUserIds  String[]
+    fromUserId String?
+    status     SMSStatus @default(PROGRESS)
+    sentAt     DateTime?
+    createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt  DateTime? @db.Timestamptz(6)
+}
+
+model Email {
+    id         String      @id @default(uuid())
+    title      String
+    toUserIds  String[]
+    fromUserId String?
+    status     EmailStatus @default(PROGRESS)
+    sentAt     DateTime?
+    createdAt  DateTime    @default(now()) @db.Timestamptz(6)
+    updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
+    removedAt  DateTime?   @db.Timestamptz(6)
+}
+
+enum EmailStatus {
+    PROGRESS
+    PENDING
+    SENT
+    FAILED
+}
+
+enum SMSStatus {
+    PROGRESS
+    PENDING
+    SENT
+    FAILED
+}
+
+model Reservation {
+    id             String            @id @default(uuid())
+    timelineItemId String            @unique
+    createdAt      DateTime          @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
+    removedAt      DateTime?         @db.Timestamptz(6)
+    tenantId       String
+    userId         String            @unique
+    status         ReservationStatus @default(CONFIRMED)
+    timelineItem   TimelineItem      @relation(fields: [timelineItemId], references: [id])
+
+    @@unique([userId, timelineItemId])
+}
+
+model Session {
+    id                    String                  @id @default(uuid())
+    name                  String
+    tenantId              String
+    createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+    updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
+    baseDate              DateTime                @db.Date
+    endDate               DateTime?               @db.Date
+    recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+    removedAt             DateTime?               @db.Timestamptz(6)
+    repeatCycle           Int                     @default(1)
+    repeatCycleType       RepeatCycleTypes        @default(DAY)
+    type                  SessionTypes            @default(ONE_TIME)
+    timelines             Timeline[]
+}
+
+model Timeline {
+    id            String         @id @default(uuid())
+    name          String
+    sessionId     String
+    createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+    updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
+    removedAt     DateTime?      @db.Timestamptz(6)
+    tenantId      String
+    session       Session        @relation(fields: [sessionId], references: [id])
+    timelineItems TimelineItem[]
+}
+
+model TimelineItem {
+    id            String       @id @default(uuid())
+    timelineId    String
+    title         String
+    startDateTime DateTime     @db.Timestamptz(6)
+    endDateTime   DateTime     @db.Timestamptz(6)
+    description   String
+    address       String?
+    maxCapacity   Int
+    minCapacity   Int
+    createdAt     DateTime     @default(now()) @db.Timestamptz(6)
+    updatedAt     DateTime?    @updatedAt @db.Timestamptz(6)
+    removedAt     DateTime?    @db.Timestamptz(6)
+    tenantId      String
+    reservations  Reservation?
+    timeline      Timeline?    @relation(fields: [timelineId], references: [id])
+}
+
+enum ReservationStatus {
+    PENDING
+    CONFIRMED
+    CANCELLED
+}
+
+enum SessionTypes {
+    ONE_TIME
+    RECURRING
+}
+
+enum RepeatCycleTypes {
+    DAY
+    WEEK
+    MONTH
+    YEAR
+}
+
+enum SessionEndTypes {
+    NEVER
+    ON_DATE
+    AFTER_OCCURRENCES
+}
+
+enum RecurringDayOfTheWeek {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}
+
+model Role {
+    id        String    @id @default(uuid())
+    name      Roles     @unique @default(USER)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    abilities Ability[]
+    tenant    Tenant[]
+}
+
+model Subject {
+    id        String    @id @default(uuid())
+    name      String    @unique
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    abilities Ability[]
+}
+
+model Ability {
+    id          String         @id @default(uuid())
+    type        AbilityTypes
+    roleId      String
+    action      AbilityActions
+    subjectId   String
+    description String?
+    conditions  Json?
+    createdAt   DateTime       @default(now()) @db.Timestamptz(6)
+    updatedAt   DateTime?      @updatedAt @db.Timestamptz(6)
+    removedAt   DateTime?      @db.Timestamptz(6)
+    role        Role           @relation(fields: [roleId], references: [id])
+    subject     Subject        @relation(fields: [subjectId], references: [id])
+}
+
+enum AbilityActions {
+    CREATE
+    READ
+    UPDATE
+    DELETE
+    ACCESS
+}
+
+enum AbilityTypes {
+    CAN
+    CAN_NOT
+}
+
+enum Roles {
+    USER
+    SUPER_ADMIN
+}
+
+enum TemplateNames {
+    WELCOME
+    RESET_PASSWORD
+    INVITATION
+    INVITATION_ACCEPTED
+    INVITATION_REJECTED
+    INVITATION_EXPIRED
+    INVITATION_REMINDER
+}
+
+model Template {
+    id        String        @id @default(uuid())
+    name      TemplateNames @unique @default(WELCOME)
+    keys      String[]
+    postId    String
+    serviceId String
+    createdAt DateTime      @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime?     @updatedAt @db.Timestamptz(6)
+    removedAt DateTime?     @db.Timestamptz(6)
+    post      Post          @relation(fields: [postId], references: [id])
+    service   Service       @relation(fields: [serviceId], references: [id])
+}
+
+enum QnaStatus {
+    OPEN
+    CLOSED
+}
+
+model Qna {
+    id        String     @id @default(uuid())
+    status    QnaStatus  @default(OPEN)
+    createdAt DateTime   @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+    removedAt DateTime?  @db.Timestamptz(6)
+    question  Question[]
+}
+
+model Question {
+    id        String    @id @default(uuid())
+    postId    String
+    qnaId     String
+    serviceId String
+    createdAt DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+    answers   Answer[]
+    post      Post      @relation(fields: [postId], references: [id])
+    qna       Qna       @relation(fields: [qnaId], references: [id])
+}
+
+model Answer {
+    id         String    @id @default(uuid())
+    questionId String
+    postId     String
+    serviceId  String
+    createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt  DateTime? @db.Timestamptz(6)
+    question   Question  @relation(fields: [questionId], references: [id])
+    post       Post      @relation(fields: [postId], references: [id])
+}
+
+enum PostTypes {
+    HTML
+    TEXT
+}
+
+model Post {
+    id        String     @id @default(uuid())
+    type      PostTypes  @default(TEXT)
+    title     String?
+    content   String
+    authorId  String
+    serviceId String
+    createdAt DateTime   @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+    removedAt DateTime?  @db.Timestamptz(6)
+    author    User       @relation(fields: [authorId], references: [id])
+    questions Question[]
+    answers   Answer[]
+    Template  Template[]
+}

@@ -39,6 +39,16 @@ export const ADMIN_SERVICE_SESSION_PATH =
 export const ADMIN_SERVICE_SESSION_EDIT_PATH =
   `${ADMIN_SERVICE_PATH}/sessions/:sessionId/edit` as const;
 //
+// 템플릿 관리
+export const ADMIN_SERVICE_TEMPLATES_PATH =
+  `${ADMIN_SERVICE_PATH}/templates` as const;
+
+export const ADMIN_SERVICE_TEMPLATE_PATH =
+  `${ADMIN_SERVICE_PATH}/templates/:templateId` as const;
+
+export const ADMIN_SERVICE_TEMPLATE_EDIT_PATH =
+  `${ADMIN_SERVICE_PATH}/templates/:templateId/edit` as const;
+//
 export const ADMIN_USER_CATEGORIES_PATH =
   `${ADMIN_SERVICE_PATH}/categories` as const;
 
@@ -81,5 +91,9 @@ export type Paths =
   | typeof ADMIN_SERVICE_SESSIONS_PATH
   | typeof ADMIN_SERVICE_SESSION_PATH
   | typeof ADMIN_SERVICE_SESSION_EDIT_PATH
+  // 템플릿
+  | typeof ADMIN_SERVICE_TEMPLATES_PATH
+  | typeof ADMIN_SERVICE_TEMPLATE_PATH
+  | typeof ADMIN_SERVICE_TEMPLATE_EDIT_PATH
   //
   | typeof ADMIN_USER_CATEGORY_EDIT_PATH;

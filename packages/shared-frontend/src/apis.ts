@@ -32,11 +32,13 @@ import type {
   CreateSessionDto,
   CreateSpaceDto,
   CreateSubjectDto,
+  CreateTemplateDto,
   CreateTimelineItemDto,
   GetAbilitiesByQueryParams,
   GetGroupsByQueryParams,
   GetSessionsByQueryParams,
   GetSpacesByQueryParams,
+  GetTemplatesByQueryParams,
   GetTimelineItemsByQueryParams,
   LoginPayloadDto,
   RemoveManySpaceDto,
@@ -47,6 +49,7 @@ import type {
   UpdateSessionDto,
   UpdateSpaceDto,
   UpdateSubjectDto,
+  UpdateTemplateDto,
   UpdateTimelineItemDto
 } from './model'
 import {
@@ -66,6 +69,7 @@ import {
   Roles,
   ServiceName,
   SessionTypes,
+  TemplateNames,
   TenantTypes
 } from './model'
 import type {
@@ -74,12 +78,14 @@ import type {
   CreateService201AllOf,
   CreateSession200AllOf,
   CreateSpace200AllOf,
+  CreateTemplate200AllOf,
   CreateTimelineItem200AllOf,
   DeleteAbility200AllOf,
   DeleteGroup200AllOf,
   DeleteService200AllOf,
   DeleteSession200AllOf,
   DeleteSpace200AllOf,
+  DeleteTemplate200AllOf,
   DeleteTimelineItem200AllOf,
   FindCategoryById200AllOf,
   GetAbilitiesByQuery200AllOf,
@@ -96,6 +102,8 @@ import type {
   GetSpacesByQuery200AllOf,
   GetSubjectById200AllOf,
   GetSubjectsByPageQuery200AllOf,
+  GetTemplate200AllOf,
+  GetTemplatesByQuery200AllOf,
   GetTimelineItem200AllOf,
   GetTimelineItemsByQuery200AllOf,
   GetToken200AllOf,
@@ -109,6 +117,8 @@ import type {
   RemoveSessions200AllOf,
   RemoveSpace200AllOf,
   RemoveSpaces200AllOf,
+  RemoveTemplate200AllOf,
+  RemoveTemplates200AllOf,
   RemoveTimelineItem200AllOf,
   RemoveTimelineItems200AllOf,
   TokenDto,
@@ -118,6 +128,7 @@ import type {
   UpdateSession200AllOf,
   UpdateSpace200AllOf,
   UpdateSubjectById200AllOf,
+  UpdateTemplate200AllOf,
   UpdateTimelineItem200AllOf,
   UserDto
 } from './model'
@@ -129,6 +140,524 @@ import type { ErrorType, BodyType } from './libs/customAxios';
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
 
+export const createTemplate = (
+    createTemplateDto: BodyType<CreateTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateTemplate200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTemplateDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTemplate>>, {data: BodyType<CreateTemplateDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createTemplate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof createTemplate>>>
+    export type CreateTemplateMutationBody = BodyType<CreateTemplateDto>
+    export type CreateTemplateMutationError = ErrorType<void>
+
+    export const useCreateTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createTemplate>>,
+        TError,
+        {data: BodyType<CreateTemplateDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getTemplatesByQuery = (
+    params?: GetTemplatesByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTemplatesByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetTemplatesByQueryQueryKey = (params?: GetTemplatesByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/templates`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetTemplatesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplatesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
+export type GetTemplatesByQueryQueryError = ErrorType<void>
+
+export const useGetTemplatesByQuery = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplatesByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetTemplatesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplatesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
+export type GetTemplatesByQuerySuspenseQueryError = ErrorType<void>
+
+export const useGetTemplatesByQuerySuspense = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplatesByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetTemplatesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplatesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
+export type GetTemplatesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetTemplatesByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplatesByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getTemplate = (
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetTemplate200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetTemplateQueryKey = (templateId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/templates/${templateId}`] as const;
+    }
+
+    
+export const getGetTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateQueryError = ErrorType<void>
+
+export const useGetTemplate = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplateQueryOptions(templateId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetTemplateSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplateSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseQueryError = ErrorType<void>
+
+export const useGetTemplateSuspense = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplateSuspenseQueryOptions(templateId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetTemplateSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
+export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetTemplateSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
+ templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateTemplate = (
+    templateId: string,
+    updateTemplateDto: BodyType<UpdateTemplateDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateTemplate200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTemplateDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTemplate>>, {templateId: string;data: BodyType<UpdateTemplateDto>}> = (props) => {
+          const {templateId,data} = props ?? {};
+
+          return  updateTemplate(templateId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof updateTemplate>>>
+    export type UpdateTemplateMutationBody = BodyType<UpdateTemplateDto>
+    export type UpdateTemplateMutationError = ErrorType<void>
+
+    export const useUpdateTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateTemplate>>,
+        TError,
+        {templateId: string;data: BodyType<UpdateTemplateDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteTemplate = (
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteTemplate200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTemplate>>, {templateId: string}> = (props) => {
+          const {templateId} = props ?? {};
+
+          return  deleteTemplate(templateId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTemplate>>>
+    
+    export type DeleteTemplateMutationError = ErrorType<void>
+
+    export const useDeleteTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteTemplate>>,
+        TError,
+        {templateId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeTemplates = (
+    removeTemplatesBody: BodyType<string[]>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveTemplates200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removeTemplatesBody
+    },
+      options);
+    }
+  
+
+
+export const getRemoveTemplatesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTemplates>>, {data: BodyType<string[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeTemplates(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveTemplatesMutationResult = NonNullable<Awaited<ReturnType<typeof removeTemplates>>>
+    export type RemoveTemplatesMutationBody = BodyType<string[]>
+    export type RemoveTemplatesMutationError = ErrorType<void>
+
+    export const useRemoveTemplates = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeTemplates>>,
+        TError,
+        {data: BodyType<string[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveTemplatesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeTemplate = (
+    templateId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveTemplate200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveTemplateMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTemplate>>, {templateId: string}> = (props) => {
+          const {templateId} = props ?? {};
+
+          return  removeTemplate(templateId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof removeTemplate>>>
+    
+    export type RemoveTemplateMutationError = ErrorType<void>
+
+    export const useRemoveTemplate = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeTemplate>>,
+        TError,
+        {templateId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveTemplateMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const createTimelineItem = (
     createTimelineItemDto: BodyType<CreateTimelineItemDto>,
  options?: SecondParameter<typeof customInstance>,) => {
@@ -4403,6 +4932,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     
 
 
+export const getCreateTemplateResponseMock = (): CreateTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetTemplatesByQueryResponseMock = (): GetTemplatesByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getGetTemplateResponseMock = (): GetTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getUpdateTemplateResponseMock = (): UpdateTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getDeleteTemplateResponseMock = (): DeleteTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveTemplatesResponseMock = (): RemoveTemplates200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
+export const getRemoveTemplateResponseMock = (): RemoveTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, htmlContent: faker.word.sample(), id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(TemplateNames)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+
 export const getCreateTimelineItemResponseMock = (): CreateTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
 export const getGetTimelineItemsByQueryResponseMock = (): GetTimelineItemsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
@@ -4493,18 +5036,123 @@ export const getGetNewTokenResponseMock = (overrideResponse: Partial< TokenDto >
 
 export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getGetSessionsByQueryResponseMock = (): GetSessionsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getGetSessionsByQueryResponseMock = (): GetSessionsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getGetSessionResponseMock = (): GetSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getGetSessionResponseMock = (): GetSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getUpdateSessionResponseMock = (): UpdateSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getUpdateSessionResponseMock = (): UpdateSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getDeleteSessionResponseMock = (): DeleteSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getDeleteSessionResponseMock = (): DeleteSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getRemoveSessionsResponseMock = (): RemoveSessions200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getRemoveSessionsResponseMock = (): RemoveSessions200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
-export const getRemoveSessionResponseMock = (): RemoveSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, date: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), timelineItemId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
+export const getRemoveSessionResponseMock = (): RemoveSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
 
+
+export const getCreateTemplateMockHandler = (overrideResponse?: CreateTemplate200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateTemplate200AllOf> | CreateTemplate200AllOf)) => {
+  return http.post('*/api/v1/admin/templates', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getCreateTemplateResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetTemplatesByQueryMockHandler = (overrideResponse?: GetTemplatesByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTemplatesByQuery200AllOf> | GetTemplatesByQuery200AllOf)) => {
+  return http.get('*/api/v1/admin/templates', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetTemplatesByQueryResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getGetTemplateMockHandler = (overrideResponse?: GetTemplate200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTemplate200AllOf> | GetTemplate200AllOf)) => {
+  return http.get('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getGetTemplateResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getUpdateTemplateMockHandler = (overrideResponse?: UpdateTemplate200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateTemplate200AllOf> | UpdateTemplate200AllOf)) => {
+  return http.patch('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getUpdateTemplateResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getDeleteTemplateMockHandler = (overrideResponse?: DeleteTemplate200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteTemplate200AllOf> | DeleteTemplate200AllOf)) => {
+  return http.delete('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getDeleteTemplateResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveTemplatesMockHandler = (overrideResponse?: RemoveTemplates200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTemplates200AllOf> | RemoveTemplates200AllOf)) => {
+  return http.patch('*/api/v1/admin/templates/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveTemplatesResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
+
+export const getRemoveTemplateMockHandler = (overrideResponse?: RemoveTemplate200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTemplate200AllOf> | RemoveTemplate200AllOf)) => {
+  return http.patch('*/api/v1/admin/templates/:templateId/removedAt', async (info) => {await delay(1000);
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
+            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
+            : getRemoveTemplateResponseMock()),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+  })
+}
 
 export const getCreateTimelineItemMockHandler = (overrideResponse?: CreateTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateTimelineItem200AllOf> | CreateTimelineItem200AllOf)) => {
   return http.post('*/api/v1/admin/timeline-items', async (info) => {await delay(1000);
@@ -5310,6 +5958,13 @@ export const getRemoveSessionMockHandler = (overrideResponse?: RemoveSession200A
   })
 }
 export const getPROMISEServerMock = () => [
+  getCreateTemplateMockHandler(),
+  getGetTemplatesByQueryMockHandler(),
+  getGetTemplateMockHandler(),
+  getUpdateTemplateMockHandler(),
+  getDeleteTemplateMockHandler(),
+  getRemoveTemplatesMockHandler(),
+  getRemoveTemplateMockHandler(),
   getCreateTimelineItemMockHandler(),
   getGetTimelineItemsByQueryMockHandler(),
   getGetTimelineItemMockHandler(),
