@@ -3,11 +3,15 @@
 import React from 'react';
 import {
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   Container,
   galaxy,
   HStack,
   NavbarItem,
   ServiceName,
+  Text,
   useGetService,
   VStack,
 } from '@shared/frontend';
@@ -77,18 +81,25 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
   };
 
   return (
-    <Container className="h-full">
-      <VStack className="items-start">
-        <HStack className="space-x-2">
-          {navItems[serviceName || 'USER']?.map(item => (
-            <Button variant="bordered" onClick={() => item.onClick?.()}>
-              {item.name}
-            </Button>
-          ))}
-        </HStack>
+    <HStack className="flex">
+      <VStack className="space-x-2 flex-grow-0">
+        <Card className="m-2 h-full">
+          <CardHeader>
+            <Text variant="h4">서비스명</Text>
+          </CardHeader>
+          <CardBody className="space-y-2">
+            {navItems[serviceName || 'USER']?.map(item => (
+              <Button variant="light" onClick={() => item.onClick?.()}>
+                {item.name}
+              </Button>
+            ))}
+          </CardBody>
+        </Card>
       </VStack>
-      {props.children}
-    </Container>
+      <VStack className="w-full">
+        <Card className="m-2 h-full p-2">{props.children}</Card>
+      </VStack>
+    </HStack>
   );
 });
 

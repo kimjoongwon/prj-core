@@ -35,7 +35,6 @@ export class TemplateRepository implements IRepository {
         ...args.where,
       },
       orderBy: {
-        createdAt: 'desc',
         ...args.orderBy,
       },
     });

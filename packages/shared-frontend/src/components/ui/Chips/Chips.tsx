@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { MobxProps } from '../types';
 import { useInputState } from '../../../hooks/useInputState';
 import { get } from 'lodash-es';
+import { v4 } from 'uuid';
 
 interface ChipsProps<T> extends MobxProps<T> {}
 export const Chips = observer(<T extends object>(props: ChipsProps<T>) => {
@@ -28,7 +29,7 @@ export const Chips = observer(<T extends object>(props: ChipsProps<T>) => {
         <Chip
           variant="flat"
           color="primary"
-          key={value}
+          key={v4()}
           onClose={() => handleOnClose(value)}
         >
           {value}
