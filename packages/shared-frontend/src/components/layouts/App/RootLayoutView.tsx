@@ -6,5 +6,5 @@ type AppLayoutViewProps = {
 
 export const AppLayoutView = (props: AppLayoutViewProps) => {
   const { children } = props;
-  return <div className="px-4 flex flex-auto w-full flex-col">{children}</div>;
+  return <div className="flex flex-auto w-full flex-col">{children}</div>;
 };

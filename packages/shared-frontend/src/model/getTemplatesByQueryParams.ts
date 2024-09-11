@@ -12,8 +12,6 @@ export type GetTemplatesByQueryParams = {
 postId?: string;
 name?: TemplateNames;
 keys?: string[];
-serviceId?: string;
-id?: string;
 type?: PostTypes;
 title?: string;
 content?: string;

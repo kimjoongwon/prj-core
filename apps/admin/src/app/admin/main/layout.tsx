@@ -1,5 +1,6 @@
 'use client';
 
+import { Divider } from '@nextui-org/react';
 import {
   Avatar,
   Button,
@@ -52,19 +53,20 @@ const MainLayout = observer((props: MainLayoutProps) => {
   ];
 
   return (
-    <Navbar
-      navbarItems={[...defaultNavItems, ...navbarItems]}
-      rightContents={
-        <>
-          <Avatar name={galaxy.auth.user?.name} />
-          <Button onClick={onClickLeave} color="danger" variant="flat">
-            나가기
-          </Button>
-        </>
-      }
-    >
+    <>
+      <Navbar
+        navbarItems={[...defaultNavItems, ...navbarItems]}
+        rightContents={
+          <>
+            <Avatar name={galaxy.auth.user?.name} />
+            <Button onClick={onClickLeave} color="danger" variant="flat">
+              나가기
+            </Button>
+          </>
+        }
+      />
       {children}
-    </Navbar>
+    </>
   );
 });
 
