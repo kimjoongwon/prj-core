@@ -1,3 +1,4 @@
-export * from './SpacesTable';
-export * from './TimelineItemsTable';
-export * from './SessionsTable';
+export * from './Spaces';
+export * from './TimelineItems';
+export * from './Sessions';
+export * from './Templates';

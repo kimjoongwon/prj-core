@@ -4,17 +4,14 @@
  * PROMISE Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineItemDto } from './timelineItemDto';
+import type { TemplateNames } from './templateNames';
 
-export interface TimelineDto {
+export interface TemplateDto {
   createdAt: string;
+  htmlContent: string;
   id: string;
-  name: string;
+  name: TemplateNames;
   /** @nullable */
   removedAt: string | null;
-  sessionId: string;
-  tenantId: string;
-  /** @nullable */
-  timelineItem: TimelineItemDto[] | null;
   updatedAt: string;
 }
