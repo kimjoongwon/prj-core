@@ -7,6 +7,8 @@
 import type { TemplateNames } from './templateNames';
 
 export interface CreateTemplateDto {
-  htmlContent: string;
+  keys: string[];
   name: TemplateNames;
+  postId: string;
+  serviceId: string;
 }

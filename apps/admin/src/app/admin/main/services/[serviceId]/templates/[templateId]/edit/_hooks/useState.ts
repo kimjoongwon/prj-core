@@ -8,21 +8,32 @@ export const useState = (props: {
   context: ReturnType<typeof useContext>;
 }) => {
   const {
-    context: { isEditMode },
     data: { getTemplate },
   } = props;
+  const templateDto = getTemplate.data?.data;
 
-  const defaultForm: CreateTemplateDto = {
-    htmlContent: '',
+  const updateTemplateDto: UpdateTemplateDto = {
+    id: '',
     name: 'WELCOME',
+    keys: [],
+    postId: '',
+    serviceId: '',
+    ...templateDto,
+    updatePostDto: {
+      id: '',
+      content: '',
+      authorId: '',
+      serviceId: '',
+      title: '',
+      type: 'HTML',
+      ...templateDto?.post,
+    },
   };
 
-  const form = isEditMode ? getTemplate.data?.data! : defaultForm;
-
   const state = useLocalObservable<{
-    form: CreateTemplateDto | UpdateTemplateDto;
+    form: UpdateTemplateDto;
   }>(() => ({
-    form,
+    form: updateTemplateDto,
   }));
 
   return state;

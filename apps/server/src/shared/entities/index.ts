@@ -16,3 +16,4 @@ export * from './session';
 export * from './timeline';
 export * from './timeline-item';
 export * from './template';
+export * from './post';
