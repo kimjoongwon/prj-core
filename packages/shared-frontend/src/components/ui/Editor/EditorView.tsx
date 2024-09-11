@@ -1,10 +1,11 @@
+import { observer } from 'mobx-react-lite';
 import { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { MobxProps } from '../types';
 import { get } from 'lodash-es';
-import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';
-import { observer } from 'mobx-react-lite';
+import { useMobxHookForm } from '../../../hooks';
+import 'react-quill/dist/quill.snow.css';
 
 export interface BaseEditorProps<T> extends MobxProps<T> {}
 

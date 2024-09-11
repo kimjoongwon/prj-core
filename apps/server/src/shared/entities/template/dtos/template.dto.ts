@@ -7,7 +7,6 @@ import {
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { Post } from '@nestjs/common';
 import { PostDto } from '../../post';
 
 export class TemplateDto extends AbstractDto implements Template {
@@ -17,8 +16,8 @@ export class TemplateDto extends AbstractDto implements Template {
   @EnumField(() => $Enums.TemplateNames)
   name: $Enums.TemplateNames;
 
-  @StringField()
-  htmlContent: string;
+  @StringField({ each: true, isArray: true, default: [] })
+  keys: string[];
 
   @UUIDField()
   serviceId: string;

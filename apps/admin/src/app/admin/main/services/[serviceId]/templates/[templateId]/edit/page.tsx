@@ -14,7 +14,7 @@ const TemplateEditPage = observer(() => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <TemplateForm />
+      <TemplateForm state={state.form} />
     </FormLayout>
   );
 });

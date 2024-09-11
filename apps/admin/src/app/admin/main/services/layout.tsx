@@ -9,7 +9,6 @@ import {
   NavbarItem,
   ServiceName,
   useGetService,
-  useGetServiceSuspense,
   VStack,
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
@@ -51,7 +50,18 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
         },
       },
     ],
-    USER: [],
+    USER: [
+      {
+        name: '템플릿 관리',
+        url: '/admin/main/services/:serviceId/templates',
+        onClick: () => {
+          galaxy.router.push({
+            url: '/admin/main/services/:serviceId/templates',
+            params: { serviceId },
+          });
+        },
+      },
+    ],
     SPACE: [
       {
         name: '공간 관리',

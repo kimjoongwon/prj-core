@@ -5,13 +5,18 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateNames } from './templateNames';
+import type { TemplateDtoPost } from './templateDtoPost';
 
 export interface TemplateDto {
   createdAt: string;
-  htmlContent: string;
   id: string;
+  keys: string[];
   name: TemplateNames;
   /** @nullable */
+  post: TemplateDtoPost;
+  postId: string;
+  /** @nullable */
   removedAt: string | null;
+  serviceId: string;
   updatedAt: string;
 }

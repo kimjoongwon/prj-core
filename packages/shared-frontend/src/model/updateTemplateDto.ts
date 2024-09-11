@@ -5,9 +5,13 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateNames } from './templateNames';
+import type { UpdatePostDto } from './updatePostDto';
 
 export interface UpdateTemplateDto {
-  htmlContent?: string;
   id: string;
+  keys?: string[];
   name?: TemplateNames;
+  postId?: string;
+  serviceId?: string;
+  updatePostDto: UpdatePostDto;
 }
