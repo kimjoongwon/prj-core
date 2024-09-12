@@ -6,7 +6,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Container,
   galaxy,
   HStack,
   NavbarItem,
@@ -81,9 +80,9 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
   };
 
   return (
-    <HStack className="flex">
-      <VStack className="space-x-2 flex-grow-0">
-        <Card className="m-2 h-full">
+    <HStack className="flex space-x-2">
+      <VStack className="space-x-2 flex-grow-0 basis-[14%]">
+        <Card className="m-2 h-full" fullWidth>
           <CardHeader>
             <Text variant="h4">서비스명</Text>
           </CardHeader>
@@ -97,7 +96,9 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
         </Card>
       </VStack>
       <VStack className="w-full">
-        <Card className="m-2 h-full p-2">{props.children}</Card>
+        <Card fullWidth className="m-2 h-full p-2">
+          {props.children}
+        </Card>
       </VStack>
     </HStack>
   );

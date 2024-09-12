@@ -8,18 +8,16 @@ import { useProps } from './_hooks/useProps';
 const ServicesPage = observer(() => {
   const { state, data = [], columns, leftButtons, rightButtons } = useProps();
   return (
-    <Container className='max-w-screen-xl'>
-      <DataGrid
-        color={'primary'}
-        selectionMode="multiple"
-        selectedKey="id"
-        data={data}
-        columns={columns}
-        leftButtons={leftButtons}
-        rightButtons={rightButtons}
-        state={state}
-      />
-    </Container>
+    <DataGrid
+      color={'primary'}
+      selectionMode="multiple"
+      selectedKey="id"
+      data={data}
+      columns={columns}
+      leftButtons={leftButtons}
+      rightButtons={rightButtons}
+      state={state}
+    />
   );
 });
 

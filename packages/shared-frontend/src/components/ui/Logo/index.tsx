@@ -20,10 +20,10 @@ export const Logo = (props: LogoProps) => {
     return (
       <Button
         variant="light"
+        className="font-bold text-2xl"
         onClick={onClickLogo}
-        className="text-large font-bold p-0 m-0"
       >
-        LOGO
+        로고영역
       </Button>
     );
   }
