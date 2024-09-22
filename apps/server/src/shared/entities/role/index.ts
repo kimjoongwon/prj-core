@@ -1,3 +1,5 @@
-export { RoleService } from './role.service';
-export { RoleModule } from './role.module';
-export { Role } from './role.entity';
+export * from './role.service';
+export * from './role.entity';
+export * from './role.controller';
+export * from './role.repository';
+export * from './role.module';

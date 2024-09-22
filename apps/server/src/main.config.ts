@@ -20,6 +20,7 @@ import pino from 'pino';
 import {
   CategoriesModule,
   GroupsModule,
+  RolesModule,
   ServicesModule,
   SessionsModule,
   SpacesModule,
@@ -42,6 +43,7 @@ export const adminModules = [
   AuthModule,
   SessionsModule,
   UserModule,
+  RolesModule,
 ];
 
 export const libModules = [

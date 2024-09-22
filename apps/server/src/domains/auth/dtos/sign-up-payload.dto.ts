@@ -1,16 +1,16 @@
+import { EmailField, StringField, UUIDField } from '@shared';
+
 export class SignUpPayloadDto {
-  constructor(data: SignUpPayloadDto) {
-    this.nickname = data.nickname;
-    this.spaceId = data.spaceId;
-    this.email = data.email;
-    this.name = data.name;
-    this.phone = data.phone;
-    this.password = data.password;
-  }
+  @StringField()
   nickname: string;
+  @UUIDField()
   spaceId: string;
+  @EmailField()
   email: string;
+  @StringField()
   name: string;
+  @StringField()
   phone: string;
+  @StringField()
   password: string;
 }

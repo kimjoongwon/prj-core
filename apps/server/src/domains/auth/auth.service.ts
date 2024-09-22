@@ -220,7 +220,7 @@ export class AuthService {
 
     if (!userRole) {
       this.logger.log('Create USER Role');
-      await this.roleService.createUser();
+      await this.roleService.createUserRole();
     }
   }
 

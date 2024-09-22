@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 import {
   RoleModule,
   SpaceModule,
-  SpaceRepository,
   SpaceService,
   TenancyModule,
   TenantModule,

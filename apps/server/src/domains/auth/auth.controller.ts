@@ -84,8 +84,12 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.CREATED)
   @Post('sign-up')
-  @ApiResponse({ status: HttpStatus.CREATED })
+  @ApiResponseEntity(TokenDto, HttpStatus.CREATED)
   async signUpUser(@Body() signUpDto: SignUpPayloadDto) {
-    return this.authService.signUpUser(signUpDto);
+    return new ResponseEntity(
+      HttpStatus.CREATED,
+      '회원가입 성공',
+      await this.authService.signUpUser(signUpDto),
+    );
   }
 }
