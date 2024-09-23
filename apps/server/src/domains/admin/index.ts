@@ -1,9 +1,10 @@
 export { CategoriesModule } from './categories/categories.module';
 export { AdminGroupsModule } from './groups/admin-groups.module';
-export { RolesModule } from './roles/roles.module';
+export { AdminRolesModule } from './roles/admin-roles.module';
 export { ServicesModule } from './services/services.module';
 export { SpacesModule } from './spaces/spaces.module';
-export { SubjectsModule } from './subjects/subjects.module';
+export { AdminSubjectsModule } from './subjects/admin-subjects.module';
 export { UsersModule } from './users/users.module';
-export { SessionsModule } from './sessions/sessions.module';
+export { AdminSessionsModule } from './sessions/sessions.module';
 export { TimelineItemsModule } from './timeline-items/timeline-items.module';
+export * from './templates/admin-templates.module';

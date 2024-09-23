@@ -14,7 +14,7 @@ import {
   Auth,
   CreateServiceDto,
   ServiceDto,
-  ServiceService,
+  ServicesService,
   UpdateServiceDto,
   ApiEndpoints,
   ApiResponseEntity,
@@ -25,7 +25,7 @@ import {
 @Controller(ApiEndpoints.ADMIN_SERVICES)
 export class ServicesController {
   logger = new Logger(ServicesController.name);
-  constructor(private readonly servicesService: ServiceService) {}
+  constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
   @Auth([])

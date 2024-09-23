@@ -7,7 +7,7 @@ import {
   UUIDFieldOptional,
 } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { ReservationDto } from '../../reservation/dto';
+import { ReservationDto } from '../../reservations/dto/reservation.dto';
 import { TimelineDto } from '../../timeline/dto';
 import { TimelineItem } from '../timeline-item.entity';
 

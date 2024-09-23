@@ -15,7 +15,7 @@ import { PrismaService } from 'nestjs-prisma';
 import {
   AuthConfig,
   ResponseEntity,
-  RoleService,
+  RolesService,
   TenancyService,
   TenantService,
   TokenPayloadDto,
@@ -35,7 +35,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-    private roleService: RoleService,
+    private roleService: RolesService,
     private passwordService: PasswordService,
     private config: ConfigService,
     private prisma: PrismaService,
