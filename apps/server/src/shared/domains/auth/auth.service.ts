@@ -8,36 +8,30 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
-import { PasswordService } from './services/password.service';
-import { ConfigService } from '@nestjs/config';
-import { TokenDto } from './dtos/token.dto';
-import { PrismaService } from 'nestjs-prisma';
-import {
-  AuthConfig,
-  ResponseEntity,
-  RolesService,
-  TokenPayloadDto,
-  TokenService,
-  UsersService,
-  goTryRawSync,
-} from '@shared';
 import bcrypt from 'bcrypt';
-import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
-import { match, P } from 'ts-pattern';
-import { AUTH_ERORR_MESSAGES } from './auth.constant';
+import { match } from 'ts-pattern';
+import { ConfigService } from '@nestjs/config';
+import { PrismaService } from 'nestjs-prisma';
+import { PasswordService } from '../password/password.service';
+import { AuthConfig } from '../../configs';
+import { UsersService, RolesService, ResponseEntity } from '../../entities';
+import { goTryRawSync } from '../../libs';
+import { TokenService, TokenDto, TokenPayloadDto } from '../token';
+import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
+import { LoginPayloadDto } from './dtos/login-payload.dto';
 
 @Injectable()
 export class AuthService {
   logger: Logger = new Logger(AuthService.name);
   LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
-    private userService: UsersService,
-    private jwtService: JwtService,
+    private usersService: UsersService,
     private roleService: RolesService,
     private passwordService: PasswordService,
     private config: ConfigService,
-    private prisma: PrismaService,
+    private jwtService: JwtService,
     private tokenService: TokenService,
+    private prisma: PrismaService,
   ) {}
 
   generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
@@ -65,17 +59,17 @@ export class AuthService {
     );
     if (err) throw new BadRequestException('Invalid token');
 
-    return this.userService.getUniqueById(userId);
+    return this.usersService.getUniqueById(userId);
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.userService.findUniqueByEmail(email);
+    const user = await this.usersService.findUniqueByEmail(email);
 
     const isPasswordValid = await this.validateHash(password, user?.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException(
-        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, AUTH_ERORR_MESSAGES.INVALID_PASSWORD),
+        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, '패스워드가 일치하지 않습니다.'),
       );
     }
 
@@ -222,7 +216,7 @@ export class AuthService {
   async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
     // const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
     // const hashedPassword = await this.passwordService.hashPassword(password);
-    // const newUser = await this.userService.upsert({
+    // const newUser = await this.usersService.upsert({
     //   email,
     //   name,
     //   phone,

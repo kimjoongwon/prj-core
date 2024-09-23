@@ -17,8 +17,8 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setVersion('1.0.0')
-    .setTitle('PROMISE Server')
-    .addTag('PROMISE')
+    .setTitle('Galaxy Server')
+    .addTag('Galaxy')
     .addBearerAuth()
     .build();
 

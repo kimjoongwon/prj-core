@@ -9,24 +9,16 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
-import {
-  ApiEndpoints,
-  ApiResponseEntity,
-  Auth,
-  LocalAuthGuard,
-  Public,
-  R,
-  ResponseEntity,
-  TenantDto,
-  TokenService,
-  UserDto,
-} from '@shared';
+import { ApiResponseEntity, Auth, Public } from '../../decorators';
+import { ResponseEntity, UserDto, TenantDto } from '../../entities';
+import { LocalAuthGuard } from '../../guards';
+import { TokenService } from '../token';
+import { AuthService } from './auth.service';
 
 @ApiTags('AUTH')
-@Controller(ApiEndpoints.AUTH)
+@Controller()
 export class AuthController {
   constructor(
     private authService: AuthService,
