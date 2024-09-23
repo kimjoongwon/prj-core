@@ -18,7 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import pino from 'pino';
 import {
   CategoriesModule,
-  GroupsModule,
+  AdminGroupsModule,
   RolesModule,
   ServicesModule,
   SessionsModule,
@@ -37,7 +37,7 @@ export const adminModules = [
   CategoriesModule,
   ServicesModule,
   SpacesModule,
-  GroupsModule,
+  AdminGroupsModule,
   SubjectsModule,
   CaslModule,
   AuthModule,

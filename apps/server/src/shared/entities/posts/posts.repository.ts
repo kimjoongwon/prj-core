@@ -4,7 +4,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { IRepository } from '../../types/interfaces/repository.interface';
 
 @Injectable()
-export class PostRepository implements IRepository {
+export class PostsRepository implements IRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(args: Prisma.PostCreateArgs) {

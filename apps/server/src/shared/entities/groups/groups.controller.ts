@@ -10,23 +10,17 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  ApiEndpoints,
-  ApiResponseEntity,
-  CreateGroupDto,
-  GroupDto,
-  GroupQueryDto,
-  GroupService,
-  PaginationMananger,
-  Public,
-  ResponseEntity,
-  UpdateGroupDto,
-} from '@shared';
+import { Public, ApiResponseEntity } from '../../decorators';
+import { ApiEndpoints } from '../../types';
+import { PaginationMananger } from '../../utils';
+import { ResponseEntity } from '../common';
+import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
+import { GroupsService } from './groups.service';
 
 @ApiTags('ADMIN_GROUPS')
 @Controller(ApiEndpoints.ADMIN_GROUPS)
 export class GroupsController {
-  constructor(private readonly groupService: GroupService) {}
+  constructor(private readonly groupService: GroupsService) {}
 
   @ApiResponse({
     status: 201,

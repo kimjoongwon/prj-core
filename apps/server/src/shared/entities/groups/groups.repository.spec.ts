@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupRepository } from './group.repository';
+import { GroupsRepository } from './groups.repository';
 import { PrismaService } from 'nestjs-prisma';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-describe('group.repository', () => {
-  let groupRepository: GroupRepository;
+describe('groupss.repository', () => {
+  let groupsRepository: GroupsRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GroupRepository, PrismaService],
+      providers: [GroupsRepository, PrismaService],
     }).compile();
 
-    groupRepository = module.get<GroupRepository>(GroupRepository);
+    groupsRepository = module.get<GroupsRepository>(GroupsRepository);
   });
 
   it('should be defined', () => {
-    expect(groupRepository).toBeDefined();
+    expect(groupsRepository).toBeDefined();
   });
 });

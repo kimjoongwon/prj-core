@@ -2,7 +2,7 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { ClassField, StringField } from '../../../decorators/field.decorators';
 import { Space } from '../space.entity';
 import { Tenancy } from '../../tenancy';
-import { GroupDto } from '../../group';
+import { GroupDto } from '../../groups/dtos/group.dto';
 
 export class SpaceDto extends AbstractDto implements Space {
   @StringField()

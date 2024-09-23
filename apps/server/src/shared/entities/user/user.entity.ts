@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { ProfileDto } from '../profile/profile.dto';
+import { ProfileDto } from '../profiles/profile.dto';
 import { AbstractEntity } from '../common/abstract.entity';
 import { TenantDto } from '../tenant/dtos/tenant.dto';
 

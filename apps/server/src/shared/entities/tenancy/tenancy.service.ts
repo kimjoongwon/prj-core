@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTenancyDto } from './dto/create-tenancy.dto';
 import { TenancyRepository } from './tenancy.repository';
-import { CreateSpaceDto } from '../space/dtos/create-space.dto';
+import { CreateSpaceDto } from '../spaces/dtos/create-space.dto';
 
 @Injectable()
 export class TenancyService {

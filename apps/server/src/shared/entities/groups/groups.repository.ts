@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
-export class GroupRepository {
+export class GroupsRepository {
   constructor(private prisma: PrismaService) {}
 
   async findManyByQuery(args: Prisma.GroupFindManyArgs) {

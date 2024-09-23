@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { GroupRepository } from './group.repository';
+import { GroupsRepository } from './groups.repository';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import { GroupQueryDto } from './dtos/group-query.dto';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { PaginationMananger } from '../../../shared/utils';
 
 @Injectable()
-export class GroupService {
-  constructor(private readonly repository: GroupRepository) {}
+export class GroupsService {
+  constructor(private readonly repository: GroupsRepository) {}
   create(createGroupDto: CreateGroupDto) {
     return this.repository.create({ data: createGroupDto });
   }

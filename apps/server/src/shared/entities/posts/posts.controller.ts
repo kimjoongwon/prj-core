@@ -15,22 +15,22 @@ import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
 import { TenancyDto } from '../tenancy';
-import { PostService, CreatePostDto, PostDto, UpdatePostDto, PostQueryDto } from '../post';
+import { PostsService, CreatePostDto, PostDto, UpdatePostDto, PostQueryDto } from '.';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 
 @ApiTags('ADMIN_TEMPLATES')
 @Controller(ApiEndpoints.ADMIN_TEMPLATES)
-export class PostController {
-  constructor(private readonly postService: PostService) {}
+export class PostsController {
+  constructor(private readonly postsService: PostsService) {}
 
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createPost(@Body() createPostDto: CreatePostDto) {
-    const post = await this.postService.create(createPostDto);
+    const post = await this.postsService.create(createPostDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 
@@ -39,7 +39,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async getPost(@Param('postId') postId: string) {
-    const post = await this.postService.getUnique(postId);
+    const post = await this.postsService.getUnique(postId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 
@@ -48,7 +48,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async removePosts(@Body() postIds: string[]) {
-    const posts = await this.postService.removeMany(postIds);
+    const posts = await this.postsService.removeMany(postIds);
     return new ResponseEntity(HttpStatus.OK, '성공', posts.count);
   }
 
@@ -57,7 +57,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async updatePost(@Param('postId') postId: string, @Body() updatePostDto: UpdatePostDto) {
-    const post = await this.postService.update(postId, updatePostDto);
+    const post = await this.postsService.update(postId, updatePostDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 
@@ -66,7 +66,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async removePost(@Param('postId') postId: string) {
-    const post = await this.postService.remove(postId);
+    const post = await this.postsService.remove(postId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 
@@ -75,7 +75,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async deletePost(@Param('postId') postId: string) {
-    const post = await this.postService.delete(postId);
+    const post = await this.postsService.delete(postId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 
@@ -84,7 +84,7 @@ export class PostController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK, { isArray: true })
   async getPostsByQuery(@Query() postQueryDto: PostQueryDto) {
-    const { count, posts } = await this.postService.getManyByQuery(postQueryDto);
+    const { count, posts } = await this.postsService.getManyByQuery(postQueryDto);
 
     return new ResponseEntity(
       HttpStatus.OK,

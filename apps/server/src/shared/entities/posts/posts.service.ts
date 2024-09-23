@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
-import { PostRepository } from './post.repository';
+import { PostsRepository } from './posts.repository';
 import { PostPageQueryDto } from './dtos/post-page-query.dto';
 import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
 
 @Injectable()
-export class PostService implements IService {
-  constructor(private readonly repository: PostRepository) {}
+export class PostsService implements IService {
+  constructor(private readonly repository: PostsRepository) {}
 
   getUnique(id: string) {
     return this.repository.findUnique({ where: { id } });

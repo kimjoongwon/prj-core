@@ -1,5 +1,5 @@
 export { CategoriesModule } from './categories/categories.module';
-export { GroupsModule } from './groups/groups.module';
+export { AdminGroupsModule } from './groups/admin-groups.module';
 export { RolesModule } from './roles/roles.module';
 export { ServicesModule } from './services/services.module';
 export { SpacesModule } from './spaces/spaces.module';

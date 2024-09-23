@@ -7,7 +7,7 @@ import {
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { PostDto } from '../../post';
+import { PostDto } from '../../posts';
 
 export class TemplateDto extends AbstractDto implements Template {
   @UUIDField()

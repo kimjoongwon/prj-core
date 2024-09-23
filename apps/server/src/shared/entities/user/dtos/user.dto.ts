@@ -1,6 +1,6 @@
 import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
 import { Exclude } from 'class-transformer';
-import { ProfileDto } from '../../profile/profile.dto';
+import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
 import { TenantDto } from '../../tenant';

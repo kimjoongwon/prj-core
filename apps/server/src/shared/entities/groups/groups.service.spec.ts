@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GroupService } from './group.service';
+import { GroupsService } from './groups.service';
 import { PrismaService } from 'nestjs-prisma';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { GroupDto } from './dtos/group.dto';
 import { CreateGroupDto } from './dtos/create-group.dto';
-import { GroupRepository } from './group.repository';
+import { GroupsRepository } from './groups.repository';
 
 const mockCreateGroupDto: CreateGroupDto = {
   name: 'Test Group',
@@ -20,25 +20,25 @@ const mockGroupDto: GroupDto = {
   removedAt: undefined,
 };
 
-describe('GroupService', () => {
-  let groupervice: GroupService;
+describe('GroupsService', () => {
+  let groupsService: GroupsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GroupService, PrismaService, GroupRepository],
+      providers: [GroupsService, PrismaService, GroupsRepository],
     }).compile();
 
-    groupervice = module.get<GroupService>(GroupService);
+    groupsService = module.get<GroupsService>(GroupsService);
   });
 
   it('그룹을 생성합니다.', async () => {
     const spy = vitest
-      .spyOn(groupervice, 'create')
+      .spyOn(groupsService, 'create')
       .mockImplementationOnce(() => Promise.resolve(mockGroupDto) as any);
 
-    await groupervice.create(mockCreateGroupDto);
+    await groupsService.create(mockCreateGroupDto);
 
     expect(spy).toHaveBeenCalledWith(mockCreateGroupDto);
-    expect(await groupervice.create(mockCreateGroupDto)).toBeDefined();
+    expect(await groupsService.create(mockCreateGroupDto)).toBeDefined();
   });
 });
