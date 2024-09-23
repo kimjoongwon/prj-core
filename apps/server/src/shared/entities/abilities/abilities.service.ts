@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
-import { AbilityRepository } from './ability.repository';
-import { Prisma } from '@prisma/client';
+import { AbilitiesRepository } from './abilities.repository';
 import { PaginationMananger } from '../../utils';
 import { AbilityQueryDto } from './dto/ability-query.dto';
 
 @Injectable()
-export class AbilityService {
-  constructor(private repository: AbilityRepository) {}
+export class AbilitiesService {
+  constructor(private repository: AbilitiesRepository) {}
   create(createAbilityDto: CreateAbilityDto) {
     return this.repository.create(createAbilityDto);
   }

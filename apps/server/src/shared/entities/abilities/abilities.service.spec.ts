@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AbilitiesService } from './ability.service';
+import { AbilitiesService } from './abilities.service';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 describe('AbilitiesService', () => {
