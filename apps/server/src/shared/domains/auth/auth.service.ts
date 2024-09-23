@@ -135,10 +135,6 @@ export class AuthService {
     };
   }
 
-  validateToken(token: string) {
-    return this.tokenService.validateToken(token);
-  }
-
   async createInitRoles() {
     this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
 
