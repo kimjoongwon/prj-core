@@ -1,7 +1,7 @@
 import { ClsServiceManager } from 'nestjs-cls';
 import { LanguageCode } from '../constants/language-code.constant';
-import { UserDto } from '../entities/user/dtos/user.dto';
-import { TenantDto } from '../entities/tenant/dtos/tenant.dto';
+import { UserDto } from '../entities/users/dtos/user.dto';
+import { TenantDto } from '../entities/tenants/dtos/tenant.dto';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';

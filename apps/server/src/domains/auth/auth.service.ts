@@ -16,16 +16,14 @@ import {
   AuthConfig,
   ResponseEntity,
   RolesService,
-  TenancyService,
-  TenantService,
   TokenPayloadDto,
   TokenService,
-  UserService,
+  UsersService,
   goTryRawSync,
 } from '@shared';
 import bcrypt from 'bcrypt';
 import { LoginPayloadDto, SignUpPayloadDto } from './dtos';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { AUTH_ERORR_MESSAGES } from './auth.constant';
 
 @Injectable()
@@ -33,15 +31,13 @@ export class AuthService {
   logger: Logger = new Logger(AuthService.name);
   LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
-    private userService: UserService,
+    private userService: UsersService,
     private jwtService: JwtService,
     private roleService: RolesService,
     private passwordService: PasswordService,
     private config: ConfigService,
     private prisma: PrismaService,
     private tokenService: TokenService,
-    private tenancyService: TenancyService,
-    private tenantService: TenantService,
   ) {}
 
   generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
@@ -224,43 +220,44 @@ export class AuthService {
   }
 
   async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
-    const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
-
-    const hashedPassword = await this.passwordService.hashPassword(password);
-
-    const newUser = await this.userService.upsert({
-      email,
-      name,
-      phone,
-      password: hashedPassword,
-    });
-    const userId = newUser.id;
-
-    await this.prisma.profile.upsert({
-      where: {
-        userId,
-      },
-      update: {
-        userId,
-        nickname,
-      },
-      create: {
-        userId,
-        nickname,
-      },
-    });
-
-    const superAdminRole = await this.roleService.findSuperAdminRole();
-    const tenancy = await this.tenancyService.createOrUpdate({ spaceId });
-
-    console.log(newUser.id);
-    console.log(tenancy.id);
-    await this.tenantService.createOrUpdate({
-      tenancyId: tenancy.id,
-      userId: newUser.id,
-      active: true,
-      roleId: superAdminRole.id,
-      type: 'PHYSICAL',
-    });
+    // const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
+    // const hashedPassword = await this.passwordService.hashPassword(password);
+    // const newUser = await this.userService.upsert({
+    //   email,
+    //   name,
+    //   phone,
+    //   password: hashedPassword,
+    // });
+    // const userId = newUser.id;
+    // await this.prisma.profile.upsert({
+    //   where: {
+    //     userId,
+    //   },
+    //   update: {
+    //     userId,
+    //     nickname,
+    //   },
+    //   create: {
+    //     userId,
+    //     nickname,
+    //   },
+    // });
+    // const superAdminRole = await this.roleService.findSuperAdminRole();
+    // let newSpaceId = null;
+    // const space = await this.spacesService.getUnique(spaceId);
+    // if (!space) {
+    //   newSpaceId = this.spacesService.create({
+    //     name: 'Galaxy',
+    //   });
+    // } else {
+    //   newSpaceId = space.id;
+    // }
+    // await this.tenantService.createOrUpdate({
+    //   tenancyId: tenancy.id,
+    //   userId: newUser.id,
+    //   active: true,
+    //   roleId: superAdminRole.id,
+    //   type: 'PHYSICAL',
+    // });
   }
 }

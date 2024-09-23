@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
-import { PostsRepository } from './posts.repository';
-import { PostPageQueryDto } from './dtos/post-page-query.dto';
+import { CreateTenancyDto } from './dto/create-tenancy.dto';
+import { TenanciesRepository } from './tenancies.repository';
+import { IService } from '../../types';
+import { TenancyQueryDto } from './dto/tenancy-query.dto';
 import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
+import { UpdateTenancyDto } from './dto/update-tenancy.dto';
 
 @Injectable()
-export class PostsService implements IService {
-  constructor(private readonly repository: PostsRepository) {}
+export class TenanciesService implements IService {
+  constructor(private readonly repository: TenanciesRepository) {}
+
   getUnique(id: string) {
     return this.repository.findUnique({ where: { id } });
   }
@@ -34,26 +35,26 @@ export class PostsService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createPostDto: CreatePostDto) {
-    return this.repository.create({ data: createPostDto });
+  create(createTenancyDto: CreateTenancyDto) {
+    return this.repository.create({ data: createTenancyDto });
   }
 
-  async getManyByQuery(pageQuery: PostPageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
-    const posts = await this.repository.findMany(args);
+  async getManyByQuery(query: TenancyQueryDto) {
+    const args = PaginationMananger.toArgs(query);
+    const templates = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {
-      posts,
+      templates,
       count,
     };
   }
 
-  update(postId: string, updatePostDto: UpdatePostDto) {
+  update(templateId: string, updateTenancyDto: UpdateTenancyDto) {
     return this.repository.update({
       where: {
-        id: postId,
+        id: templateId,
       },
-      data: updatePostDto,
+      data: updateTenancyDto,
     });
   }
 

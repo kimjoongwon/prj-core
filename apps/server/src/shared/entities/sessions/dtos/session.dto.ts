@@ -9,7 +9,7 @@ import {
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { TimelineDto } from '../../timeline/dto';
+import { TimelineDto } from '../../timelines/dto';
 
 export class SessionDto extends AbstractDto implements Session {
   @UUIDField()
