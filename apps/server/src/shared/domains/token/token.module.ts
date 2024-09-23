@@ -5,6 +5,6 @@ import { ConfigService } from '@nestjs/config';
 
 @Module({
   providers: [TokenService, JwtService, ConfigService],
-  exports: [TokenService, JwtService, ConfigService],
+  exports: [TokenService],
 })
 export class TokenModule {}

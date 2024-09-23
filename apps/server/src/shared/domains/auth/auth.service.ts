@@ -2,21 +2,16 @@ import {
   BadRequestException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
-import { match } from 'ts-pattern';
-import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { AuthConfig } from '../../configs';
 import { UsersService, RolesService, ResponseEntity } from '../../entities';
 import { goTryRawSync } from '../../libs';
-import { TokenService, TokenDto, TokenPayloadDto } from '../token';
+import { TokenService, TokenPayloadDto } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 
@@ -28,30 +23,10 @@ export class AuthService {
     private usersService: UsersService,
     private roleService: RolesService,
     private passwordService: PasswordService,
-    private config: ConfigService,
     private jwtService: JwtService,
     private tokenService: TokenService,
     private prisma: PrismaService,
   ) {}
-
-  generateTokens(payload: { userId: string }): Omit<TokenDto, 'user' | 'tenant'> {
-    return {
-      accessToken: this.generateAccessToken(payload),
-      refreshToken: this.generateRefreshToken(payload),
-    };
-  }
-
-  generateAccessToken(payload: { userId: string }): string {
-    return this.jwtService.sign(payload);
-  }
-
-  generateRefreshToken(payload: { userId: string }): string {
-    const authConfig = this.config.get<AuthConfig>('auth');
-    return this.jwtService.sign(payload, {
-      secret: authConfig?.secret,
-      expiresIn: authConfig?.refresh,
-    });
-  }
 
   async getCurrentUser(accessToken: string) {
     const [err, { userId }] = goTryRawSync<Error, TokenPayloadDto>(() =>
@@ -65,7 +40,7 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findUniqueByEmail(email);
 
-    const isPasswordValid = await this.validateHash(password, user?.password);
+    const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException(
@@ -120,15 +95,6 @@ export class AuthService {
     });
   }
 
-  getLoginForm() {
-    const loginFormDto = {
-      email: '',
-      password: '',
-    };
-
-    return loginFormDto;
-  }
-
   async login({ email, password }: LoginPayloadDto) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -159,7 +125,7 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
-    const { accessToken, refreshToken } = this.generateTokens({ userId: user.id });
+    const { accessToken, refreshToken } = this.tokenService.generateTokens({ userId: user.id });
 
     return {
       accessToken,
@@ -169,28 +135,8 @@ export class AuthService {
     };
   }
 
-  validateHash(password: string | undefined, hash: string | undefined | null): Promise<boolean> {
-    if (!password || !hash) {
-      return Promise.resolve(false);
-    }
-
-    return bcrypt.compare(password, hash);
-  }
-
   validateToken(token: string) {
-    const { secret } = this.config.get<AuthConfig>('auth');
-
-    const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(() =>
-      this.jwtService.verify(token, { secret }),
-    );
-
-    match(err?.name)
-      .with('TokenExpiredError', () => new BadRequestException('토튼 만료 에러'))
-      .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
-      .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
-      .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err?.message}`));
-
-    return payload;
+    return this.tokenService.validateToken(token);
   }
 
   async createInitRoles() {
