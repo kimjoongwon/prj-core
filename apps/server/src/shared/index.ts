@@ -10,3 +10,4 @@ export * from './guards';
 export * from './libs';
 export * from './utils';
 export * from './types';
+export * from './domains';

@@ -1,5 +1,4 @@
-export * from './category';
-export * from './assignment';
+export * from './categories';
 export * from './tenant';
 export * from './user';
 export * from './role';

@@ -7,27 +7,27 @@ import {
   CategoryDto,
   CreateCategoryDto,
   UpdateCategoryDto,
-  CategoryService,
+  CategoriesService,
   ApiEndpoints,
 } from '@shared';
 
 @ApiTags('ADMIN_CATEGORY')
 @Controller(ApiEndpoints.ADMIN_CATEGORIES)
 export class CategoriesController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoriesService: CategoriesService) {}
 
   @Auth()
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
   getCategories(@Param() serviceSpaceDto: { spaceId: string; serviceId: string }) {
-    return this.categoryService.getCategoriesByServiceSpace(serviceSpaceDto);
+    return this.categoriesService.getCategoriesByServiceSpace(serviceSpaceDto);
   }
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    const category = await this.categoryService.createCategory(createCategoryDto);
+    const category = await this.categoriesService.createCategory(createCategoryDto);
     return new ResponseEntity(HttpStatus.OK, 'Category created', new CategoryDto(category));
   }
 
@@ -35,7 +35,7 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto)
   @Get(':categoryId')
   async findCategoryById(@Param('categoryId') categoryId: string) {
-    const category = await this.categoryService.findCategoryById(categoryId);
+    const category = await this.categoriesService.findCategoryById(categoryId);
 
     return new ResponseEntity(
       HttpStatus.OK,
@@ -51,7 +51,7 @@ export class CategoriesController {
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const category = await this.categoryService.updateCategory(id, updateCategoryDto);
+    const category = await this.categoriesService.updateCategory(id, updateCategoryDto);
     return new ResponseEntity(HttpStatus.OK, 'Category updated', new CategoryDto(category));
   }
 }
