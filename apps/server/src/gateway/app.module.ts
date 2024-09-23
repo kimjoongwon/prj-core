@@ -4,11 +4,13 @@ import { adminModules, libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
 import { AdminAuthModule } from './admin/auth/admin-auth.module';
+import { ServiceAuthModule } from './service/auth/service-auth.module';
 
 @Module({
   imports: [
     ...libModules,
     ...adminModules,
+    ServiceAuthModule,
     RouterModule.register([
       {
         path: 'admin',
@@ -16,6 +18,15 @@ import { AdminAuthModule } from './admin/auth/admin-auth.module';
           {
             path: 'auth',
             module: AdminAuthModule,
+          },
+        ],
+      },
+      {
+        path: 'service',
+        children: [
+          {
+            path: 'auth',
+            module: ServiceAuthModule,
           },
         ],
       },
