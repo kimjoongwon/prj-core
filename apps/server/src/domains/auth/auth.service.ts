@@ -20,7 +20,6 @@ import {
   TenantService,
   TokenPayloadDto,
   TokenService,
-  UserDto,
   UserService,
   goTryRawSync,
 } from '@shared';

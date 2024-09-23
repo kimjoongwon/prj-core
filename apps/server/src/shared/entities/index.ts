@@ -9,7 +9,7 @@ export * from './group';
 export * from './common';
 export * from './profile';
 export * from './token';
-export * from './ability';
+export * from './abilities';
 export * from './subject';
 export * from './tenancy';
 export * from './session';
