@@ -1,17 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { PrismaService } from 'nestjs-prisma';
-import { RolesService, SpacesService, UsersService } from '@shared';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { PasswordService } from './services';
+import { describe, beforeEach, it, expect } from 'vitest';
+import { UsersService, SpacesService, RolesService } from '../../entities';
+import { PasswordModule } from '../password';
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [],
+      imports: [PasswordModule],
       providers: [
         PrismaService,
         AuthService,
@@ -19,7 +20,6 @@ describe('AuthService', () => {
         JwtService,
         SpacesService,
         RolesService,
-        PasswordService,
         ConfigService,
       ],
     }).compile();

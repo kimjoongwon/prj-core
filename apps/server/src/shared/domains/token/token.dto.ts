@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { UserDto } from '../../entities/users/dtos/user.dto';
+import { ClassField } from '../../decorators';
 
 export class TokenDto {
   @ApiProperty()
@@ -12,12 +12,6 @@ export class TokenDto {
   @ApiProperty({
     type: () => UserDto,
   })
-  @Type(() => UserDto)
-  user: UserDto;
-
-  constructor(accessToken: string, refreshToken: string, user: UserDto) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-    this.user = user;
-  }
+  @ClassField(() => UserDto, { nullable: true, each: false, swagger: false })
+  user?: UserDto;
 }
