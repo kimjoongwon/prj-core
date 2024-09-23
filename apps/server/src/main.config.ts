@@ -1,6 +1,6 @@
 import { ClsModule } from 'nestjs-cls';
 import { CaslModule } from './shared/casl/casl.module';
-import { AuthModule } from './domains/auth/auth.module';
+import { AuthModule } from './gateway/auth/auth.module';
 import { Logger } from '@nestjs/common';
 import {
   appConfig,
@@ -26,9 +26,9 @@ import {
   AdminTimelineItemsModule,
   AdminRolesModule,
   AdminTemplatesModule,
-} from './domains/admin';
+} from './gateway/admin';
 import { JwtModule } from '@nestjs/jwt';
-import { AdminAbilityModule } from './domains/admin/abilities/admin-abilities.module';
+import { AdminAbilityModule } from './gateway/admin/abilities/admin-abilities.module';
 
 export const adminModules = [
   AdminAbilityModule,

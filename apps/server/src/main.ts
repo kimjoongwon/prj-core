@@ -1,4 +1,4 @@
-import { AppModule } from './domains/app.module';
+import { AppModule } from './gateway/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { CustomClassSerializerInterceptor, PrismaClientExceptionFilter } from '@shared';
