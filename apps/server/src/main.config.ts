@@ -10,7 +10,7 @@ import {
   databaseConfig,
   fileConfig,
   mailConfig,
-  UserModule,
+  UsersModule,
 } from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
@@ -23,7 +23,7 @@ import {
   AdminSessionsModule,
   SpacesModule,
   AdminSubjectsModule,
-  TimelineItemsModule,
+  AdminTimelineItemsModule,
   AdminRolesModule,
   AdminTemplatesModule,
 } from './domains/admin';
@@ -33,7 +33,7 @@ import { AdminAbilityModule } from './domains/admin/abilities/admin-abilities.mo
 export const adminModules = [
   AdminAbilityModule,
   AdminTemplatesModule,
-  TimelineItemsModule,
+  AdminTimelineItemsModule,
   CategoriesModule,
   ServicesModule,
   SpacesModule,
@@ -42,7 +42,7 @@ export const adminModules = [
   CaslModule,
   AuthModule,
   AdminSessionsModule,
-  UserModule,
+  UsersModule,
   AdminRolesModule,
 ];
 

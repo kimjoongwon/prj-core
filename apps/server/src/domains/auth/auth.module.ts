@@ -6,11 +6,10 @@ import { AuthService } from './auth.service';
 import {
   RolesModule,
   SpaceModule,
-  SpaceService,
-  TenancyModule,
-  TenantModule,
+  SpacesService,
+  TenanciesModule,
   TokenService,
-  UserModule,
+  UsersModule,
 } from '@shared';
 
 import { PasswordService } from './services';
@@ -18,7 +17,7 @@ import { SignUpPayloadDto } from './dtos';
 import { LocalStrategy } from './strategies';
 
 @Module({
-  imports: [UserModule, RolesModule, TenancyModule, SpaceModule, TenantModule, PassportModule],
+  imports: [UsersModule, RolesModule, TenanciesModule, SpaceModule, PassportModule],
   controllers: [AuthController],
   providers: [TokenService, PasswordService, AuthService, LocalStrategy],
 })
@@ -27,7 +26,7 @@ export class AuthModule implements OnModuleInit {
   LOG_PREFIX = `${AuthModule.name} DB_INIT`;
   constructor(
     private readonly authService: AuthService,
-    private readonly spaceService: SpaceService,
+    private readonly spaceService: SpacesService,
   ) {}
 
   async onModuleInit() {

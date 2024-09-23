@@ -9,7 +9,6 @@ import { IService } from '../../types/interfaces/service.interface';
 @Injectable()
 export class PostsService implements IService {
   constructor(private readonly repository: PostsRepository) {}
-
   getUnique(id: string) {
     return this.repository.findUnique({ where: { id } });
   }

@@ -2,7 +2,7 @@ import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/com
 import { Reflector } from '@nestjs/core';
 import _ from 'lodash';
 
-import { UserDto } from '../entities/user/dtos/user.dto';
+import { UserDto } from '../entities/users/dtos/user.dto';
 import { $Enums } from '@prisma/client';
 
 @Injectable()

@@ -7,7 +7,7 @@ import {
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { UserDto } from '../../user';
+import { UserDto } from '../../users';
 
 export class PostDto extends AbstractDto implements Post {
   @EnumField(() => $Enums.PostTypes)

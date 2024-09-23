@@ -14,7 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancy';
+import { TenancyDto } from '../tenancies';
 import { CreateSessionDto, SessionDto, UpdateSessionDto, SessionQueryDto } from '../sessions/dtos';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
