@@ -1,5 +1,5 @@
 import { Logger, Module, OnModuleInit } from '@nestjs/common';
-import { ServiceModule, ServiceService } from '@shared';
+import { ServiceModule, ServicesService } from '@shared';
 import { ServicesController } from './services.controller';
 import { $Enums } from '@prisma/client';
 
@@ -11,7 +11,7 @@ export class ServicesModule implements OnModuleInit {
   logger: Logger = new Logger(ServicesModule.name);
   LOG_PREFIX = `${ServicesModule.name} DB_INIT`;
 
-  constructor(private readonly serviceService: ServiceService) {}
+  constructor(private readonly serviceService: ServicesService) {}
 
   async onModuleInit() {
     const services = [

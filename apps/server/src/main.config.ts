@@ -19,31 +19,31 @@ import pino from 'pino';
 import {
   CategoriesModule,
   AdminGroupsModule,
-  RolesModule,
   ServicesModule,
-  SessionsModule,
+  AdminSessionsModule,
   SpacesModule,
-  SubjectsModule,
+  AdminSubjectsModule,
   TimelineItemsModule,
+  AdminRolesModule,
+  AdminTemplatesModule,
 } from './domains/admin';
 import { JwtModule } from '@nestjs/jwt';
-import { TemplatesModule } from './domains/admin/templates/templates.module';
 import { AdminAbilityModule } from './domains/admin/abilities/admin-abilities.module';
 
 export const adminModules = [
   AdminAbilityModule,
-  TemplatesModule,
+  AdminTemplatesModule,
   TimelineItemsModule,
   CategoriesModule,
   ServicesModule,
   SpacesModule,
   AdminGroupsModule,
-  SubjectsModule,
+  AdminSubjectsModule,
   CaslModule,
   AuthModule,
-  SessionsModule,
+  AdminSessionsModule,
   UserModule,
-  RolesModule,
+  AdminRolesModule,
 ];
 
 export const libModules = [

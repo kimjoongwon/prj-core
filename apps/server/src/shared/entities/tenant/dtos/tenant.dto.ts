@@ -2,7 +2,7 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Tenant } from '../tenant.entity';
 import { $Enums } from '@prisma/client';
 import { TenancyDto } from '../../tenancy';
-import { RoleDto } from '../../role/dto/role.dto';
+import { RoleDto } from '../../roles/dto/role.dto';
 import {
   BooleanField,
   ClassField,

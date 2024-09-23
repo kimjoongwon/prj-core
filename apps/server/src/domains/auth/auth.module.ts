@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 import {
-  RoleModule,
+  RolesModule,
   SpaceModule,
   SpaceService,
   TenancyModule,
@@ -18,7 +18,7 @@ import { SignUpPayloadDto } from './dtos';
 import { LocalStrategy } from './strategies';
 
 @Module({
-  imports: [UserModule, RoleModule, TenancyModule, SpaceModule, TenantModule, PassportModule],
+  imports: [UserModule, RolesModule, TenancyModule, SpaceModule, TenantModule, PassportModule],
   controllers: [AuthController],
   providers: [TokenService, PasswordService, AuthService, LocalStrategy],
 })
