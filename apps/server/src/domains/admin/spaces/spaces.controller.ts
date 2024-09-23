@@ -54,7 +54,6 @@ export class SpacesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async removeSpaces(@Body() { spaceIds }: RemoveManySpaceDto) {
-    console.log('spaceIds', spaceIds);
     const spaces = await this.spaceService.removeMany(spaceIds);
     return new ResponseEntity(HttpStatus.OK, '성공', spaces.count);
   }

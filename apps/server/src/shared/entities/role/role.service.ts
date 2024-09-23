@@ -1,19 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Roles } from '@prisma/client';
-import { PrismaService } from 'nestjs-prisma';
 import { IService } from '../../types';
 import { RoleRepository } from './role.repository';
+import { CreateRoleDto, RoleQueryDto, UpdateRoleDto } from './dto';
 import { PaginationMananger } from '../../utils';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
-import { RoleQueryDto } from './dto/role-query.dto';
 
 @Injectable()
 export class RoleService implements IService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly repository: RoleRepository,
-  ) {}
+  constructor(private readonly repository: RoleRepository) {}
 
   getUnique(id: string) {
     return this.repository.findUnique({ where: { id } });
@@ -44,8 +38,8 @@ export class RoleService implements IService {
     return this.repository.create({ data: createRoleDto });
   }
 
-  async getManyByQuery(pageQuery: RoleQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+  async getManyByQuery(query: RoleQueryDto) {
+    const args = PaginationMananger.toArgs(query);
     const roles = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {
@@ -70,20 +64,16 @@ export class RoleService implements IService {
     });
   }
 
-  getAllRole() {
-    return this.prisma.role.findMany({});
+  createSuperAdmin() {
+    return this.repository.create({ data: { name: 'SUPER_ADMIN' } });
   }
 
-  async createSuperAdmin() {
-    return this.prisma.role.create({ data: { name: 'SUPER_ADMIN' } });
+  createUser() {
+    return this.repository.create({ data: { name: 'USER' } });
   }
 
-  async createUserRole() {
-    return this.prisma.role.create({ data: { name: 'USER' } });
-  }
-
-  async findSuperAdminRole() {
-    return this.prisma.role.findFirst({
+  findSuperAdminRole() {
+    return this.repository.findFirst({
       where: {
         name: Roles.SUPER_ADMIN,
       },
@@ -91,14 +81,14 @@ export class RoleService implements IService {
   }
 
   async findUserRole() {
-    return this.prisma.role.findFirst({
+    return this.repository.findFirst({
       where: {
         name: Roles.USER,
       },
     });
   }
   async getSuperAdminRole() {
-    return this.prisma.role.findUnique({
+    return this.repository.findUnique({
       where: {
         name: Roles.SUPER_ADMIN,
       },
@@ -106,7 +96,7 @@ export class RoleService implements IService {
   }
 
   async getUserRole() {
-    return this.prisma.role.findUnique({
+    return this.repository.findUnique({
       where: {
         name: Roles.USER,
       },

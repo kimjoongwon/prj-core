@@ -4,7 +4,6 @@ import { UpdateTemplateDto } from './dtos/update-template.dto';
 import { TemplateRepository } from './template.repository';
 import { TemplatePageQueryDto } from './dtos/template-page-query.dto';
 import { PaginationMananger } from '../../utils';
-import { R } from '../../libs/remeda';
 import { IService } from '../../types/interfaces/service.interface';
 
 @Injectable()
