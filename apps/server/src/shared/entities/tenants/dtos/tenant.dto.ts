@@ -1,5 +1,5 @@
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { Tenant } from '../tenants.entity';
+import { Tenant } from '../tenant.entity';
 import { $Enums } from '@prisma/client';
 import { TenancyDto } from '../../tenancies';
 import { RoleDto } from '../../roles/dto/role.dto';

@@ -1,53 +1,64 @@
 import { Injectable } from '@nestjs/common';
-import { UpsertTenantDto } from './dtos/upsert-tenant.dto';
 import { TenantsRepository } from './tenants.repository';
+import { IService } from '../../types';
+import { PaginationMananger } from '../../utils';
+import { CreateTenantDto, TenantPageQueryDto, UpdateTenantDto } from './dtos';
 @Injectable()
-export class TenantsService {
+export class TenantsService implements IService {
   constructor(private readonly repository: TenantsRepository) {}
 
-  createOrUpdate(upsertTenantDto: UpsertTenantDto) {
-    const { userId } = upsertTenantDto;
-    return this.repository.upsert({
+  getUnique(id: string) {
+    return this.repository.findUnique({ where: { id } });
+  }
+
+  getFirst(id: string) {
+    return this.repository.findFirst({ where: { id } });
+  }
+
+  removeMany(ids: string[]) {
+    return this.repository.updateMany({
       where: {
-        userId,
+        id: {
+          in: ids,
+        },
       },
-      create: upsertTenantDto,
-      update: upsertTenantDto,
+      data: {
+        removedAt: new Date(),
+      },
     });
   }
 
-  getUniqueById(tenantId: string) {
-    return this.repository.findUnique({
+  delete(id: string) {
+    return this.repository.delete({ where: { id } });
+  }
+
+  create(createTenantDto: CreateTenantDto) {
+    return this.repository.create({ data: createTenantDto });
+  }
+
+  async getManyByQuery(pageQuery: TenantPageQueryDto) {
+    const args = PaginationMananger.toArgs(pageQuery);
+    const tenants = await this.repository.findMany(args);
+    const count = await this.repository.count(args);
+    return {
+      tenants,
+      count,
+    };
+  }
+
+  update(tenantId: string, updateTenantDto: UpdateTenantDto) {
+    return this.repository.update({
       where: {
         id: tenantId,
       },
-      include: {
-        user: true,
-        role: true,
-        tenancy: {
-          include: {
-            space: true,
-          },
-        },
-      },
+      data: updateTenantDto,
     });
   }
 
-  getActiveTenantByUserId(userId: string) {
-    return this.repository.findUnique({
-      where: {
-        userId,
-        active: true,
-      },
-      include: {
-        user: true,
-        role: true,
-        tenancy: {
-          include: {
-            space: true,
-          },
-        },
-      },
+  remove(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
     });
   }
 }

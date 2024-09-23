@@ -9,7 +9,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { UsersService, RolesService, ResponseEntity } from '../../entities';
+import { UsersService, RolesService, ResponseEntity, UserDto } from '../../entities';
 import { goTryRawSync } from '../../libs';
 import { TokenService, TokenPayloadDto } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
@@ -57,14 +57,16 @@ export class AuthService {
     await this.prisma.$transaction(async (tx) => {
       const hashedPassword = await this.passwordService.hashPassword(password);
 
-      const newUser = await tx.user.create({
-        data: {
-          email,
-          name,
-          phone,
-          password: hashedPassword,
-        },
-      });
+      const newUser = new UserDto(
+        await tx.user.create({
+          data: {
+            email,
+            name,
+            phone,
+            password: hashedPassword,
+          },
+        }),
+      );
 
       const userRole = await this.roleService.findUserRole();
 
