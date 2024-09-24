@@ -5,13 +5,14 @@ import { CreateSpaceDto } from './dtos/create-space.dto';
 import { IService } from '../../types/interfaces/service.interface';
 import { SpaceQueryDto, UpdateSpaceDto } from './dtos';
 import { PaginationMananger } from '../../utils';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SpacesService implements IService {
   constructor(private readonly repository: SpacesRepository) {}
 
-  create(createSpaceDto: CreateSpaceDto) {
-    return this.repository.create({ data: createSpaceDto });
+  create(args: Prisma.SpaceCreateArgs) {
+    return this.repository.create(args);
   }
 
   update(spaceId: string, updateSpaceDto: UpdateSpaceDto) {
@@ -21,8 +22,8 @@ export class SpacesService implements IService {
     });
   }
 
-  getUnique(spaceId: string) {
-    return this.repository.findUnique({ where: { id: spaceId } });
+  getUnique(args: Prisma.SpaceFindUniqueArgs) {
+    return this.repository.findUnique(args);
   }
 
   getFirst(spaceId: string) {

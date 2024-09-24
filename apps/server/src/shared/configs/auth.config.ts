@@ -1,27 +1,28 @@
 import { registerAs } from '@nestjs/config';
 import { AuthConfig } from './config.type';
-import { z } from 'nestjs-zod/z';
-import { InternalServerErrorException } from '@nestjs/common';
+import { IsString } from 'class-validator';
+import validateConfig from '../utils/validate-config';
+class EnvironmentVariablesValidator {
+  @IsString()
+  AUTH_JWT_SECRET: string;
 
-const environmentVariablesValidatorSchema = z.object({
-  AUTH_JWT_SECRET: z.string(),
-  AUTH_JWT_TOKEN_EXPIRES_IN: z.string(),
-  AUTH_JWT_TOKEN_REFRESH_IN: z.string(),
-});
+  @IsString()
+  AUTH_JWT_TOKEN_EXPIRES_IN: string;
+
+  @IsString()
+  AUTH_JWT_TOKEN_REFRESH_IN: string;
+
+  @IsString()
+  AUTH_JWT_SALT_ROUNDS: string;
+}
 
 export default registerAs<AuthConfig>('auth', () => {
-  const result = environmentVariablesValidatorSchema.safeParse(process.env);
-
-  if (!result.success) {
-    throw new InternalServerErrorException(
-      'Auth Environment variables validation error',
-    );
-  }
+  validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     secret: process.env.AUTH_JWT_SECRET,
     refresh: process.env.AUTH_JWT_TOKEN_REFRESH_IN,
     expires: process.env.AUTH_JWT_TOKEN_EXPIRES_IN,
-    bcryptSaltOrRound: 10,
+    bcryptSaltOrRound: Number(process.env.AUTH_JWT_SALT_ROUNDS),
   };
 });

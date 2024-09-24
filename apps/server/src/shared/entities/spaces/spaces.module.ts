@@ -6,4 +6,4 @@ import { SpacesRepository } from './spaces.repository';
   providers: [SpacesService, SpacesRepository],
   exports: [SpacesService],
 })
-export class SpaceModule {}
+export class SpacesModule {}

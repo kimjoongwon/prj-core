@@ -40,7 +40,9 @@ export class RolesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleDto, HttpStatus.OK)
   async getRole(@Param('roleId') roleId: string) {
-    const role = await this.service.getUnique(roleId);
+    const role = await this.service.getUnique({
+      where: { id: roleId },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoleDto, role));
   }
 

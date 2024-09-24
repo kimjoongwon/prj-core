@@ -5,13 +5,14 @@ import { IService } from '../../types';
 import { TenancyQueryDto } from './dto/tenancy-query.dto';
 import { PaginationMananger } from '../../utils';
 import { UpdateTenancyDto } from './dto/update-tenancy.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TenanciesService implements IService {
   constructor(private readonly repository: TenanciesRepository) {}
 
-  getUnique(id: string) {
-    return this.repository.findUnique({ where: { id } });
+  getUnique(args: Prisma.TenancyFindUniqueArgs) {
+    return this.repository.findUnique(args);
   }
 
   getFirst(id: string) {
@@ -35,8 +36,8 @@ export class TenanciesService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createTenancyDto: CreateTenancyDto) {
-    return this.repository.create({ data: createTenancyDto });
+  create(args: Prisma.TenancyCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(query: TenancyQueryDto) {

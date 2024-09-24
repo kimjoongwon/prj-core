@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { AppConfig } from './config.type';
-import { z } from 'nestjs-zod/z';
+import { IsEmail, IsEnum, IsNumber, IsString, IsUrl } from 'class-validator';
+import validateConfig from '../utils/validate-config';
 
 enum Environment {
   Development = 'development',
@@ -8,34 +9,48 @@ enum Environment {
   Test = 'test',
 }
 
-const environmentVariablesValidatorSchema = z.object({
-  ADMIN_EMAIL: z.string().email().optional(),
-  NODE_ENV: z.enum([Environment.Development, Environment.Production, Environment.Test]).optional(),
-  APP_NAME: z.string(),
-  APP_ADMIN_EMAIL: z.string().email(),
-  APP_PORT: z.string().transform(Number),
-  FRONTEND_DOMAIN: z.string().url(),
-  BACKEND_DOMAIN: z.string().url(),
-  API_PREFIX: z.string(),
-  APP_FALLBACK_LANGUAGE: z.string(),
-  APP_HEADER_LANGUAGE: z.string(),
-});
+class EnvironmentVariablesValidator {
+  @IsEnum(Environment)
+  NODE_ENV: Environment;
+
+  @IsString()
+  APP_NAME: string;
+
+  @IsEmail()
+  APP_ADMIN_EMAIL: string;
+
+  @IsNumber()
+  APP_PORT: number;
+
+  @IsString()
+  API_PREFIX: string;
+
+  @IsUrl()
+  FRONTEND_DOMAIN: string;
+
+  @IsUrl()
+  BACKEND_DOMAIN: string;
+
+  @IsString()
+  APP_FALLBACK_LANGUAGE: string;
+
+  @IsString()
+  APP_HEADER_LANGUAGE: string;
+}
 
 export default registerAs<AppConfig>('app', () => {
-  // const parsedEnv = environmentVariablesValidatorSchema.parse(process.env);
-
-  const result = environmentVariablesValidatorSchema.parse(process.env);
+  validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
-    adminEmail: result.APP_ADMIN_EMAIL,
-    nodeEnv: result.NODE_ENV || 'development',
-    name: result.APP_NAME || 'app',
+    nodeEnv: process.env.NODE_ENV || 'development',
+    name: process.env.APP_NAME || 'app',
+    adminEmail: process.env.APP_ADMIN_EMAIL,
     workingDirectory: process.cwd(),
-    frontendDomain: result.FRONTEND_DOMAIN,
-    backendDomain: result.BACKEND_DOMAIN ?? 'http://localhost',
-    port: result.APP_PORT || 3006,
-    apiPrefix: result.API_PREFIX || 'api',
-    fallbackLanguage: result.APP_FALLBACK_LANGUAGE || 'en',
-    headerLanguage: result.APP_HEADER_LANGUAGE || 'x-custom-lang',
+    frontendDomain: process.env.FRONTEND_DOMAIN,
+    backendDomain: process.env.BACKEND_DOMAIN ?? 'http://localhost',
+    port: Number(process.env.APP_PORT) || 3006,
+    apiPrefix: process.env.API_PREFIX || 'api',
+    fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || 'en',
+    headerLanguage: process.env.APP_HEADER_LANGUAGE || 'x-custom-lang',
   };
 });

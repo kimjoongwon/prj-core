@@ -1,5 +1,5 @@
 import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { LoggerMiddleware } from '@shared';
+import { InitModule, LoggerMiddleware } from '@shared';
 import { adminModules, libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
@@ -8,6 +8,7 @@ import { ServiceAuthModule } from './service/auth/service-auth.module';
 
 @Module({
   imports: [
+    InitModule,
     ...libModules,
     ...adminModules,
     ServiceAuthModule,
