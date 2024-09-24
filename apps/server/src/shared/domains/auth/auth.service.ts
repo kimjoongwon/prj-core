@@ -9,11 +9,12 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { UsersService, RolesService, ResponseEntity, UserDto } from '../../entities';
+import { UsersService, ResponseEntity, UserDto, RolesService } from '../../entities';
 import { goTryRawSync } from '../../libs';
 import { TokenService, TokenPayloadDto } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
+import { RoleService } from '../role/role.service';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,7 @@ export class AuthService {
   LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
     private usersService: UsersService,
-    private roleService: RolesService,
+    private rolesService: RolesService,
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
@@ -68,7 +69,7 @@ export class AuthService {
         }),
       );
 
-      const userRole = await this.roleService.findUserRole();
+      const userRole = await this.rolesService.getUnique({ where: { name: 'USER' } });
 
       const tenancy = await tx.tenancy.findUnique({
         where: {
@@ -135,26 +136,6 @@ export class AuthService {
       user,
       tenant,
     };
-  }
-
-  async createInitRoles() {
-    this.logger.log(`[${this.LOG_PREFIX}] Create SUPER_ADMIN Role`);
-
-    const superAdminRole = await this.roleService.getSuperAdminRole();
-
-    this.logger.log(`[${this.LOG_PREFIX}] Create USER Role`);
-
-    const userRole = await this.roleService.getUserRole();
-
-    if (!superAdminRole) {
-      this.logger.log('Create SUPER_ADMIN Role');
-      await this.roleService.createSuperAdmin();
-    }
-
-    if (!userRole) {
-      this.logger.log('Create USER Role');
-      await this.roleService.createUser();
-    }
   }
 
   async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
