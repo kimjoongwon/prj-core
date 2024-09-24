@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
 import { UpsertUserDto } from './dtos/upsert-user.dto';
+import { Prisma } from '@prisma/client';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly repository: UsersRepository) {}
+
+  getUnique(args: Prisma.UserFindUniqueArgs) {
+    return this.repository.findUnique(args);
+  }
 
   upsert(upsertUserDto: UpsertUserDto) {
     const { email } = upsertUserDto;
-    return this.prisma.user.upsert({
+    return this.repository.upsert({
       where: {
         email,
       },
@@ -18,7 +23,7 @@ export class UsersService {
   }
 
   async findUniqueByEmail(email: string) {
-    return this.prisma.user.findUnique({
+    return this.repository.findUnique({
       where: { email },
       include: {
         profiles: true,
@@ -37,7 +42,7 @@ export class UsersService {
   }
 
   async getUniqueById(id: string) {
-    return this.prisma.user.findUnique({
+    return this.repository.findUnique({
       where: { id },
       include: {
         profiles: true,
@@ -53,5 +58,9 @@ export class UsersService {
         },
       },
     });
+  }
+
+  create(args: Prisma.UserCreateArgs) {
+    return this.repository.create(args);
   }
 }

@@ -1,16 +1,7 @@
 import { ClsModule } from 'nestjs-cls';
 import { CaslModule } from './shared/casl/casl.module';
 import { Logger } from '@nestjs/common';
-import {
-  appConfig,
-  AuthConfig,
-  authConfig,
-  corsConfig,
-  databaseConfig,
-  fileConfig,
-  mailConfig,
-  UsersModule,
-} from '@shared';
+import { appConfig, AuthConfig, authConfig, corsConfig, UsersModule } from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -20,7 +11,7 @@ import {
   AdminGroupsModule,
   ServicesModule,
   AdminSessionsModule,
-  SpacesModule,
+  AdminSpacesModule,
   AdminSubjectsModule,
   AdminTimelineItemsModule,
   AdminRolesModule,
@@ -36,7 +27,7 @@ export const adminModules = [
   AdminTimelineItemsModule,
   CategoriesModule,
   ServicesModule,
-  SpacesModule,
+  AdminSpacesModule,
   AdminGroupsModule,
   AdminSubjectsModule,
   CaslModule,
@@ -103,7 +94,7 @@ export const libModules = [
   }),
   ConfigModule.forRoot({
     isGlobal: true,
-    load: [databaseConfig, authConfig, appConfig, mailConfig, fileConfig, corsConfig],
+    load: [authConfig, appConfig, corsConfig],
     envFilePath: '.env',
   }),
 ];

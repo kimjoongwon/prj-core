@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SpacesController } from './spaces.controller';
-import { SpaceModule } from '@shared';
+import { SpacesModule } from '@shared';
 
 @Module({
-  imports: [SpaceModule],
+  imports: [SpacesModule],
   controllers: [SpacesController],
 })
-export class SpacesModule {}
+export class AdminSpacesModule {}

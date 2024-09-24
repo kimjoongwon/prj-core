@@ -3,6 +3,8 @@ import { TenantsRepository } from './tenants.repository';
 import { IService } from '../../types';
 import { PaginationMananger } from '../../utils';
 import { CreateTenantDto, TenantPageQueryDto, UpdateTenantDto } from './dtos';
+import { PrismaService } from 'nestjs-prisma';
+import { Prisma } from '@prisma/client';
 @Injectable()
 export class TenantsService implements IService {
   constructor(private readonly repository: TenantsRepository) {}
@@ -32,8 +34,8 @@ export class TenantsService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createTenantDto: CreateTenantDto) {
-    return this.repository.create({ data: createTenantDto });
+  create(args: Prisma.TenantCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(pageQuery: TenantPageQueryDto) {

@@ -36,7 +36,7 @@ export class SpacesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
-    const space = await this.service.create(createSpaceDto);
+    const space = await this.service.create({ data: createSpaceDto });
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
 
@@ -45,7 +45,7 @@ export class SpacesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async getSpace(@Param('spaceId') spaceId: string) {
-    const space = await this.service.getUnique(spaceId);
+    const space = await this.service.getUnique({ where: { id: spaceId } });
     return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
   }
 
