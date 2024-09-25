@@ -78,7 +78,7 @@ export class AuthController {
     return new ResponseEntity(
       HttpStatus.CREATED,
       '회원가입 성공',
-      await this.authService.signUpUser(signUpDto),
+      await this.authService.signUp(signUpDto),
     );
   }
 }

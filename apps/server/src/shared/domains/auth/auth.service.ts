@@ -9,12 +9,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { UsersService, ResponseEntity, UserDto, RolesService } from '../../entities';
+import { UsersService, ResponseEntity } from '../../entities';
 import { goTryRawSync } from '../../libs';
 import { TokenService, TokenPayloadDto } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
-import { RoleService } from '../role/role.service';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +21,6 @@ export class AuthService {
   LOG_PREFIX = `${AuthService.name} DB_INIT`;
   constructor(
     private usersService: UsersService,
-    private rolesService: RolesService,
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
@@ -52,50 +50,40 @@ export class AuthService {
     return user;
   }
 
-  async signUpUser(signUpPayloadDto: SignUpPayloadDto) {
+  async signUp(signUpPayloadDto: SignUpPayloadDto) {
     const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
 
-    await this.prisma.$transaction(async (tx) => {
-      const hashedPassword = await this.passwordService.hashPassword(password);
-
-      const newUser = new UserDto(
-        await tx.user.create({
-          data: {
-            email,
-            name,
-            phone,
-            password: hashedPassword,
+    const { id: userId } = await this.usersService.create({
+      data: {
+        email,
+        name,
+        phone,
+        password,
+        profiles: {
+          create: {
+            nickname,
           },
-        }),
-      );
-
-      const userRole = await this.rolesService.getUnique({ where: { name: 'USER' } });
-
-      const tenancy = await tx.tenancy.findUnique({
-        where: {
-          id: spaceId,
         },
-      });
-
-      await tx.tenant.create({
-        data: {
-          type: 'PHYSICAL',
-          active: true,
-          userId: newUser.id,
-          tenancyId: tenancy.id,
-          roleId: userRole.id,
+        tenants: {
+          create: {
+            type: 'PHYSICAL',
+            active: true,
+            role: {
+              connect: {
+                name: 'USER',
+              },
+            },
+            tenancy: {
+              connect: {
+                spaceId,
+              },
+            },
+          },
         },
-      });
-
-      await tx.profile.create({
-        data: {
-          nickname,
-          userId: newUser.id,
-        },
-      });
-
-      return this.tokenService.generateTokens({ userId: newUser.id });
+      },
     });
+
+    return this.tokenService.generateTokens({ userId });
   }
 
   async login({ email, password }: LoginPayloadDto) {
@@ -136,47 +124,5 @@ export class AuthService {
       user,
       tenant,
     };
-  }
-
-  async createSuperAdmin(signUpPayloadDto: SignUpPayloadDto) {
-    // const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
-    // const hashedPassword = await this.passwordService.hashPassword(password);
-    // const newUser = await this.usersService.upsert({
-    //   email,
-    //   name,
-    //   phone,
-    //   password: hashedPassword,
-    // });
-    // const userId = newUser.id;
-    // await this.prisma.profile.upsert({
-    //   where: {
-    //     userId,
-    //   },
-    //   update: {
-    //     userId,
-    //     nickname,
-    //   },
-    //   create: {
-    //     userId,
-    //     nickname,
-    //   },
-    // });
-    // const superAdminRole = await this.roleService.findSuperAdminRole();
-    // let newSpaceId = null;
-    // const space = await this.spacesService.getUnique(spaceId);
-    // if (!space) {
-    //   newSpaceId = this.spacesService.create({
-    //     name: 'Galaxy',
-    //   });
-    // } else {
-    //   newSpaceId = space.id;
-    // }
-    // await this.tenantService.createOrUpdate({
-    //   tenancyId: tenancy.id,
-    //   userId: newUser.id,
-    //   active: true,
-    //   roleId: superAdminRole.id,
-    //   type: 'PHYSICAL',
-    // });
   }
 }

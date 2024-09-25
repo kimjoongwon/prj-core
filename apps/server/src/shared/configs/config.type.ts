@@ -11,6 +11,14 @@ export type AppConfig = {
   headerLanguage: string;
 };
 
+export type SMTPConfig = {
+  username: string;
+  password;
+  port: string;
+  host: string;
+  sender: string;
+};
+
 export type CorsConfig = {
   enabled: boolean;
 };

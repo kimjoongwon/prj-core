@@ -4,7 +4,6 @@ import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '../../configs/config.type';
 import { TokenPayloadDto } from './token-payload.dto';
-import { TokenDto } from './token.dto';
 import { match } from 'ts-pattern';
 import { goTryRawSync } from '@shared';
 
@@ -44,7 +43,7 @@ export class TokenService {
     });
   }
 
-  generateTokens(payload: TokenPayloadDto): Omit<TokenDto, 'user'> {
+  generateTokens(payload: TokenPayloadDto) {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
