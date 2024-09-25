@@ -20,6 +20,7 @@ import {
 import { JwtModule } from '@nestjs/jwt';
 import { AdminAbilityModule } from './gateway/admin/abilities/admin-abilities.module';
 import { AdminAuthModule } from './gateway/admin/auth/admin-auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 export const adminModules = [
   AdminAbilityModule,
@@ -38,6 +39,26 @@ export const adminModules = [
 ];
 
 export const libModules = [
+  MailerModule.forRootAsync({
+    useFactory: async (config: ConfigService) => {
+      const smtpConfig = await config.get('smtp');
+      return {
+        transport: {
+          host: smtpConfig.host,
+          port: smtpConfig.port,
+          secure: true,
+          auth: {
+            user: smtpConfig.username,
+            pass: smtpConfig.password,
+          },
+        },
+        defaults: {
+          from: smtpConfig.sender,
+        },
+      };
+    },
+    inject: [ConfigService],
+  }),
   CaslModule,
   ClsModule.forRoot({
     global: true,
