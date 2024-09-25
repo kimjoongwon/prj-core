@@ -16,6 +16,7 @@ import { ResponseEntity, UserDto, TenantDto } from '../../entities';
 import { LocalAuthGuard } from '../../guards';
 import { TokenService } from '../token';
 import { AuthService } from './auth.service';
+import { EmailService } from '../email/Email.service';
 
 @ApiTags('AUTH')
 @Controller()
@@ -23,6 +24,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
+    private readonly emailService: EmailService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -80,5 +82,11 @@ export class AuthController {
       '회원가입 성공',
       await this.authService.signUp(signUpDto),
     );
+  }
+
+  @Public()
+  @Post('hihi')
+  test() {
+    this.emailService.sendResetPassword();
   }
 }

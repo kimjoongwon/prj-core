@@ -21,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AdminAbilityModule } from './gateway/admin/abilities/admin-abilities.module';
 import { AdminAuthModule } from './gateway/admin/auth/admin-auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import smtpConfig from './shared/configs/smtp.config';
 
 export const adminModules = [
   AdminAbilityModule,
@@ -46,7 +47,7 @@ export const libModules = [
         transport: {
           host: smtpConfig.host,
           port: smtpConfig.port,
-          secure: true,
+          secure: false,
           auth: {
             user: smtpConfig.username,
             pass: smtpConfig.password,
@@ -115,7 +116,7 @@ export const libModules = [
   }),
   ConfigModule.forRoot({
     isGlobal: true,
-    load: [authConfig, appConfig, corsConfig],
+    load: [authConfig, appConfig, corsConfig, smtpConfig],
     envFilePath: '.env',
   }),
 ];
