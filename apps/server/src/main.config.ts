@@ -19,9 +19,11 @@ import {
 } from './gateway/admin';
 import { JwtModule } from '@nestjs/jwt';
 import { AdminAbilityModule } from './gateway/admin/abilities/admin-abilities.module';
-import { AdminAuthModule } from './gateway/admin/auth/admin-auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import smtpConfig from './shared/configs/smtp.config';
+import { ServiceAuthModule } from './gateway/auth/service/auth/service-auth.module';
+import { AuthAdminModule } from './gateway/auth/admin/auth-admin.module';
+import { AuthModule } from './gateway/auth/auth.module';
 
 export const adminModules = [
   AdminAbilityModule,
@@ -33,10 +35,12 @@ export const adminModules = [
   AdminGroupsModule,
   AdminSubjectsModule,
   CaslModule,
-  AdminAuthModule,
+  AuthAdminModule,
+  ServiceAuthModule,
   AdminSessionsModule,
   UsersModule,
   AdminRolesModule,
+  AuthModule,
 ];
 
 export const libModules = [
@@ -47,7 +51,7 @@ export const libModules = [
         transport: {
           host: smtpConfig.host,
           port: smtpConfig.port,
-          secure: false,
+          secure: true,
           auth: {
             user: smtpConfig.username,
             pass: smtpConfig.password,

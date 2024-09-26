@@ -3,11 +3,11 @@ import { RolesModule, UsersModule } from '../../entities';
 import { PasswordService } from '../password';
 import { TokenService } from '../token';
 import { AuthService } from './auth.service';
-import { EmailModule } from '../email/email.module';
+import { LocalStrategy } from './strategies';
 
 @Module({
-  imports: [RolesModule, UsersModule, EmailModule],
-  providers: [AuthService, PasswordService, TokenService],
-  exports: [AuthService, TokenService],
+  imports: [RolesModule, UsersModule],
+  providers: [AuthService, PasswordService, TokenService, LocalStrategy],
+  exports: [AuthService, TokenService, RolesModule, UsersModule],
 })
 export class AuthModule {}

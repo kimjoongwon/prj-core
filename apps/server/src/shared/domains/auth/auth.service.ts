@@ -11,7 +11,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
 import { UsersService, ResponseEntity } from '../../entities';
 import { goTryRawSync } from '../../libs';
-import { TokenService, TokenPayloadDto } from '../token';
+import { TokenService } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 
@@ -28,7 +28,7 @@ export class AuthService {
   ) {}
 
   async getCurrentUser(accessToken: string) {
-    const [err, { userId }] = goTryRawSync<Error, TokenPayloadDto>(() =>
+    const [err, { userId }] = goTryRawSync<Error, { userId: string }>(() =>
       this.jwtService.verify<{ userId: string }>(accessToken),
     );
     if (err) throw new BadRequestException('Invalid token');

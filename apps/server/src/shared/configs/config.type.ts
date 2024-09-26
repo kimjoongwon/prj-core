@@ -14,7 +14,7 @@ export type AppConfig = {
 export type SMTPConfig = {
   username: string;
   password;
-  port: string;
+  port: number;
   host: string;
   sender: string;
 };

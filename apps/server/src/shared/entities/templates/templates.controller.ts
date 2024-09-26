@@ -45,7 +45,7 @@ export class TemplatesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TemplateDto, HttpStatus.OK)
   async getTemplate(@Param('templateId') templateId: string) {
-    const template = await this.service.getUnique(templateId);
+    const template = await this.service.getUnique({ where: { id: templateId } });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(TemplateDto, template));
   }
 

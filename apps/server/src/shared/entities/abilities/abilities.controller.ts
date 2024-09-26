@@ -19,7 +19,7 @@ import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
 
-@ApiTags('ADMIN_ABILITIES_2')
+@ApiTags('ADMIN_ABILITIES')
 @Controller(ApiEndpoints.ADMIN_ABILITIES)
 export class AbilitiesController {
   constructor(private readonly abilitiesService: AbilitiesService) {}

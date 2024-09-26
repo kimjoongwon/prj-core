@@ -26,7 +26,7 @@ export default registerAs<SMTPConfig>('smtp', () => {
   return {
     username: process.env.SMTP_USERNAME,
     password: process.env.SMTP_PASSWORD,
-    port: process.env.SMTP_PORT,
+    port: Number(process.env.SMTP_PORT),
     host: process.env.SMTP_HOST,
     sender: process.env.SMTP_SENDER,
   };

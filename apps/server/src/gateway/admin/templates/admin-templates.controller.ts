@@ -4,4 +4,4 @@ import { ApiEndpoints } from '@shared';
 
 @ApiTags('ADMIN_TEMPLATES')
 @Controller(ApiEndpoints.ADMIN_TEMPLATES)
-export class TemplatesController {}
+export class AdminTemplatesController {}

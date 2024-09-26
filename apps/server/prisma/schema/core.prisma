@@ -142,16 +142,29 @@ model SMS {
     removedAt  DateTime? @db.Timestamptz(6)
 }
 
-model Email {
+model SystemEmail {
     id         String      @id @default(uuid())
-    title      String
-    toUserIds  String[]
-    fromUserId String?
     status     EmailStatus @default(PROGRESS)
-    sentAt     DateTime?
+    emailId    String
+    templateId String
     createdAt  DateTime    @default(now()) @db.Timestamptz(6)
     updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
     removedAt  DateTime?   @db.Timestamptz(6)
+    email      Email       @relation(fields: [emailId], references: [id])
+    template   Template    @relation(fields: [templateId], references: [id])
+}
+
+model Email {
+    id           String        @id @default(uuid())
+    toUserIds    String[]
+    fromUserId   String
+    postId       String
+    sentAt       DateTime      @db.Timestamptz(6)
+    createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+    updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
+    removedAt    DateTime?     @db.Timestamptz(6)
+    post         Post          @relation(fields: [postId], references: [id])
+    systemEmails SystemEmail[]
 }
 
 enum EmailStatus {
@@ -316,25 +329,21 @@ enum Roles {
 
 enum TemplateNames {
     WELCOME
+    EMAIL_VERIFICATION
     RESET_PASSWORD
-    INVITATION
-    INVITATION_ACCEPTED
-    INVITATION_REJECTED
-    INVITATION_EXPIRED
-    INVITATION_REMINDER
 }
 
 model Template {
-    id        String        @id @default(uuid())
-    name      TemplateNames @unique @default(WELCOME)
-    keys      String[]
-    postId    String
-    serviceId String
-    createdAt DateTime      @default(now()) @db.Timestamptz(6)
-    updatedAt DateTime?     @updatedAt @db.Timestamptz(6)
-    removedAt DateTime?     @db.Timestamptz(6)
-    post      Post          @relation(fields: [postId], references: [id])
-    service   Service       @relation(fields: [serviceId], references: [id])
+    id           String        @id @default(uuid())
+    name         TemplateNames @unique @default(WELCOME)
+    postId       String
+    serviceId    String
+    createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+    updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
+    removedAt    DateTime?     @db.Timestamptz(6)
+    post         Post          @relation(fields: [postId], references: [id])
+    service      Service       @relation(fields: [serviceId], references: [id])
+    systemEmails SystemEmail[]
 }
 
 enum QnaStatus {
@@ -395,4 +404,5 @@ model Post {
     questions Question[]
     answers   Answer[]
     Template  Template[]
+    Email     Email[]
 }

@@ -8,15 +8,24 @@ import {
   Res,
   Req,
   UseGuards,
+  Version,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginPayloadDto, SignUpPayloadDto, TokenDto } from './dtos';
-import { ApiResponseEntity, Auth, Public } from '../../decorators';
-import { ResponseEntity, UserDto, TenantDto } from '../../entities';
-import { LocalAuthGuard } from '../../guards';
-import { TokenService } from '../token';
-import { AuthService } from './auth.service';
-import { EmailService } from '../email/Email.service';
+import {
+  ApiResponseEntity,
+  Auth,
+  AuthService,
+  LocalAuthGuard,
+  LoginPayloadDto,
+  Public,
+  ResponseEntity,
+  SignUpPayloadDto,
+  TenantDto,
+  TokenDto,
+  TokenService,
+  UserDto,
+} from '@shared';
+import { Response } from 'express';
 
 @ApiTags('AUTH')
 @Controller()
@@ -24,17 +33,16 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
-    private readonly emailService: EmailService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
-  async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res) {
+  async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
 
-    this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
-    this.tokenService.setTokenToHTTPOnlyCookie(res, 'accessToken', accessToken);
+    res.cookie('refreshToken', refreshToken, { httpOnly: true });
+    res.cookie('accessToken', accessToken, { httpOnly: true });
 
     return new ResponseEntity(HttpStatus.OK, '로그인 성공', {
       accessToken,
@@ -47,21 +55,18 @@ export class AuthController {
   @Auth([])
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Get('new-token')
-  async getNewToken(@Req() req, @Res({ passthrough: true }) res) {
-    const refreshToken = this.tokenService.getTokenFromRequest(req, 'refreshToken');
-
+  async getNewToken(@Req() req: Response & { user: UserDto }, @Res({ passthrough: true }) res) {
+    const refreshToken = req.cookie['refreshToken'];
     const { userId } = await this.tokenService.validateToken(refreshToken);
 
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
       this.tokenService.generateTokens({
         userId,
       });
+    res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
+    res.cookie('accessToken', newAccessToken, { httpOnly: true });
 
-    this.tokenService.setTokenToHTTPOnlyCookie(res, 'refreshToken', refreshToken);
-    this.tokenService.setTokenToHTTPOnlyCookie(res, 'accessToken', newAccessToken);
-
-    const user = req.user as UserDto;
-
+    const user = req.user;
     const tenant = user.tenants.map((tenant) => tenant.active);
 
     return {
@@ -82,11 +87,5 @@ export class AuthController {
       '회원가입 성공',
       await this.authService.signUp(signUpDto),
     );
-  }
-
-  @Public()
-  @Post('hihi')
-  test() {
-    this.emailService.sendResetPassword();
   }
 }

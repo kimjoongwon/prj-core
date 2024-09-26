@@ -3,31 +3,42 @@ import { InitModule, LoggerMiddleware } from '@shared';
 import { adminModules, libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
-import { AdminAuthModule } from './admin/auth/admin-auth.module';
-import { ServiceAuthModule } from './service/auth/service-auth.module';
+import { AuthAdminModule } from './auth/admin/auth-admin.module';
+import { ServiceAuthModule } from './auth/service/auth/service-auth.module';
+import { AuthModule } from './auth/auth.module';
+import { AdminTemplatesModule } from './admin';
 
 @Module({
   imports: [
     InitModule,
     ...libModules,
     ...adminModules,
-    ServiceAuthModule,
     RouterModule.register([
       {
-        path: 'admin',
+        path: 'api',
         children: [
           {
-            path: 'auth',
-            module: AdminAuthModule,
-          },
-        ],
-      },
-      {
-        path: 'service',
-        children: [
-          {
-            path: 'auth',
-            module: ServiceAuthModule,
+            path: 'v1',
+            children: [
+              {
+                path: 'admin',
+                module: AdminTemplatesModule,
+              },
+              {
+                path: 'auth',
+                module: AuthModule,
+                children: [
+                  {
+                    path: 'admin',
+                    module: AuthAdminModule,
+                  },
+                  {
+                    path: 'service',
+                    module: ServiceAuthModule,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TemplatesController } from './admin-templates.controller';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TemplateService } from '@shared';
+import { TemplateService } from '../../../shared/domains/template/Template.service';
+import { AdminTemplatesController } from './admin-templates.controller';
 
-describe('TemplatesController', () => {
-  let controller: TemplatesController;
+describe('AdminTemplatesController', () => {
+  let controller: AdminTemplatesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TemplatesController],
+      controllers: [AdminTemplatesController],
       providers: [TemplateService],
     }).compile();
 
-    controller = module.get<TemplatesController>(TemplatesController);
+    controller = module.get<AdminTemplatesController>(AdminTemplatesController);
   });
 
   it('should be defined', () => {

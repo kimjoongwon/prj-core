@@ -3,7 +3,6 @@ import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '../../configs/config.type';
-import { TokenPayloadDto } from './token-payload.dto';
 import { match } from 'ts-pattern';
 import { goTryRawSync } from '@shared';
 
@@ -31,11 +30,11 @@ export class TokenService {
     return res.cookie(key, value, { httpOnly: true });
   }
 
-  generateAccessToken(payload: TokenPayloadDto) {
+  generateAccessToken(payload: { userId: string }) {
     return this.jwtService.sign(payload);
   }
 
-  generateRefreshToken(payload: TokenPayloadDto) {
+  generateRefreshToken(payload: { userId: string }) {
     const authConfig = this.configService.get<AuthConfig>('auth');
     return this.jwtService.sign(payload, {
       secret: authConfig?.secret,
@@ -43,7 +42,7 @@ export class TokenService {
     });
   }
 
-  generateTokens(payload: TokenPayloadDto) {
+  generateTokens(payload: { userId: string }) {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),

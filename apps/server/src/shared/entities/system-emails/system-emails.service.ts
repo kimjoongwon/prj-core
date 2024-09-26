@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTemplateDto } from './dtos/create-template.dto';
-import { UpdateTemplateDto } from './dtos/update-template.dto';
-import { TemplatesRepository } from './templates.repository';
-import { TemplatePageQueryDto } from './dtos/template-page-query.dto';
+import { CreateSystemEmailDto } from './dtos/create-system-email.dto';
+import { UpdateSystemEmailDto } from './dtos/update-system-email.dto';
+import { SystemEmailsRepository } from './system-emails.repository';
+import { SystemEmailQueryDto } from './dtos/system-email-query.dto';
 import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class TemplatesService implements IService {
-  constructor(private readonly repository: TemplatesRepository) {}
+export class SystemEmailsService implements IService {
+  constructor(private readonly repository: SystemEmailsRepository) {}
 
-  getUnique(args: Prisma.TemplateFindUniqueArgs) {
+  getUnique(args: Prisma.SystemEmailFindUniqueArgs) {
     return this.repository.findUnique(args);
   }
 
@@ -36,26 +36,26 @@ export class TemplatesService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createTemplateDto: CreateTemplateDto) {
-    return this.repository.create({ data: createTemplateDto });
+  create(createSystemEmailDto: CreateSystemEmailDto) {
+    return this.repository.create({ data: createSystemEmailDto });
   }
 
-  async getManyByQuery(pageQuery: TemplatePageQueryDto) {
+  async getManyByQuery(pageQuery: SystemEmailQueryDto) {
     const args = PaginationMananger.toArgs(pageQuery);
-    const templates = await this.repository.findMany(args);
+    const systemEmails = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {
-      templates,
+      systemEmails,
       count,
     };
   }
 
-  update(templateId: string, updateTemplateDto: UpdateTemplateDto) {
+  update(systemEmailId: string, updateSystemEmailDto: UpdateSystemEmailDto) {
     return this.repository.update({
       where: {
-        id: templateId,
+        id: systemEmailId,
       },
-      data: updateTemplateDto,
+      data: updateSystemEmailDto,
     });
   }
 

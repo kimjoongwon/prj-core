@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AbilityService } from '../../../shared/domains/ability/ability.service';
 import { AbilitiesService } from '../../../shared/entities/abilities/abilities.service';
 
-@ApiTags('ADMIN_ABILITIES_1')
+@ApiTags()
 @Controller('ability')
 export class AdminAbilityController {
   constructor(
