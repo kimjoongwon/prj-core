@@ -172,6 +172,7 @@ enum EmailStatus {
     PENDING
     SENT
     FAILED
+    COMPLETED
 }
 
 enum SMSStatus {
@@ -323,8 +324,9 @@ enum AbilityTypes {
 }
 
 enum Roles {
-    USER
     SUPER_ADMIN
+    ADMIN
+    USER
 }
 
 enum TemplateNames {

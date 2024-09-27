@@ -1,22 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSystemEmailDto } from './dtos/create-system-email.dto';
-import { UpdateSystemEmailDto } from './dtos/update-system-email.dto';
 import { SystemEmailsRepository } from './system-emails.repository';
 import { SystemEmailQueryDto } from './dtos/system-email-query.dto';
 import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class SystemEmailsService implements IService {
+export class SystemEmailsService {
   constructor(private readonly repository: SystemEmailsRepository) {}
 
   getUnique(args: Prisma.SystemEmailFindUniqueArgs) {
     return this.repository.findUnique(args);
   }
 
-  getFirst(id: string) {
-    return this.repository.findFirst({ where: { id } });
+  getFirst(args: Prisma.SystemEmailFindFirstArgs) {
+    return this.repository.findFirst(args);
   }
 
   removeMany(ids: string[]) {
@@ -36,8 +33,8 @@ export class SystemEmailsService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createSystemEmailDto: CreateSystemEmailDto) {
-    return this.repository.create({ data: createSystemEmailDto });
+  create(args: Prisma.SystemEmailCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(pageQuery: SystemEmailQueryDto) {
@@ -50,13 +47,8 @@ export class SystemEmailsService implements IService {
     };
   }
 
-  update(systemEmailId: string, updateSystemEmailDto: UpdateSystemEmailDto) {
-    return this.repository.update({
-      where: {
-        id: systemEmailId,
-      },
-      data: updateSystemEmailDto,
-    });
+  update(args: Prisma.SystemEmailUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

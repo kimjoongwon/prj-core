@@ -36,7 +36,9 @@ export class SystemEmailsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createSystemEmail(@Body() createSystemEmailDto: CreateSystemEmailDto) {
-    const email = await this.service.create(createSystemEmailDto);
+    const email = await this.service.create({
+      data: createSystemEmailDto,
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SystemEmailDto, email));
   }
 
@@ -58,15 +60,20 @@ export class SystemEmailsController {
     return new ResponseEntity(HttpStatus.OK, '성공', emails.count);
   }
 
-  @Patch(':emailId')
+  @Patch(':systemEmailId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SystemEmailDto, HttpStatus.OK)
   async updateSystemEmail(
-    @Param('emailId') emailId: string,
+    @Param('systemEmailId') systemEmailId: string,
     @Body() updateSystemEmailDto: UpdateSystemEmailDto,
   ) {
-    const email = await this.service.update(emailId, updateSystemEmailDto);
+    const email = await this.service.update({
+      where: {
+        id: systemEmailId,
+      },
+      data: updateSystemEmailDto,
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SystemEmailDto, email));
   }
 

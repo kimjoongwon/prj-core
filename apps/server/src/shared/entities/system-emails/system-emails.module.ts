@@ -4,7 +4,7 @@ import { SystemEmailsRepository } from './system-emails.repository';
 import { SystemEmailsController } from './system-emails.controller';
 
 @Module({
-  controllers: [SystemEmailsController],
+  // controllers: [SystemEmailsController],
   providers: [SystemEmailsService, SystemEmailsRepository],
   exports: [SystemEmailsService],
 })

@@ -1,4 +1,4 @@
-import { $Enums } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Role } from '../role.entity';
 import { ClassField, EnumField } from '../../../decorators/field.decorators';

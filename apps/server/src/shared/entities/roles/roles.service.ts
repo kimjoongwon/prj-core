@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Roles } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { IService } from '../../types';
 import { RolesRepository } from './roles.repository';
-import { CreateRoleDto, RoleQueryDto, UpdateRoleDto } from './dto';
-import { PaginationMananger } from '../../utils';
+import { CreateRoleDto, RoleDto, UpdateRoleDto } from './dto';
 
 @Injectable()
-export class RolesService implements IService {
+export class RolesService {
   constructor(private readonly repository: RolesRepository) {}
 
-  getUnique(args: Prisma.RoleFindUniqueArgs) {
+  getUnique(args: Prisma.RoleFindUniqueArgs): Promise<RoleDto> {
     return this.repository.findUnique(args);
   }
 
@@ -38,23 +37,17 @@ export class RolesService implements IService {
     return this.repository.create({ data: createRoleDto });
   }
 
-  async getManyByQuery(query: RoleQueryDto) {
-    const args = PaginationMananger.toArgs(query);
+  async getManyByQuery(args: Prisma.RoleFindManyArgs) {
     const roles = await this.repository.findMany(args);
-    const count = await this.repository.count(args);
+    const count = await this.repository.count(args as Prisma.RoleCountArgs);
     return {
       roles,
       count,
     };
   }
 
-  update(roleId: string, updateRoleDto: UpdateRoleDto) {
-    return this.repository.update({
-      where: {
-        id: roleId,
-      },
-      data: updateRoleDto,
-    });
+  update(args: Prisma.RoleUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

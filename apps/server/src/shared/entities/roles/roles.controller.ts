@@ -60,7 +60,10 @@ export class RolesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleDto, HttpStatus.OK)
   async updateRole(@Param('roleId') roleId: string, @Body() updateRoleDto: UpdateRoleDto) {
-    const role = await this.service.update(roleId, updateRoleDto);
+    const role = await this.service.update({
+      where: { id: roleId },
+      data: updateRoleDto,
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoleDto, role));
   }
 
@@ -88,7 +91,7 @@ export class RolesController {
   @ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
   async getRolesByQuery(@Query() roleQueryDto: RoleQueryDto) {
     console.log('roleQueryDto', roleQueryDto);
-    const { count, roles } = await this.service.getManyByQuery(roleQueryDto);
+    const { count, roles } = await this.service.getManyByQuery(roleQueryDto.toArgs());
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
