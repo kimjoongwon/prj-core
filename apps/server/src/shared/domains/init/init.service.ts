@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   RolesService,
   SpacesService,
+  SubjectsService,
   TenanciesService,
   TenantsService,
   UsersService,
@@ -9,6 +10,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class InitService {
@@ -20,8 +22,8 @@ export class InitService {
     private readonly configService: ConfigService,
     private readonly tenanciesService: TenanciesService,
     private readonly usersService: UsersService,
-    private readonly tenantsService: TenantsService,
     private readonly passwordService: PasswordService,
+    private readonly subjectsService: SubjectsService,
   ) {}
 
   async createDefaultRoles() {
@@ -141,7 +143,16 @@ export class InitService {
     }
   }
 
+  createSubjects() {
+    return Promise.all(
+      Object.keys(Prisma.ModelName).map((key) =>
+        this.subjectsService.create({ data: { name: key } }),
+      ),
+    );
+  }
+
   async initApp() {
+    await this.createSubjects();
     const { adminRoleId } = await this.createDefaultRoles();
     const { tenancyId } = await this.createDefaultSpace();
 

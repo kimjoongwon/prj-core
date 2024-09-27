@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ServiceAuthService } from './service-auth.service';
-import { ApiResponseEntity, EmailService, RoleDto, SystemEmailDto } from '@shared';
+import { ApiResponseEntity, ContextProvider, EmailService, RoleDto, SystemEmailDto } from '@shared';
 
 @ApiTags('SERVICE_AUTH')
 @Controller()
@@ -25,13 +25,14 @@ export class ServiceAuthController {
 
   @Patch('system-emails/:systemEmailId/status/completed')
   @ApiResponseEntity(SystemEmailDto, HttpStatus.OK)
-  async verifyEmail(@Param('systemEmailId') systemEmailId) {
+  async verifyEmail(@Param('systemEmailId') systemEmailId: string) {
     return this.serviceAuthService.verifyEmail(systemEmailId);
   }
 
   @Get('system-emails/status/completed')
   @ApiResponseEntity(Boolean, HttpStatus.OK)
-  async checkEmailVerification(@Param('systemEmailId') systemEmailId) {
-    return this.emailService.checkEmailVerification(systemEmailId);
+  async checkEmailVerification() {
+    const user = ContextProvider.getAuthUser();
+    return this.emailService.checkEmailVerification(user.id);
   }
 }

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Container } from '@shared/frontend';
+import { Container, VStack } from '@shared/frontend';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
 const AuthLayout = (props: AuthLayoutProps) => {
-  return <Container>{props.children}</Container>;
+  const { children } = props;
+  return <VStack className="px-4">{children}</VStack>;
 };
 
 export default AuthLayout;

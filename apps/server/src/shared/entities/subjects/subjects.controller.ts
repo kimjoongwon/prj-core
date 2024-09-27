@@ -13,7 +13,7 @@ export class SubjectsController {
 
   @Post()
   createSubject(@Body() createSubjectDto: CreateSubjectDto) {
-    return this.service.create(createSubjectDto);
+    return this.service.create({ data: createSubjectDto });
   }
 
   @Get()

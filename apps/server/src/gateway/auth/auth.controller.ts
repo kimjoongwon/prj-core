@@ -8,7 +8,6 @@ import {
   Res,
   Req,
   UseGuards,
-  Version,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -25,7 +24,7 @@ import {
   TokenService,
   UserDto,
 } from '@shared';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @ApiTags('AUTH')
 @Controller()
@@ -55,8 +54,8 @@ export class AuthController {
   @Auth([])
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Get('new-token')
-  async getNewToken(@Req() req: Response & { user: UserDto }, @Res({ passthrough: true }) res) {
-    const refreshToken = req.cookie['refreshToken'];
+  async getNewToken(@Req() req: Request & { user: UserDto }, @Res({ passthrough: true }) res) {
+    const refreshToken = req.cookies['refreshToken'];
     const { userId } = await this.tokenService.validateToken(refreshToken);
 
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =

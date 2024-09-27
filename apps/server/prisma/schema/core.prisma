@@ -405,6 +405,6 @@ model Post {
     author    User       @relation(fields: [authorId], references: [id])
     questions Question[]
     answers   Answer[]
-    Template  Template[]
-    Email     Email[]
+    templates Template[]
+    emails    Email[]
 }
