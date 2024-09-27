@@ -5,5 +5,5 @@ type LayoutProps = {
 };
 
 export default function LoginLayout(props: LayoutProps) {
-  return <Container>{props.children}</Container>;
+  return props.children;
 }

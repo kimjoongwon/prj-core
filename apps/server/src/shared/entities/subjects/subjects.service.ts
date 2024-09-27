@@ -3,13 +3,14 @@ import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { SubjectsRepository } from './subjects.repository';
 import { SubjectPageQueryDto } from './dto/subject-page-query.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SubjectsService {
   constructor(private readonly repository: SubjectsRepository) {}
 
-  create(createSubjectDto: CreateSubjectDto) {
-    return this.repository.create(createSubjectDto);
+  create(args: Prisma.SubjectCreateArgs) {
+    return this.repository.create(args);
   }
 
   createOrUpdate(createSubjectDto: CreateSubjectDto) {

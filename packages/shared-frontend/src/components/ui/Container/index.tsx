@@ -1,14 +1,22 @@
-'use client';
-
+import { tv } from 'tailwind-variants';
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
 }
 
+const container = tv({
+  base: 'flex flex-col',
+});
+
 export const Container = (props: ContainerProps) => {
+  const { className = '', children } = props;
   return (
-    <div className={`flex flex-col w-full items-center ${props.className}`}>
-      {props.children}
+    <div
+      className={container({
+        class: className,
+      })}
+    >
+      {children}
     </div>
   );
 };

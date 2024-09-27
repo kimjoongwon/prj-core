@@ -7,10 +7,8 @@ import { Prisma } from '@prisma/client';
 export class SubjectsRepository {
   constructor(private prisma: PrismaService) {}
 
-  create(data: CreateSubjectDto) {
-    return this.prisma.subject.create({
-      data,
-    });
+  create(args: Prisma.SubjectCreateArgs) {
+    return this.prisma.subject.create(args);
   }
 
   async upsert(args: Prisma.SubjectUpsertArgs) {

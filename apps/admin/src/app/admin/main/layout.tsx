@@ -1,6 +1,5 @@
 'use client';
 
-import { Divider } from '@nextui-org/react';
 import {
   Avatar,
   Button,
@@ -69,14 +68,5 @@ const MainLayout = observer((props: MainLayoutProps) => {
     </>
   );
 });
-
-// const AccessibleSpaceSelect = observer(() => {
-//   const spaceOptions = queryData?.data?.map(space => ({
-//     text: space.name,
-//     value: space.id,
-//   }));
-
-//   return <Select className="w-40" options={spaceOptions} state={galaxy.auth} />;
-// });
 
 export default MainLayout;
