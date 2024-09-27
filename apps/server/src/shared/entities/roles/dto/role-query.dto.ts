@@ -4,6 +4,7 @@ import { OrderByDto } from '../../common/dtos/order-by.dto';
 import { EnumFieldOptional } from '../../../decorators/field.decorators';
 import { Prisma } from '@prisma/client';
 import { RoleDto } from './role.dto';
+import { PaginationMananger } from '../../../utils';
 
 class RoleOrderBy extends OrderByDto {
   @EnumFieldOptional(() => Prisma.SortOrder)
@@ -17,4 +18,9 @@ export class RoleQueryDto extends IntersectionType(
   PartialType(RoleDto),
   RoleOrderBy,
   PageQueryDto,
-) {}
+) {
+  toArgs() {
+    const args = PaginationMananger.toArgs(this);
+    return args;
+  }
+}

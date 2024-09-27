@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { PrismaService } from 'nestjs-prisma';
-import { AuthService } from './auth.service';
-import { PasswordService, RolesService, SpacesService, UsersService } from '@shared';
+import { AuthService, PasswordService, RolesService, SpacesService, UsersService } from '@shared';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { describe, beforeEach, it, expect } from 'vitest';
