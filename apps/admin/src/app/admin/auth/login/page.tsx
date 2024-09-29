@@ -28,7 +28,6 @@ const LoginPage = observer(() => {
         <LoginForm state={state} />
 
         <Spacer y={10} />
-
         <Button
           getDisabled={getDisabled}
           getLoading={getLoading}

@@ -16,7 +16,10 @@
     "codegen": "openapi-rq -i http://localhost:3005/api-json --output ./src/api -c axios"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@internationalized/date": "^3.5.5",
+    "@mui/material": "^6.1.1",
     "@nextui-org/react": "2.4.6",
     "@nozbe/watermelondb": "^0.27.1",
     "@shared/frontend": "workspace:*",
