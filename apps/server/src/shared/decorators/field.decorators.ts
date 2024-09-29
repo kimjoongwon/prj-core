@@ -399,7 +399,7 @@ export function ClassField<TClass extends Constructor>(
   if (options.swagger !== false) {
     decorators.push(
       ApiProperty({
-        type: () => classValue,
+        type: () => getClass(),
         ...options,
       }),
     );
@@ -408,6 +408,5 @@ export function ClassField<TClass extends Constructor>(
   if (options.each) {
     decorators.push(ToArray());
   }
-
   return applyDecorators(...decorators);
 }

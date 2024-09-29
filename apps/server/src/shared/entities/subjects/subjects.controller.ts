@@ -5,6 +5,7 @@ import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { ResponseEntity } from '../common/response.entity';
 import { CreateSubjectDto, SubjectDto, SubjectPageQueryDto, UpdateSubjectDto } from './dto';
 import { SubjectsService } from './subjects.service';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_SUBJECTS')
 @Controller(ApiEndpoints.ADMIN_SUBJECTS)
@@ -23,7 +24,7 @@ export class SubjectsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '조회 성공',
-      subjects.map((subject) => new SubjectDto(subject)),
+      subjects.map((subject) => plainToInstance(SubjectDto, subject)),
     );
   }
 
@@ -31,7 +32,7 @@ export class SubjectsController {
   @ApiResponseEntity(SubjectDto)
   async getSubjectById(@Param('subjectId') id: string) {
     const subject = await this.service.getOneById(id);
-    return new ResponseEntity(HttpStatus.OK, '조회 성공', new SubjectDto(subject));
+    return new ResponseEntity(HttpStatus.OK, '조회 성공', plainToInstance(SubjectDto, subject));
   }
 
   @Patch(':subjectId')
@@ -41,12 +42,12 @@ export class SubjectsController {
     @Body() updateSubjectDto: UpdateSubjectDto,
   ) {
     const subject = await this.service.updateById(id, updateSubjectDto);
-    return new ResponseEntity(HttpStatus.OK, '수정 성공', new SubjectDto(subject));
+    return new ResponseEntity(HttpStatus.OK, '수정 성공', plainToInstance(SubjectDto, subject));
   }
 
   @Delete(':subjectId')
   async removeSubjectById(@Param('subjectId') id: string) {
     const subject = await this.service.removeById(id);
-    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new SubjectDto(subject));
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', plainToInstance(SubjectDto, subject));
   }
 }

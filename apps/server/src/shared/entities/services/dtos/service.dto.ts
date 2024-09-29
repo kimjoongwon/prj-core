@@ -9,10 +9,4 @@ export class ServiceDto extends AbstractDto implements Service {
 
   @EnumField(() => $Enums.SERVICE_NAME)
   name: $Enums.SERVICE_NAME;
-
-  constructor(service: Service) {
-    super(service);
-    this.name = service.name;
-    this.label = service.label;
-  }
 }

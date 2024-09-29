@@ -24,6 +24,7 @@ import {
   TokenService,
   UserDto,
 } from '@shared';
+import { plainToInstance } from 'class-transformer';
 import { Response, Request } from 'express';
 
 @ApiTags('AUTH')
@@ -46,8 +47,8 @@ export class AuthController {
     return new ResponseEntity(HttpStatus.OK, '로그인 성공', {
       accessToken,
       refreshToken,
-      user: new UserDto(user),
-      tenant: new TenantDto(tenant),
+      user: plainToInstance(UserDto, user),
+      tenant: plainToInstance(TenantDto, tenant),
     });
   }
 
@@ -66,6 +67,7 @@ export class AuthController {
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
 
     const user = req.user;
+    console.log('user', user);
     const tenant = user.tenants.map((tenant) => tenant.active);
 
     return {

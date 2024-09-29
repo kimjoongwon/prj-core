@@ -16,14 +16,18 @@ export const useState = <T extends object>(props: {
         header: {
           date: dayjs().startOf('d').toDate(),
           decreaseMonth() {
+            // @ts-ignore
             inputState.calendarInput.header.date = dayjs(
+              // @ts-ignore
               inputState.calendarInput.header.date,
             )
               .subtract(1, 'M')
               .toDate();
           },
           increaseMonth() {
+            // @ts-ignore
             inputState.calendarInput.header.date = dayjs(
+              // @ts-ignore
               inputState.calendarInput.header.date,
             )
               .add(1, 'M')
@@ -34,6 +38,7 @@ export const useState = <T extends object>(props: {
       },
     },
     defaultValue: [],
+    // @ts-ignore
     state,
     path,
   });

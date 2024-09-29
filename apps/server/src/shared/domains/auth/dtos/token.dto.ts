@@ -12,11 +12,4 @@ export class TokenDto {
 
   @ClassField(() => TenantDto)
   tenant: TenantDto;
-
-  constructor(accessToken: string, refreshToken: string, user: UserDto, tenant: TenantDto) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-    this.user = user;
-    this.tenant = tenant;
-  }
 }

@@ -16,6 +16,7 @@ import { PaginationMananger } from '../../utils';
 import { ResponseEntity } from '../common';
 import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
 import { GroupsService } from './groups.service';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_GROUPS')
 @Controller(ApiEndpoints.ADMIN_GROUPS)
@@ -41,7 +42,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
-      groups.map((group) => new GroupDto(group)),
+      groups.map((group) => plainToInstance(GroupDto, group)),
       {
         skip,
         take,
@@ -61,7 +62,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 데이터 리턴 성공',
-      group ? new GroupDto(group) : null,
+      group ? plainToInstance(GroupDto, group) : null,
     );
   }
 
@@ -69,7 +70,11 @@ export class GroupsController {
   @Patch(':groupId')
   async updateGroup(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
     const group = await this.groupService.update(groupId, updateGroupDto);
-    return new ResponseEntity(HttpStatus.OK, '그룹 데이터 업데이트 성공', new GroupDto(group));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '그룹 데이터 업데이트 성공',
+      plainToInstance(GroupDto, group),
+    );
   }
 
   @ApiResponseEntity(Number, HttpStatus.OK)
@@ -83,6 +88,10 @@ export class GroupsController {
   @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: string) {
     const group = await this.groupService.delete(groupId);
-    return new ResponseEntity(HttpStatus.OK, '그룹 데이터 삭제 성공', new GroupDto(group));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '그룹 데이터 삭제 성공',
+      plainToInstance(GroupDto, group),
+    );
   }
 }

@@ -18,6 +18,7 @@ import { AbilityDto } from './dto/ability.dto';
 import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_ABILITIES')
 @Controller(ApiEndpoints.ADMIN_ABILITIES)
@@ -28,7 +29,11 @@ export class AbilitiesController {
   @ApiResponseEntity(AbilityDto, HttpStatus.CREATED)
   async createAbility(@Body() createAbilityDto: CreateAbilityDto) {
     const abilityDto = await this.abilitiesService.create(createAbilityDto);
-    return new ResponseEntity(HttpStatus.CREATED, '생성 성공', new AbilityDto(abilityDto));
+    return new ResponseEntity(
+      HttpStatus.CREATED,
+      '생성 성공',
+      plainToInstance(AbilityDto, abilityDto),
+    );
   }
 
   @Get()
@@ -38,7 +43,7 @@ export class AbilitiesController {
     return new ResponseEntity(
       HttpStatus.OK,
       '조회 성공',
-      abilities.map((ability) => new AbilityDto(ability)),
+      abilities.map((ability) => plainToInstance(AbilityDto, ability)),
     );
   }
 
@@ -46,21 +51,21 @@ export class AbilitiesController {
   @ApiResponseEntity(AbilityDto)
   async getAbility(@Param('abilityId') id: string) {
     const ability = await this.abilitiesService.get(id);
-    return new ResponseEntity(HttpStatus.OK, '조회 성공', new AbilityDto(ability));
+    return new ResponseEntity(HttpStatus.OK, '조회 성공', plainToInstance(AbilityDto, ability));
   }
 
   @Patch(':abilityId')
   @ApiResponseEntity(AbilityDto)
   async updateAbility(@Param('abilityId') id: string, @Body() updateAbilityDto: UpdateAbilityDto) {
     const ability = await this.abilitiesService.update(id, updateAbilityDto);
-    return new ResponseEntity(HttpStatus.OK, '수정 성공', new AbilityDto(ability));
+    return new ResponseEntity(HttpStatus.OK, '수정 성공', plainToInstance(AbilityDto, ability));
   }
 
   @Patch(':abilityId')
   @ApiResponseEntity(AbilityDto)
   async removeAbility(@Param('abilityId') id: string) {
     const abilityDto = await this.abilitiesService.remove(id);
-    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new AbilityDto(abilityDto));
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', plainToInstance(AbilityDto, abilityDto));
   }
 
   @Patch(':abilityIds')
@@ -74,6 +79,6 @@ export class AbilitiesController {
   @ApiResponseEntity(AbilityDto)
   async deleteAbility(@Param('abilityId') id: string) {
     const abilityDto = await this.abilitiesService.remove(id);
-    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new AbilityDto(abilityDto));
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', plainToInstance(AbilityDto, abilityDto));
   }
 }

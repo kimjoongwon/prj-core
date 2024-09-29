@@ -25,6 +25,7 @@ import {
   TenancyDto,
   UpdateSpaceDto,
 } from '@shared';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_SPACES')
 @Controller(ApiEndpoints.ADMIN_SPACES)
@@ -37,7 +38,7 @@ export class SpacesController {
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
     const space = await this.service.create({ data: createSpaceDto });
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 
   @Get(':spaceId')
@@ -46,7 +47,7 @@ export class SpacesController {
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async getSpace(@Param('spaceId') spaceId: string) {
     const space = await this.service.getUnique({ where: { id: spaceId } });
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 
   @Patch('removedAt')
@@ -64,7 +65,7 @@ export class SpacesController {
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async updateSpace(@Param('spaceId') spaceId: string, @Body() updateSpaceDto: UpdateSpaceDto) {
     const space = await this.service.update(spaceId, updateSpaceDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 
   @Patch(':spaceId/removedAt')
@@ -73,7 +74,7 @@ export class SpacesController {
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async removeSpace(@Param('spaceId') spaceId: string) {
     const space = await this.service.remove(spaceId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 
   @Delete(':spaceId')
@@ -82,7 +83,7 @@ export class SpacesController {
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async deleteSpace(@Param('spaceId') spaceId: string) {
     const space = await this.service.delete(spaceId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new SpaceDto(space));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 
   @Get()
@@ -95,7 +96,7 @@ export class SpacesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      spaces.map((space) => new SpaceDto(space)),
+      spaces.map((space) => plainToInstance(SpaceDto, space)),
       new PageMetaDto({
         pageQueryDto,
         itemCount: count,
@@ -112,7 +113,7 @@ export class SpacesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      spaces.map((space) => new SpaceDto(space)),
+      spaces.map((space) => plainToInstance(SpaceDto, space)),
     );
   }
 }

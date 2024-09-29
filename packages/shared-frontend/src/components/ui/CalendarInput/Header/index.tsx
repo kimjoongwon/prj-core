@@ -17,6 +17,7 @@ export const Header = observer((props: HeaderProps) => {
         <Button
           size="sm"
           variant="light"
+          // @ts-ignore
           onClick={state.calendarInput.header.decreaseMonth}
           startContent={<FcPrevious />}
         />
@@ -27,6 +28,7 @@ export const Header = observer((props: HeaderProps) => {
         <Button
           size="sm"
           variant="light"
+          // @ts-ignore
           onClick={state.calendarInput.header.increaseMonth}
           endContent={<FcNext />}
         />
@@ -43,7 +45,11 @@ export const Year = observer((props: YearProps) => {
   const { state } = props;
   return (
     <div className="text-2xl lg:text-4xl font-bold">
-      {state.calendarInput.header.date?.getFullYear()}년
+      {
+        // @ts-ignore
+        state.calendarInput.header.date?.getFullYear()
+      }
+      년
     </div>
   );
 });
@@ -52,7 +58,11 @@ export const Month = observer((props: YearProps) => {
   const { state } = props;
   return (
     <div className="text-2xl lg:text-4xl font-bold">
-      {state.calendarInput.header.date?.getMonth() + 1}월
+      {
+        // @ts-ignore
+        state.calendarInput.header.date?.getMonth() + 1
+      }
+      월
     </div>
   );
 });

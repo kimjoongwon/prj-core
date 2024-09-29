@@ -55,7 +55,7 @@ export interface FormUnitProps<T> {
 }
 
 export interface MobxProps<T> {
-  path?: Paths<T, 4>;
+  path: Paths<T, 4>;
   state?: T;
 }
 export interface HeaderCellProps<T, M> {

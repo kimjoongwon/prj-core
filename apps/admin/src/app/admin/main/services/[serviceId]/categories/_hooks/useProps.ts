@@ -1,8 +1,8 @@
 import { groupBy, isEmpty } from 'lodash-es';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
-import { ServiceEntity } from '@shared/frontend';
 import { useParams } from 'next/navigation';
+import { ServiceDto } from '@shared/frontend';
 
 export const useProps = ({
   state,
@@ -34,6 +34,6 @@ export const useProps = ({
   };
 };
 
-const getUserService = (services: ServiceEntity[]) => {
+const getUserService = (services: ServiceDto[]) => {
   return services?.find(service => service.name === 'USER');
 };

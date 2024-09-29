@@ -45,17 +45,7 @@ export class UsersService {
     return this.repository.findUnique({
       where: { id },
       include: {
-        profiles: true,
-        tenants: {
-          include: {
-            tenancy: {
-              include: {
-                tenants: true,
-              },
-            },
-            role: true,
-          },
-        },
+        tenants: true,
       },
     });
   }

@@ -13,13 +13,4 @@ export class AbstractDto {
 
   @DateField({ nullable: true })
   removedAt: Date;
-
-  constructor(entity: AbstractEntity, options?: { excludeFields?: boolean }) {
-    if (!options?.excludeFields) {
-      this.id = entity?.id;
-      this.createdAt = entity?.createdAt;
-      this.updatedAt = entity?.updatedAt;
-      this.removedAt = entity?.removedAt;
-    }
-  }
 }

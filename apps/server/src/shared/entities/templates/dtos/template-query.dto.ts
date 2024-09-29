@@ -1,8 +1,8 @@
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { IntersectionType, PartialType } from '@nestjs/swagger';
-import { UpdateTemplateDto } from './update-template.dto';
 import { Prisma } from '@prisma/client';
 import { EnumFieldOptional } from '../../../decorators/field.decorators';
+import { TemplateDto } from './template.dto';
 
 class TemplateSortOrder {
   @EnumFieldOptional(() => Prisma.SortOrder)
@@ -10,7 +10,7 @@ class TemplateSortOrder {
 }
 
 export class TemplateQueryDto extends IntersectionType(
-  PartialType(UpdateTemplateDto),
+  PartialType(TemplateDto),
   TemplateSortOrder,
   PageQueryDto,
 ) {}

@@ -44,7 +44,7 @@ export const useQueries = (props: Props) => {
     ancestorIds,
     parentId: parentCategory?.id,
     serviceId,
-    spaceId: galaxy.auth.user?.tenants.find(tenant => tenant.active)?.tenancy
+    spaceId: galaxy.auth.user?.tenants?.find(tenant => tenant.active)?.tenancy
       ?.spaceId,
   };
 

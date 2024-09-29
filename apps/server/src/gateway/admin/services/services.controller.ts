@@ -20,6 +20,7 @@ import {
   ApiResponseEntity,
   ResponseEntity,
 } from '@shared';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_SERVICES')
 @Controller(ApiEndpoints.ADMIN_SERVICES)
@@ -35,7 +36,7 @@ export class ServicesController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      services.map((service) => new ServiceDto(service)),
+      services.map((service) => plainToInstance(ServiceDto, service)),
     );
   }
 
@@ -51,7 +52,7 @@ export class ServicesController {
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async getService(@Param('serviceId') serviceId: string) {
     const service = await this.servicesService.getUnqiue(serviceId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new ServiceDto(service));
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ServiceDto, service));
   }
 
   @Patch(':serviceId')
@@ -62,7 +63,7 @@ export class ServicesController {
     @Body() updateServiceDto: UpdateServiceDto,
   ) {
     const service = await this.servicesService.update(serviceId, updateServiceDto);
-    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
+    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', plainToInstance(ServiceDto, service));
   }
 
   @Patch(':serviceId/removedAt')
@@ -70,7 +71,7 @@ export class ServicesController {
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async removeService(@Param('serviceId') serviceId: string) {
     const service = await this.servicesService.remove(serviceId);
-    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', new ServiceDto(service));
+    return new ResponseEntity(HttpStatus.OK, '업데이트 성공', plainToInstance(ServiceDto, service));
   }
 
   @Patch(':serviceIds/removedAt')
@@ -86,6 +87,6 @@ export class ServicesController {
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async deleteService(@Param('serviceId') serviceId: string) {
     const service = await this.servicesService.delete(serviceId);
-    return new ResponseEntity(HttpStatus.OK, '삭제 성공', new ServiceDto(service));
+    return new ResponseEntity(HttpStatus.OK, '삭제 성공', plainToInstance(ServiceDto, service));
   }
 }

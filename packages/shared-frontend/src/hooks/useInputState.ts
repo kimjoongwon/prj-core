@@ -18,7 +18,7 @@ export const useInputState = <S extends object, V>({
   path,
   state,
 }: InputState<S, V>) => {
-  const inputState = useLocalObservable<S & { value: V }>(() => ({
+  const inputState = useLocalObservable(() => ({
     ...extendState,
     value: get(state, path) || defaultValue,
   }));

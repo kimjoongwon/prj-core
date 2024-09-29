@@ -12,9 +12,12 @@ export const DatesView = observer((props: DatesViewProps) => {
 
   return (
     <>
-      {state.calendarInput.dates.map(date => (
-        <Date state={date} />
-      ))}
+      {
+        // @ts-ignore
+        state.calendarInput.dates.map(date => (
+          <Date state={date} />
+        ))
+      }
     </>
   );
 });

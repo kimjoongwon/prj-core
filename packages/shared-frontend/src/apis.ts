@@ -25,64 +25,23 @@ import type {
   UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import type {
-  CreateAbilityDto,
-  CreateCategoryDto,
-  CreateGroupDto,
-  CreateServiceDto,
-  CreateSessionDto,
-  CreateSpaceDto,
-  CreateSubjectDto,
-  CreateTemplateDto,
-  CreateTimelineItemDto,
-  GetAbilitiesByQueryParams,
-  GetGroupsByQueryParams,
-  GetSessionsByQueryParams,
-  GetSpacesByQueryParams,
-  GetTemplatesByQueryParams,
-  GetTimelineItemsByQueryParams,
-  LoginPayloadDto,
-  RemoveManySpaceDto,
-  SignUpPayloadDto,
-  UpdateCategoryDto,
-  UpdateGroupDto,
-  UpdateServiceDto,
-  UpdateSessionDto,
-  UpdateSpaceDto,
-  UpdateSubjectDto,
-  UpdateTemplateDto,
-  UpdateTimelineItemDto
-} from './model'
-import {
-  faker
-} from '@faker-js/faker'
-import {
-  HttpResponse,
-  delay,
-  http
-} from 'msw'
-import {
-  AbilityActions,
-  AbilityTypes,
-  EmailStatus,
-  PostTypes,
-  RecurringDayOfTheWeek,
-  RepeatCycleTypes,
-  ReservationStatus,
-  Roles,
-  ServiceName,
-  SessionTypes,
-  TemplateNames,
-  TenantTypes
-} from './model'
-import type {
   CheckEmailVerification200AllOf,
   CreateAbility201AllOf,
+  CreateAbilityDto,
   CreateCategory200AllOf,
+  CreateCategoryDto,
+  CreateGroupDto,
   CreateService201AllOf,
+  CreateServiceDto,
   CreateSession200AllOf,
+  CreateSessionDto,
   CreateSpace200AllOf,
+  CreateSpaceDto,
+  CreateSubjectDto,
   CreateTemplate200AllOf,
+  CreateTemplateDto,
   CreateTimelineItem200AllOf,
+  CreateTimelineItemDto,
   DeleteAbility200AllOf,
   DeleteGroup200AllOf,
   DeleteService200AllOf,
@@ -92,29 +51,37 @@ import type {
   DeleteTimelineItem200AllOf,
   FindCategoryById200AllOf,
   GetAbilitiesByQuery200AllOf,
+  GetAbilitiesByQueryParams,
   GetAbility200AllOf,
   GetAccessibleSpaces200AllOf,
   GetAllService200AllOf,
   GetCategories200AllOf,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
+  GetGroupsByQueryParams,
   GetService200AllOf,
   GetServiceAuthRoles200AllOf,
   GetSession200AllOf,
   GetSessionsByQuery200AllOf,
+  GetSessionsByQueryParams,
   GetSpace200AllOf,
   GetSpacesByQuery200AllOf,
+  GetSpacesByQueryParams,
   GetSubjectById200AllOf,
   GetSubjectsByPageQuery200AllOf,
   GetTemplate200AllOf,
   GetTemplatesByQuery200AllOf,
+  GetTemplatesByQueryParams,
   GetTimelineItem200AllOf,
   GetTimelineItemsByQuery200AllOf,
+  GetTimelineItemsByQueryParams,
   GetToken200AllOf,
   GroupDto,
+  LoginPayloadDto,
   RemoveAbilities200AllOf,
   RemoveAbility200AllOf,
   RemoveGroups200AllOf,
+  RemoveManySpaceDto,
   RemoveService200AllOf,
   RemoveServices200AllOf,
   RemoveSession200AllOf,
@@ -126,16 +93,25 @@ import type {
   RemoveTimelineItem200AllOf,
   RemoveTimelineItems200AllOf,
   SendEmailVerification200AllOf,
+  SignUpPayloadDto,
   SignUpUser201AllOf,
   TokenDto,
   UpdateCategory200AllOf,
+  UpdateCategoryDto,
   UpdateGroup200AllOf,
+  UpdateGroupDto,
   UpdateService200AllOf,
+  UpdateServiceDto,
   UpdateSession200AllOf,
+  UpdateSessionDto,
   UpdateSpace200AllOf,
+  UpdateSpaceDto,
   UpdateSubjectById200AllOf,
+  UpdateSubjectDto,
   UpdateTemplate200AllOf,
+  UpdateTemplateDto,
   UpdateTimelineItem200AllOf,
+  UpdateTimelineItemDto,
   VerifyEmail200AllOf
 } from './model'
 import { customInstance } from './libs/customAxios';
@@ -662,7 +638,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     }
     
 export const getTemplatesByQuery = (
-    params: GetTemplatesByQueryParams,
+    params?: GetTemplatesByQueryParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
@@ -675,12 +651,12 @@ export const getTemplatesByQuery = (
     }
   
 
-export const getGetTemplatesByQueryQueryKey = (params: GetTemplatesByQueryParams,) => {
+export const getGetTemplatesByQueryQueryKey = (params?: GetTemplatesByQueryParams,) => {
     return [`http://localhost:3005/api/v1/admin/templates`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetTemplatesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -702,7 +678,7 @@ export type GetTemplatesByQueryQueryResult = NonNullable<Awaited<ReturnType<type
 export type GetTemplatesByQueryQueryError = ErrorType<void>
 
 export const useGetTemplatesByQuery = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
@@ -717,7 +693,7 @@ export const useGetTemplatesByQuery = <TData = Awaited<ReturnType<typeof getTemp
 
 
 
-export const getGetTemplatesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -739,7 +715,7 @@ export type GetTemplatesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnT
 export type GetTemplatesByQuerySuspenseQueryError = ErrorType<void>
 
 export const useGetTemplatesByQuerySuspense = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
@@ -754,7 +730,7 @@ export const useGetTemplatesByQuerySuspense = <TData = Awaited<ReturnType<typeof
 
 
 
-export const getGetTemplatesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(params: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -776,7 +752,7 @@ export type GetTemplatesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited
 export type GetTemplatesByQuerySuspenseInfiniteQueryError = ErrorType<void>
 
 export const useGetTemplatesByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
- params: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
@@ -5166,1151 +5142,3 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-
-
-export const getCreateAbilityResponseMock = (): CreateAbility201AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetAbilitiesByQueryResponseMock = (): GetAbilitiesByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetAbilityResponseMock = (): GetAbility200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveAbilityResponseMock = (): RemoveAbility200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteAbilityResponseMock = (): DeleteAbility200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveAbilitiesResponseMock = (): RemoveAbilities200AllOf => ({data: faker.helpers.arrayElement([{action: faker.helpers.arrayElement(Object.values(AbilityActions)), conditions: faker.helpers.arrayElement([{}, undefined]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.helpers.arrayElement([faker.word.sample(), undefined]), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), roleId: faker.string.uuid(), subjectId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(AbilityTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateTemplateResponseMock = (): CreateTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetTemplatesByQueryResponseMock = (): GetTemplatesByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetTemplateResponseMock = (): GetTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateTemplateResponseMock = (): UpdateTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteTemplateResponseMock = (): DeleteTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveTemplatesResponseMock = (): RemoveTemplates200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveTemplateResponseMock = (): RemoveTemplate200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), keys: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), name: faker.helpers.arrayElement(Object.values(TemplateNames)), post: {author: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, authorId: faker.string.uuid(), content: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), title: faker.word.sample(), type: faker.helpers.arrayElement(Object.values(PostTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, postId: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateTimelineItemResponseMock = (): CreateTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetTimelineItemsByQueryResponseMock = (): GetTimelineItemsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetTimelineItemResponseMock = (): GetTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateTimelineItemResponseMock = (): UpdateTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteTimelineItemResponseMock = (): DeleteTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveTimelineItemsResponseMock = (): RemoveTimelineItems200AllOf => ({data: faker.helpers.arrayElement([{address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveTimelineItemResponseMock = (): RemoveTimelineItem200AllOf => ({data: faker.helpers.arrayElement([{address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetCategoriesResponseMock = (): GetCategories200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateCategoryResponseMock = (): CreateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getFindCategoryByIdResponseMock = (): FindCategoryById200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateCategoryResponseMock = (): UpdateCategory200AllOf => ({data: faker.helpers.arrayElement([{ancestorIds: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.word.sample())), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), parentId: faker.helpers.arrayElement([faker.word.sample(), null]), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetAllServiceResponseMock = (): GetAllService200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateServiceResponseMock = (): CreateService201AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetServiceResponseMock = (): GetService200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateServiceResponseMock = (): UpdateService200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteServiceResponseMock = (): DeleteService200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveServiceResponseMock = (): RemoveService200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveServicesResponseMock = (): RemoveServices200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), label: faker.helpers.arrayElement([faker.word.sample(), null]), name: faker.helpers.arrayElement(Object.values(ServiceName)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateSpaceResponseMock = (): CreateSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSpacesByQueryResponseMock = (): GetSpacesByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSpaceResponseMock = (): GetSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateSpaceResponseMock = (): UpdateSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteSpaceResponseMock = (): DeleteSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveSpacesResponseMock = (): RemoveSpaces200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveSpaceResponseMock = (): RemoveSpace200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetAccessibleSpacesResponseMock = (): GetAccessibleSpaces200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateGroupResponseMock = (overrideResponse: Partial< GroupDto > = {}): GroupDto => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
-
-export const getGetGroupsByQueryResponseMock = (): GetGroupsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetGroupResponseMock = (): GetGroup200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateGroupResponseMock = (): UpdateGroup200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteGroupResponseMock = (): DeleteGroup200AllOf => ({data: faker.helpers.arrayElement([{}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveGroupsResponseMock = (): RemoveGroups200AllOf => ({data: faker.helpers.arrayElement([{}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSubjectsByPageQueryResponseMock = (): GetSubjectsByPageQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSubjectByIdResponseMock = (): GetSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateSubjectByIdResponseMock = (): UpdateSubjectById200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetServiceAuthRolesResponseMock = (): GetServiceAuthRoles200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getSendEmailVerificationResponseMock = (): SendEmailVerification200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, emailId: faker.string.uuid(), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(EmailStatus)), templateId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getVerifyEmailResponseMock = (): VerifyEmail200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, emailId: faker.string.uuid(), id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(EmailStatus)), templateId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCheckEmailVerificationResponseMock = (): CheckEmailVerification200AllOf => ({data: faker.helpers.arrayElement([{}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getCreateSessionResponseMock = (): CreateSession200AllOf => ({data: faker.helpers.arrayElement([{createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSessionsByQueryResponseMock = (): GetSessionsByQuery200AllOf => ({data: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetSessionResponseMock = (): GetSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getUpdateSessionResponseMock = (): UpdateSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getDeleteSessionResponseMock = (): DeleteSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveSessionsResponseMock = (): RemoveSessions200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getRemoveSessionResponseMock = (): RemoveSession200AllOf => ({data: faker.helpers.arrayElement([{baseDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, endDate: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), id: faker.string.uuid(), name: faker.word.sample(), recurringDayOfTheWeek: faker.helpers.arrayElements(Object.values(RecurringDayOfTheWeek)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), repeatCycle: faker.number.int({min: undefined, max: undefined}), repeatCycleType: faker.helpers.arrayElement(Object.values(RepeatCycleTypes)), tenancyId: faker.string.uuid(), tenantId: faker.string.uuid(), timelines: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), sessionId: faker.string.uuid(), tenantId: faker.string.uuid(), timelineItem: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({address: faker.word.sample(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, description: faker.word.sample(), endDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), maxCapacity: faker.number.int({min: undefined, max: undefined}), minCapacity: faker.number.int({min: undefined, max: undefined}), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), reservations: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), status: faker.helpers.arrayElement(Object.values(ReservationStatus)), tenantId: faker.string.uuid(), timelineItemId: faker.string.uuid(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, userId: faker.string.uuid()})), startDateTime: `${faker.date.past().toISOString().split('.')[0]}Z`, tenantId: faker.string.uuid(), timelineId: faker.helpers.arrayElement([faker.string.uuid(), undefined]), title: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`})), type: faker.helpers.arrayElement(Object.values(SessionTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetTokenResponseMock = (): GetToken200AllOf => ({data: faker.helpers.arrayElement([{accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-export const getGetNewTokenResponseMock = (overrideResponse: Partial< TokenDto > = {}): TokenDto => ({accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, ...overrideResponse})
-
-export const getSignUpUserResponseMock = (): SignUpUser201AllOf => ({data: faker.helpers.arrayElement([{accessToken: faker.word.sample(), refreshToken: faker.word.sample(), tenant: {active: faker.datatype.boolean(), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), role: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.helpers.arrayElement(Object.values(Roles)), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, roleId: faker.word.sample(), tenancy: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), space: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, groups: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), serviceId: faker.word.sample(), spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, id: faker.string.uuid(), name: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), tenancies: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null])})), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, spaceId: faker.word.sample(), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, tenancyId: faker.string.uuid(), type: faker.helpers.arrayElement(Object.values(TenantTypes)), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}, userId: faker.word.sample()}, user: {createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, email: faker.word.sample(), id: faker.string.uuid(), name: faker.word.sample(), password: faker.word.sample(), phone: faker.word.sample(), profiles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, id: faker.string.uuid(), nickname: faker.word.sample(), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), userId: faker.word.sample()})), removedAt: faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]), updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`}}, undefined]), httpStatus: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), message: faker.helpers.arrayElement([faker.word.sample(), undefined])})
-
-
-export const getCreateAbilityMockHandler = (overrideResponse?: CreateAbility201AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateAbility201AllOf> | CreateAbility201AllOf)) => {
-  return http.post('*/api/v1/admin/abilities', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateAbilityResponseMock()),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetAbilitiesByQueryMockHandler = (overrideResponse?: GetAbilitiesByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAbilitiesByQuery200AllOf> | GetAbilitiesByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/abilities', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetAbilitiesByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetAbilityMockHandler = (overrideResponse?: GetAbility200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAbility200AllOf> | GetAbility200AllOf)) => {
-  return http.get('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetAbilityResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveAbilityMockHandler = (overrideResponse?: RemoveAbility200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveAbility200AllOf> | RemoveAbility200AllOf)) => {
-  return http.patch('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveAbilityResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteAbilityMockHandler = (overrideResponse?: DeleteAbility200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteAbility200AllOf> | DeleteAbility200AllOf)) => {
-  return http.delete('*/api/v1/admin/abilities/:abilityId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteAbilityResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveAbilitiesMockHandler = (overrideResponse?: RemoveAbilities200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveAbilities200AllOf> | RemoveAbilities200AllOf)) => {
-  return http.patch('*/api/v1/admin/abilities/:abilityIds', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveAbilitiesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateTemplateMockHandler = (overrideResponse?: CreateTemplate200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateTemplate200AllOf> | CreateTemplate200AllOf)) => {
-  return http.post('*/api/v1/admin/templates', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateTemplateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetTemplatesByQueryMockHandler = (overrideResponse?: GetTemplatesByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTemplatesByQuery200AllOf> | GetTemplatesByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/templates', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTemplatesByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetTemplateMockHandler = (overrideResponse?: GetTemplate200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTemplate200AllOf> | GetTemplate200AllOf)) => {
-  return http.get('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTemplateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateTemplateMockHandler = (overrideResponse?: UpdateTemplate200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateTemplate200AllOf> | UpdateTemplate200AllOf)) => {
-  return http.patch('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateTemplateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteTemplateMockHandler = (overrideResponse?: DeleteTemplate200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteTemplate200AllOf> | DeleteTemplate200AllOf)) => {
-  return http.delete('*/api/v1/admin/templates/:templateId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteTemplateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveTemplatesMockHandler = (overrideResponse?: RemoveTemplates200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTemplates200AllOf> | RemoveTemplates200AllOf)) => {
-  return http.patch('*/api/v1/admin/templates/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveTemplatesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveTemplateMockHandler = (overrideResponse?: RemoveTemplate200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTemplate200AllOf> | RemoveTemplate200AllOf)) => {
-  return http.patch('*/api/v1/admin/templates/:templateId/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveTemplateResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateTimelineItemMockHandler = (overrideResponse?: CreateTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateTimelineItem200AllOf> | CreateTimelineItem200AllOf)) => {
-  return http.post('*/api/v1/admin/timeline-items', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateTimelineItemResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetTimelineItemsByQueryMockHandler = (overrideResponse?: GetTimelineItemsByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTimelineItemsByQuery200AllOf> | GetTimelineItemsByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/timeline-items', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTimelineItemsByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetTimelineItemMockHandler = (overrideResponse?: GetTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetTimelineItem200AllOf> | GetTimelineItem200AllOf)) => {
-  return http.get('*/api/v1/admin/timeline-items/:timelineItemId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTimelineItemResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateTimelineItemMockHandler = (overrideResponse?: UpdateTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateTimelineItem200AllOf> | UpdateTimelineItem200AllOf)) => {
-  return http.patch('*/api/v1/admin/timeline-items/:timelineItemId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateTimelineItemResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteTimelineItemMockHandler = (overrideResponse?: DeleteTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteTimelineItem200AllOf> | DeleteTimelineItem200AllOf)) => {
-  return http.delete('*/api/v1/admin/timeline-items/:timelineItemId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteTimelineItemResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveTimelineItemsMockHandler = (overrideResponse?: RemoveTimelineItems200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTimelineItems200AllOf> | RemoveTimelineItems200AllOf)) => {
-  return http.patch('*/api/v1/admin/timeline-items/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveTimelineItemsResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveTimelineItemMockHandler = (overrideResponse?: RemoveTimelineItem200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveTimelineItem200AllOf> | RemoveTimelineItem200AllOf)) => {
-  return http.patch('*/api/v1/admin/timeline-items/:timelineItemId/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveTimelineItemResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetCategoriesMockHandler = (overrideResponse?: GetCategories200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetCategories200AllOf> | GetCategories200AllOf)) => {
-  return http.get('*/api/v1/admin/categories', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetCategoriesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateCategoryMockHandler = (overrideResponse?: CreateCategory200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateCategory200AllOf> | CreateCategory200AllOf)) => {
-  return http.post('*/api/v1/admin/categories', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateCategoryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getFindCategoryByIdMockHandler = (overrideResponse?: FindCategoryById200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FindCategoryById200AllOf> | FindCategoryById200AllOf)) => {
-  return http.get('*/api/v1/admin/categories/:categoryId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getFindCategoryByIdResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateCategoryMockHandler = (overrideResponse?: UpdateCategory200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateCategory200AllOf> | UpdateCategory200AllOf)) => {
-  return http.patch('*/api/v1/admin/categories/:categoryId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateCategoryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetAllServiceMockHandler = (overrideResponse?: GetAllService200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAllService200AllOf> | GetAllService200AllOf)) => {
-  return http.get('*/api/v1/admin/services', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetAllServiceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateServiceMockHandler = (overrideResponse?: CreateService201AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateService201AllOf> | CreateService201AllOf)) => {
-  return http.post('*/api/v1/admin/services', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateServiceResponseMock()),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetServiceMockHandler = (overrideResponse?: GetService200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetService200AllOf> | GetService200AllOf)) => {
-  return http.get('*/api/v1/admin/services/:serviceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetServiceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateServiceMockHandler = (overrideResponse?: UpdateService200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateService200AllOf> | UpdateService200AllOf)) => {
-  return http.patch('*/api/v1/admin/services/:serviceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateServiceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteServiceMockHandler = (overrideResponse?: DeleteService200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteService200AllOf> | DeleteService200AllOf)) => {
-  return http.delete('*/api/v1/admin/services/:serviceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteServiceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveServiceMockHandler = (overrideResponse?: RemoveService200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveService200AllOf> | RemoveService200AllOf)) => {
-  return http.patch('*/api/v1/admin/services/:serviceId/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveServiceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveServicesMockHandler = (overrideResponse?: RemoveServices200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveServices200AllOf> | RemoveServices200AllOf)) => {
-  return http.patch('*/api/v1/admin/services/:serviceIds/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveServicesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateSpaceMockHandler = (overrideResponse?: CreateSpace200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateSpace200AllOf> | CreateSpace200AllOf)) => {
-  return http.post('*/api/v1/admin/spaces', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateSpaceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSpacesByQueryMockHandler = (overrideResponse?: GetSpacesByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSpacesByQuery200AllOf> | GetSpacesByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/spaces', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSpacesByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSpaceMockHandler = (overrideResponse?: GetSpace200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSpace200AllOf> | GetSpace200AllOf)) => {
-  return http.get('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSpaceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateSpaceMockHandler = (overrideResponse?: UpdateSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSpace200AllOf> | UpdateSpace200AllOf)) => {
-  return http.patch('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateSpaceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteSpaceMockHandler = (overrideResponse?: DeleteSpace200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteSpace200AllOf> | DeleteSpace200AllOf)) => {
-  return http.delete('*/api/v1/admin/spaces/:spaceId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteSpaceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveSpacesMockHandler = (overrideResponse?: RemoveSpaces200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpaces200AllOf> | RemoveSpaces200AllOf)) => {
-  return http.patch('*/api/v1/admin/spaces/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSpacesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveSpaceMockHandler = (overrideResponse?: RemoveSpace200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSpace200AllOf> | RemoveSpace200AllOf)) => {
-  return http.patch('*/api/v1/admin/spaces/:spaceId/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSpaceResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetAccessibleSpacesMockHandler = (overrideResponse?: GetAccessibleSpaces200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAccessibleSpaces200AllOf> | GetAccessibleSpaces200AllOf)) => {
-  return http.get('*/api/v1/admin/spaces/accessible-spaces', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetAccessibleSpacesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateGroupMockHandler = (overrideResponse?: GroupDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<GroupDto> | GroupDto)) => {
-  return http.post('*/api/v1/admin/groups', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateGroupResponseMock()),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetGroupsByQueryMockHandler = (overrideResponse?: GetGroupsByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetGroupsByQuery200AllOf> | GetGroupsByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/groups', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetGroupsByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetGroupMockHandler = (overrideResponse?: GetGroup200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetGroup200AllOf> | GetGroup200AllOf)) => {
-  return http.get('*/api/v1/admin/groups/:groupId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetGroupResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateGroupMockHandler = (overrideResponse?: UpdateGroup200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateGroup200AllOf> | UpdateGroup200AllOf)) => {
-  return http.patch('*/api/v1/admin/groups/:groupId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateGroupResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteGroupMockHandler = (overrideResponse?: DeleteGroup200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteGroup200AllOf> | DeleteGroup200AllOf)) => {
-  return http.delete('*/api/v1/admin/groups/:groupId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteGroupResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveGroupsMockHandler = (overrideResponse?: RemoveGroups200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveGroups200AllOf> | RemoveGroups200AllOf)) => {
-  return http.patch('*/api/v1/admin/groups/:groupIds', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveGroupsResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateSubjectMockHandler = () => {
-  return http.post('*/api/v1/admin/subjects', async () => {await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSubjectsByPageQueryMockHandler = (overrideResponse?: GetSubjectsByPageQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSubjectsByPageQuery200AllOf> | GetSubjectsByPageQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/subjects', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSubjectsByPageQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSubjectByIdMockHandler = (overrideResponse?: GetSubjectById200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSubjectById200AllOf> | GetSubjectById200AllOf)) => {
-  return http.get('*/api/v1/admin/subjects/:subjectId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSubjectByIdResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateSubjectByIdMockHandler = (overrideResponse?: UpdateSubjectById200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSubjectById200AllOf> | UpdateSubjectById200AllOf)) => {
-  return http.patch('*/api/v1/admin/subjects/:subjectId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateSubjectByIdResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveSubjectByIdMockHandler = () => {
-  return http.delete('*/api/v1/admin/subjects/:subjectId', async () => {await delay(1000);
-    return new HttpResponse(null,
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetServiceAuthRolesMockHandler = (overrideResponse?: GetServiceAuthRoles200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetServiceAuthRoles200AllOf> | GetServiceAuthRoles200AllOf)) => {
-  return http.get('*/api/v1/auth/service/roles', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetServiceAuthRolesResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getSendEmailVerificationMockHandler = (overrideResponse?: SendEmailVerification200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<SendEmailVerification200AllOf> | SendEmailVerification200AllOf)) => {
-  return http.post('*/api/v1/auth/service/system-emails/templates/email-verification', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getSendEmailVerificationResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getVerifyEmailMockHandler = (overrideResponse?: VerifyEmail200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<VerifyEmail200AllOf> | VerifyEmail200AllOf)) => {
-  return http.patch('*/api/v1/auth/service/system-emails/:systemEmailId/status/completed', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getVerifyEmailResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCheckEmailVerificationMockHandler = (overrideResponse?: CheckEmailVerification200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<CheckEmailVerification200AllOf> | CheckEmailVerification200AllOf)) => {
-  return http.get('*/api/v1/auth/service/system-emails/status/completed', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCheckEmailVerificationResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getCreateSessionMockHandler = (overrideResponse?: CreateSession200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreateSession200AllOf> | CreateSession200AllOf)) => {
-  return http.post('*/api/v1/admin/sessions', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getCreateSessionResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSessionsByQueryMockHandler = (overrideResponse?: GetSessionsByQuery200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSessionsByQuery200AllOf> | GetSessionsByQuery200AllOf)) => {
-  return http.get('*/api/v1/admin/sessions', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSessionsByQueryResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetSessionMockHandler = (overrideResponse?: GetSession200AllOf | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSession200AllOf> | GetSession200AllOf)) => {
-  return http.get('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetSessionResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getUpdateSessionMockHandler = (overrideResponse?: UpdateSession200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<UpdateSession200AllOf> | UpdateSession200AllOf)) => {
-  return http.patch('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getUpdateSessionResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getDeleteSessionMockHandler = (overrideResponse?: DeleteSession200AllOf | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<DeleteSession200AllOf> | DeleteSession200AllOf)) => {
-  return http.delete('*/api/v1/admin/sessions/:sessionId', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getDeleteSessionResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveSessionsMockHandler = (overrideResponse?: RemoveSessions200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSessions200AllOf> | RemoveSessions200AllOf)) => {
-  return http.patch('*/api/v1/admin/sessions/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSessionsResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getRemoveSessionMockHandler = (overrideResponse?: RemoveSession200AllOf | ((info: Parameters<Parameters<typeof http.patch>[1]>[0]) => Promise<RemoveSession200AllOf> | RemoveSession200AllOf)) => {
-  return http.patch('*/api/v1/admin/sessions/:sessionId/removedAt', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getRemoveSessionResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetTokenMockHandler = (overrideResponse?: GetToken200AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<GetToken200AllOf> | GetToken200AllOf)) => {
-  return http.post('*/api/v1/auth/token', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetTokenResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getGetNewTokenMockHandler = (overrideResponse?: TokenDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<TokenDto> | TokenDto)) => {
-  return http.get('*/api/v1/auth/new-token', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getGetNewTokenResponseMock()),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-
-export const getSignUpUserMockHandler = (overrideResponse?: SignUpUser201AllOf | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<SignUpUser201AllOf> | SignUpUser201AllOf)) => {
-  return http.post('*/api/v1/auth/sign-up', async (info) => {await delay(1000);
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined 
-            ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse) 
-            : getSignUpUserResponseMock()),
-      {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    )
-  })
-}
-export const getGalaxyServerMock = () => [
-  getCreateAbilityMockHandler(),
-  getGetAbilitiesByQueryMockHandler(),
-  getGetAbilityMockHandler(),
-  getRemoveAbilityMockHandler(),
-  getDeleteAbilityMockHandler(),
-  getRemoveAbilitiesMockHandler(),
-  getCreateTemplateMockHandler(),
-  getGetTemplatesByQueryMockHandler(),
-  getGetTemplateMockHandler(),
-  getUpdateTemplateMockHandler(),
-  getDeleteTemplateMockHandler(),
-  getRemoveTemplatesMockHandler(),
-  getRemoveTemplateMockHandler(),
-  getCreateTimelineItemMockHandler(),
-  getGetTimelineItemsByQueryMockHandler(),
-  getGetTimelineItemMockHandler(),
-  getUpdateTimelineItemMockHandler(),
-  getDeleteTimelineItemMockHandler(),
-  getRemoveTimelineItemsMockHandler(),
-  getRemoveTimelineItemMockHandler(),
-  getGetCategoriesMockHandler(),
-  getCreateCategoryMockHandler(),
-  getFindCategoryByIdMockHandler(),
-  getUpdateCategoryMockHandler(),
-  getGetAllServiceMockHandler(),
-  getCreateServiceMockHandler(),
-  getGetServiceMockHandler(),
-  getUpdateServiceMockHandler(),
-  getDeleteServiceMockHandler(),
-  getRemoveServiceMockHandler(),
-  getRemoveServicesMockHandler(),
-  getCreateSpaceMockHandler(),
-  getGetSpacesByQueryMockHandler(),
-  getGetSpaceMockHandler(),
-  getUpdateSpaceMockHandler(),
-  getDeleteSpaceMockHandler(),
-  getRemoveSpacesMockHandler(),
-  getRemoveSpaceMockHandler(),
-  getGetAccessibleSpacesMockHandler(),
-  getCreateGroupMockHandler(),
-  getGetGroupsByQueryMockHandler(),
-  getGetGroupMockHandler(),
-  getUpdateGroupMockHandler(),
-  getDeleteGroupMockHandler(),
-  getRemoveGroupsMockHandler(),
-  getCreateSubjectMockHandler(),
-  getGetSubjectsByPageQueryMockHandler(),
-  getGetSubjectByIdMockHandler(),
-  getUpdateSubjectByIdMockHandler(),
-  getRemoveSubjectByIdMockHandler(),
-  getGetServiceAuthRolesMockHandler(),
-  getSendEmailVerificationMockHandler(),
-  getVerifyEmailMockHandler(),
-  getCheckEmailVerificationMockHandler(),
-  getCreateSessionMockHandler(),
-  getGetSessionsByQueryMockHandler(),
-  getGetSessionMockHandler(),
-  getUpdateSessionMockHandler(),
-  getDeleteSessionMockHandler(),
-  getRemoveSessionsMockHandler(),
-  getRemoveSessionMockHandler(),
-  getGetTokenMockHandler(),
-  getGetNewTokenMockHandler(),
-  getSignUpUserMockHandler()
-]

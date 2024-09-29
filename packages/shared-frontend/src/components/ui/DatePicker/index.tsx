@@ -16,7 +16,7 @@ interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
 
 export const DatePicker = observer(
   <T extends object>(props: DatePickerProps<T>) => {
-    const { state, path } = props;
+    const { state, path = '' } = props;
     //
     const initialISODate: any = get(state, path);
     const initialDateTime = new CalendarDate(

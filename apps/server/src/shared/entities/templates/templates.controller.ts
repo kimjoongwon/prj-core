@@ -92,15 +92,15 @@ export class TemplatesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TemplateDto, HttpStatus.OK, { isArray: true })
-  async getTemplatesByQuery(@Query() templateQueryDto: TemplateQueryDto) {
-    const { count, templates } = await this.service.getManyByQuery(templateQueryDto);
+  async getTemplatesByQuery(@Query() query: TemplateQueryDto) {
+    const { count, templates } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       templates.map((template) => plainToInstance(TemplateDto, template)),
       new PageMetaDto({
-        pageQueryDto: templateQueryDto,
+        pageQueryDto: query,
         itemCount: count,
       }),
     );

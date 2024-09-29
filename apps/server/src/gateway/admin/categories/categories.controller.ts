@@ -10,6 +10,7 @@ import {
   CategoriesService,
   ApiEndpoints,
 } from '@shared';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_CATEGORY')
 @Controller(ApiEndpoints.ADMIN_CATEGORIES)
@@ -28,7 +29,11 @@ export class CategoriesController {
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     const category = await this.categoriesService.createCategory(createCategoryDto);
-    return new ResponseEntity(HttpStatus.OK, 'Category created', new CategoryDto(category));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'Category created',
+      plainToInstance(CategoryDto, category),
+    );
   }
 
   @Auth()
@@ -40,7 +45,7 @@ export class CategoriesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'Category found',
-      category ? new CategoryDto(category) : category,
+      category ? plainToInstance(CategoryDto, category) : category,
     );
   }
 
@@ -52,6 +57,10 @@ export class CategoriesController {
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     const category = await this.categoriesService.updateCategory(id, updateCategoryDto);
-    return new ResponseEntity(HttpStatus.OK, 'Category updated', new CategoryDto(category));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'Category updated',
+      plainToInstance(CategoryDto, category),
+    );
   }
 }

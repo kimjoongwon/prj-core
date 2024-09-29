@@ -5,7 +5,6 @@ import {
   SpacesModule,
   SubjectsModule,
   TenanciesModule,
-  TenantsModule,
   UsersModule,
 } from '../../entities';
 import { ConfigService } from '@nestjs/config';
@@ -19,10 +18,6 @@ import { PasswordService } from '../password';
 export class InitModule implements OnModuleInit {
   constructor(private readonly initService: InitService) {}
   async onModuleInit() {
-    try {
-      await this.initService.initApp();
-    } catch (error) {
-      new InternalServerErrorException(error, '롤 초기화 에러');
-    }
+    await this.initService.initApp();
   }
 }

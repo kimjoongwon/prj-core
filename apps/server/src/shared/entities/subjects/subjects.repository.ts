@@ -19,12 +19,8 @@ export class SubjectsRepository {
     return this.prisma.subject.findMany(args);
   }
 
-  findUnique(id: string) {
-    return this.prisma.subject.findUnique({
-      where: {
-        id,
-      },
-    });
+  findUnique(args: Prisma.SubjectFindUniqueArgs) {
+    return this.prisma.subject.findUnique(args);
   }
 
   update(args: Prisma.SubjectUpdateArgs) {

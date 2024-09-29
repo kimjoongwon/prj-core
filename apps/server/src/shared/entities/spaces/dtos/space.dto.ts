@@ -13,13 +13,4 @@ export class SpaceDto extends AbstractDto implements Space {
 
   @ClassField(() => GroupDto, { nullable: true })
   groups?: GroupDto[];
-
-  constructor(entity: Space, options?: { excludeFields?: boolean }) {
-    super(entity, options);
-    this.id = entity.id;
-    this.name = entity.name;
-    this.createdAt = entity.createdAt;
-    this.updatedAt = entity.updatedAt;
-    this.removedAt = entity.removedAt;
-  }
 }
