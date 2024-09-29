@@ -14,13 +14,4 @@ export class GroupDto extends AbstractDto {
 
   @StringField()
   serviceId: string;
-
-  constructor(groupEntity: GroupEntity) {
-    super(groupEntity);
-    this.id = groupEntity?.id;
-    this.name = groupEntity?.name;
-    this.spaceId = groupEntity?.spaceId;
-    this.serviceId = groupEntity?.serviceId;
-    this.createdAt = groupEntity?.createdAt;
-  }
 }

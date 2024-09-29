@@ -11,9 +11,10 @@ interface MultiInputProps<T> extends MobxProps<T>, InputProps {}
 
 export const MultiInput = observer(
   <T extends object>(props: MultiInputProps<T>) => {
-    const { path, state: _state } = props;
+    const { path = '', state: _state } = props;
     const state = useInputState<{}, string[]>({
       defaultValue: get(_state, path) as string[],
+      // @ts-ignore
       state: _state,
       path,
     });

@@ -39,6 +39,7 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findUniqueByEmail(email);
 
+    console.log('user', user);
     const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 
     if (!isPasswordValid) {
@@ -99,7 +100,7 @@ export class AuthService {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
 
-    const tenant = await this.prisma.tenant.findUnique({
+    const tenant = await this.prisma.tenant.findFirst({
       where: {
         userId: user.id,
         active: true,
@@ -109,7 +110,7 @@ export class AuthService {
         tenancy: true,
       },
     });
-
+    console.log(user.password);
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {

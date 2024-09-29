@@ -11,6 +11,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
     context,
   });
 
+  // @ts-ignore
   const calendarInputHeaderDate = state.calendarInput.header.date;
   // 요일(월, 화, 수 등등)
   const startDateOfMonth = dayjs(calendarInputHeaderDate)
@@ -49,6 +50,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
     date: Date,
     type: 'prev' | 'current' | 'next',
   ) => {
+    // @ts-ignore
     const isSelected = state.value.some(value => {
       return dayjs(value).isSame(date, 'date');
     });
@@ -57,15 +59,18 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
       value: date.toISOString(),
       selected: isSelected,
       selectDate() {
+        // @ts-ignore
         const isSelected = state.value.some(date => {
           return dayjs(date).isSame(this.value, 'date');
         });
 
         if (isSelected) {
+          // @ts-ignore
           state.value = state.value.filter(date => {
             return !dayjs(date).isSame(this.value, 'date');
           });
         } else {
+          // @ts-ignore
           state.value = uniq([...state.value, this.value]);
         }
         this.selected = !this.selected;
@@ -87,6 +92,7 @@ export const useProps = <T extends object>(props: CalendarInputProps<T>) => {
     .map(value => dayjs(nextMonthDayJs).set('date', value).toDate())
     .map((date: Date) => convertToDateModel(date, 'next'));
 
+  // @ts-ignore
   state.calendarInput.dates = [
     ...prevMonthDates,
     ...currentMonthDates,

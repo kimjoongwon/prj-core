@@ -3,7 +3,6 @@
 import React from 'react';
 import {
   useGetAllService,
-  ServiceEntity,
   DataGrid,
   getGetServiceQueryKey,
   getService,

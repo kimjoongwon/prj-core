@@ -19,11 +19,6 @@ export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
   roleId: string;
 
-  constructor(tenant: Tenant) {
-    super(tenant);
-    Object.assign(this, tenant);
-  }
-
   @UUIDField()
   tenancyId: string;
 

@@ -26,7 +26,6 @@ export const useState = (props: {
       serviceId: '',
       title: '',
       type: 'HTML',
-      ...templateDto?.post,
     },
   };
 

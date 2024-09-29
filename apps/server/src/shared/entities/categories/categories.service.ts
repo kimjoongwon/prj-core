@@ -3,7 +3,8 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { ResponseEntity } from '../common/response.entity';
-import { CategoryDto } from './dtos/category.dto';
+import { plainToInstance } from 'class-transformer';
+import { ServiceDto } from '../services/dtos/service.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -46,7 +47,7 @@ export class CategoriesService {
     return new ResponseEntity(
       HttpStatus.OK,
       'Successfully fetched categories',
-      services.map((service) => new CategoryDto(service)),
+      services.map((service) => plainToInstance(ServiceDto, service)),
     );
   }
 }

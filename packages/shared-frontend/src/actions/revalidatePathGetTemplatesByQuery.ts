@@ -7,8 +7,10 @@ import { GetTemplatesByQueryParams } from '../model/getTemplatesByQueryParams';
 export const revalidatePathGetTemplatesByQuery = (
   params?: GetTemplatesByQueryParams,
 ) => {
-  // @ts-ignore
-  const searchParams = new URLSearchParams(params).toString();
+  if (!params) {
+    return null;
+  }
+  const searchParams = new URLSearchParams(JSON.stringify(params)).toString();
   const [queryKey] = getGetTemplatesByQueryQueryKey(params);
   revalidatePath(queryKey + searchParams);
 };

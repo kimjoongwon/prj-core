@@ -17,13 +17,4 @@ export class CategoryDto extends AbstractDto {
 
   @StringField()
   serviceId: string;
-
-  constructor(categoryEntity: CategoryEntity) {
-    super(categoryEntity);
-    this.name = categoryEntity.name;
-    this.ancestorIds = categoryEntity.ancestorIds;
-    this.parentId = categoryEntity.parentId;
-    this.spaceId = categoryEntity.spaceId;
-    this.serviceId = categoryEntity.serviceId;
-  }
 }

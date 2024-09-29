@@ -110,7 +110,7 @@ export class InitService {
     const appConfig = this.configService.get<AppConfig>('app');
     const hashedPassword = await this.passwordService.hashPassword('rkdmf12!@');
 
-    const adminUser = this.usersService.getUnique({
+    const adminUser = await this.usersService.getUnique({
       where: {
         email: appConfig.adminEmail,
       },
@@ -143,11 +143,16 @@ export class InitService {
     }
   }
 
-  createSubjects() {
-    return Promise.all(
-      Object.keys(Prisma.ModelName).map((key) =>
-        this.subjectsService.create({ data: { name: key } }),
-      ),
+  async createSubjects() {
+    return await Promise.all(
+      Object.keys(Prisma.ModelName).map(async (key) => {
+        const subject = this.subjectsService.getUnique({ where: { name: key } });
+        if (!subject) {
+          return this.subjectsService.create({ data: { name: key } });
+        } else {
+          return null;
+        }
+      }),
     );
   }
 
@@ -155,7 +160,6 @@ export class InitService {
     await this.createSubjects();
     const { adminRoleId } = await this.createDefaultRoles();
     const { tenancyId } = await this.createDefaultSpace();
-
     await this.createDefaultUser(adminRoleId, tenancyId);
   }
 }

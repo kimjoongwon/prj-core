@@ -70,7 +70,11 @@ export class TimelineItemsController {
     @Body() updateTimelineItemDto: UpdateTimelineItemDto,
   ) {
     const timelineItem = await this.service.update(timelineItemId, updateTimelineItemDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(TimelineItemDto, timelineItem),
+    );
   }
 
   @Patch(':timelineItemId/removedAt')
@@ -79,7 +83,11 @@ export class TimelineItemsController {
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async removeTimelineItem(@Param('timelineItemId') timelineItemId: string) {
     const timelineItem = await this.service.remove(timelineItemId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(TimelineItemDto, timelineItem),
+    );
   }
 
   @Delete(':timelineItemId')
@@ -88,7 +96,11 @@ export class TimelineItemsController {
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async deleteTimelineItem(@Param('timelineItemId') timelineItemId: string) {
     const timelineItem = await this.service.delete(timelineItemId);
-    return new ResponseEntity(HttpStatus.OK, '성공', new TimelineItemDto(timelineItem));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(TimelineItemDto, timelineItem),
+    );
   }
 
   @Get()

@@ -33,7 +33,7 @@ export const useHandlers = (props: {
     await createTemplate.mutateAsync({
       data: state.form as CreateTemplateDto,
     });
-    revalidatePathGetTemplatesByQuery({});
+    revalidatePathGetTemplatesByQuery();
   };
 
   const goBack = () => {

@@ -13,6 +13,10 @@ export class SubjectsService {
     return this.repository.create(args);
   }
 
+  getUnique(args: Prisma.SubjectFindUniqueArgs) {
+    return this.repository.findUnique(args);
+  }
+
   createOrUpdate(createSubjectDto: CreateSubjectDto) {
     return this.repository.upsert({
       where: { name: createSubjectDto.name },
@@ -26,7 +30,7 @@ export class SubjectsService {
   }
 
   getOneById(id: string) {
-    return this.repository.findUnique(id);
+    return this.repository.findUnique({ where: { id } });
   }
 
   updateById(id: string, updateSubjectDto: UpdateSubjectDto) {

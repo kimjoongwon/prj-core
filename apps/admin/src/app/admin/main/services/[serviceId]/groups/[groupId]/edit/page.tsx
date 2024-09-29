@@ -25,7 +25,7 @@ const Page = () => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <Input state={state.form} name="name" />
+      <Input state={state.form} name="name" path={'name'} />
     </FormLayout>
   );
 };

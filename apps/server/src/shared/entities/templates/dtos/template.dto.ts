@@ -19,9 +19,9 @@ export class TemplateDto extends AbstractDto implements Template {
   @StringField({ each: true, isArray: true, default: [] })
   keys: string[];
 
-  @UUIDField()
+  @StringField()
   serviceId: string;
 
-  @ClassField(() => PostDto, { nullable: true })
+  @ClassField(() => PostDto, { nullable: true, swagger: false })
   post?: PostDto;
 }
