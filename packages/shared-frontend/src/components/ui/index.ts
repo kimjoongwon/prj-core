@@ -43,3 +43,5 @@ export * from './NextUI';
 export * from './DatePicker';
 export * from './MultiInput';
 export * from './Copyright';
+export * from './BottomTab';
+export * from './AppBar';

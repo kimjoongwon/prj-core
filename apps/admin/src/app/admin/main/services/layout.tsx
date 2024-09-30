@@ -78,30 +78,7 @@ const UserServiceLayout = observer((props: UserServiceLayoutProps) => {
       },
     ],
   };
-
-  return (
-    <HStack className="flex space-x-2">
-      <VStack className="space-x-2 flex-grow-0 basis-[14%]">
-        <Card className="m-2 h-full" fullWidth>
-          <CardHeader>
-            <Text variant="h4">서비스명</Text>
-          </CardHeader>
-          <CardBody className="space-y-2">
-            {navItems[serviceName || 'USER']?.map(item => (
-              <Button variant="light" onClick={() => item.onClick?.()}>
-                {item.name}
-              </Button>
-            ))}
-          </CardBody>
-        </Card>
-      </VStack>
-      <VStack className="w-full">
-        <Card fullWidth className="m-2 h-full p-2">
-          {props.children}
-        </Card>
-      </VStack>
-    </HStack>
-  );
+  return;
 });
 
 export default UserServiceLayout;

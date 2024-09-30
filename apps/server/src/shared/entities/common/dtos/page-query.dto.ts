@@ -1,4 +1,5 @@
 import { NumberFieldOptional } from '../../../decorators';
+import { PaginationMananger } from '../../../utils';
 
 export class PageQueryDto {
   @NumberFieldOptional({
@@ -15,4 +16,9 @@ export class PageQueryDto {
     int: true,
   })
   readonly take?: number = 10;
+
+  toArgs() {
+    const args = PaginationMananger.toArgs(this);
+    return args;
+  }
 }

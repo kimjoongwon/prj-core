@@ -1,6 +1,7 @@
-import { InternalServerErrorException, Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { InitService } from './init.service';
 import {
+  PagesModule,
   RolesModule,
   SpacesModule,
   SubjectsModule,
@@ -11,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { PasswordService } from '../password';
 
 @Module({
-  imports: [RolesModule, SpacesModule, TenanciesModule, UsersModule, SubjectsModule],
+  imports: [RolesModule, SpacesModule, TenanciesModule, UsersModule, SubjectsModule, PagesModule],
   providers: [InitService, ConfigService, PasswordService],
   exports: [InitService],
 })

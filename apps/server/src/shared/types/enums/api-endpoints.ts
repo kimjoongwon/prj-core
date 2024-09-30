@@ -18,4 +18,5 @@ export enum ApiEndpoints {
   ADMIN_TEMPLATES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/templates`,
   ADMIN_ROLES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/roles`,
   AUTH = `${ApiEndpoints.PREFIX}/auth`,
+  ADMIN_PAGES = `${ApiEndpoints.PREFIX}/${ApiEndpoints.ADMIN}/pages`,
 }

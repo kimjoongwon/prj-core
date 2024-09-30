@@ -15,9 +15,9 @@ export function Auth(
   const isPublicRoute = options?.public;
 
   const decorators = [
+    PublicRoute(isPublicRoute),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
-    PublicRoute(isPublicRoute),
     Roles(roles),
   ];
 

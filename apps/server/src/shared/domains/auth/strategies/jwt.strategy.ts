@@ -8,7 +8,7 @@ import { AuthConfig, UsersService } from '@shared';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    readonly config: ConfigService,
+    private readonly config: ConfigService,
     private readonly usersService: UsersService,
   ) {
     const authConfig = config.get<AuthConfig>('auth');

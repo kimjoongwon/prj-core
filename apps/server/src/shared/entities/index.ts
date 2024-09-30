@@ -17,3 +17,4 @@ export * from './templates';
 export * from './posts';
 export * from './system-emails';
 export * from './emails';
+export * from './pages';

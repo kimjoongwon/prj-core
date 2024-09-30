@@ -10,11 +10,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_ROUTE_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.get<boolean>(PUBLIC_ROUTE_KEY, context.getHandler());
 
+    console.log('isPublic', isPublic);
     if (isPublic) {
       return true;
     }
@@ -23,6 +21,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err, req) {
+    console.log('여기 걸리네?');
     if (err || !req.user) {
       throw err || new UnauthorizedException();
     }

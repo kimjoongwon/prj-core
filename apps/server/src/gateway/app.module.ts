@@ -7,12 +7,15 @@ import { AuthAdminModule } from './auth/admin/auth-admin.module';
 import { ServiceAuthModule } from './auth/service/auth/service-auth.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminTemplatesModule } from './admin';
+import { AdminPagesModule } from './admin/pages/admin-pages.module';
+import { P } from 'ts-pattern';
 
 @Module({
   imports: [
     InitModule,
     ...libModules,
     ...adminModules,
+    AdminPagesModule,
     RouterModule.register([
       {
         path: 'api',
@@ -22,7 +25,16 @@ import { AdminTemplatesModule } from './admin';
             children: [
               {
                 path: 'admin',
-                module: AdminTemplatesModule,
+                children: [
+                  {
+                    path: 'pages',
+                    module: AdminPagesModule,
+                  },
+                  {
+                    path: 'templates',
+                    module: AdminTemplatesModule,
+                  },
+                ],
               },
               {
                 path: 'auth',

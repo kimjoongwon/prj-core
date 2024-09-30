@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  PagesService,
+  pathnames,
   RolesService,
   SpacesService,
   SubjectsService,
@@ -11,12 +13,14 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
 import { Prisma } from '@prisma/client';
+import { Pathnames } from '../../entities/pages/types/pathname.enum';
 
 @Injectable()
 export class InitService {
   logger = new Logger(InitService.name);
   LOG_PREFIX = `${InitService.name}`;
   constructor(
+    private readonly pagesService: PagesService,
     private readonly rolesService: RolesService,
     private readonly spacesService: SpacesService,
     private readonly configService: ConfigService,
@@ -160,6 +164,25 @@ export class InitService {
     await this.createSubjects();
     const { adminRoleId } = await this.createDefaultRoles();
     const { tenancyId } = await this.createDefaultSpace();
+    await this.createPage();
     await this.createDefaultUser(adminRoleId, tenancyId);
+  }
+
+  createPage() {
+    pathnames.map(async (item) => {
+      const page = await this.pagesService.getUnique({
+        where: { pathname: item.pathname },
+      });
+
+      if (!page) {
+        await this.pagesService.create({
+          data: {
+            type: 'ADMIN',
+            name: item.name,
+            pathname: item.pathname,
+          },
+        });
+      }
+    });
   }
 }

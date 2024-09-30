@@ -9,7 +9,7 @@ export class PublicGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.get<boolean>(PUBLIC_ROUTE_KEY, context.getHandler());
-
+    console.log('????????');
     if (_.isEmpty(isPublic)) {
       return true;
     }

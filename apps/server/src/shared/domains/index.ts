@@ -5,3 +5,4 @@ export * from './auth';
 export * from './role';
 export * from './init';
 export * from './email';
+export * from './page';
