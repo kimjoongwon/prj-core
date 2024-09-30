@@ -9,7 +9,6 @@ import pino from 'pino';
 import {
   CategoriesModule,
   AdminGroupsModule,
-  ServicesModule,
   AdminSessionsModule,
   AdminSpacesModule,
   AdminSubjectsModule,
@@ -25,23 +24,7 @@ import { ServiceAuthModule } from './gateway/auth/service/auth/service-auth.modu
 import { AuthAdminModule } from './gateway/auth/admin/auth-admin.module';
 import { AuthModule } from './gateway/auth/auth.module';
 
-export const adminModules = [
-  AdminAbilityModule,
-  AdminTemplatesModule,
-  AdminTimelineItemsModule,
-  CategoriesModule,
-  ServicesModule,
-  AdminSpacesModule,
-  AdminGroupsModule,
-  AdminSubjectsModule,
-  CaslModule,
-  AuthAdminModule,
-  ServiceAuthModule,
-  AdminSessionsModule,
-  UsersModule,
-  AdminRolesModule,
-  AuthModule,
-];
+export const adminModules = [];
 
 export const libModules = [
   MailerModule.forRootAsync({

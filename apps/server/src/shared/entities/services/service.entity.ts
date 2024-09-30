@@ -1,13 +1,7 @@
 import { $Enums, Service as ServiceEntity } from '@prisma/client';
 
-export enum SERVICE_NAME {
-  SPACE = 'SPACE',
-  USER = 'USER',
-  SETTING = 'SETTING',
-}
-
 export class Service implements ServiceEntity {
-  name: $Enums.SERVICE_NAME;
+  name: string;
   id: string;
   label: string | null;
   createdAt: Date;

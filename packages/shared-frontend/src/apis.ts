@@ -31,6 +31,8 @@ import type {
   CreateCategory200AllOf,
   CreateCategoryDto,
   CreateGroupDto,
+  CreatePage200AllOf,
+  CreatePageDto,
   CreateService201AllOf,
   CreateServiceDto,
   CreateSession200AllOf,
@@ -44,6 +46,7 @@ import type {
   CreateTimelineItemDto,
   DeleteAbility200AllOf,
   DeleteGroup200AllOf,
+  DeletePage200AllOf,
   DeleteService200AllOf,
   DeleteSession200AllOf,
   DeleteSpace200AllOf,
@@ -54,11 +57,15 @@ import type {
   GetAbilitiesByQueryParams,
   GetAbility200AllOf,
   GetAccessibleSpaces200AllOf,
+  GetAllPageByType200AllOf,
   GetAllService200AllOf,
   GetCategories200AllOf,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
+  GetPage200AllOf,
+  GetPagesByQuery200AllOf,
+  GetPagesByQueryParams,
   GetService200AllOf,
   GetServiceAuthRoles200AllOf,
   GetSession200AllOf,
@@ -82,6 +89,8 @@ import type {
   RemoveAbility200AllOf,
   RemoveGroups200AllOf,
   RemoveManySpaceDto,
+  RemovePage200AllOf,
+  RemovePages200AllOf,
   RemoveService200AllOf,
   RemoveServices200AllOf,
   RemoveSession200AllOf,
@@ -100,6 +109,8 @@ import type {
   UpdateCategoryDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
+  UpdatePage200AllOf,
+  UpdatePageDto,
   UpdateService200AllOf,
   UpdateServiceDto,
   UpdateSession200AllOf,
@@ -5138,6 +5149,654 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getSignUpUserMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getAllPageByType = (
+    type: unknown,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAllPageByType200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/${type}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAllPageByTypeQueryKey = (type: unknown,) => {
+    return [`http://localhost:3005/api/v1/admin/pages/${type}`] as const;
+    }
+
+    
+export const getGetAllPageByTypeQueryOptions = <TData = Awaited<ReturnType<typeof getAllPageByType>>, TError = ErrorType<unknown>>(type: unknown, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllPageByTypeQueryKey(type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllPageByType>>> = ({ signal }) => getAllPageByType(type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllPageByTypeQueryResult = NonNullable<Awaited<ReturnType<typeof getAllPageByType>>>
+export type GetAllPageByTypeQueryError = ErrorType<unknown>
+
+export const useGetAllPageByType = <TData = Awaited<ReturnType<typeof getAllPageByType>>, TError = ErrorType<unknown>>(
+ type: unknown, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllPageByTypeQueryOptions(type,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAllPageByTypeSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllPageByType>>, TError = ErrorType<unknown>>(type: unknown, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllPageByTypeQueryKey(type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllPageByType>>> = ({ signal }) => getAllPageByType(type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(type), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllPageByTypeSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAllPageByType>>>
+export type GetAllPageByTypeSuspenseQueryError = ErrorType<unknown>
+
+export const useGetAllPageByTypeSuspense = <TData = Awaited<ReturnType<typeof getAllPageByType>>, TError = ErrorType<unknown>>(
+ type: unknown, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllPageByTypeSuspenseQueryOptions(type,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAllPageByTypeSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAllPageByType>>>, TError = ErrorType<unknown>>(type: unknown, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllPageByTypeQueryKey(type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllPageByType>>> = ({ signal }) => getAllPageByType(type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(type), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllPageByTypeSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAllPageByType>>>
+export type GetAllPageByTypeSuspenseInfiniteQueryError = ErrorType<unknown>
+
+export const useGetAllPageByTypeSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAllPageByType>>>, TError = ErrorType<unknown>>(
+ type: unknown, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllPageByType>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllPageByTypeSuspenseInfiniteQueryOptions(type,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const createPage = (
+    createPageDto: BodyType<CreatePageDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreatePage200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPageDto
+    },
+      options);
+    }
+  
+
+
+export const getCreatePageMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPage>>, {data: BodyType<CreatePageDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPage(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePageMutationResult = NonNullable<Awaited<ReturnType<typeof createPage>>>
+    export type CreatePageMutationBody = BodyType<CreatePageDto>
+    export type CreatePageMutationError = ErrorType<void>
+
+    export const useCreatePage = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createPage>>,
+        TError,
+        {data: BodyType<CreatePageDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreatePageMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getPagesByQuery = (
+    params?: GetPagesByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetPagesByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetPagesByQueryQueryKey = (params?: GetPagesByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/pages`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetPagesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPagesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
+export type GetPagesByQueryQueryError = ErrorType<void>
+
+export const useGetPagesByQuery = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
+ params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPagesByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetPagesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPagesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
+export type GetPagesByQuerySuspenseQueryError = ErrorType<void>
+
+export const useGetPagesByQuerySuspense = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
+ params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPagesByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetPagesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPagesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
+export type GetPagesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetPagesByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPagesByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getPage = (
+    pageId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetPage200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetPageQueryKey = (pageId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/pages/${pageId}`] as const;
+    }
+
+    
+export const getGetPageQueryOptions = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPageQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
+export type GetPageQueryError = ErrorType<void>
+
+export const useGetPage = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
+ pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPageQueryOptions(pageId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
+export type GetPageSuspenseQueryError = ErrorType<void>
+
+export const useGetPageSuspense = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
+ pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPageSuspenseQueryOptions(pageId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
+export type GetPageSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetPageSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(
+ pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetPageSuspenseInfiniteQueryOptions(pageId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updatePage = (
+    pageId: string,
+    updatePageDto: BodyType<UpdatePageDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdatePage200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePageDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdatePageMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePage>>, {pageId: string;data: BodyType<UpdatePageDto>}> = (props) => {
+          const {pageId,data} = props ?? {};
+
+          return  updatePage(pageId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePageMutationResult = NonNullable<Awaited<ReturnType<typeof updatePage>>>
+    export type UpdatePageMutationBody = BodyType<UpdatePageDto>
+    export type UpdatePageMutationError = ErrorType<void>
+
+    export const useUpdatePage = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updatePage>>,
+        TError,
+        {pageId: string;data: BodyType<UpdatePageDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdatePageMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deletePage = (
+    pageId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeletePage200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeletePageMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePage>>, {pageId: string}> = (props) => {
+          const {pageId} = props ?? {};
+
+          return  deletePage(pageId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeletePageMutationResult = NonNullable<Awaited<ReturnType<typeof deletePage>>>
+    
+    export type DeletePageMutationError = ErrorType<void>
+
+    export const useDeletePage = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deletePage>>,
+        TError,
+        {pageId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeletePageMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removePages = (
+    removePagesBody: BodyType<string[]>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemovePages200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removePagesBody
+    },
+      options);
+    }
+  
+
+
+export const getRemovePagesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removePages>>, {data: BodyType<string[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removePages(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemovePagesMutationResult = NonNullable<Awaited<ReturnType<typeof removePages>>>
+    export type RemovePagesMutationBody = BodyType<string[]>
+    export type RemovePagesMutationError = ErrorType<void>
+
+    export const useRemovePages = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removePages>>,
+        TError,
+        {data: BodyType<string[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemovePagesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removePage = (
+    pageId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemovePage200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemovePageMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removePage>>, {pageId: string}> = (props) => {
+          const {pageId} = props ?? {};
+
+          return  removePage(pageId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemovePageMutationResult = NonNullable<Awaited<ReturnType<typeof removePage>>>
+    
+    export type RemovePageMutationError = ErrorType<void>
+
+    export const useRemovePage = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removePage>>,
+        TError,
+        {pageId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemovePageMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

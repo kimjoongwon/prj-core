@@ -44,14 +44,14 @@ export class ServicesController {
   @Auth()
   @ApiResponseEntity(ServiceDto, HttpStatus.CREATED)
   createService(@Body() createServiceDto: CreateServiceDto) {
-    return this.servicesService.create(createServiceDto);
+    return this.servicesService.create({ data: createServiceDto });
   }
 
   @Auth()
   @Get(':serviceId')
   @ApiResponseEntity(ServiceDto, HttpStatus.OK)
   async getService(@Param('serviceId') serviceId: string) {
-    const service = await this.servicesService.getUnqiue(serviceId);
+    const service = await this.servicesService.getUnqiue({ where: { id: serviceId } });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ServiceDto, service));
   }
 

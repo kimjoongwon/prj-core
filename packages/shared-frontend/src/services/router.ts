@@ -20,10 +20,7 @@ interface CoCRouterArgs<T> {
 export class Router {
   pathname: string = window.location.pathname;
 
-  constructor(
-    readonly galaxy: Galaxy,
-    readonly nextRouter: AppRouterInstance,
-  ) {
+  constructor(readonly galaxy: Galaxy, readonly nextRouter: AppRouterInstance) {
     makeAutoObservable(this);
     this.galaxy = galaxy;
     this.nextRouter = nextRouter;

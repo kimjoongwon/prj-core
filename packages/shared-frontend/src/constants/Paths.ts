@@ -1,99 +1,86 @@
-export const ADMIN_PATH = '/admin' as const;
-export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard` as const;
-export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth` as const;
-export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login` as const;
-export const ADMIN_MAIN_PATH = `${ADMIN_PATH}/main` as const;
+export const ADMIN_PATH = '/admin';
+export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard`;
+export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth`;
+export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login`;
+export const ADMIN_MAIN_PATH = `${ADMIN_PATH}/main`;
 
-export const ADMIN_SERVICE_PATH =
-  `${ADMIN_MAIN_PATH}/services/:serviceId` as const;
-
-export const ADMIN_SERVICES_PATH = `${ADMIN_MAIN_PATH}/services` as const;
+export const PATH = `/admin/main/services/:serviceId`;
+export const SERVICE_PATH = `/admin/main/services/:serviceId`;
 
 // 매장관리 > 공간 관리
-export const ADMIN_SERVICE_SPACES_PATH =
-  `${ADMIN_SERVICE_PATH}/spaces` as const;
+export const SPACES_PATH = `/admin/main/services/:serviceId/spaces`;
+export const SPACE_PATH = `/admin/main/services/:serviceId/spaces/:spaceId`;
+export const SPACE_EDIT_PATH = `/admin/main/services/:serviceId/spaces/:spaceId/edit`;
 
-export const ADMIN_SERVICE_SPACE_PATH =
-  `${ADMIN_SERVICE_PATH}/spaces/:spaceId` as const;
-
-export const ADMIN_SERVICE_SPACE_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/spaces/:spaceId/edit` as const;
-//
 // 예약관리 > 타임라인관리
-export const ADMIN_SERVICE_TIMELINE_ITEMS_PATH =
-  `${ADMIN_SERVICE_PATH}/timelineItems` as const;
+export const TIMELINE_ITEMS_PATH = `/admin/main/services/:serviceId/timelineItems`;
+export const TIMELINE_ITEM_PATH = `/admin/main/services/:serviceId/timelineItems/:timelineItemId`;
+export const TIMELINE_ITEM_EDIT_PATH = `/admin/main/services/:serviceId/timelineItems/:timelineItemId/edit`;
 
-export const ADMIN_SERVICE_TIMELINE_ITEM_PATH =
-  `${ADMIN_SERVICE_PATH}/timelineItems/:timelineItemId` as const;
+// 세션 > 세션 관리
+export const SESSIONS_PATH = `/admin/main/services/:serviceId/sessions`;
+export const SESSION_PATH = `/admin/main/services/:serviceId/sessions/:sessionId`;
+export const SESSION_EDIT_PATH = `/admin/main/services/:serviceId/sessions/:sessionId/edit`;
 
-export const ADMIN_SERVICE_TIMELINE_ITEM_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/timelineItems/:timelineItemId/edit` as const;
-//
-// 예약관리 > 세션 관리
-export const ADMIN_SERVICE_SESSIONS_PATH =
-  `${ADMIN_SERVICE_PATH}/sessions` as const;
+// 예약 > 예약 관리
+export const RESERVATIONS_PATH = `/admin/main/services/:serviceId/reservations`;
+export const RESERVATION_PATH = `/admin/main/services/:serviceId/reservations/:reservationId`;
+export const RESERVATION_EDIT_PATH = `/admin/main/services/:serviceId/reservations/:reservationId/edit`;
 
-export const ADMIN_SERVICE_SESSION_PATH =
-  `${ADMIN_SERVICE_PATH}/sessions/:sessionId` as const;
-
-export const ADMIN_SERVICE_SESSION_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/sessions/:sessionId/edit` as const;
-//
 // 템플릿 관리
-export const ADMIN_SERVICE_TEMPLATES_PATH =
-  `${ADMIN_SERVICE_PATH}/templates` as const;
+export const TEMPLATES_PATH = `/admin/main/services/:serviceId/templates`;
+export const TEMPLATE_PATH = `/admin/main/services/:serviceId/templates/:templateId`;
+export const TEMPLATE_EDIT_PATH = `/admin/main/services/:serviceId/templates/:templateId/edit`;
 
-export const ADMIN_SERVICE_TEMPLATE_PATH =
-  `${ADMIN_SERVICE_PATH}/templates/:templateId` as const;
+// 이용자 관리
+export const USERS_PATH = `/admin/main/services/:serviceId/users`;
+export const USER_PATH = `/admin/main/services/:serviceId/users/:userId`;
+export const USER_EDIT_PATH = `/admin/main/services/:serviceId/users/:userId/edit`;
 
-export const ADMIN_SERVICE_TEMPLATE_EDIT_PATH =
-  `${ADMIN_SERVICE_PATH}/templates/:templateId/edit` as const;
-//
-export const ADMIN_USER_CATEGORIES_PATH =
-  `${ADMIN_SERVICE_PATH}/categories` as const;
-
-export const ADMIN_USER_GROUPS_PATH = `${ADMIN_SERVICE_PATH}/groups` as const;
-
-export const ADMIN_USER_CATEGORY_PATH =
-  `${ADMIN_USER_CATEGORIES_PATH}/:categoryId` as const;
-
-export const ADMIN_USER_CATEGORY_EDIT_PATH =
-  `${ADMIN_USER_CATEGORIES_PATH}/:categoryId/edit` as const;
-
-export const ADMIN_SETTING_SERVICE_PATH =
-  `${ADMIN_MAIN_PATH}/settingService` as const;
-
-export const ADMIN_SERVICE_EDIT_PATH = `${ADMIN_SERVICE_PATH}/edit` as const;
+// 그룹
+export const GROUPS_PATH = `/admin/main/services/:serviceId/groups`;
+export const GROUP_PATH = `/admin/main/services/:serviceId/groups/:groupId`;
+export const GROUP_EDIT_PATH = `/admin/main/services/:serviceId/groups/:groupId/edit`;
+// 카테고리
+export const CATEGORIES_PATH = `/admin/main/services/:serviceId/categories`;
+export const CATEGORY_PATH = `/admin/main/services/:serviceId/categories/:categoryId`;
+export const CATEGORY_EDIT_PATH = `/admin/main/services/:serviceId/categories/:categoryId/edit`;
 
 export type Paths =
-  | typeof ADMIN_PATH
+  // 서비스
+  | typeof SERVICE_PATH
   | typeof ADMIN_MAIN_PATH
-  | typeof DASHBOARD_PAGE_PATH
   | typeof ADMIN_AUTH_PATH
   | typeof ADMIN_AUTH_LOGIN_PATH
-  | typeof ADMIN_MAIN_PATH
-  | typeof ADMIN_SERVICE_PATH
-  | typeof ADMIN_USER_GROUPS_PATH
-  | typeof ADMIN_USER_CATEGORIES_PATH
-  | typeof ADMIN_USER_CATEGORY_PATH
-  | typeof ADMIN_SETTING_SERVICE_PATH
-  | typeof ADMIN_SERVICES_PATH
-  | typeof ADMIN_SERVICE_EDIT_PATH
+  // 그룹
+  | typeof GROUPS_PATH
+  | typeof GROUP_PATH
+  | typeof GROUP_EDIT_PATH
+  // 이용자
+  | typeof USERS_PATH
+  | typeof USER_PATH
+  | typeof USER_EDIT_PATH
+  // 카테고리
+  | typeof CATEGORIES_PATH
+  | typeof CATEGORY_PATH
+  | typeof CATEGORY_EDIT_PATH
   // 매장
-  | typeof ADMIN_SERVICE_SPACES_PATH
-  | typeof ADMIN_SERVICE_SPACE_PATH
-  | typeof ADMIN_SERVICE_SPACE_EDIT_PATH
-  // 에약
-  | typeof ADMIN_SERVICE_TIMELINE_ITEMS_PATH
-  | typeof ADMIN_SERVICE_TIMELINE_ITEM_PATH
-  | typeof ADMIN_SERVICE_TIMELINE_ITEM_EDIT_PATH
+  | typeof SPACES_PATH
+  | typeof SPACE_PATH
+  | typeof SPACE_EDIT_PATH
   // 세션
-  | typeof ADMIN_SERVICE_SESSIONS_PATH
-  | typeof ADMIN_SERVICE_SESSION_PATH
-  | typeof ADMIN_SERVICE_SESSION_EDIT_PATH
+  | typeof SESSIONS_PATH
+  | typeof SESSION_PATH
+  | typeof SESSION_EDIT_PATH
+  // 타임라인
+  | typeof TIMELINE_ITEMS_PATH
+  | typeof TIMELINE_ITEM_PATH
+  | typeof TIMELINE_ITEM_EDIT_PATH
+  // 예약
+  | typeof RESERVATIONS_PATH
+  | typeof RESERVATION_PATH
+  | typeof RESERVATION_EDIT_PATH
   // 템플릿
-  | typeof ADMIN_SERVICE_TEMPLATES_PATH
-  | typeof ADMIN_SERVICE_TEMPLATE_PATH
-  | typeof ADMIN_SERVICE_TEMPLATE_EDIT_PATH
-  //
-  | typeof ADMIN_USER_CATEGORY_EDIT_PATH;
+  | typeof TEMPLATES_PATH
+  | typeof TEMPLATE_PATH
+  | typeof TEMPLATE_EDIT_PATH;

@@ -1,64 +1,51 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
-import { CreateServiceDto } from './dtos/create-service.dto';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ServiceQueryDto } from './dtos';
 import { PaginationMananger } from '../../utils';
-import { UpsertServiceDto } from './dtos/upsert-service.dto';
+import { ServicesRepository } from './services.repository';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ServicesService {
   logger = new Logger(ServicesService.name);
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly repository: ServicesRepository) {}
 
-  create(createServiceDto: CreateServiceDto) {
-    return this.prisma.service.create({
-      data: createServiceDto,
-    });
-  }
-
-  upsert(upsertServiceDto: UpsertServiceDto) {
-    return this.prisma.service.upsert({
-      where: { name: upsertServiceDto.name },
-      create: upsertServiceDto,
-      update: upsertServiceDto,
-    });
+  create(args: Prisma.ServiceCreateArgs) {
+    return this.repository.create(args);
   }
 
   findManyByQuery(query: ServiceQueryDto) {
     const args = PaginationMananger.toArgs(query);
-    return this.prisma.service.findMany(args);
+    return this.repository.findMany(args);
   }
 
   getAll() {
-    return this.prisma.service.findMany({
+    return this.repository.findMany({
       where: {
         removedAt: null,
       },
     });
   }
 
-  getUnqiue(id: string) {
-    return this.prisma.service.findUnique({
-      where: { id },
-    });
+  getUnqiue(args: Prisma.ServiceFindUniqueArgs) {
+    return this.repository.findUnique(args);
   }
 
   getFirst(id: string) {
-    return this.prisma.service.findFirst({
+    return this.repository.findFirst({
       where: { id },
     });
   }
 
   update(id: string, updateServiceDto: UpdateServiceDto) {
-    return this.prisma.service.update({
+    return this.repository.update({
       where: { id },
       data: updateServiceDto,
     });
   }
 
   remove(id: string) {
-    return this.prisma.service.update({
+    return this.repository.update({
       where: { id },
       data: {
         removedAt: new Date(),
@@ -67,14 +54,14 @@ export class ServicesService {
   }
 
   removeMany(ids: string[]) {
-    return this.prisma.service.updateMany({
+    return this.repository.updateMany({
       where: { id: { in: ids } },
       data: { removedAt: new Date() },
     });
   }
 
   delete(id: string) {
-    return this.prisma.service.delete({
+    return this.repository.delete({
       where: { id },
     });
   }
