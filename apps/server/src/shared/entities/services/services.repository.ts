@@ -1,9 +1,10 @@
-import { PrismaService } from 'nestjs-prisma';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { PrismaService } from 'nestjs-prisma';
 
+@Injectable()
 export class ServicesRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
+  constructor(private prisma: PrismaService) {}
   create(args: Prisma.ServiceCreateArgs) {
     return this.prisma.service.create(args);
   }

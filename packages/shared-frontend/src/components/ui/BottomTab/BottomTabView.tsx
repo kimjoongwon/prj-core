@@ -1,17 +1,15 @@
 import { BottomTabProps } from '.';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import { Paper } from '@mui/material';
+import { galaxy } from '../../../providers';
 
 export interface BottomTabViewProps extends BottomTabProps {}
 
 export const BottomTabView = (props: BottomTabViewProps) => {
   const [value, setValue] = useState();
   const { tabs } = props;
-  const visibleTabs = tabs?.filter(tab => tab.isVisible);
-  const isMoreTabVisible = visibleTabs?.length > 4;
 
   return (
     <Paper
@@ -23,32 +21,24 @@ export const BottomTabView = (props: BottomTabViewProps) => {
         onChange={(_, value) => {
           setValue(value);
           const tab = tabs?.find(tab => tab.name === value);
-          tab?.onClick?.();
+          const { pathname, params } = tab;
+
+          galaxy.router.push({
+            url: pathname,
+            params,
+          });
         }}
         value={value}
       >
-        {visibleTabs?.map((tab, index) => {
-          if (!tab.isVisible) {
-            return null;
-          }
-          if (index > 2) {
-            return;
-          }
+        {tabs?.map(tab => {
           return (
             <BottomNavigationAction
-              value={tab.name}
               label={tab.name}
               icon={tab.icon}
+              value={tab.name}
             />
           );
         })}
-        {isMoreTabVisible && (
-          <BottomNavigationAction
-            label="더보기"
-            icon={<AddIcon />}
-            value={'더보기'}
-          />
-        )}
       </BottomNavigation>
     </Paper>
   );

@@ -3,17 +3,16 @@ import {
   PagesService,
   pathnames,
   RolesService,
+  ServicesService,
   SpacesService,
   SubjectsService,
   TenanciesService,
-  TenantsService,
   UsersService,
 } from '../../entities';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
 import { Prisma } from '@prisma/client';
-import { Pathnames } from '../../entities/pages/types/pathname.enum';
 
 @Injectable()
 export class InitService {
@@ -28,6 +27,7 @@ export class InitService {
     private readonly usersService: UsersService,
     private readonly passwordService: PasswordService,
     private readonly subjectsService: SubjectsService,
+    private readonly servicesService: ServicesService,
   ) {}
 
   async createDefaultRoles() {
@@ -164,6 +164,7 @@ export class InitService {
     await this.createSubjects();
     const { adminRoleId } = await this.createDefaultRoles();
     const { tenancyId } = await this.createDefaultSpace();
+    await this.createServices();
     await this.createPage();
     await this.createDefaultUser(adminRoleId, tenancyId);
   }
@@ -184,5 +185,28 @@ export class InitService {
         });
       }
     });
+  }
+
+  async createServices() {
+    const services = [
+      { name: 'USER', label: '이용자' },
+      { name: 'RESERVATION', label: '예약' },
+      { name: 'SESSION', label: '세션' },
+      { name: 'SPACE', label: '공간' },
+    ];
+
+    await Promise.all(
+      services.map(async (service) => {
+        const serviceEntity = await this.servicesService.getUnqiue({
+          where: { name: service.name },
+        });
+
+        if (!serviceEntity) {
+          await this.servicesService.create({ data: service });
+        }
+      }),
+    );
+
+    this.logger.log(`[${this.LOG_PREFIX}] Create Services`);
   }
 }

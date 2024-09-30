@@ -13,7 +13,7 @@ model Category {
 
 model Service {
   id              String           @id @default(uuid())
-  name            SERVICE_NAME     @unique
+  name            String           @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
@@ -314,11 +314,6 @@ model Post {
   templates Template[]
 }
 
-enum PageTypes {
-  ADMIN
-  SERVICE
-}
-
 model Page {
   id        String    @id @default(uuid())
   name      String    @unique
@@ -329,10 +324,9 @@ model Page {
   removedAt DateTime? @db.Timestamptz(6)
 }
 
-enum SERVICE_NAME {
-  USER
-  RESERVATION
-  SPACE
+enum PageTypes {
+  ADMIN
+  SERVICE
 }
 
 enum TenantTypes {

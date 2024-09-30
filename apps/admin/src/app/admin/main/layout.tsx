@@ -4,44 +4,26 @@ import {
   AppBar,
   BottomTab,
   galaxy,
+  Paths,
   useGetAllServiceSuspense,
 } from '@shared/frontend';
+import { url } from 'inspector';
 import { observer } from 'mobx-react-lite';
+import { useMeta } from './_hooks/useMeta';
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const tabs = [
-  { name: '앱', isVisible: true },
-  { name: '세션', isVisible: true },
-  { name: '예약', isVisible: true },
-  { name: '공간', isVisible: true },
-  { name: '회원', isVisible: true },
-  { name: '권한', isVisible: true },
-];
-
 const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
-  const getAllService = useGetAllServiceSuspense();
-  const services = getAllService.data?.data;
+  const { navItems } = useMeta();
 
-  const tabs =
-    services?.map(({ id: serviceId, label }) => ({
-      name: label || '',
-      isVisible: true,
-      onClick: () => {
-        galaxy.router.push({
-          url: '/admin/main/services/:serviceId',
-          params: { serviceId: serviceId },
-        });
-      },
-    })) || [];
-
+  console.log('-?');
   return (
     <>
       <AppBar />
       {children}
-      <BottomTab tabs={tabs} />
+      <BottomTab tabs={navItems} />
     </>
   );
 });

@@ -1,21 +1,47 @@
 import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { InitModule, LoggerMiddleware } from '@shared';
+import { InitModule, LoggerMiddleware, ServicesModule, UsersModule } from '@shared';
 import { adminModules, libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
 import { AuthAdminModule } from './auth/admin/auth-admin.module';
 import { ServiceAuthModule } from './auth/service/auth/service-auth.module';
 import { AuthModule } from './auth/auth.module';
-import { AdminTemplatesModule } from './admin';
+import {
+  AdminGroupsModule,
+  AdminRolesModule,
+  AdminServicesModule,
+  AdminSessionsModule,
+  AdminSpacesModule,
+  AdminSubjectsModule,
+  AdminTemplatesModule,
+  AdminTimelineItemsModule,
+  CategoriesModule,
+} from './admin';
 import { AdminPagesModule } from './admin/pages/admin-pages.module';
-import { P } from 'ts-pattern';
+import { CaslModule } from 'nest-casl';
+import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
 
 @Module({
   imports: [
-    InitModule,
     ...libModules,
-    ...adminModules,
+    InitModule,
+    AdminAbilityModule,
+    AdminTemplatesModule,
+    AdminTimelineItemsModule,
+    CategoriesModule,
+    AdminSpacesModule,
+    AdminGroupsModule,
+    AdminSubjectsModule,
+    CaslModule,
+    AuthAdminModule,
+    ServiceAuthModule,
+    AdminSessionsModule,
+    UsersModule,
+    AdminRolesModule,
+    AuthModule,
     AdminPagesModule,
+    AdminServicesModule,
+    ServicesModule,
     RouterModule.register([
       {
         path: 'api',
