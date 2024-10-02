@@ -1,6 +1,6 @@
+import React from 'react';
 import { getTemplatesByQuery, TemplatesTable } from '@shared/frontend';
 import { cookies } from 'next/headers';
-import React from 'react';
 
 const TemplatesPage = async () => {
   const accessToken = cookies().get('accessToken');
@@ -13,7 +13,7 @@ const TemplatesPage = async () => {
     },
   );
 
-  return <TemplatesTable templates={templatesQuery.data || []} />;
+  return <TemplatesTable hideHeader templates={templatesQuery.data || []} />;
 };
 
 export default TemplatesPage;

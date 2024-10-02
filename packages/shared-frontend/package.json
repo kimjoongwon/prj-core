@@ -23,6 +23,10 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^43.1.1",
+    "@ckeditor/ckeditor5-html-embed": "^43.1.1",
+    "@ckeditor/ckeditor5-react": "^9.3.0",
+    "@ckeditor/ckeditor5-source-editing": "^43.1.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@internationalized/date": "^3.5.5",
@@ -35,6 +39,7 @@
     "@vanilla-extract/css": "^1.15.3",
     "ajv": "8",
     "axios": "^1.7.2",
+    "ckeditor5": "^43.1.1",
     "dayjs": "1.11.12",
     "effect": "^3.5.7",
     "framer-motion": "^11.3.17",
