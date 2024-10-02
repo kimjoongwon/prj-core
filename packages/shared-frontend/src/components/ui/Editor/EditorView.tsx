@@ -68,6 +68,16 @@ export const EditorView = observer(
               'htmlEmbed',
             ],
           },
+          htmlSupport: {
+            allow: [
+              {
+                name: /.*/,
+                attributes: true,
+                classes: true,
+                styles: true,
+              },
+            ],
+          },
           plugins: [
             Bold,
             Essentials,
