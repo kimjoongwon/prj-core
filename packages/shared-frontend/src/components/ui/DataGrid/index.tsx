@@ -42,6 +42,7 @@ export interface DataGridProps<T> extends TableProps {
   rightButtons?: ButtonProps[];
   actions?: ('삭제' | '생성' | '제거')[];
   selectedKey?: keyof T;
+  emptyContent?: string;
 }
 
 export const DataGrid = observer(
@@ -59,6 +60,7 @@ export const DataGrid = observer(
       rightButtons,
       selectedKey = 'id',
       state,
+      emptyContent = '데이터가 없습니다.',
       ...rest
     } = props;
 
@@ -138,7 +140,7 @@ export const DataGrid = observer(
               </TableColumn>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody emptyContent={emptyContent}>
             {rows?.map(row => (
               // @ts-ignore
               <TableRow key={row.original?.[selectedKey as string]}>

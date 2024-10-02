@@ -15,7 +15,7 @@ export const SpacesTable = observer((props: SpacesTableProps) => {
 
   return (
     <DataGrid
-      selectionMode="multiple"
+      hideHeader
       data={spaces}
       columns={columns}
       state={state}

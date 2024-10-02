@@ -45,3 +45,4 @@ export * from './MultiInput';
 export * from './Copyright';
 export * from './BottomTab';
 export * from './AppBar';
+export * from './Tabs';

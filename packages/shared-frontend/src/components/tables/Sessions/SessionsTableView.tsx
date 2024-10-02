@@ -14,7 +14,7 @@ export const SessionsTable = (props: SessionsTableProps) => {
 
   return (
     <DataGrid
-      selectionMode="multiple"
+      hideHeader
       data={sessions}
       columns={columns}
       state={state}

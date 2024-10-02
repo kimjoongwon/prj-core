@@ -21,11 +21,9 @@ export const BottomTabView = (props: BottomTabViewProps) => {
         onChange={(_, value) => {
           setValue(value);
           const tab = tabs?.find(tab => tab.name === value);
-          const { pathname, params } = tab;
-
           galaxy.router.push({
-            url: pathname,
-            params,
+            url: tab?.pathname!,
+            params: tab?.params!,
           });
         }}
         value={value}

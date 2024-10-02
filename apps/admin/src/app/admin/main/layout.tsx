@@ -1,31 +1,23 @@
 'use client';
 
-import {
-  AppBar,
-  BottomTab,
-  galaxy,
-  Paths,
-  useGetAllServiceSuspense,
-} from '@shared/frontend';
-import { url } from 'inspector';
-import { observer } from 'mobx-react-lite';
-import { useMeta } from './_hooks/useMeta';
+import { AppBar, BottomTab } from '@shared/frontend';
+import { useRoutes } from './_hooks/useRoutes';
+
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const MainLayout = observer((props: MainLayoutProps) => {
+const MainLayout = (props: MainLayoutProps) => {
   const { children } = props;
-  const { navItems } = useMeta();
+  const { routes } = useRoutes();
 
-  console.log('-?');
   return (
     <>
       <AppBar />
       {children}
-      <BottomTab tabs={navItems} />
+      <BottomTab tabs={routes} />
     </>
   );
-});
+};
 
 export default MainLayout;

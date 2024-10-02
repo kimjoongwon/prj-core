@@ -20,7 +20,7 @@ export const useHandlers = (props: {
 
   const onClickCreate = () => {
     galaxy.router.push({
-      url: '/admin/main/services/:serviceId/timelineItems/:timelineItemId/edit',
+      url: '/admin/main/timelineItems/:timelineItemId/edit',
       params: {
         serviceId,
         timelineItemId: 'new',

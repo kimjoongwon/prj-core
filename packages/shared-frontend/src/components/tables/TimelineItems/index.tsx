@@ -15,6 +15,7 @@ export const TimelineItemsTable = observer((props: TimelineItemsTableProps) => {
 
   return (
     <DataGrid
+      hideHeader
       selectionMode="multiple"
       data={timelineItems}
       columns={columns}

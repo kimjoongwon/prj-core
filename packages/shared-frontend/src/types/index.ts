@@ -1,3 +1,5 @@
+import { Paths } from '../constants/Paths';
+
 export enum AuthStatus {
   LoggedOut = 'LoggedOut',
   LoggingIn = 'LoggingIn',
@@ -22,4 +24,11 @@ export enum Month {
   October = 'October',
   November = 'November',
   December = 'December',
+}
+
+export interface Route {
+  name: string;
+  pathname: Paths;
+  params?: object;
+  icon?: React.ReactNode;
 }

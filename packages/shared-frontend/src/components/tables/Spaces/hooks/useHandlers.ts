@@ -20,7 +20,7 @@ export const useHandlers = (props: {
 
   const onClickCreate = () => {
     galaxy.router.push({
-      url: '/admin/main/services/:serviceId/spaces/:spaceId/edit',
+      url: '/admin/main/spaces/:spaceId/edit',
       params: {
         serviceId,
         spaceId: 'new',

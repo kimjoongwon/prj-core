@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   PagesService,
-  pathnames,
   RolesService,
   ServicesService,
   SpacesService,
@@ -165,26 +164,7 @@ export class InitService {
     const { adminRoleId } = await this.createDefaultRoles();
     const { tenancyId } = await this.createDefaultSpace();
     await this.createServices();
-    await this.createPage();
     await this.createDefaultUser(adminRoleId, tenancyId);
-  }
-
-  createPage() {
-    pathnames.map(async (item) => {
-      const page = await this.pagesService.getUnique({
-        where: { pathname: item.pathname },
-      });
-
-      if (!page) {
-        await this.pagesService.create({
-          data: {
-            type: 'ADMIN',
-            name: item.name,
-            pathname: item.pathname,
-          },
-        });
-      }
-    });
   }
 
   async createServices() {

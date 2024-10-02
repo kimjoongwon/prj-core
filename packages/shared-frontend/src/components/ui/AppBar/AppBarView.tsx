@@ -7,7 +7,6 @@ export interface AppBarViewProps extends AppBarProps {}
 export const AppBarView = (props: AppBarViewProps) => {
   return (
     <Paper
-      elevation={3}
       {...props}
       sx={{
         height: 62,
