@@ -39,9 +39,9 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
   @UUIDField()
   tenantId: string;
 
-  @ClassField(() => TimelineDto, { nullable: true, each: true, swagger: false })
+  @ClassField(() => TimelineDto, { nullable: true, swagger: false })
   timeline: TimelineDto | null;
 
-  @ClassField(() => ReservationDto, { each: true, isArray: true, nullable: true })
+  @ClassField(() => ReservationDto, { isArray: true, nullable: true })
   reservations: ReservationDto[] | null;
 }

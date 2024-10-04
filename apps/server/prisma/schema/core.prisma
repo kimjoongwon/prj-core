@@ -298,7 +298,7 @@ model Post {
   id        String     @id @default(uuid())
   type      PostTypes  @default(TEXT)
   title     String?
-  content   String
+  content   String     @db.VarChar(1000)
   authorId  String
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)

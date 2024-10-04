@@ -1,12 +1,12 @@
 'use client';
 
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { PostFormView } from './PostFormView';
-import { UpdatePostDto } from '../../../model';
+import { PostDto } from '../../../model';
+import { observer } from 'mobx-react-lite';
 
-interface PostFormProps {
-  state: UpdatePostDto;
+export interface PostFormProps {
+  state: Partial<PostDto>;
 }
 
 export const PostForm = observer((props: PostFormProps) => {

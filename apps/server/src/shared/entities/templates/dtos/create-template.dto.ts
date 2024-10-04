@@ -9,6 +9,6 @@ export class CreateTemplateDto extends OmitType(TemplateDto, [
   'post',
   'postId',
 ]) {
-  @ClassField(() => CreatePostDto, { each: true })
+  @ClassField(() => CreatePostDto)
   post: CreatePostDto;
 }

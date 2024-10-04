@@ -1,10 +1,8 @@
-import { UpdatePostDto } from '../../../model';
+import { PostFormProps } from '.';
 import { Editor, Input, VStack } from '../../ui';
 import Textarea from '../../ui/Textarea';
 
-interface PostFormViewProps {
-  state: UpdatePostDto;
-}
+interface PostFormViewProps extends PostFormProps {}
 
 export const PostFormView = (props: PostFormViewProps) => {
   const { state } = props;
