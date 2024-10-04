@@ -2,5 +2,4 @@
 
 module.exports = {
   reactStrictMode: true,
-  reactProductionProfiling: true,
 };

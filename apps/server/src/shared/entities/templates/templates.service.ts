@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTemplateDto } from './dtos/create-template.dto';
-import { UpdateTemplateDto } from './dtos/update-template.dto';
 import { TemplatesRepository } from './templates.repository';
 import { TemplatePageQueryDto } from './dtos/template-page-query.dto';
 import { PaginationMananger } from '../../utils';
@@ -50,13 +48,8 @@ export class TemplatesService implements IService {
     };
   }
 
-  update(templateId: string, updateTemplateDto: UpdateTemplateDto) {
-    return this.repository.update({
-      where: {
-        id: templateId,
-      },
-      data: updateTemplateDto,
-    });
+  update(args: Prisma.TemplateUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

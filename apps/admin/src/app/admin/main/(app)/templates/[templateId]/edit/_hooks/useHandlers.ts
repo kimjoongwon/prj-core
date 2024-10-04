@@ -2,7 +2,6 @@ import {
   CreateTemplateDto,
   galaxy,
   revalidatePathGetTemplatesByQuery,
-  TemplateNames,
   UpdateTemplateDto,
 } from '@shared/frontend';
 import { useData } from './useData';

@@ -6,9 +6,11 @@ import { useProps } from './_hooks/useProps';
 import { ServicesTable } from '@shared/frontend';
 
 const ServicesPage = observer(() => {
-  const { services } = useProps();
+  const { services, onClickRow } = useProps();
 
-  return <ServicesTable hideHeader services={services} />;
+  return (
+    <ServicesTable hideHeader services={services} selectionMode="single" />
+  );
 });
 
 export default ServicesPage;

@@ -7,9 +7,6 @@ import { GetTemplatesByQueryParams } from '../model/getTemplatesByQueryParams';
 export const revalidatePathGetTemplatesByQuery = (
   params?: GetTemplatesByQueryParams,
 ) => {
-  if (!params) {
-    return null;
-  }
   const searchParams = new URLSearchParams(JSON.stringify(params)).toString();
   const [queryKey] = getGetTemplatesByQueryQueryKey(params);
   revalidatePath(queryKey + searchParams);
