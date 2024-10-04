@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { useMemo, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import { useRef } from 'react';
 import { MobxProps } from '../types';
 import { get } from 'lodash-es';
 import { action } from 'mobx';
@@ -16,10 +15,9 @@ import {
   Undo,
   SourceEditing,
   HtmlEmbed,
+  GeneralHtmlSupport,
 } from 'ckeditor5';
 
-// import { SourceEditing } from '@ckeditor/ckeditor5-source-editing';
-// import { SourceEditing } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
 
 export interface BaseEditorProps<T> extends MobxProps<T> {}
@@ -79,6 +77,7 @@ export const EditorView = observer(
             ],
           },
           plugins: [
+            GeneralHtmlSupport,
             Bold,
             Essentials,
             Italic,
