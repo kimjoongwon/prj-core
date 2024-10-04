@@ -1,4 +1,5 @@
 import { Paper, Typography } from '@mui/material';
+import { Tabs } from '@shared/frontend';
 
 export type ServicePageParams = {
   serviceId: string | 'new';
