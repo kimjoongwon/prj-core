@@ -36,13 +36,17 @@ export class TemplatesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createTemplate(@Body() createTemplateDto: CreateTemplateDto) {
-    const { createPostDto, postId: omit, ...rawCreateTemplateDto } = createTemplateDto;
+    const { post, ...rawCreateTemplateDto } = createTemplateDto;
+    console.log('createTemplateDto', createTemplateDto);
     const template = await this.service.create({
       data: {
         ...rawCreateTemplateDto,
         post: {
           create: {
-            ...createPostDto,
+            title: 'sdasd',
+            content: post.content,
+            type: 'HTML',
+            authorId: 'd0d97947-c1ea-4a49-9eeb-4138e35e589f',
           },
         },
       },

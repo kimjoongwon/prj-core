@@ -6,7 +6,7 @@ import { TemplateFormView } from './TemplateFormView';
 import { TemplateDto } from '../../../model';
 
 export interface TemplateFormProps {
-  state: { form: Partial<TemplateDto> };
+  state: Partial<TemplateDto>;
 }
 
 export const TemplateForm = observer((props: TemplateFormProps) => {

@@ -1,49 +1,7 @@
-import {
-  CreateTemplateDto,
-  TemplateDto,
-  UpdateTemplateDto,
-} from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
-import { makeAutoObservable } from 'mobx';
 import { useData } from './useData';
 import { useContext } from './useContext';
-import { plainToInstance } from 'class-transformer';
-
-class Template {
-  constructor() {
-    makeAutoObservable(this);
-  }
-  form: Partial<TemplateDto> = {
-    name: 'EMAIL_VERIFICATION',
-    post: {
-      authorId: '',
-      content: '',
-      title: '',
-      type: 'HTML',
-    },
-    createdAt: '',
-    id: '',
-    postId: '',
-    removedAt: '',
-    updatedAt: '',
-  };
-
-  toUpdateDto(): UpdateTemplateDto {
-    return this.form as UpdateTemplateDto;
-  }
-  toCreateDto(): CreateTemplateDto {
-    const createTemplateDto: CreateTemplateDto = {
-      name: 'EMAIL_VERIFICATION',
-      post: {
-        authorId: '',
-        content: '',
-        title: '',
-        type: 'HTML',
-      },
-    };
-    return createTemplateDto;
-  }
-}
+import { galaxy, TemplateDto } from '@shared/frontend';
 
 export const useState = (props: {
   data: ReturnType<typeof useData>;
@@ -53,14 +11,20 @@ export const useState = (props: {
     data: {
       getTemplate: { data: responseEntity },
     },
-    context: { isEditMode },
   } = props;
 
-  const templateDto = responseEntity?.data;
-  const template = plainToInstance(Template, templateDto);
+  const templateDto = responseEntity?.data || {
+    name: 'EMAIL_VERIFICATION',
+    post: {
+      title: '',
+      content: '',
+      type: 'HTML',
+      authorId: galaxy.auth.user?.id,
+    },
+  };
 
-  const state = useLocalObservable(() => ({
-    form: isEditMode ? template.toUpdateDto() : template.toCreateDto(),
+  const state = useLocalObservable<{ form: Partial<TemplateDto> }>(() => ({
+    form: templateDto,
   }));
 
   return state;

@@ -12,6 +12,6 @@ export class TimelineDto extends AbstractDto implements Timeline {
   @StringField()
   name: string;
 
-  @ClassField(() => TimelineItemDto, { nullable: true, each: true, isArray: true })
-  timelineItem: TimelineItemDto[] | null;
+  @ClassField(() => TimelineItemDto, { nullable: true, each: true })
+  timelineItems: TimelineItemDto[] | null;
 }

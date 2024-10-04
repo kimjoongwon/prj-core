@@ -14,6 +14,6 @@ export class TemplateDto extends AbstractDto implements Template {
   @EnumField(() => $Enums.TemplateNames)
   name: $Enums.TemplateNames;
 
-  @ClassField(() => Post, { nullable: true, each: true, required: false })
+  @ClassField(() => Post, { nullable: true, required: false })
   post?: Post;
 }

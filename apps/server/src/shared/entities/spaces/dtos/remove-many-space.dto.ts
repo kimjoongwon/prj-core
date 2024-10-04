@@ -1,6 +1,6 @@
-import { StringField } from "../../../decorators/field.decorators";
+import { StringField } from '../../../decorators/field.decorators';
 
 export class RemoveManySpaceDto {
-  @StringField({ isArray: true, each: true })
+  @StringField({ each: true })
   spaceIds: string[];
 }

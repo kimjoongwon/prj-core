@@ -16,8 +16,8 @@ export const TemplateFormView = (props: TemplateFormViewProps) => {
 
   return (
     <VStack className="space-y-2 pb-20">
-      <Select state={state} path="form.name" options={templateNameOptions} />
-      <PostForm state={state.form.post} />
+      <Select state={state} path="name" options={templateNameOptions} />
+      <PostForm state={state.post} />
     </VStack>
   );
 };
