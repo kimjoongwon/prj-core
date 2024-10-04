@@ -1,9 +1,15 @@
+import { Paper, Typography } from '@mui/material';
+
 export type ServicePageParams = {
   serviceId: string | 'new';
 };
 
 const ServicePage = () => {
-  return <div>서비스 상세</div>;
+  return (
+    <Paper>
+      <Typography variant="h4">Service</Typography>
+    </Paper>
+  );
 };
 
 export default ServicePage;

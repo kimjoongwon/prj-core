@@ -37,17 +37,11 @@ export class TemplatesController {
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createTemplate(@Body() createTemplateDto: CreateTemplateDto) {
     const { post, ...rawCreateTemplateDto } = createTemplateDto;
-    console.log('createTemplateDto', createTemplateDto);
     const template = await this.service.create({
       data: {
         ...rawCreateTemplateDto,
         post: {
-          create: {
-            title: 'sdasd',
-            content: post.content,
-            type: 'HTML',
-            authorId: 'd0d97947-c1ea-4a49-9eeb-4138e35e589f',
-          },
+          create: post,
         },
       },
     });
@@ -80,7 +74,16 @@ export class TemplatesController {
     @Param('templateId') templateId: string,
     @Body() updateTemplateDto: UpdateTemplateDto,
   ) {
-    const template = await this.service.update(templateId, updateTemplateDto);
+    const { post, ...rawUpdateTemplateDto } = updateTemplateDto;
+    const template = await this.service.update({
+      where: { id: templateId },
+      data: {
+        ...rawUpdateTemplateDto,
+        post: {
+          update: post,
+        },
+      },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(TemplateDto, template));
   }
 

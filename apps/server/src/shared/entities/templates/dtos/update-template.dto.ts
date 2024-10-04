@@ -4,6 +4,6 @@ import { UpdatePostDto } from '../../posts';
 import { ClassField } from '../../../decorators';
 
 export class UpdateTemplateDto extends PartialType(OmitType(CreateTemplateDto, ['post'])) {
-  @ClassField(() => UpdatePostDto, { each: true, nullable: true, required: false })
+  @ClassField(() => UpdatePostDto, { nullable: true, required: false })
   post?: UpdatePostDto;
 }

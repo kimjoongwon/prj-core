@@ -3,11 +3,12 @@ import { useColumns } from './useColumns';
 import { useState } from './useState';
 import { galaxy } from '../../../../providers/App';
 import { useMutations } from './useMutations';
-
+import { useHandlers } from './useHandlers';
 export const useProps = () => {
   const state = useState();
   const { removeService } = useMutations();
   const columns = useColumns();
+  const { onClickRow } = useHandlers({ state });
 
   const leftButtons: ButtonProps[] = [
     {
@@ -23,6 +24,7 @@ export const useProps = () => {
       },
     },
   ];
+
   const rightButtons: ButtonProps[] = [
     {
       children: '삭제',

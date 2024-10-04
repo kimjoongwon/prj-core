@@ -6,5 +6,5 @@ export interface IService {
   remove(args: unknown): unknown;
   removeMany(args: unknown): unknown;
   delete(args: unknown): unknown;
-  update(id: string, args: unknown): unknown;
+  update(args: unknown): unknown;
 }
