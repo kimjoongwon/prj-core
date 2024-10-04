@@ -36,8 +36,8 @@ export class TemplatesService implements IService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createTemplateDto: CreateTemplateDto) {
-    return this.repository.create({ data: createTemplateDto });
+  create(args: Prisma.TemplateCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(pageQuery: TemplatePageQueryDto) {

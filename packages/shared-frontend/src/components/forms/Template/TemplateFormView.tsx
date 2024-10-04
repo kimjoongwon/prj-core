@@ -1,27 +1,23 @@
-import { Divider, Spacer } from '@nextui-org/react';
-import { UpdateTemplateDto } from '../../../model';
-import { Input } from '../../ui/Input';
+import { TemplateFormProps } from '.';
+import { TemplateNames } from '../../../model';
+import { Select } from '../../ui';
 import { VStack } from '../../ui/VStack';
 import { PostForm } from '../Post';
-import { Chips, MultiInput } from '../../ui';
 
-interface TemplateFormProps {
-  state: UpdateTemplateDto;
-}
+interface TemplateFormViewProps extends TemplateFormProps {}
 
-export const TemplateFormView = (props: TemplateFormProps) => {
+export const TemplateFormView = (props: TemplateFormViewProps) => {
   const { state } = props;
+
+  const templateNameOptions = Object.keys(TemplateNames).map(name => ({
+    text: name,
+    value: name,
+  }));
+
   return (
     <VStack className="space-y-2 pb-20">
-      <MultiInput
-        label="key"
-        placeholder="key값을 입력해주세요."
-        state={state}
-        path="keys"
-      />
-      <Chips state={state} path="keys" />
-      <Divider />
-      <PostForm state={state.updatePostDto} />
+      <Select state={state} path="form.name" options={templateNameOptions} />
+      <PostForm state={state.form.post} />
     </VStack>
   );
 };

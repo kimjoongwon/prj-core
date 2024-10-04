@@ -5,12 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PageTypes } from './pageTypes';
-import type { Pathnames } from './pathnames';
 import type { SortOrder } from './sortOrder';
 
 export type GetPagesByQueryParams = {
 type?: PageTypes;
-pathname?: Pathnames;
 id?: string;
 createdAtSortOrder?: SortOrder;
 skip?: number;

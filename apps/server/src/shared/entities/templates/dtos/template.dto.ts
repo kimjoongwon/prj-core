@@ -1,13 +1,11 @@
 import { $Enums } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Template } from '../template.entity';
-import {
-  ClassField,
-  EnumField,
-  StringField,
-  UUIDField,
-} from '../../../decorators/field.decorators';
+import { ClassField, EnumField, UUIDField } from '../../../decorators/field.decorators';
 import { PostDto } from '../../posts';
+import { PartialType } from '@nestjs/swagger';
+
+class Post extends PartialType(PostDto) {}
 
 export class TemplateDto extends AbstractDto implements Template {
   @UUIDField()
@@ -16,12 +14,6 @@ export class TemplateDto extends AbstractDto implements Template {
   @EnumField(() => $Enums.TemplateNames)
   name: $Enums.TemplateNames;
 
-  @StringField({ each: true, isArray: true, default: [] })
-  keys: string[];
-
-  @StringField()
-  serviceId: string;
-
-  @ClassField(() => PostDto, { nullable: true, swagger: false })
-  post?: PostDto;
+  @ClassField(() => Post, { nullable: true, each: true, required: false })
+  post?: Post;
 }

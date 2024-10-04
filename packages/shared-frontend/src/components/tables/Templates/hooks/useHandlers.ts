@@ -12,9 +12,6 @@ export const useHandlers = (props: {
 }) => {
   const {
     state,
-    context: {
-      params: { serviceId },
-    },
     data: { removeTemplates },
   } = props;
 
@@ -22,7 +19,6 @@ export const useHandlers = (props: {
     galaxy.router.push({
       url: '/admin/main/templates/:templateId/edit',
       params: {
-        serviceId,
         templateId: 'new',
       },
     });

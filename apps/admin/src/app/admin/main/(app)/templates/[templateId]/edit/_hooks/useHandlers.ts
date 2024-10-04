@@ -2,6 +2,7 @@ import {
   CreateTemplateDto,
   galaxy,
   revalidatePathGetTemplatesByQuery,
+  TemplateNames,
   UpdateTemplateDto,
 } from '@shared/frontend';
 import { useData } from './useData';
@@ -33,6 +34,7 @@ export const useHandlers = (props: {
     await createTemplate.mutateAsync({
       data: state.form as CreateTemplateDto,
     });
+
     revalidatePathGetTemplatesByQuery();
   };
 

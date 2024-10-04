@@ -10,6 +10,9 @@ export type PageTypes = typeof PageTypes[keyof typeof PageTypes];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PageTypes = {
-  ADMIN: 'ADMIN',
-  SERVICE: 'SERVICE',
+  BOTTOM_TAB: 'BOTTOM_TAB',
+  TOP_TAB: 'TOP_TAB',
+  BUTTON: 'BUTTON',
+  MENU: 'MENU',
+  LANDING: 'LANDING',
 } as const;

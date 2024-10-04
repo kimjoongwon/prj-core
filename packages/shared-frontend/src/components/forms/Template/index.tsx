@@ -3,10 +3,10 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { TemplateFormView } from './TemplateFormView';
-import { UpdateTemplateDto } from '../../../model';
+import { TemplateDto } from '../../../model';
 
-interface TemplateFormProps {
-  state: UpdateTemplateDto;
+export interface TemplateFormProps {
+  state: { form: Partial<TemplateDto> };
 }
 
 export const TemplateForm = observer((props: TemplateFormProps) => {

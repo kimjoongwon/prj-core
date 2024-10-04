@@ -4,13 +4,11 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { Pathnames } from './pathnames';
 import type { PageTypes } from './pageTypes';
 
 export interface PageDto {
   createdAt: string;
   id: string;
-  pathname: Pathnames;
   /** @nullable */
   removedAt: string | null;
   type: PageTypes;

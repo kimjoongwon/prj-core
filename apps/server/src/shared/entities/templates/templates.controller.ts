@@ -36,7 +36,17 @@ export class TemplatesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenancyDto, HttpStatus.OK)
   async createTemplate(@Body() createTemplateDto: CreateTemplateDto) {
-    const template = await this.service.create(createTemplateDto);
+    const { createPostDto, postId: omit, ...rawCreateTemplateDto } = createTemplateDto;
+    const template = await this.service.create({
+      data: {
+        ...rawCreateTemplateDto,
+        post: {
+          create: {
+            ...createPostDto,
+          },
+        },
+      },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(TemplateDto, template));
   }
 

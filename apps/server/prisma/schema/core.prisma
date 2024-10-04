@@ -21,7 +21,6 @@ model Service {
   assignments     Assignment[]
   classifications Classification[]
   groups          Group[]
-  template        Template[]
 }
 
 model Classification {
@@ -254,13 +253,11 @@ model Template {
   id           String        @id @default(uuid())
   name         TemplateNames @unique @default(WELCOME)
   postId       String
-  serviceId    String
   createdAt    DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
   removedAt    DateTime?     @db.Timestamptz(6)
   systemEmails SystemEmail[]
   post         Post          @relation(fields: [postId], references: [id])
-  service      Service       @relation(fields: [serviceId], references: [id])
 }
 
 model Qna {
@@ -303,7 +300,6 @@ model Post {
   title     String?
   content   String
   authorId  String
-  serviceId String
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
   removedAt DateTime?  @db.Timestamptz(6)

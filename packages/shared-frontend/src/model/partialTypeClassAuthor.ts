@@ -4,9 +4,9 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { PageTypes } from './pageTypes';
+import type { UserDto } from './userDto';
 
-export interface UpdatePageDto {
-  id: string;
-  type?: PageTypes;
-}
+/**
+ * @nullable
+ */
+export type PartialTypeClassAuthor = UserDto | null;

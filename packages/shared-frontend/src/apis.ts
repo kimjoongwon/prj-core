@@ -1997,521 +1997,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       return useMutation(mutationOptions);
     }
     
-export const getAllService = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetAllService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-export const getGetAllServiceQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/services`] as const;
-    }
-
-    
-export const getGetAllServiceQueryOptions = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllServiceQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
-export type GetAllServiceQueryError = ErrorType<void>
-
-export const useGetAllService = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllServiceQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAllServiceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllServiceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
-export type GetAllServiceSuspenseQueryError = ErrorType<void>
-
-export const useGetAllServiceSuspense = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllServiceSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAllServiceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAllServiceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
-export type GetAllServiceSuspenseInfiniteQueryError = ErrorType<void>
-
-export const useGetAllServiceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetAllServiceSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const createService = (
-    createServiceDto: BodyType<CreateServiceDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateService201AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createServiceDto
-    },
-      options);
-    }
-  
-
-
-export const getCreateServiceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createService>>, {data: BodyType<CreateServiceDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createService(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateServiceMutationResult = NonNullable<Awaited<ReturnType<typeof createService>>>
-    export type CreateServiceMutationBody = BodyType<CreateServiceDto>
-    export type CreateServiceMutationError = ErrorType<void>
-
-    export const useCreateService = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createService>>,
-        TError,
-        {data: BodyType<CreateServiceDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateServiceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getService = (
-    serviceId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-export const getGetServiceQueryKey = (serviceId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/services/${serviceId}`] as const;
-    }
-
-    
-export const getGetServiceQueryOptions = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
-export type GetServiceQueryError = ErrorType<void>
-
-export const useGetService = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(
- serviceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetServiceQueryOptions(serviceId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetServiceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
-export type GetServiceSuspenseQueryError = ErrorType<void>
-
-export const useGetServiceSuspense = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(
- serviceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetServiceSuspenseQueryOptions(serviceId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetServiceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getService>>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
-export type GetServiceSuspenseInfiniteQueryError = ErrorType<void>
-
-export const useGetServiceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getService>>>, TError = ErrorType<void>>(
- serviceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const queryOptions = getGetServiceSuspenseInfiniteQueryOptions(serviceId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const updateService = (
-    serviceId: string,
-    updateServiceDto: BodyType<UpdateServiceDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateServiceDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateServiceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateService>>, {serviceId: string;data: BodyType<UpdateServiceDto>}> = (props) => {
-          const {serviceId,data} = props ?? {};
-
-          return  updateService(serviceId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateServiceMutationResult = NonNullable<Awaited<ReturnType<typeof updateService>>>
-    export type UpdateServiceMutationBody = BodyType<UpdateServiceDto>
-    export type UpdateServiceMutationError = ErrorType<void>
-
-    export const useUpdateService = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateService>>,
-        TError,
-        {serviceId: string;data: BodyType<UpdateServiceDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateServiceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deleteService = (
-    serviceId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteServiceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteService>>, {serviceId: string}> = (props) => {
-          const {serviceId} = props ?? {};
-
-          return  deleteService(serviceId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteServiceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteService>>>
-    
-    export type DeleteServiceMutationError = ErrorType<void>
-
-    export const useDeleteService = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteService>>,
-        TError,
-        {serviceId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteServiceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeService = (
-    serviceId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveService200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveServiceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeService>>, {serviceId: string}> = (props) => {
-          const {serviceId} = props ?? {};
-
-          return  removeService(serviceId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveServiceMutationResult = NonNullable<Awaited<ReturnType<typeof removeService>>>
-    
-    export type RemoveServiceMutationError = ErrorType<void>
-
-    export const useRemoveService = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeService>>,
-        TError,
-        {serviceId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveServiceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeServices = (
-    serviceIds: string[],
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveServices200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/services/${serviceIds}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveServicesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeServices>>, {serviceIds: string[]}> = (props) => {
-          const {serviceIds} = props ?? {};
-
-          return  removeServices(serviceIds,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveServicesMutationResult = NonNullable<Awaited<ReturnType<typeof removeServices>>>
-    
-    export type RemoveServicesMutationError = ErrorType<void>
-
-    export const useRemoveServices = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeServices>>,
-        TError,
-        {serviceIds: string[]},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveServicesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createSpace = (
     createSpaceDto: BodyType<CreateSpaceDto>,
  options?: SecondParameter<typeof customInstance>,) => {
@@ -5797,6 +5282,521 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemovePageMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getAllService = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAllService200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAllServiceQueryKey = () => {
+    return [`http://localhost:3005/api/v1/admin/services`] as const;
+    }
+
+    
+export const getGetAllServiceQueryOptions = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllServiceQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
+export type GetAllServiceQueryError = ErrorType<void>
+
+export const useGetAllService = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllServiceQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAllServiceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllServiceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
+export type GetAllServiceSuspenseQueryError = ErrorType<void>
+
+export const useGetAllServiceSuspense = <TData = Awaited<ReturnType<typeof getAllService>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllServiceSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAllServiceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAllServiceQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllService>>> = ({ signal }) => getAllService(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAllServiceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAllService>>>
+export type GetAllServiceSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetAllServiceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAllService>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAllService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAllServiceSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const createService = (
+    createServiceDto: BodyType<CreateServiceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateService201AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createServiceDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateServiceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createService>>, {data: BodyType<CreateServiceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createService(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateServiceMutationResult = NonNullable<Awaited<ReturnType<typeof createService>>>
+    export type CreateServiceMutationBody = BodyType<CreateServiceDto>
+    export type CreateServiceMutationError = ErrorType<void>
+
+    export const useCreateService = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createService>>, TError,{data: BodyType<CreateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createService>>,
+        TError,
+        {data: BodyType<CreateServiceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateServiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getService = (
+    serviceId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetService200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetServiceQueryKey = (serviceId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/services/${serviceId}`] as const;
+    }
+
+    
+export const getGetServiceQueryOptions = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetServiceQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
+export type GetServiceQueryError = ErrorType<void>
+
+export const useGetService = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(
+ serviceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetServiceQueryOptions(serviceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetServiceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetServiceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
+export type GetServiceSuspenseQueryError = ErrorType<void>
+
+export const useGetServiceSuspense = <TData = Awaited<ReturnType<typeof getService>>, TError = ErrorType<void>>(
+ serviceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetServiceSuspenseQueryOptions(serviceId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetServiceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getService>>>, TError = ErrorType<void>>(serviceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceQueryKey(serviceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getService>>> = ({ signal }) => getService(serviceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(serviceId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetServiceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getService>>>
+export type GetServiceSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetServiceSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getService>>>, TError = ErrorType<void>>(
+ serviceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getService>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetServiceSuspenseInfiniteQueryOptions(serviceId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateService = (
+    serviceId: string,
+    updateServiceDto: BodyType<UpdateServiceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateService200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateServiceDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateServiceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateService>>, {serviceId: string;data: BodyType<UpdateServiceDto>}> = (props) => {
+          const {serviceId,data} = props ?? {};
+
+          return  updateService(serviceId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateServiceMutationResult = NonNullable<Awaited<ReturnType<typeof updateService>>>
+    export type UpdateServiceMutationBody = BodyType<UpdateServiceDto>
+    export type UpdateServiceMutationError = ErrorType<void>
+
+    export const useUpdateService = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateService>>, TError,{serviceId: string;data: BodyType<UpdateServiceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateService>>,
+        TError,
+        {serviceId: string;data: BodyType<UpdateServiceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateServiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteService = (
+    serviceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteService200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteServiceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteService>>, {serviceId: string}> = (props) => {
+          const {serviceId} = props ?? {};
+
+          return  deleteService(serviceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteServiceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteService>>>
+    
+    export type DeleteServiceMutationError = ErrorType<void>
+
+    export const useDeleteService = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteService>>,
+        TError,
+        {serviceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteServiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeService = (
+    serviceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveService200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveServiceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeService>>, {serviceId: string}> = (props) => {
+          const {serviceId} = props ?? {};
+
+          return  removeService(serviceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveServiceMutationResult = NonNullable<Awaited<ReturnType<typeof removeService>>>
+    
+    export type RemoveServiceMutationError = ErrorType<void>
+
+    export const useRemoveService = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeService>>, TError,{serviceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeService>>,
+        TError,
+        {serviceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveServiceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeServices = (
+    serviceIds: string[],
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveServices200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/services/${serviceIds}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveServicesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeServices>>, {serviceIds: string[]}> = (props) => {
+          const {serviceIds} = props ?? {};
+
+          return  removeServices(serviceIds,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveServicesMutationResult = NonNullable<Awaited<ReturnType<typeof removeServices>>>
+    
+    export type RemoveServicesMutationError = ErrorType<void>
+
+    export const useRemoveServices = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeServices>>, TError,{serviceIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeServices>>,
+        TError,
+        {serviceIds: string[]},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveServicesMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

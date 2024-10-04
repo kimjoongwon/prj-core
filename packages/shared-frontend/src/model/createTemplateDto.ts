@@ -5,10 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateNames } from './templateNames';
+import type { CreatePostDto } from './createPostDto';
 
 export interface CreateTemplateDto {
-  keys: string[];
   name: TemplateNames;
-  postId: string;
-  serviceId: string;
+  post: CreatePostDto;
 }

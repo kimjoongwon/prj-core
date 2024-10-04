@@ -22,9 +22,6 @@ export class PostDto extends AbstractDto implements Post {
   @UUIDField()
   authorId: string;
 
-  @UUIDField()
-  serviceId: string;
-
-  @ClassField(() => UserDto, { nullable: true })
+  @ClassField(() => UserDto, { nullable: true, each: true, required: false })
   author?: UserDto;
 }

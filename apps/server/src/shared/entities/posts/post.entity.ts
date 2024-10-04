@@ -5,5 +5,4 @@ export class Post extends AbstractEntity implements PostEntity {
   title: string;
   content: string;
   authorId: string;
-  serviceId: string;
 }

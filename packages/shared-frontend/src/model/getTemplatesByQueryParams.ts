@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateNames } from './templateNames';
+import type { PostTypes } from './postTypes';
 import type { SortOrder } from './sortOrder';
 
 export type GetTemplatesByQueryParams = {
@@ -14,8 +15,15 @@ updatedAt?: string;
 removedAt?: string | null;
 postId?: string;
 name?: TemplateNames;
-keys?: string[];
-serviceId?: string;
+id?: string;
+createdAt?: string;
+updatedAt?: string;
+removedAt?: string | null;
+type?: PostTypes;
+title?: string;
+content?: string;
+authorId?: string;
+author?: unknown | null;
 createdAtSortOrder?: SortOrder;
 skip?: number;
 take?: number;

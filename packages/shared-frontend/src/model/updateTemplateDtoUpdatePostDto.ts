@@ -4,9 +4,9 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { Post } from './post';
+import type { UpdatePostDto } from './updatePostDto';
 
 /**
  * @nullable
  */
-export type TemplateDtoPost = Post | null;
+export type UpdateTemplateDtoUpdatePostDto = UpdatePostDto | null;

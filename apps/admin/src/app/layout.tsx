@@ -13,7 +13,6 @@ const pretendard = localFont({
   weight: '45 920',
   variable: '--font-pretendard',
 });
-
 // if (process.env.NODE_ENV === 'development') {
 //   if (isServer) {
 //     (async () => {
