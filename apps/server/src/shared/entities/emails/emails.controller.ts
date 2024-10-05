@@ -57,7 +57,10 @@ export class EmailsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(EmailDto, HttpStatus.OK)
   async updateEmail(@Param('emailId') emailId: string, @Body() updateEmailDto: UpdateEmailDto) {
-    const email = await this.service.update(emailId, updateEmailDto);
+    const email = await this.service.update({
+      where: { id: emailId },
+      data: updateEmailDto,
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(EmailDto, email));
   }
 

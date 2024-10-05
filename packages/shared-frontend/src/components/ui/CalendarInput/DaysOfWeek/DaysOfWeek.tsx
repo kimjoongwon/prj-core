@@ -1,9 +1,8 @@
-import { Button } from '../../Button';
 import { Chip } from '../../Chip';
 
 export const DaysOfWeek = () => {
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'];
-  ['SAT', 'SUN'];
+
   return (
     <>
       {daysOfWeek.map(dayOfWeek => {

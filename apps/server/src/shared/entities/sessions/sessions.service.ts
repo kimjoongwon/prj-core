@@ -4,10 +4,9 @@ import { UpdateSessionDto } from './dtos/update-session.dto';
 import { SessionsRepository } from './sessions.repository';
 import { SessionPageQueryDto } from './dtos/session-page-query.dto';
 import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 
 @Injectable()
-export class SessionsService implements IService {
+export class SessionsService {
   constructor(private readonly repository: SessionsRepository) {}
 
   getUnique(id: string) {

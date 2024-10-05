@@ -5,6 +5,7 @@ import { PostsRepository } from './posts.repository';
 import { PostPageQueryDto } from './dtos/post-page-query.dto';
 import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PostsService implements IService {
@@ -48,13 +49,8 @@ export class PostsService implements IService {
     };
   }
 
-  update(postId: string, updatePostDto: UpdatePostDto) {
-    return this.repository.update({
-      where: {
-        id: postId,
-      },
-      data: updatePostDto,
-    });
+  update(args: Prisma.PostUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

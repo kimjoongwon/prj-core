@@ -50,13 +50,8 @@ export class TenanciesService implements IService {
     };
   }
 
-  update(templateId: string, updateTenancyDto: UpdateTenancyDto) {
-    return this.repository.update({
-      where: {
-        id: templateId,
-      },
-      data: updateTenancyDto,
-    });
+  update(args: Prisma.TenancyUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

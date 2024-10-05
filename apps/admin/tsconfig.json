@@ -43,20 +43,15 @@
   },
   "include": [
     "./src/**/*.ts",
-    // "./src/__generated__/**/*.ts",
+    "./src/__generated__/**/*.ts",
     "next-env.d.ts",
-    "./src/**/*.tsx"
-    // ".next/types/**/*.ts",
-    // "src/mocks/node.js",
-    // "src/index.js",
-    // "src/mocks/node.js",
-    // "src/mocks/browser.js"
+    "./src/**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/mocks/node.js",
+    "src/index.js",
+    "src/mocks/node.js",
+    "src/mocks/browser.js"
   ],
-  "exclude": [
-    "node_modules/.pnpm",
-    "cypress",
-    "_template",
-    ".next",
-    "node_modules"
-  ]
+
+  "exclude": ["node_modules/.pnpm", "cypress", "_template", ".next"]
 }

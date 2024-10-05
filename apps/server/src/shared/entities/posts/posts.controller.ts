@@ -57,7 +57,12 @@ export class PostsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PostDto, HttpStatus.OK)
   async updatePost(@Param('postId') postId: string, @Body() updatePostDto: UpdatePostDto) {
-    const post = await this.postsService.update(postId, updatePostDto);
+    const post = await this.postsService.update({
+      where: {
+        id: postId,
+      },
+      data: updatePostDto,
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));
   }
 

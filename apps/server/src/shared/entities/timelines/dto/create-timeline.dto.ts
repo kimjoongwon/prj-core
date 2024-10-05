@@ -4,5 +4,5 @@ import { COMMON_ENTITY_FIELDS } from '../../../constants';
 
 export class CreateTimelineDto extends OmitType(TimelineDto, [
   ...COMMON_ENTITY_FIELDS,
-  'timelineItem',
+  'timelineItems',
 ]) {}

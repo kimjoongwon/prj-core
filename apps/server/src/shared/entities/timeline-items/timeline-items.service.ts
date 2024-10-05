@@ -5,6 +5,7 @@ import { CreateTimelineItemDto } from './dto/create-timeline-item.dto';
 import { TimelineItemsRepository } from './timeline-items.repository';
 import { UpdateTimelineItemDto } from './dto/update-timeline-item.dto';
 import { TimelineItemQueryDto } from './dto/timeline-item-query.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TimelineItemsService implements IService {
@@ -22,11 +23,8 @@ export class TimelineItemsService implements IService {
     return this.repository.create({ data: { ...createTimelineItemDto } });
   }
 
-  update(timelineItemId: string, updateTimelineItemDto: UpdateTimelineItemDto) {
-    return this.repository.update({
-      where: { id: timelineItemId },
-      data: updateTimelineItemDto,
-    });
+  update(args: Prisma.TimelineItemUpdateArgs) {
+    return this.repository.update(args);
   }
 
   getUnique(timelineItemId: string) {

@@ -8,7 +8,7 @@ import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class SpacesService implements IService {
+export class SpacesService {
   constructor(private readonly repository: SpacesRepository) {}
 
   create(args: Prisma.SpaceCreateArgs) {

@@ -50,13 +50,8 @@ export class EmailsService implements IService {
     };
   }
 
-  update(emailId: string, updateEmailDto: UpdateEmailDto) {
-    return this.repository.update({
-      where: {
-        id: emailId,
-      },
-      data: updateEmailDto,
-    });
+  update(args: Prisma.EmailUpdateArgs) {
+    return this.repository.update(args);
   }
 
   remove(id: string) {

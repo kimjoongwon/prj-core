@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from './tenants.repository';
-import { IService } from '../../types';
 import { PaginationMananger } from '../../utils';
-import { CreateTenantDto, TenantPageQueryDto, UpdateTenantDto } from './dtos';
-import { PrismaService } from 'nestjs-prisma';
+import { TenantPageQueryDto, UpdateTenantDto } from './dtos';
 import { Prisma } from '@prisma/client';
 @Injectable()
-export class TenantsService implements IService {
+export class TenantsService {
   constructor(private readonly repository: TenantsRepository) {}
 
   getUnique(id: string) {
