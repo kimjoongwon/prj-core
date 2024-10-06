@@ -67,8 +67,7 @@ export class AuthController {
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
 
     const user = req.user;
-    console.log('user', user);
-    const tenant = user.tenants.map((tenant) => tenant.active);
+    const tenant = user.tenants.find((tenant) => tenant.active);
 
     return {
       accessToken: newAccessToken,

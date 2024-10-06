@@ -7,6 +7,7 @@ import { AuthAdminModule } from './auth/admin/auth-admin.module';
 import { ServiceAuthModule } from './auth/service/auth/service-auth.module';
 import { AuthModule } from './auth/auth.module';
 import {
+  AdminCategoriesModule,
   AdminGroupsModule,
   AdminRolesModule,
   AdminServicesModule,
@@ -15,7 +16,6 @@ import {
   AdminSubjectsModule,
   AdminTemplatesModule,
   AdminTimelineItemsModule,
-  CategoriesModule,
 } from './admin';
 import { AdminPagesModule } from './admin/pages/admin-pages.module';
 import { CaslModule } from 'nest-casl';
@@ -25,10 +25,10 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
   imports: [
     ...libModules,
     InitModule,
+    AdminCategoriesModule,
     AdminAbilityModule,
     AdminTemplatesModule,
     AdminTimelineItemsModule,
-    CategoriesModule,
     AdminSpacesModule,
     AdminGroupsModule,
     AdminSubjectsModule,
@@ -59,6 +59,10 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                   {
                     path: 'templates',
                     module: AdminTemplatesModule,
+                  },
+                  {
+                    path: 'categories',
+                    module: AdminCategoriesModule,
                   },
                 ],
               },

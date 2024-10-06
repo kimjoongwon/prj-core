@@ -2,6 +2,7 @@ import { NumberFieldOptional } from '../../../decorators';
 import { PaginationMananger } from '../../../utils';
 
 export class PageQueryDto {
+  constructor() {}
   @NumberFieldOptional({
     minimum: 1,
     default: 1,
@@ -17,8 +18,12 @@ export class PageQueryDto {
   })
   readonly take?: number = 10;
 
-  toArgs() {
+  toArgs(tenantId?: string) {
     const args = PaginationMananger.toArgs(this);
+    args.where = {
+      ...args.where,
+      tenantId,
+    };
     return args;
   }
 }

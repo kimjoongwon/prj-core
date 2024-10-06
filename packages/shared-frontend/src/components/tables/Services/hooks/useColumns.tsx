@@ -12,7 +12,7 @@ export const useColumns = () => {
           <div
             onClick={() =>
               galaxy.router.push({
-                url: '/admin/main/services/:serviceId',
+                url: '/admin/main/app/services/:serviceId',
                 params: { serviceId: props.row.original.id },
               })
             }

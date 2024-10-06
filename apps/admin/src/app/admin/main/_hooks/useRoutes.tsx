@@ -20,7 +20,7 @@ export const useRoutes = () => {
     },
     {
       name: '앱',
-      pathname: '/admin/main/services',
+      pathname: '/admin/main/app',
       icon: <CiSettings />,
     },
   ];

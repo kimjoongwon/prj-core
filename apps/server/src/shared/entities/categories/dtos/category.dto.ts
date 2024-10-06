@@ -1,8 +1,8 @@
-import { StringField } from '../../../decorators/field.decorators';
+import { StringField, UUIDField } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { CategoryEntity } from '../category.entity';
 
-export class CategoryDto extends AbstractDto {
+export class CategoryDto extends AbstractDto implements CategoryEntity {
   @StringField()
   name: string;
 
@@ -12,8 +12,8 @@ export class CategoryDto extends AbstractDto {
   @StringField({ nullable: true })
   parentId: string | null;
 
-  @StringField()
-  spaceId: string;
+  @UUIDField()
+  tenantId: string;
 
   @StringField()
   serviceId: string;

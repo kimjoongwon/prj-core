@@ -13,6 +13,7 @@ interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
     | 'subtitle2'
     | 'body1'
     | 'body2'
+    | 'label'
     | 'title';
 }
 
@@ -32,6 +33,7 @@ export const Text = (props: TextProps) => {
     body1: 'text-base font-normal text-gray-500',
     body2: 'text-sm font-normal text-gray-500',
     title: 'text-xl font-bold text-primary-500',
+    label: 'text-sm font-bold text-gray-500',
   };
 
   return (

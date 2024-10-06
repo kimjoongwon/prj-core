@@ -90,8 +90,9 @@ export class PagesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PageDto, HttpStatus.OK, { isArray: true })
   async getPagesByQuery(@Query() pageQueryDto: CPageQueryDto) {
-    const { count, pages } = await this.service.getManyByQuery(pageQueryDto.toArgs());
-
+    const pageQuery = plainToInstance(CPageQueryDto, pageQueryDto);
+    const { count, pages } = await this.service.getManyByQuery(pageQuery.toArgs());
+    console.log('pages', pages);
     return new ResponseEntity(
       HttpStatus.OK,
       'success',

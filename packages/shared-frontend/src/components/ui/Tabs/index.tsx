@@ -4,10 +4,9 @@ import React from 'react';
 import { TabsView } from './TabsView';
 
 export interface Tab {
-  title: string;
+  text: string;
   value: string;
-  default?: boolean;
-  onClick?: (item: Tab) => void;
+  onClick?: () => void;
 }
 
 export interface TabsProps {

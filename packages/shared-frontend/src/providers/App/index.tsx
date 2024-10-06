@@ -5,9 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Galaxy } from '../../services/galaxy';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@nextui-org/react';
-import { getNewToken } from '../../apis';
-import { Effect } from 'effect';
-import { reaction } from 'mobx';
 
 interface AppProviderProps {
   children: React.ReactNode;

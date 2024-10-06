@@ -1,4 +1,4 @@
-export * from './categories/categories.module';
+export * from './categories/admin-categories.module';
 export * from './groups/admin-groups.module';
 export * from './roles/admin-roles.module';
 export * from './services/services.module';

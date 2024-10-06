@@ -1,25 +1,29 @@
 import { Tab, Tabs } from '@nextui-org/react';
-import React, { useState } from 'react';
+import { Key } from 'react';
 import { TabsProps } from '.';
+import { usePathname } from 'next/navigation';
+import { useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 
-export const TabsView = (props: TabsProps) => {
+export const TabsView = observer((props: TabsProps) => {
   const { items } = props;
-  const defaultItem = items.find(item => item?.default);
-  const [value, setValue] = useState('');
+  const pathname = usePathname();
+
+  const state = useLocalObservable<{ selectedValue: Key }>(() => ({
+    selectedValue: pathname,
+  }));
 
   return (
     <Tabs
-      selectedKey={value || defaultItem?.value}
-      // @ts-ignore
-      onSelectionChange={(value: string) => {
-        const item = items.find(item => item.value === value);
-        setValue(value);
-        item?.onClick?.(item);
+      selectedKey={state.selectedValue as string}
+      onSelectionChange={key => {
+        state.selectedValue = key;
+        items.find(item => item.value === key)?.onClick?.();
       }}
     >
       {items.map(item => (
-        <Tab key={item.value} title={item.title} />
+        <Tab key={item.value} title={item.text} />
       ))}
     </Tabs>
   );
-};
+});
