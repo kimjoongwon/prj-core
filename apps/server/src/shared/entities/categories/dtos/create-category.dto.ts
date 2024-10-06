@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { CategoryEntity } from '../category.entity';
 import { COMMON_ENTITY_FIELDS } from '../../../constants';
+import { CategoryDto } from './category.dto';
 
-export class CreateCategoryDto extends OmitType(CategoryEntity, COMMON_ENTITY_FIELDS) {}
+export class CreateCategoryDto extends OmitType(CategoryDto, COMMON_ENTITY_FIELDS) {}

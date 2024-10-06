@@ -87,6 +87,7 @@ export class Auth {
 
   setAuth({ tenant, user, accessToken }: TokenDto) {
     localStorage.setItem('accessToken', accessToken);
+    console.log(tenant, user);
     this.tenant = tenant;
     this.user = user;
   }

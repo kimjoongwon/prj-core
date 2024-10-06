@@ -46,3 +46,4 @@ export * from './Copyright';
 export * from './BottomTab';
 export * from './AppBar';
 export * from './Tabs';
+export * from './Meta';

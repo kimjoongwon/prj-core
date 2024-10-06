@@ -6,23 +6,9 @@ import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import pino from 'pino';
-import {
-  CategoriesModule,
-  AdminGroupsModule,
-  AdminSessionsModule,
-  AdminSpacesModule,
-  AdminSubjectsModule,
-  AdminTimelineItemsModule,
-  AdminRolesModule,
-  AdminTemplatesModule,
-} from './gateway/admin';
 import { JwtModule } from '@nestjs/jwt';
-import { AdminAbilityModule } from './gateway/admin/abilities/admin-abilities.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import smtpConfig from './shared/configs/smtp.config';
-import { ServiceAuthModule } from './gateway/auth/service/auth/service-auth.module';
-import { AuthAdminModule } from './gateway/auth/admin/auth-admin.module';
-import { AuthModule } from './gateway/auth/auth.module';
 
 export const adminModules = [];
 

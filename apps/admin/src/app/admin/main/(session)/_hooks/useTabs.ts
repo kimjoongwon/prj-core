@@ -1,17 +1,18 @@
-import { galaxy } from '@shared/frontend';
+import { galaxy, Tab } from '@shared/frontend';
+import { useParams, usePathname } from 'next/navigation';
 
 export const useTabs = () => {
-  const tabs = [
+  const pathname = usePathname();
+
+  const tabs: Tab[] = [
     {
-      title: '세션',
-      value: 'sessions',
-      default: true,
+      text: '세션',
+      value: '/admin/main/sessions',
       onClick: () => galaxy.router.push({ url: '/admin/main/sessions' }),
     },
     {
-      title: '타임라인',
-      value: 'timeline-items',
-      default: false,
+      text: '타임라인',
+      value: '/admin/main/timelineItems',
       onClick: () => galaxy.router.push({ url: '/admin/main/timelineItems' }),
     },
   ];

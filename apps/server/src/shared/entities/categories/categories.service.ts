@@ -5,6 +5,9 @@ import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { ServiceDto } from '../services/dtos/service.dto';
+import { CategoryQueryDto } from './dtos';
+import { ContextProvider } from '../../providers';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
@@ -30,24 +33,13 @@ export class CategoriesService {
     });
   }
 
-  async getCategoriesByServiceSpace({
-    serviceId,
-    spaceId,
-  }: {
-    spaceId: string;
-    serviceId: string;
-  }) {
-    const services = await this.prisma.category.findMany({
-      where: {
-        serviceId,
-        spaceId,
-        removedAt: null,
-      },
-    });
+  async getManyByQuery(args: Prisma.CategoryFindManyArgs) {
+    const categories = await this.prisma.category.findMany(args);
+
     return new ResponseEntity(
       HttpStatus.OK,
       'Successfully fetched categories',
-      services.map((service) => plainToInstance(ServiceDto, service)),
+      categories.map((service) => plainToInstance(ServiceDto, service)),
     );
   }
 }

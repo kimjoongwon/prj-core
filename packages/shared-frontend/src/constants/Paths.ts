@@ -4,10 +4,10 @@ export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth`;
 export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login`;
 export const ADMIN_MAIN_PATH = `${ADMIN_PATH}/main`;
 
-export const PATH = `/admin/main`;
-export const SERVICES_PATH = `/admin/main/services`;
-export const SERVICE_PATH = `/admin/main/services/:serviceId`;
-export const SERVICE_EDIT_PATH = `/admin/main/services/:serviceId/edit`;
+export const APP_PATH = `/admin/main/app`;
+export const SERVICES_PATH = `/admin/main/app/services`;
+export const SERVICE_PATH = `/admin/main/app/services/:serviceId`;
+export const SERVICE_EDIT_PATH = `/admin/main/app/services/:serviceId/edit`;
 
 // 매장관리 > 공간 관리
 export const SPACES_PATH = `/admin/main/spaces`;
@@ -40,16 +40,24 @@ export const USER_PATH = `/admin/main/users/:userId`;
 export const USER_EDIT_PATH = `/admin/main/users/:userId/edit`;
 
 // 그룹
-export const GROUPS_PATH = `/admin/main/services/:serviceId/groups`;
-export const GROUP_PATH = `/admin/main/services/:serviceId/groups/:groupId`;
-export const GROUP_EDIT_PATH = `/admin/main/services/:serviceId/groups/:groupId/edit`;
+export const GROUPS_PATH = `/admin/main/app/services/:serviceId/groups`;
+export const GROUP_PATH = `/admin/main/app/services/:serviceId/groups/:groupId`;
+export const GROUP_EDIT_PATH = `/admin/main/app/services/:serviceId/groups/:groupId/edit`;
+
 // 카테고리
-export const CATEGORIES_PATH = `/admin/main/services/:serviceId/categories`;
-export const CATEGORY_PATH = `/admin/main/services/:serviceId/categories/:categoryId`;
-export const CATEGORY_EDIT_PATH = `/admin/main/services/:serviceId/categories/:categoryId/edit`;
+export const CATEGORIES_PATH = `/admin/main/app/services/:serviceId/categories`;
+export const CATEGORY_PATH = `/admin/main/app/services/:serviceId/categories/:categoryId`;
+export const CATEGORY_EDIT_PATH = `/admin/main/app/services/:serviceId/categories/:categoryId/edit`;
 
 export type Paths =
+  | typeof CATEGORIES_PATH
+  | typeof CATEGORY_PATH
+  | typeof CATEGORY_EDIT_PATH
+  | typeof GROUPS_PATH
+  | typeof GROUP_PATH
+  | typeof GROUP_EDIT_PATH
   // 서비스
+  | typeof APP_PATH
   | typeof SERVICE_PATH
   | typeof SERVICES_PATH
   | typeof SERVICE_EDIT_PATH
