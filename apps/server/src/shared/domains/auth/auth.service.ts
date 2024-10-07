@@ -39,7 +39,6 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findUniqueByEmail(email);
 
-    console.log('user', user);
     const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 
     if (!isPasswordValid) {

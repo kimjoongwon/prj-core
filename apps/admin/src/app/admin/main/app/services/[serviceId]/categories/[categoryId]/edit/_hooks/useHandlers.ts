@@ -1,7 +1,5 @@
 import { CreateCategoryDto, galaxy } from '@shared/frontend';
-
 import { useContext } from './useContext';
-import { useQueries } from './useQueries';
 import { useState } from './useState';
 import { useMutations } from './useMutations';
 
@@ -12,7 +10,7 @@ export const useHandlers = (context: {
 }) => {
   const {
     state,
-    mutations: { updateCategory, createCategory },
+    mutations: { updateCategory, createCategory, invalidateCategories },
     context: { categoryId, isEditMode },
   } = context;
 
@@ -24,7 +22,7 @@ export const useHandlers = (context: {
 
   const onClickSave = () => {
     !isEditMode ? editNew() : edit();
-
+    invalidateCategories();
     galaxy.router.back();
   };
 
