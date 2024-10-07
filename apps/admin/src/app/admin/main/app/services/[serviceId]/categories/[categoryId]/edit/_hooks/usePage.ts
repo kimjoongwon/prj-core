@@ -33,11 +33,7 @@ export const usePage = () => {
 
   return {
     state,
-    meta: {
-      form: {
-        leftButtons,
-        rightButtons,
-      },
-    },
+    leftButtons,
+    rightButtons,
   };
 };
