@@ -32,3 +32,11 @@ export interface Route {
   params?: object;
   icon?: React.ReactNode;
 }
+
+export interface TableState<T> {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+  selectedRowIds: string[];
+}

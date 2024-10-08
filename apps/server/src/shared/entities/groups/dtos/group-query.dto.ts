@@ -6,6 +6,9 @@ export class GroupQueryDto extends PageQueryDto {
   @StringFieldOptional()
   name: string;
 
+  @StringFieldOptional()
+  serviceId: string;
+
   @EnumFieldOptional(() => Order, { default: Order.ASC })
   orderByCreatedAt: Order;
 }

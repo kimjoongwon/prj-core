@@ -4,3 +4,5 @@ export * from './Sessions';
 export * from './Templates';
 export * from './Services';
 export * from './Categories';
+export * from './Groups';
+export * from './Users';

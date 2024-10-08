@@ -1,7 +1,8 @@
-import { CreateGroupDto, UpdateGroupDto } from '@shared/frontend';
+import { CreateGroupDto, GroupDto, UpdateGroupDto } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useData } from './useData';
 import { useContext } from './useContext';
+import { useParams } from 'next/navigation';
 
 export const useState = (props: {
   data: ReturnType<typeof useData>;
@@ -9,22 +10,17 @@ export const useState = (props: {
 }) => {
   const {
     data: { getGroup },
-    context: { isEditMode },
+    context: { serviceId },
   } = props;
 
-  const state = useLocalObservable<{ form: UpdateGroupDto | CreateGroupDto }>(
-    () => ({
-      form: isEditMode
-        ? {
-            ...getGroup.data?.data,
-          }
-        : {
-            name: '',
-            spaceId: 'ss',
-            serviceId: 'ss',
-          },
-    }),
-  );
+  const form: Partial<GroupDto> = getGroup.data?.data || {
+    name: '',
+    serviceId,
+  };
+
+  const state = useLocalObservable<{ form: Partial<GroupDto> }>(() => ({
+    form: form,
+  }));
 
   return state;
 };

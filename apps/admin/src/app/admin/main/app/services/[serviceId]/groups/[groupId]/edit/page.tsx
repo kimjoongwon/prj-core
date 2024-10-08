@@ -3,7 +3,7 @@
 import { FormLayout, Input } from '@shared/frontend';
 import { useProps } from './_hooks/useProps';
 
-const Page = () => {
+const GroupEditPage = () => {
   const { onClickList, onClickSave, state } = useProps();
 
   const leftButtons = [
@@ -25,11 +25,9 @@ const Page = () => {
       leftButtons={leftButtons}
       rightButtons={rightButtons}
     >
-      <Input state={state.form} name="name" path={'name'} />
+      <Input state={state.form} label="그룹명" path="name" />
     </FormLayout>
   );
 };
 
-Page.displayName = 'GroupEditPage';
-
-export default Page;
+export default GroupEditPage;

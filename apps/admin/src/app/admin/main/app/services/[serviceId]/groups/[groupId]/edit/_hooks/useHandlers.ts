@@ -28,13 +28,11 @@ export const useHandlers = (props: {
     } else {
       create();
     }
+    galaxy.router.back();
   };
 
   const onClickList = () => {
-    galaxy.router.push({
-      url: '/admin/main/services/:serviceId/groups',
-      params: { serviceId: 'test' },
-    });
+    galaxy.router.back();
   };
 
   return {

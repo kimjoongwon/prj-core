@@ -8,9 +8,10 @@ import {
   Delete,
   HttpStatus,
   Query,
+  Headers,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public, ApiResponseEntity } from '../../decorators';
+import { Public, ApiResponseEntity, Auth } from '../../decorators';
 import { ApiEndpoints } from '../../types';
 import { PaginationMananger } from '../../utils';
 import { ResponseEntity } from '../common';
@@ -23,21 +24,25 @@ import { plainToInstance } from 'class-transformer';
 export class GroupsController {
   constructor(private readonly groupService: GroupsService) {}
 
+  @Auth([], { public: false })
   @ApiResponse({
     status: 201,
     description: 'The record has been successfully created.',
     type: GroupDto,
   })
   @Post()
-  createGroup(@Body() createGroupDto: CreateGroupDto) {
+  createGroup(@Body() createGroupDto: CreateGroupDto, @Headers('tenantId') tenantId: string) {
+    createGroupDto.tenantId = tenantId;
+    console.log('createGroupDto', createGroupDto);
     return this.groupService.create(createGroupDto);
   }
 
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByQuery(@Query() query: GroupQueryDto) {
-    const { count, groups } = await this.groupService.getManyByQuery(query);
+  async getGroupsByQuery(@Query() query: GroupQueryDto, @Headers('tenantId') tenantId: string) {
+    const args = query.toArgs(tenantId);
+    const { count, groups } = await this.groupService.getManyByQuery(args);
     const { skip, take } = query;
     return new ResponseEntity(
       HttpStatus.OK,
