@@ -1,14 +1,11 @@
 import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
-import { Exclude, Type } from 'class-transformer';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { UserEntity } from '../user.entity';
 import { TenantDto } from '../../tenants';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto extends AbstractDto implements UserEntity {
   @EmailField()
-  @Exclude()
   email: string;
 
   @StringField()

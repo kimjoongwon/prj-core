@@ -16,6 +16,7 @@ import {
   AdminSubjectsModule,
   AdminTemplatesModule,
   AdminTimelineItemsModule,
+  AdminUsersModule,
 } from './admin';
 import { AdminPagesModule } from './admin/pages/admin-pages.module';
 import { CaslModule } from 'nest-casl';
@@ -25,6 +26,7 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
   imports: [
     ...libModules,
     InitModule,
+    AdminUsersModule,
     AdminCategoriesModule,
     AdminAbilityModule,
     AdminTemplatesModule,
@@ -63,6 +65,14 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                   {
                     path: 'categories',
                     module: AdminCategoriesModule,
+                  },
+                  {
+                    path: 'users',
+                    module: AdminUsersModule,
+                  },
+                  {
+                    path: 'groups',
+                    module: AdminGroupsModule,
                   },
                 ],
               },

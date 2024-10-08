@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public, ApiResponseEntity, Auth } from '../../decorators';
-import { ApiEndpoints } from '../../types';
 import { PaginationMananger } from '../../utils';
 import { ResponseEntity } from '../common';
 import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
@@ -20,7 +19,7 @@ import { GroupsService } from './groups.service';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_GROUPS')
-@Controller(ApiEndpoints.ADMIN_GROUPS)
+@Controller()
 export class GroupsController {
   constructor(private readonly groupService: GroupsService) {}
 

@@ -33,11 +33,11 @@ export class AuthService {
     );
     if (err) throw new BadRequestException('Invalid token');
 
-    return this.usersService.getUniqueById(userId);
+    return this.usersService.getUnique({ where: { id: userId } });
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findUniqueByEmail(email);
+    const user = await this.usersService.getUnique({ where: { email } });
 
     const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 

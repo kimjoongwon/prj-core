@@ -10,6 +10,11 @@ const GroupPage = () => {
     queries: { group, service },
   } = useGroupPage();
 
+  const bodys: Record<string, React.ReactNode> = {
+    USER: <UsersTable users={[]} state={{ selectedKeys: [] }} />,
+  };
+  const body = service?.name ? bodys[service?.name] : <></>;
+
   return (
     <Card variant="outlined" className="p-4 space-y-4">
       <Text variant="h3">{service?.label} 그룹</Text>
@@ -23,15 +28,7 @@ const GroupPage = () => {
         onClick={() => {
           galaxy.modal.build({
             header: '그룹 추가',
-            body: (
-              <UsersTable
-                selectionMode="single"
-                users={[]}
-                state={{
-                  selectedKeys: [],
-                }}
-              />
-            ),
+            body,
             footer: '그룹 추가',
           });
         }}

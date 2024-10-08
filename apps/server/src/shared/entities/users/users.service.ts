@@ -1,56 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { UpsertUserDto } from './dtos/upsert-user.dto';
-import { Prisma } from '@prisma/client';
 import { UsersRepository } from './users.repository';
+import { IService } from '../../types/interfaces/service.interface';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class UsersService {
+export class UsersService implements IService {
   constructor(private readonly repository: UsersRepository) {}
 
   getUnique(args: Prisma.UserFindUniqueArgs) {
     return this.repository.findUnique(args);
   }
 
-  upsert(upsertUserDto: UpsertUserDto) {
-    const { email } = upsertUserDto;
-    return this.repository.upsert({
-      where: {
-        email,
-      },
-      update: upsertUserDto,
-      create: upsertUserDto,
+  getFirst(args: Prisma.UserFindFirstArgs) {
+    return this.repository.findFirst(args);
+  }
+
+  removeMany(ids: string[]) {
+    return this.repository.updateMany({
+      where: { id: { in: ids } },
+      data: { removedAt: new Date() },
     });
   }
 
-  async findUniqueByEmail(email: string) {
-    return this.repository.findUnique({
-      where: { email },
-      include: {
-        profiles: true,
-        tenants: {
-          include: {
-            tenancy: {
-              include: {
-                tenants: true,
-              },
-            },
-            role: true,
-          },
-        },
-      },
-    });
-  }
-
-  async getUniqueById(id: string) {
-    return this.repository.findUnique({
-      where: { id },
-      include: {
-        tenants: true,
-      },
-    });
+  delete(args: Prisma.UserDeleteArgs) {
+    return this.repository.delete(args);
   }
 
   create(args: Prisma.UserCreateArgs) {
     return this.repository.create(args);
+  }
+
+  async getManyByQuery(args: Prisma.UserFindManyArgs) {
+    const users = await this.repository.findMany(args);
+    const count = await this.repository.count(args as Prisma.UserCountArgs);
+
+    return { users, count };
+  }
+
+  update(args: Prisma.UserUpdateArgs) {
+    return this.repository.update(args);
+  }
+
+  remove(id: string) {
+    return this.update({ where: { id }, data: { removedAt: new Date() } });
   }
 }
