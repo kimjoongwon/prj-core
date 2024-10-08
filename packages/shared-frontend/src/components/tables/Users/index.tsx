@@ -12,15 +12,7 @@ export interface UsersTableProps extends TableProps {
 
 export const UsersTable = (props: UsersTableProps) => {
   const { users = [], state, ...rest } = props;
-  const { columns, leftButtons } = useUsersTables(props);
+  const { columns } = useUsersTables(props);
 
-  return (
-    <DataGrid
-      {...rest}
-      leftButtons={leftButtons}
-      data={users}
-      columns={columns}
-      state={state}
-    />
-  );
+  return <DataGrid {...rest} data={users} columns={columns} state={state} />;
 };

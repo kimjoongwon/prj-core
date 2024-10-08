@@ -5,10 +5,10 @@ import { appConfig, AuthConfig, authConfig, corsConfig, UsersModule } from '@sha
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import pino from 'pino';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
 import smtpConfig from './shared/configs/smtp.config';
+import pino from 'pino';
 
 export const adminModules = [];
 
