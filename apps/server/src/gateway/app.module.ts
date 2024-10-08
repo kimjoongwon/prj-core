@@ -1,6 +1,6 @@
 import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
 import { InitModule, LoggerMiddleware, ServicesModule, UsersModule } from '@shared';
-import { adminModules, libModules } from '../main.config';
+import { libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
 import { AuthAdminModule } from './auth/admin/auth-admin.module';

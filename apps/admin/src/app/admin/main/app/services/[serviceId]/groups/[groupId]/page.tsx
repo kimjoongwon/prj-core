@@ -7,13 +7,9 @@ import { Divider, Spacer } from '@nextui-org/react';
 
 const GroupPage = () => {
   const {
+    onClickAdd,
     queries: { group, service },
   } = useGroupPage();
-
-  const bodys: Record<string, React.ReactNode> = {
-    USER: <UsersTable users={[]} state={{ selectedKeys: [] }} />,
-  };
-  const body = service?.name ? bodys[service?.name] : <></>;
 
   return (
     <Card variant="outlined" className="p-4 space-y-4">
@@ -23,16 +19,7 @@ const GroupPage = () => {
       <Divider />
       <Meta name={'그룹 명'} value={group?.name || ''} />
       <Divider />
-      <Button
-        color="primary"
-        onClick={() => {
-          galaxy.modal.build({
-            header: '그룹 추가',
-            body,
-            footer: '그룹 추가',
-          });
-        }}
-      >
+      <Button color="primary" onClick={onClickAdd}>
         {service?.label} 추가
       </Button>
     </Card>
