@@ -8,7 +8,7 @@ interface SpaceLayoutProps {
 const SpacesLayout = async (props: SpaceLayoutProps) => {
   const { children } = props;
 
-  return <Container className="h-full">{children}</Container>;
+  return children;
 };
 
 export default SpacesLayout;

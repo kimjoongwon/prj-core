@@ -2,7 +2,6 @@ import { NumberFieldOptional } from '../../../decorators';
 import { PaginationMananger } from '../../../utils';
 
 export class PageQueryDto {
-  constructor() {}
   @NumberFieldOptional({
     minimum: 1,
     default: 1,

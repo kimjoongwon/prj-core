@@ -1,15 +1,16 @@
 'use client';
 
 import React from 'react';
-import { DataGrid } from '@shared/frontend';
-import { usePage } from './_hooks/usePage';
+import { GroupsTable } from '@shared/frontend';
+import { useGroupsPage } from './_hooks/useGroupsPage';
 
-const UserGroupsPage = () => {
+const GroupsPage = () => {
   const {
-    dataGrid: { columns, data },
-  } = usePage();
+    queries: { groups },
+    state,
+  } = useGroupsPage();
 
-  return <DataGrid data={data} columns={columns} />;
+  return <GroupsTable groups={groups} state={state} selectionMode="single" />;
 };
 
-export default UserGroupsPage;
+export default GroupsPage;

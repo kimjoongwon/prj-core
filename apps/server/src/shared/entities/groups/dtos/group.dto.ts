@@ -1,4 +1,4 @@
-import { StringField } from '../../../decorators';
+import { StringField, UUIDField, UUIDFieldOptional } from '../../../decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { GroupEntity } from '../group.entity';
 
@@ -9,8 +9,8 @@ export class GroupDto extends AbstractDto {
   @StringField()
   name: string;
 
-  @StringField()
-  spaceId: string;
+  @UUIDFieldOptional()
+  tenantId: string;
 
   @StringField()
   serviceId: string;

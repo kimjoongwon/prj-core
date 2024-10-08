@@ -4,11 +4,10 @@ import { Galaxy } from './galaxy';
 
 export class Modal {
   galaxy: Galaxy;
-  open: boolean = false;
+  open = false;
   header?: string | ReactNode = undefined;
   body?: string | ReactNode = undefined;
   footer?: string | ReactNode = undefined;
-
   constructor(galaxy: Galaxy) {
     this.galaxy = galaxy;
     makeAutoObservable(this, {}, { autoBind: true });
@@ -21,8 +20,8 @@ export class Modal {
     this.footer = undefined;
   }
 
-  build({ header, body, footer }: Modal) {
-    this.open = false;
+  build({ header, body, footer }) {
+    this.open = true;
     this.header = header;
     this.body = body;
     this.footer = footer;

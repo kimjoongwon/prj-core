@@ -16,4 +16,7 @@ export class CategoryQueryDto extends CategorySortOrder {
 
   @StringFieldOptional()
   parentId?: string;
+
+  @StringFieldOptional()
+  serviceId?: string;
 }
