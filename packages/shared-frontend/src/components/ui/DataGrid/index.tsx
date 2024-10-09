@@ -112,6 +112,7 @@ export const DataGrid = observer(
           {...rest}
           defaultSelectedKeys={state?.selectedKeys || []}
           onSelectionChange={selection => {
+            console.log('daragrid: state.selectedKeys', selection);
             if (selection instanceof Set) {
               // @ts-ignore
               state.selectedKeys = Array.from(selection);

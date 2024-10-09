@@ -13,6 +13,10 @@ export class AssignmentsService implements IService {
     return this.repository.findUnique(args);
   }
 
+  createMany(args: Prisma.AssignmentCreateManyArgs) {
+    return this.repository.createMany(args);
+  }
+
   getFirst(id: string) {
     return this.repository.findFirst({ where: { id } });
   }

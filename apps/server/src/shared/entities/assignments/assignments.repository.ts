@@ -51,4 +51,8 @@ export class AssignmentsRepository implements IRepository {
   count(args: Prisma.AssignmentCountArgs) {
     return this.prisma.assignment.count(args);
   }
+
+  createMany(args: Prisma.AssignmentCreateManyArgs) {
+    return this.prisma.assignment.createMany(args);
+  }
 }

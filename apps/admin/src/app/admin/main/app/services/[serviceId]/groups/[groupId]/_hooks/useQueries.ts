@@ -1,4 +1,6 @@
 import {
+  useCreateAssignment,
+  useCreateAssignments,
   useGetGroupSuspense,
   useGetServiceSuspense,
   useGetSpacesByQuerySuspense,
@@ -16,11 +18,12 @@ export const useQueries = () => {
   const { data: getGroupResponse } = useGetGroupSuspense(groupId);
   const { data: getUsersResponse } = useGetUsersByQuerySuspense();
   const { data: getSpacesResponse } = useGetSpacesByQuerySuspense();
-
+  const { mutate } = useCreateAssignments();
   return {
     service: getServiceResponse.data,
     group: getGroupResponse.data,
     users: getUsersResponse.data || [],
     spaces: getSpacesResponse.data || [],
+    createAssignments: mutate,
   };
 };

@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TemplatesService } from './assignments.service';
-import { TemplatesRepository } from './assignments.repository';
-import { TemplatesController } from './assignments.controller';
+import { AssignmentsService } from './assignments.service';
+import { AssignmentsRepository } from './assignments.repository';
 
 @Module({
-  controllers: [TemplatesController],
-  providers: [TemplatesService, TemplatesRepository],
-  exports: [TemplatesService],
+  providers: [AssignmentsService, AssignmentsRepository],
+  exports: [AssignmentsService],
 })
-export class TemplatesModule {}
+export class AssignmentsModule {}

@@ -14,12 +14,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import {
   CreateAssignmentDto,
   AssignmentDto,
   UpdateAssignmentDto,
   AssignmentQueryDto,
+  CreateAssignmentDtos,
 } from '../assignments/dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
@@ -33,12 +33,28 @@ export class AssignmentsController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
   async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
     const assignment = await this.service.create({
       data: createAssignmentDto,
     });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssignmentDto, assignment));
+  }
+
+  @Post('/bulk')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
+  async createAssignments(@Body() createAssignmentDtos: CreateAssignmentDtos) {
+    const assignments = await this.service.createMany({
+      data: createAssignmentDtos.items,
+      skipDuplicates: true,
+    });
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(AssignmentDto, assignments.count),
+    );
   }
 
   @Get(':assignmentId')

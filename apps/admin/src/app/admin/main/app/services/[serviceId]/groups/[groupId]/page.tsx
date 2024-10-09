@@ -4,13 +4,14 @@ import { Button, galaxy, Meta, Text, UsersTable } from '@shared/frontend';
 import { useGroupPage } from './_hooks/useGroupPage';
 import { Card } from '@mui/material';
 import { Divider, Spacer } from '@nextui-org/react';
+import { observer } from 'mobx-react-lite';
 
-const GroupPage = () => {
+const GroupPage = observer(() => {
   const {
     onClickAdd,
     queries: { group, service },
   } = useGroupPage();
-
+  
   return (
     <Card variant="outlined" className="p-4 space-y-4">
       <Text variant="h3">{service?.label} 그룹</Text>
@@ -24,6 +25,6 @@ const GroupPage = () => {
       </Button>
     </Card>
   );
-};
+});
 
 export default GroupPage;

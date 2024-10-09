@@ -21,11 +21,13 @@ import {
 import { AdminPagesModule } from './admin/pages/admin-pages.module';
 import { CaslModule } from 'nest-casl';
 import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
+import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.module';
 
 @Module({
   imports: [
     ...libModules,
     InitModule,
+    AdminAssignmentsModule,
     AdminUsersModule,
     AdminCategoriesModule,
     AdminAbilityModule,
@@ -73,6 +75,10 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                   {
                     path: 'groups',
                     module: AdminGroupsModule,
+                  },
+                  {
+                    path: 'assignments',
+                    module: AdminAssignmentsModule,
                   },
                 ],
               },
