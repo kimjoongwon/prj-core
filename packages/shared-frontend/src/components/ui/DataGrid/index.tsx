@@ -119,11 +119,12 @@ export const DataGrid = observer(
               return;
             }
             if (selection === 'all') {
+              console.log('data', data);
               const allKey =
                 // @ts-ignore
                 data?.map(row => row?.[selectedKey as string]) || [];
               // @ts-ignore
-              state.selectedKeys = uniq([state.selectedKeys, ...allKey]);
+              state.selectedKeys = uniq([...state.selectedKeys, ...allKey]);
             } else {
               difference(state?.selectedKeys || [], Array.from(selection));
             }

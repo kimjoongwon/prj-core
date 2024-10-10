@@ -168,11 +168,11 @@ export class InitService {
   }
 
   async createServices() {
-    const services = [
-      { name: 'USER', label: '이용자' },
-      { name: 'RESERVATION', label: '예약' },
-      { name: 'SESSION', label: '세션' },
-      { name: 'SPACE', label: '공간' },
+    const services: { name: Lowercase<Prisma.ModelName>; label: string }[] = [
+      { name: 'user', label: '이용자' },
+      { name: 'reservation', label: '예약' },
+      { name: 'session', label: '세션' },
+      { name: 'space', label: '공간' },
     ];
 
     await Promise.all(

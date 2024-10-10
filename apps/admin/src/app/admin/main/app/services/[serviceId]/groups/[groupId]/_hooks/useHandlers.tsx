@@ -2,43 +2,40 @@ import {
   Button,
   CreateAssignmentDto,
   galaxy,
-  SpacesTable,
   UsersTable,
 } from '@shared/frontend';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
-import { useParams } from 'next/navigation';
+import { create } from 'domain';
 
 export const useHandlers = (context: {
   queries: ReturnType<typeof useQueries>;
   state: ReturnType<typeof useState>;
 }) => {
   const {
+    queries: { service, users, createAssignments, group },
     state,
-    queries: { service, users, spaces, createAssignments },
   } = context;
-
-  const { groupId, serviceId } = useParams<{
-    serviceId: string;
-    groupId: string;
-  }>();
-
+  console.log('users', users);
   const onClickAddToGroup = () => {
-    const serviceItemIds = state.selectedKeys;
-
     if (state.selectedKeys.length === 0) {
-      return alert('선택된 키가 없습니다.');
+      galaxy.modal.destory();
+      return;
     }
 
-    const items: CreateAssignmentDto[] = serviceItemIds.map(serviceItemId => ({
-      serviceItemId,
-      serviceId,
-      groupId,
-    }));
+    console.log('state.selectedKeys', { ...state.selectedKeys });
+
+    const createAssignmentsDtos: CreateAssignmentDto[] = state.selectedKeys.map(
+      id => ({
+        serviceItemId: id!,
+        serviceId: service?.id!,
+        groupId: group?.id!,
+      }),
+    );
 
     createAssignments({
       data: {
-        items,
+        items: createAssignmentsDtos,
       },
     });
   };
@@ -53,14 +50,10 @@ export const useHandlers = (context: {
 
   const openGroupAddModal = () => {
     const bodys: Record<string, React.ReactNode> = {
-      USER: <UsersTable selectionMode="multiple" users={users} state={state} />,
-      SPACE: (
-        <SpacesTable selectionMode="multiple" spaces={spaces} state={state} />
-      ),
+      user: <UsersTable selectionMode="multiple" users={users} state={state} />,
     };
 
     const body = service?.name ? bodys[service?.name] : <></>;
-
     galaxy.modal.build({
       header: '이용자 목록',
       body: body,

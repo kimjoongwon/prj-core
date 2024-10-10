@@ -3,7 +3,13 @@ import { AssignmentDto } from './assignment.dto';
 import { COMMON_ENTITY_FIELDS } from '../../../constants/entity-common-fields';
 import { ClassField } from '../../../decorators';
 
-export class CreateAssignmentDto extends OmitType(AssignmentDto, [...COMMON_ENTITY_FIELDS]) {}
+export class CreateAssignmentDto extends OmitType(AssignmentDto, [
+  ...COMMON_ENTITY_FIELDS,
+  'group',
+  'reservation',
+  'service',
+  'space',
+]) {}
 
 export class CreateAssignmentDtos {
   @ClassField(() => CreateAssignmentDto, { each: true, isArray: true })

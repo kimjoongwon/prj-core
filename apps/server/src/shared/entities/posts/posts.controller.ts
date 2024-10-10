@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import { PostsService, CreatePostDto, PostDto, UpdatePostDto, PostQueryDto } from '.';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
@@ -28,7 +27,7 @@ export class PostsController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(PostDto, HttpStatus.OK)
   async createPost(@Body() createPostDto: CreatePostDto) {
     const post = await this.postsService.create(createPostDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(PostDto, post));

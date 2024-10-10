@@ -7,7 +7,7 @@ export const useGroupPage = () => {
   const state = useState();
   const handlers = useHandlers({ queries, state });
   const { onClickAdd, onClickAddToGroup, onClickCancel } = handlers;
-  
+
   return {
     queries,
     onClickAdd,

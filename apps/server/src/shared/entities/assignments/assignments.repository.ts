@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { IRepository } from '../../types/interfaces/repository.interface';
+import { AssignmentDto } from './dtos';
 
 @Injectable()
 export class AssignmentsRepository implements IRepository {
@@ -28,16 +29,7 @@ export class AssignmentsRepository implements IRepository {
   }
 
   findMany(args: Prisma.AssignmentFindManyArgs) {
-    return this.prisma.assignment.findMany({
-      ...args,
-      where: {
-        removedAt: null,
-        ...args.where,
-      },
-      orderBy: {
-        ...args.orderBy,
-      },
-    });
+    return this.prisma.assignment.findMany(args);
   }
 
   findUnique(args: Prisma.AssignmentFindUniqueArgs) {
@@ -46,6 +38,18 @@ export class AssignmentsRepository implements IRepository {
 
   findFirst(args: Prisma.AssignmentFindFirstArgs) {
     return this.prisma.assignment.findFirst(args);
+  }
+
+  async findServiceItem(assignment: AssignmentDto) {
+    const service = await this.prisma.service.findUnique({
+      where: { id: assignment.serviceId, removedAt: null },
+    });
+
+    const serviceItem = await this.prisma[service.name].findUnique({
+      where: { id: assignment.serviceItemId, removedAt: null },
+    });
+
+    return serviceItem;
   }
 
   count(args: Prisma.AssignmentCountArgs) {

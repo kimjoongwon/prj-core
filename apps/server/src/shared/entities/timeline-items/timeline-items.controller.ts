@@ -13,7 +13,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { TimelineItemsService } from './timeline-items.service';
 import { ResponseEntity, PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import {
   CreateTimelineItemDto,
   TimelineItemDto,
@@ -33,7 +32,7 @@ export class TimelineItemsController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async createTimelineItem(@Body() createTimelineItemDto: CreateTimelineItemDto) {
     const timelineItem = await this.service.create(createTimelineItemDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToClass(TimelineItemDto, timelineItem));

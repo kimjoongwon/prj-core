@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import { CreateEmailDto, EmailDto, UpdateEmailDto, EmailQueryDto } from './dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
@@ -28,7 +27,7 @@ export class EmailsController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(EmailDto, HttpStatus.OK)
   async createEmail(@Body() createEmailDto: CreateEmailDto) {
     const email = await this.service.create(createEmailDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(EmailDto, email));

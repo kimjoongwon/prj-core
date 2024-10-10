@@ -4,6 +4,7 @@ import { AssignmentPageQueryDto } from './dtos/assignment-page-query.dto';
 import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
+import { AssignmentDto } from './dtos';
 
 @Injectable()
 export class AssignmentsService implements IService {
@@ -44,10 +45,30 @@ export class AssignmentsService implements IService {
 
   async getManyByQuery(pageQuery: AssignmentPageQueryDto) {
     const args = PaginationMananger.toArgs(pageQuery);
-    const assignments = await this.repository.findMany(args);
+    const assignments: AssignmentDto[] = await this.repository.findMany({
+      ...args,
+      where: {
+        ...args.where,
+        removedAt: null,
+      },
+      include: {
+        group: true,
+        service: true,
+      },
+    });
+
+    const assignmentsWithServiceItem = assignments.map(async (assignment) => {
+      const serviceItem = await this.repository.findServiceItem(assignment);
+
+      return {
+        ...assignment,
+        [`${assignment.service.name}Dto`]: serviceItem,
+      };
+    });
+
     const count = await this.repository.count(args);
     return {
-      assignments,
+      assignments: assignmentsWithServiceItem,
       count,
     };
   }

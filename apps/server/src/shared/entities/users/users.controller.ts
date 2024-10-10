@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import { CreateUserDto, UserDto, UpdateUserDto, UserQueryDto } from '../users/dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
@@ -28,7 +27,7 @@ export class UsersController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(UserDto, HttpStatus.OK)
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.service.create({
       data: createUserDto,

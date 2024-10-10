@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import { CreateRoleDto, RoleDto, UpdateRoleDto, RoleQueryDto } from './dto';
 import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
@@ -29,7 +28,7 @@ export class RolesController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(RoleDto, HttpStatus.OK)
   async createRole(@Body() createRoleDto: CreateRoleDto) {
     const role = await this.service.create(createRoleDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoleDto, role));
