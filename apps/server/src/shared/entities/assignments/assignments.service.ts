@@ -57,14 +57,16 @@ export class AssignmentsService implements IService {
       },
     });
 
-    const assignmentsWithServiceItem = assignments.map(async (assignment) => {
-      const serviceItem = await this.repository.findServiceItem(assignment);
+    const assignmentsWithServiceItem = await Promise.all(
+      assignments.map(async (assignment) => {
+        const serviceItem = await this.repository.findServiceItem(assignment);
 
-      return {
-        ...assignment,
-        [`${assignment.service.name}Dto`]: serviceItem,
-      };
-    });
+        return {
+          ...assignment,
+          [assignment.service.name]: serviceItem,
+        };
+      }),
+    );
 
     const count = await this.repository.count(args);
     return {

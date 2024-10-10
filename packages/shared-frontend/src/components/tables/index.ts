@@ -6,3 +6,4 @@ export * from './Services';
 export * from './Categories';
 export * from './Groups';
 export * from './Users';
+export * from './Assignments';

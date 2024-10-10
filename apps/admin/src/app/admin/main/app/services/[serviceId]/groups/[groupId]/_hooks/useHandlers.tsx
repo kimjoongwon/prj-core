@@ -6,7 +6,6 @@ import {
 } from '@shared/frontend';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
-import { create } from 'domain';
 
 export const useHandlers = (context: {
   queries: ReturnType<typeof useQueries>;
@@ -22,8 +21,6 @@ export const useHandlers = (context: {
       galaxy.modal.destory();
       return;
     }
-
-    console.log('state.selectedKeys', { ...state.selectedKeys });
 
     const createAssignmentsDtos: CreateAssignmentDto[] = state.selectedKeys.map(
       id => ({

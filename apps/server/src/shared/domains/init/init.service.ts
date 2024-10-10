@@ -170,8 +170,6 @@ export class InitService {
   async createServices() {
     const services: { name: Lowercase<Prisma.ModelName>; label: string }[] = [
       { name: 'user', label: '이용자' },
-      { name: 'reservation', label: '예약' },
-      { name: 'session', label: '세션' },
       { name: 'space', label: '공간' },
     ];
 
