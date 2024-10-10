@@ -15,7 +15,7 @@ export const useRoutes = () => {
     },
     {
       name: '세션',
-      pathname: '/admin/main/sessions',
+      pathname: '/admin/main/reservation',
       icon: <CiBoxList />,
     },
     {
