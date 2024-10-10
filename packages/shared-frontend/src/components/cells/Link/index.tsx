@@ -1,3 +1,5 @@
+'use client';
+
 import { LinkCellView } from './LinkCellView';
 
 export interface LinkCellProps {

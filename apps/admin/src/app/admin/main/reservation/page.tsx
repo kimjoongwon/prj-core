@@ -2,25 +2,19 @@
 
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { cn } from '@nextui-org/react';
-import { FiChevronRight } from 'react-icons/fi';
+import { useReservationPage } from './_hooks/useReservationPage';
+import Link from 'next/link';
 
 const ReservationPage = () => {
+  const { menus } = useReservationPage();
+
   return (
     <Listbox variant="solid">
-      <ListboxItem
-        key={'sessions'}
-        description="운동 프로그램의 세션을 생성 관리 합니다."
-        endContent={<FiChevronRight />}
-      >
-        세션 관리
-      </ListboxItem>
-      <ListboxItem
-        key={'timelineItems'}
-        description="운동 프로그램의 타임라인을 관리"
-        endContent={<FiChevronRight />}
-      >
-        타임라인 관리
-      </ListboxItem>
+      {menus.map(menu => (
+        <ListboxItem as={Link} href={menu.href} {...menu} key={menu.key}>
+          {menu.children}
+        </ListboxItem>
+      ))}
     </Listbox>
   );
 };

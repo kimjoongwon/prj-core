@@ -1,3 +1,5 @@
+'use client';
+
 import { AppBarView } from './AppBarView';
 
 export interface AppBarProps {}
