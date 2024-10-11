@@ -1,17 +1,21 @@
+import { useParams } from 'next/navigation';
 import { galaxy } from '../../../../providers';
 import { useState } from './useState';
-import { useMutations } from './useMutations';
 
 export const useHandlers = ({
   state,
 }: {
   state: ReturnType<typeof useState>;
-  mutations: ReturnType<typeof useMutations>;
 }) => {
+  const { serviceId } = useParams<{ serviceId: string }>();
+
   const onClickCreate = () => {
     galaxy.router.push({
       url: '/admin/main/app/services/:serviceId/categories/:categoryId/edit',
-      params: { categoryId: 'new' },
+      params: {
+        serviceId,
+        categoryId: 'new',
+      },
     });
   };
 

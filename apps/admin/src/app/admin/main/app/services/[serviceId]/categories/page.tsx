@@ -1,16 +1,15 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { usePage } from './_hooks/usePage';
 import { CategoriesTable } from '@shared/frontend';
+import { useCategoriesPage } from './_hooks/useCategoriesPage';
 
 const CategoriesPage = observer(() => {
   const {
-    meta: { onClickCard, onClickCreate, onClickDelete, onClickDetail },
-    categories,
-  } = usePage();
+    queries: { categories, totalCount },
+  } = useCategoriesPage();
 
-  return <CategoriesTable categories={categories} />;
+  return <CategoriesTable categories={categories} totalCount={totalCount} />;
 });
 
 export default CategoriesPage;

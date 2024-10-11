@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SpaceDto } from './spaceDto';
+import type { RemoveSpaces200AllOfMeta } from './removeSpaces200AllOfMeta';
 
 export type RemoveSpaces200AllOf = {
   data?: SpaceDto;
@@ -12,4 +13,5 @@ export type RemoveSpaces200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveSpaces200AllOfMeta;
 };

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CategoryDto } from './categoryDto';
+import type { GetChildrenCategories200AllOfMeta } from './getChildrenCategories200AllOfMeta';
 
 export type GetChildrenCategories200AllOf = {
   data?: CategoryDto[];
@@ -12,4 +13,5 @@ export type GetChildrenCategories200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetChildrenCategories200AllOfMeta;
 };

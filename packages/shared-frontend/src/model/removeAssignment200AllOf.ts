@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AssignmentDto } from './assignmentDto';
+import type { RemoveAssignment200AllOfMeta } from './removeAssignment200AllOfMeta';
 
 export type RemoveAssignment200AllOf = {
   data?: AssignmentDto;
@@ -12,4 +13,5 @@ export type RemoveAssignment200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveAssignment200AllOfMeta;
 };

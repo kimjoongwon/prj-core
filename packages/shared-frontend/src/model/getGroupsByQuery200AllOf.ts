@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroupDto } from './groupDto';
+import type { GetGroupsByQuery200AllOfMeta } from './getGroupsByQuery200AllOfMeta';
 
 export type GetGroupsByQuery200AllOf = {
   data?: GroupDto[];
@@ -12,4 +13,5 @@ export type GetGroupsByQuery200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetGroupsByQuery200AllOfMeta;
 };

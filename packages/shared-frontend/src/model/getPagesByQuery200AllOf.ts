@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PageDto } from './pageDto';
+import type { GetPagesByQuery200AllOfMeta } from './getPagesByQuery200AllOfMeta';
 
 export type GetPagesByQuery200AllOf = {
   data?: PageDto[];
@@ -12,4 +13,5 @@ export type GetPagesByQuery200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetPagesByQuery200AllOfMeta;
 };

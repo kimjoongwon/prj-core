@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SessionDto } from './sessionDto';
+import type { CreateSession200AllOfMeta } from './createSession200AllOfMeta';
 
 export type CreateSession200AllOf = {
   data?: SessionDto;
@@ -12,4 +13,5 @@ export type CreateSession200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreateSession200AllOfMeta;
 };

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ServiceDto } from './serviceDto';
+import type { GetService200AllOfMeta } from './getService200AllOfMeta';
 
 export type GetService200AllOf = {
   data?: ServiceDto;
@@ -12,4 +13,5 @@ export type GetService200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetService200AllOfMeta;
 };

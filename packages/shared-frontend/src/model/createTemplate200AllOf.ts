@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TenancyDto } from './tenancyDto';
+import type { CreateTemplate200AllOfMeta } from './createTemplate200AllOfMeta';
 
 export type CreateTemplate200AllOf = {
   data?: TenancyDto;
@@ -12,4 +13,5 @@ export type CreateTemplate200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreateTemplate200AllOfMeta;
 };

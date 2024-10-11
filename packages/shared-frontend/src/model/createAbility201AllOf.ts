@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AbilityDto } from './abilityDto';
+import type { CreateAbility201AllOfMeta } from './createAbility201AllOfMeta';
 
 export type CreateAbility201AllOf = {
   data?: AbilityDto;
@@ -12,4 +13,5 @@ export type CreateAbility201AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreateAbility201AllOfMeta;
 };

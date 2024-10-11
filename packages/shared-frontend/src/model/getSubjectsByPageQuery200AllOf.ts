@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SubjectDto } from './subjectDto';
+import type { GetSubjectsByPageQuery200AllOfMeta } from './getSubjectsByPageQuery200AllOfMeta';
 
 export type GetSubjectsByPageQuery200AllOf = {
   data?: SubjectDto[];
@@ -12,4 +13,5 @@ export type GetSubjectsByPageQuery200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetSubjectsByPageQuery200AllOfMeta;
 };

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UserDto } from './userDto';
+import type { GetUser200AllOfMeta } from './getUser200AllOfMeta';
 
 export type GetUser200AllOf = {
   data?: UserDto;
@@ -12,4 +13,5 @@ export type GetUser200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetUser200AllOfMeta;
 };

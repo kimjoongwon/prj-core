@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateDto } from './templateDto';
+import type { RemoveTemplates200AllOfMeta } from './removeTemplates200AllOfMeta';
 
 export type RemoveTemplates200AllOf = {
   data?: TemplateDto;
@@ -12,4 +13,5 @@ export type RemoveTemplates200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveTemplates200AllOfMeta;
 };

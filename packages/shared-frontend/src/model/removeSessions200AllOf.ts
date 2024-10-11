@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SessionDto } from './sessionDto';
+import type { RemoveSessions200AllOfMeta } from './removeSessions200AllOfMeta';
 
 export type RemoveSessions200AllOf = {
   data?: SessionDto;
@@ -12,4 +13,5 @@ export type RemoveSessions200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveSessions200AllOfMeta;
 };

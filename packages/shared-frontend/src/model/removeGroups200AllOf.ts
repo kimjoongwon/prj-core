@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Number } from './number';
+import type { RemoveGroups200AllOfMeta } from './removeGroups200AllOfMeta';
 
 export type RemoveGroups200AllOf = {
   data?: Number;
@@ -12,4 +13,5 @@ export type RemoveGroups200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveGroups200AllOfMeta;
 };

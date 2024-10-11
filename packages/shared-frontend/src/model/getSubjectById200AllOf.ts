@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SubjectDto } from './subjectDto';
+import type { GetSubjectById200AllOfMeta } from './getSubjectById200AllOfMeta';
 
 export type GetSubjectById200AllOf = {
   data?: SubjectDto;
@@ -12,4 +13,5 @@ export type GetSubjectById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetSubjectById200AllOfMeta;
 };

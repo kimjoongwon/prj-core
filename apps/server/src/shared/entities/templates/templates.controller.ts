@@ -116,10 +116,7 @@ export class TemplatesController {
       HttpStatus.OK,
       'success',
       templates.map((template) => plainToInstance(TemplateDto, template)),
-      new PageMetaDto({
-        pageQueryDto: query,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

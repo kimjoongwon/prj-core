@@ -97,10 +97,7 @@ export class SpacesController {
       HttpStatus.OK,
       'success',
       spaces.map((space) => plainToInstance(SpaceDto, space)),
-      new PageMetaDto({
-        pageQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(pageQueryDto.skip, pageQueryDto.take, count),
     );
   }
 

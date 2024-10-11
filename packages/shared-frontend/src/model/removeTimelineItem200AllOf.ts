@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TimelineItemDto } from './timelineItemDto';
+import type { RemoveTimelineItem200AllOfMeta } from './removeTimelineItem200AllOfMeta';
 
 export type RemoveTimelineItem200AllOf = {
   data?: TimelineItemDto;
@@ -12,4 +13,5 @@ export type RemoveTimelineItem200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveTimelineItem200AllOfMeta;
 };

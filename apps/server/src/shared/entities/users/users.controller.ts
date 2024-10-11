@@ -94,10 +94,7 @@ export class UsersController {
       HttpStatus.OK,
       'success',
       users.map((user) => plainToInstance(UserDto, user)),
-      new PageMetaDto({
-        pageQueryDto: query,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

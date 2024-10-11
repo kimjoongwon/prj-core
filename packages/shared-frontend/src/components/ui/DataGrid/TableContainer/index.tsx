@@ -6,5 +6,5 @@ interface TableContainerProps {
 
 export const TableContainer = (props: TableContainerProps) => {
   const { children } = props;
-  return <VStack className="p-4 space-y-3 w-full">{children}</VStack>;
+  return <VStack className="space-y-3 w-full">{children}</VStack>;
 };

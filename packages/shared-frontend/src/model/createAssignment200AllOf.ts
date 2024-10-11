@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AssignmentDto } from './assignmentDto';
+import type { CreateAssignment200AllOfMeta } from './createAssignment200AllOfMeta';
 
 export type CreateAssignment200AllOf = {
   data?: AssignmentDto;
@@ -12,4 +13,5 @@ export type CreateAssignment200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreateAssignment200AllOfMeta;
 };

@@ -43,8 +43,9 @@ export interface DataGridProps<T> extends TableProps {
   leftButtons?: ButtonProps[];
   rightButtons?: ButtonProps[];
   actions?: ('삭제' | '생성' | '제거')[];
-  selectedKey?: keyof T;
+  selectedKey?: string;
   emptyContent?: string;
+  totalCount?: number;
 }
 
 export interface CustomDataGridProps

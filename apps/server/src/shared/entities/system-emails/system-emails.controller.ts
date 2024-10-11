@@ -25,6 +25,7 @@ import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { SystemEmailsService } from './system-emails.service';
+import { query } from 'express';
 
 @ApiTags('ADMIN_TEMPLATES')
 @Controller(ApiEndpoints.ADMIN_TEMPLATES)
@@ -99,17 +100,14 @@ export class SystemEmailsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SystemEmailDto, HttpStatus.OK, { isArray: true })
-  async getSystemEmailsByQuery(@Query() emailQueryDto: SystemEmailQueryDto) {
-    const { count, systemEmails } = await this.service.getManyByQuery(emailQueryDto);
+  async getSystemEmailsByQuery(@Query() query: SystemEmailQueryDto) {
+    const { count, systemEmails } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       systemEmails.map((email) => plainToInstance(SystemEmailDto, email)),
-      new PageMetaDto({
-        pageQueryDto: emailQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

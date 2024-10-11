@@ -94,10 +94,7 @@ export class PostsController {
       HttpStatus.OK,
       'success',
       posts.map((post) => plainToInstance(PostDto, post)),
-      new PageMetaDto({
-        pageQueryDto: postQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(postQueryDto.skip, postQueryDto.take, count),
     );
   }
 }

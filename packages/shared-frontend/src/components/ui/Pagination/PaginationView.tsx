@@ -1,53 +1,44 @@
 'use client';
 
 import { Pagination, PaginationProps } from '@nextui-org/react';
-import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '../types';
-import { get, set } from 'lodash-es';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
-export interface PaginationViewProps<T>
-  extends Omit<PaginationProps, 'total'>,
-    MobxProps<T> {
+export interface PaginationViewProps<T> extends Omit<PaginationProps, 'total'> {
   totalCount: number;
+  state: {
+    take: number;
+    skip: number;
+  };
 }
 
-export const PaginationView = observer(
-  <T extends { take: number; skip: number }>(props: PaginationViewProps<T>) => {
-    const {
-      state = {
-        take: 0,
-        skip: 0,
-      },
-      path = '',
-      totalCount,
-      ...rest
-    } = props;
+export const PaginationView = observer((props: PaginationViewProps<T>) => {
+  const {
+    state = {
+      take: 10,
+      skip: 0,
+    },
+    totalCount = 1,
+    ...rest
+  } = props;
 
-    const [currentPage, setCurrentPage] = useState(0);
-    const initialValue = get(state, path);
-    const { localState } = useMobxHookForm(initialValue, state, path);
+  console.log(totalCount);
 
-    const onChangePage = (page: number) => {
-      const offset = page - 1;
+  const [currentPage, setCurrentPage] = useState(0);
 
-      localState.value = offset;
+  const onChangePage = (page: number) => {
+    state.skip = (page - 1) * state.take;
+    setCurrentPage(page);
+  };
 
-      setCurrentPage(page);
+  const total = Math.ceil(totalCount / state.take);
 
-      set(state, path, offset * state.take);
-    };
-
-    const total = totalCount / state.take;
-
-    return (
-      <Pagination
-        {...rest}
-        total={totalCount / state.take < 1 ? 1 : total}
-        onChange={onChangePage}
-        page={currentPage}
-      />
-    );
-  },
-);
+  return (
+    <Pagination
+      {...rest}
+      total={total}
+      onChange={onChangePage}
+      page={currentPage}
+    />
+  );
+});

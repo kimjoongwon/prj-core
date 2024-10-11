@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PageDto } from './pageDto';
+import type { CreatePage200AllOfMeta } from './createPage200AllOfMeta';
 
 export type CreatePage200AllOf = {
   data?: PageDto;
@@ -12,4 +13,5 @@ export type CreatePage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreatePage200AllOfMeta;
 };

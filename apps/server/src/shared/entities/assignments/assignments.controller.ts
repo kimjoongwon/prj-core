@@ -119,10 +119,7 @@ export class AssignmentsController {
       HttpStatus.OK,
       'success',
       assignments.map((assignment) => plainToInstance(AssignmentDto, assignment)),
-      new PageMetaDto({
-        pageQueryDto: query,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

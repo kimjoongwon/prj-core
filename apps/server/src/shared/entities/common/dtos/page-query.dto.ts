@@ -1,5 +1,6 @@
 import { NumberFieldOptional } from '../../../decorators';
 import { PaginationMananger } from '../../../utils';
+import { PageMetaDto } from './page-meta.dto';
 
 export class PageQueryDto {
   @NumberFieldOptional({
@@ -24,5 +25,9 @@ export class PageQueryDto {
       tenantId,
     };
     return args;
+  }
+
+  toPageMetaDto(itemCount: number) {
+    return new PageMetaDto(this.skip, this.take, itemCount);
   }
 }

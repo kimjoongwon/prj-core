@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TokenDto } from './tokenDto';
+import type { GetToken200AllOfMeta } from './getToken200AllOfMeta';
 
 export type GetToken200AllOf = {
   data?: TokenDto;
@@ -12,4 +13,5 @@ export type GetToken200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetToken200AllOfMeta;
 };

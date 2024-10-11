@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SpaceDto } from './spaceDto';
+import type { GetAccessibleSpaces200AllOfMeta } from './getAccessibleSpaces200AllOfMeta';
 
 export type GetAccessibleSpaces200AllOf = {
   data?: SpaceDto[];
@@ -12,4 +13,5 @@ export type GetAccessibleSpaces200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetAccessibleSpaces200AllOfMeta;
 };

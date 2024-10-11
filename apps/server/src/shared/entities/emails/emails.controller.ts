@@ -18,6 +18,7 @@ import { CreateEmailDto, EmailDto, UpdateEmailDto, EmailQueryDto } from './dtos'
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { EmailsService } from './emails.service';
+import { query } from 'express';
 
 @ApiTags('ADMIN_EMAILS')
 @Controller()
@@ -85,17 +86,14 @@ export class EmailsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(EmailDto, HttpStatus.OK, { isArray: true })
-  async getEmailsByQuery(@Query() emailQueryDto: EmailQueryDto) {
-    const { count, emails } = await this.service.getManyByQuery(emailQueryDto);
+  async getEmailsByQuery(@Query() query: EmailQueryDto) {
+    const { count, emails } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       emails.map((email) => plainToInstance(EmailDto, email)),
-      new PageMetaDto({
-        pageQueryDto: emailQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

@@ -95,10 +95,7 @@ export class RolesController {
       HttpStatus.OK,
       'success',
       roles.map((role) => plainToInstance(RoleDto, role)),
-      new PageMetaDto({
-        pageQueryDto: roleQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(roleQueryDto.skip, roleQueryDto.take, count),
     );
   }
 }

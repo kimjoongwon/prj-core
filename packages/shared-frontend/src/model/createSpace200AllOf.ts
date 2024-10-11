@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TenancyDto } from './tenancyDto';
+import type { CreateSpace200AllOfMeta } from './createSpace200AllOfMeta';
 
 export type CreateSpace200AllOf = {
   data?: TenancyDto;
@@ -12,4 +13,5 @@ export type CreateSpace200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: CreateSpace200AllOfMeta;
 };

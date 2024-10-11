@@ -26,8 +26,7 @@ export class PageMetaDto {
   @BooleanField()
   readonly hasNextPage: boolean;
 
-  constructor({ pageQueryDto, itemCount }: IPageMetaDtoParameters) {
-    const { skip, take } = pageQueryDto;
+  constructor(skip?: number, take?: number, itemCount: number = 0) {
     const page = PaginationMananger.getPage({ skip, take });
     this.skip = skip;
     this.take = take;

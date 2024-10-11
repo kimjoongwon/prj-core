@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SpaceDto } from './spaceDto';
+import type { GetSpacesByQuery200AllOfMeta } from './getSpacesByQuery200AllOfMeta';
 
 export type GetSpacesByQuery200AllOf = {
   data?: SpaceDto[];
@@ -12,4 +13,5 @@ export type GetSpacesByQuery200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetSpacesByQuery200AllOfMeta;
 };

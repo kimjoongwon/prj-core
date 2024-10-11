@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TimelineItemDto } from './timelineItemDto';
+import type { GetTimelineItemsByQuery200AllOfMeta } from './getTimelineItemsByQuery200AllOfMeta';
 
 export type GetTimelineItemsByQuery200AllOf = {
   data?: TimelineItemDto[];
@@ -12,4 +13,5 @@ export type GetTimelineItemsByQuery200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetTimelineItemsByQuery200AllOfMeta;
 };

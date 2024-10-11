@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PageDto } from './pageDto';
+import type { UpdatePage200AllOfMeta } from './updatePage200AllOfMeta';
 
 export type UpdatePage200AllOf = {
   data?: PageDto;
@@ -12,4 +13,5 @@ export type UpdatePage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: UpdatePage200AllOfMeta;
 };

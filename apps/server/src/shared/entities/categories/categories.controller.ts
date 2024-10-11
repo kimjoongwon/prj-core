@@ -12,7 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../../decorators';
-import { ResponseEntity } from '../common';
+import { PageMetaDto, ResponseEntity } from '../common';
 import { CategoriesService } from './categories.service';
 import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from './dtos';
 
@@ -24,9 +24,19 @@ export class CategoriesController {
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
-  getCategoriesByQuery(@Query() query: CategoryQueryDto, @Headers('tenantId') tenantId: string) {
+  async getCategoriesByQuery(
+    @Query() query: CategoryQueryDto,
+    @Headers('tenantId') tenantId: string,
+  ) {
     const args = query.toArgs(tenantId);
-    return this.categoriesService.getManyByQuery(args);
+    const { categories, count } = await this.categoriesService.getManyByQuery(args);
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'Successfully fetched categories',
+      categories.map((category) => plainToInstance(CategoryDto, category)),
+      query.toPageMetaDto(count),
+    );
   }
 
   @Auth()

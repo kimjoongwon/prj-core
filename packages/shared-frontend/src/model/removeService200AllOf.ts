@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ServiceDto } from './serviceDto';
+import type { RemoveService200AllOfMeta } from './removeService200AllOfMeta';
 
 export type RemoveService200AllOf = {
   data?: ServiceDto;
@@ -12,4 +13,5 @@ export type RemoveService200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: RemoveService200AllOfMeta;
 };

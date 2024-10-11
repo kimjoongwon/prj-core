@@ -139,10 +139,7 @@ export class ClassificationsController {
       HttpStatus.OK,
       'success',
       classifications.map((classification) => plainToInstance(ClassificationDto, classification)),
-      new PageMetaDto({
-        pageQueryDto: query,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

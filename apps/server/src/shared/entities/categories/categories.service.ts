@@ -35,11 +35,13 @@ export class CategoriesService {
 
   async getManyByQuery(args: Prisma.CategoryFindManyArgs) {
     const categories = await this.prisma.category.findMany(args);
+    const count = await this.prisma.category.count({
+      where: args.where,
+    });
 
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'Successfully fetched categories',
-      categories.map((service) => plainToInstance(ServiceDto, service)),
-    );
+    return {
+      categories,
+      count,
+    };
   }
 }

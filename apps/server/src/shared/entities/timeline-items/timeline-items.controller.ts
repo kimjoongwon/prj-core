@@ -111,17 +111,14 @@ export class TimelineItemsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK, { isArray: true })
-  async getTimelineItemsByQuery(@Query() pageQueryDto: TimelineItemQueryDto) {
-    const { count, timelineItems } = await this.service.getManyByQuery(pageQueryDto);
+  async getTimelineItemsByQuery(@Query() query: TimelineItemQueryDto) {
+    const { count, timelineItems } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       timelineItems.map((timelineItem) => plainToInstance(TimelineItemDto, timelineItem)),
-      new PageMetaDto({
-        pageQueryDto,
-        itemCount: count,
-      }),
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

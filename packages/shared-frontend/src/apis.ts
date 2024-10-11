@@ -34,6 +34,10 @@ import type {
   CreateAssignments200AllOf,
   CreateCategory200AllOf,
   CreateCategoryDto,
+  CreateClassification200AllOf,
+  CreateClassificationDto,
+  CreateClassificationDtos,
+  CreateClassifications200AllOf,
   CreateGroupDto,
   CreatePage200AllOf,
   CreatePageDto,
@@ -52,6 +56,7 @@ import type {
   CreateUserDto,
   DeleteAbility200AllOf,
   DeleteAssignment200AllOf,
+  DeleteClassification200AllOf,
   DeleteGroup200AllOf,
   DeletePage200AllOf,
   DeleteService200AllOf,
@@ -74,6 +79,9 @@ import type {
   GetCategoryById200AllOf,
   GetChildrenCategories200AllOf,
   GetChildrenCategoriesParams,
+  GetClassification200AllOf,
+  GetClassificationsByQuery200AllOf,
+  GetClassificationsByQueryParams,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
@@ -106,6 +114,8 @@ import type {
   RemoveAbility200AllOf,
   RemoveAssignment200AllOf,
   RemoveAssignments200AllOf,
+  RemoveClassification200AllOf,
+  RemoveClassifications200AllOf,
   RemoveGroups200AllOf,
   RemoveManySpaceDto,
   RemovePage200AllOf,
@@ -130,6 +140,8 @@ import type {
   UpdateAssignmentDto,
   UpdateCategory200AllOf,
   UpdateCategoryDto,
+  UpdateClassification200AllOf,
+  UpdateClassificationDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdatePage200AllOf,
@@ -7042,6 +7054,576 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemoveServicesMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createClassification = (
+    createClassificationDto: BodyType<CreateClassificationDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateClassification200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createClassificationDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateClassificationMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createClassification>>, {data: BodyType<CreateClassificationDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createClassification(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof createClassification>>>
+    export type CreateClassificationMutationBody = BodyType<CreateClassificationDto>
+    export type CreateClassificationMutationError = ErrorType<void>
+
+    export const useCreateClassification = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createClassification>>,
+        TError,
+        {data: BodyType<CreateClassificationDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateClassificationMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getClassificationsByQuery = (
+    params?: GetClassificationsByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetClassificationsByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetClassificationsByQueryQueryKey = (params?: GetClassificationsByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/admin/classifications`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetClassificationsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
+export type GetClassificationsByQueryQueryError = ErrorType<void>
+
+export const useGetClassificationsByQuery = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
+ params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationsByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetClassificationsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
+export type GetClassificationsByQuerySuspenseQueryError = ErrorType<void>
+
+export const useGetClassificationsByQuerySuspense = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
+ params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationsByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetClassificationsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
+export type GetClassificationsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetClassificationsByQuerySuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationsByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const createClassifications = (
+    createClassificationDtos: BodyType<CreateClassificationDtos>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateClassifications200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/bulk`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createClassificationDtos
+    },
+      options);
+    }
+  
+
+
+export const getCreateClassificationsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createClassifications>>, {data: BodyType<CreateClassificationDtos>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createClassifications(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateClassificationsMutationResult = NonNullable<Awaited<ReturnType<typeof createClassifications>>>
+    export type CreateClassificationsMutationBody = BodyType<CreateClassificationDtos>
+    export type CreateClassificationsMutationError = ErrorType<void>
+
+    export const useCreateClassifications = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createClassifications>>,
+        TError,
+        {data: BodyType<CreateClassificationDtos>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateClassificationsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getClassification = (
+    classificationId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetClassification200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetClassificationQueryKey = (classificationId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/classifications/${classificationId}`] as const;
+    }
+
+    
+export const getGetClassificationQueryOptions = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
+export type GetClassificationQueryError = ErrorType<void>
+
+export const useGetClassification = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
+ classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationQueryOptions(classificationId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetClassificationSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
+export type GetClassificationSuspenseQueryError = ErrorType<void>
+
+export const useGetClassificationSuspense = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
+ classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationSuspenseQueryOptions(classificationId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetClassificationSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetClassificationSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
+export type GetClassificationSuspenseInfiniteQueryError = ErrorType<void>
+
+export const useGetClassificationSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(
+ classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetClassificationSuspenseInfiniteQueryOptions(classificationId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateClassification = (
+    classificationId: string,
+    updateClassificationDto: BodyType<UpdateClassificationDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateClassification200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateClassificationDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateClassificationMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateClassification>>, {classificationId: string;data: BodyType<UpdateClassificationDto>}> = (props) => {
+          const {classificationId,data} = props ?? {};
+
+          return  updateClassification(classificationId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof updateClassification>>>
+    export type UpdateClassificationMutationBody = BodyType<UpdateClassificationDto>
+    export type UpdateClassificationMutationError = ErrorType<void>
+
+    export const useUpdateClassification = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateClassification>>,
+        TError,
+        {classificationId: string;data: BodyType<UpdateClassificationDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateClassificationMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteClassification = (
+    classificationId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteClassification200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteClassificationMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteClassification>>, {classificationId: string}> = (props) => {
+          const {classificationId} = props ?? {};
+
+          return  deleteClassification(classificationId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof deleteClassification>>>
+    
+    export type DeleteClassificationMutationError = ErrorType<void>
+
+    export const useDeleteClassification = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteClassification>>,
+        TError,
+        {classificationId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteClassificationMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeClassifications = (
+    removeClassificationsBody: BodyType<string[]>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveClassifications200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removeClassificationsBody
+    },
+      options);
+    }
+  
+
+
+export const getRemoveClassificationsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeClassifications>>, {data: BodyType<string[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeClassifications(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveClassificationsMutationResult = NonNullable<Awaited<ReturnType<typeof removeClassifications>>>
+    export type RemoveClassificationsMutationBody = BodyType<string[]>
+    export type RemoveClassificationsMutationError = ErrorType<void>
+
+    export const useRemoveClassifications = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeClassifications>>,
+        TError,
+        {data: BodyType<string[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveClassificationsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeClassification = (
+    classificationId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveClassification200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveClassificationMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeClassification>>, {classificationId: string}> = (props) => {
+          const {classificationId} = props ?? {};
+
+          return  removeClassification(classificationId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof removeClassification>>>
+    
+    export type RemoveClassificationMutationError = ErrorType<void>
+
+    export const useRemoveClassification = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeClassification>>,
+        TError,
+        {classificationId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveClassificationMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { PageDto } from './pageDto';
+import type { DeletePage200AllOfMeta } from './deletePage200AllOfMeta';
 
 export type DeletePage200AllOf = {
   data?: PageDto;
@@ -12,4 +13,5 @@ export type DeletePage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: DeletePage200AllOfMeta;
 };

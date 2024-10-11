@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { RoleDto } from './roleDto';
+import type { GetServiceAuthRoles200AllOfMeta } from './getServiceAuthRoles200AllOfMeta';
 
 export type GetServiceAuthRoles200AllOf = {
   data?: RoleDto[];
@@ -12,4 +13,5 @@ export type GetServiceAuthRoles200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  meta?: GetServiceAuthRoles200AllOfMeta;
 };

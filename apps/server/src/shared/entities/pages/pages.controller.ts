@@ -18,6 +18,7 @@ import { CreatePageDto, PageDto, UpdatePageDto, CPageQueryDto } from './dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { PagesService } from './pages.service';
+import { query } from 'express';
 
 @ApiTags('ADMIN_PAGES')
 @Controller()
@@ -89,18 +90,14 @@ export class PagesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PageDto, HttpStatus.OK, { isArray: true })
-  async getPagesByQuery(@Query() pageQueryDto: CPageQueryDto) {
-    const pageQuery = plainToInstance(CPageQueryDto, pageQueryDto);
+  async getPagesByQuery(@Query() query: CPageQueryDto) {
+    const pageQuery = plainToInstance(CPageQueryDto, query);
     const { count, pages } = await this.service.getManyByQuery(pageQuery.toArgs());
-    console.log('pages', pages);
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       pages.map((page) => plainToInstance(PageDto, page)),
-      new PageMetaDto({
-        pageQueryDto: pageQueryDto,
-        itemCount: count,
-      }),
+      query.toPageMetaDto(count),
     );
   }
 }
