@@ -8,6 +8,7 @@ import { ServiceAuthModule } from './auth/service/auth/service-auth.module';
 import { AuthModule } from './auth/auth.module';
 import {
   AdminCategoriesModule,
+  AdminClassificationsModule,
   AdminGroupsModule,
   AdminRolesModule,
   AdminServicesModule,
@@ -46,6 +47,7 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
     AdminPagesModule,
     AdminServicesModule,
     ServicesModule,
+    AdminClassificationsModule,
     RouterModule.register([
       {
         path: 'api',
@@ -79,6 +81,10 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
                   {
                     path: 'assignments',
                     module: AdminAssignmentsModule,
+                  },
+                  {
+                    path: 'classifications',
+                    module: AdminClassificationsModule,
                   },
                 ],
               },
