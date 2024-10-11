@@ -16,6 +16,7 @@ import {
 import { renderButton } from '../../renderer/renderButton';
 import {
   ButtonProps,
+  SortDescriptor,
   Spacer,
   Table,
   TableBody,
@@ -29,11 +30,21 @@ import { TableContainer } from './TableContainer';
 import { HStack } from '../HStack';
 import { observer } from 'mobx-react-lite';
 import { difference, uniq } from 'lodash-es';
+import { Pagination } from '../Pagination';
 
-export type DataGridState = {
-  selectedKeys: string[];
+export type PageQuery = {
   take: number;
   skip: number;
+};
+
+export type TableQuery = {
+  [key: string]: any;
+} & PageQuery;
+
+export type DataGridState = {
+  currentSort?: SortDescriptor;
+  selectedKeys?: string[];
+  query?: TableQuery;
 };
 
 export interface DataGridProps<T> extends TableProps {
@@ -67,6 +78,7 @@ export const DataGrid = observer(
       selectedKey = 'id',
       state,
       emptyContent = '데이터가 없습니다.',
+      totalCount,
       ...rest
     } = props;
 
@@ -102,7 +114,7 @@ export const DataGrid = observer(
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
-
+    console.log({ state });
     return (
       <TableContainer>
         <HStack className="w-full">
@@ -135,10 +147,20 @@ export const DataGrid = observer(
               difference(state?.selectedKeys || [], Array.from(selection));
             }
           }}
+          sortDescriptor={state.currentSort}
+          onSortChange={sort => {
+            console.log('sort', sort);
+            state.query = {
+              ...state.query,
+              [`${sort.column}SortOrder`]:
+                sort.direction === 'ascending' ? 'asc' : 'desc',
+            };
+            state.currentSort = sort;
+          }}
         >
           <TableHeader>
             {headers?.map(header => (
-              <TableColumn key={header.column.id}>
+              <TableColumn allowsSorting key={header.column.id}>
                 {header.isPlaceholder
                   ? null
                   : flexRender(
@@ -166,6 +188,8 @@ export const DataGrid = observer(
             ))}
           </TableBody>
         </Table>
+        <Spacer y={4} />
+        <Pagination totalCount={totalCount} state={state.query} />
       </TableContainer>
     );
   },

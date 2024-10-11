@@ -3,13 +3,11 @@
 import { Pagination, PaginationProps } from '@nextui-org/react';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { TableQuery } from '../DataGrid';
 
 export interface PaginationViewProps<T> extends Omit<PaginationProps, 'total'> {
   totalCount: number;
-  state: {
-    take: number;
-    skip: number;
-  };
+  state: TableQuery;
 }
 
 export const PaginationView = observer((props: PaginationViewProps<T>) => {
@@ -21,8 +19,6 @@ export const PaginationView = observer((props: PaginationViewProps<T>) => {
     totalCount = 1,
     ...rest
   } = props;
-
-  console.log(totalCount);
 
   const [currentPage, setCurrentPage] = useState(0);
 

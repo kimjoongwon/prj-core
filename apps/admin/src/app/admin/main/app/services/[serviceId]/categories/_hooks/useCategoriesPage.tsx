@@ -1,9 +1,12 @@
 import { useQueries } from './useQueries';
+import { useState } from './useState';
 
 export const useCategoriesPage = () => {
-  const queries = useQueries();
+  const state = useState();
+  const queries = useQueries({ state });
 
   return {
     queries,
+    state,
   };
 };

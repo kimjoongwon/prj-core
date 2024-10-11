@@ -4,11 +4,13 @@ import { CategoriesTableProps } from '..';
 
 export const useState = (context: { props?: CategoriesTableProps }) => {
   const { props } = context;
+
+  if (props.state.query) {
+    return props.state;
+  }
+
   const state = useLocalObservable<DataGridState>(() => ({
     selectedKeys: [],
-    skip: 0,
-    take: 5,
-    ...props?.state,
   }));
 
   return state;
