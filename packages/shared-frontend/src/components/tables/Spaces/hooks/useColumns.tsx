@@ -5,7 +5,6 @@ import { LinkCell } from '../../../cells/Link';
 import { useParams } from 'next/navigation';
 
 export const useColumns = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
   const columnHelper = createColumnHelper<SpaceDto>();
 
   const columns = [

@@ -1,15 +1,18 @@
 'use client';
 
-import { Meta, Spacer, VStack } from '@shared/frontend';
+import { Card, Meta, Spacer, Text } from '@shared/frontend';
 import { useSpacePage } from './_hooks/useSpacePage';
+import { Divider } from '@nextui-org/react';
 
 const SpacePage = () => {
   const { space } = useSpacePage();
   return (
-    <VStack className="flex-grow-0">
-      <Spacer y={4} />
+    <Card className="p-4 space-y-4">
+      <Text variant="h3">그룹 편집</Text>
+      <Spacer y={8} />
       <Meta name={'공간명'} value={space?.name || ''} />
-    </VStack>
+      <Divider />
+    </Card>
   );
 };
 
