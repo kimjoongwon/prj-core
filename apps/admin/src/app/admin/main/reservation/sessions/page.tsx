@@ -1,19 +1,13 @@
-import { getSessionsByQuery, SessionsTable } from '@shared/frontend';
-import { cookies } from 'next/headers';
+'use client';
+
 import React from 'react';
+import { SessionsTable } from '@shared/frontend';
+import { useSessionsPage } from './_hooks/useSessionsPage';
 
-const SessionsPage = async () => {
-  const accessToken = cookies().get('accessToken');
-  const sessionsQuery = await getSessionsByQuery(
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken?.value}`,
-      },
-    },
-  );
+const SessionsPage = () => {
+  const { sessions } = useSessionsPage();
 
-  return <SessionsTable sessions={sessionsQuery.data || []} />;
+  return <SessionsTable sessions={sessions} />;
 };
 
 export default SessionsPage;

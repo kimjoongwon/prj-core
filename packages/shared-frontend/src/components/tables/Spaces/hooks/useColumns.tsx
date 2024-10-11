@@ -12,7 +12,7 @@ export const useColumns = () => {
     columnHelper.accessor('name', {
       header: '이름',
       cell: props => {
-        const href = `/admin/main/spaces/${props.row.original.id}`;
+        const href = `/admin/main/gym/spaces/${props.row.original.id}`;
         return <LinkCell value={props.getValue()} href={href} />;
       },
     }),

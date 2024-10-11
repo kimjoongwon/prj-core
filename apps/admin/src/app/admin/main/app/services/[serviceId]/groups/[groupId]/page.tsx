@@ -11,9 +11,9 @@ const GroupPage = observer(() => {
     onClickAdd,
     queries: { group, service, assignments },
   } = useGroupPage();
-  console.log('assignments  :', assignments);
+
   return (
-    <Card variant="outlined" className="p-4 space-y-4">
+    <Card variant="outlined" className="p-4 space-y-4 border-3 border-red-400">
       <Text variant="h3">{service?.label} 그룹</Text>
       <Spacer y={8} />
       <Meta name={'서비스 명'} value={service?.name || ''} />

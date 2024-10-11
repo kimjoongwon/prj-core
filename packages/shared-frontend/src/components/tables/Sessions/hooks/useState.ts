@@ -4,6 +4,8 @@ import { DataGridState } from '../../../ui/DataGrid';
 export const useState = () => {
   const state = useLocalObservable<DataGridState>(() => ({
     selectedKeys: [],
+    take: 10,
+    skip: 0,
   }));
 
   return state;

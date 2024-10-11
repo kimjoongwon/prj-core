@@ -4,35 +4,22 @@ import { useState } from './useState';
 import { useHandlers } from './useHandlers';
 import { useContext } from './useContext';
 import { useMutations } from './useMutations';
+import { useLeftButtons } from './useLeftButtons';
+import { useRightButtons } from './useRightButtons';
+import { SpacesTableProps } from '..';
 
-export const useProps = () => {
-  const state = useState();
+export const useSpacesTable = (props?: SpacesTableProps) => {
+  const state = useState({ props });
   const context = useContext();
   const data = useMutations();
-
-  const { onClickCreate, onClickRemove } = useHandlers({
+  const handlers = useHandlers({
     state,
-    data,
     context,
+    data,
   });
-
+  const leftButtons = useLeftButtons({ props, handlers });
+  const rightButtons = useRightButtons({ props, handlers });
   const columns = useColumns();
-
-  const leftButtons: ButtonProps[] = [
-    {
-      children: '생성',
-      color: 'primary',
-      onClick: onClickCreate,
-    },
-  ];
-
-  const rightButtons: ButtonProps[] = [
-    {
-      children: '삭제',
-      color: 'danger',
-      onClick: onClickRemove,
-    },
-  ];
 
   return {
     leftButtons,

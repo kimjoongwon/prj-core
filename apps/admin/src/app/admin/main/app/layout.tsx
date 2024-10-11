@@ -8,7 +8,7 @@ interface AppLayoutProps {
 const AppLayout = (props: AppLayoutProps) => {
   const { children } = props;
 
-  return <VStack className="w-full items-center p-4">{children}</VStack>;
+  return <VStack className="w-full p-4">{children}</VStack>;
 };
 
 export default AppLayout;

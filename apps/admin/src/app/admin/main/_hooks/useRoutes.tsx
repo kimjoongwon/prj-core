@@ -10,7 +10,7 @@ export const useRoutes = () => {
     },
     {
       name: '지점',
-      pathname: '/admin/main/spaces',
+      pathname: '/admin/main/gym/spaces',
       icon: <CiGrid41 />,
     },
     {

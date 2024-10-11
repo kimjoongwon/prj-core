@@ -6,7 +6,7 @@ type SessionsLayoutProps = {
 };
 
 const SessionsLayout = ({ children }: SessionsLayoutProps) => {
-  return <VStack className="w-full">{children}</VStack>;
+  return children;
 };
 
 export default SessionsLayout;

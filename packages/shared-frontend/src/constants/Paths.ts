@@ -11,9 +11,9 @@ export const SERVICE_PATH = `/admin/main/app/services/:serviceId`;
 export const SERVICE_EDIT_PATH = `/admin/main/app/services/:serviceId/edit`;
 
 // 매장관리 > 공간 관리
-export const SPACES_PATH = `/admin/main/spaces`;
-export const SPACE_PATH = `/admin/main/spaces/:spaceId`;
-export const SPACE_EDIT_PATH = `/admin/main/spaces/:spaceId/edit`;
+export const SPACES_PATH = `/admin/main/gym/spaces`;
+export const SPACE_PATH = `/admin/main/gym/spaces/:spaceId`;
+export const SPACE_EDIT_PATH = `/admin/main/gym/spaces/:spaceId/edit`;
 
 // 예약관리 > 타임라인관리
 export const TIMELINE_ITEMS_PATH = `/admin/main/reservation/timelineItems`;

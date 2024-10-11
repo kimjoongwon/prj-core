@@ -32,6 +32,8 @@ import { difference, uniq } from 'lodash-es';
 
 export type DataGridState = {
   selectedKeys: string[];
+  take: number;
+  skip: number;
 };
 
 export interface DataGridProps<T> extends TableProps {
@@ -44,6 +46,9 @@ export interface DataGridProps<T> extends TableProps {
   selectedKey?: keyof T;
   emptyContent?: string;
 }
+
+export interface CustomDataGridProps
+  extends Omit<DataGridProps<any>, 'data' | 'columns'> {}
 
 export const DataGrid = observer(
   <

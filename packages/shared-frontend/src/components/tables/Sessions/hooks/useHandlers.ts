@@ -3,7 +3,6 @@ import { useContext } from './useContext';
 import { toJS } from 'mobx';
 import { galaxy } from '../../../../providers/App';
 import { useMutations } from './useMutations';
-import { revalidatePathGetSessionsByQuery } from '../../../../actions/revalidatePathGetSessionsByQuery';
 
 export const useHandlers = (props: {
   state: ReturnType<typeof useState>;
@@ -20,7 +19,7 @@ export const useHandlers = (props: {
 
   const onClickCreate = () => {
     galaxy.router.push({
-      url: '/admin/main/sessions/:sessionId/edit',
+      url: '/admin/main/reservation/sessions/:sessionId/edit',
       params: {
         serviceId,
         sessionId: 'new',
@@ -30,10 +29,7 @@ export const useHandlers = (props: {
 
   const onClickRemove = () => {
     const sessionIds = toJS(state.selectedKeys);
-
     removeSessions.mutateAsync({ data: sessionIds });
-
-    revalidatePathGetSessionsByQuery();
   };
 
   return {
