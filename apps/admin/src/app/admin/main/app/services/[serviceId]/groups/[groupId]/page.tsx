@@ -13,7 +13,7 @@ const GroupPage = observer(() => {
   } = useGroupPage();
 
   return (
-    <Card variant="outlined" className="p-4 space-y-4 border-3 border-red-400">
+    <Card variant="outlined" className="p-4 space-y-4">
       <Text variant="h3">{service?.label} 그룹</Text>
       <Spacer y={8} />
       <Meta name={'서비스 명'} value={service?.name || ''} />

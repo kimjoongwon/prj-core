@@ -22,6 +22,7 @@ export const SessionsTable = (props: SessionsTableProps) => {
     rightButtons = [],
     columns = [],
   } = props;
+
   const {
     columns: _columns,
     leftButtons: _leftButtons,

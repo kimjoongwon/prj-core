@@ -4,9 +4,9 @@ import { CiCalendar, CiGrid41, CiBoxList, CiSettings } from 'react-icons/ci';
 export const useRoutes = () => {
   let routes: Route[] = [
     {
-      name: '내 예약',
-      pathname: '/admin/main/reservations',
-      icon: <CiCalendar />,
+      name: '이용자',
+      pathname: '/admin/main/users',
+      icon: <CiGrid41 />,
     },
     {
       name: '지점',

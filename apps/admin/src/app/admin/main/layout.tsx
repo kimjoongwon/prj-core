@@ -1,6 +1,6 @@
 'use client';
 
-import { AppBar, BottomTab } from '@shared/frontend';
+import { AppBar, BottomTab, VStack } from '@shared/frontend';
 import { useRoutes } from './_hooks/useRoutes';
 
 interface MainLayoutProps {
@@ -14,7 +14,7 @@ const MainLayout = (props: MainLayoutProps) => {
   return (
     <>
       <AppBar />
-      {children}
+      <VStack className="flex-1 p-4">{children}</VStack>
       <BottomTab tabs={routes} />
     </>
   );
