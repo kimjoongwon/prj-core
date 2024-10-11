@@ -12,7 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../../decorators';
-import { PageMetaDto, ResponseEntity } from '../common';
+import { ResponseEntity } from '../common';
 import { CategoriesService } from './categories.service';
 import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from './dtos';
 
@@ -28,6 +28,7 @@ export class CategoriesController {
     @Query() query: CategoryQueryDto,
     @Headers('tenantId') tenantId: string,
   ) {
+    console.log('query', query);
     const args = query.toArgs(tenantId);
     const { categories, count } = await this.categoriesService.getManyByQuery(args);
 

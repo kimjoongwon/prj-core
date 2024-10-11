@@ -17,17 +17,13 @@ export const CategoriesTable = observer((props: CategoriesTableProps) => {
   });
 
   return (
-    <>
-      <DataGrid
-        {...rest}
-        columns={columns}
-        data={categories}
-        leftButtons={leftButtons}
-        rightButtons={rightButtons}
-        state={state}
-      />
-      <Spacer y={4} />
-      <Pagination state={state} totalCount={totalCount} />
-    </>
+    <DataGrid
+      {...rest}
+      columns={columns}
+      data={categories}
+      leftButtons={leftButtons}
+      rightButtons={rightButtons}
+      state={state}
+    />
   );
 });

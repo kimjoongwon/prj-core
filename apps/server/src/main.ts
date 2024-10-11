@@ -11,7 +11,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 

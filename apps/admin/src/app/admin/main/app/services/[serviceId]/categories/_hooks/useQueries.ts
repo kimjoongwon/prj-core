@@ -1,10 +1,11 @@
 import { useGetCategoriesByQuerySuspense } from '@shared/frontend';
-import { useParams } from 'next/navigation';
+import { useState } from './useState';
 
-export const useQueries = () => {
-  const { serviceId } = useParams<{ serviceId: string }>();
+export const useQueries = (context: { state: ReturnType<typeof useState> }) => {
+  const { state } = context;
+  console.log('??');
   const { data: getCategoriesByQueryResponse } =
-    useGetCategoriesByQuerySuspense({ serviceId, take: 4 });
+    useGetCategoriesByQuerySuspense(state.query);
 
   return {
     categories: getCategoriesByQueryResponse.data || [],
