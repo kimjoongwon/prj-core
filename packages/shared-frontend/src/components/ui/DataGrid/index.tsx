@@ -147,7 +147,7 @@ export const DataGrid = observer(
               difference(state?.selectedKeys || [], Array.from(selection));
             }
           }}
-          sortDescriptor={state.currentSort}
+          sortDescriptor={state?.currentSort || undefined}
           onSortChange={sort => {
             console.log('sort', sort);
             state.query = {
@@ -189,7 +189,7 @@ export const DataGrid = observer(
           </TableBody>
         </Table>
         <Spacer y={4} />
-        <Pagination totalCount={totalCount} state={state.query} />
+        <Pagination totalCount={totalCount} state={state?.query} />
       </TableContainer>
     );
   },
