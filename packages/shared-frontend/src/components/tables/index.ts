@@ -7,3 +7,4 @@ export * from './Categories';
 export * from './Groups';
 export * from './Users';
 export * from './Assignments';
+export * from './Classifications';

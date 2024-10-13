@@ -3,7 +3,7 @@
 import { TableProps } from '@nextui-org/react';
 import { GroupDto } from '../../../model/groupDto';
 import { DataGrid, DataGridState } from '../../ui';
-import { useGroupsTables } from './_hooks/useGroupsTable';
+import { useGroupsTables } from './hooks/useGroupsTable';
 import { observer } from 'mobx-react-lite';
 
 export interface GroupsTableProps extends TableProps {

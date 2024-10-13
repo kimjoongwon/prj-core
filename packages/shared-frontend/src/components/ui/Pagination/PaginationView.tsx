@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { TableQuery } from '../DataGrid';
 
-export interface PaginationViewProps<T> extends Omit<PaginationProps, 'total'> {
+export interface PaginationViewProps extends Omit<PaginationProps, 'total'> {
   totalCount: number;
   state: TableQuery;
 }
 
-export const PaginationView = observer((props: PaginationViewProps<T>) => {
+export const PaginationView = observer((props: PaginationViewProps) => {
   const {
     state = {
       take: 10,

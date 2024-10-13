@@ -9,12 +9,12 @@ const CategoriesPage = observer(() => {
     state,
     queries: { categories, totalCount },
   } = useCategoriesPage();
-  console.log('CategoriesPage');
+
   return (
     <CategoriesTable
+      state={state}
       categories={categories}
       totalCount={totalCount}
-      state={state}
     />
   );
 });
