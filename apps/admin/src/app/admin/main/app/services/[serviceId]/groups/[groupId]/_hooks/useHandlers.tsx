@@ -2,7 +2,7 @@ import {
   Button,
   CreateAssignmentDto,
   galaxy,
-  UsersTable,
+  ServiceItemModalBody,
 } from '@shared/frontend';
 import { useQueries } from './useQueries';
 import { useState } from './useState';
@@ -15,20 +15,18 @@ export const useHandlers = (context: {
     queries: { service, users, createAssignments, group },
     state,
   } = context;
-  console.log('users', users);
   const onClickAddToGroup = () => {
-    if (state.selectedKeys.length === 0) {
+    if (state?.selectedKeys?.length === 0) {
       galaxy.modal.destory();
       return;
     }
 
-    const createAssignmentsDtos: CreateAssignmentDto[] = state.selectedKeys.map(
-      id => ({
+    const createAssignmentsDtos: CreateAssignmentDto[] =
+      state?.selectedKeys?.map(id => ({
         serviceItemId: id!,
         serviceId: service?.id!,
         groupId: group?.id!,
-      }),
-    );
+      })) || [];
 
     createAssignments({
       data: {
@@ -46,14 +44,9 @@ export const useHandlers = (context: {
   };
 
   const openGroupAddModal = () => {
-    const bodys: Record<string, React.ReactNode> = {
-      user: <UsersTable selectionMode="multiple" users={users} state={state} />,
-    };
-
-    const body = service?.name ? bodys[service?.name] : <></>;
     galaxy.modal.build({
       header: '이용자 목록',
-      body: body,
+      body: <ServiceItemModalBody items={users} state={state} type="user" />,
       footer: (
         <Button onClick={onClickAddToGroup}>{service?.label} 추가</Button>
       ),

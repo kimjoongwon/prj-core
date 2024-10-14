@@ -1,1 +1,1 @@
-export { SpaceSelectModalContent } from './contents/SpaceSelect';
+export * from './bodys';

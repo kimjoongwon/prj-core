@@ -53,7 +53,7 @@ export class ClassificationsService implements IService {
         removedAt: null,
       },
       include: {
-        group: true,
+        category: true,
         service: true,
       },
     });
