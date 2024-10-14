@@ -1,4 +1,5 @@
 import {
+  useGetAncestorCategoriesSuspense,
   useGetCategoryByIdSuspense,
   useGetClassificationsByQuerySuspense,
   useGetServiceSuspense,
@@ -26,10 +27,14 @@ export const useQueries = (context: { state: ReturnType<typeof useState> }) => {
 
   const { data: getServiceResponse } = useGetServiceSuspense(serviceId);
 
+  const { data: getAncestorCategoriesResponse } =
+    useGetAncestorCategoriesSuspense(categoryId);
+
   return {
     classifications: getClassificationByQueryResponse.data || [],
     spaces: getSpacesByQueryResponse.data || [],
     category: getCategoryByIdResponse.data,
     service: getServiceResponse.data,
+    ancestorCategories: getAncestorCategoriesResponse.data || [],
   };
 };

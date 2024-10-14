@@ -71,6 +71,7 @@ import type {
   GetAccessibleSpaces200AllOf,
   GetAllPageByType200AllOf,
   GetAllService200AllOf,
+  GetAncestorCategories200AllOf,
   GetAssignment200AllOf,
   GetAssignmentsByQuery200AllOf,
   GetAssignmentsByQueryParams,
@@ -1378,6 +1379,136 @@ export const useGetChildrenCategoriesSuspenseInfinite = <TData = InfiniteData<Aw
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
   const queryOptions = getGetChildrenCategoriesSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAncestorCategories = (
+    categoryId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAncestorCategories200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAncestorCategoriesQueryKey = (categoryId: string,) => {
+    return [`http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`] as const;
+    }
+
+    
+export const getGetAncestorCategoriesQueryOptions = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAncestorCategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
+export type GetAncestorCategoriesQueryError = ErrorType<unknown>
+
+export const useGetAncestorCategories = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
+ categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAncestorCategoriesQueryOptions(categoryId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAncestorCategoriesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAncestorCategoriesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
+export type GetAncestorCategoriesSuspenseQueryError = ErrorType<unknown>
+
+export const useGetAncestorCategoriesSuspense = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAncestorCategoriesSuspenseQueryOptions(categoryId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAncestorCategoriesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAncestorCategoriesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
+export type GetAncestorCategoriesSuspenseInfiniteQueryError = ErrorType<unknown>
+
+export const useGetAncestorCategoriesSuspenseInfinite = <TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const queryOptions = getGetAncestorCategoriesSuspenseInfiniteQueryOptions(categoryId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 

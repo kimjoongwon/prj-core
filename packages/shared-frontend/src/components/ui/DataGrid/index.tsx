@@ -105,16 +105,16 @@ export const DataGrid = observer(
         columnVisibility,
         rowSelection,
       },
-      debugTable: true,
-      debugHeaders: true,
-      debugColumns: true,
+      debugTable: false,
+      debugHeaders: false,
+      debugColumns: false,
     });
 
     if (!table) return null;
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
-    console.log({ state });
+
     return (
       <TableContainer>
         <HStack className="w-full">

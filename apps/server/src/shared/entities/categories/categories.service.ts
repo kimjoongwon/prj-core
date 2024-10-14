@@ -1,12 +1,7 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
-import { ResponseEntity } from '../common/response.entity';
-import { plainToInstance } from 'class-transformer';
-import { ServiceDto } from '../services/dtos/service.dto';
-import { CategoryQueryDto } from './dtos';
-import { ContextProvider } from '../../providers';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -20,6 +15,10 @@ export class CategoriesService {
     return services;
   }
 
+  getUnique(args: Prisma.CategoryFindUniqueArgs) {
+    return this.prisma.category.findUnique(args);
+  }
+
   findCategoryById(id: string) {
     return this.prisma.category.findUnique({
       where: { id },
@@ -31,6 +30,10 @@ export class CategoriesService {
       where: { id },
       data: updateCategoryDto,
     });
+  }
+
+  getMany(args: Prisma.CategoryFindManyArgs) {
+    return this.prisma.category.findMany(args);
   }
 
   async getManyByQuery(args: Prisma.CategoryFindManyArgs) {

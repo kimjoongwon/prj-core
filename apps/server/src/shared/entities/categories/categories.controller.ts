@@ -28,7 +28,6 @@ export class CategoriesController {
     @Query() query: CategoryQueryDto,
     @Headers('tenantId') tenantId: string,
   ) {
-    console.log('query', query);
     const args = query.toArgs(tenantId);
     const { categories, count } = await this.categoriesService.getManyByQuery(args);
 

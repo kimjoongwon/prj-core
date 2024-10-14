@@ -5,7 +5,7 @@ import { CategoriesService } from '@shared';
 export class CategoryService {
   constructor(private readonly categoriesService: CategoriesService) {}
   getChildCategories(ansestorIds: string[]) {
-    return this.categoriesService.getManyByQuery({
+    return this.categoriesService.getMany({
       where: {
         NOT: {
           ancestorIds: {
@@ -14,5 +14,22 @@ export class CategoryService {
         },
       },
     });
+  }
+
+  async getAncestorCategories(categoryId: string) {
+    const category = await this.categoriesService.getUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+    const categories = await this.categoriesService.getMany({
+      where: {
+        id: {
+          in: category.ancestorIds,
+        },
+      },
+    });
+
+    return categories;
   }
 }

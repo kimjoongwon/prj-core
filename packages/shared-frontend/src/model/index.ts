@@ -126,6 +126,8 @@ export * from './getAllPageByType200AllOfPageMeta';
 export * from './getAllService200AllOf';
 export * from './getAllService200AllOfMeta';
 export * from './getAllService200AllOfPageMeta';
+export * from './getAncestorCategories200AllOf';
+export * from './getAncestorCategories200AllOfMeta';
 export * from './getAssignment200AllOf';
 export * from './getAssignment200AllOfMeta';
 export * from './getAssignment200AllOfPageMeta';

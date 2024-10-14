@@ -12,6 +12,7 @@ export const useCategoryPage = () => {
     queries,
     state,
   });
+
   return {
     handlers,
     mutations,
