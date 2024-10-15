@@ -1,7 +1,7 @@
 import { useState } from './useState';
 import { useMutations } from './useMutations';
 import {
-  ClassificationDto,
+  Button,
   CreateClassificationDto,
   galaxy,
   ServiceItemModalBody,
@@ -18,7 +18,7 @@ export const useHandlers = (context: {
   const {
     state,
     mutations: { deleteClassifications, createClassifications },
-    queries: { spaces },
+    queries: { spaces, spacesTotalCount, refetchClassifications },
   } = context;
   const { categoryId, serviceId } = useParams<{
     serviceId: string;
@@ -40,22 +40,6 @@ export const useHandlers = (context: {
       },
     });
   };
-
-  // '카테고리 할당' 버튼 클릭 시
-  const onClickCategoryAssignments = () => {
-    galaxy.modal.build({
-      header: '카테고리 할당',
-      body: (
-        <ServiceItemModalBody
-          items={spaces as SpaceDto[]}
-          state={state.spacesTable}
-          type={'space'}
-        />
-      ),
-      footer: '',
-    });
-  };
-
   // '삭제' 버튼 클릭 시
   const onClickDeleteClassification = () => {
     deleteClassifications.mutate({
@@ -79,6 +63,7 @@ export const useHandlers = (context: {
       },
       {
         onSuccess: () => {
+          refetchClassifications();
           galaxy.modal.destory();
         },
         onError: () => {
@@ -86,6 +71,28 @@ export const useHandlers = (context: {
         },
       },
     );
+  };
+
+  // '카테고리 할당' 버튼 클릭 시
+  const onClickCategoryAssignments = () => {
+    galaxy.modal.build({
+      header: '카테고리 할당',
+      body: (
+        <ServiceItemModalBody
+          hideHeader
+          hideButtons
+          items={spaces as SpaceDto[]}
+          state={state.spacesTable}
+          type={'space'}
+          totalCount={spacesTotalCount || 0}
+        />
+      ),
+      footer: (
+        <Button color="primary" onClick={onClickAdd}>
+          추가
+        </Button>
+      ),
+    });
   };
 
   return {
