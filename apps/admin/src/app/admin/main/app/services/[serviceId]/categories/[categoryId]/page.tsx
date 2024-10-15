@@ -7,7 +7,7 @@ import { useCategoryPage } from './_hooks/useCategoryPage';
 
 const CategoryPage = () => {
   const {
-    queries: { category, service, ancestorCategories },
+    queries: { category, service, ancestorCategories, classifications },
     handlers: { onClickCategoryAssignments },
   } = useCategoryPage();
 
@@ -26,7 +26,7 @@ const CategoryPage = () => {
       <Button color="primary" onClick={onClickCategoryAssignments}>
         카테고리 할당
       </Button>
-      <ClassificationsTable classifications={[]} />
+      <ClassificationsTable hideHeader classifications={classifications} />
     </Card>
   );
 };

@@ -33,26 +33,27 @@ import { difference, uniq } from 'lodash-es';
 import { Pagination } from '../Pagination';
 
 export type PageQuery = {
-  take: number;
-  skip: number;
+  take?: number;
+  skip?: number;
 };
 
 export type TableQuery = {
   [key: string]: any;
 } & PageQuery;
 
-export type DataGridState = {
+export type DataGridState<T> = {
   currentSort?: SortDescriptor;
   selectedKeys?: string[];
-  query?: TableQuery;
+  query?: TableQuery & T;
 };
 
 export interface DataGridProps<T> extends TableProps {
-  state?: DataGridState;
+  state?: DataGridState<T>;
   data: T[];
   columns: ColumnDef<T, any>[];
   leftButtons?: ButtonProps[];
   rightButtons?: ButtonProps[];
+  hideButtons?: boolean;
   actions?: ('삭제' | '생성' | '제거')[];
   selectedKey?: string;
   emptyContent?: string;
@@ -79,6 +80,7 @@ export const DataGrid = observer(
       state,
       emptyContent = '데이터가 없습니다.',
       totalCount,
+      hideButtons,
       ...rest
     } = props;
 
@@ -117,27 +119,29 @@ export const DataGrid = observer(
 
     return (
       <TableContainer>
-        <HStack className="w-full">
-          <HStack className="w-full justify-start">
-            {leftButtons?.map(renderButton)}
-          </HStack>
-          <HStack className="w-full justify-end space-x-2">
-            {rightButtons?.map(renderButton)}
-          </HStack>
-        </HStack>
-        <Spacer y={1} />
+        {!hideButtons && (
+          <>
+            <HStack className="w-full">
+              <HStack className="w-full justify-start">
+                {leftButtons?.map(renderButton)}
+              </HStack>
+              <HStack className="w-full justify-end space-x-2">
+                {rightButtons?.map(renderButton)}
+              </HStack>
+            </HStack>
+            <Spacer y={1} />
+          </>
+        )}
         <Table
           {...rest}
           defaultSelectedKeys={state?.selectedKeys || []}
           onSelectionChange={selection => {
-            console.log('daragrid: state.selectedKeys', selection);
             if (selection instanceof Set) {
               // @ts-ignore
               state.selectedKeys = Array.from(selection);
               return;
             }
             if (selection === 'all') {
-              console.log('data', data);
               const allKey =
                 // @ts-ignore
                 data?.map(row => row?.[selectedKey as string]) || [];
@@ -149,7 +153,6 @@ export const DataGrid = observer(
           }}
           sortDescriptor={state?.currentSort || undefined}
           onSortChange={sort => {
-            console.log('sort', sort);
             state.query = {
               ...state.query,
               [`${sort.column}SortOrder`]:
@@ -189,7 +192,9 @@ export const DataGrid = observer(
           </TableBody>
         </Table>
         <Spacer y={4} />
-        <Pagination totalCount={totalCount} state={state?.query} />
+        {!!state?.query.take && (
+          <Pagination totalCount={totalCount} state={state?.query} />
+        )}
       </TableContainer>
     );
   },

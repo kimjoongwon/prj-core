@@ -1,14 +1,12 @@
 'use client';
 
-import { TableProps } from '@nextui-org/react';
-import { DataGrid, DataGridState } from '../../ui';
+import { CustomDataGridProps, DataGrid } from '../../ui';
 import { useUsersTables } from './_hooks/useUsersTable';
 import { UserDto } from '../../../model';
 import { observer } from 'mobx-react-lite';
 
-export interface UsersTableProps extends TableProps {
+export interface UsersTableProps extends CustomDataGridProps {
   users: UserDto[];
-  state: DataGridState;
 }
 
 export const UsersTable = observer((props: UsersTableProps) => {

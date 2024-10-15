@@ -1,3 +1,5 @@
+import { isEmpty } from 'remeda';
+
 export class PaginationMananger {
   static getPage = ({ skip, take }: { skip: number; take: number }): number => {
     if (take === 0) {
@@ -8,6 +10,9 @@ export class PaginationMananger {
   };
 
   static toArgs = <T>(query: T) => {
+    if (isEmpty(query as any)) {
+      return {};
+    }
     return Object.entries(query)
       .map(([key, value]) => {
         let object;
@@ -36,7 +41,8 @@ export class PaginationMananger {
 
         return object;
       })
-      .reduce((acc, curr) => {
+      ?.reduce((acc, curr) => {
+        console.log('acc', acc);
         return {
           ...acc,
           ...curr,

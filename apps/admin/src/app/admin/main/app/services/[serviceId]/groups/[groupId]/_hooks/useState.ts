@@ -1,10 +1,12 @@
-import { DataGridState } from '@shared/frontend';
+import { DataGridState, GetGroupsByQueryParams } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
 
 export const useState = () => {
-  const state = useLocalObservable<DataGridState>(() => ({
-    selectedKeys: [],
-  }));
+  const state = useLocalObservable<DataGridState<GetGroupsByQueryParams>>(
+    () => ({
+      selectedKeys: [],
+    }),
+  );
 
   return state;
 };

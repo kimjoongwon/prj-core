@@ -4,6 +4,7 @@ import { Pagination, PaginationProps } from '@nextui-org/react';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { TableQuery } from '../DataGrid';
+import { cons } from 'effect/List';
 
 export interface PaginationViewProps extends Omit<PaginationProps, 'total'> {
   totalCount: number;
@@ -28,7 +29,9 @@ export const PaginationView = observer((props: PaginationViewProps) => {
   };
 
   const total = Math.ceil(totalCount / state.take);
+  console.log('total', total);
 
+  console.log('PaginationView', total, state, totalCount);
   return (
     <Pagination
       {...rest}

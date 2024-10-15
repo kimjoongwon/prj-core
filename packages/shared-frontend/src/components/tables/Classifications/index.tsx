@@ -12,9 +12,11 @@ export const ClassificationsTable = observer(
     const { classifications, ...rest } = props;
     const { columns, rightButtons, leftButtons } =
       useClassificationsTables(props);
+
     return (
       <DataGrid
         {...rest}
+        hideButtons
         rightButtons={rightButtons}
         leftButtons={leftButtons}
         data={classifications}

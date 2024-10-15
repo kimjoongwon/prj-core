@@ -7,7 +7,6 @@ import { SpaceDto } from '../../../model/spaceDto';
 
 export interface SpacesTableProps extends CustomDataGridProps {
   spaces: SpaceDto[];
-  selectedKey?: keyof SpaceDto;
 }
 
 export const SpacesTable = observer((props: SpacesTableProps) => {

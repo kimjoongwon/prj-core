@@ -6,8 +6,10 @@ import {
 import { useLocalObservable } from 'mobx-react-lite';
 
 export const useState = () => {
-  const spaceQuery: GetSpacesByQueryParams & DataGridState = {};
-  const classificationQuery: GetClassificationsByQueryParams & DataGridState =
+  const spaceQuery: DataGridState<GetClassificationsByQueryParams>['query'] =
+    {};
+
+  const classificationQuery: DataGridState<GetClassificationsByQueryParams>['query'] =
     {};
 
   const state = useLocalObservable<{
