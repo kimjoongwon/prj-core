@@ -5,7 +5,7 @@ import { SpacesTable } from '../../../tables';
 import { CustomDataGridProps } from '../../../ui';
 
 interface Props extends CustomDataGridProps {
-  items: SpaceDto[] | UserDto[];
+  items?: SpaceDto[] | UserDto[];
   type: 'user' | 'space';
 }
 
@@ -16,6 +16,7 @@ export const ServiceItemModalBody = observer((props: Props) => {
     user: (
       <UsersTable
         {...rest}
+        standalone
         selectionMode="multiple"
         users={items as UserDto[]}
         state={state}

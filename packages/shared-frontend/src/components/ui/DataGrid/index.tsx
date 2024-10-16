@@ -192,7 +192,7 @@ export const DataGrid = observer(
           </TableBody>
         </Table>
         <Spacer y={4} />
-        {!!state?.query.take && (
+        {!!state?.query?.take && (
           <Pagination totalCount={totalCount} state={state?.query} />
         )}
       </TableContainer>

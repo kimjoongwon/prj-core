@@ -33,6 +33,8 @@ model Classification {
   removedAt     DateTime? @db.Timestamptz(6)
   category      Category  @relation(fields: [categoryId], references: [id])
   service       Service   @relation(fields: [serviceId], references: [id])
+
+  @@unique([serviceItemId, categoryId])
 }
 
 model Group {
@@ -58,6 +60,8 @@ model Assignment {
   removedAt     DateTime? @db.Timestamptz(6)
   group         Group     @relation(fields: [groupId], references: [id])
   service       Service   @relation(fields: [serviceId], references: [id])
+
+  @@unique([serviceItemId, groupId])
 }
 
 model Tenancy {

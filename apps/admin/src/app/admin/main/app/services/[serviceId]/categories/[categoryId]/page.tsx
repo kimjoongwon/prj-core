@@ -26,7 +26,7 @@ const CategoryPage = () => {
       <Button color="primary" onClick={onClickCategoryAssignments}>
         카테고리 할당
       </Button>
-      <ClassificationsTable hideHeader classifications={classifications} />
+      <ClassificationsTable classifications={classifications} />
     </Card>
   );
 };

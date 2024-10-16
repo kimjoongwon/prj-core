@@ -15,8 +15,6 @@ export const useHandlers = (context: {
   // const { serviceId } = useParams<{ serviceId: string }>();
 
   const onClickCreate = () => {
-    // galaxy.router.push({
-    //   url: '/admin/main/app/services/:serviceId/classifications/:classificationId/edit',
     //   params: {
     //     classificationId: 'new',
     //     serviceId,

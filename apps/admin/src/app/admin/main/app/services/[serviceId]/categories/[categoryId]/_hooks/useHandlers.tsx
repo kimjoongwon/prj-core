@@ -9,6 +9,7 @@ import {
 } from '@shared/frontend';
 import { useParams } from 'next/navigation';
 import { useQueries } from './useQueries';
+import { toast } from 'react-toastify';
 
 export const useHandlers = (context: {
   state: ReturnType<typeof useState>;
@@ -65,8 +66,10 @@ export const useHandlers = (context: {
         onSuccess: () => {
           refetchClassifications();
           galaxy.modal.destory();
+          toast.success('카테고리 할당이 완료되었습니다.');
         },
         onError: () => {
+          toast.error('카테고리 할당에 실패했습니다.');
           alert('error');
         },
       },
@@ -81,9 +84,9 @@ export const useHandlers = (context: {
         <ServiceItemModalBody
           hideHeader
           hideButtons
-          items={spaces as SpaceDto[]}
+          // items={spaces as SpaceDto[]}
           state={state.spacesTable}
-          type={'space'}
+          type={'user'}
           totalCount={spacesTotalCount || 0}
         />
       ),

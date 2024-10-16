@@ -10,7 +10,6 @@ import { useParams } from 'next/navigation';
 
 export const useQueries = (context: { state: ReturnType<typeof useState> }) => {
   const { state } = context;
-
   const { categoryId = '', serviceId } = useParams<{
     categoryId: string;
     serviceId: string;

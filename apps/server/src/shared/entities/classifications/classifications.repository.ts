@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { IRepository } from '../../types/interfaces/repository.interface';
+import { ClassificationDto } from './dtos';
 
 @Injectable()
 export class ClassificationsRepository implements IRepository {
@@ -45,5 +46,15 @@ export class ClassificationsRepository implements IRepository {
 
   createMany(args: Prisma.ClassificationCreateManyArgs) {
     return this.prisma.classification.createMany(args);
+  }
+  async findServiceItem(classification: ClassificationDto) {
+    const service = await this.prisma.service.findUnique({
+      where: { id: classification.serviceId, removedAt: null },
+    });
+    const serviceItem = await this.prisma[service.name].findUnique({
+      where: { id: classification.serviceItemId, removedAt: null },
+    });
+
+    return serviceItem;
   }
 }

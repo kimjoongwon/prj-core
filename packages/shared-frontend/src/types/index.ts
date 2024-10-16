@@ -40,3 +40,7 @@ export interface TableState<T> {
   total: number;
   selectedRowIds: string[];
 }
+
+export interface CustomTable {
+  standalone?: boolean;
+}

@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 
 export interface GroupsTableProps extends TableProps {
   groups: GroupDto[];
-  state: DataGridState;
+  state: DataGridState<any>;
 }
 
 export const GroupsTable = observer((props: GroupsTableProps) => {
