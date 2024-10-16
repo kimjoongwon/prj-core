@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 
 export interface AssignmentsTableProps extends TableProps {
   assignments: AssignmentDto[];
-  state?: DataGridState;
+  state?: DataGridState<any>;
 }
 
 export const AssignmentsTable = observer((props: AssignmentsTableProps) => {

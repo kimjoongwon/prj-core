@@ -58,9 +58,20 @@ export class ClassificationsService implements IService {
       },
     });
 
+    const classificationsWithServiceItem = await Promise.all(
+      classifications.map(async (classification) => {
+        const serviceItem = await this.repository.findServiceItem(classification);
+        console.log('serviceItem', serviceItem);
+        return {
+          ...classification,
+          [classification.service.name]: serviceItem,
+        };
+      }),
+    );
+
     const count = await this.repository.count(args);
     return {
-      classifications,
+      classifications: classificationsWithServiceItem,
       count,
     };
   }
