@@ -1,29 +1,21 @@
-import { SessionDto, UpdateSessionDto } from '@shared/frontend';
+import { galaxy, SessionDto } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
-import { useData } from './useData';
-import { useContext } from './useContext';
-import dayjs from 'dayjs';
+import { useQueries } from './useQueries';
 import { defaults } from 'lodash-es';
-import { SessionFormProps } from '@shared/frontend/src/components/forms/Session/types';
 
-type Form = Omit<SessionFormProps['state'], 'id'>;
-
-export const useState = (props: {
-  data: ReturnType<typeof useData>;
-  context: ReturnType<typeof useContext>;
-}) => {
+export const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
   const {
-    data: { getSessionResponse },
+    queries: { getSessionResponse },
   } = props;
 
   const defaultForm: Partial<SessionDto> = {
     name: '',
     recurringDayOfTheWeek: [],
     repeatCycle: 0,
-    repeatCycleType: 'DAY',
-    tenantId: '',
+    repeatCycleType: 'WEEK',
+    tenantId: galaxy.auth.tenant?.id,
     type: 'ONE_TIME',
-    baseDate: null,
+    startDate: null,
     endDate: null,
   };
 

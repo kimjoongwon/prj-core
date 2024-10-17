@@ -1,23 +1,19 @@
 import { ButtonProps } from '@nextui-org/react';
-import { useContext } from './useContext';
-import { useData } from './useData';
+import { useQueries } from './useQueries';
 import { useHandlers } from './useHandlers';
 import { useState } from './useState';
+import { useMutations } from './useMutataions';
 
 export const useSessionEditPage = () => {
-  const context = useContext();
-  const data = useData({
-    context,
-  });
+  const queries = useQueries();
+  const mutations = useMutations();
 
   const state = useState({
-    context,
-    data,
+    queries,
   });
 
   const { onClickList, onClickSave } = useHandlers({
-    context,
-    data,
+    mutations,
     state,
   });
 

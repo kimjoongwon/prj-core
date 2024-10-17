@@ -4,24 +4,19 @@ import {
   revalidatePathGetSessionsByQuery,
   UpdateSessionDto,
 } from '@shared/frontend';
-import { useData } from './useData';
 import { useState } from './useState';
-import { useContext } from './useContext';
+import { useParams } from 'next/navigation';
+import { useMutations } from './useMutataions';
 
 export const useHandlers = (props: {
-  context: ReturnType<typeof useContext>;
   state: ReturnType<typeof useState>;
-  data: ReturnType<typeof useData>;
+  mutations: ReturnType<typeof useMutations>;
 }) => {
   const {
-    context: {
-      params: { sessionId },
-      isEditMode,
-    },
     state,
-    data: { createSession, updateSession },
+    mutations: { createSession, updateSession },
   } = props;
-
+  const { sessionId } = useParams<{ sessionId: string }>();
   const form = state.form;
 
   const update = () => {
@@ -43,10 +38,10 @@ export const useHandlers = (props: {
   };
 
   const onClickSave = () => {
-    if (isEditMode) {
-      update();
-    } else {
+    if (sessionId === 'new') {
       create();
+    } else {
+      update();
     }
     goBack();
   };
