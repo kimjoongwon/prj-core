@@ -4,7 +4,7 @@ import { useData } from './useData';
 import { useHandlers } from './useHandlers';
 import { useState } from './useState';
 
-export const useProps = () => {
+export const useSessionEditPage = () => {
   const context = useContext();
   const data = useData({
     context,

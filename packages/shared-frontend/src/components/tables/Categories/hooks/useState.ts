@@ -9,7 +9,7 @@ export const useState = (context: { props?: CategoriesTableProps }) => {
     return props.state;
   }
 
-  const state = useLocalObservable<DataGridState>(() => ({
+  const state = useLocalObservable<DataGridState<any>>(() => ({
     selectedKeys: [],
   }));
 

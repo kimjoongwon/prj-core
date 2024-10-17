@@ -6,7 +6,4 @@ import { COMMON_ENTITY_FIELDS } from '../../../constants/entity-common-fields';
 export class CreateSessionDto extends OmitType(SessionDto, [...COMMON_ENTITY_FIELDS, 'timelines']) {
   @DateField({ isArray: true, each: true })
   timelineDates: Date[];
-
-  @DateField()
-  oneTimeDate: Date;
 }

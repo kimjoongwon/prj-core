@@ -1,4 +1,3 @@
-import { CreateSessionDto, UpdateSessionDto } from '../../../../model';
 import { useLocalObservable } from 'mobx-react-lite';
 import { SessionFormProps } from '../types';
 

@@ -11,6 +11,7 @@ export interface ProfileDto {
   nickname: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   /** @nullable */
   updatedAt: string | null;
   userId: string;

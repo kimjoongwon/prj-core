@@ -5,7 +5,7 @@ import { SpacesTableProps } from '..';
 export const useState = (context: { props: SpacesTableProps }) => {
   const { props } = context;
 
-  const state = useLocalObservable<DataGridState>(() => ({
+  const state = useLocalObservable<DataGridState<any>>(() => ({
     selectedKeys: [],
     ...props.state,
   }));

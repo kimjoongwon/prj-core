@@ -13,6 +13,7 @@ export interface PageDto {
   pathname: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   type: PageTypes;
   updatedAt: string;
 }

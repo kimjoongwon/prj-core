@@ -10,7 +10,6 @@ export type RepeatCycleTypes = typeof RepeatCycleTypes[keyof typeof RepeatCycleT
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RepeatCycleTypes = {
-  DAY: 'DAY',
   WEEK: 'WEEK',
   MONTH: 'MONTH',
   YEAR: 'YEAR',

@@ -12,17 +12,13 @@ export const useHandlers = (props: {
 }) => {
   const {
     state,
-    context: {
-      params: { serviceId },
-    },
     data: { removeTimelineItems },
   } = props;
 
   const onClickCreate = () => {
     galaxy.router.push({
-      url: '/admin/main/timelineItems/:timelineItemId/edit',
+      url: '/admin/main/reservation/timelineItems/:timelineItemId/edit',
       params: {
-        serviceId,
         timelineItemId: 'new',
       },
     });

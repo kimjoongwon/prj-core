@@ -3,7 +3,7 @@ import { $Enums, Session as SessionEntity } from '@prisma/client';
 export class Session extends AbstractEntity implements SessionEntity {
   name: string;
   tenantId: string;
-  baseDate: Date;
+  startDate: Date;
   endDate: Date;
   recurringDayOfTheWeek: $Enums.RecurringDayOfTheWeek[];
   repeatCycle: number;

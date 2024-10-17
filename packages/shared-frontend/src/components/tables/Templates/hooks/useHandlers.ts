@@ -17,10 +17,11 @@ export const useHandlers = (props: {
 
   const onClickCreate = () => {
     galaxy.router.push({
-      url: '/admin/main/templates/:templateId/edit',
+      url: '/admin/main/app/templates/:templateId/edit',
       params: {
         templateId: 'new',
       },
+      queryString: state.query,
     });
   };
 

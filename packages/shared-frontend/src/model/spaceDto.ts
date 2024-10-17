@@ -15,6 +15,7 @@ export interface SpaceDto {
   name: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   /** @nullable */
   tenancies: Tenancy[] | null;
   updatedAt: string;

@@ -1,6 +1,6 @@
 import { DataGridState } from '@shared/frontend';
 
-export interface State extends DataGridState {}
+export interface State extends DataGridState<any> {}
 
 export const useState = () => {
   const state: State = {

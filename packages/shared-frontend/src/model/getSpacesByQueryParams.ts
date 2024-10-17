@@ -8,6 +8,7 @@ import type { SortOrder } from './sortOrder';
 
 export type GetSpacesByQueryParams = {
 id?: string;
+seq?: number;
 createdAt?: string;
 updatedAt?: string;
 removedAt?: string | null;

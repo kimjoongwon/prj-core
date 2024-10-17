@@ -1,5 +1,6 @@
 model Category {
   id              String           @id @default(uuid())
+  seq             Int              @unique @default(autoincrement())
   name            String           @unique
   ancestorIds     String[]         @default([])
   parentId        String?
@@ -13,6 +14,7 @@ model Category {
 
 model Service {
   id              String           @id @default(uuid())
+  seq             Int              @unique @default(autoincrement())
   name            String           @unique
   label           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
@@ -25,6 +27,7 @@ model Service {
 
 model Classification {
   id            String    @id @default(uuid())
+  seq           Int       @unique @default(autoincrement())
   serviceId     String
   serviceItemId String
   categoryId    String
@@ -39,6 +42,7 @@ model Classification {
 
 model Group {
   id          String       @id @default(uuid())
+  seq         Int          @unique @default(autoincrement())
   name        String
   tenantId    String
   serviceId   String
@@ -52,6 +56,7 @@ model Group {
 
 model Assignment {
   id            String    @id @default(uuid())
+  seq           Int       @unique @default(autoincrement())
   groupId       String
   serviceId     String
   serviceItemId String
@@ -66,6 +71,7 @@ model Assignment {
 
 model Tenancy {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   spaceId   String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -76,6 +82,7 @@ model Tenancy {
 
 model Profile {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   nickname  String
   userId    String
   createdAt DateTime  @default(now())
@@ -86,6 +93,7 @@ model Profile {
 
 model User {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   email     String    @unique
   name      String    @unique
   phone     String    @unique
@@ -100,6 +108,7 @@ model User {
 
 model Tenant {
   id        String      @id @default(uuid())
+  seq       Int         @unique @default(autoincrement())
   userId    String
   roleId    String
   createdAt DateTime    @default(now())
@@ -116,6 +125,7 @@ model Tenant {
 
 model Space {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   name      String    @unique
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -125,6 +135,7 @@ model Space {
 
 model SMS {
   id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
   toUserIds  String[]
   fromUserId String?
   status     SMSStatus @default(PROGRESS)
@@ -136,6 +147,7 @@ model SMS {
 
 model SystemEmail {
   id         String      @id @default(uuid())
+  seq        Int         @unique @default(autoincrement())
   status     EmailStatus @default(PROGRESS)
   emailId    String
   templateId String
@@ -148,6 +160,7 @@ model SystemEmail {
 
 model Email {
   id           String        @id @default(uuid())
+  seq          Int           @unique @default(autoincrement())
   toUserIds    String[]
   fromUserId   String
   sentAt       DateTime      @db.Timestamptz(6)
@@ -160,6 +173,7 @@ model Email {
 }
 
 model Reservation {
+  seq            Int               @unique @default(autoincrement())
   id             String            @id @default(uuid())
   timelineItemId String            @unique
   createdAt      DateTime          @default(now()) @db.Timestamptz(6)
@@ -175,24 +189,26 @@ model Reservation {
 
 model Session {
   id                    String                  @id @default(uuid())
+  seq                   Int                     @unique @default(autoincrement())
   name                  String
   tenantId              String
   createdAt             DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-  baseDate              DateTime                @db.Date
+  type                  SessionTypes            @default(ONE_TIME)
+  startDate             DateTime                @db.Date
   endDate               DateTime?               @db.Date
   recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
   removedAt             DateTime?               @db.Timestamptz(6)
   repeatCycle           Int                     @default(1)
-  repeatCycleType       RepeatCycleTypes        @default(DAY)
-  type                  SessionTypes            @default(ONE_TIME)
+  repeatCycleType       RepeatCycleTypes        @default(WEEK)
   timelines             Timeline[]
 }
 
 model Timeline {
   id            String         @id @default(uuid())
-  name          String
+  seq           Int            @unique @default(autoincrement())
   sessionId     String
+  date          DateTime       @db.Date
   createdAt     DateTime       @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
   removedAt     DateTime?      @db.Timestamptz(6)
@@ -203,6 +219,7 @@ model Timeline {
 
 model TimelineItem {
   id            String       @id @default(uuid())
+  seq           Int          @unique @default(autoincrement())
   timelineId    String
   title         String
   startDateTime DateTime     @db.Timestamptz(6)
@@ -221,6 +238,7 @@ model TimelineItem {
 
 model Role {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   name      Roles     @unique @default(USER)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -231,6 +249,7 @@ model Role {
 
 model Subject {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -240,6 +259,7 @@ model Subject {
 
 model Ability {
   id          String         @id @default(uuid())
+  seq         Int            @unique @default(autoincrement())
   type        AbilityTypes
   roleId      String
   action      AbilityActions
@@ -255,6 +275,7 @@ model Ability {
 
 model Template {
   id           String        @id @default(uuid())
+  seq          Int           @unique @default(autoincrement())
   name         TemplateNames @unique @default(WELCOME)
   postId       String
   createdAt    DateTime      @default(now()) @db.Timestamptz(6)
@@ -266,6 +287,7 @@ model Template {
 
 model Qna {
   id        String     @id @default(uuid())
+  seq       Int        @unique @default(autoincrement())
   status    QnaStatus  @default(OPEN)
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
@@ -275,6 +297,7 @@ model Qna {
 
 model Question {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   postId    String
   qnaId     String
   serviceId String
@@ -288,6 +311,7 @@ model Question {
 
 model Answer {
   id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
   questionId String
   postId     String
   serviceId  String
@@ -300,6 +324,7 @@ model Answer {
 
 model Post {
   id        String     @id @default(uuid())
+  seq       Int        @unique @default(autoincrement())
   type      PostTypes  @default(TEXT)
   title     String?
   content   String     @db.VarChar(1000)
@@ -316,6 +341,7 @@ model Post {
 
 model Page {
   id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
   name      String    @unique
   pathname  String    @unique
   type      PageTypes @default(BUTTON)
@@ -360,11 +386,11 @@ enum ReservationStatus {
 
 enum SessionTypes {
   ONE_TIME
+  ONE_TIME_RANGE
   RECURRING
 }
 
 enum RepeatCycleTypes {
-  DAY
   WEEK
   MONTH
   YEAR

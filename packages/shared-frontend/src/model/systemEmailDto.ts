@@ -12,6 +12,7 @@ export interface SystemEmailDto {
   id: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   status: EmailStatus;
   templateId: string;
   updatedAt: string;

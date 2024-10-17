@@ -16,6 +16,7 @@ export interface Post {
   id?: string;
   /** @nullable */
   removedAt?: string | null;
+  seq?: number;
   title?: string;
   type?: PostTypes;
   updatedAt?: string;

@@ -3,11 +3,11 @@
 import { AccessorKeyColumnDef } from '@tanstack/react-table';
 import { SessionDto } from '../../../model/sessionDto';
 import { CustomDataGridProps, DataGrid, DataGridState } from '../../ui';
-import { useProps } from './hooks/useProps';
+import { useSessionsTable } from './hooks/useSessionsTable';
 
 interface SessionsTableProps extends CustomDataGridProps {
   sessions: SessionDto[];
-  state?: DataGridState;
+  state?: DataGridState<any>;
   leftButtonsHide?: boolean;
   rightButtonsHide?: boolean;
   columns?: AccessorKeyColumnDef<SessionDto, string>[];
@@ -28,7 +28,7 @@ export const SessionsTable = (props: SessionsTableProps) => {
     leftButtons: _leftButtons,
     rightButtons: _rightButtons,
     state,
-  } = useProps();
+  } = useSessionsTable();
 
   return (
     <DataGrid

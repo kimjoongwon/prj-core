@@ -10,15 +10,13 @@ import type { SessionTypes } from './sessionTypes';
 
 export interface CreateSessionDto {
   /** @nullable */
-  baseDate: string | null;
-  /** @nullable */
   endDate: string | null;
   name: string;
-  oneTimeDate: string;
   recurringDayOfTheWeek: RecurringDayOfTheWeek[];
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
-  tenancyId: string;
+  /** @nullable */
+  startDate: string | null;
   tenantId: string;
   timelineDates: string[];
   type: SessionTypes;

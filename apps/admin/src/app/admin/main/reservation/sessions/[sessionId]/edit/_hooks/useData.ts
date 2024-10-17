@@ -13,14 +13,14 @@ export const useData = (props: { context: ReturnType<typeof useContext> }) => {
     },
   } = props;
 
-  const getSession = useGetSession(sessionId, {
+  const { data: getSessionResponse } = useGetSession(sessionId, {
     query: {
       enabled: isEditMode,
     },
   });
 
   return {
-    getSession: getSession,
+    getSessionResponse: getSessionResponse,
     createSession: useCreateSession(),
     updateSession: useUpdateSession(),
   };

@@ -4,7 +4,7 @@ export interface SessionFormProps {
   state: Omit<UpdateSessionDto, 'id'> & {
     local: {
       rangeMode: boolean;
-      oneTImeDate: string | undefined;
+      oneTimeDate: string | undefined;
       oneTimeStartDate: string | undefined;
       oneTimeEndDate: string | undefined;
     };

@@ -11,6 +11,7 @@ export interface GroupDto {
   name: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   serviceId: string;
   tenantId?: string;
   updatedAt: string;

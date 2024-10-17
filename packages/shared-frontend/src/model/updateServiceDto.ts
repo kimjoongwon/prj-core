@@ -13,5 +13,6 @@ export interface UpdateServiceDto {
   name?: string;
   /** @nullable */
   removedAt?: string | null;
+  seq?: number;
   updatedAt?: string;
 }

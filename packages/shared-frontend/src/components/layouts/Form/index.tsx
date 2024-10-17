@@ -10,6 +10,7 @@ import {
   ButtonProps,
   Button,
 } from '@nextui-org/react';
+import { Text } from '../../ui/Text';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ export const FormLayout = observer((props: FormProps) => {
   return (
     <Card fullWidth>
       <CardHeader>
-        <p className="text-large">{title}</p>
+        <Text variant="h3">{title}</Text>
       </CardHeader>
       <CardBody>{children}</CardBody>
       <CardFooter className="space-x-2 justify-between">

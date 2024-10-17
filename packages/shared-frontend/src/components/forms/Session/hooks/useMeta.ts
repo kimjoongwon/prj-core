@@ -7,6 +7,10 @@ export const useMeta = () => {
       value: SessionTypes.ONE_TIME,
     },
     {
+      text: '일회성 범위',
+      value: SessionTypes.ONE_TIME_RANGE,
+    },
+    {
       text: '반복',
       value: SessionTypes.RECURRING,
     },
@@ -16,10 +20,6 @@ export const useMeta = () => {
     text: string;
     value: RepeatCycleTypes;
   }[] = [
-    {
-      text: '매일',
-      value: RepeatCycleTypes.DAY,
-    },
     {
       text: '매주',
       value: RepeatCycleTypes.WEEK,

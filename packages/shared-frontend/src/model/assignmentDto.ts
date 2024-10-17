@@ -18,6 +18,7 @@ export interface AssignmentDto {
   /** @nullable */
   removedAt: string | null;
   reservation?: ReservationDto;
+  seq: number;
   service?: ServiceDto;
   serviceId: string;
   serviceItemId: string;

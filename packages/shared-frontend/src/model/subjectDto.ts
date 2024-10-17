@@ -11,5 +11,6 @@ export interface SubjectDto {
   name: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   updatedAt: string;
 }

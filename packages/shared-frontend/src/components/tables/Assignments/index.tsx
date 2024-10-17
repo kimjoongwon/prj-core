@@ -2,13 +2,12 @@
 
 import { TableProps } from '@nextui-org/react';
 import { AssignmentDto } from '../../../model/assignmentDto';
-import { DataGrid, DataGridState } from '../../ui';
+import { CustomDataGridProps, DataGrid, DataGridState } from '../../ui';
 import { useAssignmentsTables } from './_hooks/useAssignmentsTable';
 import { observer } from 'mobx-react-lite';
 
-export interface AssignmentsTableProps extends TableProps {
+export interface AssignmentsTableProps extends CustomDataGridProps {
   assignments: AssignmentDto[];
-  state?: DataGridState<any>;
 }
 
 export const AssignmentsTable = observer((props: AssignmentsTableProps) => {

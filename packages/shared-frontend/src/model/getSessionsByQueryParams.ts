@@ -12,15 +12,13 @@ import type { RecurringDayOfTheWeek } from './recurringDayOfTheWeek';
 export type GetSessionsByQueryParams = {
 tenantId?: string;
 name?: SortOrder;
-tenancyId?: string;
 type?: SessionTypes;
 repeatCycle?: number;
 repeatCycleType?: RepeatCycleTypes;
 recurringDayOfTheWeek?: RecurringDayOfTheWeek[];
 endDate?: string | null;
-baseDate?: string | null;
+startDate?: string | null;
 timelineDates?: string[];
-oneTimeDate?: string;
 id?: string;
 createdAtSortOrder?: SortOrder;
 skip?: number;

@@ -14,6 +14,7 @@ export interface UpdateCategoryDto {
   parentId?: string | null;
   /** @nullable */
   removedAt?: string | null;
+  seq?: number;
   serviceId?: string;
   tenantId?: string;
   updatedAt?: string;

@@ -1,6 +1,4 @@
-import { useParams } from 'next/navigation';
 import { ClassificationsTableProps } from '..';
-import { galaxy } from '../../../../providers';
 import { useMutations } from './useMutations';
 
 export const useHandlers = (context: {

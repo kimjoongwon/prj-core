@@ -10,6 +10,7 @@ import type { SortOrder } from './sortOrder';
 
 export type GetAbilitiesByQueryParams = {
 id?: string;
+seq?: number;
 createdAt?: string;
 updatedAt?: string;
 removedAt?: string | null;

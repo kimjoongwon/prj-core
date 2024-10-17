@@ -5,7 +5,7 @@ import { useHandlers } from './useHandlers';
 import { useContext } from './useContext';
 import { useMutations } from './useMutations';
 
-export const useProps = () => {
+export const useSessionsTable = () => {
   const state = useState();
   const context = useContext();
   const data = useMutations();

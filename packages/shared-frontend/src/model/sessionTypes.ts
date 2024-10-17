@@ -11,5 +11,6 @@ export type SessionTypes = typeof SessionTypes[keyof typeof SessionTypes];
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SessionTypes = {
   ONE_TIME: 'ONE_TIME',
+  ONE_TIME_RANGE: 'ONE_TIME_RANGE',
   RECURRING: 'RECURRING',
 } as const;

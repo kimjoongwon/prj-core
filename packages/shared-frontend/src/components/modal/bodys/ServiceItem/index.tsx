@@ -1,3 +1,5 @@
+'use client';
+
 import { observer } from 'mobx-react-lite';
 import { UsersTable } from '../../../tables/Users';
 import { SpaceDto, UserDto } from '../../../../model';

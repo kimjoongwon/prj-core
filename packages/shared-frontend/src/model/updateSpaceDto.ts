@@ -11,5 +11,6 @@ export interface UpdateSpaceDto {
   name?: string;
   /** @nullable */
   removedAt?: string | null;
+  seq?: number;
   updatedAt?: string;
 }

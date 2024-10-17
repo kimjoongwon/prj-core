@@ -8,10 +8,11 @@ import type { TimelineDtoTimelineItems } from './timelineDtoTimelineItems';
 
 export interface TimelineDto {
   createdAt: string;
+  date: string;
   id: string;
-  name: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   sessionId: string;
   tenantId: string;
   /** @nullable */

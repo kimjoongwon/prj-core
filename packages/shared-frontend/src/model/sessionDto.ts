@@ -10,8 +10,6 @@ import type { TimelineDto } from './timelineDto';
 import type { SessionTypes } from './sessionTypes';
 
 export interface SessionDto {
-  /** @nullable */
-  baseDate: string | null;
   createdAt: string;
   /** @nullable */
   endDate: string | null;
@@ -22,7 +20,9 @@ export interface SessionDto {
   removedAt: string | null;
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
-  tenancyId: string;
+  seq: number;
+  /** @nullable */
+  startDate: string | null;
   tenantId: string;
   /** @nullable */
   timelines: TimelineDto[] | null;

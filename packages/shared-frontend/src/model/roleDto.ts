@@ -12,5 +12,6 @@ export interface RoleDto {
   name: Roles;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   updatedAt: string;
 }

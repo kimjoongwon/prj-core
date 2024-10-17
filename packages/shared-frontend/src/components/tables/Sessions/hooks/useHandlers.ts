@@ -11,9 +11,6 @@ export const useHandlers = (props: {
 }) => {
   const {
     state,
-    context: {
-      params: { serviceId },
-    },
     data: { removeSessions },
   } = props;
 
@@ -21,7 +18,6 @@ export const useHandlers = (props: {
     galaxy.router.push({
       url: '/admin/main/reservation/sessions/:sessionId/edit',
       params: {
-        serviceId,
         sessionId: 'new',
       },
     });

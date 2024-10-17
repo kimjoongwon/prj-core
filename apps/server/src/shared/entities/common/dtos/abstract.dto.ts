@@ -1,9 +1,11 @@
-import { DateField, UUIDField } from '../../../decorators';
-import { AbstractEntity } from '../abstract.entity';
+import { DateField, NumberField, UUIDField } from '../../../decorators';
 
 export class AbstractDto {
   @UUIDField()
   id: string;
+
+  @NumberField()
+  seq: number;
 
   @DateField()
   createdAt: Date;

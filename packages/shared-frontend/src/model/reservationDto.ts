@@ -11,6 +11,7 @@ export interface ReservationDto {
   id: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   status: ReservationStatus;
   tenantId: string;
   timelineItemId: string;

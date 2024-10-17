@@ -16,5 +16,6 @@ export interface TemplateDto {
   postId: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   updatedAt: string;
 }

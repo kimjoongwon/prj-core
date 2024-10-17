@@ -23,7 +23,7 @@ const GroupPage = observer(() => {
       <Button color="primary" onClick={onClickAdd}>
         {service?.label} 추가
       </Button>
-      <AssignmentsTable assignments={assignments} />
+      <AssignmentsTable hideButtons assignments={assignments} />
     </Card>
   );
 });

@@ -18,6 +18,7 @@ export interface TimelineItemDto {
   removedAt: string | null;
   /** @nullable */
   reservations: ReservationDto[] | null;
+  seq: number;
   startDateTime: string;
   tenantId: string;
   timelineId?: string;

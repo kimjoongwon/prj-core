@@ -11,6 +11,7 @@ export interface TenancyDto {
   id: string;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   space: SpaceDto;
   spaceId: string;
   updatedAt: string;

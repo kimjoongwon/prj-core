@@ -18,6 +18,7 @@ export interface TenantDto {
   /** @nullable */
   role: TenantDtoRole;
   roleId: string;
+  seq: number;
   /** @nullable */
   tenancy: TenantDtoTenancy;
   tenancyId: string;

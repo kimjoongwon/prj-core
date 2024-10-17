@@ -18,9 +18,6 @@ export class SessionDto extends AbstractDto implements Session {
   @StringField()
   name: string;
 
-  @UUIDField()
-  tenancyId: string;
-
   @EnumField(() => $Enums.SessionTypes)
   type: $Enums.SessionTypes;
 
@@ -37,7 +34,7 @@ export class SessionDto extends AbstractDto implements Session {
   endDate: Date | null;
 
   @DateField({ nullable: true })
-  baseDate: Date | null;
+  startDate: Date | null;
 
   @ClassField(() => TimelineDto, { isArray: true, nullable: true, each: true })
   timelines: TimelineDto[] | null;

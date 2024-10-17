@@ -18,6 +18,7 @@ export interface UpdateAbilityDto {
   /** @nullable */
   removedAt?: string | null;
   roleId?: string;
+  seq?: number;
   subjectId?: string;
   type?: AbilityTypes;
   updatedAt?: string;

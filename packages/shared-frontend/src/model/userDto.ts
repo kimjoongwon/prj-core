@@ -19,6 +19,7 @@ export interface UserDto {
   profiles: UserDtoProfiles;
   /** @nullable */
   removedAt: string | null;
+  seq: number;
   /** @nullable */
   tenants: UserDtoTenants;
   updatedAt: string;

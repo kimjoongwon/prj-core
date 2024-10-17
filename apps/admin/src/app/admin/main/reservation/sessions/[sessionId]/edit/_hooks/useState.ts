@@ -1,10 +1,10 @@
-import { UpdateSessionDto } from '@shared/frontend';
+import { SessionDto, UpdateSessionDto } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useData } from './useData';
 import { useContext } from './useContext';
 import dayjs from 'dayjs';
-import { SessionFormProps } from '@shared/frontend/src/components/forms/Session/types';
 import { defaults } from 'lodash-es';
+import { SessionFormProps } from '@shared/frontend/src/components/forms/Session/types';
 
 type Form = Omit<SessionFormProps['state'], 'id'>;
 
@@ -13,33 +13,24 @@ export const useState = (props: {
   context: ReturnType<typeof useContext>;
 }) => {
   const {
-    data: { getSession },
+    data: { getSessionResponse },
   } = props;
 
-  const defaultForm: Form = {
+  const defaultForm: Partial<SessionDto> = {
     name: '',
     recurringDayOfTheWeek: [],
     repeatCycle: 0,
     repeatCycleType: 'DAY',
-    tenancyId: '',
     tenantId: '',
-    timelineDates: [],
     type: 'ONE_TIME',
-    oneTimeDate: dayjs().toISOString(),
     baseDate: null,
     endDate: null,
-    local: {
-      rangeMode: false,
-      oneTImeDate: undefined,
-      oneTimeStartDate: undefined,
-      oneTimeEndDate: undefined,
-    },
   };
 
-  const form = defaults(defaultForm, getSession.data?.data!);
+  const form = defaults(defaultForm, getSessionResponse?.data);
 
   const state = useLocalObservable<{
-    form: Form;
+    form: Partial<SessionDto>;
   }>(() => ({
     form,
   }));

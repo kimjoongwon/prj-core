@@ -31,9 +31,9 @@ export const RESERVATION_PATH = `/admin/main/reservations/:reservationId`;
 export const RESERVATION_EDIT_PATH = `/admin/main/reservations/:reservationId/edit`;
 
 // 템플릿 관리
-export const TEMPLATES_PATH = `/admin/main/templates`;
-export const TEMPLATE_PATH = `/admin/main/templates/:templateId`;
-export const TEMPLATE_EDIT_PATH = `/admin/main/templates/:templateId/edit`;
+export const TEMPLATES_PATH = `/admin/main/app/templates`;
+export const TEMPLATE_PATH = `/admin/main/app/templates/:templateId`;
+export const TEMPLATE_EDIT_PATH = `/admin/main/app/templates/:templateId/edit`;
 
 // 이용자 관리
 export const USERS_PATH = `/admin/main/users`;

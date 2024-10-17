@@ -7,8 +7,6 @@ import {
 import { useData } from './useData';
 import { useState } from './useState';
 import { useContext } from './useContext';
-import { remove } from 'lodash-es';
-import R from 'remeda';
 
 export const useHandlers = (props: {
   context: ReturnType<typeof useContext>;
@@ -24,7 +22,7 @@ export const useHandlers = (props: {
     data: { createSession, updateSession },
   } = props;
 
-  const { local, ...form } = state.form;
+  const form = state.form;
 
   const update = () => {
     updateSession.mutateAsync({
@@ -35,7 +33,7 @@ export const useHandlers = (props: {
 
   const create = async () => {
     await createSession.mutateAsync({
-      data: state.form as CreateSessionDto,
+      data: form as CreateSessionDto,
     });
     revalidatePathGetSessionsByQuery({});
   };
