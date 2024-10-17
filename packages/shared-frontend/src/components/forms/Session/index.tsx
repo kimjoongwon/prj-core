@@ -2,7 +2,7 @@
 
 import { Input } from '../../ui/Input';
 import { VStack } from '../../ui/VStack';
-import { Checkbox, DatePicker, HStack, Select, Text } from '../../ui';
+import { DatePicker, HStack, Select, Text } from '../../ui';
 import { observer } from 'mobx-react-lite';
 import { useSessionForm } from './hooks/useSessionForm';
 import { SessionDto } from '../../../model';
