@@ -12,13 +12,12 @@ interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
 export const DatePicker = observer(
   <T extends object>(props: DatePickerProps<T>) => {
     const { state, path = '' } = props;
-    //
+
     const initialISODate: any = get(state, path);
 
     const { localState } = useMobxHookForm(initialISODate, state, path);
 
     const onChangeDate: DatePickerProps<T>['onChange'] = (
-      // ISOString
       dateValue: DateValue,
     ) => {
       localState.value = dateValue;

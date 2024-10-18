@@ -2,6 +2,7 @@ import { galaxy, SessionDto } from '@shared/frontend';
 import { useLocalObservable } from 'mobx-react-lite';
 import { useQueries } from './useQueries';
 import { defaults } from 'lodash-es';
+import dayjs from 'dayjs';
 
 export const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
   const {
@@ -15,8 +16,8 @@ export const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
     repeatCycleType: 'WEEK',
     tenantId: galaxy.auth.tenant?.id,
     type: 'ONE_TIME',
-    startDate: null,
-    endDate: null,
+    startDate: dayjs().toISOString(),
+    endDate: dayjs().toISOString(),
   };
 
   const form = defaults(defaultForm, getSessionResponse?.data);

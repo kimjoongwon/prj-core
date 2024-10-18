@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useSessionForm } from './hooks/useSessionForm';
 import { SessionDto } from '../../../model';
 import { Divider } from '@nextui-org/react';
+import { WeekInput } from '../../ui/WeekInput';
 
 export interface SessionFormProps {
   state: Partial<SessionDto>;
@@ -15,7 +16,7 @@ export interface SessionFormProps {
 export const SessionForm = observer((props: SessionFormProps) => {
   const { state } = props;
   const { repeatCycleTypeOptions, sessionTypeOptions } = useSessionForm();
-  console.log(state.startDate);
+
   return (
     <VStack className="space-y-4">
       <Input label="세센명" state={state} path="name" />
@@ -80,6 +81,7 @@ export const SessionForm = observer((props: SessionFormProps) => {
             path="repeatCycleType"
           />
         </HStack>
+        <WeekInput state={state} path={'recurringDayOfTheWeek'} />
         <DatePicker
           label="시작 날짜 선택"
           state={state}
