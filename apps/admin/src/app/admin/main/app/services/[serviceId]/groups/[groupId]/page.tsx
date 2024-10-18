@@ -9,8 +9,12 @@ import { observer } from 'mobx-react-lite';
 const GroupPage = observer(() => {
   const {
     onClickAdd,
-    queries: { group, service, assignments },
+    queries: { group, service, assignments, isLoading },
   } = useGroupPage();
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <Card variant="outlined" className="p-4 space-y-4">

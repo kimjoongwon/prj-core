@@ -10,7 +10,6 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import dayjs from 'dayjs';
 
 interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
 
@@ -24,6 +23,8 @@ export const DatePicker = observer(
       new Date().getMonth() + 1,
       new Date().getDate(),
     );
+
+    console.log('initialDateTime', initialDateTime);
     const dateTimePickerState = useLocalObservable<{ value: DateValue }>(
       () => ({
         value: initialDateTime,
@@ -35,6 +36,7 @@ export const DatePicker = observer(
     const onChangeDate: DatePickerProps<T>['onChange'] = (
       dateValue: DateValue,
     ) => {
+      console.log('dateValue', dateValue);
       localState.value = dateValue.toDate(getLocalTimeZone()).toISOString();
       dateTimePickerState.value = dateValue;
     };

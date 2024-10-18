@@ -11,6 +11,7 @@ import {
   Button,
 } from '@nextui-org/react';
 import { Text } from '../../ui/Text';
+import { v4 } from 'uuid';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
 export const FormLayout = observer((props: FormProps) => {
   const { children, title, leftButtons, rightButtons } = props;
 
-  const renderButton = (props: ButtonProps) => <Button {...props} />;
+  const renderButton = (props: ButtonProps) => <Button key={v4()} {...props} />;
 
   return (
     <Card fullWidth>

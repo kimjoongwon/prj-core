@@ -15,7 +15,7 @@ export interface SessionFormProps {
 export const SessionForm = observer((props: SessionFormProps) => {
   const { state } = props;
   const { repeatCycleTypeOptions, sessionTypeOptions } = useSessionForm();
-
+  console.log(state.startDate);
   return (
     <VStack className="space-y-4">
       <Input label="세센명" state={state} path="name" />

@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Galaxy } from '../../services/galaxy';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@nextui-org/react';
+import { isEmpty } from 'lodash-es';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export let galaxy: Galaxy = {} as Galaxy;
 
 export const AppProvider = observer(({ children }: AppProviderProps) => {
   const nextRouter = useRouter();
+  const [isInitialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -28,10 +30,11 @@ export const AppProvider = observer(({ children }: AppProviderProps) => {
         await galaxy.auth.reAuthenticate();
       }
     };
+    setInitialized(true);
     init();
   }, [nextRouter]);
 
-  if (!galaxy.isInitialized) {
+  if (!isInitialized) {
     return <Spinner />;
   }
 

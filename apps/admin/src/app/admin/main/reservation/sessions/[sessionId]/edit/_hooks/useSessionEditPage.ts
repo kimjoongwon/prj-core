@@ -3,13 +3,17 @@ import { useQueries } from './useQueries';
 import { useHandlers } from './useHandlers';
 import { useState } from './useState';
 import { useMutations } from './useMutataions';
+import { useReactions } from './useReactions';
 
 export const useSessionEditPage = () => {
   const queries = useQueries();
   const mutations = useMutations();
-
   const state = useState({
     queries,
+  });
+
+  useReactions({
+    state,
   });
 
   const { onClickList, onClickSave } = useHandlers({

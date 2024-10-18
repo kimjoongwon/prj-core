@@ -9,7 +9,7 @@ export const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
   } = props;
 
   const defaultForm: Partial<SessionDto> = {
-    name: '',
+    name: '세션명',
     recurringDayOfTheWeek: [],
     repeatCycle: 0,
     repeatCycleType: 'WEEK',
@@ -23,8 +23,10 @@ export const useState = (props: { queries: ReturnType<typeof useQueries> }) => {
 
   const state = useLocalObservable<{
     form: Partial<SessionDto>;
+    timelineDates: string[];
   }>(() => ({
     form,
+    timelineDates: [],
   }));
 
   return state;

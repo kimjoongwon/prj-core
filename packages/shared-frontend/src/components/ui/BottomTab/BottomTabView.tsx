@@ -31,7 +31,7 @@ export const BottomTabView = (props: BottomTabViewProps) => {
         {tabs?.map(tab => {
           return (
             <BottomNavigationAction
-              // key={tab.name}
+              key={tab.name}
               label={tab.name}
               icon={tab.icon}
               value={tab.name}
