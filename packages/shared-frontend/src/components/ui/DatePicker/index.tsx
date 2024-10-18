@@ -4,12 +4,8 @@ import { get } from 'lodash-es';
 import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
 import { MobxProps } from '../types';
 import { DatePickerView, DatePickerViewProps } from './DatePickerView';
-import {
-  CalendarDate,
-  DateValue,
-  getLocalTimeZone,
-} from '@internationalized/date';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { CalendarDate, DateValue } from '@internationalized/date';
+import { observer } from 'mobx-react-lite';
 
 interface DatePickerProps<T> extends DatePickerViewProps, MobxProps<T> {}
 
@@ -18,35 +14,22 @@ export const DatePicker = observer(
     const { state, path = '' } = props;
     //
     const initialISODate: any = get(state, path);
-    const initialDateTime = new CalendarDate(
-      new Date().getFullYear(),
-      new Date().getMonth() + 1,
-      new Date().getDate(),
-    );
-
-    console.log('initialDateTime', initialDateTime);
-    const dateTimePickerState = useLocalObservable<{ value: DateValue }>(
-      () => ({
-        value: initialDateTime,
-      }),
-    );
 
     const { localState } = useMobxHookForm(initialISODate, state, path);
 
     const onChangeDate: DatePickerProps<T>['onChange'] = (
+      // ISOString
       dateValue: DateValue,
     ) => {
-      console.log('dateValue', dateValue);
-      localState.value = dateValue.toDate(getLocalTimeZone()).toISOString();
-      dateTimePickerState.value = dateValue;
+      localState.value = dateValue;
     };
 
-    return (
-      <DatePickerView
-        {...props}
-        onChange={onChangeDate}
-        value={dateTimePickerState.value}
-      />
+    const value = new CalendarDate(
+      new Date(localState.value).getFullYear(),
+      new Date(localState.value).getMonth() + 1,
+      new Date(localState.value).getDate(),
     );
+
+    return <DatePickerView {...props} onChange={onChangeDate} value={value} />;
   },
 );
