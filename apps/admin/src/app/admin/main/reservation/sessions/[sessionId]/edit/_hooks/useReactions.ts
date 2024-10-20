@@ -48,6 +48,7 @@ export const useReactions = (context: {
     const disposer = reaction(
       () => JSON.stringify(state.form),
       () => {
+        state.timelineDates = [];
         if (state.form.type === 'ONE_TIME') {
           state.timelineDates = [state.form.startDate as string];
         }
@@ -69,7 +70,6 @@ export const useReactions = (context: {
         if (state.form.type === 'RECURRING') {
           if (state.form.repeatCycleType === 'WEEK') {
             const startDate = dayjs(state.form.startDate);
-            const repeatCycle = state.form.repeatCycle || 1;
             const recurringDays: RecurringDayOfTheWeek[] =
               state.form.recurringDayOfTheWeek || [];
 
@@ -82,11 +82,9 @@ export const useReactions = (context: {
                 const nextDate = currentDate.day(
                   convertRecurringDayToNumber(day),
                 );
-                if (nextDate.isAfter(currentDate)) {
-                  state.timelineDates.push(nextDate.format('YYYY-MM-DD'));
-                }
+                state.timelineDates.push(nextDate.toISOString());
               });
-              currentDate = currentDate.add(repeatCycle, 'week');
+              currentDate = currentDate.add(1, 'week');
             }
           }
         }

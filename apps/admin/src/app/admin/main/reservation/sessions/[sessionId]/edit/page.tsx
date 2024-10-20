@@ -4,6 +4,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { FormLayout, SessionForm } from '@shared/frontend';
 import { useSessionEditPage } from './_hooks/useSessionEditPage';
+import dayjs from 'dayjs';
 
 const SessionEditPage = observer(() => {
   const { leftButtons, rightButtons, state } = useSessionEditPage();
@@ -15,7 +16,9 @@ const SessionEditPage = observer(() => {
       rightButtons={rightButtons}
     >
       <SessionForm state={state.form} />
-      {JSON.stringify(state.timelineDates)}
+      {state.timelineDates.map((date, index) => (
+        <div key={index}>{dayjs(date).format('YYYY-MM-DD')}</div>
+      ))}
     </FormLayout>
   );
 });

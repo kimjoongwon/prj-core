@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSessionDto } from './dtos/create-session.dto';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { SessionsRepository } from './sessions.repository';
 import { SessionPageQueryDto } from './dtos/session-page-query.dto';

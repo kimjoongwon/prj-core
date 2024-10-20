@@ -218,6 +218,9 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
       effect:
         specifier: ^3.5.7
         version: 3.5.7

@@ -18,7 +18,6 @@ export class InitService {
   logger = new Logger(InitService.name);
   LOG_PREFIX = `${InitService.name}`;
   constructor(
-    private readonly pagesService: PagesService,
     private readonly rolesService: RolesService,
     private readonly spacesService: SpacesService,
     private readonly configService: ConfigService,
