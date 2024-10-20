@@ -30,12 +30,24 @@ export class SessionsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async createSession(@Body() createSessionDto: CreateSessionDto) {
-    const session = await this.service.create(createSessionDto);
+    const { timelineDates, ...rest } = createSessionDto;
+
+    const session = await this.service.create({
+      data: {
+        ...rest,
+        timelines: {
+          createMany: {
+            data: timelineDates.map((date) => ({ date, tenantId: rest.tenantId })),
+          },
+        },
+      },
+    });
+
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
   }
 
   @Get(':sessionId')
-  @Auth([])
+  @Auth()
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async getSession(@Param('sessionId') sessionId: string) {

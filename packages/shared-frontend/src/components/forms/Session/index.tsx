@@ -81,7 +81,11 @@ export const SessionForm = observer((props: SessionFormProps) => {
             path="repeatCycleType"
           />
         </HStack>
-        <WeekInput state={state} path={'recurringDayOfTheWeek'} />
+        <WeekInput
+          disabled={state.type === 'RECURRING' ? false : true}
+          state={state}
+          path={'recurringDayOfTheWeek'}
+        />
         <DatePicker
           label="시작 날짜 선택"
           state={state}

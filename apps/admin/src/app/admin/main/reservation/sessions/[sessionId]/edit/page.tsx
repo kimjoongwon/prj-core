@@ -15,6 +15,7 @@ const SessionEditPage = observer(() => {
       rightButtons={rightButtons}
     >
       <SessionForm state={state.form} />
+      {JSON.stringify(state.timelineDates)}
     </FormLayout>
   );
 });

@@ -28,9 +28,11 @@ export const useHandlers = (props: {
 
   const create = async () => {
     await createSession.mutateAsync({
-      data: form as CreateSessionDto,
+      data: {
+        ...form,
+        timelineDates: state.timelineDates,
+      } as CreateSessionDto,
     });
-    revalidatePathGetSessionsByQuery({});
   };
 
   const goBack = () => {

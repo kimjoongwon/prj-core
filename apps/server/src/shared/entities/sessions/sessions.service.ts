@@ -4,6 +4,7 @@ import { UpdateSessionDto } from './dtos/update-session.dto';
 import { SessionsRepository } from './sessions.repository';
 import { SessionPageQueryDto } from './dtos/session-page-query.dto';
 import { PaginationMananger } from '../../utils';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SessionsService {
@@ -34,8 +35,8 @@ export class SessionsService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createSessionDto: CreateSessionDto) {
-    return this.repository.create({ data: createSessionDto });
+  create(args: Prisma.SessionCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(pageQuery: SessionPageQueryDto) {

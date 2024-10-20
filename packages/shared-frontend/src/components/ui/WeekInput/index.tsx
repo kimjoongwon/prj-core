@@ -8,7 +8,9 @@ import { get, isArray } from 'lodash-es';
 import { RecurringDayOfTheWeek } from '../../../model';
 import { observer } from 'mobx-react-lite';
 
-interface WeekInputProps<T> extends MobxProps<T> {}
+interface WeekInputProps<T> extends MobxProps<T> {
+  disabled?: boolean;
+}
 
 export const WeekInput = observer(
   <T extends object>(props: WeekInputProps<T>) => {

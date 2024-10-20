@@ -13,7 +13,6 @@ export const useReactions = (context: {
     const disposer = reaction(
       () => state.form.type,
       () => {
-        console.log('type init');
         state.form.startDate = null;
         state.form.endDate = null;
         state.form.repeatCycle = 1;
@@ -47,17 +46,24 @@ export const useReactions = (context: {
       }
     };
     const disposer = reaction(
-      () => state.form.startDate,
+      () => JSON.stringify(state.form),
       () => {
         if (state.form.type === 'ONE_TIME') {
           state.timelineDates = [state.form.startDate as string];
         }
 
         if (state.form.type === 'ONE_TIME_RANGE') {
-          state.timelineDates = [
-            state.form.startDate as string,
-            state.form.endDate as string,
-          ];
+          const startDate = dayjs(state.form.startDate);
+          const endDate = dayjs(state.form.endDate);
+          const dates: string[] = [];
+
+          let currentDate = startDate;
+          while (currentDate.isBefore(endDate) || currentDate.isSame(endDate)) {
+            dates.push(currentDate.toISOString());
+            currentDate = currentDate.add(1, 'day');
+          }
+
+          state.timelineDates = dates;
         }
 
         if (state.form.type === 'RECURRING') {

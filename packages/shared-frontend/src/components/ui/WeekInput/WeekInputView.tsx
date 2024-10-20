@@ -9,10 +9,11 @@ import { observer } from 'mobx-react-lite';
 export interface WeekInputViewProps {
   onChange: (value: RecurringDayOfTheWeek) => void;
   value: RecurringDayOfTheWeek[];
+  disabled?: boolean;
 }
 
 export const WeekInputView = observer((props: WeekInputViewProps) => {
-  const { onChange, value } = props;
+  const { onChange, value, disabled } = props;
   const dayOptions: {
     text: string;
     value: RecurringDayOfTheWeek;
@@ -46,7 +47,7 @@ export const WeekInputView = observer((props: WeekInputViewProps) => {
       value: RecurringDayOfTheWeek.SUNDAY,
     },
   ];
-  console.log('value', value);
+
   return (
     <VStack className="space-y-2">
       <Text variant="caption">반복 요일</Text>
@@ -54,6 +55,7 @@ export const WeekInputView = observer((props: WeekInputViewProps) => {
         {dayOptions.map(day => {
           return (
             <Chip
+              disabled={disabled}
               onClick={() => onChange(day.value)}
               key={day.value}
               clickable
