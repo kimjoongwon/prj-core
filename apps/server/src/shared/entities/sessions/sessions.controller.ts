@@ -52,6 +52,7 @@ export class SessionsController {
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async getSession(@Param('sessionId') sessionId: string) {
     const session = await this.service.getUnique(sessionId);
+
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
   }
 
