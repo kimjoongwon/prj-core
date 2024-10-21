@@ -30,10 +30,10 @@ export class SessionDto extends AbstractDto implements Session {
   @EnumField(() => $Enums.RecurringDayOfTheWeek, { each: true })
   recurringDayOfTheWeek: $Enums.RecurringDayOfTheWeek[];
 
-  @DateField({ nullable: true })
+  @StringField({ nullable: true })
   endDate: Date | null;
 
-  @DateField({ nullable: true })
+  @StringField({ nullable: true })
   startDate: Date | null;
 
   @ClassField(() => TimelineDto, { isArray: true, nullable: true, each: true })
