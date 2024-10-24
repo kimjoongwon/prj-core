@@ -5,7 +5,7 @@ export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login`;
 export const ADMIN_MAIN_PATH = `${ADMIN_PATH}/main`;
 
 export const BOTTOM_TAB_APP_PATH = `/admin/main/app`;
-export const BOTTOM_TAB_LECTURES_PATH = `/admin/main/lectures`;
+export const BOTTOM_TAB_RESERVATION_PATH = `/admin/main/reservation`;
 export const SERVICES_PATH = `/admin/main/app/services`;
 export const SERVICE_PATH = `/admin/main/app/services/:serviceId`;
 export const SERVICE_EDIT_PATH = `/admin/main/app/services/:serviceId/edit`;
@@ -16,19 +16,19 @@ export const SPACE_PATH = `/admin/main/gym/spaces/:spaceId`;
 export const SPACE_EDIT_PATH = `/admin/main/gym/spaces/:spaceId/edit`;
 
 // 예약관리 > 타임라인관리
-export const TIMELINE_ITEMS_PATH = `/admin/main/lectures/timelineItems`;
-export const TIMELINE_ITEM_PATH = `/admin/main/lectures/timelineItems/:timelineItemId`;
-export const TIMELINE_ITEM_EDIT_PATH = `/admin/main/lectures/timelineItems/:timelineItemId/edit`;
+export const TIMELINE_ITEMS_PATH = `/admin/main/reservation/timelineItems`;
+export const TIMELINE_ITEM_PATH = `/admin/main/reservation/timelineItems/:timelineItemId`;
+export const TIMELINE_ITEM_EDIT_PATH = `/admin/main/reservation/timelineItems/:timelineItemId/edit`;
 
 // 세션 > 세션 관리
-export const SESSIONS_PATH = `/admin/main/lectures/sessions`;
-export const SESSION_PATH = `/admin/main/lectures/sessions/:sessionId`;
-export const SESSION_EDIT_PATH = `/admin/main/lectures/sessions/:sessionId/edit`;
+export const SESSIONS_PATH = `/admin/main/reservation/sessions`;
+export const SESSION_PATH = `/admin/main/reservation/sessions/:sessionId`;
+export const SESSION_EDIT_PATH = `/admin/main/reservation/sessions/:sessionId/edit`;
 
-// // 예약 > 예약 관리
-// export const lecturesS_PATH = `/admin/main/lecturess`;
-// export const lectures_PATH = `/admin/main/lecturess/:lecturesId`;
-// export const lectures_EDIT_PATH = `/admin/main/lecturess/:lecturesId/edit`;
+// 예약 > 예약 관리
+export const RESERVATIONS_PATH = `/admin/main/reservations`;
+export const RESERVATION_PATH = `/admin/main/reservations/:reservationId`;
+export const RESERVATION_EDIT_PATH = `/admin/main/reservations/:reservationId/edit`;
 
 // 템플릿 관리
 export const TEMPLATES_PATH = `/admin/main/app/templates`;
@@ -59,7 +59,7 @@ export type Paths =
   | typeof GROUP_EDIT_PATH
   // 서비스
   | typeof BOTTOM_TAB_APP_PATH
-  | typeof BOTTOM_TAB_LECTURES_PATH
+  | typeof BOTTOM_TAB_RESERVATION_PATH
   | typeof SERVICE_PATH
   | typeof SERVICES_PATH
   | typeof SERVICE_EDIT_PATH
@@ -90,6 +90,10 @@ export type Paths =
   | typeof TIMELINE_ITEMS_PATH
   | typeof TIMELINE_ITEM_PATH
   | typeof TIMELINE_ITEM_EDIT_PATH
+  // 예약
+  | typeof RESERVATIONS_PATH
+  | typeof RESERVATION_PATH
+  | typeof RESERVATION_EDIT_PATH
   // 템플릿
   | typeof TEMPLATES_PATH
   | typeof TEMPLATE_PATH
