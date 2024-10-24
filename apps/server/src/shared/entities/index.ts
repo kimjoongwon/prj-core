@@ -19,3 +19,5 @@ export * from './emails';
 export * from './pages';
 export * from './assignments';
 export * from './classifications';
+export * from './lectures';
+export * from './programs';

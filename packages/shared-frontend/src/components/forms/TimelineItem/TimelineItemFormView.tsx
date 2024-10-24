@@ -12,8 +12,8 @@ export const TimelineItemForm = observer((props: TimelineItemFormProps) => {
   const { state } = props;
   return (
     <VStack className="w-full space-y-4">
-      <Input label="제목" state={state} path="title" />
-      <Input label="설명(에디터 교체)" state={state} path="description" />
+      {/* <Input label="제목" state={state} path="title" /> */}
+      {/* <Input label="설명(에디터 교체)" state={state} path="description" /> */}
       <TimeRangePicker
         state={state}
         startTimePath="startDateTime"
