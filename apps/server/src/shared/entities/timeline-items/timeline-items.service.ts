@@ -8,7 +8,7 @@ import { TimelineItemQueryDto } from './dto/timeline-item-query.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class TimelineItemsService implements IService {
+export class TimelineItemsService {
   constructor(private readonly repository: TimelineItemsRepository) {}
 
   upsert(id: string, createTimelineItemDto: CreateTimelineItemDto) {
@@ -19,46 +19,36 @@ export class TimelineItemsService implements IService {
     });
   }
 
-  create(createTimelineItemDto: CreateTimelineItemDto) {
-    return this.repository.create({ data: { ...createTimelineItemDto } });
+  create(args: Prisma.TimelineItemCreateArgs) {
+    return this.repository.create(args);
   }
 
   update(args: Prisma.TimelineItemUpdateArgs) {
     return this.repository.update(args);
   }
 
-  getUnique(timelineItemId: string) {
-    return this.repository.findUnique({ where: { id: timelineItemId } });
+  getUnique(args: Prisma.TimelineItemFindUniqueArgs) {
+    return this.repository.findUnique(args);
   }
 
-  getFirst(timelineItemId: string) {
-    return this.repository.findFirst({
-      where: { id: timelineItemId },
-    });
+  getFirst(args: Prisma.TimelineItemFindFirstArgs) {
+    return this.repository.findFirst(args);
   }
 
-  remove(timelineItemId: string) {
-    return this.repository.update({
-      where: { id: timelineItemId },
-      data: { removedAt: new Date() },
-    });
+  remove(args: Prisma.TimelineItemUpdateArgs) {
+    return this.repository.update(args);
   }
 
-  removeMany(timelineItemIds: string[]) {
-    return this.repository.updateMany({
-      where: { id: { in: timelineItemIds } },
-      data: { removedAt: new Date() },
-    });
+  removeMany(args: Prisma.TimelineItemUpdateManyArgs) {
+    return this.repository.updateMany(args);
   }
 
-  delete(timelineItemId: string) {
-    return this.repository.delete({ where: { id: timelineItemId } });
+  delete(args: Prisma.TimelineItemDeleteArgs) {
+    return this.repository.delete(args);
   }
 
-  async getManyByQuery(query: TimelineItemQueryDto) {
-    const args = PaginationMananger.toArgs(query);
-    console.log(args);
-    const timelineItemCount = await this.repository.count(args);
+  async getManyByQuery(args: Prisma.TimelineItemFindManyArgs) {
+    const timelineItemCount = await this.repository.count(args as Prisma.TimelineItemCountArgs);
     const timelineItems = await this.repository.findMany(args);
     return {
       count: timelineItemCount,

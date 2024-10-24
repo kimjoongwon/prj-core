@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmailDto } from './dtos/create-email.dto';
-import { UpdateEmailDto } from './dtos/update-email.dto';
 import { EmailsRepository } from './emails.repository';
 import { EmailQueryDto } from './dtos/email-query.dto';
 import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class EmailsService implements IService {
+export class EmailsService {
   constructor(private readonly repository: EmailsRepository) {}
 
   getUnique(args: Prisma.EmailFindUniqueArgs) {

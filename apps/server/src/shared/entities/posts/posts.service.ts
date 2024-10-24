@@ -8,7 +8,7 @@ import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class PostsService implements IService {
+export class PostsService {
   constructor(private readonly repository: PostsRepository) {}
   getUnique(id: string) {
     return this.repository.findUnique({ where: { id } });

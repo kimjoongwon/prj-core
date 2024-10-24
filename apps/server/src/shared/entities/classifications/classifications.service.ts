@@ -2,13 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { ClassificationsRepository } from './classifications.repository';
 import { ClassificationQueryDto } from './dtos/classification-query.dto';
 import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 import { ClassificationDto } from './dtos';
 
 @Injectable()
-export class ClassificationsService implements IService {
+export class ClassificationsService {
   constructor(private readonly repository: ClassificationsRepository) {}
+  updateMany(args: unknown): unknown {
+    throw new Error('Method not implemented.');
+  }
 
   getUnique(args: Prisma.ClassificationFindUniqueArgs) {
     return this.repository.findUnique(args);

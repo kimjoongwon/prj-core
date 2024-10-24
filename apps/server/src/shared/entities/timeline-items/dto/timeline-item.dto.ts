@@ -4,7 +4,6 @@ import {
   NumberField,
   StringField,
   UUIDField,
-  UUIDFieldOptional,
 } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { ReservationDto } from '../../reservations/dto/reservation.dto';

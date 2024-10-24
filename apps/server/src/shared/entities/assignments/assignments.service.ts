@@ -18,21 +18,12 @@ export class AssignmentsService implements IService {
     return this.repository.createMany(args);
   }
 
-  getFirst(id: string) {
-    return this.repository.findFirst({ where: { id } });
+  getFirst(args: Prisma.AssignmentFindFirstArgs) {
+    return this.repository.findFirst(args);
   }
 
-  removeMany(ids: string[]) {
-    return this.repository.updateMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
-      data: {
-        removedAt: new Date(),
-      },
-    });
+  updateMany(args: Prisma.AssignmentUpdateManyArgs) {
+    return this.repository.updateMany(args);
   }
 
   delete(id: string) {

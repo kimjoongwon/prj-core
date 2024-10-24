@@ -4,7 +4,7 @@ export interface IService {
   create(args: unknown): unknown;
   getManyByQuery(args: unknown): unknown;
   remove(args: unknown): unknown;
-  removeMany(args: unknown): unknown;
+  updateMany(args: unknown): unknown;
   delete(args: unknown): unknown;
   update(args: unknown): unknown;
 }

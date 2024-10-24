@@ -4,7 +4,7 @@ import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class UsersService implements IService {
+export class UsersService {
   constructor(private readonly repository: UsersRepository) {}
 
   getUnique(args: Prisma.UserFindUniqueArgs) {

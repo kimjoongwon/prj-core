@@ -71,7 +71,10 @@ export class AssignmentsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
   async removeAssignments(@Body() assignmentIds: string[]) {
-    const assignments = await this.service.removeMany(assignmentIds);
+    const assignments = await this.service.updateMany({
+      where: { id: { in: assignmentIds } },
+      data: { removedAt: new Date() },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', assignments.count);
   }
 

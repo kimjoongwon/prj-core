@@ -8,7 +8,7 @@ import { UpdateTenancyDto } from './dto/update-tenancy.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class TenanciesService implements IService {
+export class TenanciesService {
   constructor(private readonly repository: TenanciesRepository) {}
 
   getUnique(args: Prisma.TenancyFindUniqueArgs) {
