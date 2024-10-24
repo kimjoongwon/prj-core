@@ -2,14 +2,11 @@ import { $Enums } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Session } from '../session.entity';
 import {
-  ClassField,
-  DateField,
   EnumField,
   NumberField,
   StringField,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { TimelineDto } from '../../timelines/dto';
 
 export class SessionDto extends AbstractDto implements Session {
   @UUIDField()
@@ -35,7 +32,4 @@ export class SessionDto extends AbstractDto implements Session {
 
   @StringField({ nullable: true })
   startDate: Date | null;
-
-  @ClassField(() => TimelineDto, { isArray: true, nullable: true, each: true })
-  timelines: TimelineDto[] | null;
 }

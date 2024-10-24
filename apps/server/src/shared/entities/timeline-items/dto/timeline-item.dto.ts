@@ -8,12 +8,11 @@ import {
 } from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { ReservationDto } from '../../reservations/dto/reservation.dto';
-import { TimelineDto } from '../../timelines/dto';
 import { TimelineItem } from '../timeline-item.entity';
 
 export class TimelineItemDto extends AbstractDto implements TimelineItem {
-  @UUIDFieldOptional()
-  timelineId: string | null;
+  @UUIDField()
+  sessionId: string;
 
   @StringField()
   title: string;
@@ -23,9 +22,6 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
 
   @DateField()
   endDateTime: Date;
-
-  @StringField()
-  description: string;
 
   @StringField()
   address: string;
@@ -38,9 +34,6 @@ export class TimelineItemDto extends AbstractDto implements TimelineItem {
 
   @UUIDField()
   tenantId: string;
-
-  @ClassField(() => TimelineDto, { nullable: true, swagger: false })
-  timeline: TimelineDto | null;
 
   @ClassField(() => ReservationDto, { isArray: true, nullable: true })
   reservations: ReservationDto[] | null;

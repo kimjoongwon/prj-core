@@ -5,11 +5,21 @@ import {
   ClassField,
   EnumField,
   StringField,
+  StringFieldOptional,
   UUIDField,
 } from '../../../decorators/field.decorators';
 import { UserDto } from '../../users';
 
 export class PostDto extends AbstractDto implements Post {
+  @StringFieldOptional()
+  description: string;
+
+  @StringFieldOptional()
+  thumbnailUrl: string;
+
+  @StringFieldOptional({ each: true })
+  imageUrls: string[];
+
   @EnumField(() => $Enums.PostTypes)
   type: $Enums.PostTypes;
 

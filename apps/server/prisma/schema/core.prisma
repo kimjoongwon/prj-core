@@ -121,6 +121,7 @@ model Tenant {
   tenancy   Tenancy     @relation(fields: [tenancyId], references: [id])
   user      User        @relation(fields: [userId], references: [id])
   groups    Group[]
+  lectures  Lecture[]
 }
 
 model Space {
@@ -190,50 +191,33 @@ model Reservation {
 model Session {
   id                    String                  @id @default(uuid())
   seq                   Int                     @unique @default(autoincrement())
-  name                  String
-  tenantId              String
-  createdAt             DateTime                @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
   type                  SessionTypes            @default(ONE_TIME)
   startDate             DateTime                @db.Date
   endDate               DateTime?               @db.Date
   recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
-  removedAt             DateTime?               @db.Timestamptz(6)
   repeatCycle           Int                     @default(1)
   repeatCycleType       RepeatCycleTypes        @default(WEEK)
-  timelines             Timeline[]
-}
-
-model Timeline {
-  id            String         @id @default(uuid())
-  seq           Int            @unique @default(autoincrement())
-  sessionId     String
-  date          DateTime       @db.Date
-  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime?      @updatedAt @db.Timestamptz(6)
-  removedAt     DateTime?      @db.Timestamptz(6)
-  tenantId      String
-  session       Session        @relation(fields: [sessionId], references: [id])
-  timelineItems TimelineItem[]
+  tenantId              String
+  createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
+  removedAt             DateTime?               @db.Timestamptz(6)
+  timelineItems         TimelineItem[]
+  lecture               Lecture?
 }
 
 model TimelineItem {
   id            String       @id @default(uuid())
   seq           Int          @unique @default(autoincrement())
-  timelineId    String
-  title         String
+  sessionId     String
   startDateTime DateTime     @db.Timestamptz(6)
   endDateTime   DateTime     @db.Timestamptz(6)
-  description   String
-  address       String?
-  maxCapacity   Int
-  minCapacity   Int
   createdAt     DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime?    @updatedAt @db.Timestamptz(6)
   removedAt     DateTime?    @db.Timestamptz(6)
   tenantId      String
+  session       Session      @relation(fields: [sessionId], references: [id])
   reservations  Reservation?
-  timeline      Timeline     @relation(fields: [timelineId], references: [id])
+  program       Program?
 }
 
 model Role {
@@ -277,7 +261,7 @@ model Template {
   id           String        @id @default(uuid())
   seq          Int           @unique @default(autoincrement())
   name         TemplateNames @unique @default(WELCOME)
-  postId       String
+  postId       String        @unique
   createdAt    DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
   removedAt    DateTime?     @db.Timestamptz(6)
@@ -289,6 +273,7 @@ model Qna {
   id        String     @id @default(uuid())
   seq       Int        @unique @default(autoincrement())
   status    QnaStatus  @default(OPEN)
+  tenantId  String
   createdAt DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
   removedAt DateTime?  @db.Timestamptz(6)
@@ -298,9 +283,10 @@ model Qna {
 model Question {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  postId    String
+  postId    String    @unique
   qnaId     String
   serviceId String
+  tenantId  String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
@@ -315,6 +301,7 @@ model Answer {
   questionId String
   postId     String
   serviceId  String
+  tenantId   String
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
@@ -323,20 +310,25 @@ model Answer {
 }
 
 model Post {
-  id        String     @id @default(uuid())
-  seq       Int        @unique @default(autoincrement())
-  type      PostTypes  @default(TEXT)
-  title     String?
-  content   String     @db.VarChar(1000)
-  authorId  String
-  createdAt DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?  @db.Timestamptz(6)
-  answers   Answer[]
-  emails    Email[]
-  author    User       @relation(fields: [authorId], references: [id])
-  questions Question[]
-  templates Template[]
+  id           String    @id @default(uuid())
+  seq          Int       @unique @default(autoincrement())
+  type         PostTypes @default(TEXT)
+  title        String?
+  description  String?
+  content      String    @db.VarChar(1000)
+  thumbnailUrl String?
+  imageUrls    String[]  @default([])
+  authorId     String
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt    DateTime? @db.Timestamptz(6)
+  answers      Answer[]
+  emails       Email[]
+  author       User      @relation(fields: [authorId], references: [id])
+  question     Question?
+  template     Template?
+  program      Program?
+  lecture      Lecture?
 }
 
 model Page {

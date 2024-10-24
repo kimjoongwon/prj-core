@@ -5,5 +5,4 @@ import { COMMON_ENTITY_FIELDS } from '../../../constants/entity-common-fields';
 export class CreateTimelineItemDto extends OmitType(TimelineItemDto, [
   ...COMMON_ENTITY_FIELDS,
   'reservations',
-  'timeline',
 ]) {}

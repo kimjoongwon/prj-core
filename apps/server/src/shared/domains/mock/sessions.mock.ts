@@ -11,7 +11,6 @@ export const mockSessions: CreateSessionDto[] = [
     recurringDayOfTheWeek: [],
     startDate: dayjs().toDate(),
     endDate: dayjs().toDate(),
-    timelineDates: [dayjs().toISOString()],
   },
   {
     tenantId: '56f81110-0dea-49e4-a231-3755901e3acc',
@@ -22,7 +21,6 @@ export const mockSessions: CreateSessionDto[] = [
     recurringDayOfTheWeek: [],
     endDate: dayjs().add(1, 'day').toDate(),
     startDate: dayjs().toDate(),
-    timelineDates: [dayjs().toISOString(), dayjs().add(1, 'day').toISOString()],
   },
   {
     tenantId: '56f81110-0dea-49e4-a231-3755901e3acc',
@@ -33,7 +31,6 @@ export const mockSessions: CreateSessionDto[] = [
     recurringDayOfTheWeek: ['MONDAY'],
     endDate: undefined,
     startDate: undefined,
-    timelineDates: [dayjs().add(3, 'week').toISOString(), dayjs().add(6, 'week').toISOString()],
   },
   {
     tenantId: '56f81110-0dea-49e4-a231-3755901e3acc',
@@ -44,6 +41,5 @@ export const mockSessions: CreateSessionDto[] = [
     recurringDayOfTheWeek: [],
     endDate: undefined,
     startDate: undefined,
-    timelineDates: [],
   },
 ];

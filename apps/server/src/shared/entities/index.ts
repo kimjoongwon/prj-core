@@ -11,7 +11,6 @@ export * from './abilities';
 export * from './subjects';
 export * from './tenancies';
 export * from './sessions';
-export * from './timelines';
 export * from './timeline-items';
 export * from './templates';
 export * from './posts';

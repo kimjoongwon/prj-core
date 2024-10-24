@@ -1,0 +1,27 @@
+model Program {
+    id             String       @id @default(cuid())
+    postId         String       @unique
+    timelineItemId String       @unique
+    address        String?
+    maxCapacity    Int
+    minCapacity    Int
+    tenantId       String
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
+    removedAt      DateTime?
+    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
+    post           Post         @relation(fields: [postId], references: [id])
+}
+
+model Lecture {
+    id        String    @id @default(cuid())
+    postId    String    @unique
+    sessionId String    @unique
+    tenantId  String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    removedAt DateTime?
+    session   Session   @relation(fields: [sessionId], references: [id])
+    post      Post      @relation(fields: [postId], references: [id])
+    tenant    Tenant    @relation(fields: [tenantId], references: [id])
+}
