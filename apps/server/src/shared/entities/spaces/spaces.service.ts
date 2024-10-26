@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../providers/context.provider';
 import { SpacesRepository } from './spaces.repository';
-import { CreateSpaceDto } from './dtos/create-space.dto';
-import { IService } from '../../types/interfaces/service.interface';
 import { SpaceQueryDto, UpdateSpaceDto } from './dtos';
 import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
@@ -60,22 +58,6 @@ export class SpacesService {
     };
   }
 
-  createBaseSpace() {
-    return this.repository.create({
-      data: {
-        name: '기본',
-      },
-    });
-  }
-
-  async findBaseSpace() {
-    return this.repository.findUnique({
-      where: {
-        name: '기본',
-      },
-    });
-  }
-
   async getAllSpace() {
     return this.repository.findMany({
       where: {
@@ -84,18 +66,9 @@ export class SpacesService {
     });
   }
 
-  async createOrUpdateGalaxySpace() {
-    const name = 'Galaxy';
-    return await this.repository.upsert({
-      where: { name },
-      update: { name },
-      create: { name },
-    });
-  }
-
   getAccessibleSpaces() {
-    const tenant = ContextProvider.getTenant();
-    const spaceIds = tenant.tenants.map((tenant) => tenant.tenancy.spaceId);
+    const user = ContextProvider.getTenant();
+    const spaceIds = user.tenants.map((tenant) => tenant.spaceId);
     return this.repository.findMany({ where: { id: { in: spaceIds } } });
   }
 }

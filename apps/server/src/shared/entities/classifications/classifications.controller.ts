@@ -9,6 +9,7 @@ import {
   HttpCode,
   Param,
   Query,
+  Headers,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
@@ -132,8 +133,11 @@ export class ClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ClassificationDto, HttpStatus.OK, { isArray: true })
-  async getClassificationsByQuery(@Query() query: ClassificationQueryDto) {
-    const { count, classifications } = await this.service.getManyByQuery(query);
+  async getClassificationsByQuery(
+    @Query() query: ClassificationQueryDto,
+    @Headers('tenantId') tenantId: string,
+  ) {
+    const { count, classifications } = await this.service.getManyByQuery(query.toArgs());
 
     return new ResponseEntity(
       HttpStatus.OK,

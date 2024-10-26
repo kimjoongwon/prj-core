@@ -34,34 +34,11 @@ export class AssignmentsService implements IService {
     return this.repository.create(args);
   }
 
-  async getManyByQuery(pageQuery: AssignmentPageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
-    const assignments: AssignmentDto[] = await this.repository.findMany({
-      ...args,
-      where: {
-        ...args.where,
-        removedAt: null,
-      },
-      include: {
-        group: true,
-        service: true,
-      },
-    });
-
-    const assignmentsWithServiceItem = await Promise.all(
-      assignments.map(async (assignment) => {
-        const serviceItem = await this.repository.findServiceItem(assignment);
-
-        return {
-          ...assignment,
-          [assignment.service.name]: serviceItem,
-        };
-      }),
-    );
-
-    const count = await this.repository.count(args);
+  async getManyByQuery(args: Prisma.AssignmentFindManyArgs) {
+    const assignments = await this.repository.findMany(args);
+    const count = await this.repository.count(args as Prisma.AssignmentCountArgs);
     return {
-      assignments: assignmentsWithServiceItem,
+      assignments,
       count,
     };
   }

@@ -1,13 +1,13 @@
-import { $Enums, Prisma } from '@prisma/client';
+import { $Enums } from '@prisma/client';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { TenantDto } from '../../tenants';
 import { Role } from '../role.entity';
 import { ClassField, EnumField } from '../../../decorators/field.decorators';
-import { TenantDto } from '../../tenants';
 
 export class RoleDto extends AbstractDto implements Role {
   @EnumField(() => $Enums.Roles)
   name: $Enums.Roles;
 
-  @ClassField(() => TenantDto, { each: true, nullable: true, swagger: false })
+  @ClassField(() => TenantDto, { required: false, swagger: false })
   tenant?: TenantDto;
 }

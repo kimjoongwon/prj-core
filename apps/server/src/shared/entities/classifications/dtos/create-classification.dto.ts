@@ -6,9 +6,7 @@ import { ClassField } from '../../../decorators';
 export class CreateClassificationDto extends OmitType(ClassificationDto, [
   ...COMMON_ENTITY_FIELDS,
   'space',
-  'reservation',
   'user',
-  'service',
   'category',
 ]) {}
 

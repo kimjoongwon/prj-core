@@ -1,7 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { IRepository } from '../../types/interfaces/repository.interface';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LecturesRepository implements IRepository {
@@ -28,17 +28,7 @@ export class LecturesRepository implements IRepository {
   }
 
   findMany(args: Prisma.LectureFindManyArgs) {
-    return this.prisma.lecture.findMany({
-      ...args,
-      where: {
-        removedAt: null,
-        ...args.where,
-      },
-      orderBy: {
-        createdAt: 'desc',
-        ...args.orderBy,
-      },
-    });
+    return this.prisma.lecture.findMany(args);
   }
 
   findUnique(args: Prisma.LectureFindUniqueArgs) {

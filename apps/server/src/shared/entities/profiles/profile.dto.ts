@@ -1,5 +1,4 @@
-import { ClassField, StringField } from '../../decorators/field.decorators';
-import { UserDto } from '../users';
+import { StringField } from '../../decorators/field.decorators';
 import { ProfileEntity } from './profile.entity';
 
 export class ProfileDto extends ProfileEntity {
@@ -9,6 +8,6 @@ export class ProfileDto extends ProfileEntity {
   @StringField()
   userId: string;
 
-  @ClassField(() => UserDto, { nullable: true, swagger: false, each: false })
-  user?: UserDto;
+  // @ClassField(() => UserDto, { required: true, each: false })
+  // user?: UserDto;
 }

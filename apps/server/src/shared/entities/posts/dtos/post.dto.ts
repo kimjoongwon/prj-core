@@ -8,17 +8,17 @@ import {
   StringFieldOptional,
   UUIDField,
 } from '../../../decorators/field.decorators';
-import { UserDto } from '../../users';
+import { UserDto } from '../../users/dtos/user.dto';
 
 export class PostDto extends AbstractDto implements Post {
-  @StringFieldOptional()
-  description: string;
-
-  @StringFieldOptional()
-  thumbnailUrl: string;
+  @StringFieldOptional({ nullable: true })
+  thumbnailImgUrl: string | null;
 
   @StringFieldOptional({ each: true })
-  imageUrls: string[];
+  imgUrls: string[];
+
+  @StringFieldOptional()
+  description: string;
 
   @EnumField(() => $Enums.PostTypes)
   type: $Enums.PostTypes;
@@ -32,6 +32,6 @@ export class PostDto extends AbstractDto implements Post {
   @UUIDField()
   authorId: string;
 
-  @ClassField(() => UserDto, { nullable: true, each: true, required: false })
+  @ClassField(() => UserDto, { required: false })
   author?: UserDto;
 }

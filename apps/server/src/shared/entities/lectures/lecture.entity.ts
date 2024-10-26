@@ -1,8 +1,6 @@
-import { AbstractEntity } from '../common/abstract.entity';
+import { AbstractEntity } from '../common';
 import { Lecture as LectureEntity } from '@prisma/client';
-
 export class Lecture extends AbstractEntity implements LectureEntity {
-  postId: string;
-  sessionId: string;
-  tenantId: string;
+  timlineItemId: string;
+  exerciseId: string;
 }
