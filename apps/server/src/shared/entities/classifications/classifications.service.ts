@@ -45,35 +45,12 @@ export class ClassificationsService {
     return this.repository.create(args);
   }
 
-  async getManyByQuery(query: ClassificationQueryDto) {
-    const args = PaginationMananger.toArgs(query);
+  async getManyByQuery(args: Prisma.ClassificationFindManyArgs) {
+    const classifications = await this.repository.findMany(args);
+    const count = await this.repository.count(args as Prisma.ClassificationCountArgs);
 
-    const classifications: ClassificationDto[] = await this.repository.findMany({
-      ...args,
-      where: {
-        ...args.where,
-        removedAt: null,
-      },
-      include: {
-        category: true,
-        service: true,
-      },
-    });
-
-    const classificationsWithServiceItem = await Promise.all(
-      classifications.map(async (classification) => {
-        const serviceItem = await this.repository.findServiceItem(classification);
-        console.log('serviceItem', serviceItem);
-        return {
-          ...classification,
-          [classification.service.name]: serviceItem,
-        };
-      }),
-    );
-
-    const count = await this.repository.count(args);
     return {
-      classifications: classificationsWithServiceItem,
+      classifications,
       count,
     };
   }

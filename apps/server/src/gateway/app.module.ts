@@ -1,5 +1,5 @@
 import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { InitModule, LoggerMiddleware, ServicesModule, UsersModule } from '@shared';
+import { InitModule, LoggerMiddleware, UsersModule } from '@shared';
 import { libModules } from '../main.config';
 import { JwtStrategy } from '../shared/domains/auth/strategies/jwt.strategy';
 import { RouterModule } from '@nestjs/core';
@@ -11,7 +11,6 @@ import {
   AdminClassificationsModule,
   AdminGroupsModule,
   AdminRolesModule,
-  AdminServicesModule,
   AdminSessionsModule,
   AdminSpacesModule,
   AdminSubjectsModule,
@@ -45,8 +44,6 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
     AdminRolesModule,
     AuthModule,
     AdminPagesModule,
-    AdminServicesModule,
-    ServicesModule,
     AdminClassificationsModule,
     RouterModule.register([
       {

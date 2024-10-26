@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import {
   CreateSystemEmailDto,
   SystemEmailDto,
@@ -35,7 +34,7 @@ export class SystemEmailsController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(SystemEmailDto, HttpStatus.OK)
   async createSystemEmail(@Body() createSystemEmailDto: CreateSystemEmailDto) {
     const email = await this.service.create({
       data: createSystemEmailDto,

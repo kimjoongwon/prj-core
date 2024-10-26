@@ -3,25 +3,15 @@ import { InitService } from './init.service';
 import {
   PagesModule,
   RolesModule,
-  ServicesModule,
   SpacesModule,
   SubjectsModule,
-  TenanciesModule,
   UsersModule,
 } from '../../entities';
 import { ConfigService } from '@nestjs/config';
 import { PasswordService } from '../password';
 
 @Module({
-  imports: [
-    ServicesModule,
-    RolesModule,
-    SpacesModule,
-    TenanciesModule,
-    UsersModule,
-    SubjectsModule,
-    PagesModule,
-  ],
+  imports: [RolesModule, SpacesModule, UsersModule, SubjectsModule, PagesModule],
   providers: [InitService, ConfigService, PasswordService],
   exports: [InitService],
 })

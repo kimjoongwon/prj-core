@@ -22,7 +22,6 @@ import {
   SpaceDto,
   SpaceQueryDto,
   SpacesService,
-  TenancyDto,
   UpdateSpaceDto,
 } from '@shared';
 import { plainToInstance } from 'class-transformer';
@@ -35,7 +34,7 @@ export class SpacesController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
     const space = await this.service.create({ data: createSpaceDto });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));

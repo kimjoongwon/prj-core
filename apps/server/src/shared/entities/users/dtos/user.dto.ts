@@ -1,8 +1,8 @@
 import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { TenantDto } from '../../tenants/dtos/tenant.dto';
 import { UserEntity } from '../user.entity';
-import { TenantDto } from '../../tenants';
 
 export class UserDto extends AbstractDto implements UserEntity {
   @EmailField()
@@ -17,10 +17,10 @@ export class UserDto extends AbstractDto implements UserEntity {
   @PasswordField()
   password: string;
 
-  @ClassField(() => ProfileDto, { each: true, nullable: true })
-  profiles: ProfileDto[] | null;
+  @ClassField(() => ProfileDto, { each: true, required: false })
+  profiles?: ProfileDto[] | null;
 
-  @ClassField(() => TenantDto, { each: true, nullable: true })
+  @ClassField(() => TenantDto, { each: true, required: false })
   tenants?: TenantDto[] | null;
 
   getActiveTenant(): TenantDto | null {

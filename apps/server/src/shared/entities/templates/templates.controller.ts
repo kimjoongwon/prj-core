@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
-import { TenancyDto } from '../tenancies';
 import {
   CreateTemplateDto,
   TemplateDto,
@@ -25,6 +24,7 @@ import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { TemplatesService } from './templates.service';
+import { SystemEmailDto } from '../system-emails/dtos/system-email.dto';
 
 @ApiTags('ADMIN_TEMPLATES')
 @Controller(ApiEndpoints.ADMIN_TEMPLATES)
@@ -34,7 +34,7 @@ export class TemplatesController {
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(TenancyDto, HttpStatus.OK)
+  @ApiResponseEntity(SystemEmailDto, HttpStatus.OK)
   async createTemplate(@Body() createTemplateDto: CreateTemplateDto) {
     const { post, ...rawCreateTemplateDto } = createTemplateDto;
     const template = await this.service.create({

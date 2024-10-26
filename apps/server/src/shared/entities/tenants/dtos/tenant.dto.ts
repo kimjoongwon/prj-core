@@ -1,16 +1,10 @@
-import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { Tenant } from '../tenant.entity';
-import { $Enums } from '@prisma/client';
-import { TenancyDto } from '../../tenancies';
+import { AbstractDto } from '../../common/dtos/abstract.dto';
+import { BooleanField, ClassField, StringField } from '../../../decorators/field.decorators';
 import { RoleDto } from '../../roles/dto/role.dto';
-import {
-  BooleanField,
-  ClassField,
-  EnumField,
-  StringField,
-  UUIDField,
-} from '../../../decorators/field.decorators';
-import { UserDto } from '../../users';
+import { UserDto } from '../../users/dtos/user.dto';
+import { SpaceDto } from '../../spaces/dtos/space.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
@@ -19,21 +13,18 @@ export class TenantDto extends AbstractDto implements Tenant {
   @StringField()
   roleId: string;
 
-  @UUIDField()
-  tenancyId: string;
+  @StringField()
+  spaceId: string;
 
   @BooleanField()
   active: boolean;
 
-  @EnumField(() => $Enums.TenantTypes)
-  type: $Enums.TenantTypes;
+  @ClassField(() => RoleDto, { required: false })
+  role?: RoleDto;
 
-  @ClassField(() => TenancyDto, { nullable: true })
-  tenancy: TenancyDto | null;
+  @ClassField(() => UserDto, { required: false })
+  user?: UserDto;
 
-  @ClassField(() => RoleDto, { nullable: true })
-  role: RoleDto | null;
-
-  @ClassField(() => UserDto, { nullable: true })
-  user: UserDto | null;
+  @ClassField(() => SpaceDto, { required: false })
+  space?: SpaceDto;
 }

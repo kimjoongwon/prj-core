@@ -1,43 +1,32 @@
-model Program {
-    id             String       @id @default(cuid())
-    postId         String       @unique
-    timelineItemId String       @unique
-    address        String?
-    maxCapacity    Int
-    minCapacity    Int
-    tenantId       String
-    createdAt      DateTime     @default(now())
-    updatedAt      DateTime     @updatedAt
-    removedAt      DateTime?
-    timelineItem   TimelineItem @relation(fields: [timelineItemId], references: [id])
-    post           Post         @relation(fields: [postId], references: [id])
+model Lecture {
+    id            String    @id @default(cuid())
+    timlineItemId String
+    exerciseId    String
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+    removedAt     DateTime?
 }
 
-model Lecture {
+model Exercise {
+    id          String    @id @default(cuid())
+    postId      String    @unique
+    address     String?
+    maxCapacity Int
+    minCapacity Int
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    removedAt   DateTime?
+    post        Post      @relation(fields: [postId], references: [id])
+}
+
+model Gym {
     id        String    @id @default(cuid())
-    postId    String    @unique
-    sessionId String    @unique
+    address   String
+    phone     String
+    spaceId   String
     tenantId  String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     removedAt DateTime?
-    session   Session   @relation(fields: [sessionId], references: [id])
-    post      Post      @relation(fields: [postId], references: [id])
-    tenant    Tenant    @relation(fields: [tenantId], references: [id])
+    space     Space     @relation(fields: [spaceId], references: [id])
 }
-
-// model Gym {
-//     id         String @id @default(cuid())
-//     name       String
-//     address    String
-//     categoryId String
-//     spaceId    String @unique
-// }
-
-// model Company {
-//     id         String @id @default(cuid())
-//     name       String
-//     address    String
-//     categoryId String
-//     spaceId    String @unique
-// }

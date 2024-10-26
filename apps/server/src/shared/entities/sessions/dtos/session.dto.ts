@@ -9,11 +9,14 @@ import {
 } from '../../../decorators/field.decorators';
 
 export class SessionDto extends AbstractDto implements Session {
-  @UUIDField()
-  tenantId: string;
-
   @StringField()
   name: string;
+
+  @UUIDField()
+  timelineId: string;
+
+  @UUIDField()
+  tenantId: string;
 
   @EnumField(() => $Enums.SessionTypes)
   type: $Enums.SessionTypes;

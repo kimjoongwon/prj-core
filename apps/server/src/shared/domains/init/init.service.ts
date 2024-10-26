@@ -2,10 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   PagesService,
   RolesService,
-  ServicesService,
   SpacesService,
   SubjectsService,
-  TenanciesService,
   UsersService,
 } from '../../entities';
 import { ConfigService } from '@nestjs/config';
@@ -21,11 +19,9 @@ export class InitService {
     private readonly rolesService: RolesService,
     private readonly spacesService: SpacesService,
     private readonly configService: ConfigService,
-    private readonly tenanciesService: TenanciesService,
     private readonly usersService: UsersService,
     private readonly passwordService: PasswordService,
     private readonly subjectsService: SubjectsService,
-    private readonly servicesService: ServicesService,
   ) {}
 
   async createDefaultRoles() {
@@ -67,7 +63,6 @@ export class InitService {
   async createDefaultSpace() {
     this.logger.log(`[${this.LOG_PREFIX}] 기본 공간 생성`);
     let spaceId = null;
-    let tenancyId = null;
 
     const appConfig = this.configService.get<AppConfig>('app');
 
@@ -89,26 +84,12 @@ export class InitService {
       this.logger.log(`[${this.LOG_PREFIX}] 기본 공간 생성`);
     }
 
-    const defaultTenancy = await this.tenanciesService.getUnique({
-      where: { spaceId },
-    });
-
-    if (defaultTenancy) {
-      this.logger.log(`[${this.LOG_PREFIX}] 기본 테넌시가 이미 존재합니다.`);
-      tenancyId = defaultTenancy.id;
-    } else {
-      const tenancy = await this.tenanciesService.create({ data: { spaceId } });
-      tenancyId = tenancy.id;
-      this.logger.log(`[${this.LOG_PREFIX}] 기본 테넌시 생성`);
-    }
-
     return {
-      tenancyId,
       spaceId,
     };
   }
 
-  async createDefaultUser(roleId, tenancyId) {
+  async createDefaultUser(roleId, spaceId) {
     const appConfig = this.configService.get<AppConfig>('app');
     const hashedPassword = await this.passwordService.hashPassword('rkdmf12!@');
 
@@ -130,7 +111,7 @@ export class InitService {
           phone: '01073162347',
           tenants: {
             create: {
-              tenancyId,
+              spaceId,
               roleId,
               active: true,
             },
@@ -161,29 +142,7 @@ export class InitService {
   async initApp() {
     await this.createSubjects();
     const { adminRoleId } = await this.createDefaultRoles();
-    const { tenancyId } = await this.createDefaultSpace();
-    await this.createServices();
-    await this.createDefaultUser(adminRoleId, tenancyId);
-  }
-
-  async createServices() {
-    const services: { name: Lowercase<Prisma.ModelName>; label: string }[] = [
-      { name: 'user', label: '이용자' },
-      { name: 'space', label: '공간' },
-    ];
-
-    await Promise.all(
-      services.map(async (service) => {
-        const serviceEntity = await this.servicesService.getUnqiue({
-          where: { name: service.name },
-        });
-
-        if (!serviceEntity) {
-          await this.servicesService.create({ data: service });
-        }
-      }),
-    );
-
-    this.logger.log(`[${this.LOG_PREFIX}] Create Services`);
+    const { spaceId } = await this.createDefaultSpace();
+    await this.createDefaultUser(adminRoleId, spaceId);
   }
 }

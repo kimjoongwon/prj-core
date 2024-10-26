@@ -116,7 +116,7 @@ export class AssignmentsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK, { isArray: true })
   async getAssignmentsByQuery(@Query() query: AssignmentQueryDto) {
-    const { count, assignments } = await this.service.getManyByQuery(query);
+    const { count, assignments } = await this.service.getManyByQuery(query.toArgs());
 
     return new ResponseEntity(
       HttpStatus.OK,
