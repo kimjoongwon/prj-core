@@ -1,7 +1,12 @@
-import { ClassField, EmailField, PasswordField, StringField } from '../../../decorators';
+import {
+  ClassField,
+  EmailField,
+  PasswordField,
+  StringField,
+} from '../../../decorators/field.decorators';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { TenantDto } from '../../tenants/dtos/tenant.dto';
+import { TenantDto } from '../../tenants';
 import { UserEntity } from '../user.entity';
 
 export class UserDto extends AbstractDto implements UserEntity {

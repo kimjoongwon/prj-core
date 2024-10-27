@@ -7,6 +7,6 @@ export class SpaceDto extends AbstractDto implements Space {
   @StringField()
   name: string;
 
-  @ClassField(() => GroupDto, { required: false })
+  @ClassField(() => GroupDto, { required: false, each: true })
   groups?: GroupDto[];
 }

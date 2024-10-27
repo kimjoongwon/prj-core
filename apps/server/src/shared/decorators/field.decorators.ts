@@ -382,7 +382,7 @@ export function ClassField<TClass extends Constructor>(
   options: Omit<ApiPropertyOptions, 'type'> & IClassFieldOptions = {},
 ): PropertyDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const classValue = () => getClass();
+  const classValue = getClass();
 
   const decorators = [Type(() => classValue), ValidateNested({ each: options.each })];
 
