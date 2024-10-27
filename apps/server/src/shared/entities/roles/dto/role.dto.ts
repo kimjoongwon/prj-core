@@ -8,6 +8,6 @@ export class RoleDto extends AbstractDto implements Role {
   @EnumField(() => $Enums.Roles)
   name: $Enums.Roles;
 
-  @ClassField(() => TenantDto, { required: false, swagger: false })
+  @ClassField(() => TenantDto, { required: false })
   tenant?: TenantDto;
 }

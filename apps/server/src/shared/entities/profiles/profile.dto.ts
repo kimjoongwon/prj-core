@@ -7,7 +7,4 @@ export class ProfileDto extends ProfileEntity {
 
   @StringField()
   userId: string;
-
-  // @ClassField(() => UserDto, { required: true, each: false })
-  // user?: UserDto;
 }

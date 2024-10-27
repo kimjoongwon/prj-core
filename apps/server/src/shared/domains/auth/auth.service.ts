@@ -82,7 +82,13 @@ export class AuthService {
       where: { email },
       include: {
         profiles: true,
-        tenants: true,
+        tenants: {
+          include: {
+            role: true,
+            space: true,
+            user: true,
+          },
+        },
       },
     });
 
@@ -97,9 +103,11 @@ export class AuthService {
       },
       include: {
         role: true,
+        space: true,
+        user: true,
       },
     });
-    console.log(user.password);
+
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {

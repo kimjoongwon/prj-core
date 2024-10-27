@@ -8,11 +8,7 @@ import {
 import { UserDto } from './user.dto';
 import { COMMON_ENTITY_FIELDS } from '../../../constants';
 
-export class UpsertUserDto extends OmitType(UserDto, [
-  ...COMMON_ENTITY_FIELDS,
-  'profiles',
-  'tenants',
-]) {
+export class UpsertUserDto extends OmitType(UserDto, [...COMMON_ENTITY_FIELDS]) {
   @EmailField()
   email: string;
 

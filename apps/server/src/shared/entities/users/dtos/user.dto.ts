@@ -18,12 +18,8 @@ export class UserDto extends AbstractDto implements UserEntity {
   password: string;
 
   @ClassField(() => ProfileDto, { each: true, required: false })
-  profiles?: ProfileDto[] | null;
+  profiles?: ProfileDto[];
 
   @ClassField(() => TenantDto, { each: true, required: false })
-  tenants?: TenantDto[] | null;
-
-  getActiveTenant(): TenantDto | null {
-    return this.tenants?.find((tenant) => tenant.active) ?? null;
-  }
+  tenants?: TenantDto[];
 }
