@@ -1,6 +1,6 @@
-export * from './categories';
 export * from './tenants';
 export * from './users';
+export * from './categories';
 export * from './roles';
 export * from './spaces';
 export * from './groups';
@@ -17,5 +17,4 @@ export * from './emails';
 export * from './pages';
 export * from './assignments';
 export * from './classifications';
-export * from './lectures';
 export * from './lectures';

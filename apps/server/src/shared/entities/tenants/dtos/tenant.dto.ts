@@ -1,8 +1,8 @@
 import { Tenant } from '../tenant.entity';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { RoleDto } from '../../roles/dto/role.dto';
-import { UserDto } from '../../users/dtos/user.dto';
-import { SpaceDto } from '../../spaces/dtos/space.dto';
+import { RoleDto } from '../../roles';
+import { UserDto } from '../../users';
+import { SpaceDto } from '../../spaces';
 import { BooleanField, ClassField, StringField } from '../../../decorators/field.decorators';
 
 export class TenantDto extends AbstractDto implements Tenant {
