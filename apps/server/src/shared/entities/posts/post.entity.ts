@@ -5,7 +5,7 @@ export class Post extends AbstractEntity implements PostEntity {
   title: string;
   description: string;
   content: string;
-  thumbnailImgUrl: string | null;
-  imgUrls: string[];
+  depotFileIds: string[];
   authorId: string;
+  tenantId: string;
 }

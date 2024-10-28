@@ -15,5 +15,6 @@ export interface SystemEmailDto {
   seq: number;
   status: EmailStatus;
   templateId: string;
+  tenantId: string;
   updatedAt: string;
 }

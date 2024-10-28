@@ -7,6 +7,12 @@
 
 export interface UpdateClassificationDto {
   categoryId?: string;
-  serviceId?: string;
-  serviceItemId?: string;
+  /** @nullable */
+  depotFileId?: string | null;
+  /** @nullable */
+  postId?: string | null;
+  /** @nullable */
+  spaceId?: string | null;
+  /** @nullable */
+  userId?: string | null;
 }

@@ -30,3 +30,17 @@ model Gym {
     removedAt DateTime?
     space     Space     @relation(fields: [spaceId], references: [id])
 }
+
+model Reservation {
+    seq            Int               @unique @default(autoincrement())
+    id             String            @id @default(uuid())
+    timelineItemId String            @unique
+    createdAt      DateTime          @default(now()) @db.Timestamptz(6)
+    updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
+    removedAt      DateTime?         @db.Timestamptz(6)
+    tenantId       String
+    userId         String            @unique
+    status         ReservationStatus @default(CONFIRMED)
+
+    @@unique([userId, timelineItemId])
+}

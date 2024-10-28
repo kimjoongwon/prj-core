@@ -6,14 +6,20 @@ import { GroupDto } from '../../groups/dtos/group.dto';
 import { SpaceDto } from '../../spaces/dtos/space.dto';
 
 export class AssignmentDto extends AbstractDto implements Assignment {
-  @UUIDField()
-  spaceId: string;
+  @UUIDField({ nullable: true })
+  postId: string | null;
 
-  @UUIDField()
-  userId: string;
+  @UUIDField({ nullable: true })
+  depotFileId: string | null;
 
-  @UUIDField()
-  groupId: string;
+  @UUIDField({ nullable: true })
+  spaceId: string | null;
+
+  @UUIDField({ nullable: true })
+  userId: string | null;
+
+  @UUIDField({ nullable: true })
+  groupId: string | null;
 
   @ClassField(() => UserDto, { required: false })
   user?: UserDto;

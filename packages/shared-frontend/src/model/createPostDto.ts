@@ -9,9 +9,9 @@ import type { PostTypes } from './postTypes';
 export interface CreatePostDto {
   authorId: string;
   content: string;
+  depotFileIds: string[];
   description?: string;
-  imageUrls?: string[];
-  thumbnailUrl?: string;
+  tenantId: string;
   title: string;
   type: PostTypes;
 }

@@ -12,6 +12,7 @@ export * from './abilityTypes';
 export * from './assignmentDto';
 export * from './boolean';
 export * from './categoryDto';
+export * from './categoryTypes';
 export * from './checkEmailVerification200AllOf';
 export * from './checkEmailVerification200AllOfMeta';
 export * from './checkEmailVerification200AllOfPageMeta';

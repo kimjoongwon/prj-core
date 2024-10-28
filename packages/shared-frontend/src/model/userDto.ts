@@ -4,8 +4,8 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDtoProfiles } from './userDtoProfiles';
-import type { UserDtoTenants } from './userDtoTenants';
+import type { ProfileDto } from './profileDto';
+import type { TenantDto } from './tenantDto';
 
 export interface UserDto {
   createdAt: string;
@@ -15,12 +15,10 @@ export interface UserDto {
   /** @minLength 6 */
   password: string;
   phone: string;
-  /** @nullable */
-  profiles: UserDtoProfiles;
+  profiles?: ProfileDto;
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  /** @nullable */
-  tenants: UserDtoTenants;
+  tenants?: TenantDto;
   updatedAt: string;
 }

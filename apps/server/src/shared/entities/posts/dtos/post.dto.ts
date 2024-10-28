@@ -11,11 +11,8 @@ import {
 import { UserDto } from '../../users/dtos/user.dto';
 
 export class PostDto extends AbstractDto implements Post {
-  @StringFieldOptional({ nullable: true })
-  thumbnailImgUrl: string | null;
-
-  @StringFieldOptional({ each: true })
-  imgUrls: string[];
+  @StringField({ default: [], each: true })
+  depotFileIds: string[];
 
   @StringFieldOptional()
   description: string;
@@ -31,6 +28,9 @@ export class PostDto extends AbstractDto implements Post {
 
   @UUIDField()
   authorId: string;
+
+  @UUIDField()
+  tenantId: string;
 
   @ClassField(() => UserDto, { required: false })
   author?: UserDto;

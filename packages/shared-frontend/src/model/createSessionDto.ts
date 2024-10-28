@@ -18,5 +18,6 @@ export interface CreateSessionDto {
   /** @nullable */
   startDate: string | null;
   tenantId: string;
+  timelineId: string;
   type: SessionTypes;
 }

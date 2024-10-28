@@ -6,10 +6,16 @@ import { UserDto } from '../../users/dtos/user.dto';
 import { Classification } from '../classification.entity';
 
 export class ClassificationDto extends AbstractDto implements Classification {
-  @UUIDField()
-  userId: string;
+  @UUIDField({ nullable: true })
+  postId: string | null;
 
-  @UUIDField()
+  @UUIDField({ nullable: true })
+  depotFileId: string | null;
+
+  @UUIDField({ nullable: true })
+  userId: string | null;
+
+  @UUIDField({ nullable: true })
   spaceId: string;
 
   @UUIDField()

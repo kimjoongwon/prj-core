@@ -4,6 +4,7 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
+import type { CategoryTypes } from './categoryTypes';
 
 export interface CreateCategoryDto {
   ancestorIds: string[];
@@ -12,4 +13,5 @@ export interface CreateCategoryDto {
   parentId: string | null;
   serviceId: string;
   tenantId: string;
+  type: CategoryTypes;
 }

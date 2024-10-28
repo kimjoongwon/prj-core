@@ -23,6 +23,7 @@ export interface SessionDto {
   /** @nullable */
   startDate: string | null;
   tenantId: string;
+  timelineId: string;
   type: SessionTypes;
   updatedAt: string;
 }

@@ -5,24 +5,27 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroupDto } from './groupDto';
-import type { ReservationDto } from './reservationDto';
-import type { ServiceDto } from './serviceDto';
 import type { SpaceDto } from './spaceDto';
 import type { UserDto } from './userDto';
 
 export interface AssignmentDto {
   createdAt: string;
+  /** @nullable */
+  depotFileId: string | null;
   group?: GroupDto;
-  groupId: string;
+  /** @nullable */
+  groupId: string | null;
   id: string;
   /** @nullable */
+  postId: string | null;
+  /** @nullable */
   removedAt: string | null;
-  reservation?: ReservationDto;
   seq: number;
-  service?: ServiceDto;
-  serviceId: string;
-  serviceItemId: string;
   space?: SpaceDto;
+  /** @nullable */
+  spaceId: string | null;
   updatedAt: string;
   user?: UserDto;
+  /** @nullable */
+  userId: string | null;
 }

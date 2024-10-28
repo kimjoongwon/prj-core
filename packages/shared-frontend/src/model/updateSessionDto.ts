@@ -19,5 +19,6 @@ export interface UpdateSessionDto {
   /** @nullable */
   startDate?: string | null;
   tenantId?: string;
+  timelineId?: string;
   type?: SessionTypes;
 }

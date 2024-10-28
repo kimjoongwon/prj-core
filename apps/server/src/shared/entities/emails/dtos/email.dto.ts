@@ -14,4 +14,7 @@ export class EmailDto extends AbstractDto implements Email {
 
   @DateField()
   sentAt: Date;
+
+  @UUIDField()
+  tenantId: string;
 }

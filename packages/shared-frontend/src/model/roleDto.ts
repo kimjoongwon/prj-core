@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Roles } from './roles';
+import type { TenantDto } from './tenantDto';
 
 export interface RoleDto {
   createdAt: string;
@@ -13,5 +14,6 @@ export interface RoleDto {
   /** @nullable */
   removedAt: string | null;
   seq: number;
+  tenant?: TenantDto;
   updatedAt: string;
 }

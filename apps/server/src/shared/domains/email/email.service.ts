@@ -34,7 +34,7 @@ export class EmailService {
 
   async sendEmailVerification() {
     const template = (await this.templateService.getEmailVerification()) as TemplateDto;
-
+    const user = ContextProvider.getAuthUser();
     const superAdminRole = await this.rolesService.getUnique({
       where: { name: 'SUPER_ADMIN' },
       include: {
@@ -62,6 +62,7 @@ export class EmailService {
             toUserIds: [this.user.id],
           },
         },
+        tenantId: user.tenants.find((t) => t.active).id,
       },
     });
 

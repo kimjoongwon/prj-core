@@ -4,22 +4,21 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { PostAuthor } from './postAuthor';
+import type { UserDto } from './userDto';
 import type { PostTypes } from './postTypes';
 
 export interface Post {
-  /** @nullable */
-  author?: PostAuthor;
+  author?: UserDto;
   authorId?: string;
   content?: string;
   createdAt?: string;
+  depotFileIds?: string[];
   description?: string;
   id?: string;
-  imageUrls?: string[];
   /** @nullable */
   removedAt?: string | null;
   seq?: number;
-  thumbnailUrl?: string;
+  tenantId?: string;
   title?: string;
   type?: PostTypes;
   updatedAt?: string;

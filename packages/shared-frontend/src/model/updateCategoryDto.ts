@@ -4,6 +4,7 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
+import type { CategoryTypes } from './categoryTypes';
 
 export interface UpdateCategoryDto {
   ancestorIds?: string[];
@@ -17,5 +18,6 @@ export interface UpdateCategoryDto {
   seq?: number;
   serviceId?: string;
   tenantId?: string;
+  type?: CategoryTypes;
   updatedAt?: string;
 }

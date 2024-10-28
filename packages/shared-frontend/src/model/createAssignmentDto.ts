@@ -4,11 +4,16 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from './userDto';
 
 export interface CreateAssignmentDto {
-  groupId: string;
-  serviceId: string;
-  serviceItemId: string;
-  user?: UserDto;
+  /** @nullable */
+  depotFileId: string | null;
+  /** @nullable */
+  groupId: string | null;
+  /** @nullable */
+  postId: string | null;
+  /** @nullable */
+  spaceId: string | null;
+  /** @nullable */
+  userId: string | null;
 }

@@ -4,10 +4,9 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDtoRole } from './tenantDtoRole';
-import type { TenantDtoTenancy } from './tenantDtoTenancy';
-import type { TenantTypes } from './tenantTypes';
-import type { TenantDtoUser } from './tenantDtoUser';
+import type { RoleDto } from './roleDto';
+import type { SpaceDto } from './spaceDto';
+import type { UserDto } from './userDto';
 
 export interface TenantDto {
   active: boolean;
@@ -15,16 +14,12 @@ export interface TenantDto {
   id: string;
   /** @nullable */
   removedAt: string | null;
-  /** @nullable */
-  role: TenantDtoRole;
+  role?: RoleDto;
   roleId: string;
   seq: number;
-  /** @nullable */
-  tenancy: TenantDtoTenancy;
-  tenancyId: string;
-  type: TenantTypes;
+  space?: SpaceDto;
+  spaceId: string;
   updatedAt: string;
-  /** @nullable */
-  user: TenantDtoUser;
+  user?: UserDto;
   userId: string;
 }

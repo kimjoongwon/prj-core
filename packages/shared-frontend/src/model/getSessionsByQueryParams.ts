@@ -10,8 +10,9 @@ import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { RecurringDayOfTheWeek } from './recurringDayOfTheWeek';
 
 export type GetSessionsByQueryParams = {
-tenantId?: string;
 name?: SortOrder;
+timelineId?: string;
+tenantId?: string;
 type?: SessionTypes;
 repeatCycle?: number;
 repeatCycleType?: RepeatCycleTypes;

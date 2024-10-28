@@ -15,6 +15,9 @@ export class SystemEmailDto extends AbstractDto implements SystemEmail {
   @UUIDField()
   templateId: string;
 
+  @UUIDField()
+  tenantId: string;
+
   @ClassField(() => EmailDto, { swagger: false, nullable: true })
   email?: EmailDto;
 

@@ -1,85 +1,97 @@
 model Category {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  name            String           @unique
-  ancestorIds     String[]         @default([])
-  parentId        String?
-  tenantId        String
-  serviceId       String
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
-  classifications Classification[]
+  id             String           @id @default(uuid())
+  seq            Int              @unique @default(autoincrement())
+  name           String
+  type           CategoryTypes    @default(USER)
+  ancestorIds    String[]         @default([])
+  parentId       String?
+  tenantId       String
+  serviceId      String
+  createdAt      DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?        @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?        @db.Timestamptz(6)
+  classification Classification[]
 }
 
 model Classification {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  userId     String?
-  spaceId    String?
-  categoryId String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
-  category   Category  @relation(fields: [categoryId], references: [id])
-  user       User?     @relation(fields: [userId], references: [id])
-  space      Space?    @relation(fields: [spaceId], references: [id])
+  id          String     @id @default(uuid())
+  seq         Int        @unique @default(autoincrement())
+  userId      String?    @unique
+  spaceId     String?    @unique
+  postId      String?    @unique
+  depotFileId String?    @unique
+  categoryId  String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime?  @db.Timestamptz(6)
+  category    Category   @relation(fields: [categoryId], references: [id])
+  user        User?      @relation(fields: [userId], references: [id])
+  space       Space?     @relation(fields: [spaceId], references: [id])
+  post        Post?      @relation(fields: [postId], references: [id])
+  depotFile   DepotFile? @relation(fields: [depotFileId], references: [id])
 
   @@unique([userId, categoryId])
   @@unique([spaceId, categoryId])
-}
-
-model Group {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
+  @@unique([postId, categoryId])
+  @@unique([depotFileId, categoryId])
 }
 
 model Assignment {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  groupId   String?
-  spaceId   String?
-  userId    String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  user      User?     @relation(fields: [userId], references: [id])
-  space     Space?    @relation(fields: [spaceId], references: [id])
+  id          String     @id @default(uuid())
+  seq         Int        @unique @default(autoincrement())
+  spaceId     String?
+  userId      String?
+  postId      String?
+  depotFileId String?
+  groupId     String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime?  @db.Timestamptz(6)
+  group       Group      @relation(fields: [groupId], references: [id])
+  user        User?      @relation(fields: [userId], references: [id])
+  space       Space?     @relation(fields: [spaceId], references: [id])
+  post        Post?      @relation(fields: [postId], references: [id])
+  depotFile   DepotFile? @relation(fields: [depotFileId], references: [id])
+}
 
-  @@unique([groupId, spaceId])
-  @@unique([groupId, userId])
+model Group {
+  id          String       @id @default(uuid())
+  seq         Int          @unique @default(autoincrement())
+  name        String
+  tenantId    String
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime?    @db.Timestamptz(6)
+  assignments Assignment[]
 }
 
 model Profile {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  nickname  String
-  userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  user      User      @relation(fields: [userId], references: [id])
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  depotFileId String?
+  nickname    String
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime? @db.Timestamptz(6)
+  user        User      @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  email           String           @unique
-  name            String           @unique
-  phone           String           @unique
-  password        String
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
-  posts           Post[]
-  profiles        Profile[]
-  tenants         Tenant[]
-  classifications Classification[]
-  assignments     Assignment[]
+  id             String          @id @default(uuid())
+  seq            Int             @unique @default(autoincrement())
+  email          String          @unique
+  name           String          @unique
+  phone          String          @unique
+  password       String
+  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  removedAt      DateTime?       @db.Timestamptz(6)
+  posts          Post[]
+  profiles       Profile[]
+  tenants        Tenant[]
+  classification Classification?
+  assignments    Assignment[]
 }
 
 model Tenant {
@@ -98,16 +110,16 @@ model Tenant {
 }
 
 model Space {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  name            String           @unique
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
-  tenants         Tenant[]
-  classifications Classification[]
-  assignments     Assignment[]
-  gyms            Gym[]
+  id             String          @id @default(uuid())
+  seq            Int             @unique @default(autoincrement())
+  name           String          @unique
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?       @db.Timestamptz(6)
+  tenants        Tenant[]
+  gyms           Gym[]
+  classification Classification?
+  assignment     Assignment[]
 }
 
 model SMS {
@@ -115,6 +127,7 @@ model SMS {
   seq        Int       @unique @default(autoincrement())
   toUserIds  String[]
   fromUserId String?
+  tenantId   String
   status     SMSStatus @default(PROGRESS)
   sentAt     DateTime?
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
@@ -128,6 +141,7 @@ model SystemEmail {
   status     EmailStatus @default(PROGRESS)
   emailId    String
   templateId String
+  tenantId   String
   createdAt  DateTime    @default(now()) @db.Timestamptz(6)
   updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
   removedAt  DateTime?   @db.Timestamptz(6)
@@ -149,24 +163,10 @@ model Email {
   systemEmails SystemEmail[]
 }
 
-model Reservation {
-  seq            Int               @unique @default(autoincrement())
-  id             String            @id @default(uuid())
-  timelineItemId String            @unique
-  createdAt      DateTime          @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?         @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?         @db.Timestamptz(6)
-  tenantId       String
-  userId         String            @unique
-  status         ReservationStatus @default(CONFIRMED)
-
-  @@unique([userId, timelineItemId])
-}
-
 model Timeline {
   id        String    @id @default(uuid())
-  tenantId  String
   seq       Int       @unique @default(autoincrement())
+  tenantId  String
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
@@ -290,24 +290,40 @@ model Answer {
 }
 
 model Post {
-  id              String    @id @default(uuid())
-  seq             Int       @unique @default(autoincrement())
-  type            PostTypes @default(TEXT)
-  title           String?
-  description     String?
-  content         String    @db.VarChar(1000)
-  thumbnailImgUrl String?
-  imgUrls         String[]  @default([])
-  authorId        String
-  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime? @db.Timestamptz(6)
-  answers         Answer[]
-  emails          Email[]
-  author          User      @relation(fields: [authorId], references: [id])
-  question        Question?
-  template        Template?
-  exercise        Exercise?
+  id             String          @id @default(uuid())
+  seq            Int             @unique @default(autoincrement())
+  type           PostTypes       @default(TEXT)
+  title          String?
+  description    String?
+  content        String          @db.VarChar(1000)
+  depotFileIds   String[]        @default([])
+  authorId       String
+  tenantId       String
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?       @db.Timestamptz(6)
+  answers        Answer[]
+  emails         Email[]
+  author         User            @relation(fields: [authorId], references: [id])
+  question       Question?
+  template       Template?
+  exercise       Exercise?
+  classification Classification?
+  assignments    Assignment[]
+}
+
+model DepotFile {
+  id             String          @id @default(uuid())
+  seq            Int             @unique @default(autoincrement())
+  name           String
+  size           Int
+  mimeType       String
+  url            String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?       @db.Timestamptz(6)
+  classification Classification?
+  assignments    Assignment[]
 }
 
 model Page {
@@ -416,4 +432,11 @@ enum QnaStatus {
 enum PostTypes {
   HTML
   TEXT
+}
+
+enum CategoryTypes {
+  USER
+  SPACE
+  DEPOT_FILE
+  POST
 }

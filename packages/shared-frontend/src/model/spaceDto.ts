@@ -4,19 +4,15 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDtoGroups } from './spaceDtoGroups';
-import type { Tenancy } from './tenancy';
+import type { GroupDto } from './groupDto';
 
 export interface SpaceDto {
   createdAt: string;
-  /** @nullable */
-  groups: SpaceDtoGroups;
+  groups?: GroupDto;
   id: string;
   name: string;
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  /** @nullable */
-  tenancies: Tenancy[] | null;
   updatedAt: string;
 }

@@ -7,12 +7,13 @@
 
 export interface ProfileDto {
   createdAt: string;
+  /** @nullable */
+  depotFileId: string | null;
   id: string;
   nickname: string;
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  /** @nullable */
-  updatedAt: string | null;
+  updatedAt: string;
   userId: string;
 }

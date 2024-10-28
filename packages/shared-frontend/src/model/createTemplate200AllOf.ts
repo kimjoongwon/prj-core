@@ -4,11 +4,11 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { TenancyDto } from './tenancyDto';
+import type { SystemEmailDto } from './systemEmailDto';
 import type { CreateTemplate200AllOfMeta } from './createTemplate200AllOfMeta';
 
 export type CreateTemplate200AllOf = {
-  data?: TenancyDto;
+  data?: SystemEmailDto;
   /** */
   httpStatus?: number;
   /** */
