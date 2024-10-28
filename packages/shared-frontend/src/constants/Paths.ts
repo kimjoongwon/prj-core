@@ -83,7 +83,7 @@ export const POST_SERVICE_CATEGORIES_PATH = `${POST_SERVICE_PATH}/categories`;
 export const POST_SERVICE_CATEGORY_PATH = `${POST_SERVICE_PATH}/categories/:categoryId`;
 export const POST_SERVICE_CATEGORY_EDIT_PATH = `${POST_SERVICE_PATH}/categories/:categoryId/edit`;
 
-export const DEPOT_FILE_SERVICE_PATH = `/admin/main/depot-file-service`;
+export const DEPOT_FILE_SERVICE_PATH = `/admin/main/file-service`;
 export const DEPOT_FILE_SERVICE_FILES_PATH = `${DEPOT_FILE_SERVICE_PATH}/files`;
 export const DEPOT_FILE_SERVICE_FILE_PATH = `${DEPOT_FILE_SERVICE_PATH}/files/:fileId`;
 export const DEPOT_FILE_SERVICE_FILE_EDIT_PATH = `${DEPOT_FILE_SERVICE_PATH}/files/:fileId/edit`;
