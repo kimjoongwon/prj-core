@@ -5,7 +5,7 @@ export const useRoutes = () => {
   let routes: Route[] = [
     {
       name: '이용자',
-      pathname: '/admin/main/users',
+      pathname: '/admin/main/user-service',
       icon: <CiGrid41 />,
     },
     {

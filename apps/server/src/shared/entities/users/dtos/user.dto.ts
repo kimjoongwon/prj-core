@@ -8,6 +8,7 @@ import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { TenantDto } from '../../tenants';
 import { UserEntity } from '../user.entity';
+import { Exclude } from 'class-transformer';
 
 export class UserDto extends AbstractDto implements UserEntity {
   @EmailField()
@@ -19,6 +20,7 @@ export class UserDto extends AbstractDto implements UserEntity {
   @StringField()
   phone: string;
 
+  @Exclude()
   @PasswordField()
   password: string;
 

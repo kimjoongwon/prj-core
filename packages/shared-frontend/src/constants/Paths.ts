@@ -50,7 +50,33 @@ export const CATEGORIES_PATH = `/admin/main/app/services/:serviceId/categories`;
 export const CATEGORY_PATH = `/admin/main/app/services/:serviceId/categories/:categoryId`;
 export const CATEGORY_EDIT_PATH = `/admin/main/app/services/:serviceId/categories/:categoryId/edit`;
 
+export const USER_SERVICE_PATH = `/admin/main/user-service`;
+export const USER_SERVICE_USERS_PATH = `${USER_SERVICE_PATH}/users`;
+export const USER_SERVICE_USER_PATH = `${USER_SERVICE_PATH}/users/:userId`;
+export const USER_SERVICE_USER_EDIT_PATH = `${USER_SERVICE_PATH}/users/:userId/edit`;
+export const USER_SERVICE_GROUPS_PATH = `${USER_SERVICE_PATH}/groups`;
+export const USER_SERVICE_GROUP_PATH = `${USER_SERVICE_PATH}/groups/:groupId`;
+export const USER_SERVICE_GROUP_EDIT_PATH = `${USER_SERVICE_PATH}/groups/:groupId/edit`;
+export const USER_SERVICE_CATEGORIES_PATH = `${USER_SERVICE_PATH}/categories`;
+export const USER_SERVICE_CATEGORY_PATH = `${USER_SERVICE_PATH}/categories/:categoryId`;
+export const USER_SERVICE_CATEGORY_EDIT_PATH = `${USER_SERVICE_PATH}/categories/:categoryId/edit`;
+
+export const SPACE_SERVICE_PATH = `/admin/main/space-service`;
+export const SPACE_SERVICE_SPACES_PATH = `${SPACE_SERVICE_PATH}/spaces`;
+export const SPACE_SERVICE_SPACE_PATH = `${SPACE_SERVICE_PATH}/spaces/:spaceId`;
+export const SPACE_SERVICE_SPACE_EDIT_PATH = `${SPACE_SERVICE_PATH}/spaces/:spaceId/edit`;
+export const SPACE_SERVICE_GROUPS_PATH = `${SPACE_SERVICE_PATH}/groups`;
+export const SPACE_SERVICE_GROUP_PATH = `${SPACE_SERVICE_PATH}/groups/:groupId`;
+export const SPACE_SERVICE_GROUP_EDIT_PATH = `${SPACE_SERVICE_PATH}/groups/:groupId/edit`;
+export const SPACE_SERVICE_CATEGORIES_PATH = `${SPACE_SERVICE_PATH}/categories`;
+export const SPACE_SERVICE_CATEGORY_PATH = `${SPACE_SERVICE_PATH}/categories/:categoryId`;
+export const SPACE_SERVICE_CATEGORY_EDIT_PATH = `${SPACE_SERVICE_PATH}/categories/:categoryId/edit`;
+
 export type Paths =
+  | typeof USER_SERVICE_PATH
+  | typeof USER_SERVICE_USERS_PATH
+  | typeof USER_SERVICE_USER_PATH
+  | typeof USER_SERVICE_USER_EDIT_PATH
   | typeof CATEGORIES_PATH
   | typeof CATEGORY_PATH
   | typeof CATEGORY_EDIT_PATH

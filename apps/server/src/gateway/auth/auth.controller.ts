@@ -44,23 +44,16 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
     res.cookie('accessToken', accessToken, { httpOnly: true });
 
-    try {
-      plainToInstance(TenantDto, tenant);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // console.log('user', user, 'tenant', tenant);
-    // return new ResponseEntity(
-    //   HttpStatus.OK,
-    //   '로그인 성공',
-    //   plainToInstance(TokenDto, {
-    //     accessToken,
-    //     refreshToken,
-    //     user,
-    //     tenant,
-    //   }),
-    // );
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '로그인 성공',
+      plainToInstance(TokenDto, {
+        accessToken,
+        refreshToken,
+        user: plainToInstance(UserDto, user),
+        tenant: plainToInstance(TenantDto, tenant),
+      }),
+    );
   }
 
   @Auth([])
