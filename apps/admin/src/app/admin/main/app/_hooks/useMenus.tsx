@@ -5,7 +5,7 @@ import { FiChevronRight } from 'react-icons/fi';
 export const useMenus = () => {
   const menus: ListboxItemProps<LinkProps>[] = [
     {
-      key: 'services',
+      key: '',
       children: '서비스 관리',
       href: '/admin/main/app/services',
       description: '서비스에 그룹과 카테고리를 생성하고 관리합니다.',
