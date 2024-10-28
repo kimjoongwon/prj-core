@@ -20,7 +20,7 @@ export const useRoutes = () => {
     },
     {
       name: '저장소',
-      pathname: '/admin/main/depot-file-service',
+      pathname: '/admin/main/file-service',
       icon: <CiSettings />,
     },
   ];
