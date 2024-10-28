@@ -9,18 +9,18 @@ export const useRoutes = () => {
       icon: <CiGrid41 />,
     },
     {
-      name: '지점',
-      pathname: '/admin/main/gym/spaces',
+      name: '공간',
+      pathname: '/admin/main/space-service',
       icon: <CiGrid41 />,
     },
     {
-      name: '예약',
-      pathname: '/admin/main/reservation',
+      name: '게시물',
+      pathname: '/admin/main/post-service',
       icon: <CiBoxList />,
     },
     {
-      name: '앱',
-      pathname: '/admin/main/app',
+      name: '저장소',
+      pathname: '/admin/main/depot-file-service',
       icon: <CiSettings />,
     },
   ];
