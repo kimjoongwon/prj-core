@@ -1,15 +1,13 @@
 import { EnumFieldOptional, StringFieldOptional } from '../../../decorators/field.decorators';
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { PageQueryDto } from '../../common';
 
-class CategorySortOrder extends PageQueryDto {
-  @EnumFieldOptional(() => Prisma.SortOrder, { default: Prisma.SortOrder })
-  nameSortOrder?: Prisma.SortOrder;
-}
-
-export class CategoryQueryDto extends CategorySortOrder {
+export class CategoryQueryDto extends PageQueryDto {
   @StringFieldOptional()
   name?: string;
+
+  @EnumFieldOptional(() => $Enums.CategoryTypes)
+  type?: $Enums.CategoryTypes;
 
   @StringFieldOptional({ each: true })
   ancestorIds?: string[];
@@ -19,4 +17,7 @@ export class CategoryQueryDto extends CategorySortOrder {
 
   @StringFieldOptional()
   serviceId?: string;
+
+  @EnumFieldOptional(() => Prisma.SortOrder, { default: Prisma.SortOrder })
+  nameSortOrder?: Prisma.SortOrder;
 }

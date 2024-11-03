@@ -28,7 +28,6 @@ model Gym {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     removedAt DateTime?
-    space     Space     @relation(fields: [spaceId], references: [id])
 }
 
 model Member {

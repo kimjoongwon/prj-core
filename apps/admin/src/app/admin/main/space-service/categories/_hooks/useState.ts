@@ -5,6 +5,7 @@ export const useState = () => {
   const state = useLocalObservable<DataGridState<GetCategoriesByQueryParams>>(
     () => ({
       query: {
+        type: 'SPACE',
         take: 10,
         skip: 0,
       },

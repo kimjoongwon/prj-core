@@ -9,7 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
-import { Prisma } from '@prisma/client';
+import { Page, Prisma } from '@prisma/client';
 
 @Injectable()
 export class InitService {
@@ -137,6 +137,10 @@ export class InitService {
         }
       }),
     );
+  }
+
+  initPage() {
+    this.logger.log(`[${this.LOG_PREFIX}] 페이지 생성`);
   }
 
   async initApp() {
