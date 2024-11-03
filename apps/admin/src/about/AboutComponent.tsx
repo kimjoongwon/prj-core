@@ -1,15 +1,16 @@
 import { useNavigate } from '@tanstack/react-router';
 
-export function IndexComponent() {
-  const navigate = useNavigate({});
+export function AboutComponent() {
+  const navigate = useNavigate({
+    from: '/',
+  });
 
   navigate({
     to: '/about',
   });
-
   return (
     <div>
-      <h1>Index5</h1>
+      <h1>About</h1>
     </div>
   );
 }

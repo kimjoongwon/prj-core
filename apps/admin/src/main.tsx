@@ -8,8 +8,6 @@ import {
   createRouter,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { AboutComponent } from './AboutComponent';
-import { IndexComponent } from './IndexComponent';
 
 const rootRoute = createRootRoute({
   component: RootComponent,
@@ -32,13 +30,24 @@ function RootComponent() {
   );
 }
 
+function IndexComponent() {
+  return <div></div>;
+}
+
+function AboutComponent() {
+  return (
+    <div>
+      <h1>About</h1>
+    </div>
+  );
+}
 const routes = [
   {
-    path: '/index',
+    path: '/index' as const,
     component: IndexComponent,
   },
   {
-    path: '/about',
+    path: '/about' as const,
     component: AboutComponent,
   },
 ];
