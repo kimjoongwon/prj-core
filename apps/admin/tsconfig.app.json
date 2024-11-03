@@ -22,5 +22,28 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
+  "paths": {
+    "@schemas": ["./src/app/shared/schemas/index.ts"],
+    "@__generated__": ["./src/__generated__"],
+    "@__generated__/graphql": ["./src/__generated__/graphql.ts"],
+    "@links": ["./src/app/shared/links/index.ts"],
+    "@components": ["./src/app/shared/components/index.ts"],
+    "@hooks": ["./src/app/shared/hooks/index.ts"],
+    "@constants": ["./src/app/shared/constants/index.ts"],
+    "@utils": ["./src/app/shared/utils/index.ts"],
+    "@contexts": ["./src/app/shared/contexts/index.ts"],
+    "@columns": ["./src/app/shared/columns/index.ts"],
+    "@gqls": ["./src/app/shared/gqls/index.ts"],
+    "@providers": ["./src/app/shared/providers/index.ts"],
+    "@pages": ["./src/app/shared/pages/index.ts"],
+    "@skeletons": ["./src/app/shared/components/skeletons/index.ts"],
+    "@containers": ["./src/app/shared/components/containers/index.ts"],
+    "@types": ["./src/app/shared/types/index.ts"],
+    "@adminPages": ["./src/app/admin/index.ts"],
+    "@libs": ["./src/app/shared/libs/index.ts"],
+    "@stores": ["./src/app/shared/stores/index.ts"],
+    "@modals": ["./src/app/shared/components/modals/index.tsx"],
+    "@common": ["./src/app/shared/hooks/common/index.ts"]
+  },
   "include": ["src"]
 }
