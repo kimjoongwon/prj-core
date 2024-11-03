@@ -77,20 +77,20 @@ model Profile {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  seq            Int       @unique @default(autoincrement())
-  email          String    @unique
-  name           String    @unique
-  phone          String    @unique
-  password       String
-  assignmentIds  String[]  @unique @default([])
-  classification String
-  updatedAt      DateTime? @updatedAt @db.Timestamptz(6)
-  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
-  removedAt      DateTime? @db.Timestamptz(6)
-  posts          Post[]
-  profiles       Profile[]
-  tenants        Tenant[]
+  id               String    @id @default(uuid())
+  seq              Int       @unique @default(autoincrement())
+  email            String    @unique
+  name             String    @unique
+  phone            String    @unique
+  password         String
+  assignmentIds    String[]  @unique @default([])
+  classificationId String
+  updatedAt        DateTime? @updatedAt @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  removedAt        DateTime? @db.Timestamptz(6)
+  posts            Post[]
+  profiles         Profile[]
+  tenants          Tenant[]
 }
 
 model Tenant {

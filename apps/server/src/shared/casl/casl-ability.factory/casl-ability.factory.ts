@@ -34,6 +34,7 @@ export class CaslAbilityFactory {
       },
     });
 
+    // @ts-ignore
     const tenant = tenants.find((tenant) => tenant.active);
     tenant.role.abilities.forEach((ability) => {
       if (ability.type === 'CAN') {

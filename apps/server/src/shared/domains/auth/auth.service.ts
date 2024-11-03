@@ -99,7 +99,6 @@ export class AuthService {
     const tenant = await this.prisma.tenant.findFirst({
       where: {
         userId: user.id,
-        active: true,
       },
       include: {
         role: true,

@@ -11,8 +11,14 @@ import {
 import { UserDto } from '../../users/dtos/user.dto';
 
 export class PostDto extends AbstractDto implements Post {
-  @StringField({ default: [], each: true })
-  depotFileIds: string[];
+  @UUIDField()
+  dopotId: string;
+
+  @UUIDField()
+  classificationId: string;
+
+  @UUIDField({ each: true })
+  assignemntIds: string[];
 
   @StringFieldOptional()
   description: string;

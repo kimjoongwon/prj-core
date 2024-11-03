@@ -1,6 +1,5 @@
 import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PageTypes } from '@prisma/client';
 import { ApiResponseEntity, PageDto, PageService, ResponseEntity } from '@shared';
 import { plainToInstance } from 'class-transformer';
 
@@ -11,7 +10,7 @@ export class AdminPagesController {
 
   @ApiResponseEntity(PageDto, HttpStatus.OK, { isArray: true })
   @Get(':type')
-  async getAllPageByType(@Param('type') type: PageTypes) {
+  async getAllPageByType(@Param('type') type) {
     const { pages } = await this.pageService.getAllPagesByType(type);
     return new ResponseEntity(
       HttpStatus.OK,

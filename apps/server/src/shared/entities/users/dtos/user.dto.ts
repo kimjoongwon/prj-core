@@ -3,6 +3,7 @@ import {
   EmailField,
   PasswordField,
   StringField,
+  UUIDField,
 } from '../../../decorators/field.decorators';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
@@ -11,6 +12,12 @@ import { UserEntity } from '../user.entity';
 import { Exclude } from 'class-transformer';
 
 export class UserDto extends AbstractDto implements UserEntity {
+  @UUIDField()
+  assignmentIds: string[];
+
+  @UUIDField()
+  classificationId: string;
+
   @EmailField()
   email: string;
 
