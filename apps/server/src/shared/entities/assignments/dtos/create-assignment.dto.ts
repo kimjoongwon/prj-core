@@ -6,8 +6,6 @@ import { ClassField } from '../../../decorators';
 export class CreateAssignmentDto extends OmitType(AssignmentDto, [
   ...COMMON_ENTITY_FIELDS,
   'group',
-  'space',
-  'user',
 ]) {}
 
 export class CreateAssignmentDtos {

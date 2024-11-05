@@ -17,7 +17,7 @@ export class PostDto extends AbstractDto implements Post {
   @UUIDField()
   classificationId: string;
 
-  @UUIDField({ each: true })
+  @StringField({ each: true })
   assignemntIds: string[];
 
   @StringFieldOptional()

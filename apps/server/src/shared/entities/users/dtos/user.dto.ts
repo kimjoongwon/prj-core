@@ -32,7 +32,7 @@ export class UserDto extends AbstractDto implements UserEntity {
   @UUIDField()
   tenantId: string;
 
-  @UUIDField({ each: true, default: [] })
+  @StringField({ each: true, default: [] })
   assignmentIds: string[];
 
   @UUIDField({ nullable: true })

@@ -7,7 +7,7 @@ export class SpaceDto extends AbstractDto implements Space {
   @UUIDField({ nullable: true })
   classificationId: string | null;
 
-  @UUIDField({ each: true, default: [] })
+  @StringField({ each: true, default: [], items: { type: 'uuid' } })
   assignmentIds: string[];
 
   @StringField()
