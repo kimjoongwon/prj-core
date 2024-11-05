@@ -59,6 +59,8 @@ export class AuthService {
         name,
         phone,
         password,
+        spaceId,
+        assignmentIds: [],
         profiles: {
           create: {
             nickname,
@@ -67,7 +69,6 @@ export class AuthService {
         tenants: {
           create: {
             spaceId,
-            active: true,
             roleId: role.id,
           },
         },

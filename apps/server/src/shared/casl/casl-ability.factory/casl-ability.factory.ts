@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { $Enums, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { createPrismaAbility, PrismaQuery, Subjects } from '@casl/prisma';
 import { PureAbility, AbilityBuilder } from '@casl/ability';
 import { PrismaService } from 'nestjs-prisma';
 import { UserDto } from '@shared';
-export type AppSubjects =
-  | 'all'
-  | Subjects<{
+export type AppAbility = PureAbility<
+  [
+    string,
+    Subjects<{
       User: User;
-    }>;
-
-export type AppAbility = PureAbility<[$Enums.AbilityActions, AppSubjects], PrismaQuery>;
+    }>,
+  ],
+  PrismaQuery
+>;
 
 @Injectable()
 export class CaslAbilityFactory {

@@ -34,7 +34,12 @@ export class InitService {
 
     if (!superAdminRole) {
       this.logger.log(`[${this.LOG_PREFIX}] 슈퍼어드민 생성`);
-      const role = await this.rolesService.create({ name: 'SUPER_ADMIN' });
+      const role = await this.rolesService.create({
+        data: {
+          name: 'SUPER_ADMIN',
+          assignmentIds: [],
+        },
+      });
 
       adminRoleId = role.id;
     } else {
@@ -50,7 +55,12 @@ export class InitService {
     if (!userRole) {
       this.logger.log(`[${this.LOG_PREFIX}] USER 생성`);
 
-      await this.rolesService.create({ name: 'USER' });
+      await this.rolesService.create({
+        data: {
+          name: 'USER',
+          assignmentIds: [],
+        },
+      });
     } else {
       this.logger.log(`[${this.LOG_PREFIX}] USER가 이미 존재합니다.`);
     }
@@ -109,11 +119,12 @@ export class InitService {
           password: hashedPassword,
           name: appConfig.name,
           phone: '01073162347',
+          spaceId,
+          assignmentIds: [],
           tenants: {
             create: {
               spaceId,
               roleId,
-              active: true,
             },
           },
           profiles: {

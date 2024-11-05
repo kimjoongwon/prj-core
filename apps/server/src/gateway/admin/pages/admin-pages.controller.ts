@@ -11,11 +11,6 @@ export class AdminPagesController {
   @ApiResponseEntity(PageDto, HttpStatus.OK, { isArray: true })
   @Get(':type')
   async getAllPageByType(@Param('type') type) {
-    const { pages } = await this.pageService.getAllPagesByType(type);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      pages?.map((page) => plainToInstance(PageDto, page)),
-    );
+    return new ResponseEntity(HttpStatus.OK, '성공', []);
   }
 }

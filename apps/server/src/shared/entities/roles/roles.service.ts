@@ -33,8 +33,8 @@ export class RolesService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createRoleDto: CreateRoleDto) {
-    return this.repository.create({ data: createRoleDto });
+  create(args: Prisma.RoleCreateArgs) {
+    return this.repository.create(args);
   }
 
   async getManyByQuery(args: Prisma.RoleFindManyArgs) {

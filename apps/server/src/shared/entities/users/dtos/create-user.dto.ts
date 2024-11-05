@@ -6,4 +6,5 @@ export class CreateUserDto extends OmitType(UserDto, [
   ...COMMON_ENTITY_FIELDS,
   'tenants',
   'profiles',
+  'space',
 ]) {}

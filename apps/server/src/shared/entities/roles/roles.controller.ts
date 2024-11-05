@@ -30,7 +30,7 @@ export class RolesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleDto, HttpStatus.OK)
   async createRole(@Body() createRoleDto: CreateRoleDto) {
-    const role = await this.service.create(createRoleDto);
+    const role = await this.service.create({ data: createRoleDto });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoleDto, role));
   }
 

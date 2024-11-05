@@ -10,13 +10,11 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { TenantDto } from '../../tenants';
 import { UserEntity } from '../user.entity';
 import { Exclude } from 'class-transformer';
+import { SpaceDto } from '../../spaces';
 
 export class UserDto extends AbstractDto implements UserEntity {
   @UUIDField()
-  assignmentIds: string[];
-
-  @UUIDField()
-  classificationId: string;
+  spaceId: string;
 
   @EmailField()
   email: string;
@@ -31,9 +29,24 @@ export class UserDto extends AbstractDto implements UserEntity {
   @PasswordField()
   password: string;
 
+  @UUIDField()
+  tenantId: string;
+
+  @UUIDField({ each: true, default: [] })
+  assignmentIds: string[];
+
+  @UUIDField({ nullable: true })
+  classificationId: string | null;
+
   @ClassField(() => ProfileDto, { each: true, required: false })
   profiles?: ProfileDto[];
 
   @ClassField(() => TenantDto, { each: true, required: false })
   tenants?: TenantDto[];
+
+  @ClassField(() => UserDto, { required: false })
+  user?: UserDto;
+
+  @ClassField(() => SpaceDto, { required: false })
+  space?: SpaceDto;
 }
