@@ -354,7 +354,7 @@ model Page {
   updatedAt        DateTime?      @updatedAt @db.Timestamptz(6)
   removedAt        DateTime?      @db.Timestamptz(6)
   classificationId String
-  Element          Element[]
+  elements         Element[]
 }
 
 enum ElementTypes {
