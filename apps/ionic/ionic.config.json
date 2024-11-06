@@ -1,0 +1,8 @@
+{
+  "name": "Galaxy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "66ccc786"
+}
