@@ -6,9 +6,10 @@ import {
   IonTitle,
   IonToolbar,
   useIonRouter,
-} from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
-import "./Tab1.css";
+} from '@ionic/react';
+import ExploreContainer from '../components/ExploreContainer';
+import './Tab1.css';
+import { Button } from '@nextui-org/react';
 
 const Tab1: React.FC = () => {
   const router = useIonRouter();
@@ -25,7 +26,8 @@ const Tab1: React.FC = () => {
             <IonTitle size="large">Tab One</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonButton onClick={() => router.push("/tab2")}>ss</IonButton>
+        <Button variant="solid">TAB</Button>
+        <IonButton onClick={() => router.push('/tab2')}>ss</IonButton>
         <ExploreContainer name="Tab 1 page" />
       </IonContent>
     </IonPage>
