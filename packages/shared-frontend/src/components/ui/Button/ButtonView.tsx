@@ -1,4 +1,3 @@
-'use client';
 import { ButtonProps, Button as NextUIButton } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 

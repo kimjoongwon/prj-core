@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Galaxy } from '../../services/galaxy';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@nextui-org/react';
-import { isEmpty } from 'lodash-es';
 
 interface AppProviderProps {
   children: React.ReactNode;
