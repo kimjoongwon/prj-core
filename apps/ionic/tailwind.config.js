@@ -6,6 +6,7 @@ export default {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/**/*.{js,ts,jsx,tsx}',
     './node_modules/@shared/frontend/dist/**/*.{js,ts,jsx,tsx}',
     '../../packages/shared-frontend/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
@@ -17,6 +18,6 @@ export default {
       },
     },
   },
-  darkMode: 'class',
+  darkMode: false,
   plugins: [nextui()],
 };
