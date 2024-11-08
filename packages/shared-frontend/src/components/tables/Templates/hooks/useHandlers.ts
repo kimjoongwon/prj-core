@@ -3,7 +3,6 @@ import { useContext } from './useContext';
 import { toJS } from 'mobx';
 import { galaxy } from '../../../../providers/App';
 import { useMutations } from './useMutations';
-import { revalidatePathGetTemplatesByQuery } from '../../../../actions';
 
 export const useHandlers = (props: {
   state: ReturnType<typeof useState>;
@@ -28,8 +27,6 @@ export const useHandlers = (props: {
   const onClickRemove = () => {
     const templateIds = toJS(state.selectedKeys);
     removeTemplates.mutateAsync({ data: templateIds });
-
-    revalidatePathGetTemplatesByQuery();
   };
 
   return {
