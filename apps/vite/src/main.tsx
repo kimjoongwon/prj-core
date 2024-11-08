@@ -3,14 +3,14 @@ import {
   Link,
   RouterProvider,
   createRootRoute,
-  createRoute,
   createRouter,
 } from '@tanstack/react-router';
 import { RootComponent } from './RootComponent';
 import './index.css';
+import { ReactQueryProvider } from '@shared/frontend';
 
 const rootRoute = createRootRoute({
-  component: RootComponent,
+  component: () => <RootComponent key={'useGetSpace'} />,
   notFoundComponent: () => {
     return (
       <div>
@@ -22,15 +22,7 @@ const rootRoute = createRootRoute({
   },
 });
 
-const hi = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: () => {
-    return <div>hahah----------------</div>;
-  },
-});
-
-const routeTree = rootRoute.addChildren([hi]);
+const routeTree = rootRoute;
 
 // Set up a Router instance
 const router = createRouter({
@@ -51,5 +43,9 @@ const rootElement = document.getElementById('root')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
 
-  root.render(<RouterProvider router={router} />);
+  root.render(
+    <ReactQueryProvider>
+      <RouterProvider router={router} />
+    </ReactQueryProvider>,
+  );
 }

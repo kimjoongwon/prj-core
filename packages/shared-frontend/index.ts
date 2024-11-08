@@ -1,4 +1,3 @@
-export * from './src/apis';
 export * from './src/components';
 export * from './src/hooks';
 export * from './src/model';
@@ -9,3 +8,6 @@ export * from './src/providers';
 export * from './src/services';
 export * from './src/types';
 export * from './src/errors';
+
+export * as APIManager from './src/apis';
+export * as ComponentManager from './src/components';

@@ -1,13 +1,12 @@
 import { Tab, Tabs } from '@nextui-org/react';
 import { Key } from 'react';
 import { TabsProps } from '.';
-import { usePathname } from 'next/navigation';
 import { useLocalObservable } from 'mobx-react-lite';
 import { observer } from 'mobx-react-lite';
 
 export const TabsView = observer((props: TabsProps) => {
   const { items } = props;
-  const pathname = usePathname();
+  const pathname = window.location.pathname;
 
   const state = useLocalObservable<{ selectedValue: Key }>(() => ({
     selectedValue: pathname,

@@ -45,9 +45,9 @@ export class Auth {
 
   beforeLogin() {
     this.status = AuthStatus.LoggingIn;
-    this.galaxy.router.push({
-      url: '/admin/main',
-    });
+    // this.galaxy.router.push({
+    //   url: '/admin/main',
+    // });
   }
 
   login(loginPayloadDto: LoginPayloadDto) {

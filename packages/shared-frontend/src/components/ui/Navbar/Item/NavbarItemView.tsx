@@ -9,10 +9,10 @@ export const NavbarItemView = observer((props: NavbarItemProps) => {
   const { text, active, url, params } = props;
 
   const onClickNavItem = () => {
-    galaxy?.router.push({
-      url,
-      params,
-    });
+    // galaxy?.router.push({
+    //   url,
+    //   params,
+    // });
   };
 
   return (

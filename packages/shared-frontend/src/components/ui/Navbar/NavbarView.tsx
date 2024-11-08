@@ -28,7 +28,7 @@ export const NavbarView = observer((props: NavbarProps) => {
     <Card className="flex-grow-1 m-2 px-2">
       <HStack className="items-center basis-14">
         <HStack className="flex-1 items-center">
-          <Logo variants="text" alt={'LOGO'} />
+          <Logo variants="text" />
           {leftContents}
         </HStack>
         <HStack className="flex-1 gap-2 items-center justify-center">
