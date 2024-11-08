@@ -3,7 +3,6 @@ import { useContext } from './useContext';
 import { toJS } from 'mobx';
 import { galaxy } from '../../../../providers/App';
 import { useMutations } from './useMutations';
-import { revalidatePathGetTimelineItemsByQuery } from '../../../../actions';
 
 export const useHandlers = (props: {
   state: ReturnType<typeof useState>;
@@ -27,8 +26,6 @@ export const useHandlers = (props: {
   const onClickRemove = () => {
     const timelineItemIds = toJS(state.selectedKeys);
     removeTimelineItems.mutateAsync({ data: timelineItemIds });
-
-    revalidatePathGetTimelineItemsByQuery();
   };
 
   return {

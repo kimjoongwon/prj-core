@@ -3,7 +3,6 @@ import { useContext } from './useContext';
 import { toJS } from 'mobx';
 import { galaxy } from '../../../../providers/App';
 import { useMutations } from './useMutations';
-import { revalidatePathGetSpacesByQuery } from '../../../../actions';
 
 export const useHandlers = (props: {
   state: ReturnType<typeof useState>;
@@ -35,8 +34,6 @@ export const useHandlers = (props: {
         spaceIds: spaceIds,
       },
     });
-
-    revalidatePathGetSpacesByQuery({});
   };
 
   return {

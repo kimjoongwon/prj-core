@@ -12,7 +12,6 @@ import { AxiosError } from 'axios';
 import { getNewToken, getToken } from '../apis';
 import { AuthStatus } from '../types';
 import { GalaxyError, InvalidPasswordError } from '../errors';
-import { clearTokenCookie } from '../actions';
 
 export class Auth {
   galaxy: Galaxy;
@@ -79,7 +78,6 @@ export class Auth {
   }
 
   logout() {
-    clearTokenCookie();
     localStorage.clear();
     this.user = undefined;
     this.status = AuthStatus.LoggedOut;
