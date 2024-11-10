@@ -8,8 +8,8 @@ import {
   useMutation,
   useQuery,
   useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query'
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import type {
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
@@ -25,8 +25,8 @@ import type {
   UseSuspenseInfiniteQueryOptions,
   UseSuspenseInfiniteQueryResult,
   UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query'
+  UseSuspenseQueryResult,
+} from '@tanstack/react-query';
 import type {
   CheckEmailVerification200AllOf,
   CreateAbility201AllOf,
@@ -42,8 +42,6 @@ import type {
   CreateClassificationDtos,
   CreateClassifications200AllOf,
   CreateGroupDto,
-  CreatePage200AllOf,
-  CreatePageDto,
   CreateSession200AllOf,
   CreateSessionDto,
   CreateSpace200AllOf,
@@ -59,7 +57,6 @@ import type {
   DeleteAssignment200AllOf,
   DeleteClassification200AllOf,
   DeleteGroup200AllOf,
-  DeletePage200AllOf,
   DeleteSession200AllOf,
   DeleteSpace200AllOf,
   DeleteTemplate200AllOf,
@@ -84,9 +81,7 @@ import type {
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
-  GetPage200AllOf,
-  GetPagesByQuery200AllOf,
-  GetPagesByQueryParams,
+  GetPages200AllOf,
   GetServiceAuthRoles200AllOf,
   GetSession200AllOf,
   GetSessionsByQuery200AllOf,
@@ -116,8 +111,6 @@ import type {
   RemoveClassifications200AllOf,
   RemoveGroups200AllOf,
   RemoveManySpaceDto,
-  RemovePage200AllOf,
-  RemovePages200AllOf,
   RemoveSession200AllOf,
   RemoveSessions200AllOf,
   RemoveSpace200AllOf,
@@ -140,8 +133,6 @@ import type {
   UpdateClassificationDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
-  UpdatePage200AllOf,
-  UpdatePageDto,
   UpdateSession200AllOf,
   UpdateSessionDto,
   UpdateSpace200AllOf,
@@ -154,8576 +145,14764 @@ import type {
   UpdateTimelineItemDto,
   UpdateUser200AllOf,
   UpdateUserDto,
-  VerifyEmail200AllOf
-} from './model'
+  VerifyEmail200AllOf,
+} from './model';
 import { customInstance } from './libs/customAxios';
 import type { ErrorType, BodyType } from './libs/customAxios';
 
-
-
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
-
 export const createAssignment = (
-    createAssignmentDto: BodyType<CreateAssignmentDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAssignmentDto
+  createAssignmentDto: BodyType<CreateAssignmentDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateAssignment200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createAssignmentDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateAssignmentMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAssignment>>,
+    TError,
+    { data: BodyType<CreateAssignmentDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createAssignment>>,
+  TError,
+  { data: BodyType<CreateAssignmentDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createAssignment>>,
+    { data: BodyType<CreateAssignmentDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createAssignment(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAssignment>>, {data: BodyType<CreateAssignmentDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateAssignmentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createAssignment>>
+>;
+export type CreateAssignmentMutationBody = BodyType<CreateAssignmentDto>;
+export type CreateAssignmentMutationError = ErrorType<void>;
 
-          return  createAssignment(data,requestOptions)
-        }
+export const useCreateAssignment = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAssignment>>,
+    TError,
+    { data: BodyType<CreateAssignmentDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createAssignment>>,
+  TError,
+  { data: BodyType<CreateAssignmentDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateAssignmentMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof createAssignment>>>
-    export type CreateAssignmentMutationBody = BodyType<CreateAssignmentDto>
-    export type CreateAssignmentMutationError = ErrorType<void>
-
-    export const useCreateAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createAssignment>>,
-        TError,
-        {data: BodyType<CreateAssignmentDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getAssignmentsByQuery = (
-    params?: GetAssignmentsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetAssignmentsByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetAssignmentsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments`, method: 'GET',
-        params, signal
+  return customInstance<GetAssignmentsByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetAssignmentsByQueryQueryKey = (params?: GetAssignmentsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/assignments`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetAssignmentsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentsByQueryQueryKey = (
+  params?: GetAssignmentsByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/assignments`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetAssignmentsByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>
+  > = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetAssignmentsByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignmentsByQuery>>
+>;
+export type GetAssignmentsByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQueryQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>> & Pick<
+export function useGetAssignmentsByQuery<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetAssignmentsByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAssignmentsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuery<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAssignmentsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuery<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAssignmentsByQuery<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentsByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAssignmentsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentsByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>
+  > = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
+export type GetAssignmentsByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignmentsByQuery>>
+>;
+export type GetAssignmentsByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetAssignmentsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetAssignmentsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAssignmentsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentsByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetAssignmentsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAssignmentsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentsByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>
+  > = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
+export type GetAssignmentsByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignmentsByQuery>>
+>;
+export type GetAssignmentsByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetAssignmentsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetAssignmentsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAssignmentsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetAssignmentsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignmentsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentsByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetAssignmentsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const createAssignments = (
-    createAssignmentDtos: BodyType<CreateAssignmentDtos>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateAssignments200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/bulk`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAssignmentDtos
+  createAssignmentDtos: BodyType<CreateAssignmentDtos>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateAssignments200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/bulk`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createAssignmentDtos,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateAssignmentsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAssignments>>,
+    TError,
+    { data: BodyType<CreateAssignmentDtos> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createAssignments>>,
+  TError,
+  { data: BodyType<CreateAssignmentDtos> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateAssignmentsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createAssignments>>,
+    { data: BodyType<CreateAssignmentDtos> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createAssignments(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAssignments>>, {data: BodyType<CreateAssignmentDtos>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateAssignmentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createAssignments>>
+>;
+export type CreateAssignmentsMutationBody = BodyType<CreateAssignmentDtos>;
+export type CreateAssignmentsMutationError = ErrorType<void>;
 
-          return  createAssignments(data,requestOptions)
-        }
+export const useCreateAssignments = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAssignments>>,
+    TError,
+    { data: BodyType<CreateAssignmentDtos> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createAssignments>>,
+  TError,
+  { data: BodyType<CreateAssignmentDtos> },
+  TContext
+> => {
+  const mutationOptions = getCreateAssignmentsMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAssignmentsMutationResult = NonNullable<Awaited<ReturnType<typeof createAssignments>>>
-    export type CreateAssignmentsMutationBody = BodyType<CreateAssignmentDtos>
-    export type CreateAssignmentsMutationError = ErrorType<void>
-
-    export const useCreateAssignments = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createAssignments>>,
-        TError,
-        {data: BodyType<CreateAssignmentDtos>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateAssignmentsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  assignmentId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'GET', signal
+  return customInstance<GetAssignment200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetAssignmentQueryKey = (assignmentId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/assignments/${assignmentId}`] as const;
-    }
+export const getGetAssignmentQueryKey = (assignmentId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`,
+  ] as const;
+};
 
-    
-export const getGetAssignmentQueryOptions = <TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({
+    signal,
+  }) => getAssignment(assignmentId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!assignmentId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAssignment>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
+export type GetAssignmentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignment>>
+>;
+export type GetAssignmentQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentQueryError = ErrorType<void>
-
-
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>> & Pick<
+export function useGetAssignment<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAssignment>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignment<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAssignment>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignment<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAssignment<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentQueryOptions(assignmentId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentQueryOptions(assignmentId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAssignmentSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({
+    signal,
+  }) => getAssignment(assignmentId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!assignmentId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAssignment>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
+export type GetAssignmentSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignment>>
+>;
+export type GetAssignmentSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetAssignmentSuspense<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentSuspense<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentSuspense<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAssignmentSuspense<
+  TData = Awaited<ReturnType<typeof getAssignment>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentSuspenseQueryOptions(
+    assignmentId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetAssignmentSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentSuspenseQueryOptions(assignmentId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAssignmentSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAssignmentSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({
+    signal,
+  }) => getAssignment(assignmentId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!assignmentId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAssignment>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
+export type GetAssignmentSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAssignment>>
+>;
+export type GetAssignmentSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetAssignmentSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAssignmentSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAssignmentSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>,
+  TError = ErrorType<void>,
+>(
+  assignmentId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAssignment>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAssignmentSuspenseInfiniteQueryOptions(
+    assignmentId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetAssignmentSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentSuspenseInfiniteQueryOptions(assignmentId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateAssignment = (
-    assignmentId: string,
-    updateAssignmentDto: BodyType<UpdateAssignmentDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateAssignmentDto
+  assignmentId: string,
+  updateAssignmentDto: BodyType<UpdateAssignmentDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateAssignment200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateAssignmentDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateAssignmentMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateAssignment>>,
+    TError,
+    { assignmentId: string; data: BodyType<UpdateAssignmentDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateAssignment>>,
+  TError,
+  { assignmentId: string; data: BodyType<UpdateAssignmentDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateAssignment>>,
+    { assignmentId: string; data: BodyType<UpdateAssignmentDto> }
+  > = props => {
+    const { assignmentId, data } = props ?? {};
 
-      
+    return updateAssignment(assignmentId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAssignment>>, {assignmentId: string;data: BodyType<UpdateAssignmentDto>}> = (props) => {
-          const {assignmentId,data} = props ?? {};
+export type UpdateAssignmentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateAssignment>>
+>;
+export type UpdateAssignmentMutationBody = BodyType<UpdateAssignmentDto>;
+export type UpdateAssignmentMutationError = ErrorType<void>;
 
-          return  updateAssignment(assignmentId,data,requestOptions)
-        }
+export const useUpdateAssignment = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateAssignment>>,
+    TError,
+    { assignmentId: string; data: BodyType<UpdateAssignmentDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateAssignment>>,
+  TError,
+  { assignmentId: string; data: BodyType<UpdateAssignmentDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateAssignmentMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateAssignment>>>
-    export type UpdateAssignmentMutationBody = BodyType<UpdateAssignmentDto>
-    export type UpdateAssignmentMutationError = ErrorType<void>
-
-    export const useUpdateAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateAssignment>>,
-        TError,
-        {assignmentId: string;data: BodyType<UpdateAssignmentDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'DELETE'
+  assignmentId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteAssignment200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteAssignmentMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAssignment>>,
+    TError,
+    { assignmentId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteAssignment>>,
+  TError,
+  { assignmentId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteAssignment>>,
+    { assignmentId: string }
+  > = props => {
+    const { assignmentId } = props ?? {};
 
-      
+    return deleteAssignment(assignmentId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAssignment>>, {assignmentId: string}> = (props) => {
-          const {assignmentId} = props ?? {};
+export type DeleteAssignmentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteAssignment>>
+>;
 
-          return  deleteAssignment(assignmentId,requestOptions)
-        }
+export type DeleteAssignmentMutationError = ErrorType<void>;
 
-        
+export const useDeleteAssignment = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAssignment>>,
+    TError,
+    { assignmentId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteAssignment>>,
+  TError,
+  { assignmentId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteAssignmentMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAssignment>>>
-    
-    export type DeleteAssignmentMutationError = ErrorType<void>
-
-    export const useDeleteAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteAssignment>>,
-        TError,
-        {assignmentId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeAssignments = (
-    removeAssignmentsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAssignments200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeAssignmentsBody
+  removeAssignmentsBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveAssignments200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeAssignmentsBody,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveAssignmentsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAssignments>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeAssignments>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveAssignmentsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeAssignments>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return removeAssignments(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAssignments>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
+export type RemoveAssignmentsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeAssignments>>
+>;
+export type RemoveAssignmentsMutationBody = BodyType<string[]>;
+export type RemoveAssignmentsMutationError = ErrorType<void>;
 
-          return  removeAssignments(data,requestOptions)
-        }
+export const useRemoveAssignments = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAssignments>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeAssignments>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveAssignmentsMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAssignmentsMutationResult = NonNullable<Awaited<ReturnType<typeof removeAssignments>>>
-    export type RemoveAssignmentsMutationBody = BodyType<string[]>
-    export type RemoveAssignmentsMutationError = ErrorType<void>
-
-    export const useRemoveAssignments = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAssignments>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAssignmentsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}/removedAt`, method: 'PATCH'
+  assignmentId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveAssignment200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}/removedAt`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveAssignmentMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAssignment>>,
+    TError,
+    { assignmentId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeAssignment>>,
+  TError,
+  { assignmentId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeAssignment>>,
+    { assignmentId: string }
+  > = props => {
+    const { assignmentId } = props ?? {};
 
-      
+    return removeAssignment(assignmentId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAssignment>>, {assignmentId: string}> = (props) => {
-          const {assignmentId} = props ?? {};
+export type RemoveAssignmentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeAssignment>>
+>;
 
-          return  removeAssignment(assignmentId,requestOptions)
-        }
+export type RemoveAssignmentMutationError = ErrorType<void>;
 
-        
+export const useRemoveAssignment = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAssignment>>,
+    TError,
+    { assignmentId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeAssignment>>,
+  TError,
+  { assignmentId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveAssignmentMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof removeAssignment>>>
-    
-    export type RemoveAssignmentMutationError = ErrorType<void>
-
-    export const useRemoveAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAssignment>>,
-        TError,
-        {assignmentId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createUser = (
-    createUserDto: BodyType<CreateUserDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateUser200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createUserDto
+  createUserDto: BodyType<CreateUserDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateUser200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createUserDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateUserMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createUser>>,
+    TError,
+    { data: BodyType<CreateUserDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createUser>>,
+  TError,
+  { data: BodyType<CreateUserDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateUserMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: BodyType<CreateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: BodyType<CreateUserDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createUser>>,
+    { data: BodyType<CreateUserDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createUser(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createUser>>, {data: BodyType<CreateUserDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createUser>>
+>;
+export type CreateUserMutationBody = BodyType<CreateUserDto>;
+export type CreateUserMutationError = ErrorType<void>;
 
-          return  createUser(data,requestOptions)
-        }
+export const useCreateUser = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createUser>>,
+    TError,
+    { data: BodyType<CreateUserDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createUser>>,
+  TError,
+  { data: BodyType<CreateUserDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateUserMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateUserMutationResult = NonNullable<Awaited<ReturnType<typeof createUser>>>
-    export type CreateUserMutationBody = BodyType<CreateUserDto>
-    export type CreateUserMutationError = ErrorType<void>
-
-    export const useCreateUser = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUser>>, TError,{data: BodyType<CreateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createUser>>,
-        TError,
-        {data: BodyType<CreateUserDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateUserMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getUsersByQuery = (
-    params?: GetUsersByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetUsersByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetUsersByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users`, method: 'GET',
-        params, signal
+  return customInstance<GetUsersByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetUsersByQueryQueryKey = (params?: GetUsersByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/users`, ...(params ? [params]: [])] as const;
-    }
+export const getGetUsersByQueryQueryKey = (params?: GetUsersByQueryParams) => {
+  return [
+    `http://localhost:3005/api/v1/admin/users`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-    
-export const getGetUsersByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(params?: GetUsersByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUsersByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({
+    signal,
+  }) => getUsersByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUsersByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({ signal }) => getUsersByQuery(params, requestOptions, signal);
+export type GetUsersByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUsersByQuery>>
+>;
+export type GetUsersByQueryQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetUsersByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getUsersByQuery>>>
-export type GetUsersByQueryQueryError = ErrorType<void>
-
-
-export function useGetUsersByQuery<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetUsersByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>> & Pick<
+export function useGetUsersByQuery<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetUsersByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUsersByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuery<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuery<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUsersByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuery<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuery<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetUsersByQuery<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUsersByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetUsersByQuery<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUsersByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetUsersByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUsersByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({
+    signal,
+  }) => getUsersByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getUsersByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({ signal }) => getUsersByQuery(params, requestOptions, signal);
+export type GetUsersByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUsersByQuery>>
+>;
+export type GetUsersByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetUsersByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetUsersByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetUsersByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getUsersByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUsersByQuerySuspenseQueryOptions(params, options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetUsersByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getUsersByQuery>>>
-export type GetUsersByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetUsersByQuerySuspense<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetUsersByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuerySuspense<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuerySuspense<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetUsersByQuerySuspense<TData = Awaited<ReturnType<typeof getUsersByQuery>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUsersByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetUsersByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>, TError = ErrorType<void>>(params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUsersByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUsersByQueryQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({
+    signal,
+  }) => getUsersByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getUsersByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersByQuery>>> = ({ signal }) => getUsersByQuery(params, requestOptions, signal);
+export type GetUsersByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUsersByQuery>>
+>;
+export type GetUsersByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetUsersByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetUsersByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUsersByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetUsersByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetUsersByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUsersByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUsersByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetUsersByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getUsersByQuery>>>
-export type GetUsersByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetUsersByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetUsersByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUsersByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetUsersByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUsersByQuery>>>, TError = ErrorType<void>>(
- params?: GetUsersByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUsersByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUsersByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getUser = (
-    userId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  userId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetUser200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users/${userId}`, method: 'GET', signal
+  return customInstance<GetUser200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users/${userId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetUserQueryKey = (userId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/users/${userId}`] as const;
-    }
+export const getGetUserQueryKey = (userId: string) => {
+  return [`http://localhost:3005/api/v1/admin/users/${userId}`] as const;
+};
 
-    
-export const getGetUserQueryOptions = <TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUserQueryKey(userId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserQueryKey(userId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({
+    signal,
+  }) => getUser(userId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({ signal }) => getUser(userId, requestOptions, signal);
+export type GetUserQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUser>>
+>;
+export type GetUserQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetUserQueryResult = NonNullable<Awaited<ReturnType<typeof getUser>>>
-export type GetUserQueryError = ErrorType<void>
-
-
-export function useGetUser<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>> & Pick<
+export function useGetUser<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUser>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUser<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUser<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUser>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUser<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUser<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetUser<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUserQueryOptions(userId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetUser<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUserQueryOptions(userId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUserQueryKey(userId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserQueryKey(userId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({
+    signal,
+  }) => getUser(userId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getUser>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({ signal }) => getUser(userId, requestOptions, signal);
+export type GetUserSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUser>>
+>;
+export type GetUserSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetUserSuspense<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUserSuspense<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUserSuspense<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetUserSuspense<
+  TData = Awaited<ReturnType<typeof getUser>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUserSuspenseQueryOptions(userId, options);
 
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetUserSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getUser>>>
-export type GetUserSuspenseQueryError = ErrorType<void>
-
-
-export function useGetUserSuspense<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUserSuspense<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUserSuspense<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetUserSuspense<TData = Awaited<ReturnType<typeof getUser>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUserSuspenseQueryOptions(userId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetUserSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetUserQueryKey(userId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserQueryKey(userId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({
+    signal,
+  }) => getUser(userId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getUser>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUser>>> = ({ signal }) => getUser(userId, requestOptions, signal);
+export type GetUserSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUser>>
+>;
+export type GetUserSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetUserSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUserSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetUserSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetUserSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>,
+  TError = ErrorType<void>,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getUser>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetUserSuspenseInfiniteQueryOptions(userId, options);
 
-   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetUserSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getUser>>>
-export type GetUserSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetUserSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>, TError = ErrorType<void>>(
- userId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUserSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetUserSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetUserSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUser>>>, TError = ErrorType<void>>(
- userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUser>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetUserSuspenseInfiniteQueryOptions(userId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateUser = (
-    userId: string,
-    updateUserDto: BodyType<UpdateUserDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateUser200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users/${userId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateUserDto
+  userId: string,
+  updateUserDto: BodyType<UpdateUserDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateUser200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users/${userId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateUserDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateUserMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateUser>>,
+    TError,
+    { userId: string; data: BodyType<UpdateUserDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateUser>>,
+  TError,
+  { userId: string; data: BodyType<UpdateUserDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateUserMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{userId: string;data: BodyType<UpdateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{userId: string;data: BodyType<UpdateUserDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateUser>>,
+    { userId: string; data: BodyType<UpdateUserDto> }
+  > = props => {
+    const { userId, data } = props ?? {};
 
-      
+    return updateUser(userId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUser>>, {userId: string;data: BodyType<UpdateUserDto>}> = (props) => {
-          const {userId,data} = props ?? {};
+export type UpdateUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateUser>>
+>;
+export type UpdateUserMutationBody = BodyType<UpdateUserDto>;
+export type UpdateUserMutationError = ErrorType<void>;
 
-          return  updateUser(userId,data,requestOptions)
-        }
+export const useUpdateUser = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateUser>>,
+    TError,
+    { userId: string; data: BodyType<UpdateUserDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateUser>>,
+  TError,
+  { userId: string; data: BodyType<UpdateUserDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateUserMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateUserMutationResult = NonNullable<Awaited<ReturnType<typeof updateUser>>>
-    export type UpdateUserMutationBody = BodyType<UpdateUserDto>
-    export type UpdateUserMutationError = ErrorType<void>
-
-    export const useUpdateUser = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUser>>, TError,{userId: string;data: BodyType<UpdateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateUser>>,
-        TError,
-        {userId: string;data: BodyType<UpdateUserDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateUserMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteUser = (
-    userId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteUser200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users/${userId}`, method: 'DELETE'
+  userId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteUser200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users/${userId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteUserMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteUser>>,
+    TError,
+    { userId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteUser>>,
+  TError,
+  { userId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteUserMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{userId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteUser>>,
+    { userId: string }
+  > = props => {
+    const { userId } = props ?? {};
 
-      
+    return deleteUser(userId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteUser>>, {userId: string}> = (props) => {
-          const {userId} = props ?? {};
+export type DeleteUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteUser>>
+>;
 
-          return  deleteUser(userId,requestOptions)
-        }
+export type DeleteUserMutationError = ErrorType<void>;
 
-        
+export const useDeleteUser = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteUser>>,
+    TError,
+    { userId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteUser>>,
+  TError,
+  { userId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteUserMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteUserMutationResult = NonNullable<Awaited<ReturnType<typeof deleteUser>>>
-    
-    export type DeleteUserMutationError = ErrorType<void>
-
-    export const useDeleteUser = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUser>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteUser>>,
-        TError,
-        {userId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteUserMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeUsers = (
-    removeUsersBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveUsers200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeUsersBody
+  removeUsersBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveUsers200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeUsersBody,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveUsersMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeUsers>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeUsers>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveUsersMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeUsers>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeUsers>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeUsers>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return removeUsers(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeUsers>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
+export type RemoveUsersMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeUsers>>
+>;
+export type RemoveUsersMutationBody = BodyType<string[]>;
+export type RemoveUsersMutationError = ErrorType<void>;
 
-          return  removeUsers(data,requestOptions)
-        }
+export const useRemoveUsers = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeUsers>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeUsers>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveUsersMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveUsersMutationResult = NonNullable<Awaited<ReturnType<typeof removeUsers>>>
-    export type RemoveUsersMutationBody = BodyType<string[]>
-    export type RemoveUsersMutationError = ErrorType<void>
-
-    export const useRemoveUsers = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeUsers>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeUsers>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveUsersMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeUser = (
-    userId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveUser200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/users/${userId}/removedAt`, method: 'PATCH'
+  userId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveUser200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/users/${userId}/removedAt`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveUserMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeUser>>,
+    TError,
+    { userId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeUser>>,
+  TError,
+  { userId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveUserMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeUser>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeUser>>, TError,{userId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeUser>>,
+    { userId: string }
+  > = props => {
+    const { userId } = props ?? {};
 
-      
+    return removeUser(userId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeUser>>, {userId: string}> = (props) => {
-          const {userId} = props ?? {};
+export type RemoveUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeUser>>
+>;
 
-          return  removeUser(userId,requestOptions)
-        }
+export type RemoveUserMutationError = ErrorType<void>;
 
-        
+export const useRemoveUser = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeUser>>,
+    TError,
+    { userId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeUser>>,
+  TError,
+  { userId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveUserMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveUserMutationResult = NonNullable<Awaited<ReturnType<typeof removeUser>>>
-    
-    export type RemoveUserMutationError = ErrorType<void>
-
-    export const useRemoveUser = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeUser>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeUser>>,
-        TError,
-        {userId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveUserMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getChildrenCategories = (
-    params: GetChildrenCategoriesParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params: GetChildrenCategoriesParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetChildrenCategories200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories/children`, method: 'GET',
-        params, signal
+  return customInstance<GetChildrenCategories200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories/children`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetChildrenCategoriesQueryKey = (params: GetChildrenCategoriesParams,) => {
-    return [`http://localhost:3005/api/v1/admin/categories/children`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetChildrenCategoriesQueryOptions = <TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(params: GetChildrenCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetChildrenCategoriesQueryKey = (
+  params: GetChildrenCategoriesParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/categories/children`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetChildrenCategoriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getChildrenCategories>>
+  > = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getChildrenCategories>>> = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getChildrenCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetChildrenCategoriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getChildrenCategories>>
+>;
+export type GetChildrenCategoriesQueryError = ErrorType<unknown>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetChildrenCategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof getChildrenCategories>>>
-export type GetChildrenCategoriesQueryError = ErrorType<unknown>
-
-
-export function useGetChildrenCategories<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>> & Pick<
+export function useGetChildrenCategories<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChildrenCategories>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategories<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategories<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChildrenCategories>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategories<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategories<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetChildrenCategories<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetChildrenCategoriesQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetChildrenCategories<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetChildrenCategoriesQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetChildrenCategoriesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetChildrenCategoriesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getChildrenCategories>>
+  > = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getChildrenCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getChildrenCategories>>> = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
+export type GetChildrenCategoriesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getChildrenCategories>>
+>;
+export type GetChildrenCategoriesSuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetChildrenCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetChildrenCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getChildrenCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetChildrenCategoriesSuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetChildrenCategoriesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getChildrenCategories>>>
-export type GetChildrenCategoriesSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetChildrenCategoriesSuspense<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategoriesSuspense<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategoriesSuspense<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetChildrenCategoriesSuspense<TData = Awaited<ReturnType<typeof getChildrenCategories>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetChildrenCategoriesSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetChildrenCategoriesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>, TError = ErrorType<unknown>>(params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetChildrenCategoriesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetChildrenCategoriesQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getChildrenCategories>>
+  > = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getChildrenCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getChildrenCategories>>> = ({ signal }) => getChildrenCategories(params, requestOptions, signal);
+export type GetChildrenCategoriesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getChildrenCategories>>
+>;
+export type GetChildrenCategoriesSuspenseInfiniteQueryError =
+  ErrorType<unknown>;
 
-      
+export function useGetChildrenCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetChildrenCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetChildrenCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetChildrenCategoriesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getChildrenCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetChildrenCategoriesSuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetChildrenCategoriesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getChildrenCategories>>>
-export type GetChildrenCategoriesSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetChildrenCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetChildrenCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetChildrenCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getChildrenCategories>>>, TError = ErrorType<unknown>>(
- params: GetChildrenCategoriesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getChildrenCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetChildrenCategoriesSuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getAncestorCategories = (
-    categoryId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  categoryId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetAncestorCategories200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`, method: 'GET', signal
+  return customInstance<GetAncestorCategories200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetAncestorCategoriesQueryKey = (categoryId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`] as const;
-    }
+export const getGetAncestorCategoriesQueryKey = (categoryId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/categories/${categoryId}/ancestors`,
+  ] as const;
+};
 
-    
-export const getGetAncestorCategoriesQueryOptions = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAncestorCategoriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAncestorCategories>>
+  > = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAncestorCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+export type GetAncestorCategoriesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAncestorCategories>>
+>;
+export type GetAncestorCategoriesQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAncestorCategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
-export type GetAncestorCategoriesQueryError = ErrorType<unknown>
-
-
-export function useGetAncestorCategories<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>> & Pick<
+export function useGetAncestorCategories<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAncestorCategories>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategories<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategories<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAncestorCategories>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategories<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategories<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAncestorCategories<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAncestorCategoriesQueryOptions(
+    categoryId,
+    options,
+  );
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetAncestorCategories<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAncestorCategoriesQueryOptions(categoryId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAncestorCategoriesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAncestorCategoriesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAncestorCategories>>
+  > = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAncestorCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+export type GetAncestorCategoriesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAncestorCategories>>
+>;
+export type GetAncestorCategoriesSuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetAncestorCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAncestorCategoriesSuspense<
+  TData = Awaited<ReturnType<typeof getAncestorCategories>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAncestorCategoriesSuspenseQueryOptions(
+    categoryId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetAncestorCategoriesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
-export type GetAncestorCategoriesSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetAncestorCategoriesSuspense<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategoriesSuspense<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategoriesSuspense<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAncestorCategoriesSuspense<TData = Awaited<ReturnType<typeof getAncestorCategories>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAncestorCategoriesSuspenseQueryOptions(categoryId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAncestorCategoriesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAncestorCategoriesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAncestorCategoriesQueryKey(categoryId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAncestorCategories>>
+  > = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAncestorCategories>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAncestorCategories>>> = ({ signal }) => getAncestorCategories(categoryId, requestOptions, signal);
+export type GetAncestorCategoriesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAncestorCategories>>
+>;
+export type GetAncestorCategoriesSuspenseInfiniteQueryError =
+  ErrorType<unknown>;
 
-      
+export function useGetAncestorCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAncestorCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAncestorCategoriesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>,
+  TError = ErrorType<unknown>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAncestorCategories>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAncestorCategoriesSuspenseInfiniteQueryOptions(
+    categoryId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetAncestorCategoriesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAncestorCategories>>>
-export type GetAncestorCategoriesSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetAncestorCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAncestorCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAncestorCategoriesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAncestorCategories>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAncestorCategories>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAncestorCategoriesSuspenseInfiniteQueryOptions(categoryId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getCategoriesByQuery = (
-    params?: GetCategoriesByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetCategoriesByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetCategoriesByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories`, method: 'GET',
-        params, signal
+  return customInstance<GetCategoriesByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetCategoriesByQueryQueryKey = (params?: GetCategoriesByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/categories`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetCategoriesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQueryQueryKey = (
+  params?: GetCategoriesByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/categories`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetCategoriesByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>
+  > = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoriesByQuery>>> = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetCategoriesByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoriesByQuery>>
+>;
+export type GetCategoriesByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetCategoriesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoriesByQuery>>>
-export type GetCategoriesByQueryQueryError = ErrorType<void>
-
-
-export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
+export function useGetCategoriesByQuery<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetCategoriesByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoriesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuery<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoriesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuery<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetCategoriesByQuery<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoriesByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoriesByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetCategoriesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>
+  > = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoriesByQuery>>> = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
+export type GetCategoriesByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoriesByQuery>>
+>;
+export type GetCategoriesByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetCategoriesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetCategoriesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetCategoriesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getCategoriesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoriesByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetCategoriesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoriesByQuery>>>
-export type GetCategoriesByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoriesByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetCategoriesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoriesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>
+  > = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getCategoriesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoriesByQuery>>> = ({ signal }) => getCategoriesByQuery(params, requestOptions, signal);
+export type GetCategoriesByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoriesByQuery>>
+>;
+export type GetCategoriesByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetCategoriesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetCategoriesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoriesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetCategoriesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetCategoriesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoriesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoriesByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetCategoriesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoriesByQuery>>>
-export type GetCategoriesByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoriesByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const createCategory = (
-    createCategoryDto: BodyType<CreateCategoryDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateCategory200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createCategoryDto
+  createCategoryDto: BodyType<CreateCategoryDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateCategory200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createCategoryDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateCategoryMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createCategory>>,
+    TError,
+    { data: BodyType<CreateCategoryDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createCategory>>,
+  TError,
+  { data: BodyType<CreateCategoryDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateCategoryMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: BodyType<CreateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: BodyType<CreateCategoryDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createCategory>>,
+    { data: BodyType<CreateCategoryDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createCategory(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCategory>>, {data: BodyType<CreateCategoryDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateCategoryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createCategory>>
+>;
+export type CreateCategoryMutationBody = BodyType<CreateCategoryDto>;
+export type CreateCategoryMutationError = ErrorType<void>;
 
-          return  createCategory(data,requestOptions)
-        }
+export const useCreateCategory = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createCategory>>,
+    TError,
+    { data: BodyType<CreateCategoryDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createCategory>>,
+  TError,
+  { data: BodyType<CreateCategoryDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateCategoryMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof createCategory>>>
-    export type CreateCategoryMutationBody = BodyType<CreateCategoryDto>
-    export type CreateCategoryMutationError = ErrorType<void>
-
-    export const useCreateCategory = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: BodyType<CreateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createCategory>>,
-        TError,
-        {data: BodyType<CreateCategoryDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateCategoryMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getCategoryById = (
-    categoryId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  categoryId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetCategoryById200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`, method: 'GET', signal
+  return customInstance<GetCategoryById200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetCategoryByIdQueryKey = (categoryId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/categories/${categoryId}`] as const;
-    }
+export const getGetCategoryByIdQueryKey = (categoryId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/categories/${categoryId}`,
+  ] as const;
+};
 
-    
-export const getGetCategoryByIdQueryOptions = <TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoryByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({
+    signal,
+  }) => getCategoryById(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCategoryById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({ signal }) => getCategoryById(categoryId, requestOptions, signal);
+export type GetCategoryByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoryById>>
+>;
+export type GetCategoryByIdQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetCategoryByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoryById>>>
-export type GetCategoryByIdQueryError = ErrorType<void>
-
-
-export function useGetCategoryById<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>> & Pick<
+export function useGetCategoryById<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoryById>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryById<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryById<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoryById>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryById<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryById<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetCategoryById<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoryByIdQueryOptions(categoryId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetCategoryById<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoryByIdQueryOptions(categoryId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetCategoryByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoryByIdSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({
+    signal,
+  }) => getCategoryById(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getCategoryById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({ signal }) => getCategoryById(categoryId, requestOptions, signal);
+export type GetCategoryByIdSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoryById>>
+>;
+export type GetCategoryByIdSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetCategoryByIdSuspense<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryByIdSuspense<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryByIdSuspense<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetCategoryByIdSuspense<
+  TData = Awaited<ReturnType<typeof getCategoryById>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoryByIdSuspenseQueryOptions(
+    categoryId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetCategoryByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoryById>>>
-export type GetCategoryByIdSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCategoryByIdSuspense<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryByIdSuspense<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryByIdSuspense<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetCategoryByIdSuspense<TData = Awaited<ReturnType<typeof getCategoryById>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoryByIdSuspenseQueryOptions(categoryId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetCategoryByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoryByIdSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCategoryByIdQueryKey(categoryId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({
+    signal,
+  }) => getCategoryById(categoryId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!categoryId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getCategoryById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCategoryById>>> = ({ signal }) => getCategoryById(categoryId, requestOptions, signal);
+export type GetCategoryByIdSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCategoryById>>
+>;
+export type GetCategoryByIdSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetCategoryByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetCategoryByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetCategoryByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>,
+  TError = ErrorType<void>,
+>(
+  categoryId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getCategoryById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetCategoryByIdSuspenseInfiniteQueryOptions(
+    categoryId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetCategoryByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCategoryById>>>
-export type GetCategoryByIdSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCategoryByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>, TError = ErrorType<void>>(
- categoryId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetCategoryByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetCategoryByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoryById>>>, TError = ErrorType<void>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoryById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetCategoryByIdSuspenseInfiniteQueryOptions(categoryId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateCategory = (
-    categoryId: string,
-    updateCategoryDto: BodyType<UpdateCategoryDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateCategory200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateCategoryDto
+  categoryId: string,
+  updateCategoryDto: BodyType<UpdateCategoryDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateCategory200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateCategoryDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateCategoryMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateCategory>>,
+    TError,
+    { categoryId: string; data: BodyType<UpdateCategoryDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateCategory>>,
+  TError,
+  { categoryId: string; data: BodyType<UpdateCategoryDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateCategoryMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateCategory>>,
+    { categoryId: string; data: BodyType<UpdateCategoryDto> }
+  > = props => {
+    const { categoryId, data } = props ?? {};
 
-      
+    return updateCategory(categoryId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategory>>, {categoryId: string;data: BodyType<UpdateCategoryDto>}> = (props) => {
-          const {categoryId,data} = props ?? {};
+export type UpdateCategoryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateCategory>>
+>;
+export type UpdateCategoryMutationBody = BodyType<UpdateCategoryDto>;
+export type UpdateCategoryMutationError = ErrorType<void>;
 
-          return  updateCategory(categoryId,data,requestOptions)
-        }
+export const useUpdateCategory = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateCategory>>,
+    TError,
+    { categoryId: string; data: BodyType<UpdateCategoryDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateCategory>>,
+  TError,
+  { categoryId: string; data: BodyType<UpdateCategoryDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateCategoryMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategory>>>
-    export type UpdateCategoryMutationBody = BodyType<UpdateCategoryDto>
-    export type UpdateCategoryMutationError = ErrorType<void>
-
-    export const useUpdateCategory = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateCategory>>,
-        TError,
-        {categoryId: string;data: BodyType<UpdateCategoryDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateCategoryMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createAbility = (
-    createAbilityDto: BodyType<CreateAbilityDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateAbility201AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAbilityDto
+  createAbilityDto: BodyType<CreateAbilityDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateAbility201AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createAbilityDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateAbilityMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAbility>>,
+    TError,
+    { data: BodyType<CreateAbilityDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createAbility>>,
+  TError,
+  { data: BodyType<CreateAbilityDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateAbilityMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createAbility>>,
+    { data: BodyType<CreateAbilityDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createAbility(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAbility>>, {data: BodyType<CreateAbilityDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateAbilityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createAbility>>
+>;
+export type CreateAbilityMutationBody = BodyType<CreateAbilityDto>;
+export type CreateAbilityMutationError = ErrorType<unknown>;
 
-          return  createAbility(data,requestOptions)
-        }
+export const useCreateAbility = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createAbility>>,
+    TError,
+    { data: BodyType<CreateAbilityDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createAbility>>,
+  TError,
+  { data: BodyType<CreateAbilityDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateAbilityMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof createAbility>>>
-    export type CreateAbilityMutationBody = BodyType<CreateAbilityDto>
-    export type CreateAbilityMutationError = ErrorType<unknown>
-
-    export const useCreateAbility = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAbility>>, TError,{data: BodyType<CreateAbilityDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createAbility>>,
-        TError,
-        {data: BodyType<CreateAbilityDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateAbilityMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getAbilitiesByQuery = (
-    params?: GetAbilitiesByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetAbilitiesByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetAbilitiesByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities`, method: 'GET',
-        params, signal
+  return customInstance<GetAbilitiesByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetAbilitiesByQueryQueryKey = (params?: GetAbilitiesByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/abilities`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetAbilitiesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilitiesByQueryQueryKey = (
+  params?: GetAbilitiesByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/abilities`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetAbilitiesByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>
+  > = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByQuery>>> = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetAbilitiesByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbilitiesByQuery>>
+>;
+export type GetAbilitiesByQueryQueryError = ErrorType<unknown>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAbilitiesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByQuery>>>
-export type GetAbilitiesByQueryQueryError = ErrorType<unknown>
-
-
-export function useGetAbilitiesByQuery<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params: undefined |  GetAbilitiesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>> & Pick<
+export function useGetAbilitiesByQuery<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetAbilitiesByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAbilitiesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuery<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuery<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAbilitiesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuery<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuery<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAbilitiesByQuery<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilitiesByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetAbilitiesByQuery<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilitiesByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAbilitiesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilitiesByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>
+  > = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByQuery>>> = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
+export type GetAbilitiesByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbilitiesByQuery>>
+>;
+export type GetAbilitiesByQuerySuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetAbilitiesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetAbilitiesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAbilitiesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilitiesByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetAbilitiesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByQuery>>>
-export type GetAbilitiesByQuerySuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetAbilitiesByQuerySuspense<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params: undefined |  GetAbilitiesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuerySuspense<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuerySuspense<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAbilitiesByQuerySuspense<TData = Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilitiesByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAbilitiesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>, TError = ErrorType<unknown>>(params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilitiesByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilitiesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>
+  > = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbilitiesByQuery>>> = ({ signal }) => getAbilitiesByQuery(params, requestOptions, signal);
+export type GetAbilitiesByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbilitiesByQuery>>
+>;
+export type GetAbilitiesByQuerySuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function useGetAbilitiesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetAbilitiesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitiesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAbilitiesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAbilitiesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbilitiesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilitiesByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetAbilitiesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbilitiesByQuery>>>
-export type GetAbilitiesByQuerySuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetAbilitiesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>, TError = ErrorType<unknown>>(
- params: undefined |  GetAbilitiesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitiesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAbilitiesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbilitiesByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetAbilitiesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbilitiesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilitiesByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getAbility = (
-    abilityId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  abilityId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetAbility200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'GET', signal
+  return customInstance<GetAbility200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetAbilityQueryKey = (abilityId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/abilities/${abilityId}`] as const;
-    }
+export const getGetAbilityQueryKey = (abilityId: string) => {
+  return [`http://localhost:3005/api/v1/admin/abilities/${abilityId}`] as const;
+};
 
-    
-export const getGetAbilityQueryOptions = <TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilityQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({
+    signal,
+  }) => getAbility(abilityId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!abilityId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAbility>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({ signal }) => getAbility(abilityId, requestOptions, signal);
+export type GetAbilityQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbility>>
+>;
+export type GetAbilityQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAbilityQueryResult = NonNullable<Awaited<ReturnType<typeof getAbility>>>
-export type GetAbilityQueryError = ErrorType<unknown>
-
-
-export function useGetAbility<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>> & Pick<
+export function useGetAbility<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAbility>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbility<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbility<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAbility>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbility<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbility<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAbility<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilityQueryOptions(abilityId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetAbility<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilityQueryOptions(abilityId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAbilitySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilitySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({
+    signal,
+  }) => getAbility(abilityId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!abilityId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAbility>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({ signal }) => getAbility(abilityId, requestOptions, signal);
+export type GetAbilitySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbility>>
+>;
+export type GetAbilitySuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetAbilitySuspense<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitySuspense<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitySuspense<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAbilitySuspense<
+  TData = Awaited<ReturnType<typeof getAbility>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilitySuspenseQueryOptions(abilityId, options);
 
-   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetAbilitySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAbility>>>
-export type GetAbilitySuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetAbilitySuspense<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitySuspense<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitySuspense<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAbilitySuspense<TData = Awaited<ReturnType<typeof getAbility>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilitySuspenseQueryOptions(abilityId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetAbilitySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>, TError = ErrorType<unknown>>(abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAbilitySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAbilityQueryKey(abilityId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({
+    signal,
+  }) => getAbility(abilityId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!abilityId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAbility>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAbility>>> = ({ signal }) => getAbility(abilityId, requestOptions, signal);
+export type GetAbilitySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAbility>>
+>;
+export type GetAbilitySuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function useGetAbilitySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAbilitySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAbilitySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>,
+  TError = ErrorType<unknown>,
+>(
+  abilityId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAbility>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAbilitySuspenseInfiniteQueryOptions(
+    abilityId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(abilityId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetAbilitySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAbility>>>
-export type GetAbilitySuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetAbilitySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>, TError = ErrorType<unknown>>(
- abilityId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAbilitySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAbilitySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAbility>>>, TError = ErrorType<unknown>>(
- abilityId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAbility>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAbilitySuspenseInfiniteQueryOptions(abilityId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const removeAbility = (
-    abilityId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAbility200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'PATCH'
+  abilityId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveAbility200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveAbilityMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAbility>>,
+    TError,
+    { abilityId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeAbility>>,
+  TError,
+  { abilityId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveAbilityMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbility>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAbility>>, TError,{abilityId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeAbility>>,
+    { abilityId: string }
+  > = props => {
+    const { abilityId } = props ?? {};
 
-      
+    return removeAbility(abilityId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAbility>>, {abilityId: string}> = (props) => {
-          const {abilityId} = props ?? {};
+export type RemoveAbilityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeAbility>>
+>;
 
-          return  removeAbility(abilityId,requestOptions)
-        }
+export type RemoveAbilityMutationError = ErrorType<unknown>;
 
-        
+export const useRemoveAbility = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAbility>>,
+    TError,
+    { abilityId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeAbility>>,
+  TError,
+  { abilityId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveAbilityMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof removeAbility>>>
-    
-    export type RemoveAbilityMutationError = ErrorType<unknown>
-
-    export const useRemoveAbility = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbility>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAbility>>,
-        TError,
-        {abilityId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAbilityMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteAbility = (
-    abilityId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteAbility200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`, method: 'DELETE'
+  abilityId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteAbility200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities/${abilityId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteAbilityMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAbility>>,
+    TError,
+    { abilityId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteAbility>>,
+  TError,
+  { abilityId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteAbilityMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,{abilityId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteAbility>>,
+    { abilityId: string }
+  > = props => {
+    const { abilityId } = props ?? {};
 
-      
+    return deleteAbility(abilityId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAbility>>, {abilityId: string}> = (props) => {
-          const {abilityId} = props ?? {};
+export type DeleteAbilityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteAbility>>
+>;
 
-          return  deleteAbility(abilityId,requestOptions)
-        }
+export type DeleteAbilityMutationError = ErrorType<unknown>;
 
-        
+export const useDeleteAbility = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAbility>>,
+    TError,
+    { abilityId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteAbility>>,
+  TError,
+  { abilityId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteAbilityMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteAbilityMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAbility>>>
-    
-    export type DeleteAbilityMutationError = ErrorType<unknown>
-
-    export const useDeleteAbility = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAbility>>, TError,{abilityId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteAbility>>,
-        TError,
-        {abilityId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteAbilityMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeAbilities = (
-    abilityIds: string[],
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAbilities200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/abilities/${abilityIds}`, method: 'PATCH'
+  abilityIds: string[],
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveAbilities200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/abilities/${abilityIds}`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveAbilitiesMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAbilities>>,
+    TError,
+    { abilityIds: string[] },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeAbilities>>,
+  TError,
+  { abilityIds: string[] },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveAbilitiesMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbilities>>, TError,{abilityIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAbilities>>, TError,{abilityIds: string[]}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeAbilities>>,
+    { abilityIds: string[] }
+  > = props => {
+    const { abilityIds } = props ?? {};
 
-      
+    return removeAbilities(abilityIds, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAbilities>>, {abilityIds: string[]}> = (props) => {
-          const {abilityIds} = props ?? {};
+export type RemoveAbilitiesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeAbilities>>
+>;
 
-          return  removeAbilities(abilityIds,requestOptions)
-        }
+export type RemoveAbilitiesMutationError = ErrorType<unknown>;
 
-        
+export const useRemoveAbilities = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeAbilities>>,
+    TError,
+    { abilityIds: string[] },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeAbilities>>,
+  TError,
+  { abilityIds: string[] },
+  TContext
+> => {
+  const mutationOptions = getRemoveAbilitiesMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAbilitiesMutationResult = NonNullable<Awaited<ReturnType<typeof removeAbilities>>>
-    
-    export type RemoveAbilitiesMutationError = ErrorType<unknown>
-
-    export const useRemoveAbilities = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAbilities>>, TError,{abilityIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAbilities>>,
-        TError,
-        {abilityIds: string[]},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAbilitiesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createTemplate = (
-    createTemplateDto: BodyType<CreateTemplateDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateTemplate200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createTemplateDto
+  createTemplateDto: BodyType<CreateTemplateDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateTemplate200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createTemplateDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateTemplateMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTemplate>>,
+    TError,
+    { data: BodyType<CreateTemplateDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createTemplate>>,
+  TError,
+  { data: BodyType<CreateTemplateDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateTemplateMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createTemplate>>,
+    { data: BodyType<CreateTemplateDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createTemplate(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTemplate>>, {data: BodyType<CreateTemplateDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateTemplateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createTemplate>>
+>;
+export type CreateTemplateMutationBody = BodyType<CreateTemplateDto>;
+export type CreateTemplateMutationError = ErrorType<void>;
 
-          return  createTemplate(data,requestOptions)
-        }
+export const useCreateTemplate = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTemplate>>,
+    TError,
+    { data: BodyType<CreateTemplateDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createTemplate>>,
+  TError,
+  { data: BodyType<CreateTemplateDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateTemplateMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof createTemplate>>>
-    export type CreateTemplateMutationBody = BodyType<CreateTemplateDto>
-    export type CreateTemplateMutationError = ErrorType<void>
-
-    export const useCreateTemplate = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTemplate>>, TError,{data: BodyType<CreateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createTemplate>>,
-        TError,
-        {data: BodyType<CreateTemplateDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateTemplateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getTemplatesByQuery = (
-    params?: GetTemplatesByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetTemplatesByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTemplatesByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates`, method: 'GET',
-        params, signal
+  return customInstance<GetTemplatesByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetTemplatesByQueryQueryKey = (params?: GetTemplatesByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/templates`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetTemplatesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQueryQueryKey = (
+  params?: GetTemplatesByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/templates`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetTemplatesByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>
+  > = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetTemplatesByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplatesByQuery>>
+>;
+export type GetTemplatesByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetTemplatesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
-export type GetTemplatesByQueryQueryError = ErrorType<void>
-
-
-export function useGetTemplatesByQuery<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetTemplatesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>> & Pick<
+export function useGetTemplatesByQuery<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTemplatesByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTemplatesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuery<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuery<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTemplatesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuery<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuery<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetTemplatesByQuery<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplatesByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetTemplatesByQuery<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplatesByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTemplatesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>
+  > = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+export type GetTemplatesByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplatesByQuery>>
+>;
+export type GetTemplatesByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetTemplatesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTemplatesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTemplatesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTemplatesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplatesByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetTemplatesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
-export type GetTemplatesByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetTemplatesByQuerySuspense<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetTemplatesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuerySuspense<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuerySuspense<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTemplatesByQuerySuspense<TData = Awaited<ReturnType<typeof getTemplatesByQuery>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplatesByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTemplatesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplatesByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplatesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>
+  > = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getTemplatesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplatesByQuery>>> = ({ signal }) => getTemplatesByQuery(params, requestOptions, signal);
+export type GetTemplatesByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplatesByQuery>>
+>;
+export type GetTemplatesByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetTemplatesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTemplatesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplatesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTemplatesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTemplatesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplatesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplatesByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetTemplatesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplatesByQuery>>>
-export type GetTemplatesByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTemplatesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetTemplatesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplatesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTemplatesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplatesByQuery>>>, TError = ErrorType<void>>(
- params?: GetTemplatesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplatesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplatesByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getTemplate = (
-    templateId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  templateId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTemplate200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'GET', signal
+  return customInstance<GetTemplate200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates/${templateId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetTemplateQueryKey = (templateId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/templates/${templateId}`] as const;
-    }
+export const getGetTemplateQueryKey = (templateId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/templates/${templateId}`,
+  ] as const;
+};
 
-    
-export const getGetTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplateQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
+    signal,
+  }) => getTemplate(templateId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!templateId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTemplate>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+export type GetTemplateQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplate>>
+>;
+export type GetTemplateQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
-export type GetTemplateQueryError = ErrorType<void>
-
-
-export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>> & Pick<
+export function useGetTemplate<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTemplate>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplate<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTemplate>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplate<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetTemplate<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplateQueryOptions(templateId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetTemplate<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplateQueryOptions(templateId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTemplateSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplateSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
+    signal,
+  }) => getTemplate(templateId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!templateId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getTemplate>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+export type GetTemplateSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplate>>
+>;
+export type GetTemplateSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetTemplateSuspense<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplateSuspense<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplateSuspense<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTemplateSuspense<
+  TData = Awaited<ReturnType<typeof getTemplate>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplateSuspenseQueryOptions(templateId, options);
 
-   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetTemplateSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
-export type GetTemplateSuspenseQueryError = ErrorType<void>
-
-
-export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTemplateSuspense<TData = Awaited<ReturnType<typeof getTemplate>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplateSuspenseQueryOptions(templateId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTemplateSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTemplateSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTemplateQueryKey(templateId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({
+    signal,
+  }) => getTemplate(templateId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!templateId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getTemplate>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTemplate>>> = ({ signal }) => getTemplate(templateId, requestOptions, signal);
+export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTemplate>>
+>;
+export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetTemplateSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplateSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTemplateSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTemplateSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>,
+  TError = ErrorType<void>,
+>(
+  templateId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTemplate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(
+    templateId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(templateId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetTemplateSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTemplate>>>
-export type GetTemplateSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
- templateId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTemplateSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTemplate>>>, TError = ErrorType<void>>(
- templateId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTemplateSuspenseInfiniteQueryOptions(templateId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateTemplate = (
-    templateId: string,
-    updateTemplateDto: BodyType<UpdateTemplateDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateTemplate200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateTemplateDto
+  templateId: string,
+  updateTemplateDto: BodyType<UpdateTemplateDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateTemplate200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates/${templateId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateTemplateDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateTemplateMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTemplate>>,
+    TError,
+    { templateId: string; data: BodyType<UpdateTemplateDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateTemplate>>,
+  TError,
+  { templateId: string; data: BodyType<UpdateTemplateDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateTemplateMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateTemplate>>,
+    { templateId: string; data: BodyType<UpdateTemplateDto> }
+  > = props => {
+    const { templateId, data } = props ?? {};
 
-      
+    return updateTemplate(templateId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTemplate>>, {templateId: string;data: BodyType<UpdateTemplateDto>}> = (props) => {
-          const {templateId,data} = props ?? {};
+export type UpdateTemplateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateTemplate>>
+>;
+export type UpdateTemplateMutationBody = BodyType<UpdateTemplateDto>;
+export type UpdateTemplateMutationError = ErrorType<void>;
 
-          return  updateTemplate(templateId,data,requestOptions)
-        }
+export const useUpdateTemplate = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTemplate>>,
+    TError,
+    { templateId: string; data: BodyType<UpdateTemplateDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateTemplate>>,
+  TError,
+  { templateId: string; data: BodyType<UpdateTemplateDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateTemplateMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof updateTemplate>>>
-    export type UpdateTemplateMutationBody = BodyType<UpdateTemplateDto>
-    export type UpdateTemplateMutationError = ErrorType<void>
-
-    export const useUpdateTemplate = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTemplate>>, TError,{templateId: string;data: BodyType<UpdateTemplateDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateTemplate>>,
-        TError,
-        {templateId: string;data: BodyType<UpdateTemplateDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateTemplateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteTemplate = (
-    templateId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteTemplate200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}`, method: 'DELETE'
+  templateId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteTemplate200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates/${templateId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteTemplateMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTemplate>>,
+    TError,
+    { templateId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteTemplate>>,
+  TError,
+  { templateId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteTemplateMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteTemplate>>,
+    { templateId: string }
+  > = props => {
+    const { templateId } = props ?? {};
 
-      
+    return deleteTemplate(templateId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTemplate>>, {templateId: string}> = (props) => {
-          const {templateId} = props ?? {};
+export type DeleteTemplateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteTemplate>>
+>;
 
-          return  deleteTemplate(templateId,requestOptions)
-        }
+export type DeleteTemplateMutationError = ErrorType<void>;
 
-        
+export const useDeleteTemplate = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTemplate>>,
+    TError,
+    { templateId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteTemplate>>,
+  TError,
+  { templateId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteTemplateMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTemplate>>>
-    
-    export type DeleteTemplateMutationError = ErrorType<void>
-
-    export const useDeleteTemplate = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteTemplate>>,
-        TError,
-        {templateId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteTemplateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeTemplates = (
-    removeTemplatesBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveTemplates200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeTemplatesBody
+  removeTemplatesBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveTemplates200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeTemplatesBody,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveTemplatesMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTemplates>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeTemplates>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveTemplatesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeTemplates>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return removeTemplates(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTemplates>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
+export type RemoveTemplatesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeTemplates>>
+>;
+export type RemoveTemplatesMutationBody = BodyType<string[]>;
+export type RemoveTemplatesMutationError = ErrorType<void>;
 
-          return  removeTemplates(data,requestOptions)
-        }
+export const useRemoveTemplates = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTemplates>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeTemplates>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveTemplatesMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveTemplatesMutationResult = NonNullable<Awaited<ReturnType<typeof removeTemplates>>>
-    export type RemoveTemplatesMutationBody = BodyType<string[]>
-    export type RemoveTemplatesMutationError = ErrorType<void>
-
-    export const useRemoveTemplates = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplates>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeTemplates>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveTemplatesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeTemplate = (
-    templateId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveTemplate200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/templates/${templateId}/removedAt`, method: 'PATCH'
+  templateId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveTemplate200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/templates/${templateId}/removedAt`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveTemplateMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTemplate>>,
+    TError,
+    { templateId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeTemplate>>,
+  TError,
+  { templateId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveTemplateMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeTemplate>>,
+    { templateId: string }
+  > = props => {
+    const { templateId } = props ?? {};
 
-      
+    return removeTemplate(templateId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTemplate>>, {templateId: string}> = (props) => {
-          const {templateId} = props ?? {};
+export type RemoveTemplateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeTemplate>>
+>;
 
-          return  removeTemplate(templateId,requestOptions)
-        }
+export type RemoveTemplateMutationError = ErrorType<void>;
 
-        
+export const useRemoveTemplate = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTemplate>>,
+    TError,
+    { templateId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeTemplate>>,
+  TError,
+  { templateId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveTemplateMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof removeTemplate>>>
-    
-    export type RemoveTemplateMutationError = ErrorType<void>
-
-    export const useRemoveTemplate = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTemplate>>, TError,{templateId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeTemplate>>,
-        TError,
-        {templateId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveTemplateMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createTimelineItem = (
-    createTimelineItemDto: BodyType<CreateTimelineItemDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateTimelineItem200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createTimelineItemDto
+  createTimelineItemDto: BodyType<CreateTimelineItemDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateTimelineItem200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createTimelineItemDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateTimelineItemMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTimelineItem>>,
+    TError,
+    { data: BodyType<CreateTimelineItemDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createTimelineItem>>,
+  TError,
+  { data: BodyType<CreateTimelineItemDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateTimelineItemMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTimelineItem>>, TError,{data: BodyType<CreateTimelineItemDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createTimelineItem>>, TError,{data: BodyType<CreateTimelineItemDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createTimelineItem>>,
+    { data: BodyType<CreateTimelineItemDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createTimelineItem(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createTimelineItem>>, {data: BodyType<CreateTimelineItemDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateTimelineItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createTimelineItem>>
+>;
+export type CreateTimelineItemMutationBody = BodyType<CreateTimelineItemDto>;
+export type CreateTimelineItemMutationError = ErrorType<void>;
 
-          return  createTimelineItem(data,requestOptions)
-        }
+export const useCreateTimelineItem = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createTimelineItem>>,
+    TError,
+    { data: BodyType<CreateTimelineItemDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createTimelineItem>>,
+  TError,
+  { data: BodyType<CreateTimelineItemDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateTimelineItemMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateTimelineItemMutationResult = NonNullable<Awaited<ReturnType<typeof createTimelineItem>>>
-    export type CreateTimelineItemMutationBody = BodyType<CreateTimelineItemDto>
-    export type CreateTimelineItemMutationError = ErrorType<void>
-
-    export const useCreateTimelineItem = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createTimelineItem>>, TError,{data: BodyType<CreateTimelineItemDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createTimelineItem>>,
-        TError,
-        {data: BodyType<CreateTimelineItemDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateTimelineItemMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getTimelineItemsByQuery = (
-    params?: GetTimelineItemsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetTimelineItemsByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTimelineItemsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items`, method: 'GET',
-        params, signal
+  return customInstance<GetTimelineItemsByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetTimelineItemsByQueryQueryKey = (params?: GetTimelineItemsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/timeline-items`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetTimelineItemsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemsByQueryQueryKey = (
+  params?: GetTimelineItemsByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/timeline-items`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetTimelineItemsByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+  > = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItemsByQuery>>> = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetTimelineItemsByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+>;
+export type GetTimelineItemsByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetTimelineItemsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>
-export type GetTimelineItemsByQueryQueryError = ErrorType<void>
-
-
-export function useGetTimelineItemsByQuery<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelineItemsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>> & Pick<
+export function useGetTimelineItemsByQuery<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTimelineItemsByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuery<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuery<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuery<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuery<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetTimelineItemsByQuery<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemsByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetTimelineItemsByQuery<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTimelineItemsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemsByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+  > = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItemsByQuery>>> = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
+export type GetTimelineItemsByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+>;
+export type GetTimelineItemsByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetTimelineItemsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTimelineItemsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTimelineItemsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemsByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetTimelineItemsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>
-export type GetTimelineItemsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetTimelineItemsByQuerySuspense<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelineItemsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuerySuspense<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuerySuspense<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTimelineItemsByQuerySuspense<TData = Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTimelineItemsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>, TError = ErrorType<void>>(params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemsByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+  > = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItemsByQuery>>> = ({ signal }) => getTimelineItemsByQuery(params, requestOptions, signal);
+export type GetTimelineItemsByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItemsByQuery>>
+>;
+export type GetTimelineItemsByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetTimelineItemsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetTimelineItemsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTimelineItemsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetTimelineItemsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItemsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemsByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetTimelineItemsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>
-export type GetTimelineItemsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTimelineItemsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetTimelineItemsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTimelineItemsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItemsByQuery>>>, TError = ErrorType<void>>(
- params?: GetTimelineItemsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItemsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getTimelineItem = (
-    timelineItemId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  timelineItemId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetTimelineItem200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`, method: 'GET', signal
+  return customInstance<GetTimelineItem200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetTimelineItemQueryKey = (timelineItemId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`] as const;
-    }
+export const getGetTimelineItemQueryKey = (timelineItemId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`,
+  ] as const;
+};
 
-    
-export const getGetTimelineItemQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(timelineItemId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({
+    signal,
+  }) => getTimelineItem(timelineItemId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!timelineItemId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItem>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({ signal }) => getTimelineItem(timelineItemId, requestOptions, signal);
+export type GetTimelineItemQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItem>>
+>;
+export type GetTimelineItemQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(timelineItemId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetTimelineItemQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItem>>>
-export type GetTimelineItemQueryError = ErrorType<void>
-
-
-export function useGetTimelineItem<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>> & Pick<
+export function useGetTimelineItem<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTimelineItem>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItem<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItem<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTimelineItem>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItem<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItem<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetTimelineItem<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemQueryOptions(timelineItemId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetTimelineItem<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemQueryOptions(timelineItemId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTimelineItemSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(timelineItemId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({
+    signal,
+  }) => getTimelineItem(timelineItemId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!timelineItemId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItem>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({ signal }) => getTimelineItem(timelineItemId, requestOptions, signal);
+export type GetTimelineItemSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItem>>
+>;
+export type GetTimelineItemSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetTimelineItemSuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemSuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemSuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTimelineItemSuspense<
+  TData = Awaited<ReturnType<typeof getTimelineItem>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemSuspenseQueryOptions(
+    timelineItemId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(timelineItemId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetTimelineItemSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItem>>>
-export type GetTimelineItemSuspenseQueryError = ErrorType<void>
-
-
-export function useGetTimelineItemSuspense<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemSuspense<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemSuspense<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTimelineItemSuspense<TData = Awaited<ReturnType<typeof getTimelineItem>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemSuspenseQueryOptions(timelineItemId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetTimelineItemSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>, TError = ErrorType<void>>(timelineItemId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetTimelineItemSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTimelineItemQueryKey(timelineItemId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({
+    signal,
+  }) => getTimelineItem(timelineItemId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!timelineItemId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getTimelineItem>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTimelineItem>>> = ({ signal }) => getTimelineItem(timelineItemId, requestOptions, signal);
+export type GetTimelineItemSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTimelineItem>>
+>;
+export type GetTimelineItemSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetTimelineItemSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetTimelineItemSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetTimelineItemSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>,
+  TError = ErrorType<void>,
+>(
+  timelineItemId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getTimelineItem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTimelineItemSuspenseInfiniteQueryOptions(
+    timelineItemId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(timelineItemId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetTimelineItemSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getTimelineItem>>>
-export type GetTimelineItemSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetTimelineItemSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>, TError = ErrorType<void>>(
- timelineItemId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetTimelineItemSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetTimelineItemSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getTimelineItem>>>, TError = ErrorType<void>>(
- timelineItemId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getTimelineItem>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetTimelineItemSuspenseInfiniteQueryOptions(timelineItemId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateTimelineItem = (
-    timelineItemId: string,
-    updateTimelineItemDto: BodyType<UpdateTimelineItemDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateTimelineItem200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateTimelineItemDto
+  timelineItemId: string,
+  updateTimelineItemDto: BodyType<UpdateTimelineItemDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateTimelineItem200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateTimelineItemDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateTimelineItemMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTimelineItem>>,
+    TError,
+    { timelineItemId: string; data: BodyType<UpdateTimelineItemDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateTimelineItem>>,
+  TError,
+  { timelineItemId: string; data: BodyType<UpdateTimelineItemDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateTimelineItemMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTimelineItem>>, TError,{timelineItemId: string;data: BodyType<UpdateTimelineItemDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateTimelineItem>>, TError,{timelineItemId: string;data: BodyType<UpdateTimelineItemDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateTimelineItem>>,
+    { timelineItemId: string; data: BodyType<UpdateTimelineItemDto> }
+  > = props => {
+    const { timelineItemId, data } = props ?? {};
 
-      
+    return updateTimelineItem(timelineItemId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTimelineItem>>, {timelineItemId: string;data: BodyType<UpdateTimelineItemDto>}> = (props) => {
-          const {timelineItemId,data} = props ?? {};
+export type UpdateTimelineItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateTimelineItem>>
+>;
+export type UpdateTimelineItemMutationBody = BodyType<UpdateTimelineItemDto>;
+export type UpdateTimelineItemMutationError = ErrorType<void>;
 
-          return  updateTimelineItem(timelineItemId,data,requestOptions)
-        }
+export const useUpdateTimelineItem = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTimelineItem>>,
+    TError,
+    { timelineItemId: string; data: BodyType<UpdateTimelineItemDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateTimelineItem>>,
+  TError,
+  { timelineItemId: string; data: BodyType<UpdateTimelineItemDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateTimelineItemMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateTimelineItemMutationResult = NonNullable<Awaited<ReturnType<typeof updateTimelineItem>>>
-    export type UpdateTimelineItemMutationBody = BodyType<UpdateTimelineItemDto>
-    export type UpdateTimelineItemMutationError = ErrorType<void>
-
-    export const useUpdateTimelineItem = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTimelineItem>>, TError,{timelineItemId: string;data: BodyType<UpdateTimelineItemDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateTimelineItem>>,
-        TError,
-        {timelineItemId: string;data: BodyType<UpdateTimelineItemDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateTimelineItemMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteTimelineItem = (
-    timelineItemId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteTimelineItem200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`, method: 'DELETE'
+  timelineItemId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteTimelineItem200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteTimelineItemMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTimelineItem>>,
+    TError,
+    { timelineItemId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteTimelineItem>>,
+  TError,
+  { timelineItemId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteTimelineItemMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTimelineItem>>, TError,{timelineItemId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteTimelineItem>>, TError,{timelineItemId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteTimelineItem>>,
+    { timelineItemId: string }
+  > = props => {
+    const { timelineItemId } = props ?? {};
 
-      
+    return deleteTimelineItem(timelineItemId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteTimelineItem>>, {timelineItemId: string}> = (props) => {
-          const {timelineItemId} = props ?? {};
+export type DeleteTimelineItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteTimelineItem>>
+>;
 
-          return  deleteTimelineItem(timelineItemId,requestOptions)
-        }
+export type DeleteTimelineItemMutationError = ErrorType<void>;
 
-        
+export const useDeleteTimelineItem = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTimelineItem>>,
+    TError,
+    { timelineItemId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteTimelineItem>>,
+  TError,
+  { timelineItemId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteTimelineItemMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteTimelineItemMutationResult = NonNullable<Awaited<ReturnType<typeof deleteTimelineItem>>>
-    
-    export type DeleteTimelineItemMutationError = ErrorType<void>
-
-    export const useDeleteTimelineItem = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteTimelineItem>>, TError,{timelineItemId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteTimelineItem>>,
-        TError,
-        {timelineItemId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteTimelineItemMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeTimelineItems = (
-    removeTimelineItemsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveTimelineItems200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeTimelineItemsBody
+  removeTimelineItemsBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveTimelineItems200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeTimelineItemsBody,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveTimelineItemsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTimelineItems>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeTimelineItems>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveTimelineItemsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItems>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItems>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeTimelineItems>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return removeTimelineItems(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTimelineItems>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
+export type RemoveTimelineItemsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeTimelineItems>>
+>;
+export type RemoveTimelineItemsMutationBody = BodyType<string[]>;
+export type RemoveTimelineItemsMutationError = ErrorType<void>;
 
-          return  removeTimelineItems(data,requestOptions)
-        }
+export const useRemoveTimelineItems = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTimelineItems>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeTimelineItems>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveTimelineItemsMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveTimelineItemsMutationResult = NonNullable<Awaited<ReturnType<typeof removeTimelineItems>>>
-    export type RemoveTimelineItemsMutationBody = BodyType<string[]>
-    export type RemoveTimelineItemsMutationError = ErrorType<void>
-
-    export const useRemoveTimelineItems = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItems>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeTimelineItems>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveTimelineItemsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeTimelineItem = (
-    timelineItemId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveTimelineItem200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}/removedAt`, method: 'PATCH'
+  timelineItemId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveTimelineItem200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/timeline-items/${timelineItemId}/removedAt`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveTimelineItemMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTimelineItem>>,
+    TError,
+    { timelineItemId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeTimelineItem>>,
+  TError,
+  { timelineItemId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveTimelineItemMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItem>>, TError,{timelineItemId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItem>>, TError,{timelineItemId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeTimelineItem>>,
+    { timelineItemId: string }
+  > = props => {
+    const { timelineItemId } = props ?? {};
 
-      
+    return removeTimelineItem(timelineItemId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeTimelineItem>>, {timelineItemId: string}> = (props) => {
-          const {timelineItemId} = props ?? {};
+export type RemoveTimelineItemMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeTimelineItem>>
+>;
 
-          return  removeTimelineItem(timelineItemId,requestOptions)
-        }
+export type RemoveTimelineItemMutationError = ErrorType<void>;
 
-        
+export const useRemoveTimelineItem = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeTimelineItem>>,
+    TError,
+    { timelineItemId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeTimelineItem>>,
+  TError,
+  { timelineItemId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveTimelineItemMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveTimelineItemMutationResult = NonNullable<Awaited<ReturnType<typeof removeTimelineItem>>>
-    
-    export type RemoveTimelineItemMutationError = ErrorType<void>
-
-    export const useRemoveTimelineItem = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeTimelineItem>>, TError,{timelineItemId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeTimelineItem>>,
-        TError,
-        {timelineItemId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveTimelineItemMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createSpace = (
-    createSpaceDto: BodyType<CreateSpaceDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createSpaceDto
+  createSpaceDto: BodyType<CreateSpaceDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateSpace200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createSpaceDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateSpaceMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSpace>>,
+    TError,
+    { data: BodyType<CreateSpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSpace>>,
+  TError,
+  { data: BodyType<CreateSpaceDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSpace>>,
+    { data: BodyType<CreateSpaceDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createSpace(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSpace>>, {data: BodyType<CreateSpaceDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateSpaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSpace>>
+>;
+export type CreateSpaceMutationBody = BodyType<CreateSpaceDto>;
+export type CreateSpaceMutationError = ErrorType<void>;
 
-          return  createSpace(data,requestOptions)
-        }
+export const useCreateSpace = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSpace>>,
+    TError,
+    { data: BodyType<CreateSpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createSpace>>,
+  TError,
+  { data: BodyType<CreateSpaceDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateSpaceMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof createSpace>>>
-    export type CreateSpaceMutationBody = BodyType<CreateSpaceDto>
-    export type CreateSpaceMutationError = ErrorType<void>
-
-    export const useCreateSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createSpace>>,
-        TError,
-        {data: BodyType<CreateSpaceDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getSpacesByQuery = (
-    params?: GetSpacesByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetSpacesByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSpacesByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces`, method: 'GET',
-        params, signal
+  return customInstance<GetSpacesByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetSpacesByQueryQueryKey = (params?: GetSpacesByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/spaces`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetSpacesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesByQueryQueryKey = (
+  params?: GetSpacesByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/spaces`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetSpacesByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSpacesByQuery>>
+  > = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSpacesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetSpacesByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpacesByQuery>>
+>;
+export type GetSpacesByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSpacesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
-export type GetSpacesByQueryQueryError = ErrorType<void>
-
-
-export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>> & Pick<
+export function useGetSpacesByQuery<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSpacesByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSpacesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuery<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSpacesByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuery<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetSpacesByQuery<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpacesByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpacesByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSpacesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSpacesByQuery>>
+  > = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSpacesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+export type GetSpacesByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpacesByQuery>>
+>;
+export type GetSpacesByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetSpacesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSpacesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSpacesByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSpacesByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpacesByQuerySuspenseQueryOptions(params, options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetSpacesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
-export type GetSpacesByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpacesByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSpacesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSpacesByQuery>>
+  > = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSpacesByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+export type GetSpacesByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpacesByQuery>>
+>;
+export type GetSpacesByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetSpacesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSpacesByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpacesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSpacesByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSpacesByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpacesByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpacesByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetSpacesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
-export type GetSpacesByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
- params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpacesByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getSpace = (
-    spaceId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  spaceId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'GET', signal
+  return customInstance<GetSpace200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetSpaceQueryKey = (spaceId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/spaces/${spaceId}`] as const;
-    }
+export const getGetSpaceQueryKey = (spaceId: string) => {
+  return [`http://localhost:3005/api/v1/admin/spaces/${spaceId}`] as const;
+};
 
-    
-export const getGetSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({
+    signal,
+  }) => getSpace(spaceId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!spaceId,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+export type GetSpaceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpace>>
+>;
+export type GetSpaceQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
-export type GetSpaceQueryError = ErrorType<void>
-
-
-export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>> & Pick<
+export function useGetSpace<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSpace>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpace<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSpace>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpace<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetSpace<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpaceQueryOptions(spaceId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpaceQueryOptions(spaceId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({
+    signal,
+  }) => getSpace(spaceId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!spaceId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+export type GetSpaceSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpace>>
+>;
+export type GetSpaceSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetSpaceSuspense<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpaceSuspense<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpaceSuspense<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSpaceSuspense<
+  TData = Awaited<ReturnType<typeof getSpace>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpaceSuspenseQueryOptions(spaceId, options);
 
-   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
-export type GetSpaceSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpaceSuspenseQueryOptions(spaceId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({
+    signal,
+  }) => getSpace(spaceId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!spaceId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSpace>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+export type GetSpaceSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSpace>>
+>;
+export type GetSpaceSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetSpaceSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpaceSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSpaceSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSpaceSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>,
+  TError = ErrorType<void>,
+>(
+  spaceId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSpace>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSpaceSuspenseInfiniteQueryOptions(
+    spaceId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
-export type GetSpaceSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSpaceSuspenseInfiniteQueryOptions(spaceId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateSpace = (
-    spaceId: string,
-    updateSpaceDto: BodyType<UpdateSpaceDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateSpaceDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSpace>>, {spaceId: string;data: BodyType<UpdateSpaceDto>}> = (props) => {
-          const {spaceId,data} = props ?? {};
-
-          return  updateSpace(spaceId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof updateSpace>>>
-    export type UpdateSpaceMutationBody = BodyType<UpdateSpaceDto>
-    export type UpdateSpaceMutationError = ErrorType<void>
-
-    export const useUpdateSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateSpace>>,
-        TError,
-        {spaceId: string;data: BodyType<UpdateSpaceDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deleteSpace = (
-    spaceId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSpace>>, {spaceId: string}> = (props) => {
-          const {spaceId} = props ?? {};
-
-          return  deleteSpace(spaceId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSpace>>>
-    
-    export type DeleteSpaceMutationError = ErrorType<void>
-
-    export const useDeleteSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteSpace>>,
-        TError,
-        {spaceId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeSpaces = (
-    removeManySpaceDto: BodyType<RemoveManySpaceDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveSpaces200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeManySpaceDto
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSpacesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpaces>>, {data: BodyType<RemoveManySpaceDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  removeSpaces(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSpacesMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpaces>>>
-    export type RemoveSpacesMutationBody = BodyType<RemoveManySpaceDto>
-    export type RemoveSpacesMutationError = ErrorType<void>
-
-    export const useRemoveSpaces = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpaces>>, TError,{data: BodyType<RemoveManySpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSpaces>>,
-        TError,
-        {data: BodyType<RemoveManySpaceDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSpacesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeSpace = (
-    spaceId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveSpace200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpace>>, {spaceId: string}> = (props) => {
-          const {spaceId} = props ?? {};
-
-          return  removeSpace(spaceId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpace>>>
-    
-    export type RemoveSpaceMutationError = ErrorType<void>
-
-    export const useRemoveSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSpace>>,
-        TError,
-        {spaceId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getAccessibleSpaces = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  spaceId: string,
+  updateSpaceDto: BodyType<UpdateSpaceDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<GetAccessibleSpaces200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/spaces/accessible-spaces`, method: 'GET', signal
+  return customInstance<UpdateSpace200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateSpaceDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
+
+export const getUpdateSpaceMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSpace>>,
+    TError,
+    { spaceId: string; data: BodyType<UpdateSpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateSpace>>,
+  TError,
+  { spaceId: string; data: BodyType<UpdateSpaceDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateSpace>>,
+    { spaceId: string; data: BodyType<UpdateSpaceDto> }
+  > = props => {
+    const { spaceId, data } = props ?? {};
+
+    return updateSpace(spaceId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateSpaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateSpace>>
+>;
+export type UpdateSpaceMutationBody = BodyType<UpdateSpaceDto>;
+export type UpdateSpaceMutationError = ErrorType<void>;
+
+export const useUpdateSpace = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSpace>>,
+    TError,
+    { spaceId: string; data: BodyType<UpdateSpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateSpace>>,
+  TError,
+  { spaceId: string; data: BodyType<UpdateSpaceDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateSpaceMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const deleteSpace = (
+  spaceId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteSpace200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}`,
+      method: 'DELETE',
+    },
+    options,
+  );
+};
+
+export const getDeleteSpaceMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteSpace>>,
+    TError,
+    { spaceId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteSpace>>,
+  TError,
+  { spaceId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteSpace>>,
+    { spaceId: string }
+  > = props => {
+    const { spaceId } = props ?? {};
+
+    return deleteSpace(spaceId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteSpaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteSpace>>
+>;
+
+export type DeleteSpaceMutationError = ErrorType<void>;
+
+export const useDeleteSpace = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteSpace>>,
+    TError,
+    { spaceId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteSpace>>,
+  TError,
+  { spaceId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteSpaceMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeSpaces = (
+  removeManySpaceDto: BodyType<RemoveManySpaceDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveSpaces200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeManySpaceDto,
+    },
+    options,
+  );
+};
+
+export const getRemoveSpacesMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSpaces>>,
+    TError,
+    { data: BodyType<RemoveManySpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeSpaces>>,
+  TError,
+  { data: BodyType<RemoveManySpaceDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeSpaces>>,
+    { data: BodyType<RemoveManySpaceDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return removeSpaces(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveSpacesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeSpaces>>
+>;
+export type RemoveSpacesMutationBody = BodyType<RemoveManySpaceDto>;
+export type RemoveSpacesMutationError = ErrorType<void>;
+
+export const useRemoveSpaces = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSpaces>>,
+    TError,
+    { data: BodyType<RemoveManySpaceDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeSpaces>>,
+  TError,
+  { data: BodyType<RemoveManySpaceDto> },
+  TContext
+> => {
+  const mutationOptions = getRemoveSpacesMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeSpace = (
+  spaceId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveSpace200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/${spaceId}/removedAt`,
+      method: 'PATCH',
+    },
+    options,
+  );
+};
+
+export const getRemoveSpaceMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSpace>>,
+    TError,
+    { spaceId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeSpace>>,
+  TError,
+  { spaceId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeSpace>>,
+    { spaceId: string }
+  > = props => {
+    const { spaceId } = props ?? {};
+
+    return removeSpace(spaceId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveSpaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeSpace>>
+>;
+
+export type RemoveSpaceMutationError = ErrorType<void>;
+
+export const useRemoveSpace = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSpace>>,
+    TError,
+    { spaceId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeSpace>>,
+  TError,
+  { spaceId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveSpaceMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getAccessibleSpaces = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<GetAccessibleSpaces200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/spaces/accessible-spaces`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetAccessibleSpacesQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/spaces/accessible-spaces`] as const;
-    }
+  return [
+    `http://localhost:3005/api/v1/admin/spaces/accessible-spaces`,
+  ] as const;
+};
 
-    
-export const getGetAccessibleSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getGetAccessibleSpacesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>
+  > = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccessibleSpaces>>> = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
+export type GetAccessibleSpacesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccessibleSpaces>>
+>;
+export type GetAccessibleSpacesQueryError = ErrorType<void>;
 
-      
+export function useGetAccessibleSpaces<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getAccessibleSpaces>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpaces<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getAccessibleSpaces>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpaces<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetAccessibleSpaces<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAccessibleSpacesQueryOptions(options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export type GetAccessibleSpacesQueryResult = NonNullable<Awaited<ReturnType<typeof getAccessibleSpaces>>>
-export type GetAccessibleSpacesQueryError = ErrorType<void>
-
-
-export function useGetAccessibleSpaces<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAccessibleSpaces>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpaces<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAccessibleSpaces>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpaces<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAccessibleSpaces<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAccessibleSpacesQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAccessibleSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccessibleSpaces>>> = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAccessibleSpacesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAccessibleSpaces>>>
-export type GetAccessibleSpacesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAccessibleSpacesSuspense<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpacesSuspense<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpacesSuspense<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAccessibleSpacesSuspense<TData = Awaited<ReturnType<typeof getAccessibleSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAccessibleSpacesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAccessibleSpacesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccessibleSpaces>>> = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAccessibleSpacesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAccessibleSpaces>>>
-export type GetAccessibleSpacesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAccessibleSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAccessibleSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAccessibleSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAccessibleSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAccessibleSpacesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetAccessibleSpacesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
 
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>
+  > = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAccessibleSpacesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccessibleSpaces>>
+>;
+export type GetAccessibleSpacesSuspenseQueryError = ErrorType<void>;
+
+export function useGetAccessibleSpacesSuspense<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpacesSuspense<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpacesSuspense<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetAccessibleSpacesSuspense<
+  TData = Awaited<ReturnType<typeof getAccessibleSpaces>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAccessibleSpacesSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetAccessibleSpacesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAccessibleSpacesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>
+  > = ({ signal }) => getAccessibleSpaces(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAccessibleSpaces>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAccessibleSpacesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccessibleSpaces>>
+>;
+export type GetAccessibleSpacesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetAccessibleSpacesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpacesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetAccessibleSpacesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetAccessibleSpacesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAccessibleSpaces>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getAccessibleSpaces>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getGetAccessibleSpacesSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const createGroup = (
-    createGroupDto: BodyType<CreateGroupDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<GroupDto>(
-      {url: `http://localhost:3005/api/v1/admin/groups`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createGroupDto
+  createGroupDto: BodyType<CreateGroupDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<GroupDto>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createGroupDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateGroupMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createGroup>>,
+    TError,
+    { data: BodyType<CreateGroupDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createGroup>>,
+  TError,
+  { data: BodyType<CreateGroupDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateGroupMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createGroup>>,
+    { data: BodyType<CreateGroupDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createGroup(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGroup>>, {data: BodyType<CreateGroupDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateGroupMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createGroup>>
+>;
+export type CreateGroupMutationBody = BodyType<CreateGroupDto>;
+export type CreateGroupMutationError = ErrorType<void>;
 
-          return  createGroup(data,requestOptions)
-        }
+export const useCreateGroup = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createGroup>>,
+    TError,
+    { data: BodyType<CreateGroupDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createGroup>>,
+  TError,
+  { data: BodyType<CreateGroupDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateGroupMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof createGroup>>>
-    export type CreateGroupMutationBody = BodyType<CreateGroupDto>
-    export type CreateGroupMutationError = ErrorType<void>
-
-    export const useCreateGroup = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createGroup>>,
-        TError,
-        {data: BodyType<CreateGroupDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateGroupMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getGroupsByQuery = (
-    params?: GetGroupsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetGroupsByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetGroupsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/groups`, method: 'GET',
-        params, signal
+  return customInstance<GetGroupsByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetGroupsByQueryQueryKey = (params?: GetGroupsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/groups`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetGroupsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupsByQueryQueryKey = (
+  params?: GetGroupsByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/groups`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetGroupsByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getGroupsByQuery>>
+  > = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getGroupsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetGroupsByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroupsByQuery>>
+>;
+export type GetGroupsByQueryQueryError = ErrorType<unknown>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetGroupsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
-export type GetGroupsByQueryQueryError = ErrorType<unknown>
-
-
-export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>> & Pick<
+export function useGetGroupsByQuery<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetGroupsByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroupsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuery<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroupsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuery<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupsByQuery<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupsByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetGroupsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupsByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getGroupsByQuery>>
+  > = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getGroupsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+export type GetGroupsByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroupsByQuery>>
+>;
+export type GetGroupsByQuerySuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetGroupsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetGroupsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetGroupsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getGroupsByQuery>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupsByQuerySuspenseQueryOptions(params, options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetGroupsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
-export type GetGroupsByQuerySuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetGroupsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupsByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getGroupsByQuery>>
+  > = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getGroupsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+export type GetGroupsByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroupsByQuery>>
+>;
+export type GetGroupsByQuerySuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function useGetGroupsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: undefined | GetGroupsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetGroupsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetGroupsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroupsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupsByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetGroupsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
-export type GetGroupsByQuerySuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
- params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
- params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getGroup = (
-    groupId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  groupId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetGroup200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/groups/${groupId}`, method: 'GET', signal
+  return customInstance<GetGroup200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups/${groupId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetGroupQueryKey = (groupId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/groups/${groupId}`] as const;
-    }
+export const getGetGroupQueryKey = (groupId: string) => {
+  return [`http://localhost:3005/api/v1/admin/groups/${groupId}`] as const;
+};
 
-    
-export const getGetGroupQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupQueryOptions = <
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({
+    signal,
+  }) => getGroup(groupId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!groupId,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+export type GetGroupQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroup>>
+>;
+export type GetGroupQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetGroupQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupQueryError = ErrorType<unknown>
-
-
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+export function useGetGroup<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroup>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroup<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroup>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroup<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroup<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupQueryOptions(groupId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupQueryOptions(groupId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetGroupSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({
+    signal,
+  }) => getGroup(groupId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!groupId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getGroup>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+export type GetGroupSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroup>>
+>;
+export type GetGroupSuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetGroupSuspense<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupSuspense<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupSuspense<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetGroupSuspense<
+  TData = Awaited<ReturnType<typeof getGroup>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupSuspenseQueryOptions(groupId, options);
 
-   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetGroupSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupSuspenseQueryOptions(groupId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetGroupSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({
+    signal,
+  }) => getGroup(groupId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!groupId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getGroup>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+export type GetGroupSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getGroup>>
+>;
+export type GetGroupSuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function useGetGroupSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetGroupSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetGroupSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>,
+  TError = ErrorType<unknown>,
+>(
+  groupId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getGroup>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetGroupSuspenseInfiniteQueryOptions(
+    groupId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetGroupSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetGroupSuspenseInfiniteQueryOptions(groupId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateGroup = (
-    groupId: string,
-    updateGroupDto: BodyType<UpdateGroupDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateGroup200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/groups/${groupId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateGroupDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateGroupMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroup>>, {groupId: string;data: BodyType<UpdateGroupDto>}> = (props) => {
-          const {groupId,data} = props ?? {};
-
-          return  updateGroup(groupId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroup>>>
-    export type UpdateGroupMutationBody = BodyType<UpdateGroupDto>
-    export type UpdateGroupMutationError = ErrorType<unknown>
-
-    export const useUpdateGroup = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateGroup>>,
-        TError,
-        {groupId: string;data: BodyType<UpdateGroupDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateGroupMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deleteGroup = (
-    groupId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteGroup200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/groups/${groupId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteGroupMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGroup>>, {groupId: string}> = (props) => {
-          const {groupId} = props ?? {};
-
-          return  deleteGroup(groupId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteGroupMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGroup>>>
-    
-    export type DeleteGroupMutationError = ErrorType<unknown>
-
-    export const useDeleteGroup = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteGroup>>,
-        TError,
-        {groupId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteGroupMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeGroups = (
-    groupIds: string[],
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveGroups200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/groups/${groupIds}`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveGroupsMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGroups>>, {groupIds: string[]}> = (props) => {
-          const {groupIds} = props ?? {};
-
-          return  removeGroups(groupIds,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveGroupsMutationResult = NonNullable<Awaited<ReturnType<typeof removeGroups>>>
-    
-    export type RemoveGroupsMutationError = ErrorType<unknown>
-
-    export const useRemoveGroups = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeGroups>>,
-        TError,
-        {groupIds: string[]},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveGroupsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const createSubject = (
-    createSubjectDto: BodyType<CreateSubjectDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `http://localhost:3005/api/v1/admin/subjects`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createSubjectDto
-    },
-      options);
-    }
-  
-
-
-export const getCreateSubjectMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSubject>>, {data: BodyType<CreateSubjectDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createSubject(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof createSubject>>>
-    export type CreateSubjectMutationBody = BodyType<CreateSubjectDto>
-    export type CreateSubjectMutationError = ErrorType<unknown>
-
-    export const useCreateSubject = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createSubject>>,
-        TError,
-        {data: BodyType<CreateSubjectDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateSubjectMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getSubjectsByPageQuery = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  groupId: string,
+  updateGroupDto: BodyType<UpdateGroupDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<GetSubjectsByPageQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/subjects`, method: 'GET', signal
+  return customInstance<UpdateGroup200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups/${groupId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateGroupDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
+
+export const getUpdateGroupMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateGroup>>,
+    TError,
+    { groupId: string; data: BodyType<UpdateGroupDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateGroup>>,
+  TError,
+  { groupId: string; data: BodyType<UpdateGroupDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateGroup>>,
+    { groupId: string; data: BodyType<UpdateGroupDto> }
+  > = props => {
+    const { groupId, data } = props ?? {};
+
+    return updateGroup(groupId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateGroupMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateGroup>>
+>;
+export type UpdateGroupMutationBody = BodyType<UpdateGroupDto>;
+export type UpdateGroupMutationError = ErrorType<unknown>;
+
+export const useUpdateGroup = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateGroup>>,
+    TError,
+    { groupId: string; data: BodyType<UpdateGroupDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateGroup>>,
+  TError,
+  { groupId: string; data: BodyType<UpdateGroupDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateGroupMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const deleteGroup = (
+  groupId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteGroup200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups/${groupId}`,
+      method: 'DELETE',
+    },
+    options,
+  );
+};
+
+export const getDeleteGroupMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteGroup>>,
+    TError,
+    { groupId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteGroup>>,
+  TError,
+  { groupId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteGroup>>,
+    { groupId: string }
+  > = props => {
+    const { groupId } = props ?? {};
+
+    return deleteGroup(groupId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteGroupMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteGroup>>
+>;
+
+export type DeleteGroupMutationError = ErrorType<unknown>;
+
+export const useDeleteGroup = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteGroup>>,
+    TError,
+    { groupId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteGroup>>,
+  TError,
+  { groupId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteGroupMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeGroups = (
+  groupIds: string[],
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveGroups200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/groups/${groupIds}`,
+      method: 'PATCH',
+    },
+    options,
+  );
+};
+
+export const getRemoveGroupsMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeGroups>>,
+    TError,
+    { groupIds: string[] },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeGroups>>,
+  TError,
+  { groupIds: string[] },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeGroups>>,
+    { groupIds: string[] }
+  > = props => {
+    const { groupIds } = props ?? {};
+
+    return removeGroups(groupIds, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveGroupsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeGroups>>
+>;
+
+export type RemoveGroupsMutationError = ErrorType<unknown>;
+
+export const useRemoveGroups = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeGroups>>,
+    TError,
+    { groupIds: string[] },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeGroups>>,
+  TError,
+  { groupIds: string[] },
+  TContext
+> => {
+  const mutationOptions = getRemoveGroupsMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const createSubject = (
+  createSubjectDto: BodyType<CreateSubjectDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/admin/subjects`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createSubjectDto,
+    },
+    options,
+  );
+};
+
+export const getCreateSubjectMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSubject>>,
+    TError,
+    { data: BodyType<CreateSubjectDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSubject>>,
+  TError,
+  { data: BodyType<CreateSubjectDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSubject>>,
+    { data: BodyType<CreateSubjectDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return createSubject(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateSubjectMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSubject>>
+>;
+export type CreateSubjectMutationBody = BodyType<CreateSubjectDto>;
+export type CreateSubjectMutationError = ErrorType<unknown>;
+
+export const useCreateSubject = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSubject>>,
+    TError,
+    { data: BodyType<CreateSubjectDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createSubject>>,
+  TError,
+  { data: BodyType<CreateSubjectDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateSubjectMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getSubjectsByPageQuery = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<GetSubjectsByPageQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/subjects`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetSubjectsByPageQueryQueryKey = () => {
-    return [`http://localhost:3005/api/v1/admin/subjects`] as const;
-    }
+  return [`http://localhost:3005/api/v1/admin/subjects`] as const;
+};
 
-    
-export const getGetSubjectsByPageQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getGetSubjectsByPageQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+  > = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
+export type GetSubjectsByPageQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+>;
+export type GetSubjectsByPageQueryQueryError = ErrorType<unknown>;
 
-      
+export function useGetSubjectsByPageQuery<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuery<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuery<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSubjectsByPageQuery<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSubjectsByPageQueryQueryOptions(options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export type GetSubjectsByPageQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
-export type GetSubjectsByPageQueryQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectsByPageQuery<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuery<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuery<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSubjectsByPageQuery<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectsByPageQueryQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetSubjectsByPageQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSubjectsByPageQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
-export type GetSubjectsByPageQuerySuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectsByPageQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSubjectsByPageQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectsByPageQuerySuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByPageQuery>>> = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSubjectsByPageQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>
-export type GetSubjectsByPageQuerySuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectsByPageQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectsByPageQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSubjectsByPageQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByPageQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetSubjectsByPageQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
 
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+  > = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetSubjectsByPageQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+>;
+export type GetSubjectsByPageQuerySuspenseQueryError = ErrorType<unknown>;
+
+export function useGetSubjectsByPageQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetSubjectsByPageQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSubjectsByPageQuerySuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectsByPageQueryQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+  > = ({ signal }) => getSubjectsByPageQuery(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetSubjectsByPageQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectsByPageQuery>>
+>;
+export type GetSubjectsByPageQuerySuspenseInfiniteQueryError =
+  ErrorType<unknown>;
+
+export function useGetSubjectsByPageQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectsByPageQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetSubjectsByPageQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByPageQuery>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSubjectsByPageQuery>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getGetSubjectsByPageQuerySuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getSubjectById = (
-    subjectId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  subjectId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSubjectById200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'GET', signal
+  return customInstance<GetSubjectById200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetSubjectByIdQueryKey = (subjectId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/subjects/${subjectId}`] as const;
-    }
+export const getGetSubjectByIdQueryKey = (subjectId: string) => {
+  return [`http://localhost:3005/api/v1/admin/subjects/${subjectId}`] as const;
+};
 
-    
-export const getGetSubjectByIdQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({
+    signal,
+  }) => getSubjectById(subjectId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!subjectId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSubjectById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
+export type GetSubjectByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectById>>
+>;
+export type GetSubjectByIdQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSubjectByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
-export type GetSubjectByIdQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectById<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>> & Pick<
+export function useGetSubjectById<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSubjectById>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectById<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectById<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSubjectById>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectById<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectById<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetSubjectById<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSubjectByIdQueryOptions(subjectId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetSubjectById<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectByIdQueryOptions(subjectId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSubjectByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({
+    signal,
+  }) => getSubjectById(subjectId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!subjectId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSubjectById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
+export type GetSubjectByIdSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectById>>
+>;
+export type GetSubjectByIdSuspenseQueryError = ErrorType<unknown>;
 
-      
+export function useGetSubjectByIdSuspense<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectByIdSuspense<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectByIdSuspense<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSubjectByIdSuspense<
+  TData = Awaited<ReturnType<typeof getSubjectById>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSubjectByIdSuspenseQueryOptions(
+    subjectId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetSubjectByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
-export type GetSubjectByIdSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectByIdSuspense<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectByIdSuspense<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectByIdSuspense<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSubjectByIdSuspense<TData = Awaited<ReturnType<typeof getSubjectById>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectByIdSuspenseQueryOptions(subjectId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSubjectByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSubjectByIdSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSubjectByIdQueryKey(subjectId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({
+    signal,
+  }) => getSubjectById(subjectId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!subjectId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSubjectById>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectById>>> = ({ signal }) => getSubjectById(subjectId, requestOptions, signal);
+export type GetSubjectByIdSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSubjectById>>
+>;
+export type GetSubjectByIdSuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function useGetSubjectByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSubjectByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSubjectByIdSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>,
+  TError = ErrorType<unknown>,
+>(
+  subjectId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSubjectById>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSubjectByIdSuspenseInfiniteQueryOptions(
+    subjectId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetSubjectByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectById>>>
-export type GetSubjectByIdSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetSubjectByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(
- subjectId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSubjectByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSubjectByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectById>>>, TError = ErrorType<unknown>>(
- subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSubjectByIdSuspenseInfiniteQueryOptions(subjectId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateSubjectById = (
-    subjectId: string,
-    updateSubjectDto: BodyType<UpdateSubjectDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateSubjectById200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateSubjectDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateSubjectByIdMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSubjectById>>, {subjectId: string;data: BodyType<UpdateSubjectDto>}> = (props) => {
-          const {subjectId,data} = props ?? {};
-
-          return  updateSubjectById(subjectId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateSubjectByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubjectById>>>
-    export type UpdateSubjectByIdMutationBody = BodyType<UpdateSubjectDto>
-    export type UpdateSubjectByIdMutationError = ErrorType<unknown>
-
-    export const useUpdateSubjectById = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubjectById>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateSubjectById>>,
-        TError,
-        {subjectId: string;data: BodyType<UpdateSubjectDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateSubjectByIdMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeSubjectById = (
-    subjectId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSubjectByIdMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSubjectById>>, {subjectId: string}> = (props) => {
-          const {subjectId} = props ?? {};
-
-          return  removeSubjectById(subjectId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSubjectByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeSubjectById>>>
-    
-    export type RemoveSubjectByIdMutationError = ErrorType<unknown>
-
-    export const useRemoveSubjectById = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjectById>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSubjectById>>,
-        TError,
-        {subjectId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSubjectByIdMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getServiceAuthRoles = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  subjectId: string,
+  updateSubjectDto: BodyType<UpdateSubjectDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<GetServiceAuthRoles200AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/service/roles`, method: 'GET', signal
+  return customInstance<UpdateSubjectById200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateSubjectDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
+
+export const getUpdateSubjectByIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSubjectById>>,
+    TError,
+    { subjectId: string; data: BodyType<UpdateSubjectDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateSubjectById>>,
+  TError,
+  { subjectId: string; data: BodyType<UpdateSubjectDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateSubjectById>>,
+    { subjectId: string; data: BodyType<UpdateSubjectDto> }
+  > = props => {
+    const { subjectId, data } = props ?? {};
+
+    return updateSubjectById(subjectId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateSubjectByIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateSubjectById>>
+>;
+export type UpdateSubjectByIdMutationBody = BodyType<UpdateSubjectDto>;
+export type UpdateSubjectByIdMutationError = ErrorType<unknown>;
+
+export const useUpdateSubjectById = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSubjectById>>,
+    TError,
+    { subjectId: string; data: BodyType<UpdateSubjectDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateSubjectById>>,
+  TError,
+  { subjectId: string; data: BodyType<UpdateSubjectDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateSubjectByIdMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeSubjectById = (
+  subjectId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<void>(
+    {
+      url: `http://localhost:3005/api/v1/admin/subjects/${subjectId}`,
+      method: 'DELETE',
+    },
+    options,
+  );
+};
+
+export const getRemoveSubjectByIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSubjectById>>,
+    TError,
+    { subjectId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeSubjectById>>,
+  TError,
+  { subjectId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeSubjectById>>,
+    { subjectId: string }
+  > = props => {
+    const { subjectId } = props ?? {};
+
+    return removeSubjectById(subjectId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveSubjectByIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeSubjectById>>
+>;
+
+export type RemoveSubjectByIdMutationError = ErrorType<unknown>;
+
+export const useRemoveSubjectById = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSubjectById>>,
+    TError,
+    { subjectId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeSubjectById>>,
+  TError,
+  { subjectId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveSubjectByIdMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getServiceAuthRoles = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<GetServiceAuthRoles200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/service/roles`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetServiceAuthRolesQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/service/roles`] as const;
-    }
+  return [`http://localhost:3005/api/v1/auth/service/roles`] as const;
+};
 
-    
-export const getGetServiceAuthRolesQueryOptions = <TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getGetServiceAuthRolesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>
+  > = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceAuthRoles>>> = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
+export type GetServiceAuthRolesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceAuthRoles>>
+>;
+export type GetServiceAuthRolesQueryError = ErrorType<unknown>;
 
-      
+export function useGetServiceAuthRoles<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getServiceAuthRoles>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRoles<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getServiceAuthRoles>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRoles<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetServiceAuthRoles<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetServiceAuthRolesQueryOptions(options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export type GetServiceAuthRolesQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceAuthRoles>>>
-export type GetServiceAuthRolesQueryError = ErrorType<unknown>
-
-
-export function useGetServiceAuthRoles<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getServiceAuthRoles>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRoles<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getServiceAuthRoles>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRoles<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetServiceAuthRoles<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetServiceAuthRolesQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetServiceAuthRolesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceAuthRoles>>> = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceAuthRolesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceAuthRoles>>>
-export type GetServiceAuthRolesSuspenseQueryError = ErrorType<unknown>
-
-
-export function useGetServiceAuthRolesSuspense<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRolesSuspense<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRolesSuspense<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetServiceAuthRolesSuspense<TData = Awaited<ReturnType<typeof getServiceAuthRoles>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetServiceAuthRolesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetServiceAuthRolesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceAuthRoles>>> = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetServiceAuthRolesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceAuthRoles>>>
-export type GetServiceAuthRolesSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useGetServiceAuthRolesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRolesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetServiceAuthRolesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetServiceAuthRolesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceAuthRoles>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetServiceAuthRolesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetServiceAuthRolesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
 
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>
+  > = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceAuthRolesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceAuthRoles>>
+>;
+export type GetServiceAuthRolesSuspenseQueryError = ErrorType<unknown>;
+
+export function useGetServiceAuthRolesSuspense<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRolesSuspense<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRolesSuspense<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetServiceAuthRolesSuspense<
+  TData = Awaited<ReturnType<typeof getServiceAuthRoles>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetServiceAuthRolesSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetServiceAuthRolesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetServiceAuthRolesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>
+  > = ({ signal }) => getServiceAuthRoles(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getServiceAuthRoles>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetServiceAuthRolesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getServiceAuthRoles>>
+>;
+export type GetServiceAuthRolesSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export function useGetServiceAuthRolesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRolesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetServiceAuthRolesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetServiceAuthRolesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getServiceAuthRoles>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getServiceAuthRoles>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getGetServiceAuthRolesSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const sendEmailVerification = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<SendEmailVerification200AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/service/system-emails/templates/email-verification`, method: 'POST'
-    },
-      options);
-    }
-  
-
-
-export const getSendEmailVerificationMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendEmailVerification>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof sendEmailVerification>>, TError,void, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendEmailVerification>>, void> = () => {
-          
-
-          return  sendEmailVerification(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SendEmailVerificationMutationResult = NonNullable<Awaited<ReturnType<typeof sendEmailVerification>>>
-    
-    export type SendEmailVerificationMutationError = ErrorType<unknown>
-
-    export const useSendEmailVerification = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendEmailVerification>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof sendEmailVerification>>,
-        TError,
-        void,
-        TContext
-      > => {
-
-      const mutationOptions = getSendEmailVerificationMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const verifyEmail = (
-    systemEmailId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<VerifyEmail200AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/service/system-emails/${systemEmailId}/status/completed`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getVerifyEmailMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof verifyEmail>>, TError,{systemEmailId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof verifyEmail>>, TError,{systemEmailId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof verifyEmail>>, {systemEmailId: string}> = (props) => {
-          const {systemEmailId} = props ?? {};
-
-          return  verifyEmail(systemEmailId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type VerifyEmailMutationResult = NonNullable<Awaited<ReturnType<typeof verifyEmail>>>
-    
-    export type VerifyEmailMutationError = ErrorType<unknown>
-
-    export const useVerifyEmail = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof verifyEmail>>, TError,{systemEmailId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof verifyEmail>>,
-        TError,
-        {systemEmailId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getVerifyEmailMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const checkEmailVerification = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<CheckEmailVerification200AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/service/system-emails/status/completed`, method: 'GET', signal
+  return customInstance<SendEmailVerification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/service/system-emails/templates/email-verification`,
+      method: 'POST',
     },
-      options);
-    }
-  
+    options,
+  );
+};
+
+export const getSendEmailVerificationMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendEmailVerification>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sendEmailVerification>>,
+  TError,
+  void,
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sendEmailVerification>>,
+    void
+  > = () => {
+    return sendEmailVerification(requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SendEmailVerificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sendEmailVerification>>
+>;
+
+export type SendEmailVerificationMutationError = ErrorType<unknown>;
+
+export const useSendEmailVerification = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sendEmailVerification>>,
+    TError,
+    void,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof sendEmailVerification>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationOptions = getSendEmailVerificationMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const verifyEmail = (
+  systemEmailId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<VerifyEmail200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/service/system-emails/${systemEmailId}/status/completed`,
+      method: 'PATCH',
+    },
+    options,
+  );
+};
+
+export const getVerifyEmailMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    TError,
+    { systemEmailId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof verifyEmail>>,
+  TError,
+  { systemEmailId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    { systemEmailId: string }
+  > = props => {
+    const { systemEmailId } = props ?? {};
+
+    return verifyEmail(systemEmailId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type VerifyEmailMutationResult = NonNullable<
+  Awaited<ReturnType<typeof verifyEmail>>
+>;
+
+export type VerifyEmailMutationError = ErrorType<unknown>;
+
+export const useVerifyEmail = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof verifyEmail>>,
+    TError,
+    { systemEmailId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof verifyEmail>>,
+  TError,
+  { systemEmailId: string },
+  TContext
+> => {
+  const mutationOptions = getVerifyEmailMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const checkEmailVerification = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<CheckEmailVerification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/service/system-emails/status/completed`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getCheckEmailVerificationQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/service/system-emails/status/completed`] as const;
-    }
+  return [
+    `http://localhost:3005/api/v1/auth/service/system-emails/status/completed`,
+  ] as const;
+};
 
-    
-export const getCheckEmailVerificationQueryOptions = <TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getCheckEmailVerificationQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkEmailVerification>>
+  > = ({ signal }) => checkEmailVerification(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof checkEmailVerification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkEmailVerification>>> = ({ signal }) => checkEmailVerification(requestOptions, signal);
+export type CheckEmailVerificationQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkEmailVerification>>
+>;
+export type CheckEmailVerificationQueryError = ErrorType<unknown>;
 
-      
+export function useCheckEmailVerification<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof checkEmailVerification>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerification<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof checkEmailVerification>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerification<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useCheckEmailVerification<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getCheckEmailVerificationQueryOptions(options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export type CheckEmailVerificationQueryResult = NonNullable<Awaited<ReturnType<typeof checkEmailVerification>>>
-export type CheckEmailVerificationQueryError = ErrorType<unknown>
-
-
-export function useCheckEmailVerification<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof checkEmailVerification>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerification<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof checkEmailVerification>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerification<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useCheckEmailVerification<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getCheckEmailVerificationQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getCheckEmailVerificationSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkEmailVerification>>> = ({ signal }) => checkEmailVerification(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type CheckEmailVerificationSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof checkEmailVerification>>>
-export type CheckEmailVerificationSuspenseQueryError = ErrorType<unknown>
-
-
-export function useCheckEmailVerificationSuspense<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerificationSuspense<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerificationSuspense<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useCheckEmailVerificationSuspense<TData = Awaited<ReturnType<typeof checkEmailVerification>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getCheckEmailVerificationSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getCheckEmailVerificationSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkEmailVerification>>> = ({ signal }) => checkEmailVerification(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type CheckEmailVerificationSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof checkEmailVerification>>>
-export type CheckEmailVerificationSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useCheckEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useCheckEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useCheckEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof checkEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getCheckEmailVerificationSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getCheckEmailVerificationSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey =
+    queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
 
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkEmailVerification>>
+  > = ({ signal }) => checkEmailVerification(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof checkEmailVerification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type CheckEmailVerificationSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkEmailVerification>>
+>;
+export type CheckEmailVerificationSuspenseQueryError = ErrorType<unknown>;
+
+export function useCheckEmailVerificationSuspense<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerificationSuspense<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerificationSuspense<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useCheckEmailVerificationSuspense<
+  TData = Awaited<ReturnType<typeof checkEmailVerification>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getCheckEmailVerificationSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getCheckEmailVerificationSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getCheckEmailVerificationQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof checkEmailVerification>>
+  > = ({ signal }) => checkEmailVerification(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof checkEmailVerification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type CheckEmailVerificationSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof checkEmailVerification>>
+>;
+export type CheckEmailVerificationSuspenseInfiniteQueryError =
+  ErrorType<unknown>;
+
+export function useCheckEmailVerificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>,
+  TError = ErrorType<unknown>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useCheckEmailVerificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useCheckEmailVerificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof checkEmailVerification>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof checkEmailVerification>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions =
+    getCheckEmailVerificationSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const createSession = (
-    createSessionDto: BodyType<CreateSessionDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateSession200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createSessionDto
+  createSessionDto: BodyType<CreateSessionDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateSession200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createSessionDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateSessionMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSession>>,
+    TError,
+    { data: BodyType<CreateSessionDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSession>>,
+  TError,
+  { data: BodyType<CreateSessionDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSession>>,
+    { data: BodyType<CreateSessionDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createSession(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSession>>, {data: BodyType<CreateSessionDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateSessionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSession>>
+>;
+export type CreateSessionMutationBody = BodyType<CreateSessionDto>;
+export type CreateSessionMutationError = ErrorType<void>;
 
-          return  createSession(data,requestOptions)
-        }
+export const useCreateSession = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSession>>,
+    TError,
+    { data: BodyType<CreateSessionDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createSession>>,
+  TError,
+  { data: BodyType<CreateSessionDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateSessionMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof createSession>>>
-    export type CreateSessionMutationBody = BodyType<CreateSessionDto>
-    export type CreateSessionMutationError = ErrorType<void>
-
-    export const useCreateSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSession>>, TError,{data: BodyType<CreateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createSession>>,
-        TError,
-        {data: BodyType<CreateSessionDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateSessionMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getSessionsByQuery = (
-    params?: GetSessionsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetSessionsByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSessionsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions`, method: 'GET',
-        params, signal
+  return customInstance<GetSessionsByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetSessionsByQueryQueryKey = (params?: GetSessionsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/sessions`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetSessionsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsByQueryQueryKey = (
+  params?: GetSessionsByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/sessions`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetSessionsByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSessionsByQuery>>
+  > = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSessionsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetSessionsByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSessionsByQuery>>
+>;
+export type GetSessionsByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSessionsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
-export type GetSessionsByQueryQueryError = ErrorType<void>
-
-
-export function useGetSessionsByQuery<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetSessionsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>> & Pick<
+export function useGetSessionsByQuery<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSessionsByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSessionsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuery<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuery<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSessionsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuery<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuery<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetSessionsByQuery<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionsByQueryQueryOptions(params, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetSessionsByQuery<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSessionsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSessionsByQuery>>
+  > = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSessionsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+export type GetSessionsByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSessionsByQuery>>
+>;
+export type GetSessionsByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetSessionsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSessionsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSessionsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getSessionsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionsByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetSessionsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
-export type GetSessionsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetSessionsByQuerySuspense<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetSessionsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuerySuspense<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuerySuspense<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSessionsByQuerySuspense<TData = Awaited<ReturnType<typeof getSessionsByQuery>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSessionsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionsByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSessionsByQuery>>
+  > = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSessionsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSessionsByQuery>>> = ({ signal }) => getSessionsByQuery(params, requestOptions, signal);
+export type GetSessionsByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSessionsByQuery>>
+>;
+export type GetSessionsByQuerySuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetSessionsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetSessionsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSessionsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetSessionsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSessionsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionsByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetSessionsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSessionsByQuery>>>
-export type GetSessionsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSessionsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetSessionsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSessionsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSessionsByQuery>>>, TError = ErrorType<void>>(
- params?: GetSessionsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSessionsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const getSession = (
-    sessionId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  sessionId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSession200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'GET', signal
+  return customInstance<GetSession200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetSessionQueryKey = (sessionId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/sessions/${sessionId}`] as const;
-    }
+export const getGetSessionQueryKey = (sessionId: string) => {
+  return [`http://localhost:3005/api/v1/admin/sessions/${sessionId}`] as const;
+};
 
-    
-export const getGetSessionQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({
+    signal,
+  }) => getSession(sessionId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!sessionId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSession>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+export type GetSessionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSession>>
+>;
+export type GetSessionQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetSessionQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
-export type GetSessionQueryError = ErrorType<void>
-
-
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSession>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSession>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetSession<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionQueryOptions(sessionId, options);
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetSession<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionQueryOptions(sessionId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSessionSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({
+    signal,
+  }) => getSession(sessionId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!sessionId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getSession>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+export type GetSessionSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSession>>
+>;
+export type GetSessionSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetSessionSuspense<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionSuspense<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionSuspense<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSessionSuspense<
+  TData = Awaited<ReturnType<typeof getSession>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionSuspenseQueryOptions(sessionId, options);
 
-   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetSessionSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
-export type GetSessionSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSessionSuspense<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionSuspense<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionSuspense<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSessionSuspense<TData = Awaited<ReturnType<typeof getSession>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionSuspenseQueryOptions(sessionId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetSessionSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSessionSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSessionQueryKey(sessionId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({
+    signal,
+  }) => getSession(sessionId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!sessionId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSession>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) => getSession(sessionId, requestOptions, signal);
+export type GetSessionSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSession>>
+>;
+export type GetSessionSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetSessionSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetSessionSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetSessionSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>,
+  TError = ErrorType<void>,
+>(
+  sessionId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSession>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSessionSuspenseInfiniteQueryOptions(
+    sessionId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(sessionId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetSessionSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSession>>>
-export type GetSessionSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSessionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(
- sessionId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetSessionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetSessionSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSession>>>, TError = ErrorType<void>>(
- sessionId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetSessionSuspenseInfiniteQueryOptions(sessionId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateSession = (
-    sessionId: string,
-    updateSessionDto: BodyType<UpdateSessionDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateSession200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateSessionDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSession>>, {sessionId: string;data: BodyType<UpdateSessionDto>}> = (props) => {
-          const {sessionId,data} = props ?? {};
-
-          return  updateSession(sessionId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateSessionMutationResult = NonNullable<Awaited<ReturnType<typeof updateSession>>>
-    export type UpdateSessionMutationBody = BodyType<UpdateSessionDto>
-    export type UpdateSessionMutationError = ErrorType<void>
-
-    export const useUpdateSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSession>>, TError,{sessionId: string;data: BodyType<UpdateSessionDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateSession>>,
-        TError,
-        {sessionId: string;data: BodyType<UpdateSessionDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateSessionMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deleteSession = (
-    sessionId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteSession200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSession>>, {sessionId: string}> = (props) => {
-          const {sessionId} = props ?? {};
-
-          return  deleteSession(sessionId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteSessionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSession>>>
-    
-    export type DeleteSessionMutationError = ErrorType<void>
-
-    export const useDeleteSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteSession>>,
-        TError,
-        {sessionId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteSessionMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeSessions = (
-    removeSessionsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveSessions200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeSessionsBody
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSessionsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSessions>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  removeSessions(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSessionsMutationResult = NonNullable<Awaited<ReturnType<typeof removeSessions>>>
-    export type RemoveSessionsMutationBody = BodyType<string[]>
-    export type RemoveSessionsMutationError = ErrorType<void>
-
-    export const useRemoveSessions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSessions>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSessions>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSessionsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeSession = (
-    sessionId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveSession200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveSessionMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSession>>, {sessionId: string}> = (props) => {
-          const {sessionId} = props ?? {};
-
-          return  removeSession(sessionId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveSessionMutationResult = NonNullable<Awaited<ReturnType<typeof removeSession>>>
-    
-    export type RemoveSessionMutationError = ErrorType<void>
-
-    export const useRemoveSession = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSession>>, TError,{sessionId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeSession>>,
-        TError,
-        {sessionId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveSessionMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getToken = (
-    loginPayloadDto: BodyType<LoginPayloadDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<GetToken200AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/token`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginPayloadDto
-    },
-      options);
-    }
-  
-
-
-export const getGetTokenMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getToken>>, {data: BodyType<LoginPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  getToken(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type GetTokenMutationResult = NonNullable<Awaited<ReturnType<typeof getToken>>>
-    export type GetTokenMutationBody = BodyType<LoginPayloadDto>
-    export type GetTokenMutationError = ErrorType<unknown>
-
-    export const useGetToken = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getToken>>, TError,{data: BodyType<LoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof getToken>>,
-        TError,
-        {data: BodyType<LoginPayloadDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getGetTokenMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getNewToken = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  sessionId: string,
+  updateSessionDto: BodyType<UpdateSessionDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<TokenDto>(
-      {url: `http://localhost:3005/api/v1/auth/new-token`, method: 'GET', signal
+  return customInstance<UpdateSession200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateSessionDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
+
+export const getUpdateSessionMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSession>>,
+    TError,
+    { sessionId: string; data: BodyType<UpdateSessionDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateSession>>,
+  TError,
+  { sessionId: string; data: BodyType<UpdateSessionDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateSession>>,
+    { sessionId: string; data: BodyType<UpdateSessionDto> }
+  > = props => {
+    const { sessionId, data } = props ?? {};
+
+    return updateSession(sessionId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateSessionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateSession>>
+>;
+export type UpdateSessionMutationBody = BodyType<UpdateSessionDto>;
+export type UpdateSessionMutationError = ErrorType<void>;
+
+export const useUpdateSession = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateSession>>,
+    TError,
+    { sessionId: string; data: BodyType<UpdateSessionDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateSession>>,
+  TError,
+  { sessionId: string; data: BodyType<UpdateSessionDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateSessionMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const deleteSession = (
+  sessionId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteSession200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}`,
+      method: 'DELETE',
+    },
+    options,
+  );
+};
+
+export const getDeleteSessionMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteSession>>,
+    TError,
+    { sessionId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteSession>>,
+  TError,
+  { sessionId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteSession>>,
+    { sessionId: string }
+  > = props => {
+    const { sessionId } = props ?? {};
+
+    return deleteSession(sessionId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteSessionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteSession>>
+>;
+
+export type DeleteSessionMutationError = ErrorType<void>;
+
+export const useDeleteSession = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteSession>>,
+    TError,
+    { sessionId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteSession>>,
+  TError,
+  { sessionId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteSessionMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeSessions = (
+  removeSessionsBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveSessions200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeSessionsBody,
+    },
+    options,
+  );
+};
+
+export const getRemoveSessionsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSessions>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeSessions>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeSessions>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return removeSessions(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveSessionsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeSessions>>
+>;
+export type RemoveSessionsMutationBody = BodyType<string[]>;
+export type RemoveSessionsMutationError = ErrorType<void>;
+
+export const useRemoveSessions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSessions>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeSessions>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveSessionsMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const removeSession = (
+  sessionId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveSession200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/sessions/${sessionId}/removedAt`,
+      method: 'PATCH',
+    },
+    options,
+  );
+};
+
+export const getRemoveSessionMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSession>>,
+    TError,
+    { sessionId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeSession>>,
+  TError,
+  { sessionId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeSession>>,
+    { sessionId: string }
+  > = props => {
+    const { sessionId } = props ?? {};
+
+    return removeSession(sessionId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RemoveSessionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeSession>>
+>;
+
+export type RemoveSessionMutationError = ErrorType<void>;
+
+export const useRemoveSession = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeSession>>,
+    TError,
+    { sessionId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeSession>>,
+  TError,
+  { sessionId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveSessionMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getToken = (
+  loginPayloadDto: BodyType<LoginPayloadDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<GetToken200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/token`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: loginPayloadDto,
+    },
+    options,
+  );
+};
+
+export const getGetTokenMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getToken>>,
+    TError,
+    { data: BodyType<LoginPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getToken>>,
+  TError,
+  { data: BodyType<LoginPayloadDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getToken>>,
+    { data: BodyType<LoginPayloadDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return getToken(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GetTokenMutationResult = NonNullable<
+  Awaited<ReturnType<typeof getToken>>
+>;
+export type GetTokenMutationBody = BodyType<LoginPayloadDto>;
+export type GetTokenMutationError = ErrorType<unknown>;
+
+export const useGetToken = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getToken>>,
+    TError,
+    { data: BodyType<LoginPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof getToken>>,
+  TError,
+  { data: BodyType<LoginPayloadDto> },
+  TContext
+> => {
+  const mutationOptions = getGetTokenMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getNewToken = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<TokenDto>(
+    {
+      url: `http://localhost:3005/api/v1/auth/new-token`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
+};
 
 export const getGetNewTokenQueryKey = () => {
-    return [`http://localhost:3005/api/v1/auth/new-token`] as const;
-    }
+  return [`http://localhost:3005/api/v1/auth/new-token`] as const;
+};
 
-    
-export const getGetNewTokenQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getGetNewTokenQueryOptions = <
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({
+    signal,
+  }) => getNewToken(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getNewToken>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
+export type GetNewTokenQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getNewToken>>
+>;
+export type GetNewTokenQueryError = ErrorType<void>;
 
-      
+export function useGetNewToken<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getNewToken>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewToken<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getNewToken>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewToken<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetNewToken<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetNewTokenQueryOptions(options);
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export type GetNewTokenQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenQueryError = ErrorType<void>
-
-
-export function useGetNewToken<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getNewToken>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewToken<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getNewToken>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewToken<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetNewToken<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetNewTokenQueryOptions(options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetNewTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetNewTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenSuspenseQueryError = ErrorType<void>
-
-
-export function useGetNewTokenSuspense<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewTokenSuspense<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewTokenSuspense<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetNewTokenSuspense<TData = Awaited<ReturnType<typeof getNewToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetNewTokenSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetNewTokenSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
-export const getGetNewTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({
+    signal,
+  }) => getNewToken(requestOptions, signal);
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getNewToken>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetNewTokenQueryKey();
+export type GetNewTokenSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getNewToken>>
+>;
+export type GetNewTokenSuspenseQueryError = ErrorType<void>;
 
-  
+export function useGetNewTokenSuspense<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewTokenSuspense<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewTokenSuspense<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({ signal }) => getNewToken(requestOptions, signal);
+export function useGetNewTokenSuspense<
+  TData = Awaited<ReturnType<typeof getNewToken>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetNewTokenSuspenseQueryOptions(options);
 
-      
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetNewTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getNewToken>>>
-export type GetNewTokenSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetNewTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetNewTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetNewTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNewToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetNewTokenSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetNewTokenSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetNewTokenQueryKey();
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getNewToken>>> = ({
+    signal,
+  }) => getNewToken(requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getNewToken>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetNewTokenSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getNewToken>>
+>;
+export type GetNewTokenSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetNewTokenSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewTokenSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetNewTokenSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+export function useGetNewTokenSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getNewToken>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getNewToken>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetNewTokenSuspenseInfiniteQueryOptions(options);
+
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const signUpUser = (
-    signUpPayloadDto: BodyType<SignUpPayloadDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<SignUpUser201AllOf>(
-      {url: `http://localhost:3005/api/v1/auth/sign-up`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: signUpPayloadDto
-    },
-      options);
-    }
-  
-
-
-export const getSignUpUserMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUpUser>>, {data: BodyType<SignUpPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  signUpUser(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SignUpUserMutationResult = NonNullable<Awaited<ReturnType<typeof signUpUser>>>
-    export type SignUpUserMutationBody = BodyType<SignUpPayloadDto>
-    export type SignUpUserMutationError = ErrorType<unknown>
-
-    export const useSignUpUser = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUpUser>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof signUpUser>>,
-        TError,
-        {data: BodyType<SignUpPayloadDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getSignUpUserMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const createPage = (
-    createPageDto: BodyType<CreatePageDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreatePage200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createPageDto
-    },
-      options);
-    }
-  
-
-
-export const getCreatePageMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPage>>, {data: BodyType<CreatePageDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createPage(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreatePageMutationResult = NonNullable<Awaited<ReturnType<typeof createPage>>>
-    export type CreatePageMutationBody = BodyType<CreatePageDto>
-    export type CreatePageMutationError = ErrorType<void>
-
-    export const useCreatePage = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPage>>, TError,{data: BodyType<CreatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createPage>>,
-        TError,
-        {data: BodyType<CreatePageDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreatePageMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getPagesByQuery = (
-    params?: GetPagesByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  signUpPayloadDto: BodyType<SignUpPayloadDto>,
+  options?: SecondParameter<typeof customInstance>,
 ) => {
-      
-      
-      return customInstance<GetPagesByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages`, method: 'GET',
-        params, signal
+  return customInstance<SignUpUser201AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/auth/sign-up`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: signUpPayloadDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetPagesByQueryQueryKey = (params?: GetPagesByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/pages`, ...(params ? [params]: [])] as const;
-    }
+export const getSignUpUserMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof signUpUser>>,
+    TError,
+    { data: BodyType<SignUpPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof signUpUser>>,
+  TError,
+  { data: BodyType<SignUpPayloadDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-    
-export const getGetPagesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof signUpUser>>,
+    { data: BodyType<SignUpPayloadDto> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return signUpUser(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SignUpUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof signUpUser>>
+>;
+export type SignUpUserMutationBody = BodyType<SignUpPayloadDto>;
+export type SignUpUserMutationError = ErrorType<unknown>;
+
+export const useSignUpUser = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof signUpUser>>,
+    TError,
+    { data: BodyType<SignUpPayloadDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof signUpUser>>,
+  TError,
+  { data: BodyType<SignUpPayloadDto> },
+  TContext
+> => {
+  const mutationOptions = getSignUpUserMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+export const getPages = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
+  return customInstance<GetPages200AllOf>(
+    { url: `http://localhost:3005/api/v1/admin/pages`, method: 'GET', signal },
+    options,
+  );
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetPagesQueryKey = () => {
+  return [`http://localhost:3005/api/v1/admin/pages`] as const;
+};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
+export const getGetPagesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  
+  const queryKey = queryOptions?.queryKey ?? getGetPagesQueryKey();
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPages>>> = ({
+    signal,
+  }) => getPages(requestOptions, signal);
 
-      
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetPagesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPages>>
+>;
+export type GetPagesQueryError = ErrorType<void>;
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+export function useGetPages<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  > &
+    Pick<
+      DefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getPages>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPages<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  > &
+    Pick<
+      UndefinedInitialDataOptions<
+        Awaited<ReturnType<typeof getPages>>,
+        TError,
+        TData
+      >,
+      'initialData'
+    >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPages<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetPagesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
-export type GetPagesByQueryQueryError = ErrorType<void>
+export function useGetPages<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPagesQueryOptions(options);
 
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetPagesByQuery<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetPagesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPagesByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuery<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPagesByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuery<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPagesByQuery<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPagesByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetPagesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetPagesQueryKey();
 
-export const getGetPagesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPages>>> = ({
+    signal,
+  }) => getPages(requestOptions, signal);
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getPages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
+export type GetPagesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPages>>
+>;
+export type GetPagesSuspenseQueryError = ErrorType<void>;
 
-  
+export function useGetPagesSuspense<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPagesSuspense<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPagesSuspense<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
+export function useGetPagesSuspense<
+  TData = Awaited<ReturnType<typeof getPages>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPages>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPagesSuspenseQueryOptions(options);
 
-      
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetPagesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
-export type GetPagesByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetPagesByQuerySuspense<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetPagesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuerySuspense<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuerySuspense<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPagesByQuerySuspense<TData = Awaited<ReturnType<typeof getPagesByQuery>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPagesByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetPagesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetPagesByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPagesByQuery>>> = ({ signal }) => getPagesByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetPagesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPagesByQuery>>>
-export type GetPagesByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetPagesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetPagesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPagesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPagesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPagesByQuery>>>, TError = ErrorType<void>>(
- params?: GetPagesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPagesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPagesByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
+export const getGetPagesSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getPages>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getPages>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
+  const queryKey = queryOptions?.queryKey ?? getGetPagesQueryKey();
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPages>>> = ({
+    signal,
+  }) => getPages(requestOptions, signal);
 
-export const getPage = (
-    pageId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetPage200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getPages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-export const getGetPageQueryKey = (pageId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/pages/${pageId}`] as const;
-    }
+export type GetPagesSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPages>>
+>;
+export type GetPagesSuspenseInfiniteQueryError = ErrorType<void>;
 
-    
-export const getGetPageQueryOptions = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+export function useGetPagesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getPages>>>,
+  TError = ErrorType<void>,
+>(options: {
+  query: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getPages>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPagesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getPages>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getPages>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetPagesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getPages>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getPages>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export function useGetPagesSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getPages>>>,
+  TError = ErrorType<void>,
+>(options?: {
+  query?: Partial<
+    UseSuspenseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getPages>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPagesSuspenseInfiniteQueryOptions(options);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetPageQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
-export type GetPageQueryError = ErrorType<void>
-
-
-export function useGetPage<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPage>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPage<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getPage>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPage<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPage<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPageQueryOptions(pageId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
-export type GetPageSuspenseQueryError = ErrorType<void>
-
-
-export function useGetPageSuspense<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPageSuspense<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPageSuspense<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPageSuspense<TData = Awaited<ReturnType<typeof getPage>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPageSuspenseQueryOptions(pageId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetPageQueryKey(pageId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPage>>> = ({ signal }) => getPage(pageId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(pageId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getPage>>>
-export type GetPageSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(
- pageId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getPage>>>, TError = ErrorType<void>>(
- pageId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetPageSuspenseInfiniteQueryOptions(pageId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const updatePage = (
-    pageId: string,
-    updatePageDto: BodyType<UpdatePageDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdatePage200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updatePageDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdatePageMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePage>>, {pageId: string;data: BodyType<UpdatePageDto>}> = (props) => {
-          const {pageId,data} = props ?? {};
-
-          return  updatePage(pageId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdatePageMutationResult = NonNullable<Awaited<ReturnType<typeof updatePage>>>
-    export type UpdatePageMutationBody = BodyType<UpdatePageDto>
-    export type UpdatePageMutationError = ErrorType<void>
-
-    export const useUpdatePage = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePage>>, TError,{pageId: string;data: BodyType<UpdatePageDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updatePage>>,
-        TError,
-        {pageId: string;data: BodyType<UpdatePageDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdatePageMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deletePage = (
-    pageId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeletePage200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeletePageMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePage>>, {pageId: string}> = (props) => {
-          const {pageId} = props ?? {};
-
-          return  deletePage(pageId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeletePageMutationResult = NonNullable<Awaited<ReturnType<typeof deletePage>>>
-    
-    export type DeletePageMutationError = ErrorType<void>
-
-    export const useDeletePage = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deletePage>>,
-        TError,
-        {pageId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeletePageMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removePages = (
-    removePagesBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemovePages200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removePagesBody
-    },
-      options);
-    }
-  
-
-
-export const getRemovePagesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removePages>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  removePages(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemovePagesMutationResult = NonNullable<Awaited<ReturnType<typeof removePages>>>
-    export type RemovePagesMutationBody = BodyType<string[]>
-    export type RemovePagesMutationError = ErrorType<void>
-
-    export const useRemovePages = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePages>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removePages>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemovePagesMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removePage = (
-    pageId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemovePage200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/pages/${pageId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemovePageMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removePage>>, {pageId: string}> = (props) => {
-          const {pageId} = props ?? {};
-
-          return  removePage(pageId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemovePageMutationResult = NonNullable<Awaited<ReturnType<typeof removePage>>>
-    
-    export type RemovePageMutationError = ErrorType<void>
-
-    export const useRemovePage = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePage>>, TError,{pageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removePage>>,
-        TError,
-        {pageId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemovePageMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createClassification = (
-    createClassificationDto: BodyType<CreateClassificationDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateClassification200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createClassificationDto
+  createClassificationDto: BodyType<CreateClassificationDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateClassification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createClassificationDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateClassificationMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassification>>,
+    TError,
+    { data: BodyType<CreateClassificationDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createClassification>>,
+  TError,
+  { data: BodyType<CreateClassificationDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateClassificationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createClassification>>,
+    { data: BodyType<CreateClassificationDto> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createClassification(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createClassification>>, {data: BodyType<CreateClassificationDto>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateClassificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createClassification>>
+>;
+export type CreateClassificationMutationBody =
+  BodyType<CreateClassificationDto>;
+export type CreateClassificationMutationError = ErrorType<void>;
 
-          return  createClassification(data,requestOptions)
-        }
+export const useCreateClassification = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassification>>,
+    TError,
+    { data: BodyType<CreateClassificationDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createClassification>>,
+  TError,
+  { data: BodyType<CreateClassificationDto> },
+  TContext
+> => {
+  const mutationOptions = getCreateClassificationMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof createClassification>>>
-    export type CreateClassificationMutationBody = BodyType<CreateClassificationDto>
-    export type CreateClassificationMutationError = ErrorType<void>
-
-    export const useCreateClassification = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassification>>, TError,{data: BodyType<CreateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createClassification>>,
-        TError,
-        {data: BodyType<CreateClassificationDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateClassificationMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getClassificationsByQuery = (
-    params?: GetClassificationsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params?: GetClassificationsByQueryParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetClassificationsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications`, method: 'GET',
-        params, signal
+  return customInstance<GetClassificationsByQuery200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications`,
+      method: 'GET',
+      params,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetClassificationsByQueryQueryKey = (params?: GetClassificationsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/classifications`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetClassificationsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationsByQueryQueryKey = (
+  params?: GetClassificationsByQueryParams,
 ) => {
+  return [
+    `http://localhost:3005/api/v1/admin/classifications`,
+    ...(params ? [params] : []),
+  ] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+export const getGetClassificationsByQueryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
 
-  
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>
+  > = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-      
+export type GetClassificationsByQueryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassificationsByQuery>>
+>;
+export type GetClassificationsByQueryQueryError = ErrorType<void>;
 
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetClassificationsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
-export type GetClassificationsByQueryQueryError = ErrorType<void>
-
-
-export function useGetClassificationsByQuery<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetClassificationsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>> & Pick<
+export function useGetClassificationsByQuery<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetClassificationsByQueryParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getClassificationsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuery<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuery<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getClassificationsByQuery>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuery<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuery<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetClassificationsByQuery<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationsByQueryQueryOptions(
+    params,
+    options,
+  );
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetClassificationsByQuery<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetClassificationsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationsByQuerySuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>
+  > = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+export type GetClassificationsByQuerySuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassificationsByQuery>>
+>;
+export type GetClassificationsByQuerySuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetClassificationsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetClassificationsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetClassificationsByQuerySuspense<
+  TData = Awaited<ReturnType<typeof getClassificationsByQuery>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationsByQuerySuspenseQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetClassificationsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
-export type GetClassificationsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetClassificationsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getClassificationsByQuery>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetClassificationsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationsByQuerySuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationsByQueryQueryKey(params);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>
+  > = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getClassificationsByQuery>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassificationsByQuery>>> = ({ signal }) => getClassificationsByQuery(params, requestOptions, signal);
+export type GetClassificationsByQuerySuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassificationsByQuery>>
+>;
+export type GetClassificationsByQuerySuspenseInfiniteQueryError =
+  ErrorType<void>;
 
-      
+export function useGetClassificationsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params: undefined | GetClassificationsByQueryParams,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetClassificationsByQuerySuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>,
+  TError = ErrorType<void>,
+>(
+  params?: GetClassificationsByQueryParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassificationsByQuery>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationsByQuerySuspenseInfiniteQueryOptions(
+    params,
+    options,
+  );
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetClassificationsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getClassificationsByQuery>>>
-export type GetClassificationsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetClassificationsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassificationsByQuery>>>, TError = ErrorType<void>>(
- params?: GetClassificationsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const createClassifications = (
-    createClassificationDtos: BodyType<CreateClassificationDtos>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateClassifications200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/bulk`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createClassificationDtos
+  createClassificationDtos: BodyType<CreateClassificationDtos>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<CreateClassifications200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/bulk`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createClassificationDtos,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getCreateClassificationsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassifications>>,
+    TError,
+    { data: BodyType<CreateClassificationDtos> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createClassifications>>,
+  TError,
+  { data: BodyType<CreateClassificationDtos> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getCreateClassificationsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createClassifications>>,
+    { data: BodyType<CreateClassificationDtos> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return createClassifications(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createClassifications>>, {data: BodyType<CreateClassificationDtos>}> = (props) => {
-          const {data} = props ?? {};
+export type CreateClassificationsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createClassifications>>
+>;
+export type CreateClassificationsMutationBody =
+  BodyType<CreateClassificationDtos>;
+export type CreateClassificationsMutationError = ErrorType<void>;
 
-          return  createClassifications(data,requestOptions)
-        }
+export const useCreateClassifications = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassifications>>,
+    TError,
+    { data: BodyType<CreateClassificationDtos> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createClassifications>>,
+  TError,
+  { data: BodyType<CreateClassificationDtos> },
+  TContext
+> => {
+  const mutationOptions = getCreateClassificationsMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateClassificationsMutationResult = NonNullable<Awaited<ReturnType<typeof createClassifications>>>
-    export type CreateClassificationsMutationBody = BodyType<CreateClassificationDtos>
-    export type CreateClassificationsMutationError = ErrorType<void>
-
-    export const useCreateClassifications = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createClassifications>>, TError,{data: BodyType<CreateClassificationDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createClassifications>>,
-        TError,
-        {data: BodyType<CreateClassificationDtos>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateClassificationsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getClassification = (
-    classificationId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  classificationId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetClassification200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'GET', signal
+  return customInstance<GetClassification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`,
+      method: 'GET',
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
-export const getGetClassificationQueryKey = (classificationId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/classifications/${classificationId}`] as const;
-    }
+export const getGetClassificationQueryKey = (classificationId: string) => {
+  return [
+    `http://localhost:3005/api/v1/admin/classifications/${classificationId}`,
+  ] as const;
+};
 
-    
-export const getGetClassificationQueryOptions = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationQueryOptions = <
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassification>>
+  > = ({ signal }) =>
+    getClassification(classificationId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!classificationId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getClassification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+export type GetClassificationQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassification>>
+>;
+export type GetClassificationQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetClassificationQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
-export type GetClassificationQueryError = ErrorType<void>
-
-
-export function useGetClassification<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>> & Pick<
+export function useGetClassification<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getClassification>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassification<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassification<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getClassification>>,
           TError,
           TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassification<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassification<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetClassification<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationQueryOptions(
+    classificationId,
+    options,
+  );
 
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
-export function useGetClassification<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationQueryOptions(classificationId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetClassificationSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassification>>
+  > = ({ signal }) =>
+    getClassification(classificationId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!classificationId,
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof getClassification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+export type GetClassificationSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassification>>
+>;
+export type GetClassificationSuspenseQueryError = ErrorType<void>;
 
-      
+export function useGetClassificationSuspense<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationSuspense<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationSuspense<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetClassificationSuspense<
+  TData = Awaited<ReturnType<typeof getClassification>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationSuspenseQueryOptions(
+    classificationId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
-export type GetClassificationSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
-export type GetClassificationSuspenseQueryError = ErrorType<void>
-
-
-export function useGetClassificationSuspense<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationSuspense<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationSuspense<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetClassificationSuspense<TData = Awaited<ReturnType<typeof getClassification>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationSuspenseQueryOptions(classificationId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
 
-
-
-export const getGetClassificationSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetClassificationSuspenseInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetClassificationQueryKey(classificationId);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getClassification>>
+  > = ({ signal }) =>
+    getClassification(classificationId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!classificationId,
+    ...queryOptions,
+  } as UseSuspenseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getClassification>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getClassification>>> = ({ signal }) => getClassification(classificationId, requestOptions, signal);
+export type GetClassificationSuspenseInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getClassification>>
+>;
+export type GetClassificationSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
+export function useGetClassificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options: {
+    query: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+export function useGetClassificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-      
+export function useGetClassificationSuspenseInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>,
+  TError = ErrorType<void>,
+>(
+  classificationId: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getClassification>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+): UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetClassificationSuspenseInfiniteQueryOptions(
+    classificationId,
+    options,
+  );
 
-   return  { queryKey, queryFn, enabled: !!(classificationId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData> & { queryKey: QueryKey }
-}
+  const query = useSuspenseInfiniteQuery(
+    queryOptions,
+  ) as UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
-export type GetClassificationSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getClassification>>>
-export type GetClassificationSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetClassificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(
- classificationId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetClassificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetClassificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getClassification>>>, TError = ErrorType<void>>(
- classificationId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getClassification>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetClassificationSuspenseInfiniteQueryOptions(classificationId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 export const updateClassification = (
-    classificationId: string,
-    updateClassificationDto: BodyType<UpdateClassificationDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateClassification200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateClassificationDto
+  classificationId: string,
+  updateClassificationDto: BodyType<UpdateClassificationDto>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<UpdateClassification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateClassificationDto,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getUpdateClassificationMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateClassification>>,
+    TError,
+    { classificationId: string; data: BodyType<UpdateClassificationDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateClassification>>,
+  TError,
+  { classificationId: string; data: BodyType<UpdateClassificationDto> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUpdateClassificationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateClassification>>,
+    { classificationId: string; data: BodyType<UpdateClassificationDto> }
+  > = props => {
+    const { classificationId, data } = props ?? {};
 
-      
+    return updateClassification(classificationId, data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateClassification>>, {classificationId: string;data: BodyType<UpdateClassificationDto>}> = (props) => {
-          const {classificationId,data} = props ?? {};
+export type UpdateClassificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateClassification>>
+>;
+export type UpdateClassificationMutationBody =
+  BodyType<UpdateClassificationDto>;
+export type UpdateClassificationMutationError = ErrorType<void>;
 
-          return  updateClassification(classificationId,data,requestOptions)
-        }
+export const useUpdateClassification = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateClassification>>,
+    TError,
+    { classificationId: string; data: BodyType<UpdateClassificationDto> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateClassification>>,
+  TError,
+  { classificationId: string; data: BodyType<UpdateClassificationDto> },
+  TContext
+> => {
+  const mutationOptions = getUpdateClassificationMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof updateClassification>>>
-    export type UpdateClassificationMutationBody = BodyType<UpdateClassificationDto>
-    export type UpdateClassificationMutationError = ErrorType<void>
-
-    export const useUpdateClassification = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateClassification>>, TError,{classificationId: string;data: BodyType<UpdateClassificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateClassification>>,
-        TError,
-        {classificationId: string;data: BodyType<UpdateClassificationDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateClassificationMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const deleteClassification = (
-    classificationId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteClassification200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`, method: 'DELETE'
+  classificationId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<DeleteClassification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}`,
+      method: 'DELETE',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeleteClassificationMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteClassification>>,
+    TError,
+    { classificationId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteClassification>>,
+  TError,
+  { classificationId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getDeleteClassificationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteClassification>>,
+    { classificationId: string }
+  > = props => {
+    const { classificationId } = props ?? {};
 
-      
+    return deleteClassification(classificationId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteClassification>>, {classificationId: string}> = (props) => {
-          const {classificationId} = props ?? {};
+export type DeleteClassificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteClassification>>
+>;
 
-          return  deleteClassification(classificationId,requestOptions)
-        }
+export type DeleteClassificationMutationError = ErrorType<void>;
 
-        
+export const useDeleteClassification = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteClassification>>,
+    TError,
+    { classificationId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteClassification>>,
+  TError,
+  { classificationId: string },
+  TContext
+> => {
+  const mutationOptions = getDeleteClassificationMutationOptions(options);
 
+  return useMutation(mutationOptions);
+};
 
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof deleteClassification>>>
-    
-    export type DeleteClassificationMutationError = ErrorType<void>
-
-    export const useDeleteClassification = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteClassification>>,
-        TError,
-        {classificationId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteClassificationMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeClassifications = (
-    removeClassificationsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveClassifications200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeClassificationsBody
+  removeClassificationsBody: BodyType<string[]>,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveClassifications200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/removedAt`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: removeClassificationsBody,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveClassificationsMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeClassifications>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeClassifications>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveClassificationsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeClassifications>>,
+    { data: BodyType<string[]> }
+  > = props => {
+    const { data } = props ?? {};
 
-      
+    return removeClassifications(data, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeClassifications>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
+export type RemoveClassificationsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeClassifications>>
+>;
+export type RemoveClassificationsMutationBody = BodyType<string[]>;
+export type RemoveClassificationsMutationError = ErrorType<void>;
 
-          return  removeClassifications(data,requestOptions)
-        }
+export const useRemoveClassifications = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeClassifications>>,
+    TError,
+    { data: BodyType<string[]> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeClassifications>>,
+  TError,
+  { data: BodyType<string[]> },
+  TContext
+> => {
+  const mutationOptions = getRemoveClassificationsMutationOptions(options);
 
-        
+  return useMutation(mutationOptions);
+};
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveClassificationsMutationResult = NonNullable<Awaited<ReturnType<typeof removeClassifications>>>
-    export type RemoveClassificationsMutationBody = BodyType<string[]>
-    export type RemoveClassificationsMutationError = ErrorType<void>
-
-    export const useRemoveClassifications = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassifications>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeClassifications>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveClassificationsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const removeClassification = (
-    classificationId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveClassification200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}/removedAt`, method: 'PATCH'
+  classificationId: string,
+  options?: SecondParameter<typeof customInstance>,
+) => {
+  return customInstance<RemoveClassification200AllOf>(
+    {
+      url: `http://localhost:3005/api/v1/admin/classifications/${classificationId}/removedAt`,
+      method: 'PATCH',
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getRemoveClassificationMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeClassification>>,
+    TError,
+    { classificationId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof removeClassification>>,
+  TError,
+  { classificationId: string },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getRemoveClassificationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof removeClassification>>,
+    { classificationId: string }
+  > = props => {
+    const { classificationId } = props ?? {};
 
-      
+    return removeClassification(classificationId, requestOptions);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeClassification>>, {classificationId: string}> = (props) => {
-          const {classificationId} = props ?? {};
+export type RemoveClassificationMutationResult = NonNullable<
+  Awaited<ReturnType<typeof removeClassification>>
+>;
 
-          return  removeClassification(classificationId,requestOptions)
-        }
+export type RemoveClassificationMutationError = ErrorType<void>;
 
-        
+export const useRemoveClassification = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof removeClassification>>,
+    TError,
+    { classificationId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof removeClassification>>,
+  TError,
+  { classificationId: string },
+  TContext
+> => {
+  const mutationOptions = getRemoveClassificationMutationOptions(options);
 
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof removeClassification>>>
-    
-    export type RemoveClassificationMutationError = ErrorType<void>
-
-    export const useRemoveClassification = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeClassification>>, TError,{classificationId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeClassification>>,
-        TError,
-        {classificationId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveClassificationMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

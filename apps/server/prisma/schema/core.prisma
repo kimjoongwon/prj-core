@@ -355,17 +355,15 @@ model DepotFile {
 }
 
 model Page {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  name       String    @unique
-  pathname   String    @unique
-  params     Json?
-  elementIds String[]
-  tenantId   String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
-  elements   Element[]
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  name      String    @unique
+  pathname  String    @unique
+  params    Json?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  elements  Element[]
 }
 
 enum ElementTypes {
@@ -381,8 +379,8 @@ model Element {
   id        String       @id @default(uuid())
   seq       Int          @unique @default(autoincrement())
   label     String       @unique
-  type      ElementTypes @default(TABLE)
   pageId    String
+  type      ElementTypes @default(TABLE)
   createdAt DateTime     @default(now())
   updatedAt DateTime?    @updatedAt @db.Timestamptz(6)
   removedAt DateTime?    @db.Timestamptz(6)

@@ -1,42 +1,53 @@
 import ReactDOM from 'react-dom/client';
-import {
-  Link,
-  RouterProvider,
-  createRootRoute,
-  createRouter,
-} from '@tanstack/react-router';
-import { RootComponent } from './RootComponent';
-import './index.css';
 import { ReactQueryProvider } from '@shared/frontend';
+import {
+  createBrowserRouter,
+  // RouteObject,
+  RouterProvider,
+} from 'react-router-dom';
+// import { APIManager } from '@shared/frontend';
+// import { IPage, Page } from './Page';
+import './index.css';
 
-const rootRoute = createRootRoute({
-  component: () => <RootComponent key={'useGetSpace'} />,
-  notFoundComponent: () => {
-    return (
-      <div>
-        <p>This is the notFoundComponent configured on root route</p>
+// const _getPages = async () => {
+//   const { data: pages } = await APIManager.getPages();
+//   return pages;
+// };
 
-        <Link to="/">Start Over</Link>
-      </div>
-    );
+// const pages = (await _getPages()) as unknown as IPage[];
+// console.log('pages', pages);
+// const routes: RouteObject[] = pages?.map(page => {
+//   const renderPage = (page: IPage): RouteObject => {
+//     return {
+//       path: page.pathname,
+//       element: <Page page={page} />,
+//       children: page.children?.map(renderPage),
+//     };
+//   };
+
+//   const route: RouteObject = {
+//     path: page.pathname,
+//     element: <Page page={page} />,
+//   };
+
+//   if (page.children) {
+//     route.children = page.children.map(renderPage);
+//   }
+
+//   return route;
+// });
+// console.log('rotues', routes);
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <div>hahah</div>,
+    },
+  ],
+  {
+    basename: '/admin',
   },
-});
-
-const routeTree = rootRoute;
-
-// Set up a Router instance
-const router = createRouter({
-  routeTree,
-  defaultPreload: 'intent',
-  defaultStaleTime: 5000,
-});
-
-// Register things for typesafety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
+);
 
 const rootElement = document.getElementById('root')!;
 

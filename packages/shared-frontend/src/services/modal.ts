@@ -20,7 +20,15 @@ export class Modal {
     this.footer = undefined;
   }
 
-  build({ header, body, footer }) {
+  build({
+    header,
+    body,
+    footer,
+  }: {
+    header?: string | ReactNode;
+    body?: string | ReactNode;
+    footer?: string | ReactNode;
+  }) {
     this.open = true;
     this.header = header;
     this.body = body;

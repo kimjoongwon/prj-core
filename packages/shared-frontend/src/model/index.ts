@@ -165,6 +165,8 @@ export * from './getGroupsByQueryParams';
 export * from './getPage200AllOf';
 export * from './getPage200AllOfMeta';
 export * from './getPage200AllOfPageMeta';
+export * from './getPages200AllOf';
+export * from './getPages200AllOfMeta';
 export * from './getPagesByQuery200AllOf';
 export * from './getPagesByQuery200AllOfMeta';
 export * from './getPagesByQuery200AllOfPageMeta';

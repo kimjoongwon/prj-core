@@ -1,8 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import { useRef } from 'react';
 import { MobxProps } from '../types';
 import { get } from 'lodash-es';
-import { action } from 'mobx';
 import { useMobxHookForm } from '../../../hooks';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import {
@@ -24,16 +22,11 @@ export interface BaseEditorProps<T> extends MobxProps<T> {}
 
 export const EditorView = observer(
   <T extends object>(props: BaseEditorProps<T>) => {
-    const ref = useRef();
     const { path = '', state = {} } = props;
 
     const initialValue = get(state, path);
 
     const { localState } = useMobxHookForm(initialValue, state, path);
-
-    const handleChange = action((value: string) => {
-      localState.value = value;
-    });
 
     return (
       <CKEditor
@@ -48,10 +41,10 @@ export const EditorView = observer(
           console.log({ event, editor, data });
           localState.value = data;
         }}
-        onBlur={(event, editor) => {
+        onBlur={(_, editor) => {
           console.log('Blur.', editor);
         }}
-        onFocus={(event, editor) => {
+        onFocus={(_, editor) => {
           console.log('Focus.', editor);
         }}
         config={{

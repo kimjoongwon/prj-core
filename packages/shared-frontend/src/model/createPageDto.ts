@@ -6,10 +6,8 @@
  */
 
 export interface CreatePageDto {
-  elementIds: string;
   name: string;
   /** @nullable */
   params?: string | null;
   pathname: string;
-  tenantId: string;
 }

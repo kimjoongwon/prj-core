@@ -10,7 +10,7 @@
   },
   "main": "./index.ts",
   "module": "./index.ts",
-  "types": "./index.ts",
+  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsup --config tsup.config.ts && pnpm run copy-css",
     "start:dev": "tsup --watch && pnpm run copy-css",

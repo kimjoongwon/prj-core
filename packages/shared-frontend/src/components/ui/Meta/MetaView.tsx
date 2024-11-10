@@ -1,8 +1,6 @@
-import { Divider } from '@nextui-org/react';
 import { MetaProps } from '.';
 import { HStack } from '../HStack';
 import { Text } from '../Text';
-import { VStack } from '../VStack';
 
 export interface MetaViewProps extends MetaProps {}
 

@@ -6,11 +6,9 @@
  */
 
 export interface UpdatePageDto {
-  elementIds?: string;
   id: string;
   name?: string;
   /** @nullable */
   params?: string | null;
   pathname?: string;
-  tenantId?: string;
 }

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { Card, CardBody, CardHeader } from '../../NextUI';
+import { Card, CardBody } from '../../NextUI';
 import { DateModel } from '../_types';
 import { Text } from '../../Text';
 import dayjs from 'dayjs';

@@ -154,7 +154,7 @@ export const DataGrid = observer(
           sortDescriptor={state?.currentSort || undefined}
           onSortChange={sort => {
             state.query = {
-              ...state.query,
+              ...state?.query,
               [`${sort.column}SortOrder`]:
                 sort.direction === 'ascending' ? 'asc' : 'desc',
             };
