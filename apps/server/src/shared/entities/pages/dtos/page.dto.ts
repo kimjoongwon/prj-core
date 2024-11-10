@@ -7,12 +7,6 @@ export class PageDto extends AbstractDto implements Page {
   @StringFieldOptional({ nullable: true })
   params: Prisma.JsonValue | null;
 
-  @UUIDField({ default: [] })
-  elementIds: string[];
-
-  @UUIDField()
-  tenantId: string;
-
   @StringField()
   name: string;
 

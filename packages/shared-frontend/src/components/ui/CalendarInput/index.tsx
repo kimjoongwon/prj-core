@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { CalendarInputView } from './CalendarInputView';
 import { useProps } from './_hooks/useProps';

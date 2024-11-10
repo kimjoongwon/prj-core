@@ -1,5 +1,4 @@
 import { Input, InputProps } from '@nextui-org/react';
-import { MobxProps } from '../types';
 
 interface MultiInputProps extends InputProps {}
 

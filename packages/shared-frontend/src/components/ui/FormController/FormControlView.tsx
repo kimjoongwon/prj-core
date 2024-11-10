@@ -49,7 +49,6 @@ export const FormControl = observer(
             validation.isInvalid = false;
 
             validation.success = valid;
-            let errorMessage = null;
 
             if (!valid) {
               const error = getErrorFromErrorsByPath(

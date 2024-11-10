@@ -1,4 +1,3 @@
-import React from 'react';
 import { useProps } from '../_hooks/useProps';
 import { Date } from '../Date/Date';
 import { observer } from 'mobx-react-lite';

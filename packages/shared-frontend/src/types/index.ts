@@ -33,7 +33,7 @@ export interface Route {
   icon?: React.ReactNode;
 }
 
-export interface TableState<T> {
+export interface TableState {
   page: number;
   pageSize: number;
   pageCount: number;

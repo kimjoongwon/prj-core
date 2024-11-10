@@ -7,7 +7,6 @@
 
 export interface PageDto {
   createdAt: string;
-  elementIds: string;
   id: string;
   name: string;
   /** @nullable */
@@ -16,6 +15,5 @@ export interface PageDto {
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  tenantId: string;
   updatedAt: string;
 }

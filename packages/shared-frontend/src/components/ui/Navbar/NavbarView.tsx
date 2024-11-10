@@ -6,8 +6,6 @@ import { Logo } from '../Logo';
 import { Button, Card } from '@nextui-org/react';
 import { Paths } from '../../../constants/Paths';
 import { v4 } from 'uuid';
-import { VStack } from '../VStack';
-import { Container } from '../Container';
 
 export interface NavbarItem {
   url: Paths;

@@ -13,12 +13,10 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
-import { PageMetaDto } from '../common';
 import { CreatePageDto, PageDto, UpdatePageDto, CPageQueryDto } from './dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { PagesService } from './pages.service';
-import { query } from 'express';
 
 @ApiTags('ADMIN_PAGES')
 @Controller()
@@ -87,17 +85,30 @@ export class PagesController {
   }
 
   @Get()
-  @Auth([])
+  @Auth([], { public: true })
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(PageDto, HttpStatus.OK, { isArray: true })
   async getPagesByQuery(@Query() query: CPageQueryDto) {
     const pageQuery = plainToInstance(CPageQueryDto, query);
-    const { count, pages } = await this.service.getManyByQuery(pageQuery.toArgs());
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'success',
-      pages.map((page) => plainToInstance(PageDto, page)),
-      query.toPageMetaDto(count),
-    );
+    const pages = [
+      {
+        name: '로그인',
+        pathname: '/admin/auth/login',
+        queryKey: 'useGetUsersByQuery',
+        elements: [
+          {
+            type: 'Input',
+          },
+        ],
+      },
+    ];
+
+    return new ResponseEntity(HttpStatus.OK, 'success', pages);
+    // return new ResponseEntity(
+    //   HttpStatus.OK,
+    //   'success',
+    //   pages.map((page) => plainToInstance(PageDto, page)),
+    //   query.toPageMetaDto(count),
+    // );
   }
 }

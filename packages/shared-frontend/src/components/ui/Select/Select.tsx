@@ -1,11 +1,11 @@
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import {
   Select as NextSelect,
   SelectItem,
   SelectProps as NextUISelectProps,
 } from '@nextui-org/react';
 import { MobxProps } from '../types';
-import { cloneDeep, get, set } from 'lodash-es';
+import { cloneDeep, get } from 'lodash-es';
 import { useMobxHookForm } from '../../../hooks';
 
 interface SelectProps<T>

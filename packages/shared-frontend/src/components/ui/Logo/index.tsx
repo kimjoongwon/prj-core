@@ -1,6 +1,5 @@
 'use client';
 // import Image, { ImageProps } from 'next/image';
-import { galaxy } from '../../../providers/App';
 import { Button } from '../Button';
 import { cn } from '@nextui-org/react';
 
@@ -12,7 +11,7 @@ interface LogoProps {
 }
 
 export const Logo = (props: LogoProps) => {
-  const { children, variants = 'text', className } = props;
+  const { className } = props;
 
   const onClickLogo = () => {
     // galaxy?.router.push({

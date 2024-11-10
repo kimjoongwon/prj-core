@@ -4,6 +4,4 @@ export class Page extends AbstractEntity implements PageEntity {
   name: string;
   pathname: string;
   params: Prisma.JsonValue;
-  elementIds: string[];
-  tenantId: string;
 }

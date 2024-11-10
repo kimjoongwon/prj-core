@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PagesRepository } from './pages.repository';
-import { CPageQueryDto } from './dtos/page-query.dto';
-import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
