@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { children } from 'effect/Fiber';
 
 interface Element {
   type: 'Input';
@@ -25,39 +26,31 @@ export class PageService {
       {
         name: '메인',
         state: {},
-        pathname: '',
+        pathname: '/admin',
         elements: [],
-        children: [
+      },
+      {
+        name: '로그인',
+        pathname: '/admin/login',
+        elements: [
           {
-            name: '로그인',
-            pathname: 'auth/login',
-            elements: [
-              {
-                type: 'Input',
-                path: 'form.tokenDto.email',
-                validation: {
-                  timing: 'onBlur',
-                  required: true,
-                  message: '이메일을 입력해주세요.',
-                },
-              },
-              {
-                type: 'Input',
-                path: 'form.tokenDto.password',
-                validation: {
-                  timing: 'onBlur',
-                  required: true,
-                  message: '비밀번호를 입력해주세요.',
-                },
-              },
-            ],
-            state: {
-              form: {
-                tokenDto: {
-                  email: '',
-                  password: '',
-                },
-              },
+            lable: '이메일',
+            type: 'Input',
+            path: 'form.tokenDto.email',
+            validation: {
+              timing: 'onBlur',
+              required: true,
+              message: '이메일을 입력해주세요.',
+            },
+          },
+          {
+            label: '비밀번호',
+            type: 'Input',
+            path: 'form.tokenDto.password',
+            validation: {
+              timing: 'onBlur',
+              required: true,
+              message: '비밀번호를 입력해주세요.',
             },
           },
         ],

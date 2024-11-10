@@ -13,6 +13,7 @@ export class AdminPagesController {
     isArray: true,
   })
   async getPages() {
-    return new ResponseEntity(200, '성공', this.pageService.getPages());
+    const pages = await this.pageService.getPages();
+    return new ResponseEntity(200, '성공', pages);
   }
 }

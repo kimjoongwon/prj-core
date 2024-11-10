@@ -1,3 +1,6 @@
+import { Button, Input, useGetPages } from '@shared/frontend';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 interface Element {
   type: 'Input';
@@ -20,45 +23,42 @@ interface PageProps {
   children?: React.ReactNode;
   page?: IPage;
 }
-// const ElementManager = {
-//   Input: () => (
-//     <Input
-//       state={{
-//         value: 'test',
-//       }}
-//       path={'value'}
-//     />
-//   ),
-// };
-export const Page = (_: PageProps) => {
-  // const { queryKey, elements = [] } = props;
-  // const { data: response } = APIManager?.[queryKey]?.({});
+const ElementManager = {
+  Input: props => (
+    <Input
+      label={props.label}
+      state={{
+        value: 'test',
+      }}
+      path={'value'}
+    />
+  ),
+};
+export const Page = (props: PageProps) => {
+  const { page } = props;
+  console.log('page', page);
 
   return (
     <div>
       <Layout />
-      {/* {props.elements?.map(element => ElementManager[element.type]())} */}
-      {/* <DataGrid
-        data={data || []}
-        columns={[
-          {
-            header: 'ID',
-          },
-        ]}
-      />
-      {props.pathname} */}
+      <Outlet />
+      {props.page?.elements?.map(element =>
+        ElementManager[element.type]({
+          label: element.label,
+        }),
+      )}
     </div>
   );
 };
 
 export const Layout = () => {
-  // const navigate = useNavigate();
-  // const { data: getPagesByQueryResponse } = APIManager.useGetPagesByQuery({});
-  // const pages = getPagesByQueryResponse?.data;
+  const { data: getPagesResponse } = useGetPages();
+  const pages = getPagesResponse?.data || [];
+  const navigate = useNavigate();
 
   return (
     <>
-      {/* {pages?.map(page => (
+      {pages?.map(page => (
         <Button
           as={Link}
           href={page.pathname}
@@ -66,7 +66,7 @@ export const Layout = () => {
         >
           {page.pathname}
         </Button>
-      ))} */}
+      ))}
     </>
   );
 };
