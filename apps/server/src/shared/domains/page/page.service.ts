@@ -4,6 +4,8 @@ import { children } from 'effect/Fiber';
 interface Element {
   type: 'Input';
   path: string;
+  placeholder: string;
+  label: string;
   validation: {
     timing: 'onBlur' | 'onChange' | 'onClick';
     required: boolean;
@@ -24,36 +26,82 @@ export class PageService {
   getPages() {
     const pages = [
       {
-        name: '메인',
+        layout: {
+          type: 'Empty',
+        },
+        name: '루트',
+        state: {},
+        pathname: '/',
+        elements: [],
+      },
+      {
+        layout: {
+          type: 'Empty',
+        },
+        name: '어드민',
         state: {},
         pathname: '/admin',
         elements: [],
       },
       {
+        layout: {
+          type: 'Auth',
+        },
         name: '로그인',
-        pathname: '/admin/login',
-        elements: [
-          {
-            lable: '이메일',
-            type: 'Input',
-            path: 'form.tokenDto.email',
-            validation: {
-              timing: 'onBlur',
-              required: true,
-              message: '이메일을 입력해주세요.',
+        state: {
+          form: {
+            email: '',
+            password: '',
+          },
+        },
+        pathname: '/admin/auth/login',
+        form: {
+          name: '로그인',
+          submit: {
+            button: {
+              title: '로그인',
+              mutation: 'getToken',
+              onSuccess: {
+                navigate: {
+                  pathname: '/admin/main',
+                },
+              },
             },
           },
-          {
-            label: '비밀번호',
-            type: 'Input',
-            path: 'form.tokenDto.password',
-            validation: {
-              timing: 'onBlur',
-              required: true,
-              message: '비밀번호를 입력해주세요.',
+          elements: [
+            {
+              label: '이메일',
+              type: 'Input',
+              placeholder: '이메일을 입력해주세요.',
+              path: 'form.email',
+              validation: {
+                timing: 'onBlur',
+                required: true,
+                message: '이메일을 입력해주세요.',
+              },
             },
-          },
-        ],
+            {
+              label: '비밀번호',
+              type: 'Input',
+              placeholder: '비밀번호를 입력해주세요.',
+              path: 'form.password',
+              validation: {
+                timing: 'onBlur',
+                required: true,
+                message: '비밀번호를 입력해주세요.',
+              },
+            },
+          ],
+        },
+      },
+      {
+        pathname: '/admin/main',
+        layout: {
+          type: 'Main',
+        },
+        name: '메인',
+        state: {},
+        elements: [],
       },
     ];
 
