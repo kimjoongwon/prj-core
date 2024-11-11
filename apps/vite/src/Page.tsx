@@ -15,32 +15,7 @@ import { HTMLAttributes } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-interface Element {
-  type: 'Input';
-  path: string;
-  validation: {
-    timing: 'onBlur' | 'onChange' | 'onClick';
-    required: boolean;
-    message: string;
-  };
-}
-interface Layout {
-  type: 'Auth' | 'Empty' | 'Main';
-}
-
-export interface IPage {
-  name: string;
-  pathname: string;
-  form: {
-    name: string;
-    elements: Element[];
-  };
-  children: IPage[];
-  state: object;
-  layout: Layout;
-}
+import { IPage } from '@shared/types';
 
 interface PageProps {
   children?: React.ReactNode;
@@ -55,6 +30,7 @@ interface ElementProps extends HTMLAttributes<unknown> {
 
 export const Page = (props: PageProps) => {
   const { page } = props;
+
   const state = useLocalObservable(() => page.state);
   const navigate = useNavigate();
   const ElementManager = {
@@ -72,30 +48,34 @@ export const Page = (props: PageProps) => {
   };
 
   return (
-    <Layout type={page?.layout.type}>
+    <Layout layout={page?.layout}>
       <Outlet />
       <Form
         buttonProps={{
           fullWidth: true,
           color: 'primary',
-          children: page.form?.submit?.button?.title,
+          children: page.form?.submitButton.title,
           onClick: async () => {
             let data = undefined;
-            try {
-              data = await APIManager[page.form?.submit?.button?.mutation](
-                state.form,
-              );
-            } catch (error) {
-              console.error(error);
+            const mutationKey = page.form?.submitButton.mutationKey || '';
+            if (page.form?.submitButton?.mutationKey) {
+              try {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                data = await APIManager[mutationKey](state.form);
+              } catch (error) {
+                console.error(error);
+              }
             }
             if (data.httpStatus === 200) {
-              navigate(
-                page?.form?.submit?.button?.onSuccess?.navigate?.pathname,
-              );
+              navigate({
+                pathname:
+                  page?.form?.submitButton?.onSuccess?.navigate?.pathname,
+              });
             }
           },
         }}
-        name={page?.form?.name}
+        name={page?.form?.name || ''}
       >
         {props.page?.form?.elements?.map(element => {
           return ElementManager[element.type](
@@ -109,11 +89,11 @@ export const Page = (props: PageProps) => {
 
 interface LayoutProps {
   children?: React.ReactNode;
-  type: Layout['type'];
+  layout: IPage['layout'];
 }
 
 export const Layout = observer((props: LayoutProps) => {
-  const { children, type } = props;
+  const { children, layout } = props;
   const { data: getPagesResponse } = useGetPages();
   const pages = getPagesResponse?.data || [];
   const tabs: Route[] =
@@ -129,11 +109,12 @@ export const Layout = observer((props: LayoutProps) => {
 
   return (
     <VStack className="space-y-2 px-4">
-      {type === 'Auth' && <Logo variants={'text'} />}
+      {layout.type === 'Auth' && <Logo variants={'text'} />}
       <HStack>
-        {type === 'Main' &&
+        {layout.type === 'Main' &&
           pages?.map(page => (
             <Button
+              key={page.pathname}
               as={Link}
               href={page.pathname}
               onClick={() => navigate(page.pathname)}
@@ -143,7 +124,7 @@ export const Layout = observer((props: LayoutProps) => {
           ))}
       </HStack>
       {children}
-      {type === 'Main' && (
+      {layout.type === 'Main' && (
         <BottomTab tabs={tabs} state={state} path={'currentTab'} />
       )}
     </VStack>
