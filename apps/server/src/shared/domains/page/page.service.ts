@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { children } from 'effect/Fiber';
+import { IPage } from '@shared/types';
 
 interface Element {
   type: 'Input';
@@ -13,18 +13,10 @@ interface Element {
   };
 }
 
-interface IPage {
-  name: string;
-  pathname: string;
-  children?: IPage[];
-  elements: Element[];
-  state: any;
-}
-
 @Injectable()
 export class PageService {
   getPages() {
-    const pages = [
+    const pages: IPage[] = [
       {
         layout: {
           type: 'Empty',
@@ -32,7 +24,6 @@ export class PageService {
         name: '루트',
         state: {},
         pathname: '/',
-        elements: [],
       },
       {
         layout: {
@@ -41,7 +32,6 @@ export class PageService {
         name: '어드민',
         state: {},
         pathname: '/admin',
-        elements: [],
       },
       {
         layout: {
@@ -57,14 +47,12 @@ export class PageService {
         pathname: '/admin/auth/login',
         form: {
           name: '로그인',
-          submit: {
-            button: {
-              title: '로그인',
-              mutation: 'getToken',
-              onSuccess: {
-                navigate: {
-                  pathname: '/admin/main',
-                },
+          submitButton: {
+            title: '로그인',
+            mutationKey: 'getToken',
+            onSuccess: {
+              navigate: {
+                pathname: '/admin/main',
               },
             },
           },
@@ -101,7 +89,6 @@ export class PageService {
         },
         name: '메인',
         state: {},
-        elements: [],
       },
     ];
 

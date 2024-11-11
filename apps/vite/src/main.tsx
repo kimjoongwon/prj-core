@@ -2,19 +2,17 @@ import ReactDOM from 'react-dom/client';
 import { APIManager, ReactQueryProvider } from '@shared/frontend';
 import {
   createBrowserRouter,
-  Outlet,
   RouteObject,
-  // RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-// import { APIManager } from '@shared/frontend';
-// import { IPage, Page } from './Page';
 import './index.css';
 import { useEffect, useMemo, useState } from 'react';
-import { IPage, Page } from './Page';
+import { Page } from './Page';
+import { IPage } from '@shared/types';
 
 const rootElement = document.getElementById('root')!;
 
+// eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
   const [pages, setPages] = useState<IPage[]>([]);
 
@@ -22,9 +20,8 @@ const App = () => {
     const _getPages = async () => {
       if (pages?.length === 0) {
         const { data: pages } = await APIManager.getPages();
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        setPages(pages);
+        const _pages = pages as unknown as IPage[];
+        setPages(_pages);
       }
     };
 
@@ -34,26 +31,14 @@ const App = () => {
   const routes: RouteObject[] = useMemo(
     () =>
       pages?.map(page => {
-        const renderPage = (page: IPage): RouteObject => {
-          return {
-            path: page.pathname,
-            element: <Page page={page} />,
-            children: page.children?.map(renderPage),
-          };
-        };
-
         const route: RouteObject = {
           path: page.pathname,
           element: <Page page={page} />,
         };
 
-        if (page.children) {
-          route.children = page.children.map(renderPage);
-        }
-
         return route;
       }),
-    [pages.length],
+    [pages],
   );
 
   if (routes.length === 0) {
@@ -64,8 +49,6 @@ const App = () => {
   if (!router) {
     router = createBrowserRouter(routes);
   }
-
-  console.log('routes', routes);
 
   return <RouterProvider router={router} />;
 };

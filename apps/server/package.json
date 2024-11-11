@@ -65,7 +65,8 @@
     "remeda": "^2.11.0",
     "rxjs": "^7.8.1",
     "ts-pattern": "^5.2.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "@shared/types": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.2",
