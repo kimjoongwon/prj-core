@@ -1,5 +1,4 @@
 import {
-  APIManager,
   BottomTab,
   Button,
   Form,
@@ -32,7 +31,6 @@ export const Page = (props: PageProps) => {
   const { page } = props;
 
   const state = useLocalObservable(() => page.state);
-  const navigate = useNavigate();
   const ElementManager = {
     Input: (props: ElementProps) => (
       <Input
@@ -50,33 +48,7 @@ export const Page = (props: PageProps) => {
   return (
     <Layout layout={page?.layout}>
       <Outlet />
-      <Form
-        buttonProps={{
-          fullWidth: true,
-          color: 'primary',
-          children: page.form?.submitButton.title,
-          onClick: async () => {
-            let data = undefined;
-            const mutationKey = page.form?.submitButton.mutationKey || '';
-            if (page.form?.submitButton?.mutationKey) {
-              try {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                data = await APIManager[mutationKey](state.form);
-              } catch (error) {
-                console.error(error);
-              }
-            }
-            if (data.httpStatus === 200) {
-              navigate({
-                pathname:
-                  page?.form?.submitButton?.onSuccess?.navigate?.pathname,
-              });
-            }
-          },
-        }}
-        name={page?.form?.name || ''}
-      >
+      <Form form={page.form}>
         {props.page?.form?.elements?.map(element => {
           return ElementManager[element.type](
             element as unknown as ElementProps,

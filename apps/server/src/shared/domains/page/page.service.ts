@@ -47,12 +47,17 @@ export class PageService {
         pathname: '/admin/auth/login',
         form: {
           name: '로그인',
-          submitButton: {
+          button: {
             title: '로그인',
-            mutationKey: 'getToken',
-            onSuccess: {
-              navigate: {
+            color: 'primary',
+            flow: {
+              mutation: 'getToken',
+              success: {
+                message: '로그인 성공',
                 pathname: '/admin/main',
+              },
+              failure: {
+                message: '로그인 실패',
               },
             },
           },

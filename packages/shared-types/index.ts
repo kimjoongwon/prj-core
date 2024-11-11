@@ -18,19 +18,38 @@ export interface Layout {
 export interface Form {
   name: string;
   elements: Element[];
-  submitButton: SubmitButton;
+  button: FormButton;
 }
 
-export interface SubmitButton {
+export interface FormButtonFlow {
+  state?: object;
+  path?: string;
+  mutation?: string;
+  success?: Success;
+  failure?: Failure;
+}
+
+export interface FormButton {
+  color:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | undefined;
   title: string;
-  mutationKey: string;
-  onSuccess: OnSuccess;
+  flow?: FormButtonFlow;
 }
 
-interface OnSuccess {
-  navigate: {
-    pathname: string;
-  };
+interface Failure {
+  message: string;
+  pathname?: string;
+}
+
+interface Success {
+  message: string;
+  pathname?: string;
 }
 
 export interface IPage {

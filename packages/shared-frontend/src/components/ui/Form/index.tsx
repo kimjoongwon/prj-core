@@ -1,10 +1,9 @@
 import { HTMLAttributes } from 'react';
 import { FormView } from './FormView';
-import { ButtonProps } from '@nextui-org/react';
+import { IPage } from '@shared/types';
 
 export interface FormProps extends HTMLAttributes<HTMLFormElement> {
-  name: string;
-  buttonProps: ButtonProps;
+  form: IPage['form'];
 }
 
 export const Form = (props: FormProps) => {
