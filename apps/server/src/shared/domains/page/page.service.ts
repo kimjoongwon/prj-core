@@ -40,8 +40,8 @@ export class PageService {
         name: '로그인',
         state: {
           form: {
-            email: '',
-            password: '',
+            email: 'galaxy@gmail.com',
+            password: 'rkdmf12!@',
           },
         },
         pathname: '/admin/auth/login',

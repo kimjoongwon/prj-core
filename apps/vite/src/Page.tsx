@@ -1,7 +1,6 @@
 import {
   BottomTab,
   Button,
-  Form,
   HStack,
   Input,
   Logo,
@@ -15,6 +14,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { IPage } from '@shared/types';
+import { Form } from './Form';
 
 interface PageProps {
   children?: React.ReactNode;

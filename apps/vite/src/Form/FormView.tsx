@@ -1,17 +1,16 @@
 import { tv } from 'tailwind-variants';
-import { Button } from '../Button';
 import { FormProps } from './index';
-import { Text } from '../Text';
 import { FormButton } from './FormButton';
+import { Text } from '@shared/frontend';
 
-interface FormViewProps extends FormProps {}
+type FormViewProps = FormProps;
 
 const formView = tv({
   base: 'space-y-4',
 });
 
 export const FormView = (props: FormViewProps) => {
-  const { onSubmit, children, form } = props;
+  const { onSubmit, children, form, state } = props;
 
   return (
     <form
@@ -20,9 +19,9 @@ export const FormView = (props: FormViewProps) => {
         className: props.className,
       })}
     >
-      <Text variant="h5">{form.name}</Text>
+      <Text variant="h5">{form?.name}</Text>
       {children}
-      <FormButton formButton={form.button} />
+      {form?.button && <FormButton formButton={form?.button} state={state} />}
     </form>
   );
 };

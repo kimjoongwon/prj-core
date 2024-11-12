@@ -9,6 +9,8 @@ import './index.css';
 import { useEffect, useMemo, useState } from 'react';
 import { Page } from './Page';
 import { IPage } from '@shared/types';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const rootElement = document.getElementById('root')!;
 
@@ -59,6 +61,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <ReactQueryProvider>
       <App />
+      <ToastContainer />
     </ReactQueryProvider>,
   );
 }
