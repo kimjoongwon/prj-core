@@ -63,25 +63,31 @@ export class PageService {
           },
           elements: [
             {
-              label: '이메일',
               type: 'Input',
-              placeholder: '이메일을 입력해주세요.',
-              path: 'form.email',
-              validation: {
-                timing: 'onBlur',
-                required: true,
-                message: '이메일을 입력해주세요.',
+              input: {
+                type: 'email',
+                label: '이메일',
+                path: 'form.email',
+                placeholder: '이메일을 입력해주세요.',
+                validation: {
+                  timing: 'onBlur',
+                  required: true,
+                  message: '이메일을 입력해주세요.',
+                },
               },
             },
             {
-              label: '비밀번호',
               type: 'Input',
-              placeholder: '비밀번호를 입력해주세요.',
-              path: 'form.password',
-              validation: {
-                timing: 'onBlur',
-                required: true,
-                message: '비밀번호를 입력해주세요.',
+              input: {
+                label: '비밀번호',
+                type: 'password',
+                placeholder: '비밀번호를 입력해주세요.',
+                path: 'form.password',
+                validation: {
+                  timing: 'onBlur',
+                  required: true,
+                  message: '비밀번호를 입력해주세요.',
+                },
               },
             },
           ],

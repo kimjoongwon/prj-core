@@ -1,15 +1,21 @@
+import { type InputProps } from '@nextui-org/react';
 export interface Validation {
   timing: 'onBlur' | 'onChange' | 'onClick';
   required: boolean;
   message: string;
 }
 
-export interface Element {
-  type: 'Input';
-  path: string;
+export interface Input {
+  type: InputProps['type'];
   label: string;
+  path: string;
   placeholder: string;
   validation?: Validation;
+}
+
+export interface Element {
+  type: 'Input';
+  input: Input;
 }
 export interface Layout {
   type: 'Auth' | 'Empty' | 'Main';
