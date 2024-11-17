@@ -1,28 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { IPage } from '@shared/types';
-
-interface Element {
-  type: 'Input';
-  path: string;
-  placeholder: string;
-  label: string;
-  validation: {
-    timing: 'onBlur' | 'onChange' | 'onClick';
-    required: boolean;
-    message: string;
-  };
-}
+import { State } from '@shared/types';
 
 @Injectable()
 export class PageService {
   getPages() {
-    const pages: IPage[] = [
+    const pages: State[] = [
       {
         layout: {
           type: 'Empty',
         },
         name: '루트',
-        state: {},
         pathname: '/',
       },
       {
@@ -30,7 +17,6 @@ export class PageService {
           type: 'Empty',
         },
         name: '어드민',
-        state: {},
         pathname: '/admin',
       },
       {
@@ -38,12 +24,6 @@ export class PageService {
           type: 'Auth',
         },
         name: '로그인',
-        state: {
-          form: {
-            email: 'galaxy@gmail.com',
-            password: 'rkdmf12!@',
-          },
-        },
         pathname: '/admin/auth/login',
         form: {
           name: '로그인',
@@ -63,30 +43,56 @@ export class PageService {
           },
           elements: [
             {
+              type: 'Spacer',
+              style: {
+                gridArea: 'spacer',
+                width: '100%',
+                minWidth: 16,
+              },
+            },
+            {
               type: 'Input',
+              style: {
+                gridArea: 'email',
+              },
               input: {
+                value: 'galaxy@gmail.com',
                 type: 'email',
                 label: '이메일',
-                path: 'form.email',
                 placeholder: '이메일을 입력해주세요.',
-                validation: {
-                  timing: 'onBlur',
-                  required: true,
-                  message: '이메일을 입력해주세요.',
+                validator: {
+                  validation: {
+                    type: 'string',
+                    timings: ['onBlur'],
+                    required: true,
+                    messages: {
+                      required: '이메일을 입력해주세요.',
+                    },
+                    isValid: false,
+                  },
                 },
               },
             },
             {
               type: 'Input',
+              style: {
+                gridArea: 'password',
+              },
               input: {
                 label: '비밀번호',
                 type: 'password',
                 placeholder: '비밀번호를 입력해주세요.',
-                path: 'form.password',
-                validation: {
-                  timing: 'onBlur',
-                  required: true,
-                  message: '비밀번호를 입력해주세요.',
+                value: 'rkdmf12!@',
+                validator: {
+                  validation: {
+                    type: 'string',
+                    timings: ['onBlur'],
+                    required: true,
+                    messages: {
+                      required: '비밀번호를 입력해주세요.',
+                    },
+                    isValid: false,
+                  },
                 },
               },
             },
@@ -99,7 +105,6 @@ export class PageService {
           type: 'Main',
         },
         name: '메인',
-        state: {},
       },
     ];
 

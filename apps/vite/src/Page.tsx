@@ -9,59 +9,67 @@ import {
   useGetPages,
   VStack,
 } from '@shared/frontend';
-import { HTMLAttributes } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { IPage } from '@shared/types';
-import { Form } from './Form';
+import { State } from '@shared/types';
+import { reaction, toJS } from 'mobx';
+import { FormValidator } from './FormValidator';
+import { Grid2 } from '@mui/material';
 
 interface PageProps {
   children?: React.ReactNode;
-  page: IPage;
+  state: State;
 }
 
-interface ElementProps extends HTMLAttributes<unknown> {
-  label: string;
-  path: unknown;
-  placeholder: string;
-}
+let state: State | null = null;
 
-export const Page = (props: PageProps) => {
-  const { page } = props;
+reaction(
+  () => JSON.stringify(state),
+  () => console.log(toJS(state)),
+);
 
-  const state = useLocalObservable(() => page.state);
-  const ElementManager = {
-    Input: (props: ElementProps) => (
-      <Input
-        key={v4()}
-        label={props.label}
-        state={state}
-        placeholder={props.placeholder}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error'
-        path={props.path}
-      />
-    ),
-  };
+export const Page = observer((props: PageProps) => {
+  const { state: _state } = props;
 
+  state = useLocalObservable(() => _state);
+
+  const style = toJS(state.layout.style);
   return (
-    <Layout layout={page?.layout}>
-      <Outlet />
-      <Form form={page.form}>
-        {props.page?.form?.elements?.map(element => {
-          return ElementManager[element.type](
-            element as unknown as ElementProps,
-          );
-        })}
-      </Form>
-    </Layout>
+    <Grid2 container>
+      {state?.form?.elements?.map(element => {
+        if (!element) {
+          return <></>;
+        }
+        if (element.type === 'Spacer') {
+          return <div style={toJS(element.style)} />;
+        }
+
+        if (element?.input) {
+          if (element.type === 'Input') {
+            return (
+              <div style={toJS(element.style)}>
+                <FormValidator key={v4()} state={element}>
+                  <Input
+                    type={element.input.type}
+                    label={element.input.label}
+                    state={element.input}
+                    placeholder={element.input.placeholder}
+                    path={'value'}
+                  />
+                </FormValidator>
+              </div>
+            );
+          }
+        }
+      })}
+    </Grid2>
   );
-};
+});
 
 interface LayoutProps {
   children?: React.ReactNode;
-  layout: IPage['layout'];
+  layout: State['layout'];
 }
 
 export const Layout = observer((props: LayoutProps) => {
@@ -83,7 +91,7 @@ export const Layout = observer((props: LayoutProps) => {
     <VStack className="space-y-2 px-4">
       {layout.type === 'Auth' && <Logo variants={'text'} />}
       <HStack>
-        {layout.type === 'Main' &&
+        {layout?.type === 'Main' &&
           pages?.map(page => (
             <Button
               key={page.pathname}

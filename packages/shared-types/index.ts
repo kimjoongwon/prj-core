@@ -1,29 +1,46 @@
 import { type InputProps } from '@nextui-org/react';
-export interface Validation {
-  timing: 'onBlur' | 'onChange' | 'onClick';
+
+export interface IValidator {
+  validation: IValidation;
+}
+
+export interface IValidation {
+  timings: ('onBlur' | 'onChange' | 'onFocus')[];
+  type?: string | number | boolean;
+  minLength?: number;
+  maxLength?: number;
+  regex?: string;
   required: boolean;
-  message: string;
+  messages: Partial<Record<keyof IValidation, string>>;
+  isValid: boolean;
 }
 
 export interface Input {
   type: InputProps['type'];
   label: string;
-  path: string;
   placeholder: string;
-  validation?: Validation;
+  validator: IValidator;
+  value: InputProps['value'];
+  isInvalid?: boolean;
+  errorMessage?: string;
 }
 
-export interface Element {
-  type: 'Input';
-  input: Input;
+export interface IElement {
+  type: 'Input' | 'Spacer';
+  input?: Input;
+  style: object;
 }
+
 export interface Layout {
   type: 'Auth' | 'Empty' | 'Main';
+  gridTemplateAreas?: string[][];
+  style?: object;
 }
+export interface FormLayout {}
 
 export interface Form {
   name: string;
-  elements: Element[];
+  elements: IElement[];
   button: FormButton;
 }
 
@@ -58,10 +75,9 @@ interface Success {
   pathname?: string;
 }
 
-export interface IPage {
+export interface State {
   name: string;
   pathname: string;
   form?: Form;
-  state: object;
   layout: Layout;
 }

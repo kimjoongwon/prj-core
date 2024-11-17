@@ -8,21 +8,21 @@ import {
 import './index.css';
 import { useEffect, useMemo, useState } from 'react';
 import { Page } from './Page';
-import { IPage } from '@shared/types';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { State } from '@shared/types';
 
 const rootElement = document.getElementById('root')!;
 
 // eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
-  const [pages, setPages] = useState<IPage[]>([]);
+  const [pages, setPages] = useState<State[]>([]);
 
   useEffect(() => {
     const _getPages = async () => {
       if (pages?.length === 0) {
         const { data: pages } = await APIManager.getPages();
-        const _pages = pages as unknown as IPage[];
+        const _pages = pages as unknown as State[];
         setPages(_pages);
       }
     };
@@ -35,7 +35,7 @@ const App = () => {
       pages?.map(page => {
         const route: RouteObject = {
           path: page.pathname,
-          element: <Page page={page} />,
+          element: <Page state={page} />,
         };
 
         return route;

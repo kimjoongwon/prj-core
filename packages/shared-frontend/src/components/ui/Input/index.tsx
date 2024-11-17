@@ -7,16 +7,12 @@ import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
-import { ValidationState } from '../FormController/FormControlView';
 import { InputView } from './InputView';
 
-export type InputProps<T> = MobxProps<T> &
-  NextUIInputProps & {
-    validation?: ValidationState;
-  };
+export type InputProps<T> = MobxProps<T> & NextUIInputProps;
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
-  const { path = '', state = {}, onChange, validation, type } = props;
+  const { path = '', state = {}, onChange, type, ...rest } = props;
 
   const initialValue = get(state, path) || '';
 
@@ -29,18 +25,20 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
       }
 
       localState.value = e.target.value;
-
-      onChange && onChange(e);
+      onChange && onChange(localState.value);
     },
   );
 
   return (
     <InputView
-      {...props}
+      {...rest}
+      type={type}
       onChange={handleChange}
+      onBlur={e => {
+        console.log('onBlur');
+        rest.onBlur(e.target.value);
+      }}
       value={String(localState.value)}
-      isInvalid={validation?.isInvalid}
-      errorMessage={validation?.errorMessage}
     />
   );
 });
