@@ -12,58 +12,67 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { State } from '@shared/types';
-import { reaction, toJS } from 'mobx';
+import { IButton, IInput, State } from '@shared/types';
+import { toJS } from 'mobx';
 import { FormValidator } from './FormValidator';
-import { Grid2 } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 
 interface PageProps {
   children?: React.ReactNode;
   state: State;
 }
 
-let state: State | null = null;
-
-reaction(
-  () => JSON.stringify(state),
-  () => console.log(toJS(state)),
-);
-
 export const Page = observer((props: PageProps) => {
   const { state: _state } = props;
 
-  state = useLocalObservable(() => _state);
+  const state = useLocalObservable(() => _state);
 
-  const style = toJS(state.layout.style);
   return (
-    <Grid2 container>
-      {state?.form?.elements?.map(element => {
-        if (!element) {
-          return <></>;
-        }
-        if (element.type === 'Spacer') {
-          return <div style={toJS(element.style)} />;
-        }
+    <form>
+      <Grid {...toJS(state.layout.gridProps)}>
+        {state?.form?.elements?.map(element => {
+          if (!element) {
+            return <></>;
+          }
 
-        if (element?.input) {
-          if (element.type === 'Input') {
+          if (element?.input) {
+            if (element.type === 'Input') {
+              const input = element.input as IInput;
+              return (
+                <Grid key={v4()} {...toJS(element.gridProps)}>
+                  <FormValidator state={element}>
+                    <Input
+                      type={input.type}
+                      label={input.label}
+                      state={input}
+                      placeholder={input.placeholder}
+                      path={'value'}
+                    />
+                  </FormValidator>
+                </Grid>
+              );
+            }
+          }
+
+          if (element.type === 'Button') {
+            const button = element.input as IButton;
             return (
-              <div style={toJS(element.style)}>
-                <FormValidator key={v4()} state={element}>
-                  <Input
-                    type={element.input.type}
-                    label={element.input.label}
-                    state={element.input}
-                    placeholder={element.input.placeholder}
-                    path={'value'}
-                  />
-                </FormValidator>
-              </div>
+              <Grid key={v4()} {...toJS(element.gridProps)}>
+                <Button
+                  color={button.color}
+                  fullWidth={button?.fullWidth}
+                  onClick={() => {
+                    console.log('button.flow', button.flow);
+                  }}
+                >
+                  {button.title}
+                </Button>
+              </Grid>
             );
           }
-        }
-      })}
-    </Grid2>
+        })}
+      </Grid>
+    </form>
   );
 });
 
