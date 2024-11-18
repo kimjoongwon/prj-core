@@ -27,7 +27,7 @@ export interface IInput {
 
 export interface IElement {
   type: 'Input' | 'Spacer' | 'Button';
-  input?: Input | IButton;
+  input?: IInput | IButton;
   gridProps?: object;
 }
 
