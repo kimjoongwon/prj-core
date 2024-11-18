@@ -15,7 +15,7 @@ export interface IValidation {
   isValid: boolean;
 }
 
-export interface Input {
+export interface IInput {
   type: InputProps['type'];
   label: string;
   placeholder: string;
@@ -26,22 +26,20 @@ export interface Input {
 }
 
 export interface IElement {
-  type: 'Input' | 'Spacer';
-  input?: Input;
-  style: object;
+  type: 'Input' | 'Spacer' | 'Button';
+  input?: Input | IButton;
+  gridProps?: object;
 }
 
 export interface Layout {
   type: 'Auth' | 'Empty' | 'Main';
-  gridTemplateAreas?: string[][];
-  style?: object;
+  gridProps?: object;
 }
 export interface FormLayout {}
 
 export interface Form {
   name: string;
   elements: IElement[];
-  button: FormButton;
 }
 
 export interface FormButtonFlow {
@@ -52,7 +50,7 @@ export interface FormButtonFlow {
   failure?: Failure;
 }
 
-export interface FormButton {
+export interface IButton {
   color:
     | 'default'
     | 'primary'
@@ -62,6 +60,7 @@ export interface FormButton {
     | 'danger'
     | undefined;
   title: string;
+  fullWidth?: boolean;
   flow?: FormButtonFlow;
 }
 

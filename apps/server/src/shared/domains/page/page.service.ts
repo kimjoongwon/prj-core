@@ -22,39 +22,19 @@ export class PageService {
       {
         layout: {
           type: 'Auth',
+          gridProps: {
+            container: true,
+            spacing: 2,
+            justifyContent: 'center',
+          },
         },
         name: '로그인',
         pathname: '/admin/auth/login',
         form: {
           name: '로그인',
-          button: {
-            title: '로그인',
-            color: 'primary',
-            flow: {
-              mutation: 'getToken',
-              success: {
-                message: '로그인 성공',
-                pathname: '/admin/main',
-              },
-              failure: {
-                message: '로그인 실패',
-              },
-            },
-          },
           elements: [
             {
-              type: 'Spacer',
-              style: {
-                gridArea: 'spacer',
-                width: '100%',
-                minWidth: 16,
-              },
-            },
-            {
               type: 'Input',
-              style: {
-                gridArea: 'email',
-              },
               input: {
                 value: 'galaxy@gmail.com',
                 type: 'email',
@@ -72,12 +52,12 @@ export class PageService {
                   },
                 },
               },
+              gridProps: {
+                size: 10,
+              },
             },
             {
               type: 'Input',
-              style: {
-                gridArea: 'password',
-              },
               input: {
                 label: '비밀번호',
                 type: 'password',
@@ -94,6 +74,20 @@ export class PageService {
                     isValid: false,
                   },
                 },
+              },
+              gridProps: {
+                size: 10,
+              },
+            },
+            {
+              type: 'Button',
+              input: {
+                color: 'primary',
+                title: '로그인',
+                fullWidth: true,
+              },
+              gridProps: {
+                size: 10,
               },
             },
           ],
