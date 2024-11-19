@@ -1,15 +1,17 @@
 import React, { Children, ReactElement } from 'react';
 import { observer } from 'mobx-react-lite';
 import { isEmpty } from 'remeda';
-import { IElement } from '@shared/types';
+import { BValidation, State } from '@shared/types';
 
 interface FormValidatorProps {
   children: ReactElement;
-  state: IElement;
+  state: State;
+  validation: BValidation;
+  componentNo: number;
 }
 
 export const FormValidator = observer((props: FormValidatorProps) => {
-  const { children, state } = props;
+  const { children, state, validation, componentNo } = props;
 
   const child = Children.only(children);
 
@@ -18,31 +20,32 @@ export const FormValidator = observer((props: FormValidatorProps) => {
   }
 
   const callbacks =
-    state.input.validator.validation.timings?.map(timing => {
+    validation.timings?.map(timing => {
       return {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [timing]: (value: any) => {
-          if (state.input.validator.validation.required) {
+          if (validation.required) {
             if (isEmpty(value)) {
-              state.input.errorMessage =
-                state.input.validator.validation.messages?.['required'];
-              state.input.isInvalid = true;
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              state.form.components[componentNo].props.errorMessage =
+                validation.messages?.['required'];
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              state.form.components[componentNo].props.isInvalid = true;
               return;
             }
-
-            state.input.isInvalid = false;
-            state.input.errorMessage = ' ';
           }
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          state.form.components[componentNo].props.isInvalid = false;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          state.form.components[componentNo].props.errorMessage = '';
         },
       };
     }) || [];
 
-  const childProps = Object.assign(
-    {
-      isInvalid: state.input.isInvalid,
-      errorMessage: state.input.errorMessage,
-    },
-    ...callbacks,
-  );
+  const childProps = Object.assign({}, ...callbacks);
   return <>{React.cloneElement(child, childProps)}</>;
 });

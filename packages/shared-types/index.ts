@@ -1,33 +1,33 @@
-import { type InputProps } from '@nextui-org/react';
+import { type ButtonProps, type InputProps } from '@nextui-org/react';
 
-export interface IValidator {
-  validation: IValidation;
-}
-
-export interface IValidation {
+export interface BValidation {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
   type?: string | number | boolean;
   minLength?: number;
   maxLength?: number;
   regex?: string;
   required: boolean;
-  messages: Partial<Record<keyof IValidation, string>>;
+  messages: Partial<Record<keyof BValidation, string>>;
   isValid: boolean;
 }
 
-export interface IInput {
+export interface BInput {
   type: InputProps['type'];
   label: string;
   placeholder: string;
-  validator: IValidator;
   value: InputProps['value'];
+}
+
+export interface BCommonComponent {
+  validation: BValidation;
   isInvalid?: boolean;
   errorMessage?: string;
 }
 
-export interface IElement {
+export interface BComponent {
+  validation?: BValidation;
   type: 'Input' | 'Spacer' | 'Button';
-  input?: IInput | IButton;
+  props: any;
   gridProps?: object;
 }
 
@@ -39,7 +39,7 @@ export interface FormLayout {}
 
 export interface Form {
   name: string;
-  elements: IElement[];
+  components: BComponent[];
 }
 
 export interface FormButtonFlow {
@@ -50,19 +50,7 @@ export interface FormButtonFlow {
   failure?: Failure;
 }
 
-export interface IButton {
-  color:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | undefined;
-  title: string;
-  fullWidth?: boolean;
-  flow?: FormButtonFlow;
-}
+export interface BButton extends ButtonProps {}
 
 interface Failure {
   message: string;

@@ -7,20 +7,6 @@ export class PageService {
     const pages: State[] = [
       {
         layout: {
-          type: 'Empty',
-        },
-        name: '루트',
-        pathname: '/',
-      },
-      {
-        layout: {
-          type: 'Empty',
-        },
-        name: '어드민',
-        pathname: '/admin',
-      },
-      {
-        layout: {
           type: 'Auth',
           gridProps: {
             container: true,
@@ -32,25 +18,23 @@ export class PageService {
         pathname: '/admin/auth/login',
         form: {
           name: '로그인',
-          elements: [
+          components: [
             {
               type: 'Input',
-              input: {
+              props: {
                 value: 'galaxy@gmail.com',
                 type: 'email',
                 label: '이메일',
                 placeholder: '이메일을 입력해주세요.',
-                validator: {
-                  validation: {
-                    type: 'string',
-                    timings: ['onBlur'],
-                    required: true,
-                    messages: {
-                      required: '이메일을 입력해주세요.',
-                    },
-                    isValid: false,
-                  },
+              },
+              validation: {
+                type: 'string',
+                timings: ['onChange'],
+                required: true,
+                messages: {
+                  required: '이메일을 입력해주세요.',
                 },
+                isValid: false,
               },
               gridProps: {
                 size: 10,
@@ -58,22 +42,20 @@ export class PageService {
             },
             {
               type: 'Input',
-              input: {
+              props: {
                 label: '비밀번호',
                 type: 'password',
                 placeholder: '비밀번호를 입력해주세요.',
                 value: 'rkdmf12!@',
-                validator: {
-                  validation: {
-                    type: 'string',
-                    timings: ['onBlur'],
-                    required: true,
-                    messages: {
-                      required: '비밀번호를 입력해주세요.',
-                    },
-                    isValid: false,
-                  },
+              },
+              validation: {
+                type: 'string',
+                timings: ['onBlur'],
+                required: true,
+                messages: {
+                  required: '비밀번호를 입력해주세요.',
                 },
+                isValid: false,
               },
               gridProps: {
                 size: 10,
@@ -81,7 +63,7 @@ export class PageService {
             },
             {
               type: 'Button',
-              input: {
+              props: {
                 color: 'primary',
                 title: '로그인',
                 fullWidth: true,
@@ -92,13 +74,6 @@ export class PageService {
             },
           ],
         },
-      },
-      {
-        pathname: '/admin/main',
-        layout: {
-          type: 'Main',
-        },
-        name: '메인',
       },
     ];
 
