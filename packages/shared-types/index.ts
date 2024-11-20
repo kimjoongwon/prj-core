@@ -33,12 +33,12 @@ export interface BComponent {
 
 export interface Layout {
   type: 'Auth' | 'Empty' | 'Main';
-  gridProps?: object;
 }
 export interface FormLayout {}
 
 export interface Form {
   name: string;
+  gridProps?: object;
   components: BComponent[];
 }
 
@@ -50,7 +50,13 @@ export interface FormButtonFlow {
   failure?: Failure;
 }
 
-export interface BButton extends ButtonProps {}
+export interface BButton extends ButtonProps {
+  flow: {
+    success: Success;
+    failture: Failure;
+    mutation: string;
+  };
+}
 
 interface Failure {
   message: string;
@@ -58,6 +64,9 @@ interface Failure {
 }
 
 interface Success {
+  state?: object;
+  path?: string;
+  value?: string;
   message: string;
   pathname?: string;
 }
@@ -65,6 +74,6 @@ interface Success {
 export interface State {
   name: string;
   pathname: string;
-  form?: Form;
+  forms?: Form[];
   layout: Layout;
 }
