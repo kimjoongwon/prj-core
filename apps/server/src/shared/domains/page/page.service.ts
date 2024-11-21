@@ -9,8 +9,20 @@ export class PageService {
         layout: {
           type: 'Auth',
         },
+        name: '메인',
+        pathname: 'admin/main',
+        payload: {},
+      },
+      {
+        layout: {
+          type: 'Auth',
+        },
         name: '로그인',
-        pathname: '/admin/auth/login',
+        pathname: 'admin/auth/login',
+        payload: {
+          email: 'galaxy@gmail.com',
+          password: 'rkdmf12!@',
+        },
         forms: [
           {
             gridProps: {
@@ -23,7 +35,7 @@ export class PageService {
               {
                 type: 'Input',
                 props: {
-                  value: 'galaxy@gmail.com',
+                  path: 'payload.email',
                   type: 'email',
                   label: '이메일',
                   placeholder: '이메일을 입력해주세요.',
@@ -44,10 +56,10 @@ export class PageService {
               {
                 type: 'Input',
                 props: {
+                  path: 'payload.password',
                   label: '비밀번호',
                   type: 'password',
                   placeholder: '비밀번호를 입력해주세요.',
-                  value: 'rkdmf12!@',
                 },
                 validation: {
                   type: 'string',
@@ -70,6 +82,16 @@ export class PageService {
                   children: '로그인',
                   flow: {
                     mutation: 'getToken',
+                    try: {
+                      pathname: '/admin/main',
+                      message: '로그인 성공',
+                      severity: 'success',
+                    },
+                    catch: {
+                      message: '로그인 실패',
+                      pathname: '/admin/auth/login',
+                      severity: 'error',
+                    },
                   },
                 } as BButton,
                 gridProps: {
