@@ -13,11 +13,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly usersService: UsersService,
   ) {
     const authConfig = config.get<AuthConfig>('auth');
-    console.log('/???');
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
-          console.log('req.cookies?.accessToken', req.cookies);
           return req.cookies?.accessToken;
         },
       ]),

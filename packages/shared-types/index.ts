@@ -46,34 +46,40 @@ export interface FormButtonFlow {
   state?: object;
   path?: string;
   mutation?: string;
-  success?: Success;
-  failure?: Failure;
+  try?: Try;
+  catch?: Catch;
+  finally: Finally;
 }
 
 export interface BButton extends ButtonProps {
   flow: {
-    success: Success;
-    failture: Failure;
+    try: Try;
+    catch: Catch;
+    finally: Finally;
     mutation: string;
   };
 }
 
-interface Failure {
+interface Catch {
+  severity: 'success' | 'error';
+  message: string;
+  pathname?: string;
+}
+interface Finally {
   message: string;
   pathname?: string;
 }
 
-interface Success {
-  state?: object;
-  path?: string;
-  value?: string;
+interface Try {
   message: string;
   pathname?: string;
+  severity: 'success' | 'error';
 }
 
 export interface State {
   name: string;
   pathname: string;
+  payload: object;
   forms?: Form[];
   layout: Layout;
 }

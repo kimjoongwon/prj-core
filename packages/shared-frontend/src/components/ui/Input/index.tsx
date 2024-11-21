@@ -35,8 +35,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
       type={type}
       onChange={handleChange}
       onBlur={e => {
-        console.log('onBlur');
-        rest.onBlur(e.target.value);
+        rest?.onBlur?.(e.target.value);
       }}
       value={String(localState.value)}
     />

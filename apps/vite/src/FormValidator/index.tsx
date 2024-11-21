@@ -1,5 +1,5 @@
 import React, { Children, ReactElement } from 'react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { isEmpty } from 'remeda';
 import { BValidation, State } from '@shared/types';
 
@@ -11,7 +11,12 @@ interface FormValidatorProps {
 }
 
 export const FormValidator = observer((props: FormValidatorProps) => {
-  const { children, state, validation, componentNo } = props;
+  const { children, validation } = props;
+
+  const state = useLocalObservable(() => ({
+    errorMessage: '',
+    isInvalid: false,
+  }));
 
   const child = Children.only(children);
 
@@ -26,26 +31,23 @@ export const FormValidator = observer((props: FormValidatorProps) => {
         [timing]: (value: any) => {
           if (validation.required) {
             if (isEmpty(value)) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              state.form.components[componentNo].props.errorMessage =
-                validation.messages?.['required'];
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              state.form.components[componentNo].props.isInvalid = true;
+              state.errorMessage = validation.messages?.['required'] as string;
+              state.isInvalid = true;
               return;
             }
           }
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          state.form.components[componentNo].props.isInvalid = false;
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          state.form.components[componentNo].props.errorMessage = '';
+          state.isInvalid = false;
+          state.errorMessage = '';
         },
       };
     }) || [];
 
-  const childProps = Object.assign({}, ...callbacks);
+  const childProps = Object.assign(
+    {
+      isInvalid: state.isInvalid,
+      errorMessage: state.errorMessage,
+    },
+    ...callbacks,
+  );
   return <>{React.cloneElement(child, childProps)}</>;
 });
