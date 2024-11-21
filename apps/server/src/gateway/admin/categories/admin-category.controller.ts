@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { ApiResponseEntity, CategoryDto, ResponseEntity } from '@shared';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { ApiResponseEntity, Auth, CategoryDto, ResponseEntity } from '@shared';
 import { CategoryService } from './admin-categories.service';
 import { plainToInstance } from 'class-transformer';
 
@@ -10,6 +10,8 @@ export class AdminCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get('children')
+  @ApiCookieAuth('accessToken')
+  @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   async getChildrenCategories(@Query('ancestorIds') ancestorIds: string[]) {
     const categories = await this.categoryService.getChildCategories(ancestorIds);
