@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom/client';
 import { APIManager, ReactQueryProvider } from '@shared/frontend';
 import {
   createBrowserRouter,
-  Outlet,
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
@@ -10,13 +9,11 @@ import './index.css';
 import { useEffect, useMemo, useState } from 'react';
 import { Page } from './Page';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { State } from '@shared/types';
 import { Alert, Snackbar } from '@mui/material';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { element } from 'effect/Schema';
-import { AdminPage } from './AdminPage';
+import 'react-toastify/dist/ReactToastify.css';
 
 const rootElement = document.getElementById('root')!;
 
@@ -49,7 +46,6 @@ const App = () => {
         const route: RouteObject = {
           path: page.pathname,
           element: <Page state={page} />,
-          exact: true,
         };
 
         return route;
@@ -58,25 +54,7 @@ const App = () => {
     [pages],
   );
 
-  const adminRoute = {
-    path: 'admin',
-    element: <AdminPage />,
-  };
-
-  const rootRoute = {
-    path: '/',
-    element: (
-      <div>
-        <Outlet />
-      </div>
-    ),
-    index: true,
-  };
-
-  routes.push(rootRoute);
-  routes.push(adminRoute);
-
-  if (routes?.length <= 3) {
+  if (routes?.length <= 1) {
     return <></>;
   }
 

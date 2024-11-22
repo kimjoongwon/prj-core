@@ -2,57 +2,64 @@ import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { BButton, BComponent, State } from '@shared/types';
 import { FormValidator } from './FormValidator';
-import { Grid2 as Grid, Stack } from '@mui/material';
-import { APIManager, Button, ComponentManager, Text } from '@shared/frontend';
+import { Container, Grid2 as Grid } from '@mui/material';
+import {
+  APIManager,
+  Button,
+  ComponentManager,
+  HStack,
+  Text,
+} from '@shared/frontend';
 import { Toast } from './toast';
-import { isAxiosError } from 'axios';
 import { toJS } from 'mobx';
 import { store } from './main';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { isAxiosError } from 'axios';
 
 interface PageProps {
   children?: React.ReactNode;
   state: State;
 }
 
-export const Page = observer((props: PageProps) => {
+export const Page = (props: PageProps) => {
   const { state: _state } = props;
-  const location = useLocation();
   const state = useLocalObservable(() => ({ ..._state }));
+  const page = toJS(props.state);
 
-  console.log(location.pathname);
   return (
-    <form style={{ display: 'flex', padding: 10 }}>
-      <div>{location.pathname}</div>
-      {state?.forms?.map(form => {
+    <form>
+      {page.forms?.map(form => {
         return (
           <>
-            <Stack key={v4()} spacing={2}>
-              <Text variant="h5">{form.name}</Text>
-              <Grid container spacing={2}>
-                {form.components?.map((component, componentNo) => (
-                  <Grid key={v4()} {...component.gridProps}>
-                    {component.validation ? (
-                      <FormValidator
-                        state={state}
-                        componentNo={componentNo}
-                        validation={component.validation}
-                      >
+            <HStack>
+              <div style={{ border: '1px solid red' }}>haha</div>
+              <Container maxWidth="sm">
+                <Text variant="h5">{form.name}</Text>
+                <Grid container spacing={2}>
+                  {form.components?.map((component, componentNo) => (
+                    <Grid key={v4()} {...component.gridProps}>
+                      {component.validation ? (
+                        <FormValidator
+                          state={state}
+                          componentNo={componentNo}
+                          validation={component.validation}
+                        >
+                          <Component state={state} component={component} />
+                        </FormValidator>
+                      ) : (
                         <Component state={state} component={component} />
-                      </FormValidator>
-                    ) : (
-                      <Component state={state} component={component} />
-                    )}
-                  </Grid>
-                ))}
-              </Grid>
-            </Stack>
+                      )}
+                    </Grid>
+                  ))}
+                </Grid>
+              </Container>
+            </HStack>
           </>
         );
       })}
     </form>
   );
-});
+};
 
 interface ComponentProps {
   state: State;
@@ -79,7 +86,6 @@ const Component = observer((props: ComponentProps) => {
         }
 
         if (props.flow.try.pathname) {
-          console.log('가니?', props.flow.try.pathname);
           navigate(props.flow.try.pathname);
         }
       } catch (error: unknown) {
