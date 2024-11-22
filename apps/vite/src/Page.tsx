@@ -3,13 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { BButton, BComponent, State } from '@shared/types';
 import { FormValidator } from './FormValidator';
 import { Container, Grid2 as Grid } from '@mui/material';
-import {
-  APIManager,
-  Button,
-  ComponentManager,
-  HStack,
-  Text,
-} from '@shared/frontend';
+import { APIManager, Button, ComponentManager, Text } from '@shared/frontend';
 import { Toast } from './toast';
 import { toJS } from 'mobx';
 import { store } from './main';
@@ -30,31 +24,26 @@ export const Page = (props: PageProps) => {
     <form>
       {page.forms?.map(form => {
         return (
-          <>
-            <HStack>
-              <div style={{ border: '1px solid red' }}>haha</div>
-              <Container maxWidth="sm">
-                <Text variant="h5">{form.name}</Text>
-                <Grid container spacing={2}>
-                  {form.components?.map((component, componentNo) => (
-                    <Grid key={v4()} {...component.gridProps}>
-                      {component.validation ? (
-                        <FormValidator
-                          state={state}
-                          componentNo={componentNo}
-                          validation={component.validation}
-                        >
-                          <Component state={state} component={component} />
-                        </FormValidator>
-                      ) : (
-                        <Component state={state} component={component} />
-                      )}
-                    </Grid>
-                  ))}
+          <Container maxWidth="sm">
+            <Text variant="h5">{form.name}</Text>
+            <Grid container spacing={2}>
+              {form.components?.map((component, componentNo) => (
+                <Grid key={v4()} {...component.gridProps}>
+                  {component.validation ? (
+                    <FormValidator
+                      state={state}
+                      componentNo={componentNo}
+                      validation={component.validation}
+                    >
+                      <Component state={state} component={component} />
+                    </FormValidator>
+                  ) : (
+                    <Component state={state} component={component} />
+                  )}
                 </Grid>
-              </Container>
-            </HStack>
-          </>
+              ))}
+            </Grid>
+          </Container>
         );
       })}
     </form>

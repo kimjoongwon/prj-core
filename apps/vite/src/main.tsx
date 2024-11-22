@@ -2,11 +2,12 @@ import ReactDOM from 'react-dom/client';
 import { APIManager, ReactQueryProvider } from '@shared/frontend';
 import {
   createBrowserRouter,
+  Outlet,
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
 import './index.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Page } from './Page';
 import { ToastContainer } from 'react-toastify';
 import { State } from '@shared/types';
@@ -40,19 +41,20 @@ const App = () => {
     _getPages();
   }, [pages.length]);
 
-  const routes: RouteObject[] = useMemo(
-    () =>
-      pages?.map(page => {
-        const route: RouteObject = {
-          path: page.pathname,
-          element: <Page state={page} />,
-        };
+  const routes: RouteObject[] = pages?.map(page => {
+    const route: RouteObject = {
+      path: page.pathname,
+      element: <Page state={page} />,
+    };
 
-        return route;
-      }),
+    return route;
+  });
 
-    [pages],
-  );
+  const _route: RouteObject = {
+    path: '/',
+    element: <Layout />,
+    children: routes,
+  };
 
   if (routes?.length <= 1) {
     return <></>;
@@ -60,7 +62,7 @@ const App = () => {
 
   let router = undefined;
   if (!router) {
-    router = createBrowserRouter(routes);
+    router = createBrowserRouter([_route]);
   }
 
   return <RouterProvider router={router} />;
@@ -96,3 +98,12 @@ if (!rootElement.innerHTML) {
     </ReactQueryProvider>,
   );
 }
+
+export const Layout = () => {
+  return (
+    <div>
+      layout
+      <Outlet />
+    </div>
+  );
+};
