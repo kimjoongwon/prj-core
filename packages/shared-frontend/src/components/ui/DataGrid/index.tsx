@@ -73,9 +73,9 @@ export const DataGrid = observer(
   ) => {
     const {
       data,
-      columns,
-      leftButtons,
-      rightButtons,
+      columns = [],
+      leftButtons = [],
+      rightButtons = [],
       selectedKey = 'id',
       state,
       emptyContent = '데이터가 없습니다.',
@@ -113,6 +113,10 @@ export const DataGrid = observer(
     });
 
     if (!table) return null;
+
+    if (columns.length === 0) {
+      throw new Error('columns is empty');
+    }
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
@@ -179,7 +183,7 @@ export const DataGrid = observer(
               <TableRow key={row.original?.[selectedKey as string]}>
                 {row.getAllCells().map(cell => {
                   return (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell?.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

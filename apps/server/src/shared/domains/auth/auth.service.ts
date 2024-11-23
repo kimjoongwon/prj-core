@@ -79,7 +79,7 @@ export class AuthService {
   }
 
   async login({ email, password }: LoginPayloadDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: { email },
       include: {
         profiles: true,
@@ -93,21 +93,7 @@ export class AuthService {
       },
     });
 
-    if (!user) {
-      throw new NotFoundException(`No user found for email: ${email}`);
-    }
-
-    const tenant = await this.prisma.tenant.findFirst({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        role: true,
-        space: true,
-        user: true,
-      },
-    });
-
+    this.logger.log(`User: ${JSON.stringify(user)}`);
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {
@@ -120,7 +106,6 @@ export class AuthService {
       accessToken,
       refreshToken,
       user,
-      tenant,
     };
   }
 }

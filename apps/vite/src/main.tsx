@@ -1,10 +1,20 @@
 import ReactDOM from 'react-dom/client';
-import { APIManager, ReactQueryProvider } from '@shared/frontend';
+import {
+  APIManager,
+  AppBar,
+  BottomTab,
+  ComponentManager,
+  HStack,
+  ReactQueryProvider,
+  useGetPages,
+  VStack,
+} from '@shared/frontend';
 import {
   createBrowserRouter,
   Outlet,
   RouteObject,
   RouterProvider,
+  useLocation,
 } from 'react-router-dom';
 import './index.css';
 import { useEffect, useState } from 'react';
@@ -100,10 +110,48 @@ if (!rootElement.innerHTML) {
 }
 
 export const Layout = () => {
+  const location = useLocation();
+  const { data: getPagesResponse } = useGetPages();
+  const pages = (getPagesResponse?.data || []) as unknown as State[];
+
+  const page = pages?.find(page => page.pathname === location.pathname);
+
+  const layout = page?.layout;
+
   return (
-    <div>
-      layout
-      <Outlet />
-    </div>
+    <VStack className="w-full">
+      {layout?.top && <AppBar />}
+      <HStack>
+        {layout?.left && <Left />}
+        <VStack className="w-full">
+          <Outlet />
+          {layout?.bottom && <Footer state={page!} />}
+        </VStack>
+        {layout?.right && <Right />}
+      </HStack>
+    </VStack>
   );
+};
+export const Top = () => {
+  return <div>top</div>;
+};
+
+export const Right = () => {
+  return <div>right</div>;
+};
+
+export const Left = () => {
+  return <div>left</div>;
+};
+
+interface LayoutProps {
+  state: State;
+}
+
+export const Footer = (props: LayoutProps) => {
+  const { state } = props;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const Component = ComponentManager[state.layout?.bottom?.component.type];
+  return <Component {...state.layout?.bottom?.component.props} />;
 };

@@ -22,7 +22,7 @@ export const Page = (props: PageProps) => {
 
   return (
     <form>
-      {page.forms?.map(form => {
+      {page.forms?.map((form, formIndex) => {
         return (
           <Container maxWidth="sm">
             <Text variant="h5">{form.name}</Text>
@@ -34,6 +34,7 @@ export const Page = (props: PageProps) => {
                       state={state}
                       componentNo={componentNo}
                       validation={component.validation}
+                      formIndex={formIndex}
                     >
                       <Component state={state} component={component} />
                     </FormValidator>
@@ -58,6 +59,8 @@ interface ComponentProps {
 const Component = observer((props: ComponentProps) => {
   const navigate = useNavigate();
   const { component, state, ...rest } = props;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const Component = ComponentManager[component.type];
 
   if (component.type === 'Button') {
@@ -95,12 +98,14 @@ const Component = observer((props: ComponentProps) => {
       }
     };
 
-    return <Button {...component.props} onClick={onClick} />;
+    const isInvalid = state.forms?.some(form =>
+      form.components.some(c => c.validation?.isInValid),
+    );
+
+    return (
+      <Button {...component.props} onClick={onClick} isDisabled={isInvalid} />
+    );
   }
 
-  return (
-    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-    /* @ts-expect-error */
-    <Component {...rest} {...component.props} state={state} />
-  );
+  return <Component {...rest} {...component.props} state={state} />;
 });

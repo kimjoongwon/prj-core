@@ -9,7 +9,4 @@ export class TokenDto {
 
   @ClassField(() => UserDto)
   user: UserDto;
-
-  @ClassField(() => TenantDto)
-  tenant: TenantDto;
 }

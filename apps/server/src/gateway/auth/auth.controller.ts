@@ -1,25 +1,13 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpStatus,
-  HttpCode,
-  Get,
-  Res,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiResponseEntity,
   Auth,
   AuthService,
-  LocalAuthGuard,
   LoginPayloadDto,
   Public,
   ResponseEntity,
   SignUpPayloadDto,
-  TenantDto,
   TokenDto,
   TokenService,
   UserDto,
@@ -35,11 +23,11 @@ export class AuthController {
     private readonly tokenService: TokenService,
   ) {}
 
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, refreshToken, user, tenant } = await this.authService.login(loginDto);
+    const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
     res.cookie('accessToken', accessToken, { httpOnly: true });
@@ -51,7 +39,6 @@ export class AuthController {
         accessToken,
         refreshToken,
         user: plainToInstance(UserDto, user),
-        tenant: plainToInstance(TenantDto, tenant),
       }),
     );
   }
@@ -67,6 +54,7 @@ export class AuthController {
       this.tokenService.generateTokens({
         userId,
       });
+
     res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
 

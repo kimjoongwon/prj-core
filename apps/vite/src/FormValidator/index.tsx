@@ -1,5 +1,5 @@
 import React, { Children, ReactElement } from 'react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { isEmpty } from 'remeda';
 import { BValidation, State } from '@shared/types';
 
@@ -8,15 +8,11 @@ interface FormValidatorProps {
   state: State;
   validation: BValidation;
   componentNo: number;
+  formIndex: number;
 }
 
 export const FormValidator = observer((props: FormValidatorProps) => {
-  const { children, validation } = props;
-
-  const state = useLocalObservable(() => ({
-    errorMessage: '',
-    isInvalid: false,
-  }));
+  const { children, validation, state, componentNo, formIndex } = props;
 
   const child = Children.only(children);
 
@@ -31,21 +27,44 @@ export const FormValidator = observer((props: FormValidatorProps) => {
         [timing]: (value: any) => {
           if (validation.required) {
             if (isEmpty(value)) {
-              state.errorMessage = validation.messages?.['required'] as string;
-              state.isInvalid = true;
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              state.forms[formIndex].components[
+                componentNo
+              ].validation.errorMessage = validation.messages?.[
+                'required'
+              ] as string;
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              state.forms[formIndex].components[
+                componentNo
+              ].validation.isInValid = true;
               return;
             }
           }
-          state.isInvalid = false;
-          state.errorMessage = '';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          state.forms[formIndex].components[
+            componentNo
+          ].validation.errorMessage = '';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          state.forms[formIndex].components[componentNo].validation.isInValid =
+            false;
         },
       };
     }) || [];
 
   const childProps = Object.assign(
     {
-      isInvalid: state.isInvalid,
-      errorMessage: state.errorMessage,
+      isInvalid:
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        state.forms[formIndex].components[componentNo].validation.isInValid,
+      errorMessage:
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        state.forms[formIndex].components[componentNo].validation.errorMessage,
     },
     ...callbacks,
   );

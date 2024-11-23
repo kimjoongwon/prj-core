@@ -8,7 +8,8 @@ export interface BValidation {
   regex?: string;
   required: boolean;
   messages: Partial<Record<keyof BValidation, string>>;
-  isValid: boolean;
+  isInValid: boolean;
+  errorMessage: string;
 }
 
 export interface BInput {
@@ -18,21 +19,46 @@ export interface BInput {
   value: InputProps['value'];
 }
 
-export interface BCommonComponent {
-  validation: BValidation;
-  isInvalid?: boolean;
-  errorMessage?: string;
-}
-
 export interface BComponent {
-  validation?: BValidation;
-  type: 'Input' | 'Spacer' | 'Button';
+  type:
+    | 'Input'
+    | 'Spacer'
+    | 'Button'
+    | 'AppBar'
+    | 'Text'
+    | 'Image'
+    | 'DataGrid'
+    | 'BottomTab';
   props: any;
   gridProps?: object;
+  validation?: BValidation;
 }
 
-export interface Layout {
-  type: 'Auth' | 'Empty' | 'Main';
+export interface BLayout {
+  top?: {
+    component: {
+      type: 'AppBar';
+      props: object;
+    };
+  };
+  bottom?: {
+    component: {
+      type: 'Footer' | 'BottomTab';
+      props: object;
+    };
+  };
+  left?: {
+    component: {
+      type: 'SideBar';
+      props: object;
+    };
+  };
+  right?: {
+    element: {
+      type: 'SideBar';
+      props: object;
+    };
+  };
 }
 export interface FormLayout {}
 
@@ -81,5 +107,5 @@ export interface State {
   pathname: string;
   payload: object;
   forms?: Form[];
-  layout: Layout;
+  layout?: BLayout;
 }
