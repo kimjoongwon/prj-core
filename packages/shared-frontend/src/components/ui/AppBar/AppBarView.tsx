@@ -16,11 +16,13 @@ export const AppBarView = (props: AppBarViewProps) => {
       }}
     >
       <HStack className="flex flex-1 items-center justify-evenly px-4">
-        <Logo variants={'text'} />
-        <div className="flex flex-1 flex-row justify-center">
-          {props.children}
+        <div className="flex">
+          <Logo variants={'text'} />
         </div>
-        <Avatar size="sm" />
+        <div className="flex-1 md:flex hidden">{props.children}</div>
+        <div className="flex flex-1 justify-end">
+          <Avatar size="sm" />
+        </div>
       </HStack>
       <Divider />
     </div>
