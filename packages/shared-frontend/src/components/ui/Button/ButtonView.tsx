@@ -1,28 +1,14 @@
-import { ButtonProps, Button as NextUIButton } from '@nextui-org/react';
+import { Button as NextUIButton } from '@nextui-org/react';
+import { ButtonViewProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 
-interface ButtonViewProps extends ButtonProps {
-  getDisabled?: () => boolean;
-  getLoading?: () => boolean;
-}
-
 export const ButtonView = observer((props: ButtonViewProps) => {
-  const {
-    children,
-    onClick,
-    className = '',
-    size,
-    getDisabled,
-    getLoading,
-    ...rest
-  } = props;
+  const { children, onClick, className = '', size, ...rest } = props;
   return (
     <>
       <NextUIButton
         className={'font-pretendard ' + className}
         onClick={onClick}
-        isDisabled={getDisabled?.()}
-        isLoading={getLoading?.()}
         {...rest}
       >
         {children}

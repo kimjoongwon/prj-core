@@ -1,10 +1,7 @@
-import { Paper } from '@mui/material';
-import { AppBarProps } from '.';
 import { Logo } from '../Logo';
 import { Avatar, Divider } from '@nextui-org/react';
 import { HStack } from '../HStack';
-
-export interface AppBarViewProps extends AppBarProps {}
+import { AppBarViewProps } from '@shared/types';
 
 export const AppBarView = (props: AppBarViewProps) => {
   return (
@@ -18,8 +15,11 @@ export const AppBarView = (props: AppBarViewProps) => {
         justifyContent: 'center',
       }}
     >
-      <HStack className="flex-1 items-center justify-between px-4">
-        <Logo variants={'text'} alt="로고" />
+      <HStack className="flex flex-1 items-center justify-evenly px-4">
+        <Logo variants={'text'} />
+        <div className="flex flex-1 flex-row justify-center">
+          {props.children}
+        </div>
         <Avatar size="sm" />
       </HStack>
       <Divider />

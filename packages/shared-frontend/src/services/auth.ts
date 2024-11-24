@@ -10,8 +10,8 @@ import { Galaxy } from './galaxy';
 import { Effect, pipe } from 'effect';
 import { AxiosError } from 'axios';
 import { getNewToken, getToken } from '../apis';
-import { AuthStatus } from '../types';
 import { GalaxyError, InvalidPasswordError } from '../errors';
+import { AuthStatus } from '@shared/types';
 
 export class Auth {
   galaxy: Galaxy;
@@ -83,10 +83,8 @@ export class Auth {
     this.status = AuthStatus.LoggedOut;
   }
 
-  setAuth({ tenant, user, accessToken }: TokenDto) {
+  setAuth({ user, accessToken }: TokenDto) {
     localStorage.setItem('accessToken', accessToken);
-
-    this.tenant = tenant;
     this.user = user;
   }
 

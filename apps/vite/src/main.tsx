@@ -3,10 +3,8 @@ import {
   APIManager,
   AppBar,
   BottomTab,
-  ComponentManager,
   HStack,
   ReactQueryProvider,
-  useGetPages,
   VStack,
 } from '@shared/frontend';
 import {
@@ -14,17 +12,18 @@ import {
   Outlet,
   RouteObject,
   RouterProvider,
-  useLocation,
 } from 'react-router-dom';
 import './index.css';
 import { useEffect, useState } from 'react';
 import { Page } from './Page';
 import { ToastContainer } from 'react-toastify';
-import { State } from '@shared/types';
+import { PageState } from '@shared/types';
 import { Alert, Snackbar } from '@mui/material';
-import { observable } from 'mobx';
-import { observer } from 'mobx-react-lite';
+import { observable, reaction } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import 'react-toastify/dist/ReactToastify.css';
+import { ButtonProps } from '@nextui-org/react';
+import { MainNavBar } from './widgets/MainNavBar';
 
 const rootElement = document.getElementById('root')!;
 
@@ -37,13 +36,13 @@ export const store = observable({
 
 // eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
-  const [pages, setPages] = useState<State[]>([]);
+  const [pages, setPages] = useState<PageState[]>([]);
 
   useEffect(() => {
     const _getPages = async () => {
       if (pages?.length === 0) {
         const { data: pages } = await APIManager.getPages();
-        const _pages = pages as unknown as State[];
+        const _pages = pages as unknown as PageState[];
         setPages(_pages);
       }
     };
@@ -110,48 +109,36 @@ if (!rootElement.innerHTML) {
 }
 
 export const Layout = () => {
-  const location = useLocation();
-  const { data: getPagesResponse } = useGetPages();
-  const pages = (getPagesResponse?.data || []) as unknown as State[];
+  console.log('Layout');
+  return <Main />;
+};
 
-  const page = pages?.find(page => page.pathname === location.pathname);
-
-  const layout = page?.layout;
-
+export const Main = observer(() => {
   return (
     <VStack className="w-full">
-      {layout?.top && <AppBar />}
+      <Top />
       <HStack>
-        {layout?.left && <Left />}
         <VStack className="w-full">
           <Outlet />
-          {layout?.bottom && <Footer state={page!} />}
+          <Footer />
         </VStack>
-        {layout?.right && <Right />}
       </HStack>
     </VStack>
   );
-};
-export const Top = () => {
-  return <div>top</div>;
-};
+});
 
-export const Right = () => {
-  return <div>right</div>;
-};
+export const Top = observer(() => {
+  return (
+    <AppBar>
+      <MainNavBar />
+    </AppBar>
+  );
+});
 
-export const Left = () => {
-  return <div>left</div>;
-};
-
-interface LayoutProps {
-  state: State;
-}
-
-export const Footer = (props: LayoutProps) => {
-  const { state } = props;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const Component = ComponentManager[state.layout?.bottom?.component.type];
-  return <Component {...state.layout?.bottom?.component.props} />;
-};
+export const Footer = observer(() => {
+  return (
+    <BottomTab>
+      <MainNavBar />
+    </BottomTab>
+  );
+});

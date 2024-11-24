@@ -1,6 +1,6 @@
-import { BButton, State } from '@shared/types';
+import { BButton, PageState } from '@shared/types';
 
-export const MainPage: State = {
+export const loginPage: PageState = {
   name: '로그인',
   pathname: '/admin/auth/login',
   payload: {
@@ -87,4 +87,5 @@ export const MainPage: State = {
       ],
     },
   ],
+  main: false,
 };

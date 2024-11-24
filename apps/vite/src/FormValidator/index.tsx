@@ -1,11 +1,11 @@
 import React, { Children, ReactElement } from 'react';
 import { observer } from 'mobx-react-lite';
 import { isEmpty } from 'remeda';
-import { BValidation, State } from '@shared/types';
+import { BValidation, PageState } from '@shared/types';
 
 interface FormValidatorProps {
   children: ReactElement;
-  state: State;
+  state: PageState;
   validation: BValidation;
   componentNo: number;
   formIndex: number;

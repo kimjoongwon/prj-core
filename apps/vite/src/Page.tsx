@@ -1,27 +1,29 @@
 import { v4 } from 'uuid';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { BButton, BComponent, State } from '@shared/types';
+import { BButton, BComponent, PageState } from '@shared/types';
 import { FormValidator } from './FormValidator';
 import { Container, Grid2 as Grid } from '@mui/material';
 import { APIManager, Button, ComponentManager, Text } from '@shared/frontend';
 import { Toast } from './toast';
 import { toJS } from 'mobx';
 import { store } from './main';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
 
 interface PageProps {
   children?: React.ReactNode;
-  state: State;
+  state: PageState;
 }
 
 export const Page = (props: PageProps) => {
   const { state: _state } = props;
   const state = useLocalObservable(() => ({ ..._state }));
   const page = toJS(props.state);
+  const location = useLocation();
 
   return (
     <form>
+      <div>{location.pathname}</div>
       {page.forms?.map((form, formIndex) => {
         return (
           <Container maxWidth="sm">
@@ -52,7 +54,7 @@ export const Page = (props: PageProps) => {
 };
 
 interface ComponentProps {
-  state: State;
+  state: PageState;
   component: BComponent;
 }
 

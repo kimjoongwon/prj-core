@@ -8,18 +8,18 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     // Or if using `src` directory:
     '../../node_modules/@nextui-org/**/*.{js,ts,jsx,tsx}',
-    // './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
     './node_modules/@shared/frontend/dist/**/*.{js,ts,jsx,tsx}',
     '../../packages/shared-frontend/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  // presets: ['@shared/frontend'],
-  // theme: {
-  //   extend: {
-  //     fontFamily: {
-  //       pretendard: ['var(--font-pretendard)'],
-  //     },
-  //   },
-  // },
+  presets: ['@shared/frontend'],
+  theme: {
+    extend: {
+      fontFamily: {
+        pretendard: ['Pretendard'],
+      },
+    },
+  },
   darkMode: 'light',
   plugins: [nextui()],
 };

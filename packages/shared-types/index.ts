@@ -1,4 +1,5 @@
 import { type ButtonProps, type InputProps } from '@nextui-org/react';
+export * from './components';
 
 export interface BValidation {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
@@ -38,19 +39,19 @@ export interface BLayout {
   top?: {
     component: {
       type: 'AppBar';
-      props: object;
+      props?: object;
     };
   };
   bottom?: {
     component: {
       type: 'Footer' | 'BottomTab';
-      props: object;
+      props?: object;
     };
   };
   left?: {
     component: {
       type: 'SideBar';
-      props: object;
+      props?: object;
     };
   };
   right?: {
@@ -102,10 +103,11 @@ interface Try {
   severity: 'success' | 'error';
 }
 
-export interface State {
+export interface PageState {
   name: string;
   pathname: string;
   payload: object;
   forms?: Form[];
   layout?: BLayout;
+  main: boolean;
 }
