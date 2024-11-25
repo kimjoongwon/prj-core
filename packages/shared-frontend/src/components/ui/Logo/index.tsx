@@ -22,7 +22,7 @@ export const Logo = (props: LogoProps) => {
   return (
     <Button
       variant="light"
-      className={cn(className, 'font-bold text-2xl')}
+      className={cn(className, 'font-bold text-2xl p-0')}
       onClick={onClickLogo}
     >
       Hello World!
