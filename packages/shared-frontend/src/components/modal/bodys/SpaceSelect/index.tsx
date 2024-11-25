@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { ListBox } from '../../../ui';
+import { NavListBox } from '../../../ui';
 import { galaxy } from '../../../../providers/App';
 import { useGetSpacesByQuerySuspense } from '../../../../apis';
 
@@ -18,7 +18,7 @@ export const SpaceSelectModalBody = observer(() => {
   };
 
   return (
-    <ListBox
+    <NavListBox
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
       options={spaceOptions || []}
