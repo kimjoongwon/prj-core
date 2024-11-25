@@ -8,7 +8,7 @@ export const BottomTabView = (props: BottomTabViewProps) => {
       sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
       elevation={3}
     >
-      <HStack className="h-14 items-center justify-center w-full">
+      <HStack className="h-14 items-center justify-center w-full md:hidden flex">
         {props.children}
       </HStack>
     </Paper>

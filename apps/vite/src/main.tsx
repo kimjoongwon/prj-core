@@ -19,10 +19,9 @@ import { Page } from './Page';
 import { ToastContainer } from 'react-toastify';
 import { PageState } from '@shared/types';
 import { Alert, Snackbar } from '@mui/material';
-import { observable, reaction } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import 'react-toastify/dist/ReactToastify.css';
-import { ButtonProps } from '@nextui-org/react';
 import { MainNavBar } from './widgets/MainNavBar';
 
 const rootElement = document.getElementById('root')!;
