@@ -1,7 +1,8 @@
 import { Logo } from '../Logo';
-import { Avatar, Divider } from '@nextui-org/react';
+import { Divider } from '@nextui-org/react';
 import { HStack } from '../HStack';
 import { AppBarViewProps } from '@shared/types';
+import { Avatar } from '../Avatar';
 
 export const AppBarView = (props: AppBarViewProps) => {
   return (
@@ -16,12 +17,14 @@ export const AppBarView = (props: AppBarViewProps) => {
       }}
     >
       <HStack className="flex flex-1 items-center justify-evenly px-4">
-        <div className="flex">
+        <div className="flex-1">
           <Logo variants={'text'} />
         </div>
-        <div className="flex-1 md:flex hidden">{props.children}</div>
+        <div className="flex-1 md:flex hidden justify-center">
+          {props.children}
+        </div>
         <div className="flex flex-1 justify-end">
-          <Avatar size="sm" />
+          <Avatar />
         </div>
       </HStack>
       <Divider />
