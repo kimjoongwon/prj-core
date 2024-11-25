@@ -2,9 +2,21 @@ import {
   type ButtonProps,
   type AutocompleteProps,
   type UserProps,
+  type ListboxProps as NextUIListboxProps,
+  ListboxItemProps,
 } from '@nextui-org/react';
 import { type BottomNavigationProps } from '@mui/material';
 import { GroupButton, MobxProps } from '../utils';
+
+export interface ListboxViewProps extends ListBoxProps<any> {
+  value: any;
+}
+
+export interface ListBoxProps<T>
+  extends Omit<NextUIListboxProps, 'state'>,
+    MobxProps<T> {
+  items: ListboxItemProps[];
+}
 
 export interface MainNavBarViewProps {
   onClickNavBarItem: (value: string) => void;
