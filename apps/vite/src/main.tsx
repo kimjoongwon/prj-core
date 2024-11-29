@@ -116,7 +116,7 @@ export const Layout = () => {
 
 export const Main = observer(() => {
   return (
-    <VStack className="w-full">
+    <VStack className="w-full h-screen">
       <Top />
 
       <HStack className="flex-1 h-full">

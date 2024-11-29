@@ -1,3 +1,4 @@
+import { Paper } from '@mui/material';
 import { ListboxItemProps } from '@nextui-org/react';
 import { Listbox, useGetServiceItemRoutes } from '@shared/frontend';
 import { reaction } from 'mobx';
@@ -29,5 +30,9 @@ export const ServiceItemListBox = observer(() => {
     );
   }, []);
 
-  return <Listbox state={state} path="currentPathname" items={listboxItem} />;
+  return (
+    <Paper variant="outlined" className="w-60 mt-1">
+      <Listbox state={state} path="currentPathname" items={listboxItem} />
+    </Paper>
+  );
 });

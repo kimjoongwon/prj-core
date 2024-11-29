@@ -8,10 +8,13 @@ export const MainServiceNavBarView = observer((props: MainNavBarViewProps) => {
   return (
     <>
       {navItems.map((navItem, index) => {
+        // @ts-ignore
+        console.log(navItem.active);
         return (
           <Button
             key={index}
-            color={value === navItem.href ? 'primary' : 'default'}
+            // @ts-ignore
+            color={navItem.active ? 'primary' : 'default'}
             variant="light"
             as={Link}
             value={navItem.href}

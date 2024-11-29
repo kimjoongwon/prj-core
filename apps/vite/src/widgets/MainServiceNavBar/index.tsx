@@ -30,6 +30,7 @@ export const MainServiceNavBar = observer(() => {
     variant: 'bordered',
     children: page.name,
     href: page.pathname,
+    active: state.currentPathname.includes(page.pathname),
   }));
 
   return (
