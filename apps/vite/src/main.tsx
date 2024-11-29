@@ -136,8 +136,10 @@ export const Top = observer(() => {
 
 export const Footer = observer(() => {
   return (
-    <BottomTab>
-      <MainNavBar />
-    </BottomTab>
+    <div className="md:hidden flex">
+      <BottomTab>
+        <MainNavBar />
+      </BottomTab>
+    </div>
   );
 });

@@ -25,7 +25,7 @@ export const Logo = (props: LogoProps) => {
       className={cn(className, 'font-bold text-2xl p-0')}
       onClick={onClickLogo}
     >
-      Hello World!
+      ILLIT🐣
     </Button>
   );
 };

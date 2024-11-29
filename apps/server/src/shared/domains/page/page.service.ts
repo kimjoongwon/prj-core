@@ -20,7 +20,7 @@ export class PageService {
     return pages;
   }
 
-  getMainServicePages() {
+  getMainNavbarItems() {
     const pages = this.getPages();
     const mainServicePages = pages
       .filter((page) => page.main)
