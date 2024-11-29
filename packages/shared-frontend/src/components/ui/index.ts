@@ -47,5 +47,6 @@ export * from './BottomTab';
 export * from './AppBar';
 export * from './Tabs';
 export * from './Meta';
-export * from './MainNavBar';
+export * from './MainServiceNavBar';
+export { Responsive } from './Responsive';
 export { Listbox } from './Listbox';

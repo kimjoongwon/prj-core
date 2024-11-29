@@ -3,7 +3,7 @@ import { Button } from '../Button';
 import { MainNavBarViewProps } from '@shared/types';
 import { Link } from '@nextui-org/react';
 
-export const MainNavBarView = observer((props: MainNavBarViewProps) => {
+export const MainServiceNavBarView = observer((props: MainNavBarViewProps) => {
   const { navItems, value, onClickNavBarItem } = props;
   return (
     <>

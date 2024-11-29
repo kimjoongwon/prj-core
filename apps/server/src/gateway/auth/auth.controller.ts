@@ -23,7 +23,6 @@ export class AuthController {
     private readonly tokenService: TokenService,
   ) {}
 
-  // @UseGuards(LocalAuthGuard)
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {

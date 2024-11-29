@@ -1,6 +1,6 @@
 import { StringField } from '../../../decorators';
 
-export class MainNavbarItemDto {
+export class RouteDto {
   @StringField({ description: '탭 이름' })
   name: string;
 

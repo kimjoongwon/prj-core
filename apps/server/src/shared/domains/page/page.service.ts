@@ -5,6 +5,8 @@ import { userServicePage } from './page/user-service.page';
 import { spaceServicePage } from './page/space-service.page';
 import { depotServicePage } from './page/depot-service.page';
 import { postServicePage } from './page/post-service.page';
+import { PAGE_INDEX } from './constants/page-index.constant';
+import { getCategoryPage } from './page/post-categories.page';
 
 @Injectable()
 export class PageService {
@@ -16,18 +18,33 @@ export class PageService {
       spaceServicePage,
       depotServicePage,
       postServicePage,
+      getCategoryPage('user-service'),
+      getCategoryPage('space-service'),
+      getCategoryPage('post-service'),
+      getCategoryPage('depot-service'),
     ];
     return pages;
   }
 
-  getMainNavbarItems() {
+  getMainServiceRoutes() {
     const pages = this.getPages();
     const mainServicePages = pages
-      .filter((page) => page.main)
+      .filter((page) => page.pathname.split('/').length === PAGE_INDEX.MAIN_SERVICE)
       .map((bottomTabPage) => ({
         name: bottomTabPage.name,
         pathname: bottomTabPage.pathname,
       }));
     return mainServicePages;
+  }
+
+  getServiceItemRoutes() {
+    const serviceItemPages = this.getPages()
+      .filter((page) => page.pathname.split('/')?.length === PAGE_INDEX.SERVICE_ITEM)
+      .map((page) => ({
+        name: page.name,
+        pathname: page.pathname,
+      }));
+
+    return serviceItemPages;
   }
 }

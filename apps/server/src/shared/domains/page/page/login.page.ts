@@ -87,5 +87,4 @@ export const loginPage: PageState = {
       ],
     },
   ],
-  main: false,
 };

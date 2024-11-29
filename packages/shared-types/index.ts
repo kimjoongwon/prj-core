@@ -109,5 +109,4 @@ export interface PageState {
   payload: object;
   forms?: Form[];
   layout?: BLayout;
-  main: boolean;
 }

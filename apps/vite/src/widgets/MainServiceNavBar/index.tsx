@@ -1,16 +1,16 @@
 import { ButtonProps } from '@nextui-org/react';
 import {
-  useGetMainNavbarItems,
-  MainNavBar as BaseMainNavBar,
+  useGetMainServiceRoutes,
+  MainServiceNavBar as BaseMainServiceNavBar,
 } from '@shared/frontend';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export const MainNavBar = observer(() => {
-  const { data: useGetMainNavbarItemsResponse } = useGetMainNavbarItems();
-  const navbarItems = useGetMainNavbarItemsResponse?.data || [];
+export const MainServiceNavBar = observer(() => {
+  const { data: getMainServiceRoutesResponse } = useGetMainServiceRoutes();
+  const routes = getMainServiceRoutesResponse?.data || [];
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const state = useLocalObservable(() => ({ currentPathname: pathname }));
@@ -26,14 +26,14 @@ export const MainNavBar = observer(() => {
     return disposer;
   }, []);
 
-  const buttons: ButtonProps[] = navbarItems.map(page => ({
+  const buttons: ButtonProps[] = routes.map(page => ({
     variant: 'bordered',
     children: page.name,
     href: page.pathname,
   }));
 
   return (
-    <BaseMainNavBar
+    <BaseMainServiceNavBar
       navItems={buttons}
       value={pathname}
       state={state}

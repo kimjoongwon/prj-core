@@ -17,5 +17,4 @@ export const mainPage: PageState = {
       components: [],
     },
   ],
-  main: false,
 };

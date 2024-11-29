@@ -13,7 +13,7 @@ export interface ListboxViewProps extends ListBoxProps<any> {
 }
 
 export interface ListBoxProps<T>
-  extends Omit<NextUIListboxProps, 'state'>,
+  extends Omit<NextUIListboxProps, 'state' | 'children'>,
     MobxProps<T> {
   items: ListboxItemProps[];
 }
@@ -111,3 +111,6 @@ export interface TableState {
 export interface CustomTable {
   standalone?: boolean;
 }
+
+export * from './TilesProps';
+export * from './ResponsiveProps';

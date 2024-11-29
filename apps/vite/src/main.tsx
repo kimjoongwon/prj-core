@@ -5,6 +5,7 @@ import {
   BottomTab,
   HStack,
   ReactQueryProvider,
+  Responsive,
   VStack,
 } from '@shared/frontend';
 import {
@@ -18,11 +19,13 @@ import { useEffect, useState } from 'react';
 import { Page } from './Page';
 import { ToastContainer } from 'react-toastify';
 import { PageState } from '@shared/types';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Container, Snackbar, SpeedDial } from '@mui/material';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import 'react-toastify/dist/ReactToastify.css';
-import { MainNavBar } from './widgets/MainNavBar';
+import { MainServiceNavBar } from './widgets/MainServiceNavBar';
+import { Menu } from 'lucide-react';
+import { ServiceItemListBox } from './widgets/ServiceItemListBox';
 
 const rootElement = document.getElementById('root')!;
 
@@ -108,7 +111,6 @@ if (!rootElement.innerHTML) {
 }
 
 export const Layout = () => {
-  console.log('Layout');
   return <Main />;
 };
 
@@ -116,11 +118,25 @@ export const Main = observer(() => {
   return (
     <VStack className="w-full">
       <Top />
-      <HStack>
-        <VStack className="w-full">
+
+      <HStack className="flex-1 h-full">
+        <Left />
+        <Container>
           <Outlet />
-          <Footer />
-        </VStack>
+        </Container>
+        <Footer />
+        <Responsive>
+          <SpeedDial
+            open={true}
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: 'absolute', bottom: 64, right: 16 }}
+            icon={<Menu />}
+          >
+            <div>
+              <ServiceItemListBox />
+            </div>
+          </SpeedDial>
+        </Responsive>
       </HStack>
     </VStack>
   );
@@ -129,7 +145,7 @@ export const Main = observer(() => {
 export const Top = observer(() => {
   return (
     <AppBar>
-      <MainNavBar />
+      <MainServiceNavBar />
     </AppBar>
   );
 });
@@ -138,8 +154,16 @@ export const Footer = observer(() => {
   return (
     <div className="md:hidden flex">
       <BottomTab>
-        <MainNavBar />
+        <MainServiceNavBar />
       </BottomTab>
+    </div>
+  );
+});
+
+export const Left = observer(() => {
+  return (
+    <div className="hidden md:flex">
+      <ServiceItemListBox />
     </div>
   );
 });
