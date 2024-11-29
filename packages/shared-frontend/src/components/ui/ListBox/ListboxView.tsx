@@ -10,6 +10,8 @@ export const ListboxView = (props: ListboxViewProps) => {
           <ListboxItem
             variant="bordered"
             key={item.value.toString()}
+            // @ts-ignore
+            color={item.active ? 'primary' : 'default'}
             value={item.value}
             href={item.href}
           >
