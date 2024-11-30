@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PageService } from './page.service';
+import { BuilderService } from './builder.service';
 import { PagesModule } from '../../entities/pages/pages.module';
 
 @Module({
   imports: [PagesModule],
-  providers: [PageService],
-  exports: [PageService],
+  providers: [BuilderService],
+  exports: [BuilderService],
 })
-export class PageModule {}
+export class BuilderModule {}

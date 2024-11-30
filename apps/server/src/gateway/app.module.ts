@@ -18,7 +18,7 @@ import {
   AdminTimelineItemsModule,
   AdminUsersModule,
 } from './admin';
-import { AdminPagesModule } from './admin/pages/admin-pages.module';
+import { AdminAppBuilderModule } from './admin/builder/admin-builder.module';
 import { CaslModule } from 'nest-casl';
 import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
 import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.module';
@@ -43,7 +43,7 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
     UsersModule,
     AdminRolesModule,
     AuthModule,
-    AdminPagesModule,
+    AdminAppBuilderModule,
     AdminClassificationsModule,
     RouterModule.register([
       {
@@ -56,8 +56,8 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
                 path: 'admin',
                 children: [
                   {
-                    path: 'pages',
-                    module: AdminPagesModule,
+                    path: 'app-builder',
+                    module: AdminAppBuilderModule,
                   },
                   {
                     path: 'templates',

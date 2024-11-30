@@ -26,7 +26,6 @@ export const ServiceItemListBox = observer(() => {
         active: state.currentPathname?.includes(item.pathname),
       };
     });
-  console.log(listboxItem);
 
   useEffect(() => {
     reaction(
