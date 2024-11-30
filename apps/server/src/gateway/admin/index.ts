@@ -10,3 +10,4 @@ export * from './templates/admin-templates.module';
 export * from './users/admin-users.module';
 export * from './classifications/admin-classifications.module';
 export * from './assignments/admin-assignments.module';
+export * from './builder/admin-builder.module';

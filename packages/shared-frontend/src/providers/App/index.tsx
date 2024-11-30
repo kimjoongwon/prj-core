@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { Galaxy } from '../../services/galaxy';
+import { Galaxy } from '../../services/Illit';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@nextui-org/react';
 

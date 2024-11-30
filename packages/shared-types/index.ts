@@ -1,26 +1,26 @@
 import { type ButtonProps, type InputProps } from '@nextui-org/react';
 export * from './components';
 
-export interface BValidation {
+export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
   type?: string | number | boolean;
   minLength?: number;
   maxLength?: number;
   regex?: string;
   required: boolean;
-  messages: Partial<Record<keyof BValidation, string>>;
+  messages: Partial<Record<keyof ValidationBuilder, string>>;
   isInValid: boolean;
   errorMessage: string;
 }
 
-export interface BInput {
+export interface InputBuilder {
   type: InputProps['type'];
   label: string;
   placeholder: string;
   value: InputProps['value'];
 }
 
-export interface BComponent {
+export interface ComponentBuilder {
   type:
     | 'Input'
     | 'Spacer'
@@ -31,42 +31,16 @@ export interface BComponent {
     | 'DataGrid'
     | 'BottomTab';
   props: any;
+  path: string;
   gridProps?: object;
-  validation?: BValidation;
+  validation?: ValidationBuilder;
 }
 
-export interface BLayout {
-  top?: {
-    component: {
-      type: 'AppBar';
-      props?: object;
-    };
-  };
-  bottom?: {
-    component: {
-      type: 'Footer' | 'BottomTab';
-      props?: object;
-    };
-  };
-  left?: {
-    component: {
-      type: 'SideBar';
-      props?: object;
-    };
-  };
-  right?: {
-    element: {
-      type: 'SideBar';
-      props: object;
-    };
-  };
-}
-export interface FormLayout {}
-
-export interface Form {
+export interface FormBuilder {
   name: string;
-  gridProps?: object;
-  components: BComponent[];
+  isInValid: boolean;
+  sections: SectionBuilder[];
+  button: ButtonBuilder;
 }
 
 export interface FormButtonFlow {
@@ -78,7 +52,7 @@ export interface FormButtonFlow {
   finally: Finally;
 }
 
-export interface BButton extends ButtonProps {
+export interface ButtonBuilder extends ButtonProps {
   flow: {
     try: Try;
     catch: Catch;
@@ -103,10 +77,30 @@ interface Try {
   severity: 'success' | 'error';
 }
 
-export interface PageState {
+export interface AppBuilder {
+  name: string;
+  routes: RouteBuilder[];
+}
+
+export interface LayoutBuilder {
+  page: PageBuilder;
+}
+
+export interface RouteBuilder {
   name: string;
   pathname: string;
+  active: boolean;
+  layout: LayoutBuilder;
+}
+
+export interface PageBuilder {
+  name: string;
+  form?: FormBuilder;
+}
+
+export interface SectionBuilder {
+  name: string;
   payload: object;
-  forms?: Form[];
-  layout?: BLayout;
+  gridProps?: object;
+  components: ComponentBuilder[];
 }
