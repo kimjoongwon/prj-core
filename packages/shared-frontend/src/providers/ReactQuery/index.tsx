@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AXIOS_INSTANCE } from '../../libs/customAxios';
-import { galaxy } from '../App';
+// import { galaxy } from '../App';
 
 interface InitContainerProps {
   children: React.ReactNode;
@@ -57,9 +57,9 @@ AXIOS_INSTANCE.interceptors.response.use(
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
     const token = `Bearer ${localStorage.getItem('accessToken')}`;
-    const tenantId = galaxy?.auth?.tenant?.id;
-    config.headers.Authorization = token;
-    config.headers.TenantId = tenantId;
+    // const tenantId = galaxy?.auth?.tenant?.id;
+    // config.headers.Authorization = token;
+    // config.headers.TenantId = tenantId;
 
     return config;
   },

@@ -9,7 +9,7 @@ export interface ValidationBuilder {
   regex?: string;
   required: boolean;
   messages: Partial<Record<keyof ValidationBuilder, string>>;
-  isInValid: boolean;
+  isInvalid: boolean;
   errorMessage: string;
 }
 
@@ -103,4 +103,13 @@ export interface SectionBuilder {
   payload: object;
   gridProps?: object;
   components: ComponentBuilder[];
+}
+
+export interface Route {
+  name: string;
+  pathname: string;
+  active?: boolean;
+  icon?: string;
+  visible?: boolean;
+  children?: Route[];
 }

@@ -17,6 +17,7 @@
     "@nextui-org/react": "2.4.8",
     "@shared/frontend": "workspace:*",
     "@shared/types": "workspace:*",
+    "@shared/stores": "workspace:*",
     "@tanstack/react-query": "5.59.19",
     "@tanstack/react-router": "^1.78.3",
     "@tanstack/react-table": "^8.20.5",

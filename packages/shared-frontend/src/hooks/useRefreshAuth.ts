@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { Auth } from '../services/auth';
+// import { useEffect } from 'react';
+// import { Auth } from '../store/auth';
 
-const useRefreshAuth = (auth: Auth) => {
-  useEffect(() => {
-    if (!auth.isLoggedIn) {
-      auth.refreshing();
-    }
-  }, []);
-};
+// const useRefreshAuth = (auth: Auth) => {
+//   useEffect(() => {
+//     if (!auth.isLoggedIn) {
+//       auth.refreshing();
+//     }
+//   }, []);
+// };

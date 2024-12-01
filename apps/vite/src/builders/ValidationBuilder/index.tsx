@@ -1,18 +1,15 @@
-// import React, { Children, ReactElement } from 'react';
+// import React, { Children } from 'react';
 // import { observer } from 'mobx-react-lite';
 // import { isEmpty } from 'remeda';
-// import { BValidation, PageState } from '@shared/types';
+// import { ValidationBuilder as ValidationBuilderState } from '@shared/types';
 
 // interface FormValidatorProps {
-//   children: ReactElement;
-//   state: PageState;
-//   validation: BValidation;
-//   componentNo: number;
-//   formIndex: number;
+//   children: React.ReactNode;
+//   state: ValidationBuilderState;
 // }
 
-// export const FormValidator = observer((props: FormValidatorProps) => {
-//   const { children, validation, state, componentNo, formIndex } = props;
+// export const ValidationBuilder = observer((props: FormValidatorProps) => {
+//   const { state, children } = props;
 
 //   const child = Children.only(children);
 
@@ -21,11 +18,11 @@
 //   }
 
 //   const callbacks =
-//     validation.timings?.map(timing => {
+//     state.timings?.map(timing => {
 //       return {
 //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
 //         [timing]: (value: any) => {
-//           if (validation.required) {
+//           if (state.required) {
 //             if (isEmpty(value)) {
 //               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //               // @ts-expect-error
