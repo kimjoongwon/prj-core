@@ -1,12 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 
-export class Galaxy {
-  isInitialized = false;
-
-  constructor() {
-    this.isInitialized = true;
-    makeAutoObservable(this);
-  }
+export function createIllit() {
+  return makeAutoObservable({
+    isInitialized: false,
+  });
 }
 
 // Store 전역 -> Menu or Page

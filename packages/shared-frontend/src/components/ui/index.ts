@@ -29,7 +29,7 @@ export * from './AutoComplete';
 export * from './Editor';
 export * from './Skeleton';
 export * from './Button';
-export * from './Modal';
+// export * from './Modal';
 export * from './User';
 export * from './List';
 export * from './CategoryCard';

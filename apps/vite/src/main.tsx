@@ -5,12 +5,14 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-import './index.css';
 import { observable } from 'mobx';
-import { AppBuilderProvider, useAppBuilder } from './AppBuilderProvider';
 import { PageBuilder } from './builders/PageBuilder';
 import { LayoutBuilder } from './builders/LayoutBuilder';
 import { observer } from 'mobx-react-lite';
+import { NextUIProvider } from '@nextui-org/react';
+import './index.css';
+import { Providers } from './providers';
+import { useStore } from '@shared/stores';
 
 const rootElement = document.getElementById('root')!;
 
@@ -23,9 +25,9 @@ export const store = observable({
 
 // eslint-disable-next-line react-refresh/only-export-components
 const App = observer(() => {
-  const appBuilder = useAppBuilder();
+  const illitStore = useStore();
 
-  const routerDomRoutes = appBuilder.routes?.map(rawRoute => {
+  const routerDomRoutes = illitStore.appBuilder.routes?.map(rawRoute => {
     const route: RouteObject = {
       path: rawRoute.pathname,
       element: <PageBuilder state={rawRoute.layout.page} />,
@@ -57,9 +59,11 @@ if (!rootElement.innerHTML) {
 
   root.render(
     <ReactQueryProvider>
-      <AppBuilderProvider>
-        <App />
-      </AppBuilderProvider>
+      <NextUIProvider>
+        <Providers>
+          <App />
+        </Providers>
+      </NextUIProvider>
     </ReactQueryProvider>,
   );
 }

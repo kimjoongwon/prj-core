@@ -12,7 +12,14 @@ import { InputView } from './InputView';
 export type InputProps<T> = MobxProps<T> & NextUIInputProps;
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
-  const { path = '', state = {}, onChange, type, ...rest } = props;
+  const {
+    path = '',
+    state = {},
+    onChange,
+    errorMessage = ' ',
+    type,
+    ...rest
+  } = props;
 
   const initialValue = get(state, path) || '';
 
@@ -30,15 +37,18 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
   );
 
   return (
-    <InputView
-      {...rest}
-      type={type}
-      onChange={handleChange}
-      onBlur={e => {
-        rest?.onBlur?.(e.target.value);
-      }}
-      value={String(localState.value)}
-    />
+    <div className='h-20'>
+      <InputView
+        {...rest}
+        type={type}
+        onChange={handleChange}
+        onBlur={e => {
+          rest?.onBlur?.(e.target.value);
+        }}
+        errorMessage={errorMessage}
+        value={String(localState.value)}
+      />
+    </div>
   );
 });
 

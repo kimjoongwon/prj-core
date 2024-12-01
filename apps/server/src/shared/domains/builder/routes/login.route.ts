@@ -63,7 +63,7 @@ export const loginRoute: RouteBuilder = {
                     required: '이메일을 입력해주세요.',
                   },
                   errorMessage: '',
-                  isInValid: false,
+                  isInvalid: false,
                 },
                 gridProps: {
                   size: 12,
@@ -86,7 +86,7 @@ export const loginRoute: RouteBuilder = {
                     required: '비밀번호를 입력해주세요.',
                   },
                   errorMessage: '',
-                  isInValid: false,
+                  isInvalid: false,
                 },
                 gridProps: {
                   size: 12,

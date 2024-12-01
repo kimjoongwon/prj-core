@@ -67,7 +67,6 @@ import type {
   GetAbility200AllOf,
   GetAccessibleSpaces200AllOf,
   GetAncestorCategories200AllOf,
-  GetAppBuilder200AllOf,
   GetAssignment200AllOf,
   GetAssignmentsByQuery200AllOf,
   GetAssignmentsByQueryParams,
@@ -7420,7 +7419,7 @@ export const getAppBuilder = (
 ) => {
       
       
-      return customInstance<GetAppBuilder200AllOf>(
+      return customInstance<unknown>(
       {url: `http://localhost:3005/api/v1/admin/app-builder`, method: 'GET', signal
     },
       options);
@@ -7587,6 +7586,190 @@ export function useGetAppBuilderSuspenseInfinite<TData = InfiniteData<Awaited<Re
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetAppBuilderSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getNavItems = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `http://localhost:3005/api/v1/admin/app-builder/nav-items`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetNavItemsQueryKey = () => {
+    return [`http://localhost:3005/api/v1/admin/app-builder/nav-items`] as const;
+    }
+
+    
+export const getGetNavItemsQueryOptions = <TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNavItemsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNavItems>>> = ({ signal }) => getNavItems(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetNavItemsQueryResult = NonNullable<Awaited<ReturnType<typeof getNavItems>>>
+export type GetNavItemsQueryError = ErrorType<void>
+
+
+export function useGetNavItems<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNavItems>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItems<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNavItems>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItems<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetNavItems<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetNavItemsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetNavItemsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNavItemsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNavItems>>> = ({ signal }) => getNavItems(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetNavItemsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getNavItems>>>
+export type GetNavItemsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetNavItemsSuspense<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItemsSuspense<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItemsSuspense<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetNavItemsSuspense<TData = Awaited<ReturnType<typeof getNavItems>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetNavItemsSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetNavItemsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getNavItems>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNavItemsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNavItems>>> = ({ signal }) => getNavItems(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetNavItemsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getNavItems>>>
+export type GetNavItemsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetNavItemsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNavItems>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItemsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNavItems>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetNavItemsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNavItems>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetNavItemsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getNavItems>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getNavItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetNavItemsSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 

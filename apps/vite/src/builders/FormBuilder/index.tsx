@@ -66,7 +66,7 @@ export const FormBuilder = (props: FormBuilderProps) => {
   };
 
   return (
-    <form className="space-y-2">
+    <form className="space-y-4">
       {children}
       <Button {...state.button} onClick={onClick} />
     </form>
