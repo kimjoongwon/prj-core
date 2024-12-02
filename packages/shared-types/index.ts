@@ -90,7 +90,7 @@ export interface RouteBuilder {
   name: string;
   pathname: string;
   active: boolean;
-  layout: LayoutBuilder;
+  layout?: LayoutBuilder;
 }
 
 export interface PageBuilder {

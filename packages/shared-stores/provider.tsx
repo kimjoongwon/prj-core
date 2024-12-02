@@ -1,12 +1,12 @@
 import React from 'react';
 import { createContext } from 'react';
-import { Illit } from './Illit';
+import { Store } from './store';
 
-const StoreContext = createContext<Illit | null>(null);
+const StoreContext = createContext<Store | null>(null);
 
 interface StoreProviderProps {
   children: React.ReactNode;
-  value: Illit;
+  value: Store;
 }
 
 export const StoreProvider = (props: StoreProviderProps) => {

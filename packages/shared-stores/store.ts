@@ -2,7 +2,8 @@ import { makeAutoObservable } from 'mobx';
 import { Navigation } from './navigation';
 import { AppBuilder } from '@shared/types';
 
-export class Illit {
+export class Store {
+  name: string = 'Illit';
   navigation: Navigation;
   appBuilder: AppBuilder;
   isInitialized = false;

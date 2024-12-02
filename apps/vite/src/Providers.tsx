@@ -1,32 +1,33 @@
 import { useLocalObservable } from 'mobx-react-lite';
-import { StoreProvider, Illit, Navigation } from '@shared/stores';
+import { StoreProvider, Store, Navigation } from '@shared/stores';
 import { useGetAppBuilderSuspense } from '@shared/frontend';
 import { AppBuilder } from '@shared/types';
+import { NextUIProvider } from '@nextui-org/react';
 
 interface ProvidersProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Providers = (props: ProvidersProps) => {
   const { children } = props;
 
   const { data: getAppBuilderResponse } = useGetAppBuilderSuspense();
+  const appBuilder = (
+    getAppBuilderResponse as {
+      data: AppBuilder;
+    }
+  )?.data;
 
-  const appBuilder = useLocalObservable(
-    () =>
-      (
-        getAppBuilderResponse as {
-          data: AppBuilder;
-        }
-      )?.data,
-  );
-
-  const store = useLocalObservable(() => {
+  const value = useLocalObservable(() => {
     const navigation = new Navigation(appBuilder.routes);
-    const illit = new Illit(navigation, appBuilder);
-
-    return illit;
+    const store = new Store(navigation, appBuilder);
+    store.isInitialized = true;
+    return store;
   });
 
-  return <StoreProvider value={store}>{children}</StoreProvider>;
+  return (
+    <StoreProvider value={value}>
+      <NextUIProvider>{children}</NextUIProvider>
+    </StoreProvider>
+  );
 };

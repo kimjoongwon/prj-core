@@ -10,28 +10,47 @@ export const LayoutBuilder = () => {
 
 export const Main = observer(() => {
   const navigate = useNavigate();
-  const illitStore = useStore();
+  const store = useStore();
 
   return (
     <VStack className="w-full h-screen">
       <AppBar>
         <div className="flex flex-row space-x-2">
-          {illitStore.navigation.navItems?.map(navItem => {
+          {store.navigation.mainServiceRoutes?.map(route => {
             return (
               <Button
-                key={navItem.pathname}
-                href={navItem.pathname}
+                className="font-medium"
+                variant="light"
+                key={route.pathname}
+                color={route.active ? 'primary' : 'default'}
                 onClick={() => {
-                  navigate(navItem.pathname);
+                  store.navigation.setActiveRoute(route);
+                  navigate(route.pathname);
                 }}
               >
-                {navItem.name}
+                {route.name}
               </Button>
             );
           })}
         </div>
       </AppBar>
       <HStack className="flex-1 h-full">
+        {store.navigation.serviceItemRoutes.map(route => {
+          return (
+            <Button
+              className="font-medium"
+              variant="light"
+              color={route.active ? 'primary' : 'default'}
+              key={route.pathname}
+              onClick={() => {
+                store.navigation.setActiveRoute(route);
+                navigate(route.pathname);
+              }}
+            >
+              {route.name}
+            </Button>
+          );
+        })}
         <Container>
           <Outlet />
         </Container>

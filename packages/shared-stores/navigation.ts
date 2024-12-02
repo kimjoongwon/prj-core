@@ -1,17 +1,57 @@
 import { makeAutoObservable } from 'mobx';
 import { Route, RouteBuilder } from '@shared/types';
+import { range } from 'lodash-es';
 
 export class Navigation {
   routes: Route[] = [];
+  MAIN_SERVICE_INDEX = 5;
+  SERVICE_ITEM_INDEX = 6;
 
   constructor(routes: RouteBuilder[]) {
-    this.routes = this.buildRouteTree(routes);
+    this.routes = routes.map(route => {
+      return {
+        ...route,
+        active: false,
+      };
+    });
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  get navItems() {
-    return this.routes.find(route => route.pathname === '/admin/main')
-      ?.children;
+  findRoutesByIndex(index: number): Route[] {
+    return this.findRoutesByIndexRecursive(this.routes, index);
+  }
+
+  get mainServiceRoutes() {
+    return this.findRoutesByIndex(this.MAIN_SERVICE_INDEX) || [];
+  }
+
+  setActiveRoute(targetRoute: Route) {
+    const segments = targetRoute.pathname.split('/');
+
+    let parentPaths: string[] = [];
+
+    range(0, segments.length).forEach(index => {
+      const parentPath = '/' + segments.slice(1, index + 1).join('/');
+      parentPaths.push(parentPath);
+    });
+
+    this.routes.forEach(route => {
+      route.active = false;
+    });
+
+    this.routes.forEach(route => {
+      if (parentPaths.includes(route.pathname)) {
+        route.active = true;
+      }
+    });
+  }
+
+  get serviceItemRoutes() {
+    return this.findRoutesByIndex(this.SERVICE_ITEM_INDEX) || [];
+  }
+
+  get currentActiveRoutePathnames() {
+    return this.currentActiveRoutes.map(route => route.pathname);
   }
 
   get currentActiveRoutes() {
@@ -35,36 +75,19 @@ export class Navigation {
     return this.currentActiveRoutes.pop();
   }
 
-  push(pathname: string, params: object) {
-    this.push(pathname, params);
-  }
-
-  buildRouteTree(routes: RouteBuilder[]): Route[] {
-    // 경로 길이순으로 정렬
-    const sortedRoutes = [...routes].sort(
-      (a, b) => a.pathname.split('/').length - b.pathname.split('/').length,
-    );
-
-    const result: Route[] = [];
-
-    sortedRoutes.forEach(route => {
-      const currentPath = route.pathname;
-
-      // 부모 경로 찾기
-      const parentRoute = result.find(
-        r => r.pathname !== currentPath && currentPath.startsWith(r.pathname),
-      );
-
-      if (parentRoute) {
-        // 부모가 있으면 children 배열에 추가
-        parentRoute.children = parentRoute.children || [];
-        parentRoute.children.push({ ...route });
-      } else {
-        // 부모가 없으면 최상위 레벨에 추가
-        result.push({ ...route });
+  private findRoutesByIndexRecursive(routes: Route[], index: number): Route[] {
+    let result: Route[] = [];
+    for (const route of routes) {
+      const routeIndex = route.pathname.split('/').length;
+      if (routeIndex === index) {
+        result.push(route);
       }
-    });
-
+      if (route.children) {
+        result = result.concat(
+          this.findRoutesByIndexRecursive(route.children, index),
+        );
+      }
+    }
     return result;
   }
 }

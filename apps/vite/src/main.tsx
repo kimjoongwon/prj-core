@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/client';
-import { ReactQueryProvider } from '@shared/frontend';
 import {
   createBrowserRouter,
   RouteObject,
@@ -9,10 +8,10 @@ import { observable } from 'mobx';
 import { PageBuilder } from './builders/PageBuilder';
 import { LayoutBuilder } from './builders/LayoutBuilder';
 import { observer } from 'mobx-react-lite';
-import { NextUIProvider } from '@nextui-org/react';
-import './index.css';
-import { Providers } from './providers';
 import { useStore } from '@shared/stores';
+import { Providers } from './Providers';
+import { ReactQueryProvider } from '@shared/frontend';
+import './index.css';
 
 const rootElement = document.getElementById('root')!;
 
@@ -25,9 +24,9 @@ export const store = observable({
 
 // eslint-disable-next-line react-refresh/only-export-components
 const App = observer(() => {
-  const illitStore = useStore();
+  const store = useStore();
 
-  const routerDomRoutes = illitStore.appBuilder.routes?.map(rawRoute => {
+  const routerDomRoutes = store.appBuilder.routes?.map(rawRoute => {
     const route: RouteObject = {
       path: rawRoute.pathname,
       element: <PageBuilder state={rawRoute.layout.page} />,
@@ -59,11 +58,9 @@ if (!rootElement.innerHTML) {
 
   root.render(
     <ReactQueryProvider>
-      <NextUIProvider>
-        <Providers>
-          <App />
-        </Providers>
-      </NextUIProvider>
+      <Providers>
+        <App />
+      </Providers>
     </ReactQueryProvider>,
   );
 }
