@@ -5,9 +5,9 @@ import { AppBarViewProps } from '@shared/types';
 import { Avatar } from '../Avatar';
 
 export const AppBarView = (props: AppBarViewProps) => {
+  const { content } = props;
   return (
     <div
-      {...props}
       style={{
         height: 62,
         display: 'flex',
@@ -20,9 +20,7 @@ export const AppBarView = (props: AppBarViewProps) => {
         <div className="flex-1">
           <Logo variants={'text'} />
         </div>
-        <div className="flex-1 md:flex hidden justify-center">
-          {props.children}
-        </div>
+        <div className="flex-1 md:flex hidden justify-center">{content}</div>
         <div className="flex flex-1 justify-end">
           <Avatar />
         </div>

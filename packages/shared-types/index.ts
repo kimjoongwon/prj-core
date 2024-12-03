@@ -83,7 +83,8 @@ export interface AppBuilder {
 }
 
 export interface LayoutBuilder {
-  page: PageBuilder;
+  type?: 'Outlet' | 'Auth' | 'Main' | 'Root';
+  page?: PageBuilder;
 }
 
 export interface RouteBuilder {
@@ -91,10 +92,12 @@ export interface RouteBuilder {
   pathname: string;
   active: boolean;
   layout?: LayoutBuilder;
+  children?: RouteBuilder[];
 }
 
 export interface PageBuilder {
-  name: string;
+  type?: 'Outlet';
+  name?: string;
   form?: FormBuilder;
 }
 
@@ -107,9 +110,10 @@ export interface SectionBuilder {
 
 export interface Route {
   name: string;
-  pathname: string;
+  path: string;
   active?: boolean;
   icon?: string;
   visible?: boolean;
+  onClick?: () => void;
   children?: Route[];
 }

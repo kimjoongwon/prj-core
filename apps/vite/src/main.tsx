@@ -5,12 +5,12 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { observable } from 'mobx';
-import { PageBuilder } from './builders/PageBuilder';
-import { LayoutBuilder } from './builders/LayoutBuilder';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@shared/stores';
 import { Providers } from './Providers';
 import { ReactQueryProvider } from '@shared/frontend';
+import { RouteBuilder } from './builders/RouteBuilder';
+import { RouteBuilder as IRouteBuilder } from '@shared/types';
 import './index.css';
 
 const rootElement = document.getElementById('root')!;
@@ -26,30 +26,38 @@ export const store = observable({
 const App = observer(() => {
   const store = useStore();
 
-  const routerDomRoutes = store.appBuilder.routes?.map(rawRoute => {
-    const route: RouteObject = {
-      path: rawRoute.pathname,
-      element: <PageBuilder state={rawRoute.layout.page} />,
-    } as RouteObject;
+  const routes = store.navigation.routeBuilders?.map(routeBuilder => {
+    const getRoute = (routeBuilder: IRouteBuilder) => {
+      const _route: RouteObject = {
+        path: routeBuilder.pathname,
+        element: <RouteBuilder state={routeBuilder} />,
+        children: [],
+      };
 
-    return route as RouteObject;
+      if (routeBuilder.children) {
+        const children = routeBuilder.children.map(getRoute);
+        _route.children = children;
+      }
+
+      return _route;
+    };
+
+    const _route: RouteObject = {
+      path: routeBuilder.pathname,
+      element: <RouteBuilder state={routeBuilder} />,
+    };
+
+    if (routeBuilder.children) {
+      const children = routeBuilder.children.map(getRoute);
+      _route.children = children;
+    }
+
+    return _route;
   });
 
-  const routerDomRootRoute: RouteObject = {
-    path: '/',
-    element: <LayoutBuilder />,
-    children: routerDomRoutes,
-  };
+  console.log('routes', routes);
 
-  if (routerDomRoutes.length === 0) {
-    return <></>;
-  }
-
-  let router = undefined;
-  if (!router) {
-    router = createBrowserRouter([routerDomRootRoute]);
-  }
-
+  const router = createBrowserRouter(routes);
   return <RouterProvider router={router} />;
 });
 

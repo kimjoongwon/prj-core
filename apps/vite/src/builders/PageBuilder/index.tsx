@@ -5,17 +5,22 @@ import { Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
+import { Outlet } from 'react-router-dom';
 
 interface PageBuilderProps {
-  state: PageBuilderState;
+  state: PageBuilderState | undefined;
 }
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
 
+  if (state?.type === 'Outlet') {
+    return <Outlet />;
+  }
+
   return (
     <Container maxWidth="sm">
-      {state.form && (
+      {state?.form && (
         <FormBuilder state={state.form!}>
           {state?.form?.sections?.map(section => {
             return (

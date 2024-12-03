@@ -549,7 +549,7 @@ importers:
         version: 6.13.5
       mobx-react-lite:
         specifier: ^4.0.7
-        version: 4.0.7(mobx@6.13.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.0.7(mobx@6.13.5)(react@18.3.1)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -16904,6 +16904,12 @@ snapshots:
       use-sync-external-store: 1.2.2(react@18.3.1)
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  mobx-react-lite@4.0.7(mobx@6.13.5)(react@18.3.1):
+    dependencies:
+      mobx: 6.13.5
+      react: 18.3.1
+      use-sync-external-store: 1.2.2(react@18.3.1)
 
   mobx@6.13.5: {}
 

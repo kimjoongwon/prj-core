@@ -1,39 +1,68 @@
 import { Container } from '@mui/material';
 import { AppBar, BottomTab, Button, HStack, VStack } from '@shared/frontend';
-import { observer } from 'mobx-react-lite';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
+import { LayoutBuilder as LayoutBuilderState, Route } from '@shared/types';
+import { observer } from 'mobx-react-lite';
+import { ReactNode } from 'react';
 
-export const LayoutBuilder = () => {
-  return <Main />;
-};
+interface LayoutBuilderProps {
+  state: LayoutBuilderState | undefined;
+  children: React.ReactNode;
+}
 
-export const Main = observer(() => {
+export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
+  const { children, state } = props;
+
+  if (state?.type === 'Auth') {
+    return <AuthLayout>{children}</AuthLayout>;
+  }
+
+  if (state?.type === 'Main') {
+    return <MainLayout>{children}</MainLayout>;
+  }
+
+  return children;
+});
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+export const RootLayout = observer((props: RootLayoutProps) => {
+  const { children } = props;
+  return <VStack className="w-full h-screen">{children}</VStack>;
+});
+
+interface AuthLayoutProps {
+  children: ReactNode;
+}
+
+export const AuthLayout = observer((props: AuthLayoutProps) => {
+  return (
+    <RootLayout>
+      <AppBar />
+      {props.children}
+    </RootLayout>
+  );
+});
+
+interface MainLayoutProps {
+  children: ReactNode;
+}
+
+export const MainLayout = observer((props: MainLayoutProps) => {
+  const { children } = props;
   const navigate = useNavigate();
   const store = useStore();
-
+  console.log('hah', store.navigation.routes);
   return (
-    <VStack className="w-full h-screen">
-      <AppBar>
-        <div className="flex flex-row space-x-2">
-          {store.navigation.mainServiceRoutes?.map(route => {
-            return (
-              <Button
-                className="font-medium"
-                variant="light"
-                key={route.pathname}
-                color={route.active ? 'primary' : 'default'}
-                onClick={() => {
-                  store.navigation.setActiveRoute(route);
-                  navigate(route.pathname);
-                }}
-              >
-                {route.name}
-              </Button>
-            );
-          })}
-        </div>
-      </AppBar>
+    <RootLayout>
+      <AppBar
+        content={
+          <AppBarContent routes={store.navigation.mainServiceRoutes || []} />
+        }
+      />
       <HStack className="flex-1 h-full">
         {store.navigation.serviceItemRoutes.map(route => {
           return (
@@ -51,27 +80,18 @@ export const Main = observer(() => {
             </Button>
           );
         })}
-        <Container>
-          <Outlet />
-        </Container>
-        <Footer />
+        <Container>{children}</Container>
       </HStack>
-    </VStack>
+      <BottomTab />
+    </RootLayout>
   );
 });
 
-export const Top = observer(() => {
-  return <AppBar>{/* <MainServiceNavBar /> */}</AppBar>;
-});
+interface AppBarContentProps {
+  routes: Route[];
+}
 
-export const Footer = observer(() => {
-  return (
-    <div className="md:hidden flex">
-      <BottomTab>{/* <MainServiceNavBar /> */}</BottomTab>
-    </div>
-  );
-});
-
-export const Left = observer(() => {
-  return <div className="hidden md:flex">{/* <ServiceItemListBox /> */}</div>;
-});
+export const AppBarContent = (props: AppBarContentProps) => {
+  const { routes } = props;
+  return routes.map(route => <Button>{route.name}</Button>);
+};

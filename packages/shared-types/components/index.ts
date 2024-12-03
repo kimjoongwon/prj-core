@@ -32,6 +32,7 @@ export interface MainNavBarProps<T> extends MobxProps<T> {
 export interface AppBarViewProps extends AppBarProps {}
 export interface AppBarProps {
   children?: React.ReactNode;
+  content?: React.ReactNode;
 }
 
 export interface BaseAutoCompleteProps<T>

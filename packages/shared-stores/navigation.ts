@@ -3,26 +3,42 @@ import { Route, RouteBuilder } from '@shared/types';
 import { range } from 'lodash-es';
 
 export class Navigation {
-  routes: Route[] = [];
+  routeBuilders: RouteBuilder[] = [];
   MAIN_SERVICE_INDEX = 5;
   SERVICE_ITEM_INDEX = 6;
 
-  constructor(routes: RouteBuilder[]) {
-    this.routes = routes.map(route => {
-      return {
-        ...route,
-        active: false,
-      };
-    });
+  constructor(routeBuilders: RouteBuilder[]) {
+    this.routeBuilders = routeBuilders;
     makeAutoObservable(this, {}, { autoBind: true });
+  }
+
+  get routes() {
+    // let routes: Route[] = [];
+    // this.remoteRoutes.forEach(route => {
+    //   const getRoute = (route: RouteBuilder) => {
+    //     if (route.children) {
+    //       route.children.map(getRoute);
+    //     }
+    //     routes.push({
+    //       pathname: route.pathname,
+    //       name: route.name,
+    //       active: false,
+    //     });
+    //   };
+    //   if (route.children) {
+    //     route.children.map(getRoute);
+    //   }
+    //   routes.push({
+    //     pathname: route.pathname,
+    //     name: route.pathname,
+    //     active: false,
+    //   });
+    // });
+    return [];
   }
 
   findRoutesByIndex(index: number): Route[] {
     return this.findRoutesByIndexRecursive(this.routes, index);
-  }
-
-  get mainServiceRoutes() {
-    return this.findRoutesByIndex(this.MAIN_SERVICE_INDEX) || [];
   }
 
   setActiveRoute(targetRoute: Route) {
@@ -46,12 +62,33 @@ export class Navigation {
     });
   }
 
-  get serviceItemRoutes() {
-    return this.findRoutesByIndex(this.SERVICE_ITEM_INDEX) || [];
+  get mainServiceRoutes() {
+    const findMainRoute = (route: Route) => {
+      if (route.pathname === '/admin/main') {
+        return route.children;
+      }
+      if (route.children) {
+        route.children?.forEach(findMainRoute);
+      }
+    };
+
+    for (let route of this.routes) {
+      console.log(route.pathname);
+      if (route.pathname === '/admin/main') {
+        return route.children;
+      }
+      if (route.children) {
+        route.children?.forEach(findMainRoute);
+      }
+    }
   }
 
-  get currentActiveRoutePathnames() {
-    return this.currentActiveRoutes.map(route => route.pathname);
+  get serviceItemRoutes() {
+    const activeMainServiceRoute = this.mainServiceRoutes?.find(
+      route => route.active,
+    );
+
+    return activeMainServiceRoute?.children || [];
   }
 
   get currentActiveRoutes() {
