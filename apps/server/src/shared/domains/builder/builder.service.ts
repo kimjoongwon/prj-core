@@ -32,7 +32,6 @@ export class BuilderService {
                 pathname: 'main',
                 active: false,
                 layout: {
-                  type: 'Main',
                   page: {
                     type: 'Outlet',
                   },
@@ -44,6 +43,9 @@ export class BuilderService {
                     active: false,
                     layout: {
                       type: 'Main',
+                      page: {
+                        type: 'Outlet',
+                      },
                     },
                     children: [
                       {

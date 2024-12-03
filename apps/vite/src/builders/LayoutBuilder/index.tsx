@@ -53,10 +53,7 @@ interface MainLayoutProps {
 
 export const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
-  const navigate = useNavigate();
   const store = useStore();
-  console.log('routes', store.navigation.routes);
-  console.log('servicesRoute', store.navigation.servicesRoute);
   return (
     <RootLayout>
       <AppBar
@@ -96,5 +93,13 @@ interface AppBarContentProps {
 
 export const AppBarContent = (props: AppBarContentProps) => {
   const { routes } = props;
-  return routes.map(route => <Button>{route.name}</Button>);
+  const navigate = useNavigate();
+
+  return (
+    <div className="space-x-2">
+      {routes.map(route => (
+        <Button onClick={() => navigate(route.pathname)}>{route.name}</Button>
+      ))}
+    </div>
+  );
 };
