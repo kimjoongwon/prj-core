@@ -42,6 +42,9 @@ export class BuilderService {
                     name: '서비스',
                     pathname: 'services',
                     active: false,
+                    layout: {
+                      type: 'Main',
+                    },
                     children: [
                       {
                         name: '유저 서비스',
@@ -78,7 +81,9 @@ export class BuilderService {
                 pathname: 'auth',
                 active: false,
                 layout: {
-                  type: 'Auth',
+                  page: {
+                    type: 'Outlet',
+                  },
                 },
                 children: [
                   {

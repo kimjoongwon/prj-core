@@ -55,16 +55,19 @@ export const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
   const navigate = useNavigate();
   const store = useStore();
-  console.log('hah', store.navigation.routes);
+  console.log('routes', store.navigation.routes);
+  console.log('servicesRoute', store.navigation.servicesRoute);
   return (
     <RootLayout>
       <AppBar
         content={
-          <AppBarContent routes={store.navigation.mainServiceRoutes || []} />
+          <AppBarContent
+            routes={store.navigation.servicesRoute?.children || []}
+          />
         }
       />
       <HStack className="flex-1 h-full">
-        {store.navigation.serviceItemRoutes.map(route => {
+        {/* {store.navigation.serviceItemRoutes.map(route => {
           return (
             <Button
               className="font-medium"
@@ -79,7 +82,7 @@ export const MainLayout = observer((props: MainLayoutProps) => {
               {route.name}
             </Button>
           );
-        })}
+        })} */}
         <Container>{children}</Container>
       </HStack>
       <BottomTab />

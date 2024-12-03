@@ -26,8 +26,8 @@ export const store = observable({
 const App = observer(() => {
   const store = useStore();
 
-  const routes = store.navigation.routeBuilders?.map(routeBuilder => {
-    const getRoute = (routeBuilder: IRouteBuilder) => {
+  const routeObjects = store.navigation.routeBuilders?.map(routeBuilder => {
+    const getRouteObjects = (routeBuilder: IRouteBuilder) => {
       const _route: RouteObject = {
         path: routeBuilder.pathname,
         element: <RouteBuilder state={routeBuilder} />,
@@ -35,7 +35,7 @@ const App = observer(() => {
       };
 
       if (routeBuilder.children) {
-        const children = routeBuilder.children.map(getRoute);
+        const children = routeBuilder.children.map(getRouteObjects);
         _route.children = children;
       }
 
@@ -48,16 +48,14 @@ const App = observer(() => {
     };
 
     if (routeBuilder.children) {
-      const children = routeBuilder.children.map(getRoute);
+      const children = routeBuilder.children.map(getRouteObjects);
       _route.children = children;
     }
 
     return _route;
   });
 
-  console.log('routes', routes);
-
-  const router = createBrowserRouter(routes);
+  const router = createBrowserRouter(routeObjects);
   return <RouterProvider router={router} />;
 });
 

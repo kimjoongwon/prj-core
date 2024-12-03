@@ -110,7 +110,7 @@ export interface SectionBuilder {
 
 export interface Route {
   name: string;
-  path: string;
+  pathname: string;
   active?: boolean;
   icon?: string;
   visible?: boolean;
