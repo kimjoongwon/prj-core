@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { AppBar, BottomTab, Button, HStack, VStack } from '@shared/frontend';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderState, Route } from '@shared/types';
 import { observer } from 'mobx-react-lite';
@@ -94,11 +94,21 @@ interface AppBarContentProps {
 export const AppBarContent = (props: AppBarContentProps) => {
   const { routes } = props;
   const navigate = useNavigate();
+  const store = useStore();
 
   return (
     <div className="space-x-2">
       {routes.map(route => (
-        <Button onClick={() => navigate(route.pathname)}>{route.name}</Button>
+        <Button
+          variant="light"
+          color={route.active ? 'primary' : 'default'}
+          onClick={() => {
+            navigate(route.pathname);
+            store.navigation.activateRoute();
+          }}
+        >
+          {route.name}
+        </Button>
       ))}
     </div>
   );

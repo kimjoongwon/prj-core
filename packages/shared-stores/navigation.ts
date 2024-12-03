@@ -8,7 +8,7 @@ export class Navigation {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  findRouteByPath(pathname: string) {
+  private findRouteByPath(pathname: string) {
     let findedRoute: Route;
     const findRoute = (route: Route) => {
       console.log('route', route.pathname, pathname);
@@ -37,6 +37,32 @@ export class Navigation {
   get servicesRoute() {
     const servicesRoute = this.findRouteByPath('services');
     return servicesRoute;
+  }
+
+  activateRoute() {
+    const segments = window.location.pathname.split('/');
+
+    const changeRouteActiveState = (route: Route) => {
+      if (segments.includes(route.pathname)) {
+        route.active = true;
+      } else {
+        route.active = false;
+      }
+
+      if (route.children) {
+        route.children.forEach(changeRouteActiveState);
+      }
+    };
+
+    this.routes.forEach(route => {
+      if (segments.includes(route.pathname)) {
+        route.active = true;
+      } else {
+        route.active = false;
+      }
+
+      route.children?.forEach(changeRouteActiveState);
+    });
   }
 
   get routes(): Route[] {
