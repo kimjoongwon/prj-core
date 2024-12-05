@@ -1,5 +1,5 @@
 import { applyDecorators, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiCookieAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { RoleType } from '../constants';
 import { AuthUserInterceptor } from '../interceptors';
 import { Roles } from './roles.decorator';
@@ -16,7 +16,6 @@ export function Auth(
 
   const decorators = [
     PublicRoute(isPublicRoute),
-    // ApiBearerAuth(),
     ApiCookieAuth('accessToken'),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
     Roles(roles),

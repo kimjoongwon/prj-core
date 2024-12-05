@@ -83,7 +83,15 @@ export interface AppBuilder {
 }
 
 export interface LayoutBuilder {
-  type?: 'Outlet' | 'Auth' | 'Main' | 'Root';
+  type?:
+    | 'Outlet'
+    | 'Auth'
+    | 'Main'
+    | 'Root'
+    | 'Sidebar'
+    | 'Admin'
+    | 'Services'
+    | 'Service';
   page?: PageBuilder;
 }
 

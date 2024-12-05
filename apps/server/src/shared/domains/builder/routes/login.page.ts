@@ -15,7 +15,7 @@ export const loginPage: PageBuilder = {
         },
         mutation: 'getToken',
         try: {
-          pathname: '/admin/main',
+          pathname: '/admin/main/services',
           message: '로그인 성공',
           severity: 'success',
         },

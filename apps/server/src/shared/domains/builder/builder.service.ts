@@ -22,6 +22,7 @@ export class BuilderService {
             pathname: 'admin',
             active: false,
             layout: {
+              type: 'Admin',
               page: {
                 type: 'Outlet',
               },
@@ -32,6 +33,7 @@ export class BuilderService {
                 pathname: 'main',
                 active: false,
                 layout: {
+                  type: 'Main',
                   page: {
                     type: 'Outlet',
                   },
@@ -42,7 +44,7 @@ export class BuilderService {
                     pathname: 'services',
                     active: false,
                     layout: {
-                      type: 'Main',
+                      type: 'Services',
                       page: {
                         type: 'Outlet',
                       },
@@ -51,6 +53,12 @@ export class BuilderService {
                       {
                         name: '유저 서비스',
                         pathname: 'user-service',
+                        layout: {
+                          type: 'Service',
+                          page: {
+                            type: 'Outlet',
+                          },
+                        },
                         active: false,
                         children: [
                           {
@@ -64,6 +72,12 @@ export class BuilderService {
                       {
                         name: '공간 서비스',
                         pathname: 'space-service',
+                        layout: {
+                          type: 'Service',
+                          page: {
+                            type: 'Outlet',
+                          },
+                        },
                         active: false,
                         children: [
                           {

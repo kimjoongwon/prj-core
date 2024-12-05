@@ -1,17 +1,25 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, reaction } from 'mobx';
 import { Route, RouteBuilder } from '@shared/types';
 
 export class Navigation {
   routeBuilders: RouteBuilder[] = [];
+  currentPathname: string = '';
+  routes: Route[] = [];
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
     makeAutoObservable(this, {}, { autoBind: true });
+
+    reaction(
+      () => this.currentPathname,
+      () => {
+        this.activateRoute();
+      },
+    );
   }
 
   private findRouteByPath(pathname: string) {
     let findedRoute: Route;
     const findRoute = (route: Route) => {
-      console.log('route', route.pathname, pathname);
       if (route.pathname === pathname) {
         findedRoute = route;
       }
@@ -39,11 +47,21 @@ export class Navigation {
     return servicesRoute;
   }
 
+  get serviceRoute() {
+    const serviceRoute = this.servicesRoute.children?.find(
+      serviceRoute => serviceRoute.active,
+    );
+
+    console.log('serviceRoute', serviceRoute);
+
+    return serviceRoute;
+  }
+
   activateRoute() {
     const segments = window.location.pathname.split('/');
-
     const changeRouteActiveState = (route: Route) => {
       if (segments.includes(route.pathname)) {
+        console.log('active-1', route.pathname);
         route.active = true;
       } else {
         route.active = false;
@@ -56,6 +74,7 @@ export class Navigation {
 
     this.routes.forEach(route => {
       if (segments.includes(route.pathname)) {
+        console.log('active2', route.pathname);
         route.active = true;
       } else {
         route.active = false;
@@ -65,7 +84,7 @@ export class Navigation {
     });
   }
 
-  get routes(): Route[] {
+  getRoutes() {
     const convertRouteBuilderToRoute = (routeBuilder: RouteBuilder) => {
       const route: Route = {
         name: routeBuilder?.name,
@@ -96,6 +115,6 @@ export class Navigation {
       return route;
     });
 
-    return routes;
+    this.routes = routes;
   }
 }
