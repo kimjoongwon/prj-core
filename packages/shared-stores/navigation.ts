@@ -7,6 +7,7 @@ export class Navigation {
   routes: Route[] = [];
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
+    this.getRoutes()
     makeAutoObservable(this, {}, { autoBind: true });
 
     reaction(
@@ -48,7 +49,7 @@ export class Navigation {
   }
 
   get serviceRoute() {
-    const serviceRoute = this.servicesRoute.children?.find(
+    const serviceRoute = this.servicesRoute?.children?.find(
       serviceRoute => serviceRoute.active,
     );
 

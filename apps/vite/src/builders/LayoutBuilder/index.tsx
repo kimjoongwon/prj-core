@@ -1,22 +1,11 @@
-import { AppBar, Button, HStack, VStack } from '@shared/frontend';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { AppBar, Button, HStack, List, VStack } from '@shared/frontend';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderState } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import React, { ReactNode } from 'react';
-import { Paper } from '@mui/material';
-import { Listbox, ListboxItem } from '@nextui-org/react';
 import { v4 } from 'uuid';
 import { action } from 'mobx';
-
-interface LayoutBuilderProps {
-  state: LayoutBuilderState | undefined;
-  children: React.ReactNode;
-}
-
-export const Header = () => {
-  return <AppBar content={<AppBarContent />} />;
-};
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, state } = props;
@@ -48,22 +37,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   return children;
 });
 
-interface RootLayoutProps {
-  children: ReactNode;
-}
-
 export const RootLayout = observer((props: RootLayoutProps) => {
   const { children } = props;
   return <VStack className="w-full h-screen">{children}</VStack>;
 });
-
-interface AuthLayoutProps {
-  children: ReactNode;
-}
-
-interface AdminLayoutProps {
-  children: ReactNode;
-}
 
 export const AdminLayout = observer((props: AdminLayoutProps) => {
   const { children } = props;
@@ -72,117 +49,79 @@ export const AdminLayout = observer((props: AdminLayoutProps) => {
 });
 
 export const AuthLayout = observer((props: AuthLayoutProps) => {
+  const { children } = props;
   return (
     <>
       <AppBar />
-      {props.children}
+      {children}
     </>
   );
 });
-
-interface ServiceLayoutProps {
-  children: ReactNode;
-}
 
 export const ServiceLayout = observer((props: ServiceLayoutProps) => {
   const { children } = props;
 
   return (
-    <HStack>
-      <ServiceRoutes />
+    <>
+      <Sidebar />
       {children}
-    </HStack>
+    </>
   );
 });
-
-interface ServicesLayoutProps {
-  children: ReactNode;
-}
 
 export const ServicesLayout = observer((props: ServicesLayoutProps) => {
   const { children } = props;
 
   return (
     <>
-      <AppBar />
+      <Header />
       {children}
-      <BottomNavigator />
+      <Footer />
     </>
   );
 });
-
-interface MainLayoutProps {
-  children: ReactNode;
-}
 
 export const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
   return <>{children}</>;
 });
 
-export const AppBarContent = observer(() => {
-  const store = useStore();
-  const navigate = useNavigate();
-  const servicesRoutes = store.navigation.servicesRoute.children;
-
-  return (
-    <div className="space-x-2">
-      {servicesRoutes?.map(route => (
-        <Button
-          variant="light"
-          color={route.active ? 'primary' : 'default'}
-          onClick={() => {
-            navigate(route.pathname);
-          }}
-        >
-          {route.name}
-        </Button>
-      ))}
-    </div>
-  );
-});
-
-export const BottomNavigator = observer(() => {
-  return (
-    <Paper
-      elevation={3}
-      sx={{
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        height: '60px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <ServicesRoutes />
-    </Paper>
-  );
+export const ServiceNavigator = observer(() => {
+  return <ServicesRoutes />;
 });
 
 export const ServiceRoutes = observer(() => {
   const store = useStore();
-  // console.log('navigation.routes', navigation.serviceRoute);
-
-  console.log(store.navigation.routes);
+  const navigate = useNavigate();
   return (
-    <Listbox>
-      {(store.navigation.serviceRoute?.children || [])?.map(route => {
-        return <ListboxItem key={v4()}>{route.name}</ListboxItem>;
-      })}
-    </Listbox>
+    <List
+      className="flex-1"
+      data={store.navigation.serviceRoute?.children || []}
+      renderItem={route => {
+        return (
+          <Button
+            variant="light"
+            key={v4()}
+            color={route.active ? 'primary' : 'default'}
+            onClick={() => {
+              navigate(route.pathname);
+              store.navigation.activateRoute();
+            }}
+          >
+            {route.name}
+          </Button>
+        );
+      }}
+    />
   );
 });
 
 export const ServicesRoutes = observer(() => {
   const { navigation } = useStore();
   const navigate = useNavigate();
-  console.log('navigation', navigation);
   return (
     <HStack className="justify-center">
-      {navigation.servicesRoute.children?.map(route => {
-        console.log('route.active', route.active, route.name);
+      {navigation.servicesRoute?.children?.map(route => {
         return (
           <Button
             variant="light"
@@ -199,3 +138,52 @@ export const ServicesRoutes = observer(() => {
     </HStack>
   );
 });
+
+export const Sidebar = () => {
+  return (
+    <VStack className="flex-1 border-r-1 w-52">
+      <ServiceRoutes />
+    </VStack>
+  );
+};
+
+export const Header = () => {
+  return <AppBar content={<ServicesRoutes />} />;
+};
+
+export const Footer = () => {
+  return (
+    <div className="w-full border-t-1 flex h-[60px] justify-center items-center">
+      <ServiceNavigator />
+    </div>
+  );
+};
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+interface LayoutBuilderProps {
+  state: LayoutBuilderState | undefined;
+  children: React.ReactNode;
+}
+
+interface AuthLayoutProps {
+  children: ReactNode;
+}
+
+interface AdminLayoutProps {
+  children: ReactNode;
+}
+
+interface ServiceLayoutProps {
+  children: ReactNode;
+}
+
+interface ServicesLayoutProps {
+  children: ReactNode;
+}
+
+interface MainLayoutProps {
+  children: ReactNode;
+}
