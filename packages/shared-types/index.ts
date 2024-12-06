@@ -91,7 +91,9 @@ export interface LayoutBuilder {
     | 'Sidebar'
     | 'Admin'
     | 'Services'
-    | 'Service';
+    | 'Service'
+    | 'Table'
+    | 'Form';
   page?: PageBuilder;
 }
 

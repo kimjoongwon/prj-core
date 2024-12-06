@@ -53,19 +53,59 @@ export class BuilderService {
                       {
                         name: '유저 서비스',
                         pathname: 'user-service',
+                        active: false,
                         layout: {
                           type: 'Service',
                           page: {
                             type: 'Outlet',
                           },
                         },
-                        active: false,
                         children: [
                           {
                             name: '카테고리',
                             pathname: 'categories',
                             active: false,
+                            layout: {
+                              type: 'Table',
+                              page: {
+                                type: 'Outlet',
+                              },
+                            },
+                            children: [
+                              {
+                                pathname: 'category/detail',
+                                name: '카테고리 상세',
+                                active: false,
+                                layout: {
+                                  type: 'Form',
+                                },
+                              },
+                              {
+                                pathname: 'category/create',
+                                name: '카테고리',
+                                active: false,
+                                layout: {
+                                  type: 'Form',
+                                },
+                              },
+                              {
+                                pathname: 'category/modify',
+                                name: '카테고리',
+                                active: false,
+                                layout: {
+                                  type: 'Form',
+                                },
+                              },
+                            ],
+                          },
+                          {
+                            name: '그룹',
+                            pathname: 'groups',
+                            active: false,
                             children: [],
+                            layout: {
+                              type: 'Table',
+                            },
                           },
                         ],
                       },
