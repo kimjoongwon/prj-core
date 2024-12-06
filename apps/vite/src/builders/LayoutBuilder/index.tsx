@@ -1,12 +1,11 @@
+import React, { ReactNode } from 'react';
 import { AppBar, Button, HStack, VStack } from '@shared/frontend';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderState } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import React, { ReactNode } from 'react';
 import { Paper } from '@mui/material';
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import { v4 } from 'uuid';
 import { action } from 'mobx';
 
 interface LayoutBuilderProps {
@@ -106,7 +105,7 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
     <>
       <AppBar />
       {children}
-      <BottomNavigator />
+      <ServicesNavigator />
     </>
   );
 });
@@ -142,7 +141,7 @@ export const AppBarContent = observer(() => {
   );
 });
 
-export const BottomNavigator = observer(() => {
+export const ServicesNavigator = observer(() => {
   return (
     <Paper
       elevation={3}
@@ -163,13 +162,11 @@ export const BottomNavigator = observer(() => {
 
 export const ServiceRoutes = observer(() => {
   const store = useStore();
-  // console.log('navigation.routes', navigation.serviceRoute);
 
-  console.log(store.navigation.routes);
   return (
     <Listbox>
       {(store.navigation.serviceRoute?.children || [])?.map(route => {
-        return <ListboxItem key={v4()}>{route.name}</ListboxItem>;
+        return <ListboxItem key={route.pathname}>{route.name}</ListboxItem>;
       })}
     </Listbox>
   );
@@ -178,13 +175,13 @@ export const ServiceRoutes = observer(() => {
 export const ServicesRoutes = observer(() => {
   const { navigation } = useStore();
   const navigate = useNavigate();
-  console.log('navigation', navigation);
+
   return (
     <HStack className="justify-center">
       {navigation.servicesRoute.children?.map(route => {
-        console.log('route.active', route.active, route.name);
         return (
           <Button
+            key={route.pathname}
             variant="light"
             color={route.active ? 'primary' : 'default'}
             onClick={action(() => {
