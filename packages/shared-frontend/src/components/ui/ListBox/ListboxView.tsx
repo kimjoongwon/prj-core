@@ -1,5 +1,5 @@
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import { ListboxViewProps } from '@shared/types';
+import { ListboxViewProps } from '../../../types/components';
 
 export const ListboxView = (props: ListboxViewProps) => {
   const { items, value, ...rest } = props;

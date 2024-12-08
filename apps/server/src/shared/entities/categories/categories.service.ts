@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { Prisma } from '@prisma/client';
 
@@ -8,12 +7,13 @@ import { Prisma } from '@prisma/client';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createCategory(createCategoryDto: CreateCategoryDto) {
-    const services = await this.prisma.category.create({
-      data: createCategoryDto,
-    });
-
+  async create(args: Prisma.CategoryCreateArgs) {
+    const services = await this.prisma.category.create(args);
     return services;
+  }
+
+  createMany(args: Prisma.CategoryCreateManyArgs) {
+    return this.prisma.category.createMany(args);
   }
 
   getUnique(args: Prisma.CategoryFindUniqueArgs) {

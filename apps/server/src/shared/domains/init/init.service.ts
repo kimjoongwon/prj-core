@@ -1,15 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
-  PagesService,
+  CategoriesService,
   RolesService,
   SpacesService,
   SubjectsService,
+  TenantsService,
   UsersService,
 } from '../../entities';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
-import { Page, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { ServicesService } from '../../entities/services/services.service';
 
 @Injectable()
 export class InitService {
@@ -22,6 +24,9 @@ export class InitService {
     private readonly usersService: UsersService,
     private readonly passwordService: PasswordService,
     private readonly subjectsService: SubjectsService,
+    private readonly servicesService: ServicesService,
+    private readonly categoriesService: CategoriesService,
+    private readonly tenantsService: TenantsService,
   ) {}
 
   async createDefaultRoles() {
@@ -140,9 +145,22 @@ export class InitService {
   async createSubjects() {
     return await Promise.all(
       Object.keys(Prisma.ModelName).map(async (key) => {
-        const subject = this.subjectsService.getUnique({ where: { name: key } });
+        const subject = await this.subjectsService.getUnique({ where: { name: key } });
         if (!subject) {
           return this.subjectsService.create({ data: { name: key } });
+        } else {
+          return null;
+        }
+      }),
+    );
+  }
+
+  async createServices() {
+    return await Promise.all(
+      Object.keys(Prisma.ModelName).map(async (key) => {
+        const service = await this.servicesService.getUnique({ where: { name: key } });
+        if (!service) {
+          return this.servicesService.create({ data: { name: key } });
         } else {
           return null;
         }
@@ -154,8 +172,67 @@ export class InitService {
     this.logger.log(`[${this.LOG_PREFIX}] 페이지 생성`);
   }
 
+  async createUserCategories() {
+    const userService = await this.servicesService.getUnique({
+      where: {
+        name: 'USER',
+      },
+    });
+
+    const tenant = await this.tenantsService.getUnique({
+      where: {
+        seq: 1,
+      },
+    });
+
+    [
+      {
+        name: '비회원',
+        children: [
+          {
+            name: '여자',
+          },
+          {
+            name: '남자',
+          },
+        ],
+      },
+      {
+        name: '회원',
+        children: [
+          {
+            name: '남자',
+          },
+          {
+            name: '여자',
+          },
+        ],
+      },
+    ].map(async (category, index) => {
+      return this.categoriesService.create({
+        data: {
+          name: category.name,
+          serviceId: userService.id,
+          tenantId: tenant.id,
+          ancestors: {
+            createMany: {
+              data: [
+                {
+                  name: category.children[index].name,
+                  serviceId: userService.id,
+                  tenantId: tenant.id,
+                },
+              ],
+            },
+          },
+        },
+      });
+    });
+  }
+
   async initApp() {
     await this.createSubjects();
+    await this.createServices();
     const { adminRoleId } = await this.createDefaultRoles();
     const { spaceId } = await this.createDefaultSpace();
     await this.createDefaultUser(adminRoleId, spaceId);

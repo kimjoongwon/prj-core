@@ -1,6 +1,5 @@
 import { type ButtonProps, type InputProps } from '@nextui-org/react';
 import { APIManager, type ComponentManager } from '@shared/frontend';
-export * from './components';
 
 export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
