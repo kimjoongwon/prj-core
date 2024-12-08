@@ -9,28 +9,28 @@ import { plainToInstance } from 'class-transformer';
 export class AdminCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get('children')
-  @ApiCookieAuth('accessToken')
-  @Auth([])
-  @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
-  async getChildrenCategories(@Query('ancestorIds') ancestorIds: string[]) {
-    const categories = await this.categoryService.getChildCategories(ancestorIds);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '자식 카테고리 조회 성공',
-      categories?.map((category) => plainToInstance(CategoryDto, category)),
-    );
-  }
+  // @Get('children')
+  // @ApiCookieAuth('accessToken')
+  // @Auth([])
+  // @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
+  // async getChildrenCategories(@Query('ancestorIds') ancestorIds: string[]) {
+  //   const categories = await this.categoryService.getChildCategories(ancestorIds);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '자식 카테고리 조회 성공',
+  //     categories?.map((category) => plainToInstance(CategoryDto, category)),
+  //   );
+  // }
 
-  @Get(':categoryId/ancestors')
-  @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
-  async getAncestorCategories(@Param('categoryId') categoryId: string) {
-    const ancestorCategories = await this.categoryService.getAncestorCategories(categoryId);
+  // @Get(':categoryId/ancestors')
+  // @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
+  // async getAncestorCategories(@Param('categoryId') categoryId: string) {
+  //   const ancestorCategories = await this.categoryService.getAncestorCategories(categoryId);
 
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '부모 카테고리 조회 성공',
-      ancestorCategories?.map((category) => plainToInstance(CategoryDto, category)),
-    );
-  }
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '부모 카테고리 조회 성공',
+  //     ancestorCategories?.map((category) => plainToInstance(CategoryDto, category)),
+  //   );
+  // }
 }
