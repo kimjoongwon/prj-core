@@ -175,7 +175,7 @@ export class InitService {
   async createUserCategories() {
     const userService = await this.servicesService.getUnique({
       where: {
-        name: 'USER',
+        name: 'User',
       },
     });
 
@@ -185,54 +185,48 @@ export class InitService {
       },
     });
 
-    [
-      {
-        name: '비회원',
-        children: [
-          {
-            name: '여자',
-          },
-          {
-            name: '남자',
-          },
-        ],
+    const category = await this.categoriesService.getFirst({
+      where: {
+        name: '이용자',
       },
-      {
-        name: '회원',
-        children: [
-          {
-            name: '남자',
-          },
-          {
-            name: '여자',
-          },
-        ],
-      },
-    ].map(async (category, index) => {
-      return this.categoriesService.create({
+    });
+    if (!category) {
+      const userCategory = await this.categoriesService.create({
         data: {
-          name: category.name,
-          serviceId: userService.id,
           tenantId: tenant.id,
-          ancestors: {
-            createMany: {
-              data: [
-                {
-                  name: category.children[index].name,
-                  serviceId: userService.id,
-                  tenantId: tenant.id,
-                },
-              ],
-            },
-          },
+          serviceId: userService.id,
+          name: '이용자',
+          ancestorIds: [],
+          parentId: null,
         },
       });
-    });
+
+      await this.categoriesService.create({
+        data: {
+          tenantId: tenant.id,
+          serviceId: userService.id,
+          name: '회원',
+          parentId: userCategory.id,
+          ancestorIds: [userCategory.id],
+        },
+      });
+
+      await this.categoriesService.create({
+        data: {
+          tenantId: tenant.id,
+          serviceId: userService.id,
+          name: '비회원',
+          parentId: userCategory.id,
+          ancestorIds: [userCategory.id],
+        },
+      });
+    }
   }
 
   async initApp() {
     await this.createSubjects();
     await this.createServices();
+    await this.createUserCategories();
     const { adminRoleId } = await this.createDefaultRoles();
     const { spaceId } = await this.createDefaultSpace();
     await this.createDefaultUser(adminRoleId, spaceId);

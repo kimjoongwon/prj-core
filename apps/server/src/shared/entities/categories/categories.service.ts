@@ -12,6 +12,10 @@ export class CategoriesService {
     return services;
   }
 
+  getFirst(args: Prisma.CategoryFindFirstArgs) {
+    return this.prisma.category.findFirst(args);
+  }
+
   createMany(args: Prisma.CategoryCreateManyArgs) {
     return this.prisma.category.createMany(args);
   }
