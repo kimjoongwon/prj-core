@@ -3,7 +3,7 @@ import { AbstractEntity } from '../common/abstract.entity';
 
 export class CategoryEntity extends AbstractEntity implements Category {
   name: string;
-  ancestorIds: string[];
+  childrenIds: string[];
   parentId: string;
   tenantId: string;
   serviceId: string;

@@ -7,7 +7,7 @@ export class CategoryDto extends AbstractDto implements CategoryEntity {
   name: string;
 
   @StringField({ isArray: true, each: true })
-  ancestorIds: string[];
+  childrenIds: string[];
 
   @StringField({ nullable: true })
   parentId: string | null;

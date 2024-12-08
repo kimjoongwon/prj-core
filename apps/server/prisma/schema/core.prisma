@@ -2,7 +2,7 @@ model Category {
   id             String           @id @default(uuid())
   seq            Int              @unique @default(autoincrement())
   name           String
-  ancestorIds    String[]         @default([])
+  childrenIds    String[]         @default([])
   parentId       String?
   tenantId       String
   serviceId      String
@@ -11,8 +11,9 @@ model Category {
   removedAt      DateTime?        @db.Timestamptz(6)
   classification Classification[]
   service        Service          @relation(fields: [serviceId], references: [id])
-  parent         Category?        @relation(fields: [parentId], references: [id], name: "CategoryToCategory")
-  ancestors      Category[]       @relation("CategoryToCategory")
+  // 추가되는 필드와 관계
+  parent         Category?        @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children       Category[]       @relation("CategoryToCategory")
 }
 
 model Classification {

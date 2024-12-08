@@ -42,7 +42,12 @@ export class CategoriesService {
   }
 
   async getManyByQuery(args: Prisma.CategoryFindManyArgs) {
-    const categories = await this.prisma.category.findMany(args);
+    const categories = await this.prisma.category.findMany({
+      ...args,
+      include: {
+        children: true,
+      },
+    });
     const count = await this.prisma.category.count({
       where: args.where,
     });

@@ -191,33 +191,28 @@ export class InitService {
       },
     });
     if (!category) {
-      const userCategory = await this.categoriesService.create({
+      await this.categoriesService.create({
         data: {
           tenantId: tenant.id,
           serviceId: userService.id,
           name: '이용자',
-          ancestorIds: [],
           parentId: null,
-        },
-      });
-
-      await this.categoriesService.create({
-        data: {
-          tenantId: tenant.id,
-          serviceId: userService.id,
-          name: '회원',
-          parentId: userCategory.id,
-          ancestorIds: [userCategory.id],
-        },
-      });
-
-      await this.categoriesService.create({
-        data: {
-          tenantId: tenant.id,
-          serviceId: userService.id,
-          name: '비회원',
-          parentId: userCategory.id,
-          ancestorIds: [userCategory.id],
+          children: {
+            createMany: {
+              data: [
+                {
+                  name: '회원',
+                  serviceId: userService.id,
+                  tenantId: tenant.id,
+                },
+                {
+                  tenantId: tenant.id,
+                  serviceId: userService.id,
+                  name: '비회원',
+                },
+              ],
+            },
+          },
         },
       });
     }

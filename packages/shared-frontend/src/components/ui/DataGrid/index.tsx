@@ -3,8 +3,10 @@
 import React from 'react';
 import {
   ColumnDef,
+  ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -87,6 +89,7 @@ export const DataGrid = observer(
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [grouping, setGrouping] = React.useState<GroupingState>([]);
     const [rowSelection, setRowSelection] = React.useState({});
+    const [expanded, setExpanded] = React.useState<ExpandedState>({});
 
     const table = useReactTable({
       data,
@@ -97,6 +100,8 @@ export const DataGrid = observer(
       getFacetedRowModel: getFacetedRowModel(),
       getFacetedUniqueValues: getFacetedUniqueValues(),
       getFacetedMinMaxValues: getFacetedMinMaxValues(),
+      getSubRows: (row: any) => row?.children || [],
+      getExpandedRowModel: getExpandedRowModel(),
       enableColumnResizing: true,
       columnResizeMode: 'onChange',
       onColumnVisibilityChange: setColumnVisibility,
@@ -106,7 +111,9 @@ export const DataGrid = observer(
         grouping,
         columnVisibility,
         rowSelection,
+        expanded,
       },
+      onExpandedChange: setExpanded,
       debugTable: false,
       debugHeaders: false,
       debugColumns: false,
@@ -181,7 +188,7 @@ export const DataGrid = observer(
             {rows?.map(row => (
               // @ts-ignore
               <TableRow key={row.original?.[selectedKey as string]}>
-                {row.getAllCells().map(cell => {
+                {row.getVisibleCells().map(cell => {
                   return (
                     <TableCell key={cell?.id}>
                       {flexRender(
