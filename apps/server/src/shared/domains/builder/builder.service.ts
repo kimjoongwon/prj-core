@@ -66,6 +66,21 @@ export class BuilderService {
                             pathname: 'categories',
                             active: false,
                             children: [],
+                            layout: {
+                              type: 'Table',
+                              page: {
+                                type: 'Table',
+                                table: {
+                                  queryKey: 'useGetUsersByQuery',
+                                  query: {},
+                                  columns: [
+                                    {
+                                      accessorKey: 'id',
+                                    },
+                                  ],
+                                },
+                              },
+                            },
                           },
                         ],
                       },

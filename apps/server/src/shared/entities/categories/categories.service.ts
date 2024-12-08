@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
+
   async createCategory(createCategoryDto: CreateCategoryDto) {
     const services = await this.prisma.category.create({
       data: createCategoryDto,

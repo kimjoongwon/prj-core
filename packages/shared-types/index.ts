@@ -1,4 +1,5 @@
 import { type ButtonProps, type InputProps } from '@nextui-org/react';
+import { APIManager, type ComponentManager } from '@shared/frontend';
 export * from './components';
 
 export interface ValidationBuilder {
@@ -21,24 +22,16 @@ export interface InputBuilder {
 }
 
 export interface ComponentBuilder {
-  type:
-    | 'Input'
-    | 'Spacer'
-    | 'Button'
-    | 'AppBar'
-    | 'Text'
-    | 'Image'
-    | 'DataGrid'
-    | 'BottomTab';
+  type: keyof typeof ComponentManager;
   props: any;
-  path: string;
+  path?: string;
   gridProps?: object;
   validation?: ValidationBuilder;
 }
 
 export interface FormBuilder {
-  name: string;
-  isInValid: boolean;
+  name?: string;
+  isInValid?: boolean;
   sections: SectionBuilder[];
   button: ButtonBuilder;
 }
@@ -91,7 +84,8 @@ export interface LayoutBuilder {
     | 'Sidebar'
     | 'Admin'
     | 'Services'
-    | 'Service';
+    | 'Service'
+    | 'Table';
   page?: PageBuilder;
 }
 
@@ -104,9 +98,16 @@ export interface RouteBuilder {
 }
 
 export interface PageBuilder {
-  type?: 'Outlet';
+  type?: 'Outlet' | 'Form' | 'Table';
   name?: string;
   form?: FormBuilder;
+  table?: TableBuilder;
+}
+
+export interface TableBuilder {
+  queryKey: keyof typeof APIManager;
+  query: object;
+  columns: any[];
 }
 
 export interface SectionBuilder {

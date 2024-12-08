@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { Container, Grid2 as Grid } from '@mui/material';
-import { Text } from '@shared/frontend';
+import { APIManager, DataGrid, Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
@@ -13,9 +13,33 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
+  console.log(state);
+  let items = [];
+  if (state?.type === 'Table') {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const { data: response } = APIManager[state?.table?.queryKey](
+      state?.table?.query || {},
+      {
+        query: {
+          enabled: !!state?.table?.queryKey,
+        },
+      },
+    );
+
+    items = response?.data || [];
+  }
 
   if (state?.type === 'Outlet') {
     return <Outlet />;
+  }
+
+  if (state?.type === 'Table') {
+    return (
+      <Container maxWidth="sm">
+        <DataGrid data={items} columns={state.table?.columns || []} />
+      </Container>
+    );
   }
 
   return (
