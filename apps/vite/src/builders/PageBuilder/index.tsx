@@ -5,7 +5,7 @@ import { APIManager, DataGrid, Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import { HTMLProps } from 'react';
 import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -16,12 +16,13 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
+  const searchParams = new URLSearchParams(window.location.search);
   let items = [];
   if (state?.type === 'Table') {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const { data: response } = APIManager[state?.table?.queryKey](
-      state?.table?.query || {},
+      { ...state.table.query },
       {
         query: {
           enabled: !!state?.table?.queryKey,
@@ -102,6 +103,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
     return <Outlet />;
   }
 
+  console.log('state Table', state);
   return (
     <Container maxWidth="sm">
       {state?.form && (
@@ -123,7 +125,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         </FormBuilder>
       )}
       {state?.type === 'Table' && (
-        <DataGrid data={items} columns={columns || []} />
+        <DataGrid data={items} columns={columns || []} state={state.table} />
       )}
     </Container>
   );

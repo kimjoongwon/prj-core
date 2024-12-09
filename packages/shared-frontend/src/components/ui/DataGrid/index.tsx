@@ -33,6 +33,7 @@ import { HStack } from '../HStack';
 import { observer } from 'mobx-react-lite';
 import { difference, uniq } from 'lodash-es';
 import { Pagination } from '../Pagination';
+import { toJS } from 'mobx';
 
 export type PageQuery = {
   take?: number;
@@ -127,7 +128,7 @@ export const DataGrid = observer(
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
-
+    console.log('state.currentSort', state.currentSort);
     return (
       <TableContainer>
         {!hideButtons && (
@@ -164,11 +165,19 @@ export const DataGrid = observer(
           }}
           sortDescriptor={state?.currentSort || undefined}
           onSortChange={sort => {
+            console.log('state', state);
             state.query = {
               ...state?.query,
               [`${sort.column}SortOrder`]:
                 sort.direction === 'ascending' ? 'asc' : 'desc',
             };
+
+            console.log(state);
+            // window.location.replace(
+            //   window.location.pathname +
+            //     '?' +
+            //     new URLSearchParams(state.query).toString(),
+            // );
             state.currentSort = sort;
           }}
         >
