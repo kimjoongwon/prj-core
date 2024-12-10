@@ -2,7 +2,7 @@ import { Logo } from '../Logo';
 import { Divider } from '@nextui-org/react';
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
-import { AppBarViewProps } from '../../../types/components';
+import { AppBarViewProps } from '.';
 
 export const AppBarView = (props: AppBarViewProps) => {
   const { content } = props;

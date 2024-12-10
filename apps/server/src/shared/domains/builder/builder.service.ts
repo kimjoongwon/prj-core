@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AppBuilder, RouteBuilder } from '@shared/types';
 import { loginPage } from './routes/login.page';
-import { type InputProps } from '@shared/frontend';
-import { date } from 'nestjs-zod/z';
+import { type RouteBuilder, type AppBuilder, type InputProps } from '@shared/frontend';
 
 @Injectable()
 export class BuilderService {

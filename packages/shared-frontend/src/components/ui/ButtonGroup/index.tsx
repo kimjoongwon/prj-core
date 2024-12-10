@@ -4,7 +4,11 @@ import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { Button } from '../Button';
 import { GroupButton } from '../types';
-import { ButtonGroupProps } from '../../../types/components';
+
+interface ButtonGroupProps {
+  leftButtons?: GroupButton[];
+  rightButtons?: GroupButton[];
+}
 
 export const ButtonGroup = observer((props: ButtonGroupProps) => {
   const { leftButtons, rightButtons } = props;

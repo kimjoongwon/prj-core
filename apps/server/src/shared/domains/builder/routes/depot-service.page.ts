@@ -1,4 +1,4 @@
-// import { PageBuilder } from '@shared/types';
+// import { PageBuilder } from '@shared/frontend';
 
 // export const depotServicePage: PageState = {
 //   name: '저장소 서비스',

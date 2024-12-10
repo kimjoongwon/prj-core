@@ -18,6 +18,7 @@
     "to-path-tree": "^1.2.3"
   },
   "devDependencies": {
+    "@nextui-org/react": "2.4.8",
     "@shared/types": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "18.3.12"

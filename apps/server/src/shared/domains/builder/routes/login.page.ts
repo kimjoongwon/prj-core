@@ -1,4 +1,4 @@
-import { PageBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/frontend';
 
 export const loginPage: PageBuilder = {
   name: '로그인',

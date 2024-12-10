@@ -1,4 +1,4 @@
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/frontend';
 
 export const spaceServiceRoute: RouteBuilder = {
   pathname: '/admin/main/services/space-service',
