@@ -20,7 +20,6 @@ import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } f
 @Controller()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
-
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
@@ -43,7 +42,9 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    const category = await this.categoriesService.createCategory(createCategoryDto);
+    const category = await this.categoriesService.create({
+      data: createCategoryDto,
+    });
     return new ResponseEntity(
       HttpStatus.OK,
       'Category created',

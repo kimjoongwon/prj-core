@@ -1,8 +1,8 @@
 import { Logo } from '../Logo';
 import { Divider } from '@nextui-org/react';
 import { HStack } from '../HStack';
-import { AppBarViewProps } from '@shared/types';
 import { Avatar } from '../Avatar';
+import { AppBarViewProps } from '../../../types/components';
 
 export const AppBarView = (props: AppBarViewProps) => {
   const { content } = props;

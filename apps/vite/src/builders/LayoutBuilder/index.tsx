@@ -62,11 +62,17 @@ export const ServiceLayout = observer((props: ServiceLayoutProps) => {
   const { children } = props;
 
   return (
-    <>
+    <HStack className="h-full">
       <Sidebar />
       {children}
-    </>
+    </HStack>
   );
+});
+
+export const TableLayout = observer((props: TableLayoutProps) => {
+  const { children } = props;
+
+  return <>{children}</>;
 });
 
 export const ServicesLayout = observer((props: ServicesLayoutProps) => {
@@ -142,7 +148,7 @@ export const ServicesRoutes = observer(() => {
 
 export const Sidebar = () => {
   return (
-    <VStack className="flex-1 border-r-1 w-52">
+    <VStack className="border-r-1 w-52">
       <ServiceRoutes />
     </VStack>
   );
@@ -154,8 +160,8 @@ export const Header = () => {
 
 export const Footer = () => {
   return (
-    <div className="w-full border-t-1 flex h-[60px] justify-center items-center">
-      <ServiceNavigator />
+    <div className="absolute bottom-0 w-full border-t-1 flex h-[60px] justify-center items-center">
+      <ServicesRoutes />
     </div>
   );
 };
@@ -186,5 +192,9 @@ interface ServicesLayoutProps {
 }
 
 interface MainLayoutProps {
+  children: ReactNode;
+}
+
+interface TableLayoutProps {
   children: ReactNode;
 }

@@ -6,7 +6,8 @@ import {
   ListboxItemProps,
 } from '@nextui-org/react';
 import { type BottomNavigationProps } from '@mui/material';
-import { GroupButton, MobxProps } from '../utils';
+import { MobxProps } from '../../utils';
+import { GroupButton } from '../../components/ui/types';
 
 export interface ListboxViewProps extends ListBoxProps<any> {
   value: any;

@@ -18,8 +18,8 @@ export const FormBuilder = (props: FormBuilderProps) => {
     const payloads = state.sections
       .map(section =>
         section.components.map(component => {
-          console.log(component.path.split('.'));
-          const paths = component.path.split('.');
+          console.log(component?.path?.split('.'));
+          const paths = component?.path?.split('.') || [];
           const result = set({}, paths, component.props.value);
           return result;
         }),

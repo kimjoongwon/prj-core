@@ -11,7 +11,7 @@
 // import { AxiosError } from 'axios';
 // import { getNewToken, getToken } from '../apis';
 // import { GalaxyError, InvalidPasswordError } from '../errors';
-// import { AuthStatus } from '@shared/types';
+// import { AuthStatus } from '../../../types/components';
 
 // export class Auth {
 //   galaxy: Galaxy;

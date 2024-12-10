@@ -1,5 +1,5 @@
 import { Button as NextUIButton } from '@nextui-org/react';
-import { ButtonViewProps } from '@shared/types';
+import { ButtonViewProps } from '../../../types/components';
 import { observer } from 'mobx-react-lite';
 
 export const ButtonView = observer((props: ButtonViewProps) => {
