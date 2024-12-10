@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { Button } from '../Button';
-import { MainNavBarViewProps } from '@shared/types';
+import { MainNavBarViewProps } from '../../../types/components';
 import { Link } from '@nextui-org/react';
 
 export const MainServiceNavBarView = observer((props: MainNavBarViewProps) => {

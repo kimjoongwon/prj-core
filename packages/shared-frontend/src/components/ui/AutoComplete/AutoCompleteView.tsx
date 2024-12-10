@@ -7,7 +7,7 @@ import { cloneDeep, get } from 'lodash-es';
 import React from 'react';
 import { MobxProps } from '../types';
 import { useMobxHookForm } from '../../../hooks';
-import { BaseAutoCompleteProps } from '@shared/types';
+import { BaseAutoCompleteProps } from '../../../types/components';
 
 export const BaseAutoComplete = <T extends object>(
   props: BaseAutoCompleteProps<T>,

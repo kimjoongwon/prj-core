@@ -1,4 +1,4 @@
-import { ListBoxProps } from '@shared/types';
+import { ListBoxProps } from '../../../types/components';
 import { observer } from 'mobx-react-lite';
 import { ListboxView } from './ListboxView';
 import { useMobxHookForm } from '../../../hooks';

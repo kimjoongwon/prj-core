@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateCategoryDto } from './dtos/create-category.dto';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
-  async createCategory(createCategoryDto: CreateCategoryDto) {
-    const services = await this.prisma.category.create({
-      data: createCategoryDto,
-    });
 
+  async create(args: Prisma.CategoryCreateArgs) {
+    const services = await this.prisma.category.create(args);
     return services;
+  }
+
+  getFirst(args: Prisma.CategoryFindFirstArgs) {
+    return this.prisma.category.findFirst(args);
+  }
+
+  createMany(args: Prisma.CategoryCreateManyArgs) {
+    return this.prisma.category.createMany(args);
   }
 
   getUnique(args: Prisma.CategoryFindUniqueArgs) {
@@ -37,7 +42,12 @@ export class CategoriesService {
   }
 
   async getManyByQuery(args: Prisma.CategoryFindManyArgs) {
-    const categories = await this.prisma.category.findMany(args);
+    const categories = await this.prisma.category.findMany({
+      ...args,
+      include: {
+        children: true,
+      },
+    });
     const count = await this.prisma.category.count({
       where: args.where,
     });

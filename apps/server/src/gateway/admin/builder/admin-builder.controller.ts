@@ -14,12 +14,4 @@ export class AdminBuilderController {
     const pages = await this.builderService.getAppBuilder();
     return new ResponseEntity(200, '성공', pages);
   }
-
-  @Get('/nav-items')
-  @Auth([], { public: true })
-  // @ApiResponseEntity(null, 200)
-  async getNavItems() {
-    const pages = await this.builderService.getNavItems();
-    return new ResponseEntity(200, '성공', pages);
-  }
 }

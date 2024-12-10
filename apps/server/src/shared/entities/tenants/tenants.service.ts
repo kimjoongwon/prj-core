@@ -7,8 +7,8 @@ import { Prisma } from '@prisma/client';
 export class TenantsService {
   constructor(private readonly repository: TenantsRepository) {}
 
-  getUnique(id: string) {
-    return this.repository.findUnique({ where: { id } });
+  getUnique(args: Prisma.TenantFindUniqueArgs) {
+    return this.repository.findUnique(args);
   }
 
   getFirst(id: string) {

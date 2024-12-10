@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import { BottomTabViewProps } from '@shared/types';
+import { BottomTabViewProps } from '../../../types/components';
 import { HStack } from '../HStack';
 
 export const BottomTabView = (props: BottomTabViewProps) => {

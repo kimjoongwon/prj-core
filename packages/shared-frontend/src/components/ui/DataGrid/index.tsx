@@ -3,8 +3,10 @@
 import React from 'react';
 import {
   ColumnDef,
+  ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -31,6 +33,7 @@ import { HStack } from '../HStack';
 import { observer } from 'mobx-react-lite';
 import { difference, uniq } from 'lodash-es';
 import { Pagination } from '../Pagination';
+import { toJS } from 'mobx';
 
 export type PageQuery = {
   take?: number;
@@ -87,6 +90,7 @@ export const DataGrid = observer(
     const [columnVisibility, setColumnVisibility] = React.useState({});
     const [grouping, setGrouping] = React.useState<GroupingState>([]);
     const [rowSelection, setRowSelection] = React.useState({});
+    const [expanded, setExpanded] = React.useState<ExpandedState>({});
 
     const table = useReactTable({
       data,
@@ -97,6 +101,8 @@ export const DataGrid = observer(
       getFacetedRowModel: getFacetedRowModel(),
       getFacetedUniqueValues: getFacetedUniqueValues(),
       getFacetedMinMaxValues: getFacetedMinMaxValues(),
+      getSubRows: (row: any) => row?.children || [],
+      getExpandedRowModel: getExpandedRowModel(),
       enableColumnResizing: true,
       columnResizeMode: 'onChange',
       onColumnVisibilityChange: setColumnVisibility,
@@ -106,7 +112,9 @@ export const DataGrid = observer(
         grouping,
         columnVisibility,
         rowSelection,
+        expanded,
       },
+      onExpandedChange: setExpanded,
       debugTable: false,
       debugHeaders: false,
       debugColumns: false,
@@ -120,7 +128,7 @@ export const DataGrid = observer(
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
-
+    console.log('state.currentSort', state.currentSort);
     return (
       <TableContainer>
         {!hideButtons && (
@@ -157,11 +165,19 @@ export const DataGrid = observer(
           }}
           sortDescriptor={state?.currentSort || undefined}
           onSortChange={sort => {
+            console.log('state', state);
             state.query = {
               ...state?.query,
               [`${sort.column}SortOrder`]:
                 sort.direction === 'ascending' ? 'asc' : 'desc',
             };
+
+            console.log(state);
+            // window.location.replace(
+            //   window.location.pathname +
+            //     '?' +
+            //     new URLSearchParams(state.query).toString(),
+            // );
             state.currentSort = sort;
           }}
         >
@@ -181,7 +197,7 @@ export const DataGrid = observer(
             {rows?.map(row => (
               // @ts-ignore
               <TableRow key={row.original?.[selectedKey as string]}>
-                {row.getAllCells().map(cell => {
+                {row.getVisibleCells().map(cell => {
                   return (
                     <TableCell key={cell?.id}>
                       {flexRender(

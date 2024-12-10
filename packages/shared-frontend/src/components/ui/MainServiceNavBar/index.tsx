@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { MainNavBarProps } from '@shared/types';
+import { MainNavBarProps } from '../../../types/components';
 import { useMobxHookForm } from '../../../hooks';
 import { MainServiceNavBarView } from './MainServiceNavBarView';
 import { get } from 'lodash-es';
