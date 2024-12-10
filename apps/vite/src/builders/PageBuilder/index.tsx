@@ -5,9 +5,8 @@ import { APIManager, DataGrid, Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet, useSearchParams } from 'react-router-dom';
-import { HTMLProps } from 'react';
-import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { HTMLProps, useEffect, useRef } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface PageBuilderProps {
@@ -16,7 +15,6 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
-  const searchParams = new URLSearchParams(window.location.search);
   let items = [];
   if (state?.type === 'Table') {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -59,10 +57,6 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
     cell: ({ row, getValue }) => (
       <div
         style={{
-          // Since rows are flattened by default,
-          // we can use the row.depth property
-          // and paddingLeft to visually indicate the depth
-          // of the row
           paddingLeft: `${row.depth * 2}rem`,
         }}
       >
@@ -136,9 +130,9 @@ function IndeterminateCheckbox({
   className = '',
   ...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-  const ref = React.useRef<HTMLInputElement>(null!);
+  const ref = useRef<HTMLInputElement>(null!);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }

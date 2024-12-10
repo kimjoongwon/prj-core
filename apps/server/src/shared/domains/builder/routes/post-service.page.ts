@@ -1,4 +1,4 @@
-// import { PageState } from '@shared/types';
+// import { PageState } from '@shared/frontend';
 
 // export const postServicePage: PageState = {
 //   name: '게시물 서비스',

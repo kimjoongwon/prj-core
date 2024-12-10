@@ -1,4 +1,4 @@
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/frontend';
 
 export const mainRoute: RouteBuilder = {
   name: '메인',

@@ -1,9 +1,18 @@
-import { ListBoxProps } from '../../../types/components';
 import { observer } from 'mobx-react-lite';
-import { ListboxView } from './ListboxView';
 import { useMobxHookForm } from '../../../hooks';
 import { get } from 'lodash-es';
+import { MobxProps } from '@shared/types';
+import {
+  ListboxItemProps,
+  type ListboxProps as NextUIListboxProps,
+} from '@nextui-org/react';
+import { ListboxView } from './ListboxView';
 
+export interface ListBoxProps<T>
+  extends Omit<NextUIListboxProps, 'state' | 'children'>,
+    MobxProps<T> {
+  items: ListboxItemProps[];
+}
 export const Listbox = observer(<T extends object>(props: ListBoxProps<T>) => {
   const { state, path = '', ...rest } = props;
 
