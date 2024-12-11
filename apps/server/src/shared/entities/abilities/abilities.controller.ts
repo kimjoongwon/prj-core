@@ -17,11 +17,10 @@ import { AbilityQueryDto } from './dto/ability-query.dto';
 import { AbilityDto } from './dto/ability.dto';
 import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_ABILITIES')
-@Controller(ApiEndpoints.ADMIN_ABILITIES)
+@Controller()
 export class AbilitiesController {
   constructor(private readonly abilitiesService: AbilitiesService) {}
 

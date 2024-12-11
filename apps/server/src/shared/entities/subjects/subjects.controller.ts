@@ -1,14 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseEntity } from '../../decorators';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { ResponseEntity } from '../common/response.entity';
 import { CreateSubjectDto, SubjectDto, SubjectPageQueryDto, UpdateSubjectDto } from './dto';
 import { SubjectsService } from './subjects.service';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_SUBJECTS')
-@Controller(ApiEndpoints.ADMIN_SUBJECTS)
+@Controller()
 export class SubjectsController {
   constructor(private readonly service: SubjectsService) {}
 

@@ -15,12 +15,11 @@ import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
 import { PostsService, CreatePostDto, PostDto, UpdatePostDto, PostQueryDto } from '.';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 
 @ApiTags('ADMIN_TEMPLATES')
-@Controller(ApiEndpoints.ADMIN_TEMPLATES)
+@Controller()
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

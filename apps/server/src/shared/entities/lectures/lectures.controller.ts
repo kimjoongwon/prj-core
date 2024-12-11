@@ -16,13 +16,12 @@ import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
 import { CreateLectureDto, LectureDto, UpdateLectureDto, LectureQueryDto } from './dtos';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { LecturesService } from './lectures.service';
 
 @ApiTags('ADMIN_PROGRAMS')
-@Controller(ApiEndpoints.ADMIN_TEMPLATES)
+@Controller()
 export class LecturesController {
   constructor(private readonly service: LecturesService) {}
 

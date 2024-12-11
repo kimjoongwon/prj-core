@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { LecturesRepository } from './lectures.repository';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class LecturesService implements IService {
+export class LecturesService {
   constructor(private readonly repository: LecturesRepository) {}
 
   updateMany(args: Prisma.LectureUpdateManyArgs) {

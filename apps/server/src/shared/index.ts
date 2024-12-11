@@ -8,5 +8,4 @@ export * from './interceptors';
 export * from './providers';
 export * from './guards';
 export * from './libs';
-export * from './types';
 export * from './domains';

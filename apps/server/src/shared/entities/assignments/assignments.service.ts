@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AssignmentsRepository } from './assignments.repository';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class AssignmentsService implements IService {
+export class AssignmentsService {
   constructor(private readonly repository: AssignmentsRepository) {}
 
   getUnique(args: Prisma.AssignmentFindUniqueArgs) {

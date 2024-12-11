@@ -15,13 +15,12 @@ import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
 import { CreateRoleDto, RoleDto, UpdateRoleDto, RoleQueryDto } from './dto';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { RolesService } from './roles.service';
 
 @ApiTags('ADMIN_ROLES')
-@Controller(ApiEndpoints.ADMIN_ROLES)
+@Controller()
 export class RolesController {
   constructor(private readonly service: RolesService) {}
 

@@ -20,14 +20,13 @@ import {
   UpdateTemplateDto,
   TemplateQueryDto,
 } from '../templates/dtos';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { TemplatesService } from './templates.service';
 import { SystemEmailDto } from '../system-emails/dtos/system-email.dto';
 
 @ApiTags('ADMIN_TEMPLATES')
-@Controller(ApiEndpoints.ADMIN_TEMPLATES)
+@Controller()
 export class TemplatesController {
   constructor(private readonly service: TemplatesService) {}
 

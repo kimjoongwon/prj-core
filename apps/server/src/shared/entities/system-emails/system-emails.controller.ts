@@ -20,14 +20,12 @@ import {
   UpdateSystemEmailDto,
   SystemEmailQueryDto,
 } from './dtos';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { SystemEmailsService } from './system-emails.service';
-import { query } from 'express';
 
 @ApiTags('ADMIN_TEMPLATES')
-@Controller(ApiEndpoints.ADMIN_TEMPLATES)
+@Controller()
 export class SystemEmailsController {
   constructor(private readonly service: SystemEmailsService) {}
 

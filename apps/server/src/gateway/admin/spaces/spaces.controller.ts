@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
-  ApiEndpoints,
   ApiResponseEntity,
   Auth,
   CreateSpaceDto,
@@ -27,7 +26,7 @@ import {
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('ADMIN_SPACES')
-@Controller(ApiEndpoints.ADMIN_SPACES)
+@Controller()
 export class SpacesController {
   constructor(private readonly service: SpacesService) {}
 

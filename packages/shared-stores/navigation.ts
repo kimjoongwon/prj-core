@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { type RouteBuilder } from '@shared/types';
-import { type Route } from '@shared/types';
+import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 
 type NavigateFunction = (pathnameWithSearchParams: string) => void;

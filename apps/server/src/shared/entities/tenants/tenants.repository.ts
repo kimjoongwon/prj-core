@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import { IRepository } from '../../types';
 
 @Injectable()
-export class TenantsRepository implements IRepository {
+export class TenantsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(args: Prisma.TenantCreateArgs) {

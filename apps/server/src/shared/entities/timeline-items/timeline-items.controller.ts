@@ -21,12 +21,11 @@ import {
   TimelineItemQueryDto,
 } from './dto';
 import { plainToClass, plainToInstance } from 'class-transformer';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 
 @ApiTags('ADMIN_TIMELINE_ITEMS')
-@Controller(ApiEndpoints.ADMIN_TIMELINE_ITEMS)
+@Controller()
 export class TimelineItemsController {
   constructor(private readonly service: TimelineItemsService) {}
 

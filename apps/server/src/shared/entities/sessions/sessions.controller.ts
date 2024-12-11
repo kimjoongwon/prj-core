@@ -15,13 +15,12 @@ import { ResponseEntity } from '../common/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
 import { CreateSessionDto, SessionDto, UpdateSessionDto, SessionQueryDto } from '../sessions/dtos';
-import { ApiEndpoints } from '../../types/enums/api-endpoints';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
 import { SessionsService } from './sessions.service';
 
 @ApiTags('ADMIN_SESSIONS')
-@Controller(ApiEndpoints.ADMIN_SESSIONS)
+@Controller()
 export class SessionsController {
   constructor(private readonly service: SessionsService) {}
 
