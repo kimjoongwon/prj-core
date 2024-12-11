@@ -1,5 +1,5 @@
+import { PaginationUtil } from '@shared/utils';
 import { NumberFieldOptional } from '../../../decorators';
-import { PaginationMananger } from '../../../utils';
 import { PageMetaDto } from './page-meta.dto';
 
 export class PageQueryDto {
@@ -19,7 +19,7 @@ export class PageQueryDto {
   readonly take?: number = undefined;
 
   toArgs(tenantId?: string) {
-    const args = PaginationMananger.toArgs(this);
+    const args = PaginationUtil.toArgs(this);
     args.where = {
       ...args.where,
       tenantId,

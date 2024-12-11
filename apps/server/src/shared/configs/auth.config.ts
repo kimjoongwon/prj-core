@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { AuthConfig } from './config.type';
 import { IsString } from 'class-validator';
-import validateConfig from '../utils/validate-config';
+import { ValidationUtil } from '@shared/utils';
 class EnvironmentVariablesValidator {
   @IsString()
   AUTH_JWT_SECRET: string;
@@ -17,7 +17,7 @@ class EnvironmentVariablesValidator {
 }
 
 export default registerAs<AuthConfig>('auth', () => {
-  validateConfig(process.env, EnvironmentVariablesValidator);
+  ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
     secret: process.env.AUTH_JWT_SECRET,

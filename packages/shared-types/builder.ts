@@ -1,5 +1,4 @@
 import { type InputProps, type ButtonProps } from '@nextui-org/react';
-import { APIManager, ComponentManager } from '../..';
 
 export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
@@ -21,7 +20,7 @@ export interface InputBuilder {
 }
 
 export interface ComponentBuilder {
-  type: keyof typeof ComponentManager;
+  type: string;
   props: any;
   path?: string;
   gridProps?: object;
@@ -105,7 +104,7 @@ export interface PageBuilder {
 }
 
 export interface TableBuilder {
-  queryKey: keyof typeof APIManager;
+  queryKey: string;
   query: object;
   columns: any[];
 }

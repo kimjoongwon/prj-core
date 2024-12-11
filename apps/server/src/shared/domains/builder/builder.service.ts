@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { loginPage } from './routes/login.page';
-import { type RouteBuilder, type AppBuilder, type InputProps } from '@shared/frontend';
+import { type RouteBuilder, type AppBuilder } from '@shared/types';
 
 @Injectable()
 export class BuilderService {
@@ -164,7 +164,7 @@ export class BuilderService {
                                             value: '',
                                             label: '카테고리 이름',
                                             placeholder: '카테고리 이름을 입력해주세요.',
-                                          } as InputProps<any>,
+                                          } as any,
                                         },
                                       ],
                                     },

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from './tenants.repository';
-import { PaginationMananger } from '../../utils';
 import { TenantPageQueryDto, UpdateTenantDto } from './dtos';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 @Injectable()
 export class TenantsService {
   constructor(private readonly repository: TenantsRepository) {}
@@ -37,7 +37,7 @@ export class TenantsService {
   }
 
   async getManyByQuery(pageQuery: TenantPageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     const tenants = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {

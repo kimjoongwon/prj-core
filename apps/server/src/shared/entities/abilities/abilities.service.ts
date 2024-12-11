@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateAbilityDto } from './dto/create-ability.dto';
 import { UpdateAbilityDto } from './dto/update-ability.dto';
 import { AbilitiesRepository } from './abilities.repository';
-import { PaginationMananger } from '../../utils';
 import { AbilityQueryDto } from './dto/ability-query.dto';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class AbilitiesService {
@@ -13,7 +13,7 @@ export class AbilitiesService {
   }
 
   getManyByQuery(pageQuery: AbilityQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     return this.repository.findMany(args);
   }
 

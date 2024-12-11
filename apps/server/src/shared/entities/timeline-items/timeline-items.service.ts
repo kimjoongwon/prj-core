@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IService } from '../../types/interfaces/service.interface';
-import { PaginationMananger } from '../../utils';
 import { CreateTimelineItemDto } from './dto/create-timeline-item.dto';
 import { TimelineItemsRepository } from './timeline-items.repository';
-import { UpdateTimelineItemDto } from './dto/update-timeline-item.dto';
-import { TimelineItemQueryDto } from './dto/timeline-item-query.dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()

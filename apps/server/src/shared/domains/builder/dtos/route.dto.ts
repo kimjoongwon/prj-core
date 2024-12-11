@@ -7,7 +7,7 @@
 //   PageBuilder,
 //   RouteBuilder,
 //   ValidationBuilder,
-// } from '@shared/frontend';
+// } from '@shared/utils';
 
 // export class AppBuilderDto implements AppBuilder {
 //   routes: RouteBuilder[];

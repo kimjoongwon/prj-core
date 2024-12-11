@@ -1,5 +1,5 @@
+import { PaginationUtil } from '@shared/utils';
 import { NumberField, BooleanField } from '../../../decorators';
-import { PaginationMananger } from '../../../utils';
 import { PageQueryDto } from './page-query.dto';
 
 interface IPageMetaDtoParameters {
@@ -27,7 +27,7 @@ export class PageMetaDto {
   readonly hasNextPage: boolean;
 
   constructor(skip?: number, take?: number, itemCount: number = 0) {
-    const page = PaginationMananger.getPage({ skip, take });
+    const page = PaginationUtil.getPage({ skip, take });
     this.skip = skip;
     this.take = take;
     this.itemCount = itemCount;
