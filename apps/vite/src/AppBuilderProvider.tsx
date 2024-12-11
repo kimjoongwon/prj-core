@@ -1,4 +1,4 @@
-import { AppBuilder } from '@shared/types';
+import { AppBuilder } from '@shared/frontend';
 import { createContext, useContext } from 'react';
 
 const AppBuilderContext = createContext<AppBuilder>({} as AppBuilder);

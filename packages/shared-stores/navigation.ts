@@ -1,20 +1,40 @@
-import { makeAutoObservable, reaction } from 'mobx';
-import { Route, RouteBuilder } from '@shared/types';
+import { makeAutoObservable } from 'mobx';
+import { type RouteBuilder } from '@shared/frontend';
+import { type Route } from '@shared/types';
+import { PathUtil } from '@shared/utils';
+
+type NavigateFunction = (pathnameWithSearchParams: string) => void;
 
 export class Navigation {
   routeBuilders: RouteBuilder[] = [];
-  currentPathname: string = '';
   routes: Route[] = [];
+  navigateFunction?: NavigateFunction;
+
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
     makeAutoObservable(this, {}, { autoBind: true });
+  }
 
-    reaction(
-      () => this.currentPathname,
-      () => {
-        this.activateRoute();
-      },
+  setNavigateFunction(navigateFunction: NavigateFunction) {
+    this.navigateFunction = navigateFunction;
+  }
+
+  push(
+    pathname: string,
+    pathParams: object,
+    searchParams?: Record<string, string>,
+  ) {
+    let urlSearchParams;
+    if (searchParams) {
+      urlSearchParams = new URLSearchParams(searchParams).toString();
+    }
+    const pathnameWithSearchParams = PathUtil.getUrlWithParamsAndQueryString(
+      pathname,
+      pathParams,
+      urlSearchParams,
     );
+
+    this.navigateFunction?.(pathnameWithSearchParams);
   }
 
   private findRouteByPath(pathname: string) {
@@ -52,8 +72,6 @@ export class Navigation {
       serviceRoute => serviceRoute.active,
     );
 
-    console.log('serviceRoute', serviceRoute);
-
     return serviceRoute;
   }
 
@@ -61,7 +79,6 @@ export class Navigation {
     const segments = window.location.pathname.split('/');
     const changeRouteActiveState = (route: Route) => {
       if (segments.includes(route.pathname)) {
-        console.log('active-1', route.pathname);
         route.active = true;
       } else {
         route.active = false;
@@ -74,7 +91,6 @@ export class Navigation {
 
     this.routes.forEach(route => {
       if (segments.includes(route.pathname)) {
-        console.log('active2', route.pathname);
         route.active = true;
       } else {
         route.active = false;
