@@ -1,4 +1,4 @@
-import { LayoutBuilder, RouteBuilder } from '@shared/frontend';
+import { LayoutBuilder, RouteBuilder } from '@shared/types';
 
 export const userServiceRoute: RouteBuilder = {
   name: '유저 서비스',

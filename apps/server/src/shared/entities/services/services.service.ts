@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 import { ServiceQueryDto } from './dtos';
-import { PaginationMananger } from '../../utils';
 import { ServicesRepository } from './services.repository';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class ServicesService {
@@ -15,7 +15,7 @@ export class ServicesService {
   }
 
   findManyByQuery(query: ServiceQueryDto) {
-    const args = PaginationMananger.toArgs(query);
+    const args = PaginationUtil.toArgs(query);
     return this.repository.findMany(args);
   }
 

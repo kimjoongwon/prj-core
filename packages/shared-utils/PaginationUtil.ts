@@ -1,6 +1,6 @@
 import { isEmpty } from 'remeda';
 
-export class PaginationMananger {
+export class PaginationUtil {
   static getPage = ({ skip, take }: { skip: number; take: number }): number => {
     if (take === 0) {
       throw new Error('Take must be greater than 0');
@@ -9,7 +9,7 @@ export class PaginationMananger {
     return page;
   };
 
-  static toArgs = <T>(query: T) => {
+  static toArgs = <T extends object>(query: T) => {
     if (isEmpty(query as any)) {
       return {};
     }
@@ -41,20 +41,25 @@ export class PaginationMananger {
 
         return object;
       })
-      ?.reduce((acc, curr) => {
-        console.log('acc', acc);
-        return {
-          ...acc,
-          ...curr,
-          where: {
-            ...acc.where,
-            ...curr.where,
-          },
-          orderBy: {
-            ...acc.orderBy,
-            ...curr.orderBy,
-          },
-        };
-      });
+      .reduce(
+        (acc, curr) => {
+          const { where = {}, orderBy = {} } = acc;
+          const { where: currWhere = {}, orderBy: currOrderBy = {} } = curr;
+
+          return {
+            ...acc,
+            ...curr,
+            where: {
+              ...where,
+              ...currWhere,
+            },
+            orderBy: {
+              ...orderBy,
+              ...currOrderBy,
+            },
+          };
+        },
+        { where: {}, orderBy: {} },
+      );
   };
 }

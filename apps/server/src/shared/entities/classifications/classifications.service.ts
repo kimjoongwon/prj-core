@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClassificationsRepository } from './classifications.repository';
-import { ClassificationQueryDto } from './dtos/classification-query.dto';
-import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
-import { ClassificationDto } from './dtos';
 
 @Injectable()
 export class ClassificationsService {

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UpdateSessionDto } from './dtos/update-session.dto';
 import { SessionsRepository } from './sessions.repository';
 import { SessionPageQueryDto } from './dtos/session-page-query.dto';
-import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class SessionsService {
@@ -39,7 +39,7 @@ export class SessionsService {
   }
 
   async getManyByQuery(pageQuery: SessionPageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     const sessions = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {

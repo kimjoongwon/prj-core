@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
 import { PostsRepository } from './posts.repository';
 import { PostPageQueryDto } from './dtos/post-page-query.dto';
-import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class PostsService {
@@ -40,7 +38,7 @@ export class PostsService {
   }
 
   async getManyByQuery(pageQuery: PostPageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     const posts = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {

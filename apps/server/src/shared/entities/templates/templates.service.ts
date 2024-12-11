@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TemplatesRepository } from './templates.repository';
 import { TemplatePageQueryDto } from './dtos/template-page-query.dto';
-import { PaginationMananger } from '../../utils';
-import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class TemplatesService {
@@ -39,7 +38,7 @@ export class TemplatesService {
   }
 
   async getManyByQuery(pageQuery: TemplatePageQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     const templates = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {

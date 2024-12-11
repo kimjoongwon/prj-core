@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LecturesRepository } from './lectures.repository';
-import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
-import { LectureQueryDto } from './dtos/lecture-query.dto';
 
 @Injectable()
 export class LecturesService implements IService {

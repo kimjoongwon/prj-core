@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssignmentsRepository } from './assignments.repository';
-import { AssignmentPageQueryDto } from './dtos/assignment-page-query.dto';
-import { PaginationMananger } from '../../utils';
 import { IService } from '../../types/interfaces/service.interface';
 import { Prisma } from '@prisma/client';
-import { AssignmentDto } from './dtos';
 
 @Injectable()
 export class AssignmentsService implements IService {

@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public, ApiResponseEntity, Auth } from '../../decorators';
-import { PaginationMananger } from '../../utils';
 import { ResponseEntity } from '../common';
 import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
 import { GroupsService } from './groups.service';
 import { plainToInstance } from 'class-transformer';
+import { PaginationUtil } from '@shared/utils';
 
 @ApiTags('ADMIN_GROUPS')
 @Controller()
@@ -51,7 +51,7 @@ export class GroupsController {
         skip,
         take,
         hasNextPage: groups.length === take,
-        hasPreviousPage: PaginationMananger.getPage({ skip, take }) > 1,
+        hasPreviousPage: PaginationUtil.getPage({ skip, take }) > 1,
         itemCount: count,
         pageCount: 0,
       },

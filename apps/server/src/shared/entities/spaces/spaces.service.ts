@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../providers/context.provider';
 import { SpacesRepository } from './spaces.repository';
 import { SpaceQueryDto, UpdateSpaceDto } from './dtos';
-import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class SpacesService {
@@ -49,7 +49,7 @@ export class SpacesService {
   }
 
   async getManyByQuery(query: SpaceQueryDto) {
-    const args = PaginationMananger.toArgs(query);
+    const args = PaginationUtil.toArgs(query);
     const spaceCount = await this.repository.count(args);
     const spaces = await this.repository.findMany(args);
     return {

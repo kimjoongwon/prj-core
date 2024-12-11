@@ -10,9 +10,5 @@ export default defineConfig(option => ({
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
-  external: ['react', 'react-dom'],
   dts: true,
-  esbuildOptions(options) {
-    options.inject?.push('./inject.js');
-  },
 }));

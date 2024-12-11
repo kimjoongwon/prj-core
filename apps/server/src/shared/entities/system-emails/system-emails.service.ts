@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { SystemEmailsRepository } from './system-emails.repository';
 import { SystemEmailQueryDto } from './dtos/system-email-query.dto';
-import { PaginationMananger } from '../../utils';
 import { Prisma } from '@prisma/client';
+import { PaginationUtil } from '@shared/utils';
 
 @Injectable()
 export class SystemEmailsService {
@@ -38,7 +38,7 @@ export class SystemEmailsService {
   }
 
   async getManyByQuery(pageQuery: SystemEmailQueryDto) {
-    const args = PaginationMananger.toArgs(pageQuery);
+    const args = PaginationUtil.toArgs(pageQuery);
     const systemEmails = await this.repository.findMany(args);
     const count = await this.repository.count(args);
     return {
