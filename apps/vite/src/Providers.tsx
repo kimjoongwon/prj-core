@@ -1,7 +1,6 @@
 import { useLocalObservable } from 'mobx-react-lite';
 import { StoreProvider, Store, Navigation } from '@shared/stores';
-import { useGetAppBuilderSuspense } from '@shared/frontend';
-import { AppBuilder } from '@shared/types';
+import { useGetAppBuilderSuspense, AppBuilder } from '@shared/frontend';
 import { NextUIProvider } from '@nextui-org/react';
 
 interface ProvidersProps {

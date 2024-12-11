@@ -1,7 +1,9 @@
 import { DateTimeUtil } from './DateTimeUtil';
 import { PathUtil } from './PathUtil';
 
-export default {
+const Util = {
   DateTimeUtil,
   PathUtil,
 };
+
+export { Util as default, DateTimeUtil, PathUtil };
