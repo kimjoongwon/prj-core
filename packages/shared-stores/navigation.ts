@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { type RouteBuilder } from '@shared/frontend';
+import { type RouteBuilder } from '@shared/types';
 import { type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 

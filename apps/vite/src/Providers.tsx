@@ -1,7 +1,8 @@
 import { useLocalObservable } from 'mobx-react-lite';
 import { StoreProvider, Store, Navigation } from '@shared/stores';
-import { useGetAppBuilderSuspense, AppBuilder } from '@shared/frontend';
+import { useGetAppBuilderSuspense } from '@shared/frontend';
 import { NextUIProvider } from '@nextui-org/react';
+import { AppBuilder } from '@shared/types';
 
 interface ProvidersProps {
   children?: React.ReactNode;

@@ -8,12 +8,10 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@shared/stores';
 import { Providers } from './Providers';
-import {
-  ReactQueryProvider,
-  RouteBuilder as IRouteBuilder,
-} from '@shared/frontend';
+import { RouteBuilder as IRouteBuilder } from '@shared/types';
 import { RouteBuilder } from './builders/RouteBuilder';
 import './index.css';
+import { ReactQueryProvider } from '@shared/frontend';
 
 const rootElement = document.getElementById('root')!;
 

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { Navigation } from './navigation';
-import { AppBuilder } from '@shared/frontend';
+import { AppBuilder } from '@shared/types';
 
 export class Store {
   name: string = 'Illit';
