@@ -6,7 +6,7 @@ import {
   ApiResponseProperty,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseEntity } from '../entities/common/response.entity';
+import { ResponseEntity } from '../entities/common/entities/response.entity';
 
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   dataDto: DataDto,

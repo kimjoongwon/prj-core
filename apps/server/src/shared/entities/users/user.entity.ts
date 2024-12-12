@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { AbstractEntity } from '../common/abstract.entity';
+import { AbstractEntity } from '../common/entities/abstract.entity';
 
 export class UserEntity extends AbstractEntity implements User {
   spaceId: string;

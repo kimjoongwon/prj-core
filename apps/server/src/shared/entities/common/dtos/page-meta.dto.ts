@@ -1,12 +1,5 @@
 import { PaginationUtil } from '@shared/utils';
 import { NumberField, BooleanField } from '../../../decorators';
-import { PageQueryDto } from './page-query.dto';
-
-interface IPageMetaDtoParameters {
-  pageQueryDto: PageQueryDto;
-  itemCount: number;
-}
-
 export class PageMetaDto {
   @NumberField()
   readonly skip: number;
@@ -15,7 +8,7 @@ export class PageMetaDto {
   readonly take: number;
 
   @NumberField()
-  readonly itemCount: number;
+  readonly totalCount: number;
 
   @NumberField()
   readonly pageCount: number;
@@ -26,12 +19,12 @@ export class PageMetaDto {
   @BooleanField()
   readonly hasNextPage: boolean;
 
-  constructor(skip?: number, take?: number, itemCount: number = 0) {
+  constructor(skip?: number, take?: number, totalCount: number = 0) {
     const page = PaginationUtil.getPage({ skip, take });
     this.skip = skip;
     this.take = take;
-    this.itemCount = itemCount;
-    this.pageCount = Math.ceil(this.itemCount / this.take);
+    this.totalCount = totalCount;
+    this.pageCount = Math.ceil(totalCount / this.take);
     this.hasPreviousPage = page > 1;
     this.hasNextPage = page < this.pageCount;
   }

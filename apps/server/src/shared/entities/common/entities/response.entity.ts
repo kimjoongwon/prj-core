@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { ClassField } from '../../decorators/field.decorators';
-import { PageMetaDto } from './dtos/page-meta.dto';
+import { ClassField } from '../../../decorators/field.decorators';
+import { PageMetaDto } from '../dtos/page-meta.dto';
 
 export class ResponseEntity<T> {
   @ApiProperty({
