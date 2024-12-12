@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiResponseEntity } from '../../decorators';
-import { ResponseEntity } from '../common/response.entity';
+import { ResponseEntity } from '../common/entities/response.entity';
 import { CreateSubjectDto, SubjectDto, SubjectPageQueryDto, UpdateSubjectDto } from './dto';
 import { SubjectsService } from './subjects.service';
 import { plainToInstance } from 'class-transformer';

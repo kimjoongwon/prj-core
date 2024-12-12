@@ -1,5 +1,5 @@
 import { $Enums, Ability as AbilityEntity, Prisma } from '@prisma/client';
-import { AbstractEntity } from '../common/abstract.entity';
+import { AbstractEntity } from '../common/entities/abstract.entity';
 
 export class Ability extends AbstractEntity implements AbilityEntity {
   type: $Enums.AbilityTypes;

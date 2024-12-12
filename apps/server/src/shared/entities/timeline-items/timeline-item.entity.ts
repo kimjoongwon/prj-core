@@ -1,4 +1,4 @@
-import { AbstractEntity } from '../common/abstract.entity';
+import { AbstractEntity } from '../common/entities/abstract.entity';
 import { TimelineItem as TimelineEntity } from '@prisma/client';
 
 export class TimelineItem extends AbstractEntity implements TimelineEntity {

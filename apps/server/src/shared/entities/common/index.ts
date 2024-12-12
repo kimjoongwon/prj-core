@@ -1,3 +1,3 @@
-export { AbstractEntity } from './abstract.entity';
-export { ResponseEntity } from './response.entity';
+export { AbstractEntity } from './entities/abstract.entity';
+export { ResponseEntity } from './entities/response.entity';
 export * from './dtos';

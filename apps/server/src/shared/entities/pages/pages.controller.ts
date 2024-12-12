@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity } from '../common/response.entity';
+import { ResponseEntity } from '../common/entities/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { CreatePageDto, PageDto, UpdatePageDto, CPageQueryDto } from './dtos';
 import { Auth } from '../../decorators/auth.decorator';
