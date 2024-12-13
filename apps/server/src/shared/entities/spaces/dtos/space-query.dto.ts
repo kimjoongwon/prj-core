@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { IntersectionType, PartialType } from '@nestjs/swagger';
-import { PageQueryDto } from '../../common';
+import { QueryDto } from '../../common';
 import { UpdateSpaceDto } from './update-space.dto';
 import { EnumFieldOptional } from '../../../decorators/field.decorators';
 
@@ -12,5 +12,5 @@ class SpaceSortOrder {
 export class SpaceQueryDto extends IntersectionType(
   PartialType(UpdateSpaceDto),
   SpaceSortOrder,
-  PageQueryDto,
+  QueryDto,
 ) {}

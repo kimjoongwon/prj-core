@@ -115,6 +115,9 @@ export class BuilderService {
                                       accessorKey: 'name',
                                       type: 'expand',
                                     },
+                                    {
+                                      accessorKey: 'id',
+                                    },
                                   ],
                                 },
                                 form: {

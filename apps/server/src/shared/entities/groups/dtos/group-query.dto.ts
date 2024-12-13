@@ -1,8 +1,8 @@
 import { EnumFieldOptional, StringFieldOptional } from '../../../decorators/field.decorators';
 import { Order } from '../../../constants/order.constant';
-import { PageQueryDto } from '../../common';
+import { QueryDto } from '../../common';
 
-export class GroupQueryDto extends PageQueryDto {
+export class GroupQueryDto extends QueryDto {
   @StringFieldOptional()
   name: string;
 

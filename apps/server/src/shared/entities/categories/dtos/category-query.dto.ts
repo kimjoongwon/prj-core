@@ -1,8 +1,8 @@
 import { EnumFieldOptional, StringFieldOptional } from '../../../decorators/field.decorators';
 import { Prisma } from '@prisma/client';
-import { PageQueryDto } from '../../common';
+import { QueryDto } from '../../common';
 
-export class CategoryQueryDto extends PageQueryDto {
+export class CategoryQueryDto extends QueryDto {
   @StringFieldOptional()
   name?: string;
 

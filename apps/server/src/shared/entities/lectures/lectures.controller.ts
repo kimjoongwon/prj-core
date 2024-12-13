@@ -95,8 +95,8 @@ export class LecturesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(LectureDto, HttpStatus.OK, { isArray: true })
-  async getLecturesByQuery(@Query() query: LectureQueryDto, @Headers('tenantId') tenantId: string) {
-    const { count, lectures } = await this.service.getManyByQuery(query.toArgs(tenantId));
+  async getLecturesByQuery(@Query() query: LectureQueryDto) {
+    const { count, lectures } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,

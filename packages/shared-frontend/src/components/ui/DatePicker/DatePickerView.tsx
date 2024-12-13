@@ -1,7 +1,7 @@
-import { DatePicker, DatePickerProps } from '@nextui-org/react';
+// import { DatePicker, DatePickerProps } from '@nextui-org/react';
 
-export interface DatePickerViewProps extends DatePickerProps {}
+// export interface DatePickerViewProps extends DatePickerProps {}
 
-export const DatePickerView = (props: DatePickerProps) => {
-  return <DatePicker {...props} />;
-};
+// export const DatePickerView = (props: DatePickerProps) => {
+//   return <DatePicker {...props} />;
+// };

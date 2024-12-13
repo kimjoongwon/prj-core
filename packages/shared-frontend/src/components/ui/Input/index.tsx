@@ -37,14 +37,14 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
   );
 
   return (
-    <div className='h-20'>
+    <div className="h-20">
       <InputView
         {...rest}
         type={type}
         onChange={handleChange}
-        onBlur={e => {
-          rest?.onBlur?.(e.target.value);
-        }}
+        // onBlur={e => {
+        //   rest?.onBlur?.(e.target.value);
+        // }}
         errorMessage={errorMessage}
         value={String(localState.value)}
       />

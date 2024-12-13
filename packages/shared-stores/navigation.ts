@@ -11,6 +11,7 @@ export class Navigation {
 
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
+    this.getRoutes();
     makeAutoObservable(this, {}, { autoBind: true });
   }
 

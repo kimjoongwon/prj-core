@@ -9,11 +9,9 @@
     "access": "public"
   },
   "main": "./index.ts",
-  "module": "./index.ts",
-  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsup --config tsup.config.ts && pnpm run copy-css",
-    "start:dev": "tsup --watch && pnpm run copy-css",
+    "start:dev": "",
     "copy-css": "copyfiles --all \"./globals.css\" dist",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",
@@ -29,7 +27,7 @@
     "@emotion/styled": "^11.13.0",
     "@internationalized/date": "^3.5.6",
     "@mui/material": "^6.1.6",
-    "@nextui-org/react": "2.4.8",
+    "@nextui-org/react": "2.6.8",
     "@nozbe/watermelondb": "^0.27.1",
     "@tanstack/react-query": "5.59.19",
     "@tanstack/react-table": "^8.20.5",

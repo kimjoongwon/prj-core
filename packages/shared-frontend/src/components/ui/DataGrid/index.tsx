@@ -17,6 +17,7 @@ import {
 } from '@tanstack/react-table';
 import { renderButton } from '../../renderer/renderButton';
 import {
+  Selection,
   ButtonProps,
   SortDescriptor,
   Spacer,
@@ -31,9 +32,9 @@ import {
 import { TableContainer } from './TableContainer';
 import { HStack } from '../HStack';
 import { observer } from 'mobx-react-lite';
-import { difference, uniq } from 'lodash-es';
 import { Pagination } from '../Pagination';
-import { toJS } from 'mobx';
+
+export type Key = string | number;
 
 export type PageQuery = {
   take?: number;
@@ -46,7 +47,7 @@ export type TableQuery = {
 
 export type DataGridState<T> = {
   currentSort?: SortDescriptor;
-  selectedKeys?: string[];
+  selection?: Selection;
   query?: TableQuery & T;
 };
 
@@ -62,9 +63,6 @@ export interface DataGridProps<T> extends TableProps {
   emptyContent?: string;
   totalCount?: number;
 }
-
-export interface CustomDataGridProps
-  extends Omit<DataGridProps<any>, 'data' | 'columns'> {}
 
 export const DataGrid = observer(
   <
@@ -84,7 +82,6 @@ export const DataGrid = observer(
       emptyContent = '데이터가 없습니다.',
       totalCount,
       hideButtons,
-      ...rest
     } = props;
 
     const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -128,7 +125,7 @@ export const DataGrid = observer(
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
     const rows = table?.getRowModel?.()?.rows || [];
-    console.log('state.currentSort', state.currentSort);
+
     return (
       <TableContainer>
         {!hideButtons && (
@@ -145,70 +142,42 @@ export const DataGrid = observer(
           </>
         )}
         <Table
-          {...rest}
-          defaultSelectedKeys={state?.selectedKeys || []}
-          onSelectionChange={selection => {
-            if (selection instanceof Set) {
-              // @ts-ignore
-              state.selectedKeys = Array.from(selection);
-              return;
-            }
-            if (selection === 'all') {
-              const allKey =
-                // @ts-ignore
-                data?.map(row => row?.[selectedKey as string]) || [];
-              // @ts-ignore
-              state.selectedKeys = uniq([...state.selectedKeys, ...allKey]);
-            } else {
-              difference(state?.selectedKeys || [], Array.from(selection));
-            }
-          }}
-          sortDescriptor={state?.currentSort || undefined}
-          onSortChange={sort => {
-            console.log('state', state);
-            state.query = {
-              ...state?.query,
-              [`${sort.column}SortOrder`]:
-                sort.direction === 'ascending' ? 'asc' : 'desc',
-            };
-
-            console.log(state);
-            // window.location.replace(
-            //   window.location.pathname +
-            //     '?' +
-            //     new URLSearchParams(state.query).toString(),
-            // );
-            state.currentSort = sort;
+          defaultSelectedKeys={state?.selection}
+          onSelectionChange={(selection: Selection) => {
+            state.selection = selection;
           }}
         >
-          <TableHeader>
-            {headers?.map(header => (
-              <TableColumn allowsSorting key={header.column.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-              </TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody emptyContent={emptyContent}>
-            {rows?.map(row => (
-              // @ts-ignore
-              <TableRow key={row.original?.[selectedKey as string]}>
-                {row.getVisibleCells().map(cell => {
-                  return (
-                    <TableCell key={cell?.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+          <TableHeader columns={headers}>
+            {header => {
+              return (
+                <TableColumn key={header.column.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
                       )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
+                </TableColumn>
+              );
+            }}
+          </TableHeader>
+          <TableBody emptyContent={emptyContent} items={rows}>
+            {row => {
+              return (
+                <TableRow key={row.original?.[selectedKey as string]}>
+                  {row.getVisibleCells().map(cell => {
+                    return (
+                      <TableCell key={cell?.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            }}
           </TableBody>
         </Table>
         <Spacer y={4} />

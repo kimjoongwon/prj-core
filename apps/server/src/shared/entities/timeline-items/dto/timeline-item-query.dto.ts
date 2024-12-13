@@ -1,5 +1,5 @@
 import { IntersectionType, PartialType } from '@nestjs/swagger';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
 import { EnumFieldOptional } from '../../../decorators/field.decorators';
 import { Prisma } from '@prisma/client';
 import { UpdateTimelineItemDto } from './update-timeline-item.dto';
@@ -12,5 +12,5 @@ export class TimelineItemSortOrder {
 export class TimelineItemQueryDto extends IntersectionType(
   PartialType(UpdateTimelineItemDto),
   TimelineItemSortOrder,
-  PageQueryDto,
+  QueryDto,
 ) {}

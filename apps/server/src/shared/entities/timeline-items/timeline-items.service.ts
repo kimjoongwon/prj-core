@@ -17,7 +17,7 @@ export class TimelineItemsService {
     return this.prisma.timelineItem.findUnique({ where: { id } });
   }
 
-  updateWithRemovedAtById(id: string, removedAt: Date) {
+  updateRemovedAtById(id: string, removedAt: Date) {
     return this.prisma.timelineItem.update({
       where: {
         id,
@@ -41,7 +41,7 @@ export class TimelineItemsService {
     });
   }
 
-  updateDtoById(id: string, dto: UpdateTimelineItemDto) {
+  updateById(id: string, dto: UpdateTimelineItemDto) {
     return this.prisma.timelineItem.update({
       where: {
         id,
@@ -56,8 +56,7 @@ export class TimelineItemsService {
 
   async getManyByQuery(query: TimelineItemQueryDto) {
     const args = query.toArgs<Prisma.TimelineItemFindManyArgs>();
-
-    const countArgs = query.toTotalCountArgs<Prisma.TimelineItemCountArgs>();
+    const countArgs = query.toCountArgs<Prisma.TimelineItemCountArgs>();
 
     const totalCount = await this.prisma.timelineItem.count(countArgs);
     const timelineItems = await this.prisma.timelineItem.findMany(args);

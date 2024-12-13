@@ -1,5 +1,5 @@
 import { IntersectionType, PartialType } from '@nestjs/swagger';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
 import { OrderByDto } from '../../common/dtos/order-by.dto';
 import { EnumFieldOptional } from '../../../decorators/field.decorators';
 import { Prisma } from '@prisma/client';
@@ -13,8 +13,4 @@ class RoleOrderBy extends OrderByDto {
   createdAtSortOrder?: Prisma.SortOrder;
 }
 
-export class RoleQueryDto extends IntersectionType(
-  PartialType(RoleDto),
-  RoleOrderBy,
-  PageQueryDto,
-) {}
+export class RoleQueryDto extends IntersectionType(PartialType(RoleDto), RoleOrderBy, QueryDto) {}

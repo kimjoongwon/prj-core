@@ -9,7 +9,6 @@ export class AdminBuilderController {
 
   @Get()
   @Auth([], { public: true })
-  // @ApiResponseEntity(null, 200)
   async getAppBuilder() {
     const pages = await this.builderService.getAppBuilder();
     return new ResponseEntity(200, '성공', pages);

@@ -32,9 +32,9 @@ export const User = observer(() => {
         </DropdownItem>
         <DropdownItem key="space" className="h-14 gap-2">
           {/* <p className="font-semibold">소속: {auth.user?.email}</p> */}
-          <DropdownItem>설정</DropdownItem>
+          <DropdownItem key="setting">설정</DropdownItem>
         </DropdownItem>
-        <DropdownItem color="danger" className="text-danger">
+        <DropdownItem key="logout" color="danger" className="text-danger">
           로그아웃
         </DropdownItem>
       </DropdownMenu>

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { UpdateCategoryDto } from './dtos/update-category.dto';
 import { Prisma } from '@prisma/client';
+import { CategoryQueryDto } from './dtos';
 
 @Injectable()
 export class CategoriesService {
@@ -41,16 +42,15 @@ export class CategoriesService {
     return this.prisma.category.findMany(args);
   }
 
-  async getManyByQuery(args: Prisma.CategoryFindManyArgs) {
-    const categories = await this.prisma.category.findMany({
-      ...args,
-      include: {
-        children: true,
-      },
-    });
-    const count = await this.prisma.category.count({
-      where: args.where,
-    });
+  async getManyByQuery(query: CategoryQueryDto) {
+    const args = query.toArgs<Prisma.CategoryFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
+    args.include = {
+      children: true,
+    };
+
+    const categories = await this.prisma.category.findMany(args);
+    const count = await this.prisma.category.count(countArgs);
 
     return {
       categories,

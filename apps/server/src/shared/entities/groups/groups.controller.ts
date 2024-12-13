@@ -16,7 +16,6 @@ import { ResponseEntity } from '../common';
 import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
 import { GroupsService } from './groups.service';
 import { plainToInstance } from 'class-transformer';
-import { PaginationUtil } from '@shared/utils';
 
 @ApiTags('ADMIN_GROUPS')
 @Controller()

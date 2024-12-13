@@ -1,4 +1,4 @@
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
 import { IntersectionType, PartialType } from '@nestjs/swagger';
 import { UpdateEmailDto } from './update-email.dto';
 import { Prisma } from '@prisma/client';
@@ -12,5 +12,5 @@ class EmailSortOrder {
 export class EmailQueryDto extends IntersectionType(
   PartialType(UpdateEmailDto),
   EmailSortOrder,
-  PageQueryDto,
+  QueryDto,
 ) {}

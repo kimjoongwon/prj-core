@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TimelineItemsService } from './timeline-items.service';
-import { ResponseEntity, PageMetaDto } from '../common';
+import { ResponseEntity } from '../common';
 import {
   CreateTimelineItemDto,
   TimelineItemDto,
@@ -67,7 +67,7 @@ export class TimelineItemsController {
     @Param('timelineItemId') timelineItemId: string,
     @Body() updateTimelineItemDto: UpdateTimelineItemDto,
   ) {
-    const timelineItem = await this.service.updateDtoById(timelineItemId, updateTimelineItemDto);
+    const timelineItem = await this.service.updateById(timelineItemId, updateTimelineItemDto);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
@@ -80,7 +80,7 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async removeTimelineItem(@Param('timelineItemId') timelineItemId: string) {
-    const timelineItem = await this.service.updateWithRemovedAtById(timelineItemId, new Date());
+    const timelineItem = await this.service.updateRemovedAtById(timelineItemId, new Date());
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

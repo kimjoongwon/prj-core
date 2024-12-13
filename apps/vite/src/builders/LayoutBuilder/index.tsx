@@ -124,6 +124,7 @@ export const ServiceRoutes = observer(() => {
 
 export const ServicesRoutes = observer(() => {
   const { navigation } = useStore();
+  console.log('navigation', navigation);
   const navigate = useNavigate();
   return (
     <HStack className="justify-center">
