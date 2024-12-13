@@ -1,53 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTimelineItemDto } from './dto/create-timeline-item.dto';
-import { TimelineItemsRepository } from './timeline-items.repository';
 import { Prisma } from '@prisma/client';
+import { CreateTimelineItemDto, TimelineItemQueryDto, UpdateTimelineItemDto } from './dto';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class TimelineItemsService {
-  constructor(private readonly repository: TimelineItemsRepository) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  upsert(id: string, createTimelineItemDto: CreateTimelineItemDto) {
-    return this.repository.upsert({
-      where: { id },
-      create: createTimelineItemDto,
-      update: createTimelineItemDto,
+  create(createTimelineItemDto: CreateTimelineItemDto) {
+    return this.prisma.timelineItem.create({
+      data: createTimelineItemDto,
     });
   }
 
-  create(args: Prisma.TimelineItemCreateArgs) {
-    return this.repository.create(args);
+  getUniqueById(id: string) {
+    return this.prisma.timelineItem.findUnique({ where: { id } });
   }
 
-  update(args: Prisma.TimelineItemUpdateArgs) {
-    return this.repository.update(args);
+  updateWithRemovedAtById(id: string, removedAt: Date) {
+    return this.prisma.timelineItem.update({
+      where: {
+        id,
+      },
+      data: {
+        removedAt,
+      },
+    });
   }
 
-  getUnique(args: Prisma.TimelineItemFindUniqueArgs) {
-    return this.repository.findUnique(args);
+  removeManyByIds(ids: string[], removedAt: Date) {
+    return this.prisma.timelineItem.updateMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      data: {
+        removedAt,
+      },
+    });
   }
 
-  getFirst(args: Prisma.TimelineItemFindFirstArgs) {
-    return this.repository.findFirst(args);
+  updateDtoById(id: string, dto: UpdateTimelineItemDto) {
+    return this.prisma.timelineItem.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
   }
 
-  remove(args: Prisma.TimelineItemUpdateArgs) {
-    return this.repository.update(args);
+  deleteById(id: string) {
+    return this.prisma.timelineItem.delete({ where: { id } });
   }
 
-  removeMany(args: Prisma.TimelineItemUpdateManyArgs) {
-    return this.repository.updateMany(args);
-  }
+  async getManyByQuery(query: TimelineItemQueryDto) {
+    const args = query.toArgs<Prisma.TimelineItemFindManyArgs>();
 
-  delete(args: Prisma.TimelineItemDeleteArgs) {
-    return this.repository.delete(args);
-  }
+    const countArgs = query.toTotalCountArgs<Prisma.TimelineItemCountArgs>();
 
-  async getManyByQuery(args: Prisma.TimelineItemFindManyArgs) {
-    const timelineItemCount = await this.repository.count(args as Prisma.TimelineItemCountArgs);
-    const timelineItems = await this.repository.findMany(args);
+    const totalCount = await this.prisma.timelineItem.count(countArgs);
+    const timelineItems = await this.prisma.timelineItem.findMany(args);
+
     return {
-      count: timelineItemCount,
+      totalCount,
       timelineItems,
     };
   }

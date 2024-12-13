@@ -3,6 +3,7 @@ import { GroupsRepository } from './groups.repository';
 import { CreateGroupDto } from './dtos/create-group.dto';
 import { UpdateGroupDto } from './dtos/update-group.dto';
 import { Prisma } from '@prisma/client';
+import { GroupQueryDto } from './dtos';
 
 @Injectable()
 export class GroupsService {
@@ -11,11 +12,14 @@ export class GroupsService {
     return this.repository.create({ data: createGroupDto });
   }
 
-  async getManyByQuery(args: Prisma.GroupFindManyArgs) {
+  async getManyByQuery(query: GroupQueryDto) {
+    const args = query.toArgs<Prisma.GroupFindManyArgs>();
+    const countArgs = query.toTotalCountArgs<Prisma.GroupCountArgs>();
     const groups = await this.repository.findManyByQuery(args);
-    const count = await this.repository.count(args as Prisma.GroupCountArgs);
+    const totalCount = await this.repository.count(countArgs);
+
     return {
-      count,
+      totalCount,
       groups,
     };
   }

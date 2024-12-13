@@ -4,6 +4,6 @@ import { AbilitiesRepository } from './abilities.repository';
 
 @Module({
   providers: [AbilitiesService, AbilitiesRepository],
-  exports: [AbilitiesService, AbilitiesRepository],
+  exports: [AbilitiesService],
 })
 export class AbilitiesModule {}

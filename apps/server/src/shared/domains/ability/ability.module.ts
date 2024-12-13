@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AbilitiesModule } from '../../entities/abilities/abilities.module';
 import { AbilityService } from './ability.service';
+import { AbilitiesService } from '../../entities/abilities/abilities.service';
 
 @Module({
   imports: [AbilitiesModule],

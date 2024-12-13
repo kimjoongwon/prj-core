@@ -18,13 +18,21 @@ export class PageQueryDto {
   })
   readonly take?: number = undefined;
 
-  toArgs(tenantId?: string) {
-    const args = PaginationUtil.toArgs(this);
-    args.where = {
-      ...args.where,
-      tenantId,
-    };
-    return args;
+  toArgs<T>() {
+    return PaginationUtil.toArgs(this) as T;
+  }
+
+  toTotalCountArgs<T>(includeRemovedItems = false) {
+    const args = PaginationUtil.toArgs(this).include;
+    delete args.where;
+    delete args.include;
+    delete args.skip;
+    delete args.take;
+    delete args.orderBy;
+    if (!includeRemovedItems) {
+      args.where.removedAt = null;
+    }
+    return args as T;
   }
 
   toPageMetaDto(itemCount: number) {

@@ -1,6 +1,5 @@
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
-
-import { getVariableName } from '../common/utils';
+import { ValidationUtil } from '@shared/utils';
 
 export function ApiBooleanProperty(
   options: Omit<ApiPropertyOptions, 'type'> = {},
@@ -15,8 +14,7 @@ export function ApiBooleanPropertyOptional(
 }
 
 export function ApiUUIDProperty(
-  options: Omit<ApiPropertyOptions, 'type' | 'format'> &
-    Partial<{ each: boolean }> = {},
+  options: Omit<ApiPropertyOptions, 'type' | 'format'> & Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
   return ApiProperty({
     type: options.each ? [String] : String,
@@ -45,7 +43,7 @@ export function ApiEnumProperty<TEnum>(
     // throw error during the compilation of swagger
     // isArray: options.each,
     enum: enumValue,
-    enumName: getVariableName(getEnum),
+    enumName: ValidationUtil.getVariableName(getEnum),
     ...options,
   });
 }

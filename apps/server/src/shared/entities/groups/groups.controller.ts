@@ -39,22 +39,14 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByQuery(@Query() query: GroupQueryDto, @Headers('tenantId') tenantId: string) {
-    const args = query.toArgs(tenantId);
-    const { count, groups } = await this.groupService.getManyByQuery(args);
-    const { skip, take } = query;
+  async getGroupsByQuery(@Query() query: GroupQueryDto) {
+    const { totalCount, groups } = await this.groupService.getManyByQuery(query);
+
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
       groups.map((group) => plainToInstance(GroupDto, group)),
-      {
-        skip,
-        take,
-        hasNextPage: groups.length === take,
-        hasPreviousPage: PaginationUtil.getPage({ skip, take }) > 1,
-        itemCount: count,
-        pageCount: 0,
-      },
+      query.toPageMetaDto(totalCount),
     );
   }
 

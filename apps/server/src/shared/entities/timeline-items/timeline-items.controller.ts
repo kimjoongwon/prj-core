@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   HttpCode,
   HttpStatus,
   Param,
@@ -34,9 +33,7 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async createTimelineItem(@Body() createTimelineItemDto: CreateTimelineItemDto) {
-    const timelineItem = await this.service.create({
-      data: createTimelineItemDto,
-    });
+    const timelineItem = await this.service.create(createTimelineItemDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToClass(TimelineItemDto, timelineItem));
   }
 
@@ -45,11 +42,7 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async getTimelineItem(@Param('timelineItemId') timelineItemId: string) {
-    const timelineItem = await this.service.getUnique({
-      where: {
-        id: timelineItemId,
-      },
-    });
+    const timelineItem = await this.service.getUniqueById(timelineItemId);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
@@ -62,16 +55,7 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async removeTimelineItems(@Body() timelineItemIds: string[]) {
-    const timelineItems = await this.service.removeMany({
-      where: {
-        id: {
-          in: timelineItemIds,
-        },
-      },
-      data: {
-        removedAt: new Date(),
-      },
-    });
+    const timelineItems = await this.service.removeManyByIds(timelineItemIds, new Date());
     return new ResponseEntity(HttpStatus.OK, '성공', timelineItems.count);
   }
 
@@ -83,12 +67,7 @@ export class TimelineItemsController {
     @Param('timelineItemId') timelineItemId: string,
     @Body() updateTimelineItemDto: UpdateTimelineItemDto,
   ) {
-    const timelineItem = await this.service.update({
-      where: {
-        id: timelineItemId,
-      },
-      data: updateTimelineItemDto,
-    });
+    const timelineItem = await this.service.updateDtoById(timelineItemId, updateTimelineItemDto);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
@@ -101,14 +80,7 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async removeTimelineItem(@Param('timelineItemId') timelineItemId: string) {
-    const timelineItem = await this.service.remove({
-      where: {
-        id: timelineItemId,
-      },
-      data: {
-        removedAt: new Date(),
-      },
-    });
+    const timelineItem = await this.service.updateWithRemovedAtById(timelineItemId, new Date());
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
@@ -121,11 +93,8 @@ export class TimelineItemsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK)
   async deleteTimelineItem(@Param('timelineItemId') timelineItemId: string) {
-    const timelineItem = await this.service.delete({
-      where: {
-        id: timelineItemId,
-      },
-    });
+    const timelineItem = await this.service.deleteById(timelineItemId);
+
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
@@ -137,16 +106,13 @@ export class TimelineItemsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TimelineItemDto, HttpStatus.OK, { isArray: true })
-  async getTimelineItemsByQuery(
-    @Query() query: TimelineItemQueryDto,
-    @Headers('tenant-id') tenantId: string,
-  ) {
-    const { count, timelineItems } = await this.service.getManyByQuery(query.toArgs(tenantId));
+  async getTimelineItemsByQuery(@Query() query: TimelineItemQueryDto) {
+    const { totalCount, timelineItems } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
       timelineItems.map((timelineItem) => plainToInstance(TimelineItemDto, timelineItem)),
-      new PageMetaDto(query.skip, query.take, count),
+      query.toPageMetaDto(totalCount),
     );
   }
 }
