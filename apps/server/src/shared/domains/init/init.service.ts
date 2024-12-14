@@ -190,24 +190,28 @@ export class InitService {
         name: '이용자',
       },
     });
+
     if (!category) {
       await this.categoriesService.create({
         data: {
-          tenantId: tenant.id,
+          tenantId: tenant?.id,
           serviceId: userService.id,
           name: '이용자',
           parentId: null,
+          type: 'ROOT',
           children: {
             createMany: {
               data: [
                 {
                   name: '회원',
                   serviceId: userService.id,
+                  type: 'LEAF',
                   tenantId: tenant.id,
                 },
                 {
                   tenantId: tenant.id,
                   serviceId: userService.id,
+                  type: 'LEAF',
                   name: '비회원',
                 },
               ],
@@ -221,9 +225,9 @@ export class InitService {
   async initApp() {
     await this.createSubjects();
     await this.createServices();
-    await this.createUserCategories();
     const { adminRoleId } = await this.createDefaultRoles();
     const { spaceId } = await this.createDefaultSpace();
     await this.createDefaultUser(adminRoleId, spaceId);
+    await this.createUserCategories();
   }
 }

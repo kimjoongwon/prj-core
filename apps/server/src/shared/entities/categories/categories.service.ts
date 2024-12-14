@@ -48,6 +48,9 @@ export class CategoriesService {
     args.include = {
       children: true,
     };
+    args.where = {
+      ...args.where,
+    };
 
     const categories = await this.prisma.category.findMany(args);
     const count = await this.prisma.category.count(countArgs);

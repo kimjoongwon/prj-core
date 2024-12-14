@@ -1,4 +1,5 @@
 import { type InputProps, type ButtonProps } from '@nextui-org/react';
+import { Key } from 'react';
 
 export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
@@ -104,9 +105,36 @@ export interface PageBuilder {
 }
 
 export interface TableBuilder {
-  queryKey: string;
+  apiKey: string;
   query: object;
+  meta?: {
+    expandable?: boolean;
+  };
+  selection?: Key[] | 'all';
   columns: any[];
+  remove?: {
+    mutationKey: string;
+    try: Try;
+    catch: Catch;
+    finally: Finally;
+  };
+  delete?: {
+    mutationKey: string;
+    try: Try;
+    catch: Catch;
+    finally: Finally;
+  };
+  update?: {
+    mutationKey: string;
+    try: Try;
+    catch: Catch;
+    finally: Finally;
+  };
+  create?: {
+    try: Try;
+    catch: Catch;
+    finally: Finally;
+  };
 }
 
 export interface SectionBuilder {

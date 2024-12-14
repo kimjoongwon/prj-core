@@ -23,7 +23,7 @@ export class PaginationUtil {
           return object;
         }
 
-        if (key.endsWith('SortOrder') && value) {
+        if (key.endsWith('SortOrder')) {
           object = {
             orderBy: {
               [key.replace('SortOrder', '')]: value,

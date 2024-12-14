@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite';
 import { ButtonViewProps } from '.';
 
 export const ButtonView = observer((props: ButtonViewProps) => {
-  const { children, onClick, className = '', size, ...rest } = props;
+  const { children, onPress, className = '', size, ...rest } = props;
   return (
     <>
       <NextUIButton
         className={'font-pretendard ' + className}
-        onClick={onClick}
+        onPress={onPress}
         {...rest}
       >
         {children}

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import {
   ColumnDef,
@@ -7,9 +5,6 @@ import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
   getGroupedRowModel,
   getSortedRowModel,
   GroupingState,
@@ -31,30 +26,16 @@ import { action } from 'mobx';
 
 export type Key = string | number;
 
-export type PageQuery = {
-  take?: number;
-  skip?: number;
-};
-
-export type TableQuery = {
-  [key: string]: any;
-} & PageQuery;
-
 export type DataGridState<T> = {
   currentSort?: SortDescriptor;
   selection?: Selection;
-  query?: TableQuery & T;
 };
 
 export interface DataGridProps<T> extends TableProps {
   state?: DataGridState<T>;
   data: T[];
   columns: ColumnDef<T, any>[];
-  hideButtons?: boolean;
-  actions?: ('삭제' | '생성' | '제거')[];
-  selectedKey?: string;
   emptyContent?: string;
-  totalCount?: number;
 }
 
 export const DataGrid = observer(
@@ -68,13 +49,10 @@ export const DataGrid = observer(
     const {
       data,
       columns = [],
-      selectedKey = 'id',
       state,
       emptyContent = '데이터가 없습니다.',
     } = props;
 
-    const [columnVisibility, setColumnVisibility] = React.useState({});
-    const [grouping, setGrouping] = React.useState<GroupingState>([]);
     const [rowSelection, setRowSelection] = React.useState({});
     const [expanded, setExpanded] = React.useState<ExpandedState>({});
 
@@ -82,32 +60,20 @@ export const DataGrid = observer(
       data,
       columns,
       getCoreRowModel: getCoreRowModel(),
-      getSortedRowModel: getSortedRowModel(),
-      getGroupedRowModel: getGroupedRowModel(),
-      getFacetedRowModel: getFacetedRowModel(),
-      getFacetedUniqueValues: getFacetedUniqueValues(),
-      getFacetedMinMaxValues: getFacetedMinMaxValues(),
       getSubRows: (row: any) => row?.children || [],
       getExpandedRowModel: getExpandedRowModel(),
-      enableColumnResizing: true,
-      columnResizeMode: 'onChange',
-      onColumnVisibilityChange: setColumnVisibility,
-      onGroupingChange: setGrouping,
       onRowSelectionChange: setRowSelection,
+      onExpandedChange: setExpanded,
       state: {
-        grouping,
-        columnVisibility,
         rowSelection,
         expanded,
       },
-      onExpandedChange: setExpanded,
       debugTable: false,
-      debugHeaders: false,
+      debugHeaders: true,
       debugColumns: false,
     });
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
-    const rows = table?.getRowModel?.()?.rows || [];
 
     const onSelectionChange = action((selection: Selection) => {
       state.selection = selection;
@@ -115,13 +81,16 @@ export const DataGrid = observer(
 
     return (
       <Table
+        aria-label="datagrid"
+        isHeaderSticky
+        isCompact
         defaultSelectedKeys={state?.selection}
         onSelectionChange={onSelectionChange}
       >
-        <TableHeader columns={headers}>
-          {header => {
+        <TableHeader>
+          {headers.map(header => {
             return (
-              <TableColumn key={header.column.id}>
+              <TableColumn key={header.column.id} colSpan={header.colSpan}>
                 {header.isPlaceholder
                   ? null
                   : flexRender(
@@ -130,15 +99,15 @@ export const DataGrid = observer(
                     )}
               </TableColumn>
             );
-          }}
+          })}
         </TableHeader>
-        <TableBody emptyContent={emptyContent} items={rows}>
-          {row => {
+        <TableBody emptyContent={emptyContent}>
+          {table.getRowModel().rows.map(row => {
             return (
-              <TableRow key={row.original?.[selectedKey as keyof T]}>
+              <TableRow key={row.id}>
                 {row.getVisibleCells().map(cell => {
                   return (
-                    <TableCell key={cell?.id}>
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -148,7 +117,7 @@ export const DataGrid = observer(
                 })}
               </TableRow>
             );
-          }}
+          })}
         </TableBody>
       </Table>
     );
