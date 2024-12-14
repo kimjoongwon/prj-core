@@ -24,7 +24,6 @@ export const categoriesPage: PageBuilder = {
       {
         id: 'action',
         header: '액션',
-        cell: 'test',
         meta: {
           headerName: '액션 버튼',
           edit: {
@@ -34,7 +33,8 @@ export const categoriesPage: PageBuilder = {
               color: 'primary',
               flow: {
                 try: {
-                  pathname: 'edit',
+                  pathname: ':categoryId/edit',
+                  paramKeys: ['categoryId'],
                 },
               },
             },

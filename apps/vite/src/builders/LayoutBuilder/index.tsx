@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { AppBar, Button, HStack, List, VStack } from '@shared/frontend';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderState } from '@shared/types';
 import { observer } from 'mobx-react-lite';
@@ -32,6 +32,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (state?.type === 'Service') {
     return <ServiceLayout>{children}</ServiceLayout>;
+  }
+
+  if (state?.type === 'Table') {
+    return <TableLayout>{children}</TableLayout>;
   }
 
   return children;
@@ -72,7 +76,12 @@ export const ServiceLayout = observer((props: ServiceLayoutProps) => {
 export const TableLayout = observer((props: TableLayoutProps) => {
   const { children } = props;
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <Outlet />
+    </>
+  );
 });
 
 export const ServicesLayout = observer((props: ServicesLayoutProps) => {

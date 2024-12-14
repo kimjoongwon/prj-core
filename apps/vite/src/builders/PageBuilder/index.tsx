@@ -6,8 +6,10 @@ import { Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
+import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
+import { toJS } from 'mobx';
 
 interface PageBuilderProps {
   state: PageBuilderState | undefined;
@@ -15,9 +17,22 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
+  const params = useParams();
+  console.log('params', params);
 
   if (state?.type === 'Outlet') {
     return <Outlet />;
+  }
+  console.log('state', toJS(state));
+  if (state?.type === 'Form') {
+    console.log('modal open?');
+    return (
+      <Modal isOpen={true}>
+        <ModalContent>
+          <ModalBody>sadasdsa</ModalBody>
+        </ModalContent>
+      </Modal>
+    );
   }
 
   return (

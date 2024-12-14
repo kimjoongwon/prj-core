@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
-import { access } from 'fs';
 import { categoriesPage } from './pages/categories.page';
+import { categoryEditPage } from './pages/category-edit.page';
 
 @Injectable()
 export class BuilderService {
@@ -71,7 +71,16 @@ export class BuilderService {
                               type: 'Table',
                               page: categoriesPage,
                             },
-                            children: [],
+                            children: [
+                              {
+                                name: '수정',
+                                pathname: ':categoryId/edit',
+                                active: false,
+                                layout: {
+                                  page: categoryEditPage,
+                                },
+                              },
+                            ],
                           },
                           {
                             name: '그룹',
