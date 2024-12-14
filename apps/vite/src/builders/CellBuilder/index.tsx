@@ -1,6 +1,7 @@
 import { Button } from '@shared/frontend';
 import { CellContext } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
+import { PathUtil } from '@shared/utils';
 
 export const CellBuilder = ({
   row,
@@ -10,7 +11,20 @@ export const CellBuilder = ({
   const navigate = useNavigate();
 
   const onPressEdit = () => {
-    navigate(column.columnDef.meta.edit.button.flow.try.pathname);
+    const params = column.columnDef.meta.edit.button.flow.try.paramKeys.reduce(
+      (acc, key) => {
+        acc[key] = row.original.id;
+        return acc;
+      },
+      {},
+    );
+
+    navigate(
+      PathUtil.getUrlWithParamsAndQueryString(
+        column.columnDef.meta.edit.button.flow.try.pathname,
+        params,
+      ),
+    );
     console.log('onPressEdit');
   };
 
