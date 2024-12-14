@@ -12,6 +12,7 @@ import { RouteBuilder as IRouteBuilder } from '@shared/types';
 import { RouteBuilder } from './builders/RouteBuilder';
 import './index.css';
 import { ReactQueryProvider } from '@shared/frontend';
+import { v4 } from 'uuid';
 
 const rootElement = document.getElementById('root')!;
 
@@ -30,8 +31,9 @@ const App = observer(() => {
     const getRouteObjects = (routeBuilder: IRouteBuilder) => {
       const _route: RouteObject = {
         path: routeBuilder.pathname,
-        element: <RouteBuilder state={routeBuilder} />,
+        element: <RouteBuilder key={v4()} state={routeBuilder} />,
         children: [],
+        errorElement: <div>error</div>,
       };
 
       if (routeBuilder.children) {
@@ -44,7 +46,8 @@ const App = observer(() => {
 
     const _route: RouteObject = {
       path: routeBuilder.pathname,
-      element: <RouteBuilder state={routeBuilder} />,
+      element: <RouteBuilder key={v4()} state={routeBuilder} />,
+      errorElement: <div>error</div>,
     };
 
     if (routeBuilder.children) {
@@ -56,6 +59,8 @@ const App = observer(() => {
   });
 
   const router = createBrowserRouter(routeObjects);
+
+  if (!store.isInitialized) return <div>init...</div>;
   return <RouterProvider router={router} />;
 });
 

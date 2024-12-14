@@ -11,7 +11,7 @@ interface ProvidersProps {
 export const Providers = (props: ProvidersProps) => {
   const { children } = props;
 
-  const { data: getAppBuilderResponse } = useGetAppBuilderSuspense();
+  const { data: getAppBuilderResponse, isLoading } = useGetAppBuilderSuspense();
   const appBuilder = (
     getAppBuilderResponse as {
       data: AppBuilder;
@@ -24,6 +24,10 @@ export const Providers = (props: ProvidersProps) => {
     store.isInitialized = true;
     return store;
   });
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <StoreProvider value={value}>

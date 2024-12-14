@@ -8,7 +8,10 @@ interface RouteBuilderProps {
 
 export const RouteBuilder = (props: RouteBuilderProps) => {
   const { state } = props;
-  console.log('state', state);
+  // console.log('state', state);
+  if (!state) {
+    return null;
+  }
   return (
     <LayoutBuilder state={state.layout}>
       <PageBuilder state={state.layout?.page} />

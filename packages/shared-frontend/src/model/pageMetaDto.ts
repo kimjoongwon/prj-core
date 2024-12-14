@@ -8,8 +8,8 @@
 export interface PageMetaDto {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-  itemCount: number;
   pageCount: number;
   skip: number;
   take: number;
+  totalCount: number;
 }

@@ -24,6 +24,7 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
   async getCategoriesByQuery(@Query() query: CategoryQueryDto) {
+    console.log('query', query);
     const { categories, count } = await this.categoriesService.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

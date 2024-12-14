@@ -2,7 +2,7 @@ model Category {
   id             String           @id @default(uuid())
   seq            Int              @unique @default(autoincrement())
   name           String
-  childrenIds    String[]         @default([])
+  type           CategoryTypes    @default(ROOT)
   parentId       String?
   tenantId       String
   serviceId      String
@@ -486,8 +486,6 @@ enum PostTypes {
 }
 
 enum CategoryTypes {
-  USER
-  SPACE
-  DEPOT_FILE
-  POST
+  LEAF
+  ROOT
 }
