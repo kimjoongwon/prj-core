@@ -10,29 +10,25 @@ export const CellBuilder = ({
 }: CellContext<unknown, unknown>) => {
   const navigate = useNavigate();
 
-  const onPressEdit = () => {
-    const params = column.columnDef.meta.edit.button.flow.try.paramKeys.reduce(
-      (acc, key) => {
-        acc[key] = row.original.id;
-        return acc;
-      },
-      {},
-    );
-
-    navigate(
-      PathUtil.getUrlWithParamsAndQueryString(
-        column.columnDef.meta.edit.button.flow.try.pathname,
-        params,
-      ),
-    );
-    console.log('onPressEdit');
-  };
-
-  if (column.columnDef.meta?.edit) {
+  if (column.columnDef.meta?.buttons) {
     return (
-      <Button size="sm" onPress={onPressEdit}>
-        수정
-      </Button>
+      <div className="flex space-x-1">
+        {column.columnDef.meta?.buttons.map(button => {
+          const onPress = () => {
+            const params = button.paramKeys?.reduce((acc, key) => {
+              acc[key] = row.original.id;
+              return acc;
+            }, {});
+
+            console.log('params', params);
+            console.log('button', button);
+            navigate(
+              PathUtil.getUrlWithParamsAndQueryString(button.link, params),
+            );
+          };
+          return <Button onPress={onPress}>{button.name}</Button>;
+        })}
+      </div>
     );
   }
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

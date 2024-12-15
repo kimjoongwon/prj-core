@@ -21,9 +21,9 @@ export function Auth(
     Roles(roles),
   ];
 
+  decorators.push(UseInterceptors(AuthUserInterceptor));
   if (!isPublicRoute) {
     decorators.push(UseGuards(JwtAuthGuard, PoliciesGuard, RolesGuard));
-    decorators.push(UseInterceptors(AuthUserInterceptor));
   }
 
   return applyDecorators(...decorators);

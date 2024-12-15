@@ -9,16 +9,20 @@ interface TableBuilderProps {
 }
 
 export const TableBuilder = ({ state }: TableBuilderProps) => {
-  console.log('state', toJS(state.table?.query));
+  const serviceId = window.location.pathname.split('/')[4];
+  console.log('serviceId', serviceId);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const { data: response } = APIManager[
     state.table?.apiKey as keyof typeof APIManager
-  ](state.table?.query, {
-    query: {
-      enabled: !!state?.table?.apiKey,
+  ](
+    { ...state.table?.query, serviceId },
+    {
+      query: {
+        enabled: !!state?.table?.apiKey,
+      },
     },
-  });
+  );
 
   const columns = state?.table?.columns.map(column => {
     return {

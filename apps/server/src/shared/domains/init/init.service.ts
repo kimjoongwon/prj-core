@@ -157,10 +157,13 @@ export class InitService {
 
   async createServices() {
     return await Promise.all(
-      Object.keys(Prisma.ModelName).map(async (key) => {
-        const service = await this.servicesService.getUnique({ where: { name: key } });
+      [
+        { name: 'USER', label: '유저' },
+        { name: 'SPACE', label: '공간' },
+      ].map(async (seedService) => {
+        const service = await this.servicesService.getUnique({ where: { name: seedService.name } });
         if (!service) {
-          return this.servicesService.create({ data: { name: key } });
+          return this.servicesService.create({ data: seedService });
         } else {
           return null;
         }
@@ -175,7 +178,7 @@ export class InitService {
   async createUserCategories() {
     const userService = await this.servicesService.getUnique({
       where: {
-        name: 'User',
+        name: 'USER',
       },
     });
 

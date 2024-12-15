@@ -1,14 +1,13 @@
 import { PageBuilder } from '@shared/types';
-import { ContextProvider } from '../../../providers';
 
-export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
+export const categoryAddPage: PageBuilder = {
   type: 'Form',
-  name: '카테고리 편집',
+  name: '카테고리 추가',
   form: {
-    name: '정보',
+    name: '카테고리 정보',
     button: {
-      name: '저장',
-      mutation: 'Category',
+      name: '수정',
+      mutation: 'createCategory',
       failure: {
         message: '카테고리 수정에 실패했습니다.',
         navigate: {
@@ -22,31 +21,28 @@ export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
         },
       },
     },
-    defaultValues: {
-      type: 'LEAF',
-      tenantId,
-    },
     sections: [
       {
         name: '카테고리 정보',
         payload: {
           data: {
+            parentId: '',
             name: '',
+            serviceId: '',
           },
         },
         components: [
           {
+            type: 'Input',
             path: 'name',
             props: {
+              value: '',
               fullWidth: true,
               label: '카테고리 이름',
-              placeholder: '카테고리 이름을 입력해주세요.',
-              value: '',
             },
-            type: 'Input',
           },
         ],
       },
     ],
   },
-});
+};

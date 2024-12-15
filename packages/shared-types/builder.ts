@@ -45,11 +45,21 @@ export interface FormButtonFlow {
 }
 
 export interface ButtonBuilder extends ButtonProps {
-  flow: {
-    try: Try;
-    catch: Catch;
-    finally: Finally;
-    mutation: string;
+  name: string;
+  mutation?: string;
+  success: {
+    message?: string;
+    navigate: {
+      pathname: string;
+      params?: any;
+    };
+  };
+  failure: {
+    message?: string;
+    navigate: {
+      pathname: string;
+      params?: any;
+    };
   };
 }
 
@@ -94,6 +104,7 @@ export interface RouteBuilder {
   pathname: string;
   active: boolean;
   layout?: LayoutBuilder;
+  params?: object;
   children?: RouteBuilder[];
 }
 
@@ -107,9 +118,7 @@ export interface PageBuilder {
 export interface TableBuilder {
   apiKey: string;
   query: object;
-  meta?: {
-    expandable?: boolean;
-  };
+  meta?: any;
   selection?: Key[] | 'all';
   columns: any[];
   remove?: {

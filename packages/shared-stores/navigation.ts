@@ -12,6 +12,7 @@ export class Navigation {
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
     this.getRoutes();
+    this.activateRoute();
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
@@ -76,7 +77,8 @@ export class Navigation {
   }
 
   activateRoute() {
-    const segments = window.location.pathname.split('/');
+    const segments = window.location.pathname;
+
     const changeRouteActiveState = (route: Route) => {
       if (segments.includes(route.pathname)) {
         route.active = true;
@@ -90,7 +92,11 @@ export class Navigation {
     };
 
     this.routes.forEach(route => {
-      if (segments.includes(route.pathname)) {
+      const url = PathUtil.getUrlWithParamsAndQueryString(
+        route.pathname,
+        route.params,
+      );
+      if (segments.includes(url)) {
         route.active = true;
       } else {
         route.active = false;
@@ -105,6 +111,7 @@ export class Navigation {
       const route: Route = {
         name: routeBuilder?.name,
         pathname: routeBuilder?.pathname,
+        params: routeBuilder?.params,
         active: false,
         children: [],
       };
@@ -121,6 +128,7 @@ export class Navigation {
         name: routeBuilder.name,
         pathname: routeBuilder.pathname,
         active: false,
+        params: routeBuilder.params,
         children: [],
       };
 

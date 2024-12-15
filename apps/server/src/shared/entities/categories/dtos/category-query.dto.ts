@@ -1,6 +1,6 @@
 import {
-  EnumField,
   EnumFieldOptional,
+  StringField,
   StringFieldOptional,
 } from '../../../decorators/field.decorators';
 import { $Enums, Prisma } from '@prisma/client';
@@ -10,14 +10,14 @@ export class CategoryQueryDto extends QueryDto {
   @StringFieldOptional()
   name?: string;
 
-  @StringFieldOptional({ each: true })
-  childrenIds?: string[];
-
   @EnumFieldOptional(() => $Enums.CategoryTypes)
   type?: $Enums.CategoryTypes;
 
   @StringFieldOptional()
   parentId?: string;
+
+  @StringField()
+  tenantId: string;
 
   @StringFieldOptional()
   serviceId?: string;

@@ -4,6 +4,7 @@ export class Service implements ServiceEntity {
   id: string;
   seq: number;
   name: string;
+  label: string;
   createdAt: Date;
   updatedAt: Date;
   removedAt: Date;

@@ -5,4 +5,7 @@ import { Service } from '../service.entity';
 export class ServiceDto extends AbstractDto implements Service {
   @StringField()
   name: string;
+
+  @StringField()
+  label: string;
 }

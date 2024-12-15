@@ -12,6 +12,8 @@ export class AuthUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): any {
     const request = context.switchToHttp().getRequest();
 
+    ContextProvider.setTenantId(request.cookies['tenantId']);
+
     if (request?.user?.id && request?.user?.tenants) {
       const user = <UserDto>request.user;
       // const tenant = user?.tenants?.find((tenant) => tenant.active);

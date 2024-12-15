@@ -8,36 +8,42 @@ import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
 import { Outlet, useParams } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
-import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
-import { toJS } from 'mobx';
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
 interface PageBuilderProps {
   state: PageBuilderState | undefined;
 }
 
+interface PageBuilderParams {
+  id: string;
+  type: string;
+}
+
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
-  const params = useParams();
-  console.log('params', params);
 
   if (state?.type === 'Outlet') {
     return <Outlet />;
   }
-  console.log('state', toJS(state));
-  if (state?.type === 'Form') {
-    console.log('modal open?');
-    return (
-      <Modal isOpen={true}>
-        <ModalContent>
-          <ModalBody>sadasdsa</ModalBody>
-        </ModalContent>
-      </Modal>
-    );
-  }
 
-  return (
-    <Container maxWidth="sm">
-      {state?.form && (
+  const renderContainer = (children: React.ReactNode) => {
+    if (state?.type === 'Form') {
+      return (
+        <Modal isOpen={true}>
+          <ModalContent>
+            <ModalHeader>{state.name}</ModalHeader>
+            <ModalBody>{children}</ModalBody>
+          </ModalContent>
+        </Modal>
+      );
+    }
+
+    return <Container maxWidth="sm">{children}</Container>;
+  };
+
+  return renderContainer(
+    !state?.form ? null : (
+      <>
         <FormBuilder state={state.form!}>
           {state?.form?.sections?.map(section => {
             return (
@@ -54,8 +60,8 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
             );
           })}
         </FormBuilder>
-      )}
-      {state?.type === 'Table' && <TableBuilder state={state} />}
-    </Container>
+        {state?.type === 'Table' && <TableBuilder state={state} />}
+      </>
+    ),
   );
 });

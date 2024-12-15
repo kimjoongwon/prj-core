@@ -1,20 +1,11 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Get,
-  HttpStatus,
-  Query,
-  Headers,
-} from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../../decorators';
 import { ResponseEntity } from '../common';
 import { CategoriesService } from './categories.service';
 import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from './dtos';
+import { QueryWithTenant } from '../../decorators/query.decorator';
 
 @ApiTags('ADMIN_CATEGORY')
 @Controller()
@@ -23,8 +14,7 @@ export class CategoriesController {
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getCategoriesByQuery(@Query() query: CategoryQueryDto) {
-    console.log('query', query);
+  async getCategoriesByQuery(@QueryWithTenant(CategoryQueryDto) query: CategoryQueryDto) {
     const { categories, count } = await this.categoriesService.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
@@ -38,6 +28,7 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    console.log('createCategoryDto', createCategoryDto);
     const category = await this.categoriesService.create({
       data: createCategoryDto,
     });

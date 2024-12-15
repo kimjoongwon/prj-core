@@ -14,7 +14,7 @@ export class ServicesService {
     return this.repository.create(args);
   }
 
-  findManyByQuery(query: ServiceQueryDto) {
+  findManyByQuery(query?: ServiceQueryDto) {
     const args = PaginationUtil.toArgs(query);
     return this.repository.findMany(args);
   }

@@ -55,11 +55,6 @@ AXIOS_INSTANCE.interceptors.response.use(
 
 AXIOS_INSTANCE.interceptors.request.use(
   function (config) {
-    const token = `Bearer ${localStorage.getItem('accessToken')}`;
-    // const tenantId = galaxy?.auth?.tenant?.id;
-    // config.headers.Authorization = token;
-    // config.headers.TenantId = tenantId;
-
     return config;
   },
   function (error) {

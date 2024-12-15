@@ -41,6 +41,13 @@ export class ContextProvider {
     ContextProvider.set(ContextProvider.tenantKey, tenant);
   }
 
+  static setTenantId(tenantId: string): void {
+    ContextProvider.set('tenantId', tenantId);
+  }
+  static getTenantId(): string {
+    return ContextProvider.get('tenantId');
+  }
+
   static getLanguage(): LanguageCode | undefined {
     return ContextProvider.get<LanguageCode>(ContextProvider.languageKey);
   }

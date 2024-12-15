@@ -26,45 +26,36 @@ export const categoriesPage: PageBuilder = {
         header: '액션',
         meta: {
           headerName: '액션 버튼',
-          edit: {
-            type: 'button',
-            button: {
-              children: '수정',
-              color: 'primary',
-              flow: {
-                try: {
-                  pathname: ':categoryId/edit',
-                  paramKeys: ['categoryId'],
-                },
-              },
+          buttons: [
+            {
+              type: 'button',
+              name: '수정',
+              link: ':id/edit',
+              paramKeys: ['id'],
             },
-          },
+            {
+              type: 'button',
+              name: '추가',
+              link: ':id/add',
+              paramKeys: ['id'],
+            },
+          ],
         },
       },
+      ,
     ],
   },
   form: {
     name: '카테고리',
     button: {
-      children: '검색',
-      fullWidth: true,
-      color: 'primary',
-      flow: {
-        mutation: 'getToken',
-        try: {
-          message: '카테고리를 생성중입니다...',
-          severity: 'success',
-          pathname: '/admin/main/services/user-service/categories',
-        },
-        catch: {
-          message: '카테고리 생성에 실패했습니다.',
-          severity: 'error',
-          pathname: '/admin/main/services/user-service/categories',
-        },
-        finally: {
-          message: '카테고리 생성에 성공했습니다.',
-          pathname: '/admin/main/services/user-service/categories',
-        },
+      name: '추가',
+      failure: {
+        message: '카테고리 추가에 실패했습니다.',
+        link: '/admin/main/services/user-service/categories',
+      },
+      success: {
+        message: '카테고리 추가가 완료되었습니다.',
+        link: '/admin/main/services/user-service/categories',
       },
     },
     sections: [

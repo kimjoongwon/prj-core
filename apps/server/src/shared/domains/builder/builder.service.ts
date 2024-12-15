@@ -2,11 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
 import { categoriesPage } from './pages/categories.page';
-import { categoryEditPage } from './pages/category-edit.page';
+import { getCategoryEditPage } from './pages/category-edit.page';
+import { ServicesService } from '../../entities/services';
+import { ContextProvider } from '../../providers';
 
 @Injectable()
 export class BuilderService {
-  getRoutes(): RouteBuilder[] {
+  constructor(private readonly servicesService: ServicesService) {}
+
+  async getRoutes(): Promise<RouteBuilder[]> {
+    const services = await this.servicesService.findManyByQuery();
     return [
       {
         name: 'ROOT',
@@ -51,68 +56,118 @@ export class BuilderService {
                         type: 'Outlet',
                       },
                     },
-                    children: [
-                      {
-                        name: '유저 서비스',
-                        pathname: 'user-service',
-                        active: false,
-                        layout: {
-                          type: 'Service',
-                          page: {
-                            type: 'Outlet',
-                          },
+                    children: services.map((service) => ({
+                      name: service.label,
+                      pathname: service.id,
+                      active: false,
+                      layout: {
+                        type: 'Service',
+                        page: {
+                          type: 'Outlet',
                         },
-                        children: [
-                          {
-                            name: '카테고리',
-                            pathname: 'categories',
-                            active: false,
-                            layout: {
-                              type: 'Table',
-                              page: categoriesPage,
-                            },
-                            children: [
-                              {
-                                name: '수정',
-                                pathname: ':categoryId/edit',
-                                active: false,
-                                layout: {
-                                  page: categoryEditPage,
-                                },
+                      },
+                      children: [
+                        {
+                          name: '카테고리',
+                          pathname: 'categories',
+                          active: false,
+                          layout: {
+                            type: 'Table',
+                            page: categoriesPage,
+                          },
+                          children: [
+                            {
+                              name: '추가',
+                              pathname: ':id/:type',
+                              active: false,
+                              layout: {
+                                page: getCategoryEditPage(ContextProvider.getTenantId()),
                               },
-                            ],
-                          },
-                          {
-                            name: '그룹',
-                            pathname: 'groups',
-                            active: false,
-                            children: [],
-                            layout: {
-                              type: 'Table',
                             },
-                          },
-                        ],
-                      },
-                      {
-                        name: '공간 서비스',
-                        pathname: 'space-service',
-                        layout: {
-                          type: 'Service',
-                          page: {
-                            type: 'Outlet',
+                          ],
+                        },
+                        {
+                          name: '그룹',
+                          pathname: 'groups',
+                          active: false,
+                          children: [],
+                          layout: {
+                            type: 'Table',
                           },
                         },
-                        active: false,
-                        children: [
-                          {
-                            name: '카테고리',
-                            pathname: 'categories',
-                            active: false,
-                            children: [],
-                          },
-                        ],
-                      },
-                    ],
+                      ],
+                    })),
+                    //   children: [
+                    //     {
+                    //       name: '서비스',
+                    //       pathname: ':serviceId',
+                    //       active: false,
+                    //       layout: {
+                    //         type: 'Service',
+
+                    //         page: {
+                    //           type: 'Outlet',
+                    //         },
+                    //       },
+                    //       children: [
+                    //         {
+                    //           name: '카테고리',
+                    //           pathname: 'categories',
+                    //           active: false,
+                    //           layout: {
+                    //             type: 'Table',
+                    //             page: categoriesPage,
+                    //           },
+                    //           children: [
+                    //             {
+                    //               name: '추가',
+                    //               pathname: ':id/add',
+                    //               active: false,
+                    //               layout: {
+                    //                 page: categoryAddPage,
+                    //               },
+                    //             },
+                    //             {
+                    //               name: '편집',
+                    //               pathname: ':id/edit',
+                    //               active: false,
+                    //               layout: {
+                    //                 page: categoryEditPage,
+                    //               },
+                    //             },
+                    //           ],
+                    //         },
+                    //         {
+                    //           name: '그룹',
+                    //           pathname: 'groups',
+                    //           active: false,
+                    //           children: [],
+                    //           layout: {
+                    //             type: 'Table',
+                    //           },
+                    //         },
+                    //       ],
+                    //     },
+                    //     {
+                    //       name: '공간 서비스',
+                    //       pathname: 'space-service',
+                    //       layout: {
+                    //         type: 'Service',
+                    //         page: {
+                    //           type: 'Outlet',
+                    //         },
+                    //       },
+                    //       active: false,
+                    //       children: [
+                    //         {
+                    //           name: '카테고리',
+                    //           pathname: 'categories',
+                    //           active: false,
+                    //           children: [],
+                    //         },
+                    //       ],
+                    //     },
+                    //   ],
                   },
                 ],
               },
@@ -145,10 +200,11 @@ export class BuilderService {
     ];
   }
 
-  getAppBuilder() {
+  async getAppBuilder() {
+    console.log('tenantId', ContextProvider.getTenantId());
     const appBuilder: AppBuilder = {
       name: 'ILLIT',
-      routes: this.getRoutes(),
+      routes: await this.getRoutes(),
     };
     return appBuilder;
   }

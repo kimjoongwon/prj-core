@@ -6,26 +6,40 @@ export const loginPage: PageBuilder = {
     isInValid: false,
     name: '로그인',
     button: {
-      color: 'primary',
-      fullWidth: true,
-      children: '로그인',
-      flow: {
-        finally: {
-          message: '로그인 시도가 종료되었습니다.',
-        },
-        mutation: 'getToken',
-        try: {
+      name: '로그인',
+      mutation: 'getToken',
+      success: {
+        message: '로그인 성공',
+        navigate: {
           pathname: '/admin/main/services',
-          message: '로그인 성공',
-          severity: 'success',
         },
-        catch: {
-          message: '로그인 실패',
+      },
+      failure: {
+        message: '로그인 실패',
+        navigate: {
           pathname: '/admin/auth/login',
-          severity: 'error',
         },
       },
     },
+    // button: {
+    //   color: 'primary',
+    //   fullWidth: true,
+    //   children: '로그인',
+    //       message: '로그인 시도가 종료되었습니다.',
+    //     },
+    //     mutation: 'getToken',
+    //     try: {
+    //       pathname: '/admin/main/services',
+    //       message: '로그인 성공',
+    //       severity: 'success',
+    //     },
+    //     catch: {
+    //       message: '로그인 실패',
+    //       pathname: '/admin/auth/login',
+    //       severity: 'error',
+    //     },
+    //   },
+    // },
     sections: [
       {
         payload: {

@@ -6,6 +6,7 @@ import { LayoutBuilder as LayoutBuilderState } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
+import { PathUtil } from '@shared/utils';
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, state } = props;
@@ -143,8 +144,13 @@ export const ServicesRoutes = observer(() => {
             key={route.pathname}
             variant="light"
             color={route.active ? 'primary' : 'default'}
-            onClick={action(() => {
-              navigate(route.pathname);
+            onPress={action(() => {
+              navigate(
+                PathUtil.getUrlWithParamsAndQueryString(
+                  route.pathname,
+                  route.params,
+                ),
+              );
               navigation.activateRoute();
             })}
           >
