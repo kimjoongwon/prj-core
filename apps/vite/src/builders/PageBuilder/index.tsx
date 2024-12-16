@@ -6,17 +6,12 @@ import { Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
 interface PageBuilderProps {
   state: PageBuilderState | undefined;
-}
-
-interface PageBuilderParams {
-  id: string;
-  type: string;
 }
 
 export const PageBuilder = observer((props: PageBuilderProps) => {

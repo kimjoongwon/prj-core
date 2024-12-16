@@ -16,15 +16,18 @@ interface ButtonBuilderProps {
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
   const params = useParams();
-  console.log('params', params);
   const { state, form } = props;
   const navigate = useNavigate();
+
+  console.log('params', params);
 
   const onPress = async () => {
     const serviceId = window.location.pathname.split('/')[4];
     const button = toJS(state);
+
     console.log('button', button);
     console.log('form', form);
+
     const payloads = form.sections
       .map(section =>
         section.components.map(component => {
@@ -37,8 +40,10 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
 
     const mergedPayload = payloads.reduce(
       (acc, payload) => mergeWith(acc, payload as never),
-      form?.defaultValues,
-    );
+      form?.defaultValues || {},
+    ) as {
+      [key: string]: unknown;
+    };
 
     mergedPayload.serviceId = serviceId;
     try {
@@ -72,14 +77,14 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
         alert(button.success.message);
       }
 
-      if (button?.success?.navigate) {
-        navigate(button.success.navigate.pathname);
+      if (button?.success?.link) {
+        navigate(button.success.link);
       }
     } catch (error: unknown) {
       if (isAxiosError(error) && button.failure) {
         alert(button.failure.message);
-        if (button.failure?.navigate) {
-          navigate(button.failure?.navigate.pathname);
+        if (button.failure?.link) {
+          navigate(button.failure?.link);
         }
       }
     }

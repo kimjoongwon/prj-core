@@ -1,4 +1,4 @@
-import { type InputProps, type ButtonProps } from '@nextui-org/react';
+import { type InputProps } from '@nextui-org/react';
 import { Key } from 'react';
 
 export interface ValidationBuilder {
@@ -31,52 +31,24 @@ export interface ComponentBuilder {
 export interface FormBuilder {
   name?: string;
   isInValid?: boolean;
+  defaultValues?: object;
   sections: SectionBuilder[];
   button: ButtonBuilder;
 }
 
-export interface FormButtonFlow {
-  state?: object;
-  path?: string;
-  mutation?: string;
-  try?: Try;
-  catch?: Catch;
-  finally: Finally;
-}
-
-export interface ButtonBuilder extends ButtonProps {
+export interface ButtonBuilder {
   name: string;
   mutation?: string;
-  success: {
+  success?: {
+    link: string;
     message?: string;
-    navigate: {
-      pathname: string;
-      params?: any;
-    };
+    paramKeys?: any[];
   };
-  failure: {
+  failure?: {
+    link: string;
     message?: string;
-    navigate: {
-      pathname: string;
-      params?: any;
-    };
+    paramKeys?: any[];
   };
-}
-
-interface Catch {
-  severity: 'success' | 'error';
-  message: string;
-  pathname?: string;
-}
-interface Finally {
-  message: string;
-  pathname?: string;
-}
-
-interface Try {
-  message: string;
-  pathname?: string;
-  severity: 'success' | 'error';
 }
 
 export interface AppBuilder {
@@ -121,34 +93,10 @@ export interface TableBuilder {
   meta?: any;
   selection?: Key[] | 'all';
   columns: any[];
-  remove?: {
-    mutationKey: string;
-    try: Try;
-    catch: Catch;
-    finally: Finally;
-  };
-  delete?: {
-    mutationKey: string;
-    try: Try;
-    catch: Catch;
-    finally: Finally;
-  };
-  update?: {
-    mutationKey: string;
-    try: Try;
-    catch: Catch;
-    finally: Finally;
-  };
-  create?: {
-    try: Try;
-    catch: Catch;
-    finally: Finally;
-  };
 }
 
 export interface SectionBuilder {
   name: string;
-  payload: object;
   gridProps?: object;
   components: ComponentBuilder[];
 }

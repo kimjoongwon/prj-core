@@ -1,5 +1,4 @@
 import { PageBuilder } from '@shared/types';
-import { ContextProvider } from '../../../providers';
 
 export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
   type: 'Form',
@@ -11,15 +10,11 @@ export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
       mutation: 'Category',
       failure: {
         message: '카테고리 수정에 실패했습니다.',
-        navigate: {
-          pathname: '..',
-        },
+        link: '..',
       },
       success: {
         message: '카테고리 수정이 완료되었습니다.',
-        navigate: {
-          pathname: '..',
-        },
+        link: '..',
       },
     },
     defaultValues: {
@@ -29,11 +24,6 @@ export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
     sections: [
       {
         name: '카테고리 정보',
-        payload: {
-          data: {
-            name: '',
-          },
-        },
         components: [
           {
             path: 'name',

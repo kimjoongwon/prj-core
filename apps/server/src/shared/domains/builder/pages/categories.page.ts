@@ -52,20 +52,17 @@ export const categoriesPage: PageBuilder = {
       failure: {
         message: '카테고리 추가에 실패했습니다.',
         link: '/admin/main/services/user-service/categories',
+        paramKeys: [],
       },
       success: {
         message: '카테고리 추가가 완료되었습니다.',
         link: '/admin/main/services/user-service/categories',
+        paramKeys: [],
       },
     },
     sections: [
       {
         name: '카테고리',
-        payload: {
-          data: {
-            name: '',
-          },
-        },
         gridProps: {
           xs: 12,
         },

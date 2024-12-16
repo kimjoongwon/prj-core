@@ -10,27 +10,16 @@ export const categoryAddPage: PageBuilder = {
       mutation: 'createCategory',
       failure: {
         message: '카테고리 수정에 실패했습니다.',
-        navigate: {
-          pathname: '..',
-        },
+        link: '..',
       },
       success: {
         message: '카테고리 수정이 완료되었습니다.',
-        navigate: {
-          pathname: '..',
-        },
+        link: '..',
       },
     },
     sections: [
       {
         name: '카테고리 정보',
-        payload: {
-          data: {
-            parentId: '',
-            name: '',
-            serviceId: '',
-          },
-        },
         components: [
           {
             type: 'Input',
