@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
 import { categoriesPage } from './pages/categories.page';
-import { getCategoryEditPage } from './pages/category-edit.page';
+import { categoryEditPage } from './pages/category-edit.page';
 import { ServicesService } from '../../entities/services';
 import { ContextProvider } from '../../providers';
 
@@ -81,7 +81,7 @@ export class BuilderService {
                               pathname: ':id/:type',
                               active: false,
                               layout: {
-                                page: getCategoryEditPage(ContextProvider.getTenantId()),
+                                page: categoryEditPage,
                               },
                             },
                           ],

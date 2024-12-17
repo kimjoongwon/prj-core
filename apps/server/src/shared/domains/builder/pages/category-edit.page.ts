@@ -1,6 +1,6 @@
 import { PageBuilder } from '@shared/types';
 
-export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
+export const categoryEditPage: PageBuilder = {
   type: 'Form',
   name: '카테고리 편집',
   form: {
@@ -19,7 +19,6 @@ export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
     },
     defaultValues: {
       type: 'LEAF',
-      tenantId,
     },
     sections: [
       {
@@ -39,4 +38,4 @@ export const getCategoryEditPage = (tenantId: string): PageBuilder => ({
       },
     ],
   },
-});
+};

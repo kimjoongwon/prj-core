@@ -6,7 +6,7 @@ import { Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
@@ -16,6 +16,7 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
+  const navigate = useNavigate();
 
   if (state?.type === 'Outlet') {
     return <Outlet />;
@@ -24,7 +25,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   const renderContainer = (children: React.ReactNode) => {
     if (state?.type === 'Form') {
       return (
-        <Modal isOpen={true}>
+        <Modal isOpen={true} onClose={() => navigate('..')}>
           <ModalContent>
             <ModalHeader>{state.name}</ModalHeader>
             <ModalBody>{children}</ModalBody>

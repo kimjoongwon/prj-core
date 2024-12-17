@@ -46,7 +46,11 @@ export class CategoriesService {
     const args = query.toArgs<Prisma.CategoryFindManyArgs>();
     const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
     args.include = {
-      children: true,
+      children: {
+        include: {
+          children: true,
+        },
+      },
     };
     args.where = {
       ...args.where,

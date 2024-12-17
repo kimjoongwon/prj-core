@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Get, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, HttpStatus, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../../decorators';
@@ -14,7 +14,7 @@ export class CategoriesController {
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getCategoriesByQuery(@QueryWithTenant(CategoryQueryDto) query: CategoryQueryDto) {
+  async getCategoriesByQuery(@Query() query: CategoryQueryDto) {
     const { categories, count } = await this.categoriesService.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
