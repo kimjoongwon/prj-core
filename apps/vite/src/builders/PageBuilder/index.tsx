@@ -2,7 +2,7 @@ import React from 'react';
 import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { Container, Grid2 as Grid } from '@mui/material';
-import { Text } from '@shared/frontend';
+import { APIManager, Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
@@ -17,6 +17,23 @@ interface PageBuilderProps {
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
   const navigate = useNavigate();
+  console.log('state?.apiKey', state?.apiKey);
+  const serviceId = window.location.pathname.split('/')[4];
+  const isQueryExist = !!APIManager?.[state?.apiKey as keyof typeof APIManager];
+  const getQuery = isQueryExist
+    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      APIManager?.[state?.apiKey as keyof typeof APIManager](
+        { ...state?.query, serviceId },
+        {
+          query: {
+            enabled: !!state?.apiKey,
+          },
+        },
+      )
+    : [];
+  console.log('getQuery', getQuery);
+  const data = getQuery?.data?.data || [];
 
   if (state?.type === 'Outlet') {
     return <Outlet />;
@@ -56,7 +73,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
             );
           })}
         </FormBuilder>
-        {state?.type === 'Table' && <TableBuilder state={state} />}
+        {state?.type === 'Table' && <TableBuilder state={state} data={data} />}
       </>
     ),
   );

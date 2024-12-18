@@ -2,6 +2,10 @@ import { PageBuilder } from '@shared/types';
 
 export const categoriesPage: PageBuilder = {
   type: 'Table',
+  apiKey: 'useGetCategoriesByQuery',
+  query: {
+    type: 'ROOT',
+  },
   table: {
     apiKey: 'useGetCategoriesByQuery',
     query: {

@@ -81,11 +81,14 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
       }
 
       if (button?.success?.link) {
-        if (button.type === 'ROW') {
-          const params = button.success.paramKeys?.reduce((acc, key) => {
+        let params = {};
+
+        if (button.success.paramKeys) {
+          params = button.success.paramKeys?.reduce((acc, key) => {
             acc[key] = data?.id;
             return acc;
           }, {});
+
           navigate(
             PathUtil.getUrlWithParamsAndQueryString(
               button.success.link,

@@ -84,6 +84,8 @@ export interface RouteBuilder {
 
 export interface PageBuilder {
   type?: 'Outlet' | 'Form' | 'Table';
+  apiKey?: string;
+  query?: object;
   name?: string;
   form?: FormBuilder;
   table?: TableBuilder;

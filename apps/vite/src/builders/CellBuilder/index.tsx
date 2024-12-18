@@ -11,7 +11,7 @@ export const CellBuilder = ({
     return (
       <div className="flex space-x-1">
         {buttons.map(button => {
-          return <ButtonBuilder state={button} form={undefined} />;
+          return <ButtonBuilder state={button} data={row.original} />;
         })}
       </div>
     );

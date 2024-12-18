@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
 import { categoriesPage } from './pages/categories.page';
-import { categoryEditPage } from './pages/category-edit.page';
+import { categoryAddPage } from './pages/category-add.page';
 import { ServicesService } from '../../entities/services';
-import { ContextProvider } from '../../providers';
 
 @Injectable()
 export class BuilderService {
@@ -81,7 +80,7 @@ export class BuilderService {
                               pathname: ':id/:type',
                               active: false,
                               layout: {
-                                page: categoryEditPage,
+                                page: categoryAddPage,
                               },
                             },
                           ],
@@ -130,7 +129,6 @@ export class BuilderService {
   }
 
   async getAppBuilder() {
-    console.log('tenantId', ContextProvider.getTenantId());
     const appBuilder: AppBuilder = {
       name: 'ILLIT',
       routes: await this.getRoutes(),
