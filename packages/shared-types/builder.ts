@@ -1,5 +1,6 @@
 import { type InputProps } from '@nextui-org/react';
 import { Key } from 'react';
+import { HeaderContext, CellContext, ColumnDef } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
@@ -37,6 +38,7 @@ export interface FormBuilder {
 }
 
 export interface ButtonBuilder {
+  type?: 'ROW';
   name: string;
   mutation?: string;
   success?: {
@@ -92,8 +94,30 @@ export interface TableBuilder {
   query: object;
   meta?: any;
   selection?: Key[] | 'all';
-  columns: any[];
+  columns: ColumnBuilder[];
 }
+
+export interface ColumnBuilder {
+  id?: string;
+  accessorKey?: string;
+  header: Header;
+  cell?: Cell;
+}
+export interface Cell {
+  buttons?: ButtonBuilder[];
+  expandable?: boolean;
+}
+export interface Header {
+  name: string;
+  expandable?: boolean;
+}
+
+export interface HeaderBuilderProps
+  extends HeaderContext<unknown & { id: string }, unknown>,
+    Header {}
+export interface CellBuilderProps
+  extends CellContext<unknown & { id: string }, unknown>,
+    Cell {}
 
 export interface SectionBuilder {
   name: string;

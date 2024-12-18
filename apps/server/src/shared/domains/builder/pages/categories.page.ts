@@ -10,34 +10,40 @@ export const categoriesPage: PageBuilder = {
     columns: [
       {
         accessorKey: 'name',
-        meta: {
-          headerName: '이름',
+        header: {
+          name: '이름',
+          expandable: true,
+        },
+        cell: {
           expandable: true,
         },
       },
       {
         accessorKey: 'id',
-        meta: {
-          headerName: 'ID',
+        header: {
+          name: 'ID',
         },
       },
       {
         id: 'action',
-        header: '액션',
-        meta: {
-          headerName: '액션 버튼',
+        header: {
+          name: '액션',
+        },
+        cell: {
           buttons: [
             {
-              type: 'button',
               name: '수정',
-              link: ':id/edit',
-              paramKeys: ['id'],
+              success: {
+                link: ':id/edit',
+                paramKeys: ['id'],
+              },
             },
             {
-              type: 'button',
               name: '추가',
-              link: ':id/add',
-              paramKeys: ['id'],
+              success: {
+                link: ':id/add',
+                paramKeys: ['id'],
+              },
             },
           ],
         },

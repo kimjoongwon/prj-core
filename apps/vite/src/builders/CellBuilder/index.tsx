@@ -1,50 +1,30 @@
-import { Button } from '@shared/frontend';
-import { CellContext } from '@tanstack/react-table';
-import { useNavigate } from 'react-router-dom';
-import { PathUtil } from '@shared/utils';
+import { CellBuilderProps } from '@shared/types';
+import { ButtonBuilder } from '../ButtonBuilder';
 
 export const CellBuilder = ({
   row,
   getValue,
-  column,
-}: CellContext<unknown, unknown>) => {
-  const navigate = useNavigate();
-
-  if (column.columnDef.meta?.buttons) {
+  buttons,
+  expandable = false,
+}: CellBuilderProps) => {
+  if (buttons) {
     return (
       <div className="flex space-x-1">
-        {column.columnDef.meta?.buttons.map(button => {
-          const onPress = () => {
-            const params = button.paramKeys?.reduce((acc, key) => {
-              acc[key] = row.original.id;
-              return acc;
-            }, {});
-
-            console.log('params', params);
-            console.log('button', button);
-            navigate(
-              PathUtil.getUrlWithParamsAndQueryString(button.link, params),
-            );
-          };
-          return <Button onPress={onPress}>{button.name}</Button>;
+        {buttons.map(button => {
+          return <ButtonBuilder state={button} form={undefined} />;
         })}
       </div>
     );
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  if (!column.columnDef.meta?.expandable) {
-    return <>{getValue<string>()}</>;
   }
 
   return (
     <div
       style={{
-        paddingLeft: `${row.depth * 2}rem`,
+        paddingLeft: expandable ? `${row.depth * 2}rem` : undefined,
       }}
     >
       <div>
-        {row.getCanExpand() ? (
+        {expandable && row.getCanExpand() ? (
           <button
             {...{
               onClick: row.getToggleExpandedHandler(),
@@ -53,9 +33,7 @@ export const CellBuilder = ({
           >
             {row.getIsExpanded() ? '📂' : '📁'}
           </button>
-        ) : (
-          ''
-        )}{' '}
+        ) : null}
         {getValue<string>()}
       </div>
     </div>

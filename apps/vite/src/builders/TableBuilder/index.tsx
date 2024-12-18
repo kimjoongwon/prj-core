@@ -3,6 +3,7 @@ import { PageBuilder } from '@shared/types';
 import { toJS } from 'mobx';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface TableBuilderProps {
   state: PageBuilder;
@@ -26,10 +27,13 @@ export const TableBuilder = ({ state }: TableBuilderProps) => {
 
   const columns = state?.table?.columns.map(column => {
     return {
-      ...column,
-      header: HeaderBuilder,
-      cell: CellBuilder,
-    };
+      id: column.id,
+      accessorKey: column.accessorKey,
+      header: props => {
+        return <HeaderBuilder {...props} {...column.header} />;
+      },
+      cell: props => <CellBuilder {...props} {...column.cell} />,
+    } as ColumnDef<unknown & { id: string }, unknown>;
   });
 
   return (

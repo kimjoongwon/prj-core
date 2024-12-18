@@ -3,6 +3,7 @@ import {
   ButtonBuilder as ButtonBuilderState,
   FormBuilder,
 } from '@shared/types';
+import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { mergeWith, set } from 'lodash-es';
 import { toJS } from 'mobx';
@@ -10,13 +11,14 @@ import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface ButtonBuilderProps {
-  form: FormBuilder;
+  data?: unknown & { id: string };
+  form?: FormBuilder;
   state: ButtonBuilderState;
 }
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
   const params = useParams();
-  const { state, form } = props;
+  const { state, form, data } = props;
   const navigate = useNavigate();
 
   console.log('params', params);
@@ -28,7 +30,7 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
     console.log('button', button);
     console.log('form', form);
 
-    const payloads = form.sections
+    const payloads = form?.sections
       .map(section =>
         section.components.map(component => {
           const paths = component?.path?.split('.') || [];
@@ -38,12 +40,13 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
       )
       .flat();
 
-    const mergedPayload = payloads.reduce(
-      (acc, payload) => mergeWith(acc, payload as never),
-      form?.defaultValues || {},
-    ) as {
-      [key: string]: unknown;
-    };
+    const mergedPayload =
+      (payloads?.reduce(
+        (acc, payload) => mergeWith(acc, payload as never),
+        form?.defaultValues || {},
+      ) as {
+        [key: string]: unknown;
+      }) || {};
 
     mergedPayload.serviceId = serviceId;
     try {
@@ -78,6 +81,19 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
       }
 
       if (button?.success?.link) {
+        if (button.type === 'ROW') {
+          const params = button.success.paramKeys?.reduce((acc, key) => {
+            acc[key] = data?.id;
+            return acc;
+          }, {});
+          navigate(
+            PathUtil.getUrlWithParamsAndQueryString(
+              button.success.link,
+              params,
+            ),
+          );
+          return;
+        }
         navigate(button.success.link);
       }
     } catch (error: unknown) {
