@@ -19,7 +19,6 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
         if (!state.validation) {
           return null;
         }
-        console.log('value', value);
         if (state.validation?.required) {
           if (isEmpty(value)) {
             state.validation.errorMessage = state.validation?.messages
@@ -38,7 +37,7 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
     return { ...acc, ...callback };
   });
 
-  console.log('state', state.validation?.errorMessage);
+  // console.log('state', state.validation?.errorMessage);
 
   return (
     <Component

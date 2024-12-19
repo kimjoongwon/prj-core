@@ -21,14 +21,14 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
   const { state, form, data } = props;
   const navigate = useNavigate();
 
-  console.log('params', params);
+  // console.log('params', params);
 
   const onPress = async () => {
     const serviceId = window.location.pathname.split('/')[4];
     const button = toJS(state);
 
-    console.log('button', button);
-    console.log('form', form);
+    // console.log('button', button);
+    // console.log('form', form);
 
     const payloads = form?.sections
       .map(section =>

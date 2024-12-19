@@ -4,6 +4,8 @@ import { type RouteBuilder, type AppBuilder } from '@shared/types';
 import { categoriesPage } from './pages/categories.page';
 import { categoryAddPage } from './pages/category-add.page';
 import { ServicesService } from '../../entities/services';
+import { categoryNewEditPage } from './pages/category-new-edit.page';
+import { categoryEditPage } from './pages/category-edit.page';
 
 @Injectable()
 export class BuilderService {
@@ -19,6 +21,7 @@ export class BuilderService {
         layout: {
           type: 'Root',
           page: {
+            name: 'ROOT',
             type: 'Outlet',
           },
         },
@@ -30,6 +33,7 @@ export class BuilderService {
             layout: {
               type: 'Admin',
               page: {
+                name: '어드민',
                 type: 'Outlet',
               },
             },
@@ -41,6 +45,7 @@ export class BuilderService {
                 layout: {
                   type: 'Main',
                   page: {
+                    name: '메인',
                     type: 'Outlet',
                   },
                 },
@@ -52,6 +57,7 @@ export class BuilderService {
                     layout: {
                       type: 'Services',
                       page: {
+                        name: '서비스',
                         type: 'Outlet',
                       },
                     },
@@ -62,6 +68,7 @@ export class BuilderService {
                       layout: {
                         type: 'Service',
                         page: {
+                          name: '서비스아이템',
                           type: 'Outlet',
                         },
                       },
@@ -76,11 +83,27 @@ export class BuilderService {
                           },
                           children: [
                             {
-                              name: '추가',
-                              pathname: ':id/:type',
+                              name: '카테고리 추가',
+                              pathname: ':id/add',
                               active: false,
                               layout: {
                                 page: categoryAddPage,
+                              },
+                            },
+                            {
+                              name: '카테고리 새편집',
+                              pathname: ':id/edit',
+                              active: false,
+                              layout: {
+                                page: categoryEditPage,
+                              },
+                            },
+                            {
+                              name: '카테고리 새편집',
+                              pathname: 'new/edit',
+                              active: false,
+                              layout: {
+                                page: categoryNewEditPage,
                               },
                             },
                           ],

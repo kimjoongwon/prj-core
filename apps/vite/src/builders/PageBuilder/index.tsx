@@ -17,7 +17,10 @@ interface PageBuilderProps {
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
   const navigate = useNavigate();
-  console.log('state?.apiKey', state?.apiKey);
+  // const params = useParams();
+  // console.log('params', params);
+  // console.log(state?.name + 'PAGE');
+  // console.log('state?.apiKey', state?.apiKey);
   const serviceId = window.location.pathname.split('/')[4];
   const isQueryExist = !!APIManager?.[state?.apiKey as keyof typeof APIManager];
   const getQuery = isQueryExist
@@ -32,7 +35,6 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         },
       )
     : [];
-  console.log('getQuery', getQuery);
   const data = getQuery?.data?.data || [];
 
   if (state?.type === 'Outlet') {
@@ -51,7 +53,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
       );
     }
 
-    return <Container maxWidth="sm">{children}</Container>;
+    return <Container maxWidth="xl">{children}</Container>;
   };
 
   return renderContainer(
