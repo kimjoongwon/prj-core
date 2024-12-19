@@ -40,17 +40,14 @@ export interface FormBuilder {
 export interface ButtonBuilder {
   type?: 'ROW';
   name: string;
-  mutation?: string;
-  success?: {
-    link: string;
-    message?: string;
-    paramKeys?: any[];
-  };
-  failure?: {
-    link: string;
-    message?: string;
-    paramKeys?: any[];
-  };
+  mutation?: Mutation;
+  success?: SuccessOrFailure;
+  failure?: SuccessOrFailure;
+}
+export interface SuccessOrFailure {
+  link: string;
+  message?: string;
+  keysForConvertPayloadsToParams?: string[];
 }
 
 export interface AppBuilder {
@@ -125,4 +122,9 @@ export interface SectionBuilder {
   name: string;
   gridProps?: object;
   components: ComponentBuilder[];
+}
+
+export interface Mutation {
+  key: string;
+  keyForConvertParamsToPayloads: string[];
 }

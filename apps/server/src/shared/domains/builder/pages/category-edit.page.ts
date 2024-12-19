@@ -1,8 +1,8 @@
 import { PageBuilder } from '@shared/types';
-import { categoryForm } from '../forms/category.form';
+import { getCategoryForm } from '../forms/category.form';
 
 export const categoryEditPage: PageBuilder = {
   type: 'Form',
   name: '카테고리 편집',
-  form: categoryForm,
+  form: getCategoryForm('updateCategory'),
 };

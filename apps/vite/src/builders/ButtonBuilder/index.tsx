@@ -40,7 +40,7 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
       )
       .flat();
 
-    const mergedPayload =
+    let mergedPayload =
       (payloads?.reduce(
         (acc, payload) => mergeWith(acc, payload as never),
         form?.defaultValues || {},
@@ -50,31 +50,21 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
 
     mergedPayload.serviceId = serviceId;
     try {
-      if (button.mutation) {
-        if (params?.type === 'add') {
-          mergedPayload.parentId = params.id;
-          console.log('mergedPayload', mergedPayload);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          await APIManager['create' + button.mutation](mergedPayload);
-        } else if (params.type === 'edit') {
-          if (params.id === 'new') {
-            console.log('mergedPayload', mergedPayload);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            await APIManager['update' + button.mutation](mergedPayload);
-          } else {
-            console.log('mergedPayload', mergedPayload);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            await APIManager['update' + button.mutation](id, mergedPayload);
-          }
-        } else {
-          console.log('mergedPayload', mergedPayload);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          await APIManager[button.mutation](mergedPayload);
+      if (button.mutation?.key) {
+        if (button.mutation.keyForConvertParamsToPayloads) {
+          mergedPayload = {
+            ...mergedPayload,
+            ...Object.fromEntries(
+              button.mutation.keyForConvertParamsToPayloads.map(key => [
+                key,
+                params[key],
+              ]),
+            ),
+          };
         }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        await APIManager[button.mutation.key](mergedPayload);
       }
       if (button?.success?.message) {
         alert(button.success.message);
@@ -83,18 +73,24 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
       if (button?.success?.link) {
         let params = {};
 
-        if (button.success.paramKeys) {
-          params = button.success.paramKeys?.reduce((acc, key) => {
-            acc[key] = data?.id;
-            return acc;
-          }, {});
-
-          navigate(
-            PathUtil.getUrlWithParamsAndQueryString(
-              button.success.link,
-              params,
-            ),
+        if (button.success.keysForConvertPayloadsToParams) {
+          params = button.success.keysForConvertPayloadsToParams?.reduce(
+            (acc, key) => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              acc[key] = data?.id;
+              return acc;
+            },
+            {},
           );
+          console.log('params', params);
+          const pathname = PathUtil.getUrlWithParamsAndQueryString(
+            button.success.link,
+            params,
+          );
+
+          navigate(pathname);
+
           return;
         }
         navigate(button.success.link);

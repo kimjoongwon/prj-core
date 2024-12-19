@@ -1,8 +1,10 @@
-export const categoryForm = {
+import { Mutation } from '@shared/types';
+
+export const getCategoryForm = (mutation: Mutation) => ({
   name: '정보',
   button: {
     name: '저장',
-    mutation: 'Category',
+    mutation,
     failure: {
       message: '카테고리 추가에 실패했습니다.',
       link: '..',
@@ -32,4 +34,4 @@ export const categoryForm = {
       ],
     },
   ],
-};
+});

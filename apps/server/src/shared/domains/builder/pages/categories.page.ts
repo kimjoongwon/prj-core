@@ -38,15 +38,15 @@ export const categoriesPage: PageBuilder = {
             {
               name: '수정',
               success: {
-                link: ':id/edit',
-                paramKeys: ['id'],
+                link: ':categoryId/edit',
+                keysForConvertPayloadsToParams: ['categoryId'],
               },
             },
             {
               name: '추가',
               success: {
-                link: ':id/add',
-                paramKeys: ['id'],
+                link: ':parentId/add',
+                keysForConvertPayloadsToParams: ['parentId'],
               },
             },
           ],
@@ -62,12 +62,10 @@ export const categoriesPage: PageBuilder = {
       failure: {
         message: '카테고리 추가에 실패했습니다.',
         link: '/admin/main/services/user-service/categories',
-        paramKeys: [],
       },
       success: {
         message: '카테고리 추가가 완료되었습니다.',
         link: '/admin/main/services/user-service/categories',
-        paramKeys: [],
       },
     },
     sections: [
