@@ -28,7 +28,6 @@ export class CategoriesController {
   @ApiResponseEntity(CategoryDto)
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    console.log('createCategoryDto', createCategoryDto);
     const category = await this.categoriesService.create({
       data: createCategoryDto,
     });

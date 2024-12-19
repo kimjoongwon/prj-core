@@ -7,7 +7,7 @@ export const loginPage: PageBuilder = {
     name: '로그인',
     button: {
       name: '로그인',
-      mutation: 'getToken',
+      mutation: { key: 'getToken' },
       success: {
         message: '로그인 성공',
         link: '/admin/main/services',

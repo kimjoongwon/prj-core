@@ -126,5 +126,5 @@ export interface SectionBuilder {
 
 export interface Mutation {
   key: string;
-  keyForConvertParamsToPayloads: string[];
+  keyForConvertParamsToPayloads?: string[];
 }
