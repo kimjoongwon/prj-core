@@ -79,11 +79,33 @@ export interface RouteBuilder {
   children?: RouteBuilder[];
 }
 
+export interface Query {
+  name: string;
+  defaultParams?: object;
+  keysForConvertPathParamsToPayload?: { getKey: string; setKey: string }[];
+  payload: {
+    pathParams: object;
+    queryParams: object;
+  };
+}
+
+export interface Payload {
+  query: {
+    name: string;
+    params: object;
+  };
+  path: {
+    params: object;
+  };
+  body: {
+    params: object;
+  };
+}
+
 export interface PageBuilder {
   type?: 'Outlet' | 'Form' | 'Table';
-  apiKey?: string;
-  query?: object;
   name?: string;
+  query?: Query;
   form?: FormBuilder;
   table?: TableBuilder;
 }

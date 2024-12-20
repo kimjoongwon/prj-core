@@ -23,4 +23,14 @@ export class PathUtil {
 
     return pathWithParams;
   }
+
+  static convertFromPathParamsToQueryParams({
+    pathParamKeys,
+    pathParams,
+  }: {
+    pathParamKeys: string[];
+    pathParams: object;
+  }) {
+    return Object.fromEntries(pathParamKeys.map(key => [key, pathParams[key]]));
+  }
 }

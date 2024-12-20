@@ -6,9 +6,10 @@ import { APIManager, Text } from '@shared/frontend';
 import { PageBuilder as PageBuilderState } from '@shared/types';
 import { ComponentBuilder } from '../ComponentBuilder';
 import { FormBuilder } from '../FormBuilder';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { get, set } from 'lodash-es';
 
 interface PageBuilderProps {
   state: PageBuilderState | undefined;
@@ -16,21 +17,32 @@ interface PageBuilderProps {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { state } = props;
+
   const navigate = useNavigate();
-  // const params = useParams();
-  // console.log('params', params);
-  // console.log(state?.name + 'PAGE');
-  // console.log('state?.apiKey', state?.apiKey);
   const serviceId = window.location.pathname.split('/')[4];
-  const isQueryExist = !!APIManager?.[state?.apiKey as keyof typeof APIManager];
+  const pathParams = { ...useParams(), serviceId };
+
+  // const payloadModel = cloneDeep(state?.query?.payload) || {};
+  let payload = {};
+
+  const isQueryExist =
+    !!APIManager?.[state?.query?.name as keyof typeof APIManager];
+
+  const queryParams = state?.query?.keysForConvertPathParamsToPayload?.map(
+    item => {
+      const value = get(pathParams, item.getKey);
+      payload = set(payload, item.setKey, value);
+    },
+  );
+
   const getQuery = isQueryExist
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      APIManager?.[state?.apiKey as keyof typeof APIManager](
-        { ...state?.query, serviceId },
+      APIManager?.[state?.query.name as keyof typeof APIManager](
+        { ...state?.query, ...queryParams, serviceId },
         {
           query: {
-            enabled: !!state?.apiKey,
+            enabled: !!state?.query?.name,
           },
         },
       )

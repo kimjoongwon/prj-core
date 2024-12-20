@@ -84,7 +84,7 @@ export class BuilderService {
                           children: [
                             {
                               name: '카테고리 추가',
-                              pathname: ':parentId/add',
+                              pathname: ':/add',
                               active: false,
                               layout: {
                                 page: categoryAddPage,
@@ -92,7 +92,7 @@ export class BuilderService {
                             },
                             {
                               name: '카테고리 새편집',
-                              pathname: ':categoryId/edit',
+                              pathname: ':id/edit',
                               active: false,
                               layout: {
                                 page: categoryEditPage,

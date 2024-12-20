@@ -2,9 +2,13 @@ import { PageBuilder } from '@shared/types';
 
 export const categoriesPage: PageBuilder = {
   type: 'Table',
-  apiKey: 'useGetCategoriesByQuery',
   query: {
-    type: 'ROOT',
+    payload: {
+      categoryId: '',
+    },
+    name: 'useGetCategoriesByQuery',
+    // keysForConvertPathParamsToPayload: ['categoryId'],
+    defaultParams: {},
   },
   table: {
     apiKey: 'useGetCategoriesByQuery',
