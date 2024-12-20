@@ -1,21 +1,19 @@
 import { PageBuilder } from '@shared/types';
-import { getCategoryForm } from '../forms/category.form';
 
 export const categoryEditPage: PageBuilder = {
   type: 'Form',
   name: '카테고리 편집',
-  query: {
-    name: 'useGetCategoryById',
-    keysForConvertPathParamsToPayload: [
-      {
-        getKey: 'categoryId',
-        setKey: 'categoryId',
+  params: {
+    categoryId: '',
+  },
+  api: {
+    query: {
+      name: 'useGetCategoryById',
+      resourceId: 'categoryId',
+      params: {
+        isDeleted: false,
       },
-    ],
-    defaultParams: {},
-    params: {
-      categoryId: '',
     },
   },
-  form: getCategoryForm({ key: 'updateCategory' }),
+  // form: getCategoryForm({ key: 'updateCategory' }),
 };

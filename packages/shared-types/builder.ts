@@ -1,6 +1,6 @@
 import { type InputProps } from '@nextui-org/react';
 import { Key } from 'react';
-import { HeaderContext, CellContext, ColumnDef } from '@tanstack/react-table';
+import { HeaderContext, CellContext } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
   timings: ('onBlur' | 'onChange' | 'onFocus')[];
@@ -89,23 +89,19 @@ export interface Query {
   };
 }
 
-export interface Payload {
+export interface API {
   query: {
     name: string;
-    params: object;
-  };
-  path: {
-    params: object;
-  };
-  body: {
-    params: object;
+    resourceId?: string;
+    params?: any;
   };
 }
 
 export interface PageBuilder {
   type?: 'Outlet' | 'Form' | 'Table';
   name?: string;
-  query?: Query;
+  params?: object;
+  api?: API;
   form?: FormBuilder;
   table?: TableBuilder;
 }

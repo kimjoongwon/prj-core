@@ -21,6 +21,5 @@ export const TableBuilder = ({ state, data }: TableBuilderProps) => {
       cell: props => <CellBuilder {...props} {...column.cell} />,
     } as ColumnDef<unknown & { id: string }, unknown>;
   });
-  console.log('data', data);
   return <DataGrid data={toJS(data || [])} columns={toJS(columns) || []} />;
 };
