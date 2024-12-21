@@ -31,8 +31,8 @@ export interface ComponentBuilder {
 
 export interface FormBuilder {
   name?: string;
+  state: any;
   isInValid?: boolean;
-  defaultValues?: object;
   sections: SectionBuilder[];
   button: ButtonBuilder;
 }
@@ -44,6 +44,7 @@ export interface ButtonBuilder {
   success?: SuccessOrFailure;
   failure?: SuccessOrFailure;
 }
+
 export interface SuccessOrFailure {
   link: string;
   message?: string;
@@ -67,48 +68,46 @@ export interface LayoutBuilder {
     | 'Service'
     | 'Table'
     | 'Form';
-  page?: PageBuilder;
+  page: PageBuilder;
 }
 
 export interface RouteBuilder {
   name: string;
   pathname: string;
   active: boolean;
-  layout?: LayoutBuilder;
+  layout: LayoutBuilder;
   params?: object;
   children?: RouteBuilder[];
 }
 
-export interface Query {
+export interface Mutation {
   name: string;
-  defaultParams?: object;
-  keysForConvertPathParamsToPayload?: { getKey: string; setKey: string }[];
-  payload: {
-    pathParams: object;
-    queryParams: object;
-  };
 }
 
-export interface API {
-  query: {
-    name: string;
-    resourceId?: string;
-    params?: any;
-  };
+export interface Query {
+  name: string;
+  resourceId?: string;
+  params?: object;
+}
+
+export interface Mutation {
+  name: string;
+  resourceId?: string;
+  body?: object;
 }
 
 export interface PageBuilder {
   type?: 'Outlet' | 'Form' | 'Table';
   name?: string;
+  state?: object;
   params?: object;
-  api?: API;
+  query?: Query;
   form?: FormBuilder;
   table?: TableBuilder;
 }
 
 export interface TableBuilder {
-  apiKey: string;
-  query: object;
+  query?: object;
   meta?: any;
   selection?: Key[] | 'all';
   columns: ColumnBuilder[];
@@ -132,6 +131,7 @@ export interface Header {
 export interface HeaderBuilderProps
   extends HeaderContext<unknown & { id: string }, unknown>,
     Header {}
+
 export interface CellBuilderProps
   extends CellContext<unknown & { id: string }, unknown>,
     Cell {}
@@ -140,9 +140,4 @@ export interface SectionBuilder {
   name: string;
   gridProps?: object;
   components: ComponentBuilder[];
-}
-
-export interface Mutation {
-  key: string;
-  keyForConvertParamsToPayloads?: string[];
 }

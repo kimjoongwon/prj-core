@@ -1,6 +1,6 @@
-import { Mutation } from '@shared/types';
+import { FormBuilder, Mutation } from '@shared/types';
 
-export const getCategoryForm = (mutation: Mutation) => ({
+export const getCategoryForm = (mutation: Mutation): FormBuilder => ({
   name: '정보',
   button: {
     name: '저장',
@@ -13,9 +13,6 @@ export const getCategoryForm = (mutation: Mutation) => ({
       message: '카테고리 추가가 완료되었습니다.',
       link: '..',
     },
-  },
-  defaultValues: {
-    type: 'LEAF',
   },
   sections: [
     {

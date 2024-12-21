@@ -2,40 +2,40 @@ import React, { ReactNode } from 'react';
 import { AppBar, Button, HStack, List, VStack } from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
-import { LayoutBuilder as LayoutBuilderState } from '@shared/types';
+import { LayoutBuilder } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
 
-export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
-  const { children, state } = props;
+export const Layout = observer((props: LayoutBuilderProps) => {
+  const { children, layoutBuilder } = props;
 
-  if (state?.type === 'Auth') {
+  if (layoutBuilder?.type === 'Auth') {
     return <AuthLayout>{children}</AuthLayout>;
   }
 
-  if (state?.type === 'Main') {
+  if (layoutBuilder?.type === 'Main') {
     return <MainLayout>{children}</MainLayout>;
   }
 
-  if (state?.type === 'Root') {
+  if (layoutBuilder?.type === 'Root') {
     return <RootLayout>{children}</RootLayout>;
   }
 
-  if (state?.type === 'Admin') {
+  if (layoutBuilder?.type === 'Admin') {
     return <AdminLayout>{children}</AdminLayout>;
   }
 
-  if (state?.type === 'Services') {
+  if (layoutBuilder?.type === 'Services') {
     return <ServicesLayout>{children}</ServicesLayout>;
   }
 
-  if (state?.type === 'Service') {
+  if (layoutBuilder?.type === 'Service') {
     return <ServiceLayout>{children}</ServiceLayout>;
   }
 
-  if (state?.type === 'Table') {
+  if (layoutBuilder?.type === 'Table') {
     return <TableLayout>{children}</TableLayout>;
   }
 
@@ -187,7 +187,7 @@ interface RootLayoutProps {
 }
 
 interface LayoutBuilderProps {
-  state: LayoutBuilderState | undefined;
+  layoutBuilder: LayoutBuilder | undefined;
   children: React.ReactNode;
 }
 

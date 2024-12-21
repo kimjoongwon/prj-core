@@ -1,70 +1,54 @@
-import { Button, APIManager } from '@shared/frontend';
-import {
-  ButtonBuilder as ButtonBuilderState,
-  FormBuilder,
-} from '@shared/types';
+import { Button as BaseButton, APIManager } from '@shared/frontend';
+import { ButtonBuilder, FormBuilder } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
-import { mergeWith, set } from 'lodash-es';
+import { cloneDeep, set } from 'lodash-es';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useFormState } from '../FormBuilder';
 
-interface ButtonBuilderProps {
+interface ButtonProps {
   data?: unknown & { id: string };
   form?: FormBuilder;
-  state: ButtonBuilderState;
+  buttonBuilder: ButtonBuilder;
 }
 
-export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
+export const Button = observer((props: ButtonProps) => {
+  const state = useFormState();
   const params = useParams();
-  const { state, form, data } = props;
+  const { buttonBuilder, form, data } = props;
   const navigate = useNavigate();
-
-  // console.log('params', params);
 
   const onPress = async () => {
     const serviceId = window.location.pathname.split('/')[4];
-    const button = toJS(state);
+    const body = cloneDeep(state.body);
 
-    // console.log('button', button);
-    // console.log('form', form);
+    Object.entries(body).map(([key, value]) => {
+      if (key.split('.')?.includes('serviceId')) {
+        body[key] = serviceId;
+      }
+      set(body, key.split('.'), value);
+    });
+    console.log('body', body);
+    const resourceId = params[form?.button.mutation?.resourceId as string];
 
-    const payloads = form?.sections
-      .map(section =>
-        section.components.map(component => {
-          const paths = component?.path?.split('.') || [];
-          const result = set({}, paths, component.props.value);
-          return result;
-        }),
-      )
-      .flat();
+    const args = [];
+    if (resourceId) {
+      args.push(resourceId);
+    }
 
-    let mergedPayload =
-      (payloads?.reduce(
-        (acc, payload) => mergeWith(acc, payload as never),
-        form?.defaultValues || {},
-      ) as {
-        [key: string]: unknown;
-      }) || {};
+    if (body) {
+      args.push(body);
+    }
 
-    mergedPayload.serviceId = serviceId;
+    const button = toJS(buttonBuilder);
+    console.log('args', args);
     try {
-      if (button.mutation?.key) {
-        if (button.mutation.keyForConvertParamsToPayloads) {
-          mergedPayload = {
-            ...mergedPayload,
-            ...Object.fromEntries(
-              button.mutation.keyForConvertParamsToPayloads.map(key => [
-                key,
-                params[key],
-              ]),
-            ),
-          };
-        }
+      if (button.mutation?.name) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        await APIManager[button.mutation.key](mergedPayload);
+        await APIManager[button.mutation.name].apply(null, args);
       }
       if (button?.success?.message) {
         alert(button.success.message);
@@ -105,5 +89,5 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
     }
   };
 
-  return <Button onPress={onPress}>{state.name}</Button>;
+  return <BaseButton onPress={onPress}>{buttonBuilder.name}</BaseButton>;
 });

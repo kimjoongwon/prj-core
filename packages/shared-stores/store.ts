@@ -1,4 +1,3 @@
-import { makeAutoObservable } from 'mobx';
 import { Navigation } from './navigation';
 import { AppBuilder } from '@shared/types';
 
@@ -11,6 +10,5 @@ export class Store {
   constructor(navigation: Navigation, appBuilder: AppBuilder) {
     this.navigation = navigation;
     this.appBuilder = appBuilder;
-    makeAutoObservable(this);
   }
 }
