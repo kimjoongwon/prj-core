@@ -3,11 +3,17 @@ import { PageBuilder } from '@shared/types';
 export const loginPage: PageBuilder = {
   name: '로그인',
   form: {
+    state: {
+      body: {
+        email: '',
+        password: '',
+      },
+    },
     isInValid: false,
     name: '로그인',
     button: {
       name: '로그인',
-      mutation: { key: 'getToken' },
+      mutation: { name: 'getToken' },
       success: {
         message: '로그인 성공',
         link: '/admin/main/services',
@@ -28,9 +34,8 @@ export const loginPage: PageBuilder = {
         components: [
           {
             type: 'Input',
-            path: 'email',
+            path: 'body.email',
             props: {
-              value: 'galaxy@gmail.com',
               type: 'email',
               label: '이메일',
               placeholder: '이메일을 입력해주세요.',
@@ -51,9 +56,8 @@ export const loginPage: PageBuilder = {
           },
           {
             type: 'Input',
-            path: 'password',
+            path: 'body.password',
             props: {
-              value: 'rkdmf12!@',
               label: '비밀번호',
               type: 'password',
               placeholder: '비밀번호를 입력해주세요.',

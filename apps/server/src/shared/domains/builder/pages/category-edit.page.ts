@@ -1,4 +1,6 @@
 import { PageBuilder } from '@shared/types';
+import { getCategoryForm } from '../forms/category.form';
+import { CreateCategoryDto } from '../../../entities';
 
 export const categoryEditPage: PageBuilder = {
   type: 'Form',
@@ -6,14 +8,15 @@ export const categoryEditPage: PageBuilder = {
   params: {
     categoryId: '',
   },
-  api: {
-    query: {
-      name: 'useGetCategoryById',
-      resourceId: 'categoryId',
-      params: {
-        isDeleted: false,
-      },
+  query: {
+    name: 'useGetCategoryById',
+    resourceId: 'categoryId',
+    params: {
+      isDeleted: false,
     },
   },
-  // form: getCategoryForm({ key: 'updateCategory' }),
+  form: getCategoryForm({
+    name: 'updateCategory',
+    body: new CreateCategoryDto(),
+  }),
 };

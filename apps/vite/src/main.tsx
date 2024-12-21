@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@shared/stores';
 import { Providers } from './Providers';
 import { RouteBuilder as IRouteBuilder } from '@shared/types';
-import { RouteBuilder } from './builders/RouteBuilder';
+import { Route } from './builders/Route';
 import './index.css';
 import { ReactQueryProvider } from '@shared/frontend';
 import { v4 } from 'uuid';
@@ -31,7 +31,7 @@ const App = observer(() => {
     const getRouteObjects = (routeBuilder: IRouteBuilder) => {
       const _route: RouteObject = {
         path: routeBuilder.pathname,
-        element: <RouteBuilder key={v4()} state={routeBuilder} />,
+        element: <Route key={v4()} routeBuilder={routeBuilder} />,
         children: [],
         errorElement: <div>error</div>,
       };
@@ -46,7 +46,7 @@ const App = observer(() => {
 
     const _route: RouteObject = {
       path: routeBuilder.pathname,
-      element: <RouteBuilder key={v4()} state={routeBuilder} />,
+      element: <Route key={v4()} routeBuilder={routeBuilder} />,
       errorElement: <div>error</div>,
     };
 

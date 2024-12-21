@@ -1,5 +1,5 @@
 import { CellBuilderProps } from '@shared/types';
-import { ButtonBuilder } from '../ButtonBuilder';
+import { Button } from '../ButtonBuilder';
 import { v4 } from 'uuid';
 
 export const CellBuilder = ({
@@ -13,7 +13,7 @@ export const CellBuilder = ({
       <div className="flex space-x-1">
         {buttons.map(button => {
           return (
-            <ButtonBuilder key={v4()} state={button} data={row.original} />
+            <Button key={v4()} buttonBuilder={button} data={row.original} />
           );
         })}
       </div>
