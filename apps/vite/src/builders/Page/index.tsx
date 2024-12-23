@@ -5,10 +5,10 @@ import { Grid2 as Grid } from '@mui/material';
 import { APIManager, Text } from '@shared/frontend';
 import { PageBuilder } from '@shared/types';
 import { Component } from '../Component';
-import { Form } from '../FormBuilder';
+import { Form, FormProvder } from '../FormBuilder';
 import { Outlet, useParams } from 'react-router-dom';
 import { TableBuilder } from '../TableBuilder';
-import { cloneDeep, isEmpty } from 'lodash-es';
+import { cloneDeep, isArray, isEmpty } from 'lodash-es';
 import { Mount } from '../Mount';
 
 interface PageBuilderProps {
@@ -40,11 +40,12 @@ export const usePageState = () => {
 
 export const Page = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
-  const serviceId = window.location.pathname.split('/')[4];
-  const params = useParams();
   const query = cloneDeep(pageBuilder?.query);
+  const params = useParams();
   const resourceId = params?.[query?.resourceId as string];
+  const serviceId = window.location.pathname.split('/')[4];
   const apiArgs: unknown[] = resourceId ? [resourceId] : [];
+
   if (query?.params) {
     query.params.serviceId = serviceId;
   }
@@ -53,49 +54,57 @@ export const Page = observer((props: PageBuilderProps) => {
     apiArgs.push(query?.params);
   }
 
-  const isQueryExist = !!APIManager?.[query?.name as keyof typeof APIManager];
+  apiArgs.push({
+    enabled: !!query?.name,
+  });
 
-  if (isQueryExist) {
-    apiArgs.push({
-      enabled: !!query?.name,
-    });
-  }
+  const queryName = query?.name as keyof typeof APIManager;
 
-  const getQuery = isQueryExist
+  const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      APIManager?.[query?.name as keyof typeof APIManager].apply(null, apiArgs)
-    : [];
+      APIManager[queryName].apply(null, apiArgs)
+    : undefined;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const data = getQuery?.data?.data || [];
+  const data = getQuery?.data?.data;
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  if (getQuery?.isLoading) {
+    return null;
+  }
 
   if (pageBuilder?.type === 'Outlet') {
     return <Outlet />;
   }
-
   return (
     <PageProvder state={pageBuilder?.state}>
       <Mount type={pageBuilder?.type} name={pageBuilder?.name}>
         <>
           {pageBuilder.form ? (
-            <Form formBuilder={pageBuilder.form!}>
-              {pageBuilder?.form?.sections?.map(section => {
-                return (
-                  <React.Fragment key={v4()}>
-                    <Text variant="h5">{section.name}</Text>
-                    <Grid container spacing={1}>
-                      {section.components?.map(component => (
-                        <Grid key={v4()} {...component.gridProps}>
-                          <Component componentBuilder={component} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </React.Fragment>
-                );
-              })}
-            </Form>
+            <FormProvder
+              state={pageBuilder.form.state}
+              data={isArray(data) ? null : data}
+            >
+              <Form formBuilder={pageBuilder.form!}>
+                {pageBuilder?.form?.sections?.map(section => {
+                  return (
+                    <React.Fragment key={v4()}>
+                      <Text variant="h5">{section.name}</Text>
+                      <Grid container spacing={1}>
+                        {section.components?.map(component => (
+                          <Grid key={v4()} {...component.gridProps}>
+                            <Component componentBuilder={component} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </React.Fragment>
+                  );
+                })}
+              </Form>
+            </FormProvder>
           ) : null}
           {pageBuilder?.type === 'Table' && (
             <TableBuilder state={pageBuilder} data={data} />

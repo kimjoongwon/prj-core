@@ -14,13 +14,11 @@ export const loginPage: PageBuilder = {
     button: {
       name: '로그인',
       mutation: { name: 'getToken' },
-      success: {
+      alert: {
         message: '로그인 성공',
-        link: '/admin/main/services',
       },
-      failure: {
-        message: '로그인 실패',
-        link: '/admin/auth/login',
+      navigator: {
+        pathname: '/admin/auth/login',
       },
     },
     sections: [

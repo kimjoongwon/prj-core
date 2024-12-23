@@ -31,24 +31,32 @@ export interface ComponentBuilder {
 
 export interface FormBuilder {
   name?: string;
-  state: any;
+  state: object & { body: any };
   isInValid?: boolean;
   sections: SectionBuilder[];
   button: ButtonBuilder;
 }
 
 export interface ButtonBuilder {
-  type?: 'ROW';
   name: string;
   mutation?: Mutation;
-  success?: SuccessOrFailure;
-  failure?: SuccessOrFailure;
+  navigator: Navigator;
+  alert?: Alert;
+}
+
+export interface Alert {
+  message: string;
+}
+
+export interface Navigator {
+  pathname: string;
+  hasParams?: boolean;
 }
 
 export interface SuccessOrFailure {
   link: string;
   message?: string;
-  keysForConvertPayloadsToParams?: string[];
+  params?: object & { resourceId: string };
 }
 
 export interface AppBuilder {
@@ -68,26 +76,22 @@ export interface LayoutBuilder {
     | 'Service'
     | 'Table'
     | 'Form';
-  page: PageBuilder;
+  page?: PageBuilder;
 }
 
 export interface RouteBuilder {
   name: string;
   pathname: string;
   active: boolean;
-  layout: LayoutBuilder;
+  layout?: LayoutBuilder;
   params?: object;
   children?: RouteBuilder[];
-}
-
-export interface Mutation {
-  name: string;
 }
 
 export interface Query {
   name: string;
   resourceId?: string;
-  params?: object;
+  params?: any & { serviceId?: string };
 }
 
 export interface Mutation {
@@ -100,7 +104,7 @@ export interface PageBuilder {
   type?: 'Outlet' | 'Form' | 'Table';
   name?: string;
   state?: object;
-  params?: object;
+  params?: object & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;
   table?: TableBuilder;

@@ -4,18 +4,18 @@ import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { CategoryEntity } from '../category.entity';
 
 export class CategoryDto extends AbstractDto implements CategoryEntity {
-  @EnumField(() => $Enums.CategoryTypes)
+  @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.LEAF })
   type: $Enums.CategoryTypes;
 
-  @StringField()
+  @StringField({ default: '' })
   name: string;
 
-  @StringField({ nullable: true })
+  @StringField({ nullable: true, default: null })
   parentId: string | null;
 
-  @UUIDField()
+  @UUIDField({ default: '' })
   tenantId: string;
 
-  @StringField()
+  @StringField({ default: '' })
   serviceId: string;
 }

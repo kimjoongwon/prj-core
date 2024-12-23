@@ -48,7 +48,11 @@ export class CategoriesService {
     args.include = {
       children: {
         include: {
-          children: true,
+          children: {
+            include: {
+              children: true,
+            },
+          },
         },
       },
     };
