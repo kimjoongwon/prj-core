@@ -18,7 +18,7 @@ export const loginPage: PageBuilder = {
         message: '로그인 성공',
       },
       navigator: {
-        pathname: '/admin/auth/login',
+        pathname: '/admin/main/services',
       },
     },
     sections: [
