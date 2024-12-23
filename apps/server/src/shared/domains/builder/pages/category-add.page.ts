@@ -1,11 +1,46 @@
 import { PageBuilder } from '@shared/types';
-import { getCategoryForm } from '../forms/category.form';
 
 export const categoryAddPage: PageBuilder = {
   type: 'Form',
   name: '카테고리 추가',
-  form: getCategoryForm({
-    key: 'createCategory',
-    keyForConvertParamsToPayloads: ['parentId'],
-  }),
+  form: {
+    name: '정보',
+    state: {
+      body: {
+        name: '',
+        type: 'LEAF',
+        parentId: null,
+        serviceId: '',
+      },
+    },
+    button: {
+      name: '저장',
+      mutation: {
+        name: 'createCategory',
+        resourceId: 'categoryId',
+      },
+      alert: {
+        message: '카테고리가 추가되었습니다.',
+      },
+      navigator: {
+        pathname: '..',
+      },
+    },
+    sections: [
+      {
+        name: '카테고리 정보',
+        components: [
+          {
+            path: 'body.name',
+            props: {
+              fullWidth: true,
+              label: '카테고리 이름',
+              placeholder: '카테고리 이름을 입력해주세요.',
+            },
+            type: 'Input',
+          },
+        ],
+      },
+    ],
+  },
 };

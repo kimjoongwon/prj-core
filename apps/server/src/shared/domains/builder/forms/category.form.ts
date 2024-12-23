@@ -2,16 +2,21 @@ import { FormBuilder, Mutation } from '@shared/types';
 
 export const getCategoryForm = (mutation: Mutation): FormBuilder => ({
   name: '정보',
+  state: {
+    body: {
+      name: '',
+      type: 'LEAF',
+      parentId: null,
+    },
+  },
   button: {
     name: '저장',
     mutation,
-    failure: {
-      message: '카테고리 추가에 실패했습니다.',
-      link: '..',
+    alert: {
+      message: '!!!',
     },
-    success: {
-      message: '카테고리 추가가 완료되었습니다.',
-      link: '..',
+    navigator: {
+      pathname: '..',
     },
   },
   sections: [
@@ -19,12 +24,11 @@ export const getCategoryForm = (mutation: Mutation): FormBuilder => ({
       name: '카테고리 정보',
       components: [
         {
-          path: 'name',
+          path: 'body.name',
           props: {
             fullWidth: true,
             label: '카테고리 이름',
             placeholder: '카테고리 이름을 입력해주세요.',
-            value: '',
           },
           type: 'Input',
         },

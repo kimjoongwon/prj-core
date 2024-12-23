@@ -84,17 +84,19 @@ export class BuilderService {
                           children: [
                             {
                               name: '카테고리 추가',
-                              pathname: 'parentId:/add',
+                              pathname: ':parentId/add',
                               active: false,
                               layout: {
+                                type: 'Form',
                                 page: categoryAddPage,
                               },
                             },
                             {
-                              name: '카테고리 새편집',
-                              pathname: ':categoryId/edit',
+                              name: '카테고리 수정',
+                              pathname: ':resourceId/edit',
                               active: false,
                               layout: {
+                                type: 'Form',
                                 page: categoryEditPage,
                               },
                             },
@@ -103,6 +105,7 @@ export class BuilderService {
                               pathname: 'new/edit',
                               active: false,
                               layout: {
+                                type: 'Form',
                                 page: categoryNewEditPage,
                               },
                             },

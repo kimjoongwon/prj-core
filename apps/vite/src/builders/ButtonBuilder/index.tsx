@@ -2,11 +2,11 @@ import { Button as BaseButton, APIManager } from '@shared/frontend';
 import { ButtonBuilder, FormBuilder } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
-import { cloneDeep, set } from 'lodash-es';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFormState } from '../FormBuilder';
+import { toast } from 'react-toastify';
 
 interface ButtonProps {
   data?: unknown & { id: string };
@@ -14,6 +14,9 @@ interface ButtonProps {
   buttonBuilder: ButtonBuilder;
 }
 
+// 1. cell의 수정 버튼 -> resoureId를 가지고 수정
+// 2. 폼의 저장,수정,추가 버튼가 -> body를 가지고 저장,수정,추가
+// 3. 페이지의 버튼 -> ????
 export const Button = observer((props: ButtonProps) => {
   const state = useFormState();
   const params = useParams();
@@ -22,15 +25,17 @@ export const Button = observer((props: ButtonProps) => {
 
   const onPress = async () => {
     const serviceId = window.location.pathname.split('/')[4];
-    const body = cloneDeep(state.body);
+    if (state?.body) {
+      Object.keys(state.body).map(key => {
+        if (key?.split('.')?.includes('serviceId')) {
+          state.body[key] = serviceId;
+        }
+        if (key.split('.').includes('parentId')) {
+          state.body[key] = params.parentId;
+        }
+      });
+    }
 
-    Object.entries(body).map(([key, value]) => {
-      if (key.split('.')?.includes('serviceId')) {
-        body[key] = serviceId;
-      }
-      set(body, key.split('.'), value);
-    });
-    console.log('body', body);
     const resourceId = params[form?.button.mutation?.resourceId as string];
 
     const args = [];
@@ -38,53 +43,44 @@ export const Button = observer((props: ButtonProps) => {
       args.push(resourceId);
     }
 
-    if (body) {
-      args.push(body);
+    if (state?.body) {
+      args.push(state.body);
     }
 
     const button = toJS(buttonBuilder);
-    console.log('args', args);
+    const alert = button?.alert;
+    const navigator = button?.navigator;
     try {
       if (button.mutation?.name) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
       }
-      if (button?.success?.message) {
-        alert(button.success.message);
+
+      if (alert) {
+        toast(button.alert?.message);
       }
 
-      if (button?.success?.link) {
+      if (navigator) {
         let params = {};
-
-        if (button.success.keysForConvertPayloadsToParams) {
-          params = button.success.keysForConvertPayloadsToParams?.reduce(
-            (acc, key) => {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              acc[key] = data?.id;
-              return acc;
-            },
-            {},
-          );
-          console.log('params', params);
-          const pathname = PathUtil.getUrlWithParamsAndQueryString(
-            button.success.link,
-            params,
-          );
-
-          navigate(pathname);
-
-          return;
+        const resourceId = data?.id;
+        const isParnetId = navigator.pathname.includes('parentId');
+        if (isParnetId) {
+          params = { parentId: resourceId };
+        } else {
+          params = { resourceId };
         }
-        navigate(button.success.link);
+
+        const pathname = PathUtil.getUrlWithParamsAndQueryString(
+          navigator.pathname,
+          params,
+        );
+
+        navigate(pathname);
       }
     } catch (error: unknown) {
-      if (isAxiosError(error) && button.failure) {
-        alert(button.failure.message);
-        if (button.failure?.link) {
-          navigate(button.failure?.link);
-        }
+      if (isAxiosError(error)) {
+        toast(error.response?.data?.message || '');
       }
     }
   };

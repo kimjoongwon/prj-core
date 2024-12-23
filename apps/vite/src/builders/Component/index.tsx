@@ -3,6 +3,7 @@ import { ComponentBuilder as ComponentBuilderState } from '@shared/types';
 import { ComponentManager } from '@shared/frontend';
 import { isEmpty } from 'lodash-es';
 import { useFormState } from '../FormBuilder';
+import { toJS } from 'mobx';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
@@ -14,7 +15,7 @@ export const Component = observer((props: ComponentBuilderProps) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const Component = ComponentManager[componentBuilder.type];
-
+  console.log(toJS(formState));
   const callbacks = componentBuilder.validation?.timings?.map(timing => {
     return {
       [timing]: (value: unknown) => {
