@@ -1,30 +1,25 @@
 import { PageBuilder } from '@shared/types';
-import { plainToInstance } from 'class-transformer';
-import { CategoryDto, CreateCategoryDto } from '../../../entities';
-import { name } from 'mustache';
 
 export const categoryEditPage: PageBuilder = {
-  type: 'Form',
+  type: 'Page',
   name: '카테고리 편집',
-  params: {
-    serviceId: '',
-  },
   query: {
     name: 'useGetCategoryById',
-    resourceId: 'categoryId',
+    hasResourceId: true,
   },
   form: {
     name: '정보',
     state: {
-      body: {
-        name,
+      payload: {
+        name: '',
       },
     },
     button: {
       name: '저장',
       mutation: {
         name: 'updateCategory',
-        resourceId: 'categoryId',
+        hasResourceId: true,
+        hasPayload: true,
       },
       alert: {
         message: '카테고리가 수정되었습니다.',
@@ -38,7 +33,7 @@ export const categoryEditPage: PageBuilder = {
         name: '카테고리 정보',
         components: [
           {
-            path: 'body.name',
+            path: 'name',
             props: {
               fullWidth: true,
               label: '카테고리 이름',

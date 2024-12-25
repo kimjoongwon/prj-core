@@ -1,15 +1,14 @@
 import React, { createContext } from 'react';
 import { v4 } from 'uuid';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { Grid2 as Grid } from '@mui/material';
-import { APIManager, Text } from '@shared/frontend';
+import { APIManager, Text, VStack } from '@shared/frontend';
 import { PageBuilder } from '@shared/types';
 import { Component } from '../Component';
 import { Form, FormProvder } from '../FormBuilder';
 import { Outlet, useParams } from 'react-router-dom';
-import { TableBuilder } from '../TableBuilder';
-import { cloneDeep, isArray, isEmpty } from 'lodash-es';
-import { Mount } from '../Mount';
+import { cloneDeep, isArray } from 'lodash-es';
+import { observable } from 'mobx';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilder;
@@ -20,10 +19,10 @@ interface PageProviderProps {
   children: React.ReactNode;
 }
 
-export const PageContext = createContext<PageBuilder['state'] | null>(null);
+const PageContext = createContext<PageBuilder['state'] | null>(null);
 
-export const PageProvder = (props: PageProviderProps) => {
-  const state = useLocalObservable(() => props.state!);
+const PageProvder = (props: PageProviderProps) => {
+  const state = observable(props.state || {});
 
   return (
     <PageContext.Provider value={state}>{props.children}</PageContext.Provider>
@@ -42,15 +41,18 @@ export const Page = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
   const query = cloneDeep(pageBuilder?.query);
   const params = useParams();
-  const resourceId = params?.[query?.resourceId as string];
   const serviceId = window.location.pathname.split('/')[4];
-  const apiArgs: unknown[] = resourceId ? [resourceId] : [];
+  const apiArgs: unknown[] = [];
 
-  if (query?.params) {
+  if (query?.hasResourceId) {
+    apiArgs.push(params?.resourceId);
+  }
+
+  if (query?.hasServiceId) {
     query.params.serviceId = serviceId;
   }
 
-  if (!isEmpty(query?.params)) {
+  if (query?.hasParams) {
     apiArgs.push(query?.params);
   }
 
@@ -79,38 +81,29 @@ export const Page = observer((props: PageBuilderProps) => {
   if (pageBuilder?.type === 'Outlet') {
     return <Outlet />;
   }
+
   return (
     <PageProvder state={pageBuilder?.state}>
-      <Mount type={pageBuilder?.type} name={pageBuilder?.name}>
-        <>
-          {pageBuilder.form ? (
-            <FormProvder
-              state={pageBuilder.form.state}
-              data={isArray(data) ? null : data}
-            >
-              <Form formBuilder={pageBuilder.form!}>
-                {pageBuilder?.form?.sections?.map(section => {
-                  return (
-                    <React.Fragment key={v4()}>
-                      <Text variant="h5">{section.name}</Text>
-                      <Grid container spacing={1}>
-                        {section.components?.map(component => (
-                          <Grid key={v4()} {...component.gridProps}>
-                            <Component componentBuilder={component} />
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </React.Fragment>
-                  );
-                })}
-              </Form>
-            </FormProvder>
-          ) : null}
-          {pageBuilder?.type === 'Table' && (
-            <TableBuilder state={pageBuilder} data={data} />
-          )}
-        </>
-      </Mount>
+      {pageBuilder.form ? (
+        <FormProvder
+          state={pageBuilder.form.state}
+          data={isArray(data) ? null : data}
+        >
+          <Form formBuilder={pageBuilder.form!}>
+            {pageBuilder?.form?.sections?.map(section => {
+              return (
+                <Grid container spacing={1}>
+                  {section.components?.map(component => (
+                    <Grid key={v4()} {...component.gridProps}>
+                      <Component componentBuilder={component} data={data} />
+                    </Grid>
+                  ))}
+                </Grid>
+              );
+            })}
+          </Form>
+        </FormProvder>
+      ) : null}
     </PageProvder>
   );
 });

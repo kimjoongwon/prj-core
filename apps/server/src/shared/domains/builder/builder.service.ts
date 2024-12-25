@@ -17,7 +17,6 @@ export class BuilderService {
       {
         name: 'ROOT',
         pathname: '/',
-        active: false,
         layout: {
           type: 'Root',
           page: {
@@ -29,7 +28,6 @@ export class BuilderService {
           {
             name: '어드민',
             pathname: 'admin',
-            active: false,
             layout: {
               type: 'Admin',
               page: {
@@ -41,7 +39,6 @@ export class BuilderService {
               {
                 name: '메인',
                 pathname: 'main',
-                active: false,
                 layout: {
                   type: 'Main',
                   page: {
@@ -53,7 +50,6 @@ export class BuilderService {
                   {
                     name: '서비스',
                     pathname: 'services',
-                    active: false,
                     layout: {
                       type: 'Services',
                       page: {
@@ -64,7 +60,6 @@ export class BuilderService {
                     children: services.map((service) => ({
                       name: service.label,
                       pathname: service.id,
-                      active: false,
                       layout: {
                         type: 'Service',
                         page: {
@@ -76,16 +71,14 @@ export class BuilderService {
                         {
                           name: '카테고리',
                           pathname: 'categories',
-                          active: false,
                           layout: {
-                            type: 'Table',
+                            type: 'Master',
                             page: categoriesPage,
                           },
                           children: [
                             {
                               name: '카테고리 추가',
                               pathname: ':parentId/add',
-                              active: false,
                               layout: {
                                 type: 'Form',
                                 page: categoryAddPage,
@@ -94,7 +87,6 @@ export class BuilderService {
                             {
                               name: '카테고리 수정',
                               pathname: ':resourceId/edit',
-                              active: false,
                               layout: {
                                 type: 'Form',
                                 page: categoryEditPage,
@@ -103,7 +95,6 @@ export class BuilderService {
                             {
                               name: '카테고리 새편집',
                               pathname: 'new/edit',
-                              active: false,
                               layout: {
                                 type: 'Form',
                                 page: categoryNewEditPage,
@@ -114,10 +105,9 @@ export class BuilderService {
                         {
                           name: '그룹',
                           pathname: 'groups',
-                          active: false,
                           children: [],
                           layout: {
-                            type: 'Table',
+                            type: 'Master',
                           },
                         },
                       ],
@@ -128,7 +118,6 @@ export class BuilderService {
               {
                 name: '인증',
                 pathname: 'auth',
-                active: false,
                 layout: {
                   page: {
                     type: 'Outlet',
@@ -138,7 +127,6 @@ export class BuilderService {
                   {
                     name: '로그인',
                     pathname: 'login',
-                    active: false,
                     children: [],
                     layout: {
                       type: 'Auth',

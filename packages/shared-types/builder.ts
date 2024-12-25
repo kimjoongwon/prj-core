@@ -31,16 +31,16 @@ export interface ComponentBuilder {
 
 export interface FormBuilder {
   name?: string;
-  state: object & { body: any };
+  state?: object & { payload: any & { serviceId?: string } };
   isInValid?: boolean;
   sections: SectionBuilder[];
-  button: ButtonBuilder;
+  button?: ButtonBuilder;
 }
 
 export interface ButtonBuilder {
   name: string;
   mutation?: Mutation;
-  navigator: Navigator;
+  navigator?: Navigator;
   alert?: Alert;
 }
 
@@ -50,7 +50,10 @@ export interface Alert {
 
 export interface Navigator {
   pathname: string;
+  hasResourceId?: boolean;
+  hasParentId?: boolean;
   hasParams?: boolean;
+  params?: object & { resourceId?: string; parentId?: string };
 }
 
 export interface SuccessOrFailure {
@@ -70,19 +73,17 @@ export interface LayoutBuilder {
     | 'Auth'
     | 'Main'
     | 'Root'
-    | 'Sidebar'
     | 'Admin'
+    | 'Form'
     | 'Services'
     | 'Service'
-    | 'Table'
-    | 'Form';
+    | 'Master';
   page?: PageBuilder;
 }
 
 export interface RouteBuilder {
   name: string;
   pathname: string;
-  active: boolean;
   layout?: LayoutBuilder;
   params?: object;
   children?: RouteBuilder[];
@@ -90,21 +91,25 @@ export interface RouteBuilder {
 
 export interface Query {
   name: string;
-  resourceId?: string;
+  hasResourceId?: boolean;
+  hasParams?: boolean;
+  hasServiceId?: boolean;
   params?: any & { serviceId?: string };
 }
 
 export interface Mutation {
   name: string;
-  resourceId?: string;
-  body?: object;
+  hasResourceId?: boolean;
+  hasServiceId?: boolean;
+  hasParentId?: boolean;
+  hasPayload?: boolean;
 }
 
 export interface PageBuilder {
-  type?: 'Outlet' | 'Form' | 'Table';
+  type?: 'Outlet' | 'Page';
   name?: string;
   state?: object;
-  params?: object & { serviceId?: string };
+  params?: any & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;
   table?: TableBuilder;

@@ -14,7 +14,9 @@ export const Route = (props: RouteBuilderProps) => {
 
   return (
     <Layout layoutBuilder={routeBuilder.layout}>
-      <Page pageBuilder={routeBuilder.layout?.page} />
+      {routeBuilder.layout?.page && (
+        <Page pageBuilder={routeBuilder.layout?.page} />
+      )}
     </Layout>
   );
 };

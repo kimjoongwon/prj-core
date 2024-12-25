@@ -10,9 +10,9 @@ import { useStore } from '@shared/stores';
 import { Providers } from './Providers';
 import { RouteBuilder as IRouteBuilder } from '@shared/types';
 import { Route } from './builders/Route';
-import './index.css';
 import { ReactQueryProvider } from '@shared/frontend';
 import { v4 } from 'uuid';
+import './index.css';
 
 const rootElement = document.getElementById('root')!;
 
@@ -61,6 +61,7 @@ const App = observer(() => {
   const router = createBrowserRouter(routeObjects);
 
   if (!store.isInitialized) return <div>init...</div>;
+
   return <RouterProvider router={router} />;
 });
 

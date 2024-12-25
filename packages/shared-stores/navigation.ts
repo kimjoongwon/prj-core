@@ -13,7 +13,6 @@ export class Navigation {
     this.routeBuilders = routeBuilders;
     this.getRoutes();
     this.activateRoute();
-    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   setNavigateFunction(navigateFunction: NavigateFunction) {
