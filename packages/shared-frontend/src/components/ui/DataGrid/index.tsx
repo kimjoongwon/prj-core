@@ -5,9 +5,6 @@ import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
-  getGroupedRowModel,
-  getSortedRowModel,
-  GroupingState,
   useReactTable,
 } from '@tanstack/react-table';
 import {
@@ -69,7 +66,7 @@ export const DataGrid = observer(
         expanded,
       },
       debugTable: false,
-      debugHeaders: true,
+      debugHeaders: false,
       debugColumns: false,
     });
 
@@ -81,6 +78,7 @@ export const DataGrid = observer(
 
     return (
       <Table
+        fullWidth
         aria-label="datagrid"
         isHeaderSticky
         isCompact

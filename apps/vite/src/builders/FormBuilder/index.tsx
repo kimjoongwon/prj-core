@@ -1,9 +1,9 @@
 import { FormBuilder, FormBuilder as FormBuilderState } from '@shared/types';
-import { Button } from '../ButtonBuilder';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { createContext } from 'react';
-import React from 'react';
-import { toJS } from 'mobx';
+import { ButtonBuilder } from '../ButtonBuilder';
+import { observer } from 'mobx-react-lite';
+import { createContext, useContext } from 'react';
+import { observable } from 'mobx';
+import { VStack } from '@shared/frontend';
 
 interface FormBuilderProps {
   formBuilder: FormBuilderState;
@@ -19,18 +19,16 @@ interface FormProviderProps<T> {
   children: React.ReactNode;
 }
 
-export const FormContext = createContext<FormBuilder['state'] | null>(null);
+const FormContext = createContext<FormBuilder['state'] | null>(null);
 
 export const FormProvder = <T extends object>(props: FormProviderProps<T>) => {
   const { data } = props;
-  const state: FormBuilder['state'] = useLocalObservable(() => {
-    return {
-      ...props.state,
-      body: {
-        ...props.state.body,
-        ...data,
-      },
-    };
+  const state: FormBuilder['state'] = observable({
+    ...props.state,
+    payload: {
+      ...props.state?.payload,
+      ...data,
+    },
   });
 
   return (
@@ -39,20 +37,12 @@ export const FormProvder = <T extends object>(props: FormProviderProps<T>) => {
 };
 
 export const useFormState = () => {
-  const state = React.useContext(FormContext);
-  // if (!state) {
-  //   throw new Error('useState must be used within a FormProvider');
-  // }
+  const state = useContext(FormContext);
   return state;
 };
 
 export const Form = observer((props: FormBuilderProps) => {
-  const { formBuilder, children } = props;
+  const { children } = props;
 
-  return (
-    <form className="space-y-4">
-      {children}
-      <Button buttonBuilder={formBuilder.button} form={formBuilder} />
-    </form>
-  );
+  return <VStack className="flex-1 w-full space-y-1">{children}</VStack>;
 });

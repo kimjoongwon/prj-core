@@ -3,7 +3,6 @@ import { LayoutBuilder, RouteBuilder } from '@shared/types';
 export const userServiceRoute: RouteBuilder = {
   name: '유저 서비스',
   pathname: '/admin/main/services/user-service',
-  active: false,
 };
 
 export const userServiceLayout: LayoutBuilder = {

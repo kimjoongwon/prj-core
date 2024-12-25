@@ -1,4 +1,3 @@
-import { useLocalObservable } from 'mobx-react-lite';
 import { StoreProvider, Store, Navigation } from '@shared/stores';
 import { useGetAppBuilderSuspense } from '@shared/frontend';
 import { NextUIProvider } from '@nextui-org/react';
@@ -18,19 +17,16 @@ export const Providers = (props: ProvidersProps) => {
     }
   )?.data;
 
-  const value = useLocalObservable(() => {
-    const navigation = new Navigation(appBuilder.routes);
-    const store = new Store(navigation, appBuilder);
-    store.isInitialized = true;
-    return store;
-  });
+  const navigation = new Navigation(appBuilder.routes);
+  const store = new Store(navigation, appBuilder);
+  store.isInitialized = true;
 
   if (isLoading) {
     return null;
   }
 
   return (
-    <StoreProvider value={value}>
+    <StoreProvider value={store}>
       <NextUIProvider>{children}</NextUIProvider>
     </StoreProvider>
   );

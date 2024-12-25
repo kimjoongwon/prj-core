@@ -4,7 +4,7 @@ export const loginPage: PageBuilder = {
   name: '로그인',
   form: {
     state: {
-      body: {
+      payload: {
         email: '',
         password: '',
       },
@@ -32,7 +32,7 @@ export const loginPage: PageBuilder = {
         components: [
           {
             type: 'Input',
-            path: 'body.email',
+            path: 'email',
             props: {
               type: 'email',
               label: '이메일',
@@ -54,7 +54,7 @@ export const loginPage: PageBuilder = {
           },
           {
             type: 'Input',
-            path: 'body.password',
+            path: 'password',
             props: {
               label: '비밀번호',
               type: 'password',

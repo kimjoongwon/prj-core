@@ -1,5 +1,5 @@
 import { CellBuilderProps } from '@shared/types';
-import { Button } from '../ButtonBuilder';
+import { ButtonBuilder } from '../ButtonBuilder';
 import { v4 } from 'uuid';
 
 export const CellBuilder = ({
@@ -13,7 +13,11 @@ export const CellBuilder = ({
       <div className="flex space-x-1">
         {buttons.map(button => {
           return (
-            <Button key={v4()} buttonBuilder={button} data={row.original} />
+            <ButtonBuilder
+              key={v4()}
+              buttonBuilder={button}
+              row={row.original}
+            />
           );
         })}
       </div>
@@ -26,16 +30,16 @@ export const CellBuilder = ({
         paddingLeft: expandable ? `${row.depth * 2}rem` : undefined,
       }}
     >
-      <div>
+      <div className="flex">
         {expandable && row.getCanExpand() ? (
-          <button
+          <div
             {...{
               onClick: row.getToggleExpandedHandler(),
               style: { cursor: 'pointer' },
             }}
           >
             {row.getIsExpanded() ? '📂' : '📁'}
-          </button>
+          </div>
         ) : null}
         {getValue<string>()}
       </div>
