@@ -1,14 +1,13 @@
 import { PageBuilder } from '@shared/types';
 
-export const categoriesPage: PageBuilder = {
+export const groupsPage: PageBuilder = {
   type: 'Page',
   query: {
-    name: 'useGetCategoriesByQuery',
+    name: 'useGetGroupsByQuery',
     hasParams: true,
     hasServiceId: true,
     params: {
       serviceId: '',
-      type: 'ROOT',
     },
   },
   table: {
@@ -39,17 +38,6 @@ export const categoriesPage: PageBuilder = {
         cell: {
           buttons: [
             {
-              color: 'primary',
-              name: '추가',
-              navigator: {
-                pathname: ':parentId/add',
-                hasParentId: true,
-                params: {
-                  parentId: '',
-                },
-              },
-            },
-            {
               color: 'warning',
               name: '수정',
               navigator: {
@@ -64,8 +52,11 @@ export const categoriesPage: PageBuilder = {
               color: 'danger',
               name: '삭제',
               mutation: {
-                name: 'deleteCategory',
+                name: 'deleteGroup',
                 hasRowId: true,
+              },
+              alert: {
+                message: '!!!',
               },
             },
           ],

@@ -4,14 +4,16 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
+import type { CategoryTypes } from './categoryTypes';
 import type { SortOrder } from './sortOrder';
 
 export type GetCategoriesByQueryParams = {
 skip?: number;
 take?: number;
 name?: string;
-ancestorIds?: string[];
+type?: CategoryTypes;
 parentId?: string;
+tenantId: string;
 serviceId?: string;
 nameSortOrder?: SortOrder;
 };

@@ -1,23 +1,27 @@
 import { PageBuilder } from '@shared/types';
 
-export const categoryNewEditPage: PageBuilder = {
+export const groupEditPage: PageBuilder = {
+  name: '그룹 새편집',
   type: 'Page',
-  name: '카테고리 새편집',
+  query: {
+    name: 'useGetGroup',
+    hasResourceId: true,
+    hasParams: true,
+  },
   form: {
     name: '정보',
     state: {
       payload: {
         name: '',
-        type: 'ROOT',
-        parentId: null,
+        serviceId: '',
       },
     },
     button: {
       name: '저장',
       mutation: {
-        name: 'createCategory',
+        name: 'updateGroup',
+        hasResourceId: true,
         hasPayload: true,
-        hasServiceId: true,
       },
       alert: {
         message: '!!!',
@@ -28,16 +32,16 @@ export const categoryNewEditPage: PageBuilder = {
     },
     sections: [
       {
-        name: '카테고리 정보',
+        name: '그룹 정보',
         components: [
           {
+            type: 'Input',
             path: 'name',
             props: {
               fullWidth: true,
-              label: '카테고리 이름',
-              placeholder: '카테고리 이름을 입력해주세요.',
+              label: '그룹 이름',
+              placeholder: '그룹 이름을 입력해주세요.',
             },
-            type: 'Input',
           },
         ],
       },

@@ -2,24 +2,25 @@ import React, { createContext } from 'react';
 import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { Grid2 as Grid } from '@mui/material';
-import { APIManager, Text, VStack } from '@shared/frontend';
-import { PageBuilder } from '@shared/types';
+import { APIManager } from '@shared/frontend';
+import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { Component } from '../Component';
 import { Form, FormProvder } from '../FormBuilder';
 import { Outlet, useParams } from 'react-router-dom';
 import { cloneDeep, isArray } from 'lodash-es';
 import { observable } from 'mobx';
+import { TableBuilder } from '../TableBuilder';
 
 interface PageBuilderProps {
-  pageBuilder: PageBuilder;
+  pageBuilder: PageBuilderInterface;
 }
 
 interface PageProviderProps {
-  state: PageBuilder['state'];
+  state: PageBuilderInterface['state'];
   children: React.ReactNode;
 }
 
-const PageContext = createContext<PageBuilder['state'] | null>(null);
+const PageContext = createContext<PageBuilderInterface['state'] | null>(null);
 
 const PageProvder = (props: PageProviderProps) => {
   const state = observable(props.state || {});
@@ -37,7 +38,7 @@ export const usePageState = () => {
   return state;
 };
 
-export const Page = observer((props: PageBuilderProps) => {
+export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
   const query = cloneDeep(pageBuilder?.query);
   const params = useParams();
@@ -84,7 +85,7 @@ export const Page = observer((props: PageBuilderProps) => {
 
   return (
     <PageProvder state={pageBuilder?.state}>
-      {pageBuilder.form ? (
+      {pageBuilder.form && (
         <FormProvder
           state={pageBuilder.form.state}
           data={isArray(data) ? null : data}
@@ -103,7 +104,10 @@ export const Page = observer((props: PageBuilderProps) => {
             })}
           </Form>
         </FormProvder>
-      ) : null}
+      )}
+      {pageBuilder.table && (
+        <TableBuilder tableBuilder={pageBuilder.table} data={data} />
+      )}
     </PageProvder>
   );
 });

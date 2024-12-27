@@ -82,6 +82,8 @@ export * from './deleteAbility200AllOfPageMeta';
 export * from './deleteAssignment200AllOf';
 export * from './deleteAssignment200AllOfMeta';
 export * from './deleteAssignment200AllOfPageMeta';
+export * from './deleteCategory200AllOf';
+export * from './deleteCategory200AllOfMeta';
 export * from './deleteClassification200AllOf';
 export * from './deleteClassification200AllOfMeta';
 export * from './deleteClassification200AllOfPageMeta';

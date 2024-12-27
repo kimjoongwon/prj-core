@@ -1,4 +1,14 @@
-import { Controller, Post, Body, Patch, Param, Get, HttpStatus, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Get,
+  HttpStatus,
+  Query,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../../decorators';
@@ -64,5 +74,13 @@ export class CategoriesController {
       'Category updated',
       plainToInstance(CategoryDto, category),
     );
+  }
+
+  @Auth()
+  @ApiResponseEntity(CategoryDto)
+  @Delete(':categoryId')
+  async deleteCategory(@Param('categoryId') id: string) {
+    await this.categoriesService.deleteById(id);
+    return new ResponseEntity(HttpStatus.OK, 'Category deleted');
   }
 }

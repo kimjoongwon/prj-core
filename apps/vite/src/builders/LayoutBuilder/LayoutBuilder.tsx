@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import { AppBar, Button, HStack, List, Text, VStack } from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
-import { LayoutBuilder } from '@shared/types';
+import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
 import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
 
-export const Layout = observer((props: LayoutBuilderProps) => {
+export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
 
   if (layoutBuilder?.type === 'Root') {
@@ -95,10 +95,10 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
   const { children } = props;
 
   return (
-    <>
+    <VStack className="w-full space-y-2 p-2 m-2 border-1">
       {children}
       <Outlet />
-    </>
+    </VStack>
   );
 });
 
@@ -214,7 +214,7 @@ export const Footer = () => {
 
 interface Layout {
   children: ReactNode;
-  layoutBuilder?: LayoutBuilder;
+  layoutBuilder?: LayoutBuilderInterface;
 }
 
 type RootLayoutProps = Layout;
@@ -244,5 +244,5 @@ interface MainLayoutProps {
 
 interface TableLayoutProps {
   children: ReactNode;
-  layoutBuilder: LayoutBuilder;
+  layoutBuilder: LayoutBuilderInterface;
 }

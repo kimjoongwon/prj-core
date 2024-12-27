@@ -46,6 +46,7 @@ import type {
   CreateUserDto,
   DeleteAbility200AllOf,
   DeleteAssignment200AllOf,
+  DeleteCategory200AllOf,
   DeleteClassification200AllOf,
   DeleteGroup200AllOf,
   DeleteSession200AllOf,
@@ -1434,7 +1435,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     }
     
 export const getCategoriesByQuery = (
-    params?: GetCategoriesByQueryParams,
+    params: GetCategoriesByQueryParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
@@ -1447,12 +1448,12 @@ export const getCategoriesByQuery = (
     }
   
 
-export const getGetCategoriesByQueryQueryKey = (params?: GetCategoriesByQueryParams,) => {
+export const getGetCategoriesByQueryQueryKey = (params: GetCategoriesByQueryParams,) => {
     return [`http://localhost:3005/api/v1/admin/categories`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetCategoriesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -1475,7 +1476,7 @@ export type GetCategoriesByQueryQueryError = ErrorType<void>
 
 
 export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
+ params: GetCategoriesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoriesByQuery>>,
           TError,
@@ -1485,7 +1486,7 @@ export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCat
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCategoriesByQuery>>,
           TError,
@@ -1495,12 +1496,12 @@ export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCat
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
 export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
@@ -1515,7 +1516,7 @@ export function useGetCategoriesByQuery<TData = Awaited<ReturnType<typeof getCat
 
 
 
-export const getGetCategoriesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -1538,20 +1539,20 @@ export type GetCategoriesByQuerySuspenseQueryError = ErrorType<void>
 
 
 export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
 
 export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeof getCategoriesByQuery>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
@@ -1566,7 +1567,7 @@ export function useGetCategoriesByQuerySuspense<TData = Awaited<ReturnType<typeo
 
 
 
-export const getGetCategoriesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetCategoriesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -1589,20 +1590,20 @@ export type GetCategoriesByQuerySuspenseInfiniteQueryError = ErrorType<void>
 
 
 export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
 export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
 
 export function useGetCategoriesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCategoriesByQuery>>>, TError = ErrorType<void>>(
- params?: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: GetCategoriesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCategoriesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
 
@@ -1903,6 +1904,56 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getUpdateCategoryMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteCategory = (
+    categoryId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteCategory200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/categories/${categoryId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteCategoryMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCategory>>, {categoryId: string}> = (props) => {
+          const {categoryId} = props ?? {};
+
+          return  deleteCategory(categoryId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCategory>>>
+    
+    export type DeleteCategoryMutationError = ErrorType<void>
+
+    export const useDeleteCategory = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{categoryId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteCategory>>,
+        TError,
+        {categoryId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteCategoryMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

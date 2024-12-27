@@ -30,6 +30,10 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       args.push(params.resourceId);
     }
 
+    if (button.mutation?.hasRowId) {
+      args.push(row?.id);
+    }
+
     if (button?.mutation?.hasServiceId) {
       payload.serviceId = serviceId;
     }
@@ -48,6 +52,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
+        queryClient.refetchQueries();
       }
 
       if (button.alert) {
@@ -87,5 +92,9 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     }
   };
 
-  return <BaseButton onPress={onPress}>{buttonBuilder.name}</BaseButton>;
+  return (
+    <BaseButton onPress={onPress} color={buttonBuilder?.color || 'primary'}>
+      {buttonBuilder?.name}
+    </BaseButton>
+  );
 });

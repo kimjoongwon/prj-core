@@ -1,6 +1,7 @@
 import { CellBuilderProps } from '@shared/types';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { v4 } from 'uuid';
+import { ButtonGroup } from '@nextui-org/react';
 
 export const CellBuilder = ({
   row,
@@ -11,15 +12,17 @@ export const CellBuilder = ({
   if (buttons) {
     return (
       <div className="flex space-x-1">
-        {buttons.map(button => {
-          return (
-            <ButtonBuilder
-              key={v4()}
-              buttonBuilder={button}
-              row={row.original}
-            />
-          );
-        })}
+        <ButtonGroup size="sm">
+          {buttons.map(button => {
+            return (
+              <ButtonBuilder
+                key={v4()}
+                buttonBuilder={button}
+                row={row.original}
+              />
+            );
+          })}
+        </ButtonGroup>
       </div>
     );
   }

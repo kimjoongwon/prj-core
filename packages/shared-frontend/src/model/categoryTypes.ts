@@ -10,8 +10,6 @@ export type CategoryTypes = typeof CategoryTypes[keyof typeof CategoryTypes];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CategoryTypes = {
-  USER: 'USER',
-  SPACE: 'SPACE',
-  DEPOT_FILE: 'DEPOT_FILE',
-  POST: 'POST',
+  LEAF: 'LEAF',
+  ROOT: 'ROOT',
 } as const;

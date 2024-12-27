@@ -1,6 +1,6 @@
 import { RouteBuilder } from '@shared/types';
-import { Layout } from '../Layout';
-import { Page } from '../Page';
+import { LayoutBuilder } from '../LayoutBuilder/LayoutBuilder';
+import { PageBuilder } from '../Page/PageBuilder';
 
 interface RouteBuilderProps {
   routeBuilder: RouteBuilder;
@@ -13,10 +13,10 @@ export const Route = (props: RouteBuilderProps) => {
   }
 
   return (
-    <Layout layoutBuilder={routeBuilder.layout}>
+    <LayoutBuilder layoutBuilder={routeBuilder.layout}>
       {routeBuilder.layout?.page && (
-        <Page pageBuilder={routeBuilder.layout?.page} />
+        <PageBuilder pageBuilder={routeBuilder.layout?.page} />
       )}
-    </Layout>
+    </LayoutBuilder>
   );
 };

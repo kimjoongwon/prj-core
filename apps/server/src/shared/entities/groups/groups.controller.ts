@@ -29,9 +29,7 @@ export class GroupsController {
     type: GroupDto,
   })
   @Post()
-  createGroup(@Body() createGroupDto: CreateGroupDto, @Headers('tenantId') tenantId: string) {
-    createGroupDto.tenantId = tenantId;
-    console.log('createGroupDto', createGroupDto);
+  createGroup(@Body() createGroupDto: CreateGroupDto) {
     return this.groupService.create(createGroupDto);
   }
 
@@ -64,6 +62,7 @@ export class GroupsController {
   @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Patch(':groupId')
   async updateGroup(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
+    console.log('updateGroupDto', updateGroupDto);
     const group = await this.groupService.update(groupId, updateGroupDto);
     return new ResponseEntity(
       HttpStatus.OK,

@@ -42,7 +42,12 @@ export const useFormState = () => {
 };
 
 export const Form = observer((props: FormBuilderProps) => {
-  const { children } = props;
+  const { formBuilder, children } = props;
 
-  return <VStack className="flex-1 w-full space-y-1">{children}</VStack>;
+  return (
+    <VStack className="flex-1 w-full space-y-1">
+      {children}
+      <ButtonBuilder buttonBuilder={formBuilder.button!} />
+    </VStack>
+  );
 });

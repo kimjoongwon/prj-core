@@ -42,6 +42,12 @@ export class CategoriesService {
     return this.prisma.category.findMany(args);
   }
 
+  deleteById(categoryId: string) {
+    return this.prisma.category.delete({
+      where: { id: categoryId },
+    });
+  }
+
   async getManyByQuery(query: CategoryQueryDto) {
     const args = query.toArgs<Prisma.CategoryFindManyArgs>();
     const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();

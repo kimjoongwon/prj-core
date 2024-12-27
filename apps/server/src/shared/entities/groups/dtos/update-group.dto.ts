@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { GroupEntity } from '../group.entity';
+import { GroupDto } from './group.dto';
 
-export class UpdateGroupDto extends PartialType(GroupEntity) {}
+export class UpdateGroupDto extends PartialType(GroupDto) {}

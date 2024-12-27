@@ -38,6 +38,7 @@ export interface FormBuilder {
 }
 
 export interface ButtonBuilder {
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   name: string;
   mutation?: Mutation;
   navigator?: Navigator;
@@ -103,6 +104,7 @@ export interface Mutation {
   hasServiceId?: boolean;
   hasParentId?: boolean;
   hasPayload?: boolean;
+  hasRowId?: boolean;
 }
 
 export interface PageBuilder {
@@ -112,13 +114,17 @@ export interface PageBuilder {
   params?: any & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;
+  filter?: FilterBuilder;
   table?: TableBuilder;
 }
+
+export interface FilterBuilder {}
 
 export interface TableBuilder {
   query?: object;
   meta?: any;
   selection?: Key[] | 'all';
+  buttons?: ButtonBuilder[];
   columns: ColumnBuilder[];
 }
 

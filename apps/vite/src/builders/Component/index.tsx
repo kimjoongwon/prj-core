@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { ComponentBuilder as ComponentBuilderState } from '@shared/types';
-import { ComponentManager, DataGrid } from '@shared/frontend';
+import { ComponentManager } from '@shared/frontend';
 import { isEmpty } from 'lodash-es';
 import { useFormState } from '../FormBuilder';
-import { toJS } from 'mobx';
-import { HeaderBuilder } from '../HeaderBuilder';
-import { CellBuilder } from '../CellBuilder';
-import { ColumnDef } from '@tanstack/react-table';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
@@ -15,7 +11,7 @@ interface ComponentBuilderProps {
 
 export const Component = observer((props: ComponentBuilderProps) => {
   const formState = useFormState();
-  const { componentBuilder, data = [] } = props;
+  const { componentBuilder } = props;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const Component = ComponentManager[componentBuilder.type];
@@ -43,21 +39,6 @@ export const Component = observer((props: ComponentBuilderProps) => {
     return { ...acc, ...callback };
   });
 
-  if (componentBuilder.type === 'DataGrid') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const columns = componentBuilder?.props?.columns?.map(column => {
-      return {
-        id: column.id,
-        accessorKey: column.accessorKey,
-        header: props => {
-          return <HeaderBuilder {...props} {...column.header} />;
-        },
-        cell: props => <CellBuilder {...props} {...column.cell} />,
-      } as ColumnDef<unknown & { id: string }, unknown>;
-    });
-    return <DataGrid data={data || []} columns={toJS(columns) || []} />;
-  }
   return (
     <Component
       {...componentBuilder.props}

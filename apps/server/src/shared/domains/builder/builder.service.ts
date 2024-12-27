@@ -6,6 +6,9 @@ import { categoryAddPage } from './pages/category-add.page';
 import { ServicesService } from '../../entities/services';
 import { categoryNewEditPage } from './pages/category-new-edit.page';
 import { categoryEditPage } from './pages/category-edit.page';
+import { groupNewEditPage } from './pages/group-new-edit.page';
+import { groupsPage } from './pages/groups.page';
+import { groupEditPage } from './pages/group-edit.page';
 
 @Injectable()
 export class BuilderService {
@@ -105,10 +108,28 @@ export class BuilderService {
                         {
                           name: '그룹',
                           pathname: 'groups',
-                          children: [],
                           layout: {
                             type: 'Master',
+                            page: groupsPage,
                           },
+                          children: [
+                            {
+                              name: '그룹 생성',
+                              pathname: 'new/edit',
+                              layout: {
+                                type: 'Form',
+                                page: groupNewEditPage,
+                              },
+                            },
+                            {
+                              name: '그룹 수정',
+                              pathname: ':resourceId/edit',
+                              layout: {
+                                type: 'Form',
+                                page: groupEditPage,
+                              },
+                            },
+                          ],
                         },
                       ],
                     })),
