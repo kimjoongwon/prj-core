@@ -11,6 +11,6 @@ export interface CreateCategoryDto {
   /** @nullable */
   parentId: string | null;
   serviceId: string;
-  tenantId: string;
+  spaceId: string;
   type: CategoryTypes;
 }

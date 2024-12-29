@@ -20,7 +20,7 @@ export interface Post {
   /** @nullable */
   removedAt?: string | null;
   seq?: number;
-  tenantId?: string;
+  spaceId?: string;
   title?: string;
   type?: PostTypes;
   updatedAt?: string;

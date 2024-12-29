@@ -13,7 +13,7 @@ take?: number;
 name?: string;
 type?: CategoryTypes;
 parentId?: string;
-tenantId: string;
+spaceId: string;
 serviceId?: string;
 nameSortOrder?: SortOrder;
 };

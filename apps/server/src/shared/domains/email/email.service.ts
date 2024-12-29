@@ -62,7 +62,7 @@ export class EmailService {
             toUserIds: [this.user.id],
           },
         },
-        tenantId: user.tenants.find((t) => t.active).id,
+        spaceId: user.spaceId,
       },
     });
 

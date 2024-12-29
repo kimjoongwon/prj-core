@@ -83,6 +83,10 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
                     path: 'classifications',
                     module: AdminClassificationsModule,
                   },
+                  {
+                    path: 'spaces',
+                    module: AdminSpacesModule,
+                  },
                 ],
               },
               {

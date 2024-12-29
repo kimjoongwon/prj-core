@@ -6,6 +6,7 @@ import { HeaderBuilder } from '../HeaderBuilder';
 import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { v4 } from 'uuid';
+import { ButtonGroup } from '@nextui-org/react';
 
 interface TableBuilderProps {
   tableBuilder: TableBuilderInterface;
@@ -23,12 +24,15 @@ export const TableBuilder = ({ tableBuilder, data }: TableBuilderProps) => {
       cell: props => <CellBuilder {...props} {...column.cell} />,
     } as ColumnDef<unknown & { id: string }, unknown>;
   });
+
   return (
     <>
       <HStack>
-        {tableBuilder.buttons?.map(button => {
-          return <ButtonBuilder key={v4()} buttonBuilder={button} />;
-        })}
+        <ButtonGroup size="sm">
+          {tableBuilder.buttons?.map(button => {
+            return <ButtonBuilder key={v4()} buttonBuilder={button} />;
+          })}
+        </ButtonGroup>
       </HStack>
       <DataGrid data={toJS(data || [])} columns={toJS(columns) || []} />
     </>

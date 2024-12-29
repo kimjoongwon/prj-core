@@ -30,7 +30,13 @@ export class UsersService {
   }
 
   async getManyByQuery(args: Prisma.UserFindManyArgs) {
-    const users = await this.repository.findMany(args);
+    const users = await this.repository.findMany({
+      ...args,
+      include: {
+        space: true,
+        tenants: true,
+      },
+    });
     const count = await this.repository.count(args as Prisma.UserCountArgs);
 
     return { users, count };

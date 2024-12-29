@@ -13,8 +13,8 @@ export interface SystemEmailDto {
   /** @nullable */
   removedAt: string | null;
   seq: number;
+  spaceId: string;
   status: EmailStatus;
   templateId: string;
-  tenantId: string;
   updatedAt: string;
 }

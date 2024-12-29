@@ -16,7 +16,7 @@ export interface UpdateCategoryDto {
   removedAt?: string | null;
   seq?: number;
   serviceId?: string;
-  tenantId?: string;
+  spaceId?: string;
   type?: CategoryTypes;
   updatedAt?: string;
 }

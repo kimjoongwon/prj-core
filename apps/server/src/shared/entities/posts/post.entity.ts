@@ -7,7 +7,7 @@ export class Post extends AbstractEntity implements PostEntity {
   content: string;
   dopotId: string;
   authorId: string;
-  tenantId: string;
+  spaceId: string;
   classificationId: string;
   assignemntIds: string[];
 }

@@ -8,9 +8,11 @@
 export interface UpdateGroupDto {
   createdAt?: string;
   id?: string;
+  name?: string;
   /** @nullable */
   removedAt?: string | null;
   seq?: number;
-  /** @nullable */
-  updatedAt?: string | null;
+  serviceId?: string;
+  spaceId?: string;
+  updatedAt?: string;
 }

@@ -4,6 +4,7 @@ import {
   PasswordField,
   StringField,
   UUIDField,
+  UUIDFieldOptional,
 } from '../../../decorators/field.decorators';
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
@@ -25,12 +26,12 @@ export class UserDto extends AbstractDto implements UserEntity {
   @StringField()
   phone: string;
 
+  @UUIDFieldOptional({ nullable: true, default: null })
+  tenantId: string | null;
+
   @Exclude()
   @PasswordField()
   password: string;
-
-  @UUIDField()
-  tenantId: string;
 
   @StringField({ each: true, default: [] })
   assignmentIds: string[];

@@ -17,7 +17,7 @@ export class CategoryQueryDto extends QueryDto {
   parentId?: string;
 
   @StringField()
-  tenantId: string;
+  spaceId: string;
 
   @StringFieldOptional()
   serviceId?: string;

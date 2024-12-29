@@ -11,6 +11,9 @@ import {
 import { UserDto } from '../../users/dtos/user.dto';
 
 export class PostDto extends AbstractDto implements Post {
+  @StringField()
+  spaceId: string;
+
   @UUIDField()
   dopotId: string;
 
@@ -34,9 +37,6 @@ export class PostDto extends AbstractDto implements Post {
 
   @UUIDField()
   authorId: string;
-
-  @UUIDField()
-  tenantId: string;
 
   @ClassField(() => UserDto, { required: false })
   author?: UserDto;

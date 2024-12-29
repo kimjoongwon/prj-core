@@ -19,6 +19,7 @@ export interface UpdateUserDto {
   /** @nullable */
   post?: UpdateUserDtoPost;
   spaceId?: string;
-  tenantId?: string;
+  /** @nullable */
+  tenantId?: string | null;
   user?: UserDto;
 }

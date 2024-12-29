@@ -16,6 +16,7 @@ export interface CreateUserDto {
   password: string;
   phone: string;
   spaceId: string;
-  tenantId: string;
+  /** @nullable */
+  tenantId?: string | null;
   user?: UserDto;
 }

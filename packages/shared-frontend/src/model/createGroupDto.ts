@@ -8,5 +8,5 @@
 export interface CreateGroupDto {
   name: string;
   serviceId: string;
-  tenantId?: string;
+  spaceId: string;
 }

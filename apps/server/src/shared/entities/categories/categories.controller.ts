@@ -15,7 +15,6 @@ import { Auth, ApiResponseEntity } from '../../decorators';
 import { ResponseEntity } from '../common';
 import { CategoriesService } from './categories.service';
 import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from './dtos';
-import { QueryWithTenant } from '../../decorators/query.decorator';
 
 @ApiTags('ADMIN_CATEGORY')
 @Controller()

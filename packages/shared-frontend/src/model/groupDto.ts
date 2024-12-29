@@ -13,6 +13,6 @@ export interface GroupDto {
   removedAt: string | null;
   seq: number;
   serviceId: string;
-  tenantId?: string;
+  spaceId: string;
   updatedAt: string;
 }

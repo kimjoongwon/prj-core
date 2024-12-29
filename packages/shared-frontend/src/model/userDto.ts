@@ -25,7 +25,8 @@ export interface UserDto {
   seq: number;
   space?: SpaceDto;
   spaceId: string;
-  tenantId: string;
+  /** @nullable */
+  tenantId?: string | null;
   tenants?: TenantDto;
   updatedAt: string;
   user?: UserDto;

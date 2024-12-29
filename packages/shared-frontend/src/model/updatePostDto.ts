@@ -13,7 +13,7 @@ export interface UpdatePostDto {
   content?: string;
   description?: string;
   dopotId?: string;
-  tenantId?: string;
+  spaceId?: string;
   title?: string;
   type?: PostTypes;
 }

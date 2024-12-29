@@ -5,8 +5,8 @@ export const loginPage: PageBuilder = {
   form: {
     state: {
       payload: {
-        email: '',
-        password: '',
+        email: 'galaxy@gmail.com',
+        password: 'rkdmf12!@',
       },
     },
     isInValid: false,

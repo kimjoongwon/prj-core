@@ -9,6 +9,8 @@ import { categoryEditPage } from './pages/category-edit.page';
 import { groupNewEditPage } from './pages/group-new-edit.page';
 import { groupsPage } from './pages/groups.page';
 import { groupEditPage } from './pages/group-edit.page';
+import { usersPage } from './pages/users.page';
+import { spacesPage } from './pages/spaces.page';
 
 @Injectable()
 export class BuilderService {
@@ -71,6 +73,17 @@ export class BuilderService {
                         },
                       },
                       children: [
+                        {
+                          name: service.label,
+                          pathname: service.name,
+                          layout: {
+                            type: 'Master',
+                            page: {
+                              USER: usersPage,
+                              SPACE: spacesPage,
+                            }[service.name],
+                          },
+                        },
                         {
                           name: '카테고리',
                           pathname: 'categories',

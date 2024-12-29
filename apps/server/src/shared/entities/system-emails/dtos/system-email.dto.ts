@@ -6,6 +6,9 @@ import { EmailDto } from '../../emails';
 import { TemplateDto } from '../../templates';
 
 export class SystemEmailDto extends AbstractDto implements SystemEmail {
+  @UUIDField()
+  spaceId: string;
+
   @EnumField(() => $Enums.EmailStatus)
   status: $Enums.EmailStatus;
 
@@ -14,9 +17,6 @@ export class SystemEmailDto extends AbstractDto implements SystemEmail {
 
   @UUIDField()
   templateId: string;
-
-  @UUIDField()
-  tenantId: string;
 
   @ClassField(() => EmailDto, { swagger: false, nullable: true })
   email?: EmailDto;

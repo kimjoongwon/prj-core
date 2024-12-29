@@ -9,7 +9,7 @@ import { Form, FormProvder } from '../FormBuilder';
 import { Outlet, useParams } from 'react-router-dom';
 import { cloneDeep, isArray } from 'lodash-es';
 import { observable } from 'mobx';
-import { TableBuilder } from '../TableBuilder';
+import { TableBuilder } from '../TableBuilder/TableBuilder';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -61,12 +61,13 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
     enabled: !!query?.name,
   });
 
+  console.log('apiArgs', apiArgs);
   const queryName = query?.name as keyof typeof APIManager;
-
+  console.log('queryName', queryName);
   const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
-      APIManager[queryName].apply(null, apiArgs)
+      APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

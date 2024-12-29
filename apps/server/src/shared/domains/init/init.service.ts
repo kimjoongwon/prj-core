@@ -197,7 +197,7 @@ export class InitService {
     if (!category) {
       await this.categoriesService.create({
         data: {
-          tenantId: tenant?.id,
+          spaceId: tenant.spaceId,
           serviceId: userService.id,
           name: '이용자',
           parentId: null,
@@ -209,10 +209,10 @@ export class InitService {
                   name: '회원',
                   serviceId: userService.id,
                   type: 'LEAF',
-                  tenantId: tenant.id,
+                  spaceId: tenant.spaceId,
                 },
                 {
-                  tenantId: tenant.id,
+                  spaceId: tenant.spaceId,
                   serviceId: userService.id,
                   type: 'LEAF',
                   name: '비회원',
