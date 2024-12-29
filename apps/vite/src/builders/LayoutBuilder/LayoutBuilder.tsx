@@ -7,7 +7,14 @@ import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
-import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
+import {
+  Card,
+  Modal,
+  ModalBody,
+  ModalContent,
+  Tab,
+  Tabs,
+} from '@nextui-org/react';
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
@@ -72,10 +79,12 @@ export const ServiceLayout = observer((props: ServiceLayoutProps) => {
   const { children } = props;
 
   return (
-    <HStack className="h-full">
-      <Sidebar />
-      {children}
-    </HStack>
+    <>
+      <HStack className="h-full flex-1">
+        <Sidebar />
+        {children}
+      </HStack>
+    </>
   );
 });
 
@@ -83,11 +92,11 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
   const { children } = props;
 
   return (
-    <>
+    <VStack className="flex-1 space-y-2">
       <Header />
       {children}
       <Footer />
-    </>
+    </VStack>
   );
 });
 
@@ -95,10 +104,10 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
   const { children } = props;
 
   return (
-    <VStack className="w-full space-y-2 p-2 m-2 border-1">
+    <Card className="w-full rounded-xl p-2 rounded-b-none space-y-2">
       {children}
       <Outlet />
-    </VStack>
+    </Card>
   );
 });
 
@@ -194,7 +203,7 @@ export const ServicesRoutes = observer(() => {
 
 export const Sidebar = () => {
   return (
-    <VStack className="border-r-1 w-52 hidden sm:flex">
+    <VStack className="border-1 rounded-b-none min-w-[200px] hidden sm:flex rounded-xl shadow-xl mr-2 p-2">
       <ServiceRoutes />
     </VStack>
   );
@@ -206,9 +215,9 @@ export const Header = () => {
 
 export const Footer = () => {
   return (
-    <div className="absolute bottom-0 w-full border-t-1 flex sm:hidden h-[60px] justify-center items-center">
+    <Card className="relative bottom-0 w-full flex sm:hidden h-[64px] justify-center items-center rounded-t-none rounded-b-none">
       <ServicesRoutes />
-    </div>
+    </Card>
   );
 };
 

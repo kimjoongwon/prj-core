@@ -1,7 +1,5 @@
 import React, { createContext } from 'react';
-import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
-import { Grid2 as Grid } from '@mui/material';
 import { APIManager } from '@shared/frontend';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { Component } from '../Component';
@@ -94,13 +92,13 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
           <Form formBuilder={pageBuilder.form!}>
             {pageBuilder?.form?.sections?.map(section => {
               return (
-                <Grid container spacing={1}>
+                <div>
                   {section.components?.map(component => (
-                    <Grid key={v4()} {...component.gridProps}>
+                    <div>
                       <Component componentBuilder={component} data={data} />
-                    </Grid>
+                    </div>
                   ))}
-                </Grid>
+                </div>
               );
             })}
           </Form>
