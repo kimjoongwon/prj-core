@@ -128,7 +128,7 @@ export class BuilderService {
                           },
                           children: [
                             {
-                              name: '그룹 생성',
+                              name: '생성',
                               pathname: 'new/edit',
                               layout: {
                                 type: 'Form',
@@ -136,23 +136,25 @@ export class BuilderService {
                               },
                             },
                             {
-                              name: '그룹 수정',
+                              name: '수정',
                               pathname: ':resourceId/edit',
                               layout: {
                                 type: 'Form',
                                 page: groupEditPage,
                               },
                             },
+                            {
+                              name: '상세',
+                              pathname: ':resourceId',
+                              layout: {
+                                name: '상세',
+                                type: 'Detail',
+                                page: getGroupDetailPage(),
+                              },
+                            },
                           ],
                         },
-                        {
-                          name: '그룹 상세',
-                          pathname: 'groups/:resourceId',
-                          layout: {
-                            type: 'Detail',
-                            page: getGroupDetailPage(),
-                          },
-                        },
+                        ,
                       ],
                     })),
                   },

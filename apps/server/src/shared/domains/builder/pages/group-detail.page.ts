@@ -2,7 +2,7 @@ import { PageBuilder } from '@shared/types';
 
 export const getGroupDetailPage = (): PageBuilder => {
   return {
-    name: '그룹 상세',
+    name: '그룹',
     type: 'Page',
     query: {
       name: 'useGetGroup',

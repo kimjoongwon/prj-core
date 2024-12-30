@@ -1,5 +1,13 @@
 import { ReactNode } from 'react';
-import { AppBar, Button, HStack, List, Text, VStack } from '@shared/frontend';
+import {
+  AppBar,
+  Button,
+  HStack,
+  Layout,
+  List,
+  Text,
+  VStack,
+} from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
@@ -7,7 +15,13 @@ import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
-import { Card, Modal, ModalBody, ModalContent } from '@nextui-org/react';
+import {
+  Card,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from '@nextui-org/react';
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
@@ -42,6 +56,12 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (layoutBuilder?.type === 'Form') {
     return <FormLayout>{children}</FormLayout>;
+  }
+
+  if (layoutBuilder?.type === 'Detail') {
+    return (
+      <DetailLayout layoutBuilder={layoutBuilder}>{children}</DetailLayout>
+    );
   }
 
   return children;
@@ -106,13 +126,17 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
 
 export const DetailLayout = observer((props: DetailLayoutProps) => {
   const { children } = props;
-
+  const navigate = useNavigate();
+  console.log(props.layoutBuilder?.page?.name);
   return (
-    <>
-      <Text>Detail Layout</Text>
-      {children}
-      <Outlet />
-    </>
+    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
+      <ModalContent>
+        <ModalHeader>
+          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
+        </ModalHeader>
+        <ModalBody>{children}</ModalBody>
+      </ModalContent>
+    </Modal>
   );
 });
 

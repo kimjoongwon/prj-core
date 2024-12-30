@@ -69,6 +69,7 @@ export interface AppBuilder {
 }
 
 export interface LayoutBuilder {
+  name: string;
   type?:
     | 'Outlet'
     | 'Auth'
@@ -78,7 +79,8 @@ export interface LayoutBuilder {
     | 'Form'
     | 'Services'
     | 'Service'
-    | 'Master';
+    | 'Master'
+    | 'Detail';
   page?: PageBuilder;
 }
 

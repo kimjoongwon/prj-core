@@ -38,10 +38,21 @@ export const groupsPage: PageBuilder = {
         cell: {
           buttons: [
             {
-              color: 'warning',
+              color: 'primary',
               name: '수정',
               navigator: {
                 pathname: ':resourceId/edit',
+                hasResourceId: true,
+                params: {
+                  resourceId: '',
+                },
+              },
+            },
+            {
+              color: 'secondary',
+              name: '상세',
+              navigator: {
+                pathname: ':resourceId',
                 hasResourceId: true,
                 params: {
                   resourceId: '',
@@ -57,17 +68,6 @@ export const groupsPage: PageBuilder = {
               },
               alert: {
                 message: '!!!',
-              },
-            },
-            {
-              color: 'primary',
-              name: '상세',
-              navigator: {
-                pathname: ':resourceId',
-                hasResourceId: true,
-                params: {
-                  resourceId: '',
-                },
               },
             },
           ],
