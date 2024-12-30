@@ -7,14 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
-import {
-  Card,
-  Modal,
-  ModalBody,
-  ModalContent,
-  Tab,
-  Tabs,
-} from '@nextui-org/react';
+import { Card, Modal, ModalBody, ModalContent } from '@nextui-org/react';
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
@@ -111,7 +104,7 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
   );
 });
 
-export const DetailLayout = observer((props: TableLayoutProps) => {
+export const DetailLayout = observer((props: DetailLayoutProps) => {
   const { children } = props;
 
   return (
@@ -230,6 +223,7 @@ type RootLayoutProps = Layout;
 type LayoutBuilderProps = Layout;
 type FormLayoutProps = Layout;
 type MasterLayoutProps = Layout;
+type DetailLayoutProps = Layout;
 
 interface AuthLayoutProps {
   children: ReactNode;

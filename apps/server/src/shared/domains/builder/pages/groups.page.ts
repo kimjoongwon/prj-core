@@ -59,6 +59,17 @@ export const groupsPage: PageBuilder = {
                 message: '!!!',
               },
             },
+            {
+              color: 'primary',
+              name: '상세',
+              navigator: {
+                pathname: ':resourceId',
+                hasResourceId: true,
+                params: {
+                  resourceId: '',
+                },
+              },
+            },
           ],
         },
       },

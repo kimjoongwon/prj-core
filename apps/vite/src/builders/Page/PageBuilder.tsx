@@ -59,9 +59,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
     enabled: !!query?.name,
   });
 
-  console.log('apiArgs', apiArgs);
   const queryName = query?.name as keyof typeof APIManager;
-  console.log('queryName', queryName);
   const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
@@ -72,8 +70,6 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   // @ts-expect-error
   const data = getQuery?.data?.data;
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   if (getQuery?.isLoading) {
     return null;
   }

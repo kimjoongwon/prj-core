@@ -11,6 +11,7 @@ import { groupsPage } from './pages/groups.page';
 import { groupEditPage } from './pages/group-edit.page';
 import { usersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
+import { getGroupDetailPage } from './pages/group-detail.page';
 
 @Injectable()
 export class BuilderService {
@@ -143,6 +144,14 @@ export class BuilderService {
                               },
                             },
                           ],
+                        },
+                        {
+                          name: '그룹 상세',
+                          pathname: 'groups/:resourceId',
+                          layout: {
+                            type: 'Detail',
+                            page: getGroupDetailPage(),
+                          },
                         },
                       ],
                     })),
