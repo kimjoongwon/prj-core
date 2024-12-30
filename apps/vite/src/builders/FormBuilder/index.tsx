@@ -47,7 +47,9 @@ export const Form = observer((props: FormBuilderProps) => {
   return (
     <VStack className="flex-1 w-full space-y-1">
       {children}
-      <ButtonBuilder buttonBuilder={formBuilder.button!} />
+      {formBuilder.button && (
+        <ButtonBuilder buttonBuilder={formBuilder.button} />
+      )}
     </VStack>
   );
 });
