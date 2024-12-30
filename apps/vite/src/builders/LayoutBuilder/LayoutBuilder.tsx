@@ -1,13 +1,5 @@
 import { ReactNode } from 'react';
-import {
-  AppBar,
-  Button,
-  HStack,
-  Layout,
-  List,
-  Text,
-  VStack,
-} from '@shared/frontend';
+import { AppBar, Button, HStack, Layout, List, VStack } from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
@@ -55,7 +47,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   if (layoutBuilder?.type === 'Form') {
-    return <FormLayout>{children}</FormLayout>;
+    return <FormLayout layoutBuilder={layoutBuilder}>{children}</FormLayout>;
   }
 
   if (layoutBuilder?.type === 'Detail') {
@@ -150,8 +142,11 @@ export const FormLayout = observer((props: FormLayoutProps) => {
   const navigate = useNavigate();
 
   return (
-    <Modal isOpen={true} isDismissable onClose={() => navigate(-1)}>
+    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
+        <ModalHeader>
+          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
+        </ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
@@ -267,9 +262,4 @@ interface ServicesLayoutProps {
 
 interface MainLayoutProps {
   children: ReactNode;
-}
-
-interface TableLayoutProps {
-  children: ReactNode;
-  layoutBuilder: LayoutBuilderInterface;
 }
