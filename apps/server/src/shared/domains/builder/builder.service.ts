@@ -24,6 +24,7 @@ export class BuilderService {
         name: 'ROOT',
         pathname: '/',
         layout: {
+          name: 'ROOT',
           type: 'Root',
           page: {
             name: 'ROOT',
@@ -131,6 +132,7 @@ export class BuilderService {
                               name: '생성',
                               pathname: 'new/edit',
                               layout: {
+                                name: '생성',
                                 type: 'Form',
                                 page: groupNewEditPage,
                               },
@@ -139,6 +141,7 @@ export class BuilderService {
                               name: '수정',
                               pathname: ':resourceId/edit',
                               layout: {
+                                name: '수정',
                                 type: 'Form',
                                 page: groupEditPage,
                               },

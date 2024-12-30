@@ -1,7 +1,7 @@
 import { PageBuilder } from '@shared/types';
 
 export const groupEditPage: PageBuilder = {
-  name: '그룹 새편집',
+  name: '그룹',
   type: 'Page',
   query: {
     name: 'useGetGroup',

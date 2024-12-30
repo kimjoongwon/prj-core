@@ -69,7 +69,7 @@ export interface AppBuilder {
 }
 
 export interface LayoutBuilder {
-  name: string;
+  name?: string;
   type?:
     | 'Outlet'
     | 'Auth'

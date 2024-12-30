@@ -23,6 +23,8 @@ export const getGroupDetailPage = (): PageBuilder => {
               path: 'name',
               type: 'Input',
               props: {
+                fullWidth: true,
+                label: '그룹명',
                 readOnly: true,
               },
             },
