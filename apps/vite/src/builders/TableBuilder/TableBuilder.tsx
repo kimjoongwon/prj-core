@@ -72,7 +72,7 @@ export const TableBuilder = observer(({ tableBuilder }: TableBuilderProps) => {
         </ButtonGroup>
       </HStack>
       <DataGrid data={toJS(data || [])} columns={toJS(columns) || []} />
-      {tableBuilder.query?.params.take && (
+      {tableBuilder.query?.params?.take && (
         <Pagination
           total={meta?.totalCount}
           page={currentPage}

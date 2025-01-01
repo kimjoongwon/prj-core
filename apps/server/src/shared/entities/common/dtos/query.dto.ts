@@ -24,13 +24,13 @@ export class QueryDto {
 
   toCountArgs<T>(includeRemovedItems = false) {
     const args = PaginationUtil.toArgs(this);
-    delete args.where;
     delete args.include;
     delete args.skip;
     delete args.take;
     delete args.orderBy;
     if (!includeRemovedItems) {
       args.where = {
+        ...args.where,
         removedAt: null,
       };
     }

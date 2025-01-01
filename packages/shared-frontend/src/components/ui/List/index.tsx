@@ -5,6 +5,7 @@ import { HStack } from '../HStack';
 import { VStack } from '../VStack';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
+import { tv } from 'tailwind-variants';
 
 interface ListProps<T> {
   data: T[];
@@ -14,28 +15,21 @@ interface ListProps<T> {
   placeholder?: ReactNode;
 }
 
+const listView = tv({});
+
 export const List = observer(<T extends any>(props: ListProps<T>) => {
   const { data, renderItem, className, placeholder } = props;
 
   const renderContainer = (children: ReactNode) => {
-    if (props.horizontal) {
-      return (
-        <HStack
-          key={v4()}
-          className={className ? `h-full ${className}` : 'h-full border-1'}
-        >
-          {children}
-        </HStack>
-      );
-    }
-
     return (
-      <VStack
+      <div
         key={v4()}
-        className={className ? `w-full ${className}` : 'w-full border-1'}
+        className={listView({
+          className,
+        })}
       >
         {children}
-      </VStack>
+      </div>
     );
   };
 
