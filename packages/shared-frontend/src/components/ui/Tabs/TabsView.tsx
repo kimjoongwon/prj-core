@@ -1,26 +1,18 @@
-import { Tab, Tabs } from '@nextui-org/react';
-import { Key } from 'react';
-import { TabsProps } from '.';
-import { useLocalObservable } from 'mobx-react-lite';
+import { Tab, Tabs, TabsProps } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
+import { Option } from './Tabs';
 
-export const TabsView = observer((props: TabsProps) => {
-  const { items } = props;
-  const pathname = window.location.pathname;
+export interface TabsViewProps extends TabsProps {
+  options: Option[];
+  value: any;
+}
 
-  const state = useLocalObservable<{ selectedValue: Key }>(() => ({
-    selectedValue: pathname,
-  }));
+export const TabsView = observer((props: TabsViewProps) => {
+  const { options, value, onSelectionChange } = props;
 
   return (
-    <Tabs
-      selectedKey={state.selectedValue as string}
-      onSelectionChange={key => {
-        state.selectedValue = key;
-        items.find(item => item.value === key)?.onClick?.();
-      }}
-    >
-      {items.map(item => (
+    <Tabs selectedKey={value} onSelectionChange={onSelectionChange}>
+      {options.map(item => (
         <Tab key={item.value} title={item.text} />
       ))}
     </Tabs>

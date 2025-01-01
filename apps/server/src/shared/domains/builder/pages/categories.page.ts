@@ -2,16 +2,16 @@ import { PageBuilder } from '@shared/types';
 
 export const categoriesPage: PageBuilder = {
   type: 'Page',
-  query: {
-    name: 'useGetCategoriesByQuery',
-    hasParams: true,
-    hasServiceId: true,
-    params: {
-      serviceId: '',
-      type: 'ROOT',
-    },
-  },
   table: {
+    query: {
+      name: 'useGetCategoriesByQuery',
+      hasParams: true,
+      hasServiceId: true,
+      params: {
+        serviceId: '',
+        type: 'ROOT',
+      },
+    },
     buttons: [
       {
         name: '생성',

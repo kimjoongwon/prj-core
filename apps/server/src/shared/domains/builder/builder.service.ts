@@ -65,7 +65,7 @@ export class BuilderService {
                       },
                     },
                     children: services.map((service) => ({
-                      name: service.label,
+                      name: `${service.label} 서비스`,
                       pathname: service.id,
                       layout: {
                         type: 'Service',
@@ -76,7 +76,7 @@ export class BuilderService {
                       },
                       children: [
                         {
-                          name: service.label,
+                          name: `${service.label}`,
                           pathname: service.name,
                           layout: {
                             type: 'Master',
@@ -154,6 +154,18 @@ export class BuilderService {
                                 type: 'Detail',
                                 page: getGroupDetailPage(),
                               },
+                              children: [
+                                {
+                                  name: '맴버',
+                                  pathname: 'users',
+                                  layout: {
+                                    name: '리스트',
+                                    page: {
+                                      type: 'Page',
+                                    },
+                                  },
+                                },
+                              ],
                             },
                           ],
                         },

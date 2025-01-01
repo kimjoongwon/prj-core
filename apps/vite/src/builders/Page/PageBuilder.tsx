@@ -1,13 +1,14 @@
 import React, { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { APIManager } from '@shared/frontend';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { Component } from '../Component';
 import { Form, FormProvder } from '../FormBuilder';
-import { Outlet, useParams } from 'react-router-dom';
-import { cloneDeep, isArray } from 'lodash-es';
+import { Outlet } from 'react-router-dom';
+import { isArray } from 'lodash-es';
 import { observable } from 'mobx';
-import { TableBuilder } from '../TableBuilder/TableBuilder';
+import { useGetQuery } from '../../hooks/useGetQuery';
+import { Spinner } from '@nextui-org/react';
+import { TableBuilder, TableProvider } from '../TableBuilder/TableBuilder';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -38,40 +39,12 @@ export const usePageState = () => {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
-  const query = cloneDeep(pageBuilder?.query);
-  const params = useParams();
-  const serviceId = window.location.pathname.split('/')[4];
-  const apiArgs: unknown[] = [];
+  const query = pageBuilder?.query;
 
-  if (query?.hasResourceId) {
-    apiArgs.push(params?.resourceId);
-  }
+  const { data, isLoading } = useGetQuery(query);
 
-  if (query?.hasServiceId) {
-    query.params.serviceId = serviceId;
-  }
-
-  if (query?.hasParams) {
-    apiArgs.push(query?.params);
-  }
-
-  apiArgs.push({
-    enabled: !!query?.name,
-  });
-
-  const queryName = query?.name as keyof typeof APIManager;
-  const getQuery = query?.name
-    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      APIManager?.[queryName]?.apply(null, apiArgs)
-    : undefined;
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const data = getQuery?.data?.data;
-
-  if (getQuery?.isLoading) {
-    return null;
+  if (isLoading) {
+    return <Spinner />;
   }
 
   if (pageBuilder?.type === 'Outlet') {
@@ -81,27 +54,31 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   return (
     <PageProvder state={pageBuilder?.state}>
       {pageBuilder.form && (
-        <FormProvder
-          state={pageBuilder.form.state}
-          data={isArray(data) ? null : data}
-        >
-          <Form formBuilder={pageBuilder.form!}>
-            {pageBuilder?.form?.sections?.map(section => {
-              return (
-                <div>
-                  {section.components?.map(component => (
-                    <div>
-                      <Component componentBuilder={component} data={data} />
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </Form>
-        </FormProvder>
+        <>
+          <FormProvder
+            state={pageBuilder.form.state}
+            data={isArray(data) ? null : data}
+          >
+            <Form formBuilder={pageBuilder.form!}>
+              {pageBuilder?.form?.sections?.map(section => {
+                return (
+                  <div>
+                    {section.components?.map(component => (
+                      <div>
+                        <Component componentBuilder={component} data={data} />
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </Form>
+          </FormProvder>
+        </>
       )}
       {pageBuilder.table && (
-        <TableBuilder tableBuilder={pageBuilder.table} data={data} />
+        <TableProvider value={pageBuilder.table?.state}>
+          <TableBuilder tableBuilder={pageBuilder.table} />
+        </TableProvider>
       )}
     </PageProvder>
   );

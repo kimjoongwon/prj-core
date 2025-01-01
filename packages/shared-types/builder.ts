@@ -1,4 +1,4 @@
-import { type InputProps } from '@nextui-org/react';
+import { type InputProps, Selection } from '@nextui-org/react';
 import { Key } from 'react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
@@ -68,8 +68,15 @@ export interface AppBuilder {
   routes: RouteBuilder[];
 }
 
+export interface Option {
+  key: string;
+  text: string;
+  value: any;
+}
+
 export interface LayoutBuilder {
   name?: string;
+  pathOptions?: Option[];
   type?:
     | 'Outlet'
     | 'Auth'
@@ -80,7 +87,8 @@ export interface LayoutBuilder {
     | 'Services'
     | 'Service'
     | 'Master'
-    | 'Detail';
+    | 'Detail'
+    | 'Tab';
   page?: PageBuilder;
 }
 
@@ -122,9 +130,18 @@ export interface PageBuilder {
 
 export interface FilterBuilder {}
 
+export interface TableState {
+  filter?: unknown;
+  selection?: Selection;
+  pagination?: {
+    take: number;
+    skip: number;
+  };
+}
+
 export interface TableBuilder {
-  query?: object;
-  meta?: any;
+  state?: TableState;
+  query?: Query;
   selection?: Key[] | 'all';
   buttons?: ButtonBuilder[];
   columns: ColumnBuilder[];

@@ -47,6 +47,6 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
   : '';
 
 export interface MobxProps<T> {
-  path?: Paths<T, 4>;
-  state?: T;
+  path: Paths<T, 4>;
+  state: T;
 }

@@ -26,6 +26,8 @@ export const getGroupDetailPage = (): PageBuilder => {
                 fullWidth: true,
                 label: '그룹명',
                 readOnly: true,
+                labelPlacement: 'outside',
+                isRequired: true,
               },
             },
           ],

@@ -39,6 +39,8 @@ export class GroupsController {
   async getGroupsByQuery(@Query() query: GroupQueryDto) {
     const { totalCount, groups } = await this.groupService.getManyByQuery(query);
 
+    console.log('groups', query.toPageMetaDto(totalCount));
+
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',

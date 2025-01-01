@@ -9,7 +9,6 @@
     "access": "public"
   },
   "main": "./index.ts",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup --config tsup.config.ts && pnpm run copy-css",
     "start:dev": "",

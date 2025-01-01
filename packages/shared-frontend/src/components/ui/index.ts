@@ -43,6 +43,6 @@ export * from './NextUI';
 export * from './MultiInput';
 export * from './Copyright';
 export * from './AppBar';
-export * from './Tabs';
+export * from './Tabs/Tabs';
 export * from './Meta';
 export { Listbox } from './Listbox';

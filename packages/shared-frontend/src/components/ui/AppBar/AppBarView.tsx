@@ -1,5 +1,5 @@
 import { Logo } from '../Logo';
-import { Card, Divider } from '@nextui-org/react';
+import { Card } from '@nextui-org/react';
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
 import { AppBarViewProps } from '.';
@@ -12,7 +12,7 @@ export const AppBarView = (props: AppBarViewProps) => {
         <div className="flex-1">
           <Logo variants={'text'} />
         </div>
-        <div className="flex-1 md:flex hidden justify-center">{content}</div>
+        <div className="flex-1 sm:flex hidden justify-center">{content}</div>
         <div className="flex flex-1 justify-end">
           <Avatar />
         </div>

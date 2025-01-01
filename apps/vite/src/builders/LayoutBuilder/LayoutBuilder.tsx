@@ -1,10 +1,18 @@
-import { ReactNode } from 'react';
-import { AppBar, Button, HStack, Layout, List, VStack } from '@shared/frontend';
+import { ReactNode, useEffect } from 'react';
+import {
+  AppBar,
+  Button,
+  HStack,
+  Layout,
+  List,
+  Tabs,
+  VStack,
+} from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
-import { observer } from 'mobx-react-lite';
-import { action } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { action, reaction } from 'mobx';
 import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
 import {
@@ -54,6 +62,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     return (
       <DetailLayout layoutBuilder={layoutBuilder}>{children}</DetailLayout>
     );
+  }
+
+  if (layoutBuilder?.type === 'Tab') {
+    return <TabLayout layoutBuilder={layoutBuilder}>{children}</TabLayout>;
   }
 
   return children;
@@ -120,15 +132,50 @@ export const DetailLayout = observer((props: DetailLayoutProps) => {
   const { children } = props;
   const navigate = useNavigate();
   console.log(props.layoutBuilder?.page?.name);
+  console.log(props.layoutBuilder);
   return (
     <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
         <ModalHeader>
           {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
         </ModalHeader>
-        <ModalBody>{children}</ModalBody>
+        <ModalBody>
+          {children}
+          <Outlet />
+        </ModalBody>
       </ModalContent>
     </Modal>
+  );
+});
+
+export const TabLayout = observer((props: TabLayoutProps) => {
+  const { layoutBuilder, children } = props;
+  const state = useLocalObservable(() => ({
+    currentPath: '',
+  }));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const disposer = reaction(
+      () => state.currentPath,
+      () => {
+        navigate(state.currentPath);
+      },
+    );
+
+    return disposer;
+  }, []);
+
+  return (
+    <>
+      <Tabs
+        state={state}
+        options={layoutBuilder?.pathOptions || []}
+        path="currentPath"
+      />
+      <Outlet />
+      {children}
+    </>
   );
 });
 
@@ -147,7 +194,10 @@ export const FormLayout = observer((props: FormLayoutProps) => {
         <ModalHeader>
           {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
         </ModalHeader>
-        <ModalBody>{children}</ModalBody>
+        <ModalBody>
+          {children}
+          <Outlet />
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
@@ -243,7 +293,7 @@ type LayoutBuilderProps = Layout;
 type FormLayoutProps = Layout;
 type MasterLayoutProps = Layout;
 type DetailLayoutProps = Layout;
-
+type TabLayoutProps = Layout;
 interface AuthLayoutProps {
   children: ReactNode;
 }

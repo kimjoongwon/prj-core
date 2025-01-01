@@ -2,15 +2,17 @@ import { PageBuilder } from '@shared/types';
 
 export const groupsPage: PageBuilder = {
   type: 'Page',
-  query: {
-    name: 'useGetGroupsByQuery',
-    hasParams: true,
-    hasServiceId: true,
-    params: {
-      serviceId: '',
-    },
-  },
   table: {
+    query: {
+      name: 'useGetGroupsByQuery',
+      hasParams: true,
+      hasServiceId: true,
+      params: {
+        serviceId: '',
+        skip: 0,
+        take: 1,
+      },
+    },
     buttons: [
       {
         name: '생성',

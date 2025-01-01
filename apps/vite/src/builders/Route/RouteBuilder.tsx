@@ -1,12 +1,12 @@
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder as RouteBuilderInterface } from '@shared/types';
 import { LayoutBuilder } from '../LayoutBuilder/LayoutBuilder';
 import { PageBuilder } from '../Page/PageBuilder';
 
 interface RouteBuilderProps {
-  routeBuilder: RouteBuilder;
+  routeBuilder: RouteBuilderInterface;
 }
 
-export const Route = (props: RouteBuilderProps) => {
+export const RouteBuilder = (props: RouteBuilderProps) => {
   const { routeBuilder } = props;
   if (!routeBuilder) {
     return null;
