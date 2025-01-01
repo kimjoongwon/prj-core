@@ -94,13 +94,35 @@ export const AuthLayout = observer((props: AuthLayoutProps) => {
 
 export const ServiceLayout = observer((props: ServiceLayoutProps) => {
   const { children } = props;
+  const store = useStore();
+  const navigate = useNavigate();
 
   return (
     <>
-      <HStack className="h-full flex-1">
-        <Sidebar />
+      <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2">
+        <Card className="rounded-xl p-2 w-full md:w-[200px]">
+          <List
+            className="flex flex-row md:flex-col"
+            data={store.navigation.serviceRoute?.children || []}
+            renderItem={route => {
+              return (
+                <Button
+                  variant="light"
+                  key={v4()}
+                  color={route.active ? 'primary' : 'default'}
+                  onPress={() => {
+                    navigate(route.pathname);
+                    store.navigation.activateRoute();
+                  }}
+                >
+                  {route.name}
+                </Button>
+              );
+            }}
+          />
+        </Card>
         {children}
-      </HStack>
+      </div>
     </>
   );
 });
@@ -131,8 +153,7 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
 export const DetailLayout = observer((props: DetailLayoutProps) => {
   const { children } = props;
   const navigate = useNavigate();
-  console.log(props.layoutBuilder?.page?.name);
-  console.log(props.layoutBuilder);
+
   return (
     <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
@@ -207,32 +228,6 @@ export const ServiceNavigator = observer(() => {
   return <ServicesRoutes />;
 });
 
-export const ServiceRoutes = observer(() => {
-  const store = useStore();
-  const navigate = useNavigate();
-  return (
-    <List
-      className="flex-1"
-      data={store.navigation.serviceRoute?.children || []}
-      renderItem={route => {
-        return (
-          <Button
-            variant="light"
-            key={v4()}
-            color={route.active ? 'primary' : 'default'}
-            onPress={() => {
-              navigate(route.pathname);
-              store.navigation.activateRoute();
-            }}
-          >
-            {route.name}
-          </Button>
-        );
-      }}
-    />
-  );
-});
-
 export const ServicesRoutes = observer(() => {
   const { navigation } = useStore();
   const navigate = useNavigate();
@@ -262,14 +257,6 @@ export const ServicesRoutes = observer(() => {
     </HStack>
   );
 });
-
-export const Sidebar = () => {
-  return (
-    <VStack className="border-1 rounded-b-none min-w-[200px] hidden sm:flex rounded-xl shadow-xl mr-2 p-2">
-      <ServiceRoutes />
-    </VStack>
-  );
-};
 
 export const Header = () => {
   return <AppBar content={<ServicesRoutes />} />;

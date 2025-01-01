@@ -8,7 +8,6 @@ import {
   Delete,
   HttpStatus,
   Query,
-  Headers,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public, ApiResponseEntity, Auth } from '../../decorators';
@@ -38,8 +37,6 @@ export class GroupsController {
   @Get()
   async getGroupsByQuery(@Query() query: GroupQueryDto) {
     const { totalCount, groups } = await this.groupService.getManyByQuery(query);
-
-    console.log('groups', query.toPageMetaDto(totalCount));
 
     return new ResponseEntity(
       HttpStatus.OK,
