@@ -64,7 +64,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                 return (
                   <div>
                     {section.components?.map(component => (
-                      <div>
+                      <div className="space-y-2">
                         <Component componentBuilder={component} data={data} />
                       </div>
                     ))}

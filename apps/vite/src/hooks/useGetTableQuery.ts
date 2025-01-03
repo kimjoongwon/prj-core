@@ -26,7 +26,7 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   apiArgs.push({
     enabled: !!query?.name,
   });
-
+  console.log('queryName', query?.name);
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment

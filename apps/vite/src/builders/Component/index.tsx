@@ -3,6 +3,7 @@ import { ComponentBuilder as ComponentBuilderState } from '@shared/types';
 import { ComponentManager } from '@shared/frontend';
 import { isEmpty } from 'lodash-es';
 import { useFormState } from '../FormBuilder';
+import { TableBuilder } from '../TableBuilder/TableBuilder';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
@@ -11,7 +12,9 @@ interface ComponentBuilderProps {
 
 export const Component = observer((props: ComponentBuilderProps) => {
   const formState = useFormState();
+
   const { componentBuilder } = props;
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const Component = ComponentManager[componentBuilder.type];
@@ -38,6 +41,10 @@ export const Component = observer((props: ComponentBuilderProps) => {
   const _props = callbacks?.reduce((acc, callback) => {
     return { ...acc, ...callback };
   });
+
+  if (componentBuilder.type === 'TableBuilder') {
+    return <TableBuilder tableBuilder={componentBuilder.props.tableBuilder} />;
+  }
 
   return (
     <Component

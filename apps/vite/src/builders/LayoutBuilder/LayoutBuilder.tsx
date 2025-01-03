@@ -155,7 +155,7 @@ export const DetailLayout = observer((props: DetailLayoutProps) => {
   const navigate = useNavigate();
 
   return (
-    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
+    <Modal size="full" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
         <ModalHeader>
           {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}

@@ -1,16 +1,16 @@
 import { DataGrid, HStack } from '@shared/frontend';
 import { TableBuilder as TableBuilderInterface } from '@shared/types';
-import { reaction, toJS } from 'mobx';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { v4 } from 'uuid';
 import { ButtonGroup, Pagination, Spinner } from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext } from 'react';
 import { useGetTableQuery } from '../../hooks/useGetTableQuery';
 import { useSearchParams } from 'react-router-dom';
+import { v4 } from 'uuid';
+import { toJS } from 'mobx';
 
 interface TableBuilderProps {
   tableBuilder: TableBuilderInterface;
@@ -25,7 +25,7 @@ const TableContext = createContext<TableBuilderInterface['state']>({});
 
 export const TableProvider = (props: TableContextProps) => {
   const state = useLocalObservable(() => props.value!);
-  console.log('props.state', props.value);
+
   return (
     <TableContext.Provider value={state}>
       {props.children}
@@ -40,7 +40,6 @@ export const useTableState = () => {
 export const TableBuilder = observer(({ tableBuilder }: TableBuilderProps) => {
   const { data, isLoading, meta } = useGetTableQuery(tableBuilder);
   const urlSearchParams = new URLSearchParams(tableBuilder.query?.params);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams(urlSearchParams);
 
   const columns = tableBuilder?.columns.map(column => {
@@ -71,7 +70,11 @@ export const TableBuilder = observer(({ tableBuilder }: TableBuilderProps) => {
           })}
         </ButtonGroup>
       </HStack>
-      <DataGrid data={toJS(data || [])} columns={toJS(columns) || []} />
+      <DataGrid
+        data={toJS(data || [])}
+        columns={toJS(columns) || []}
+        selectionMode={tableBuilder.selectionMode}
+      />
       {tableBuilder.query?.params?.take && (
         <Pagination
           total={meta?.totalCount}

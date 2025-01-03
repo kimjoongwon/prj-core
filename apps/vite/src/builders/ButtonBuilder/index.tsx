@@ -52,7 +52,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
-        queryClient.refetchQueries();
+        queryClient?.refetchQueries();
       }
 
       if (button.alert) {

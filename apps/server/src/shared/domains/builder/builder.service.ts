@@ -24,7 +24,6 @@ export class BuilderService {
         name: 'ROOT',
         pathname: '/',
         layout: {
-          name: 'ROOT',
           type: 'Root',
           page: {
             name: 'ROOT',
@@ -65,7 +64,7 @@ export class BuilderService {
                       },
                     },
                     children: services.map((service) => ({
-                      name: `${service.label} 서비스`,
+                      name: service.label,
                       pathname: service.id,
                       layout: {
                         type: 'Service',
@@ -76,7 +75,7 @@ export class BuilderService {
                       },
                       children: [
                         {
-                          name: `${service.label}`,
+                          name: service.label,
                           pathname: service.name,
                           layout: {
                             type: 'Master',
@@ -129,47 +128,31 @@ export class BuilderService {
                           },
                           children: [
                             {
-                              name: '생성',
+                              name: '그룹 생성',
                               pathname: 'new/edit',
                               layout: {
-                                name: '생성',
                                 type: 'Form',
                                 page: groupNewEditPage,
                               },
                             },
                             {
-                              name: '수정',
+                              name: '그룹 수정',
                               pathname: ':resourceId/edit',
                               layout: {
-                                name: '수정',
                                 type: 'Form',
                                 page: groupEditPage,
                               },
                             },
                             {
-                              name: '상세',
+                              name: '그룹 상세',
                               pathname: ':resourceId',
                               layout: {
-                                name: '상세',
                                 type: 'Detail',
                                 page: getGroupDetailPage(),
                               },
-                              children: [
-                                {
-                                  name: '맴버',
-                                  pathname: 'users',
-                                  layout: {
-                                    name: '리스트',
-                                    page: {
-                                      type: 'Page',
-                                    },
-                                  },
-                                },
-                              ],
                             },
                           ],
                         },
-                        ,
                       ],
                     })),
                   },

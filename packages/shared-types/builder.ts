@@ -1,4 +1,4 @@
-import { type InputProps, Selection } from '@nextui-org/react';
+import { type InputProps, Selection, TableProps } from '@nextui-org/react';
 import { Key } from 'react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
@@ -139,7 +139,7 @@ export interface TableState {
   };
 }
 
-export interface TableBuilder {
+export interface TableBuilder extends TableProps {
   state?: TableState;
   query?: Query;
   selection?: Key[] | 'all';

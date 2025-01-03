@@ -48,6 +48,7 @@ export const DataGrid = observer(
       columns = [],
       state,
       emptyContent = '데이터가 없습니다.',
+      selectionMode,
     } = props;
 
     const [rowSelection, setRowSelection] = React.useState({});
@@ -78,6 +79,7 @@ export const DataGrid = observer(
 
     return (
       <Table
+        selectionMode={selectionMode}
         fullWidth
         aria-label="datagrid"
         isHeaderSticky

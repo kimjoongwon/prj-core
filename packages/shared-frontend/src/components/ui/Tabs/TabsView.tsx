@@ -12,7 +12,7 @@ export const TabsView = observer((props: TabsViewProps) => {
 
   return (
     <Tabs selectedKey={value} onSelectionChange={onSelectionChange}>
-      {options.map(item => (
+      {options?.map(item => (
         <Tab key={item.value} title={item.text} />
       ))}
     </Tabs>
