@@ -1,5 +1,4 @@
 import { type InputProps, Selection, TableProps } from '@nextui-org/react';
-import { Key } from 'react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
@@ -31,7 +30,6 @@ export interface ComponentBuilder {
 
 export interface FormBuilder {
   name?: string;
-  state?: object & { payload: any & { serviceId?: string } };
   isInValid?: boolean;
   sections: SectionBuilder[];
   button?: ButtonBuilder;
@@ -117,10 +115,28 @@ export interface Mutation {
   hasRowId?: boolean;
 }
 
+export type Key = string | number;
+
+export interface PageState {
+  form?: {
+    data?: any;
+  };
+  dataGrid?: {
+    selectedRowIds?: Key[];
+    selectedRowId: Key;
+    filter?: any;
+    sortings?: any;
+  };
+}
+
+export interface TabBuilder {
+  options: Option[];
+}
+
 export interface PageBuilder {
   type?: 'Outlet' | 'Page';
   name?: string;
-  state?: object;
+  state?: PageState;
   params?: any & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;

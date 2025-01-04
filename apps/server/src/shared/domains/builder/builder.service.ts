@@ -150,6 +150,23 @@ export class BuilderService {
                                 type: 'Detail',
                                 page: getGroupDetailPage(),
                               },
+                              children: [
+                                {
+                                  name: '그룹 사용자',
+                                  pathname: 'users',
+                                  layout: {
+                                    type: 'Root',
+                                    page: usersPage,
+                                  },
+                                },
+                                {
+                                  name: '그룹 할당',
+                                  pathname: 'assignments',
+                                  layout: {
+                                    type: 'Root',
+                                  },
+                                },
+                              ],
                             },
                           ],
                         },

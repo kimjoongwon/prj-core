@@ -1,4 +1,4 @@
-import { PageBuilder, TableBuilder } from '@shared/types';
+import { PageBuilder, TabBuilder, TableBuilder } from '@shared/types';
 
 export const getGroupDetailPage = (): PageBuilder => {
   return {
@@ -9,12 +9,14 @@ export const getGroupDetailPage = (): PageBuilder => {
       hasResourceId: true,
       hasParams: true,
     },
-    form: {
-      state: {
-        payload: {
+    state: {
+      form: {
+        data: {
           name: '',
         },
       },
+    },
+    form: {
       sections: [
         {
           name: '그룹 정보',
@@ -31,30 +33,49 @@ export const getGroupDetailPage = (): PageBuilder => {
               },
             },
             {
-              type: 'TableBuilder',
+              type: 'TabNavigation',
               props: {
-                tableBuilder: {
-                  buttons: [
+                tabBuilder: {
+                  options: [
                     {
-                      name: '멤버 추가',
+                      key: 'members',
+                      text: '멤버',
+                      value: 'assignments',
+                    },
+                    {
+                      key: 'users',
+                      text: '사용자',
+                      value: 'users',
                     },
                   ],
-                  selectionMode: 'multiple',
-                  query: {
-                    name: 'useGetUsersByQuery',
-                  },
-                  columns: [
-                    {
-                      id: 'name',
-                      accessorKey: 'name',
-                      header: {
-                        name: '이름',
-                      },
-                    },
-                  ],
-                } as TableBuilder,
+                } as TabBuilder,
               },
             },
+            // {
+            //   type: 'TableBuilder',
+            //   props: {
+            //     tableBuilder: {
+            //       buttons: [
+            //         {
+            //           name: '멤버 추가',
+            //         },
+            //       ],
+            //       selectionMode: 'multiple',
+            //       query: {
+            //         name: 'useGetUsersByQuery',
+            //       },
+            //       columns: [
+            //         {
+            //           id: 'name',
+            //           accessorKey: 'name',
+            //           header: {
+            //             name: '이름',
+            //           },
+            //         },
+            //       ],
+            //     } as TableBuilder,
+            //   },
+            // },
           ],
         },
       ],

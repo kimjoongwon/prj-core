@@ -1,14 +1,13 @@
 import React, { createContext } from 'react';
-import { observer } from 'mobx-react-lite';
+import { observer, useLocalObservable } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
-import { Component } from '../Component';
-import { Form, FormProvder } from '../FormBuilder';
+import { ComponentBuilder } from '../ComponentBuilder';
+import { Form } from '../FormBuilder';
 import { Outlet } from 'react-router-dom';
-import { isArray } from 'lodash-es';
-import { observable } from 'mobx';
 import { useGetQuery } from '../../hooks/useGetQuery';
 import { Spinner } from '@nextui-org/react';
 import { TableBuilder, TableProvider } from '../TableBuilder/TableBuilder';
+import { cloneDeep } from 'lodash-es';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -16,20 +15,33 @@ interface PageBuilderProps {
 
 interface PageProviderProps {
   state: PageBuilderInterface['state'];
+  data: any;
   children: React.ReactNode;
 }
 
-const PageContext = createContext<PageBuilderInterface['state'] | null>(null);
+const PageContext = createContext<PageBuilderInterface['state']>(
+  {} as PageBuilderInterface['state'],
+);
 
 const PageProvder = (props: PageProviderProps) => {
-  const state = observable(props.state || {});
+  const { data } = props;
+  const state = useLocalObservable(() => {
+    const pageState = cloneDeep(props.state) || {};
+    if (data && pageState) {
+      pageState.form = {
+        ...pageState.form,
+        data,
+      };
+    }
+    return pageState;
+  });
 
   return (
     <PageContext.Provider value={state}>{props.children}</PageContext.Provider>
   );
 };
 
-export const usePageState = () => {
+export const usePageState = (): PageBuilderInterface['state'] => {
   const state = React.useContext(PageContext);
   if (!state) {
     throw new Error('useState must be used within a PageProvider');
@@ -52,28 +64,24 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   }
 
   return (
-    <PageProvder state={pageBuilder?.state}>
+    <PageProvder state={pageBuilder?.state} data={data}>
       {pageBuilder.form && (
-        <>
-          <FormProvder
-            state={pageBuilder.form.state}
-            data={isArray(data) ? null : data}
-          >
-            <Form formBuilder={pageBuilder.form!}>
-              {pageBuilder?.form?.sections?.map(section => {
-                return (
-                  <div>
-                    {section.components?.map(component => (
-                      <div className="space-y-2">
-                        <Component componentBuilder={component} data={data} />
-                      </div>
-                    ))}
+        <Form formBuilder={pageBuilder.form!}>
+          {pageBuilder?.form?.sections?.map(section => {
+            return (
+              <div>
+                {section.components?.map(component => (
+                  <div className="space-y-2">
+                    <ComponentBuilder
+                      componentBuilder={component}
+                      data={data}
+                    />
                   </div>
-                );
-              })}
-            </Form>
-          </FormProvder>
-        </>
+                ))}
+              </div>
+            );
+          })}
+        </Form>
       )}
       {pageBuilder.table && (
         <TableProvider value={pageBuilder.table?.state}>

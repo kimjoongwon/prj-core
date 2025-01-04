@@ -2,13 +2,15 @@ import { PageBuilder } from '@shared/types';
 
 export const loginPage: PageBuilder = {
   name: '로그인',
-  form: {
-    state: {
-      payload: {
+  state: {
+    form: {
+      data: {
         email: 'galaxy@gmail.com',
         password: 'rkdmf12!@',
       },
     },
+  },
+  form: {
     isInValid: false,
     name: '로그인',
     button: {

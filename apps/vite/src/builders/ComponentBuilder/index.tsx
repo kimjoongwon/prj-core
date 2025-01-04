@@ -2,17 +2,17 @@ import { observer } from 'mobx-react-lite';
 import { ComponentBuilder as ComponentBuilderState } from '@shared/types';
 import { ComponentManager } from '@shared/frontend';
 import { isEmpty } from 'lodash-es';
-import { useFormState } from '../FormBuilder';
 import { TableBuilder } from '../TableBuilder/TableBuilder';
+import { usePageState } from '../Page/PageBuilder';
+import { TabNavigation } from '../TabNavigation/TabNavigation';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
   data?: (unknown & { id: string })[];
 }
 
-export const Component = observer((props: ComponentBuilderProps) => {
-  const formState = useFormState();
-
+export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
+  const state = usePageState();
   const { componentBuilder } = props;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -46,10 +46,14 @@ export const Component = observer((props: ComponentBuilderProps) => {
     return <TableBuilder tableBuilder={componentBuilder.props.tableBuilder} />;
   }
 
+  if (componentBuilder.type === 'TabNavigation') {
+    return <TabNavigation tabBuilder={componentBuilder.props.tabBuilder} />;
+  }
+
   return (
     <Component
       {...componentBuilder.props}
-      state={formState?.payload}
+      state={state?.form?.data}
       path={componentBuilder.path}
       componentBuilder={componentBuilder}
       errorMessage={componentBuilder.validation?.errorMessage || ' '}

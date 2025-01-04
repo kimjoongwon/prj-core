@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ColumnDef,
   ExpandedState,
@@ -18,8 +18,11 @@ import {
   TableProps,
   TableRow,
 } from '@nextui-org/react';
-import { observer } from 'mobx-react-lite';
-import { action } from 'mobx';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { action, reaction } from 'mobx';
+import { MobxProps, PageState } from '@shared/types';
+import { useMobxHookForm } from '../../../hooks';
+import { get } from 'lodash-es';
 
 export type Key = string | number;
 
@@ -29,7 +32,7 @@ export type DataGridState<T> = {
 };
 
 export interface DataGridProps<T> extends TableProps {
-  state?: DataGridState<T>;
+  state?: PageState['dataGrid'];
   data: T[];
   columns: ColumnDef<T, any>[];
   emptyContent?: string;
@@ -73,9 +76,30 @@ export const DataGrid = observer(
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
 
+    const localState = useLocalObservable<{
+      selection: Selection;
+    }>(() => ({
+      selection: new Set(state?.selectedRowIds || []),
+    }));
+
     const onSelectionChange = action((selection: Selection) => {
-      state.selection = selection;
+      localState.selection = selection;
     });
+
+    useEffect(() => {
+      const disposer = reaction(
+        () => localState.selection,
+        () => {
+          if (selectionMode === 'single') {
+            state.selectedRowIds = Array.from(localState.selection).slice(-1);
+            return;
+          }
+          state.selectedRowIds = Array.from(localState.selection);
+        },
+      );
+
+      return disposer;
+    }, []);
 
     return (
       <Table
@@ -84,7 +108,8 @@ export const DataGrid = observer(
         aria-label="datagrid"
         isHeaderSticky
         isCompact
-        defaultSelectedKeys={state?.selection}
+        selectedKeys={localState.selection}
+        defaultSelectedKeys={localState.selection}
         onSelectionChange={onSelectionChange}
       >
         <TableHeader>

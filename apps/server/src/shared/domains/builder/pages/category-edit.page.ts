@@ -7,13 +7,15 @@ export const categoryEditPage: PageBuilder = {
     name: 'useGetCategoryById',
     hasResourceId: true,
   },
-  form: {
-    name: '정보',
-    state: {
-      payload: {
+  state: {
+    form: {
+      data: {
         name: '',
       },
     },
+  },
+  form: {
+    name: '정보',
     button: {
       name: '저장',
       mutation: {
