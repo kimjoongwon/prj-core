@@ -164,7 +164,7 @@ export interface TableBuilder extends TableProps {
   state?: TableState;
   query?: Query;
   selection?: Key[] | 'all';
-  columns: ColumnBuilder[];
+  columns?: ColumnBuilder[];
 }
 
 export interface ColumnBuilder {

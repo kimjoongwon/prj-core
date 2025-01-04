@@ -1,6 +1,6 @@
 import { ColumnBuilder } from '@shared/types';
 
-export const getUserColumn = (): ColumnBuilder[] => {
+export const getUserColumn = (columns?: ColumnBuilder[]): ColumnBuilder[] => {
   return [
     {
       accessorKey: 'name',

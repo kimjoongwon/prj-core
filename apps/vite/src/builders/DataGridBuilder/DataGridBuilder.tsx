@@ -22,7 +22,7 @@ export const DataGridBuilder = observer(
     const urlSearchParams = new URLSearchParams(data?.query?.params);
     const [searchParams, setSearchParams] = useSearchParams(urlSearchParams);
 
-    const columns = table?.columns.map(column => {
+    const columns = table?.columns?.map(column => {
       return {
         id: column.id,
         accessorKey: column.accessorKey,

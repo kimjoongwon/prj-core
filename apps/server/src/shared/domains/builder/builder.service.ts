@@ -13,6 +13,7 @@ import { getUsersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
 import { getGroupDetailPage } from './pages/group-detail.page';
 import { getAssignmentsPage } from './pages/assignments.page';
+import { getGroupUsersPage } from './pages/group-users.page';
 
 @Injectable()
 export class BuilderService {
@@ -157,7 +158,7 @@ export class BuilderService {
                                   pathname: 'users',
                                   layout: {
                                     type: 'Root',
-                                    page: getUsersPage(),
+                                    page: getGroupUsersPage(),
                                   },
                                 },
                                 {

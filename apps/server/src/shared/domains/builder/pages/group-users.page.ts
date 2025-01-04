@@ -6,7 +6,30 @@ export const getGroupUsersPage = (): PageBuilder => {
     name: '이용자',
     type: 'Page',
     dataGrid: {
-      table: getUserTable(),
+      table: getUserTable({
+        selectionMode: 'single',
+        columns: [
+          {
+            id: 'actions',
+            header: {
+              name: '액션',
+            },
+            cell: {
+              buttons: [
+                {
+                  name: '추가',
+                  color: 'primary',
+                  mutation: {
+                    name: 'createAssignment',
+                    hasPayload: true,
+                    hasServiceId: true,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }),
     },
   };
 };
