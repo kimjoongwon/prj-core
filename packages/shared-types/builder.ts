@@ -133,6 +133,12 @@ export interface TabBuilder {
   options: Option[];
 }
 
+export interface DataGridBuilder {
+  buttons?: ButtonBuilder[];
+  filter?: FilterBuilder;
+  table?: TableBuilder;
+}
+
 export interface PageBuilder {
   type?: 'Outlet' | 'Page';
   name?: string;
@@ -140,8 +146,7 @@ export interface PageBuilder {
   params?: any & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;
-  filter?: FilterBuilder;
-  table?: TableBuilder;
+  dataGrid?: DataGridBuilder;
 }
 
 export interface FilterBuilder {}
@@ -159,7 +164,6 @@ export interface TableBuilder extends TableProps {
   state?: TableState;
   query?: Query;
   selection?: Key[] | 'all';
-  buttons?: ButtonBuilder[];
   columns: ColumnBuilder[];
 }
 

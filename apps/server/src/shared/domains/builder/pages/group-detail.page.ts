@@ -51,31 +51,6 @@ export const getGroupDetailPage = (): PageBuilder => {
                 } as TabBuilder,
               },
             },
-            // {
-            //   type: 'TableBuilder',
-            //   props: {
-            //     tableBuilder: {
-            //       buttons: [
-            //         {
-            //           name: '멤버 추가',
-            //         },
-            //       ],
-            //       selectionMode: 'multiple',
-            //       query: {
-            //         name: 'useGetUsersByQuery',
-            //       },
-            //       columns: [
-            //         {
-            //           id: 'name',
-            //           accessorKey: 'name',
-            //           header: {
-            //             name: '이름',
-            //           },
-            //         },
-            //       ],
-            //     } as TableBuilder,
-            //   },
-            // },
           ],
         },
       ],

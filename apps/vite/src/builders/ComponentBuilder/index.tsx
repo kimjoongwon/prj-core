@@ -2,9 +2,9 @@ import { observer } from 'mobx-react-lite';
 import { ComponentBuilder as ComponentBuilderState } from '@shared/types';
 import { ComponentManager } from '@shared/frontend';
 import { isEmpty } from 'lodash-es';
-import { TableBuilder } from '../TableBuilder/TableBuilder';
 import { usePageState } from '../Page/PageBuilder';
 import { TabNavigation } from '../TabNavigation/TabNavigation';
+import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
@@ -43,7 +43,9 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
   });
 
   if (componentBuilder.type === 'TableBuilder') {
-    return <TableBuilder tableBuilder={componentBuilder.props.tableBuilder} />;
+    return (
+      <DataGridBuilder dataGridBuilder={componentBuilder.props.tableBuilder} />
+    );
   }
 
   if (componentBuilder.type === 'TabNavigation') {

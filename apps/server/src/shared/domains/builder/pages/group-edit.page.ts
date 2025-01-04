@@ -8,14 +8,16 @@ export const groupEditPage: PageBuilder = {
     hasResourceId: true,
     hasParams: true,
   },
-  form: {
-    name: '정보',
-    state: {
-      payload: {
+  state: {
+    form: {
+      data: {
         name: '',
         serviceId: '',
       },
     },
+  },
+  form: {
+    name: '정보',
     button: {
       name: '저장',
       mutation: {

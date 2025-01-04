@@ -1,7 +1,7 @@
 import { PageBuilder } from '@shared/types';
 import { getUserTable } from '../tables/users.table';
 
-export const getUsersPage = (): PageBuilder => {
+export const getGroupUsersPage = (): PageBuilder => {
   return {
     name: '이용자',
     type: 'Page',

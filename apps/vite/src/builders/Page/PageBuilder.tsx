@@ -6,8 +6,8 @@ import { Form } from '../FormBuilder';
 import { Outlet } from 'react-router-dom';
 import { useGetQuery } from '../../hooks/useGetQuery';
 import { Spinner } from '@nextui-org/react';
-import { TableBuilder, TableProvider } from '../TableBuilder/TableBuilder';
 import { cloneDeep } from 'lodash-es';
+import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -83,10 +83,8 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
           })}
         </Form>
       )}
-      {pageBuilder.table && (
-        <TableProvider value={pageBuilder.table?.state}>
-          <TableBuilder tableBuilder={pageBuilder.table} />
-        </TableProvider>
+      {pageBuilder.dataGrid && (
+        <DataGridBuilder dataGridBuilder={pageBuilder.dataGrid} />
       )}
     </PageProvder>
   );

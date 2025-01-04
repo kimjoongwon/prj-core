@@ -9,9 +9,10 @@ import { categoryEditPage } from './pages/category-edit.page';
 import { groupNewEditPage } from './pages/group-new-edit.page';
 import { groupsPage } from './pages/groups.page';
 import { groupEditPage } from './pages/group-edit.page';
-import { usersPage } from './pages/users.page';
+import { getUsersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
 import { getGroupDetailPage } from './pages/group-detail.page';
+import { getAssignmentsPage } from './pages/assignments.page';
 
 @Injectable()
 export class BuilderService {
@@ -80,7 +81,7 @@ export class BuilderService {
                           layout: {
                             type: 'Master',
                             page: {
-                              USER: usersPage,
+                              USER: getUsersPage(),
                               SPACE: spacesPage,
                             }[service.name],
                           },
@@ -156,7 +157,7 @@ export class BuilderService {
                                   pathname: 'users',
                                   layout: {
                                     type: 'Root',
-                                    page: usersPage,
+                                    page: getUsersPage(),
                                   },
                                 },
                                 {
@@ -164,6 +165,7 @@ export class BuilderService {
                                   pathname: 'assignments',
                                   layout: {
                                     type: 'Root',
+                                    page: getAssignmentsPage(),
                                   },
                                 },
                               ],

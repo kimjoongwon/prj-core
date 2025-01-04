@@ -3,15 +3,17 @@ import { PageBuilder } from '@shared/types';
 export const categoryNewEditPage: PageBuilder = {
   type: 'Page',
   name: '카테고리 새편집',
-  form: {
-    name: '정보',
-    state: {
-      payload: {
+  state: {
+    form: {
+      data: {
         name: '',
         type: 'ROOT',
         parentId: null,
       },
     },
+  },
+  form: {
+    name: '정보',
     button: {
       name: '저장',
       mutation: {
