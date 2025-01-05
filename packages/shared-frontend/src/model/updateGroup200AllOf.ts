@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroupDto } from './groupDto';
-import type { UpdateGroup200AllOfMeta } from './updateGroup200AllOfMeta';
 
 export type UpdateGroup200AllOf = {
   data?: GroupDto;
@@ -13,5 +12,4 @@ export type UpdateGroup200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: UpdateGroup200AllOfMeta;
 };

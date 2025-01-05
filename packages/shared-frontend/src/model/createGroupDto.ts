@@ -4,9 +4,13 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
+import type { SpaceDto } from './spaceDto';
+import type { UserDto } from './userDto';
 
 export interface CreateGroupDto {
   name: string;
   serviceId: string;
+  space: SpaceDto;
   spaceId: string;
+  users: UserDto;
 }

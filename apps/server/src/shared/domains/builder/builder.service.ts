@@ -11,7 +11,7 @@ import { groupsPage } from './pages/groups.page';
 import { groupEditPage } from './pages/group-edit.page';
 import { getUsersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
-import { getGroupDetailPage } from './pages/group-detail.page';
+import { getGroupPage } from './pages/group.page';
 import { getAssignmentsPage } from './pages/assignments.page';
 import { getGroupUsersPage } from './pages/group-users.page';
 
@@ -150,7 +150,7 @@ export class BuilderService {
                               pathname: ':resourceId',
                               layout: {
                                 type: 'Detail',
-                                page: getGroupDetailPage(),
+                                page: getGroupPage(),
                               },
                               children: [
                                 {

@@ -6,3 +6,4 @@ export * from './role';
 export * from './init';
 export * from './email';
 export * from './builder';
+export * from './user';

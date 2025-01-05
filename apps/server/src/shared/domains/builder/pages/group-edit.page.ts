@@ -22,6 +22,8 @@ export const groupEditPage: PageBuilder = {
       name: '저장',
       mutation: {
         name: 'updateGroup',
+        idMapper: 'resourceId',
+        hasServiceId: true,
         hasResourceId: true,
         hasPayload: true,
       },

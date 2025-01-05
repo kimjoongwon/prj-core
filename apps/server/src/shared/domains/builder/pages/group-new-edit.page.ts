@@ -16,9 +16,10 @@ export const groupNewEditPage: PageBuilder = {
     button: {
       name: '저장',
       mutation: {
+        mapper: {
+          serviceId: 'serviceId',
+        },
         name: 'createGroup',
-        hasPayload: true,
-        hasServiceId: true,
       },
       alert: {
         message: '!!!',

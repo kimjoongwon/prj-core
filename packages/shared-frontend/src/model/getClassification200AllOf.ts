@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ClassificationDto } from './classificationDto';
-import type { GetClassification200AllOfMeta } from './getClassification200AllOfMeta';
 
 export type GetClassification200AllOf = {
   data?: ClassificationDto;
@@ -13,5 +12,4 @@ export type GetClassification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: GetClassification200AllOfMeta;
 };

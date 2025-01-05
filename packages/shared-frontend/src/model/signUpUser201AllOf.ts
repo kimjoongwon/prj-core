@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TokenDto } from './tokenDto';
-import type { SignUpUser201AllOfMeta } from './signUpUser201AllOfMeta';
 
 export type SignUpUser201AllOf = {
   data?: TokenDto;
@@ -13,5 +12,4 @@ export type SignUpUser201AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: SignUpUser201AllOfMeta;
 };

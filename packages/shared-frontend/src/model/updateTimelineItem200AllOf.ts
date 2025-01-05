@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TimelineItemDto } from './timelineItemDto';
-import type { UpdateTimelineItem200AllOfMeta } from './updateTimelineItem200AllOfMeta';
 
 export type UpdateTimelineItem200AllOf = {
   data?: TimelineItemDto;
@@ -13,5 +12,4 @@ export type UpdateTimelineItem200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: UpdateTimelineItem200AllOfMeta;
 };

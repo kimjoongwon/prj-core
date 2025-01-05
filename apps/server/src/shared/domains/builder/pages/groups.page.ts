@@ -11,7 +11,7 @@ export const groupsPage: PageBuilder = {
         params: {
           serviceId: '',
           skip: 0,
-          take: 1,
+          take: 2,
         },
       },
       columns: [
@@ -59,7 +59,7 @@ export const groupsPage: PageBuilder = {
                 name: '삭제',
                 mutation: {
                   name: 'deleteGroup',
-                  hasRowId: true,
+                  idMapper: 'rowId',
                 },
                 alert: {
                   message: '!!!',

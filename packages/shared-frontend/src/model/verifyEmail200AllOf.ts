@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SystemEmailDto } from './systemEmailDto';
-import type { VerifyEmail200AllOfMeta } from './verifyEmail200AllOfMeta';
 
 export type VerifyEmail200AllOf = {
   data?: SystemEmailDto;
@@ -13,5 +12,4 @@ export type VerifyEmail200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: VerifyEmail200AllOfMeta;
 };

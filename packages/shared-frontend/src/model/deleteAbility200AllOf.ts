@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AbilityDto } from './abilityDto';
-import type { DeleteAbility200AllOfMeta } from './deleteAbility200AllOfMeta';
 
 export type DeleteAbility200AllOf = {
   data?: AbilityDto;
@@ -13,5 +12,4 @@ export type DeleteAbility200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: DeleteAbility200AllOfMeta;
 };

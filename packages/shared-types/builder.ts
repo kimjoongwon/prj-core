@@ -108,6 +108,8 @@ export interface Query {
 
 export interface Mutation {
   name: string;
+  mapper?: any;
+  idMapper?: string;
   hasResourceId?: boolean;
   hasServiceId?: boolean;
   hasParentId?: boolean;
@@ -164,7 +166,7 @@ export interface TableBuilder extends TableProps {
   state?: TableState;
   query?: Query;
   selection?: Key[] | 'all';
-  columns?: ColumnBuilder[];
+  columns: ColumnBuilder[];
 }
 
 export interface ColumnBuilder {
