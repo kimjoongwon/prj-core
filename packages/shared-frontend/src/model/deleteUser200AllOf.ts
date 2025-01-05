@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UserDto } from './userDto';
-import type { DeleteUser200AllOfMeta } from './deleteUser200AllOfMeta';
 
 export type DeleteUser200AllOf = {
   data?: UserDto;
@@ -13,5 +12,4 @@ export type DeleteUser200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: DeleteUser200AllOfMeta;
 };

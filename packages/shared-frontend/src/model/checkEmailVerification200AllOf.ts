@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { Boolean } from './boolean';
-import type { CheckEmailVerification200AllOfMeta } from './checkEmailVerification200AllOfMeta';
 
 export type CheckEmailVerification200AllOf = {
   data?: Boolean;
@@ -13,5 +12,4 @@ export type CheckEmailVerification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: CheckEmailVerification200AllOfMeta;
 };

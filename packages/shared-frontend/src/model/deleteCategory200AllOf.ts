@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CategoryDto } from './categoryDto';
-import type { DeleteCategory200AllOfMeta } from './deleteCategory200AllOfMeta';
 
 export type DeleteCategory200AllOf = {
   data?: CategoryDto;
@@ -13,5 +12,4 @@ export type DeleteCategory200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: DeleteCategory200AllOfMeta;
 };

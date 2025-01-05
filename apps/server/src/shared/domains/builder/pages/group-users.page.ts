@@ -2,9 +2,16 @@ import { PageBuilder } from '@shared/types';
 import { getUserTable } from '../tables/users.table';
 
 export const getGroupUsersPage = (): PageBuilder => {
-  return {
+  const groupUsersPage: PageBuilder = {
     name: '이용자',
     type: 'Page',
+    state: {
+      form: {
+        data: {
+          serviceId: '',
+        },
+      },
+    },
     dataGrid: {
       table: getUserTable({
         selectionMode: 'single',
@@ -20,8 +27,14 @@ export const getGroupUsersPage = (): PageBuilder => {
                   name: '추가',
                   color: 'primary',
                   mutation: {
-                    name: 'createAssignment',
+                    mapper: {
+                      resourceId: 'groupId',
+                      rowId: 'userId',
+                      serviceId: 'serviceId',
+                    },
+                    name: 'createUserAssignment',
                     hasPayload: true,
+                    hasRowId: true,
                     hasServiceId: true,
                   },
                 },
@@ -32,4 +45,6 @@ export const getGroupUsersPage = (): PageBuilder => {
       }),
     },
   };
+
+  return groupUsersPage;
 };

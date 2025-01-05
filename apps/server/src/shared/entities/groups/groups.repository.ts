@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { GroupDto } from './dtos';
+import { Group } from './group.entity';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class GroupsRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findManyByQuery(args: Prisma.GroupFindManyArgs) {
+  async findManyByQuery(args: Prisma.GroupFindManyArgs): Promise<Group[]> {
     const groups = await this.prisma.group.findMany(args);
-    return groups;
+    return groups.map((group) => plainToInstance(Group, group));
   }
 
   async count(args: Prisma.GroupCountArgs) {

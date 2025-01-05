@@ -29,10 +29,6 @@ import type {
 } from '@tanstack/react-query'
 import type {
   CheckEmailVerification200AllOf,
-  CreateAssignment200AllOf,
-  CreateAssignmentDto,
-  CreateAssignmentDtos,
-  CreateAssignments200AllOf,
   CreateCategory200AllOf,
   CreateCategoryDto,
   CreateClassification200AllOf,
@@ -45,9 +41,10 @@ import type {
   CreateSpace200AllOf,
   CreateSpaceDto,
   CreateUser200AllOf,
+  CreateUserAssignment200AllOf,
+  CreateUserAssignmentDto,
   CreateUserDto,
   DeleteAbility200AllOf,
-  DeleteAssignment200AllOf,
   DeleteCategory200AllOf,
   DeleteClassification200AllOf,
   DeleteGroup200AllOf,
@@ -58,9 +55,6 @@ import type {
   DeleteUser200AllOf,
   GetAbility200AllOf,
   GetAccessibleSpaces200AllOf,
-  GetAssignment200AllOf,
-  GetAssignmentsByQuery200AllOf,
-  GetAssignmentsByQueryParams,
   GetCategoriesByQuery200AllOf,
   GetCategoriesByQueryParams,
   GetCategoryById200AllOf,
@@ -88,8 +82,6 @@ import type {
   LoginPayloadDto,
   RemoveAbilities200AllOf,
   RemoveAbility200AllOf,
-  RemoveAssignment200AllOf,
-  RemoveAssignments200AllOf,
   RemoveClassification200AllOf,
   RemoveClassifications200AllOf,
   RemoveGroups200AllOf,
@@ -106,8 +98,6 @@ import type {
   SignUpPayloadDto,
   SignUpUser201AllOf,
   TokenDto,
-  UpdateAssignment200AllOf,
-  UpdateAssignmentDto,
   UpdateCategory200AllOf,
   UpdateCategoryDto,
   UpdateClassification200AllOf,
@@ -136,684 +126,6 @@ import type { ErrorType, BodyType } from './libs/customAxios';
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
 
 
-export const createAssignment = (
-    createAssignmentDto: BodyType<CreateAssignmentDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAssignmentDto
-    },
-      options);
-    }
-  
-
-
-export const getCreateAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAssignment>>, {data: BodyType<CreateAssignmentDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createAssignment(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof createAssignment>>>
-    export type CreateAssignmentMutationBody = BodyType<CreateAssignmentDto>
-    export type CreateAssignmentMutationError = ErrorType<void>
-
-    export const useCreateAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignment>>, TError,{data: BodyType<CreateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createAssignment>>,
-        TError,
-        {data: BodyType<CreateAssignmentDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getAssignmentsByQuery = (
-    params?: GetAssignmentsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetAssignmentsByQuery200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
-
-export const getGetAssignmentsByQueryQueryKey = (params?: GetAssignmentsByQueryParams,) => {
-    return [`http://localhost:3005/api/v1/admin/assignments`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetAssignmentsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQueryQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAssignmentsByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAssignmentsByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentsByQuery<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAssignmentsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentsByQuerySuspense<TData = Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAssignmentsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignmentsByQuery>>> = ({ signal }) => getAssignmentsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignmentsByQuery>>>
-export type GetAssignmentsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetAssignmentsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignmentsByQuery>>>, TError = ErrorType<void>>(
- params?: GetAssignmentsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignmentsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const createAssignments = (
-    createAssignmentDtos: BodyType<CreateAssignmentDtos>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<CreateAssignments200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/bulk`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createAssignmentDtos
-    },
-      options);
-    }
-  
-
-
-export const getCreateAssignmentsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAssignments>>, {data: BodyType<CreateAssignmentDtos>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createAssignments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateAssignmentsMutationResult = NonNullable<Awaited<ReturnType<typeof createAssignments>>>
-    export type CreateAssignmentsMutationBody = BodyType<CreateAssignmentDtos>
-    export type CreateAssignmentsMutationError = ErrorType<void>
-
-    export const useCreateAssignments = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAssignments>>, TError,{data: BodyType<CreateAssignmentDtos>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof createAssignments>>,
-        TError,
-        {data: BodyType<CreateAssignmentDtos>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateAssignmentsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-export const getGetAssignmentQueryKey = (assignmentId: string,) => {
-    return [`http://localhost:3005/api/v1/admin/assignments/${assignmentId}`] as const;
-    }
-
-    
-export const getGetAssignmentQueryOptions = <TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentQueryError = ErrorType<void>
-
-
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAssignment>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAssignment>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignment<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentQueryOptions(assignmentId,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAssignmentSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentSuspense<TData = Awaited<ReturnType<typeof getAssignment>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentSuspenseQueryOptions(assignmentId,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetAssignmentSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAssignmentQueryKey(assignmentId);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAssignment>>> = ({ signal }) => getAssignment(assignmentId, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(assignmentId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type GetAssignmentSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
-export type GetAssignmentSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-
-export function useGetAssignmentSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAssignment>>>, TError = ErrorType<void>>(
- assignmentId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAssignment>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getGetAssignmentSuspenseInfiniteQueryOptions(assignmentId,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const updateAssignment = (
-    assignmentId: string,
-    updateAssignmentDto: BodyType<UpdateAssignmentDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateAssignmentDto
-    },
-      options);
-    }
-  
-
-
-export const getUpdateAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAssignment>>, {assignmentId: string;data: BodyType<UpdateAssignmentDto>}> = (props) => {
-          const {assignmentId,data} = props ?? {};
-
-          return  updateAssignment(assignmentId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof updateAssignment>>>
-    export type UpdateAssignmentMutationBody = BodyType<UpdateAssignmentDto>
-    export type UpdateAssignmentMutationError = ErrorType<void>
-
-    export const useUpdateAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAssignment>>, TError,{assignmentId: string;data: BodyType<UpdateAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof updateAssignment>>,
-        TError,
-        {assignmentId: string;data: BodyType<UpdateAssignmentDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const deleteAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<DeleteAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAssignment>>, {assignmentId: string}> = (props) => {
-          const {assignmentId} = props ?? {};
-
-          return  deleteAssignment(assignmentId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAssignment>>>
-    
-    export type DeleteAssignmentMutationError = ErrorType<void>
-
-    export const useDeleteAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof deleteAssignment>>,
-        TError,
-        {assignmentId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeAssignments = (
-    removeAssignmentsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAssignments200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeAssignmentsBody
-    },
-      options);
-    }
-  
-
-
-export const getRemoveAssignmentsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAssignments>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  removeAssignments(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAssignmentsMutationResult = NonNullable<Awaited<ReturnType<typeof removeAssignments>>>
-    export type RemoveAssignmentsMutationBody = BodyType<string[]>
-    export type RemoveAssignmentsMutationError = ErrorType<void>
-
-    export const useRemoveAssignments = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignments>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAssignments>>,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAssignmentsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeAssignment = (
-    assignmentId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveAssignment200AllOf>(
-      {url: `http://localhost:3005/api/v1/admin/assignments/${assignmentId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveAssignmentMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeAssignment>>, {assignmentId: string}> = (props) => {
-          const {assignmentId} = props ?? {};
-
-          return  removeAssignment(assignmentId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RemoveAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof removeAssignment>>>
-    
-    export type RemoveAssignmentMutationError = ErrorType<void>
-
-    export const useRemoveAssignment = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeAssignment>>, TError,{assignmentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        Awaited<ReturnType<typeof removeAssignment>>,
-        TError,
-        {assignmentId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveAssignmentMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const createUser = (
     createUserDto: BodyType<CreateUserDto>,
  options?: SecondParameter<typeof customInstance>,) => {
@@ -1436,6 +748,58 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemoveUserMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createUserAssignment = (
+    createUserAssignmentDto: BodyType<CreateUserAssignmentDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateUserAssignment200AllOf>(
+      {url: `http://localhost:3005/api/v1/admin/users/assignments`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createUserAssignmentDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateUserAssignmentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUserAssignment>>, TError,{data: BodyType<CreateUserAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createUserAssignment>>, TError,{data: BodyType<CreateUserAssignmentDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createUserAssignment>>, {data: BodyType<CreateUserAssignmentDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createUserAssignment(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateUserAssignmentMutationResult = NonNullable<Awaited<ReturnType<typeof createUserAssignment>>>
+    export type CreateUserAssignmentMutationBody = BodyType<CreateUserAssignmentDto>
+    export type CreateUserAssignmentMutationError = ErrorType<void>
+
+    export const useCreateUserAssignment = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createUserAssignment>>, TError,{data: BodyType<CreateUserAssignmentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createUserAssignment>>,
+        TError,
+        {data: BodyType<CreateUserAssignmentDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateUserAssignmentMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

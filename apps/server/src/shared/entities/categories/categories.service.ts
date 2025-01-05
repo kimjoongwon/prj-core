@@ -49,9 +49,7 @@ export class CategoriesService {
   }
 
   async getManyByQuery(query: CategoryQueryDto) {
-    const args = query.toArgs<Prisma.CategoryFindManyArgs>();
-    const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
-    args.include = {
+    const args = query.toArgs<Prisma.CategoryFindManyArgs>({
       children: {
         include: {
           children: {
@@ -61,11 +59,9 @@ export class CategoriesService {
           },
         },
       },
-    };
-    args.where = {
-      ...args.where,
-    };
+    });
 
+    const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
     const categories = await this.prisma.category.findMany(args);
     const count = await this.prisma.category.count(countArgs);
 

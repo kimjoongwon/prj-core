@@ -16,19 +16,19 @@ import {
   AdminSubjectsModule,
   AdminTemplatesModule,
   AdminTimelineItemsModule,
-  AdminUsersModule,
+  AssignmentsEndpointModule,
+  UsersEndpointModule,
 } from './admin';
 import { AdminAppBuilderModule } from './admin/builder/admin-builder.module';
 import { CaslModule } from 'nest-casl';
 import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
-import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.module';
 
 @Module({
   imports: [
     ...libModules,
     InitModule,
-    AdminAssignmentsModule,
-    AdminUsersModule,
+    UsersEndpointModule,
+    AssignmentsEndpointModule,
     AdminCategoriesModule,
     AdminAbilityModule,
     AdminTemplatesModule,
@@ -69,15 +69,17 @@ import { AdminAssignmentsModule } from './admin/assignments/admin-assignments.mo
                   },
                   {
                     path: 'users',
-                    module: AdminUsersModule,
+                    module: UsersEndpointModule,
+                    children: [
+                      {
+                        path: 'assignments',
+                        module: AssignmentsEndpointModule,
+                      },
+                    ],
                   },
                   {
                     path: 'groups',
                     module: AdminGroupsModule,
-                  },
-                  {
-                    path: 'assignments',
-                    module: AdminAssignmentsModule,
                   },
                   {
                     path: 'classifications',

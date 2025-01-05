@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UserDto } from './userDto';
-import type { CreateUser200AllOfMeta } from './createUser200AllOfMeta';
 
 export type CreateUser200AllOf = {
   data?: UserDto;
@@ -13,5 +12,4 @@ export type CreateUser200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: CreateUser200AllOfMeta;
 };

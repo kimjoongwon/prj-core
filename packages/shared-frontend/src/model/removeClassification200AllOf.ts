@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ClassificationDto } from './classificationDto';
-import type { RemoveClassification200AllOfMeta } from './removeClassification200AllOfMeta';
 
 export type RemoveClassification200AllOf = {
   data?: ClassificationDto;
@@ -13,5 +12,4 @@ export type RemoveClassification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: RemoveClassification200AllOfMeta;
 };

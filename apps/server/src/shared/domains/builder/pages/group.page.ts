@@ -1,6 +1,6 @@
 import { PageBuilder, TabBuilder, TableBuilder } from '@shared/types';
 
-export const getGroupDetailPage = (): PageBuilder => {
+export const getGroupPage = (): PageBuilder => {
   return {
     name: '그룹',
     type: 'Page',

@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SpaceDto } from './spaceDto';
-import type { CreateSpace200AllOfMeta } from './createSpace200AllOfMeta';
 
 export type CreateSpace200AllOf = {
   data?: SpaceDto;
@@ -13,5 +12,4 @@ export type CreateSpace200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: CreateSpace200AllOfMeta;
 };

@@ -3,16 +3,18 @@ import { PageBuilder } from '@shared/types';
 export const categoryAddPage: PageBuilder = {
   type: 'Page',
   name: '카테고리 추가',
-  form: {
-    name: '정보',
-    state: {
-      payload: {
+  state: {
+    form: {
+      data: {
         name: '',
         type: 'LEAF',
         parentId: null,
         serviceId: '',
       },
     },
+  },
+  form: {
+    name: '정보',
     button: {
       name: '저장',
       mutation: {

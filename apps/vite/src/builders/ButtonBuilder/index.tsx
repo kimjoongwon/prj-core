@@ -4,10 +4,10 @@ import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useFormState } from '../FormBuilder';
 import { toast } from 'react-toastify';
 import { cloneDeep } from 'lodash-es';
 import { useQueryClient } from '@tanstack/react-query';
+import { usePageState } from '../Page/PageBuilder';
 
 interface ButtonProps {
   row?: unknown & { id: string };
@@ -16,39 +16,57 @@ interface ButtonProps {
 
 export const ButtonBuilder = observer((props: ButtonProps) => {
   const { buttonBuilder, row } = props;
-  const state = useFormState()!;
+  const state = usePageState();
   const params = useParams();
   const serviceId = window.location.pathname.split('/')[4];
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const makeContext = (): any => {
+    return {
+      rowId: row?.id,
+      serviceId,
+      ...params,
+    };
+  };
+
   const onPress = async () => {
-    const payload = cloneDeep(state?.payload);
     const button = cloneDeep(buttonBuilder);
+    const context = makeContext();
     const args = [];
-    if (button?.mutation?.hasResourceId) {
-      args.push(params.resourceId);
+    let formData = cloneDeep(state?.form?.data);
+    let resourceId = null;
+
+    if (button.mutation?.idMapper) {
+      resourceId = context?.[button.mutation?.idMapper];
+      args.push(resourceId);
     }
 
-    if (button.mutation?.hasRowId) {
-      args.push(row?.id);
-    }
+    if (button.mutation?.mapper) {
+      Object.keys(button.mutation.mapper).map(key => {
+        const value = context?.[key];
+        formData = {
+          ...formData,
+          [button.mutation?.mapper[key]]: value,
+        };
+      });
 
-    if (button?.mutation?.hasServiceId) {
-      payload.serviceId = serviceId;
-    }
+      if (button.mutation.hasServiceId) {
+        formData = {
+          ...formData,
+          serviceId,
+        };
+      }
 
-    if (button?.mutation?.hasParentId) {
-      payload.parentId = params.parentId;
-    }
-
-    if (button.mutation?.hasPayload) {
-      args.push(payload);
+      args.push(formData);
     }
 
     const navigator = button.navigator;
+
     try {
       if (button.mutation?.name) {
+        console.log('formData', formData);
+        console.log('args', args);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);

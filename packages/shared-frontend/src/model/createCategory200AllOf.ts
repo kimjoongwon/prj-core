@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CategoryDto } from './categoryDto';
-import type { CreateCategory200AllOfMeta } from './createCategory200AllOfMeta';
 
 export type CreateCategory200AllOf = {
   data?: CategoryDto;
@@ -13,5 +12,4 @@ export type CreateCategory200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: CreateCategory200AllOfMeta;
 };

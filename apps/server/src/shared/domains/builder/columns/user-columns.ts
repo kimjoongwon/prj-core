@@ -14,5 +14,6 @@ export const getUserColumn = (columns?: ColumnBuilder[]): ColumnBuilder[] => {
         name: '연락처',
       },
     },
+    ...columns,
   ];
 };

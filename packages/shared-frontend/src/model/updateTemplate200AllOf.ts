@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TemplateDto } from './templateDto';
-import type { UpdateTemplate200AllOfMeta } from './updateTemplate200AllOfMeta';
 
 export type UpdateTemplate200AllOf = {
   data?: TemplateDto;
@@ -13,5 +12,4 @@ export type UpdateTemplate200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: UpdateTemplate200AllOfMeta;
 };

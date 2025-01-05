@@ -36,7 +36,9 @@ export class AssignmentsController {
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
   async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
     const assignment = await this.service.create({
-      data: createAssignmentDto,
+      data: {
+        ...createAssignmentDto,
+      },
     });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssignmentDto, assignment));
   }
@@ -50,6 +52,7 @@ export class AssignmentsController {
       data: createAssignmentDtos.items,
       skipDuplicates: true,
     });
+
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

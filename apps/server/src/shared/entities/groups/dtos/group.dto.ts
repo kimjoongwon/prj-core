@@ -1,8 +1,10 @@
-import { StringField, UUIDFieldOptional } from '../../../decorators';
+import { Group } from '@prisma/client';
+import { ClassField, StringField } from '../../../decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { GroupEntity } from '../group.entity';
+import { UserDto } from '../../users';
+import { SpaceDto } from '../../spaces';
 
-export class GroupDto extends AbstractDto implements GroupEntity {
+export class GroupDto extends AbstractDto implements Group {
   @StringField()
   spaceId: string;
 
@@ -14,4 +16,10 @@ export class GroupDto extends AbstractDto implements GroupEntity {
 
   @StringField()
   serviceId: string;
+
+  @ClassField(() => SpaceDto)
+  space: SpaceDto;
+
+  @ClassField(() => UserDto)
+  users: UserDto[];
 }

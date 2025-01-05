@@ -19,9 +19,8 @@ export const DataGridBuilder = observer(
   ({ dataGridBuilder }: DataGridBuilderProps) => {
     const table = dataGridBuilder?.table!;
     const { data, isLoading, meta } = useGetTableQuery(table);
-    const urlSearchParams = new URLSearchParams(data?.query?.params);
+    const urlSearchParams = new URLSearchParams(table?.query?.params);
     const [searchParams, setSearchParams] = useSearchParams(urlSearchParams);
-
     const columns = table?.columns?.map(column => {
       return {
         id: column.id,
@@ -40,7 +39,7 @@ export const DataGridBuilder = observer(
     const skip = Number(searchParams.get('skip'));
     const take = Number(searchParams.get('take'));
     const currentPage = Math.floor(skip / take) + 1;
-
+    console.log('searchParams', searchParams);
     return (
       <>
         <HStack>
@@ -57,7 +56,8 @@ export const DataGridBuilder = observer(
         />
         {table.query?.params?.take && (
           <Pagination
-            total={meta?.totalCount}
+            total={meta.pageCount}
+            initialPage={currentPage}
             page={currentPage}
             onChange={page => {
               searchParams.set('take', take.toString());
