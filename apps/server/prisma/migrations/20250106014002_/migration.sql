@@ -4,11 +4,11 @@
   - You are about to drop the column `fileIds` on the `Depot` table. All the data in the column will be lost.
   - You are about to drop the column `assignemntIds` on the `Post` table. All the data in the column will be lost.
   - You are about to drop the column `classificationId` on the `Post` table. All the data in the column will be lost.
-  - You are about to drop the column `assignmentIds` on the `Role` table. All the data in the column will be lost.
+  - You are about to drop the column `associationIds` on the `Role` table. All the data in the column will be lost.
   - You are about to drop the column `classificationId` on the `Role` table. All the data in the column will be lost.
-  - You are about to drop the column `assignmentIds` on the `Space` table. All the data in the column will be lost.
+  - You are about to drop the column `associationIds` on the `Space` table. All the data in the column will be lost.
   - You are about to drop the column `classificationId` on the `Space` table. All the data in the column will be lost.
-  - You are about to drop the column `assignmentIds` on the `User` table. All the data in the column will be lost.
+  - You are about to drop the column `associationIds` on the `User` table. All the data in the column will be lost.
   - You are about to drop the column `classificationId` on the `User` table. All the data in the column will be lost.
   - You are about to drop the `DepotFile` table. If the table is not empty, all the data it contains will be lost.
   - A unique constraint covering the columns `[userId]` on the table `Classification` will be added. If there are existing duplicate values, this will fail.
@@ -41,13 +41,13 @@ ALTER TABLE "Space" DROP CONSTRAINT "Space_classificationId_fkey";
 ALTER TABLE "User" DROP CONSTRAINT "User_spaceId_fkey";
 
 -- DropIndex
-DROP INDEX "Space_assignmentIds_key";
+DROP INDEX "Space_associationIds_key";
 
 -- DropIndex
-DROP INDEX "User_assignmentIds_key";
+DROP INDEX "User_associationIds_key";
 
 -- AlterTable
-ALTER TABLE "Assignment" ADD COLUMN     "postId" TEXT,
+ALTER TABLE "Association" ADD COLUMN     "postId" TEXT,
 ADD COLUMN     "spaceId" TEXT,
 ADD COLUMN     "userId" TEXT;
 
@@ -65,15 +65,15 @@ ALTER TABLE "Post" DROP COLUMN "assignemntIds",
 DROP COLUMN "classificationId";
 
 -- AlterTable
-ALTER TABLE "Role" DROP COLUMN "assignmentIds",
+ALTER TABLE "Role" DROP COLUMN "associationIds",
 DROP COLUMN "classificationId";
 
 -- AlterTable
-ALTER TABLE "Space" DROP COLUMN "assignmentIds",
+ALTER TABLE "Space" DROP COLUMN "associationIds",
 DROP COLUMN "classificationId";
 
 -- AlterTable
-ALTER TABLE "User" DROP COLUMN "assignmentIds",
+ALTER TABLE "User" DROP COLUMN "associationIds",
 DROP COLUMN "classificationId",
 ALTER COLUMN "spaceId" SET NOT NULL;
 
@@ -143,13 +143,13 @@ ALTER TABLE "Classification" ADD CONSTRAINT "Classification_roleId_fkey" FOREIGN
 ALTER TABLE "Group" ADD CONSTRAINT "Group_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Association" ADD CONSTRAINT "Association_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Association" ADD CONSTRAINT "Association_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Association" ADD CONSTRAINT "Association_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

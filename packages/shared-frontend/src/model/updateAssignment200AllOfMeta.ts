@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateAssignment200AllOfMeta = {
+export type UpdateAssociation200AllOfMeta = {
   /** */
   hasNextPage?: boolean;
   /** */

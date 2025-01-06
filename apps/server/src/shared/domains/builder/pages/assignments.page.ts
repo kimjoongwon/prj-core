@@ -1,12 +1,12 @@
 import { PageBuilder } from '@shared/types';
-import { getAssignmentTable } from '../tables/assignments.table';
+import { getAssociationTable } from '../tables/association.table';
 
-export const getAssignmentsPage = (): PageBuilder => {
+export const getAssociationsPage = (): PageBuilder => {
   return {
     name: '할딩',
     type: 'Page',
     dataGrid: {
-      table: getAssignmentTable(),
+      table: getAssociationTable(),
     },
   };
 };

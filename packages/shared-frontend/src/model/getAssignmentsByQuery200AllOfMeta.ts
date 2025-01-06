@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetAssignmentsByQuery200AllOfMeta = {
+export type GetAssociationsByQuery200AllOfMeta = {
   /** */
   hasNextPage?: boolean;
   /** */

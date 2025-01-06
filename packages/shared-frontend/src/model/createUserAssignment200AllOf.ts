@@ -6,7 +6,7 @@
  */
 import type { Object } from './object';
 
-export type CreateUserAssignment200AllOf = {
+export type CreateUserAssociation200AllOf = {
   data?: Object;
   /** */
   httpStatus?: number;

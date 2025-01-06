@@ -8,7 +8,7 @@ import type { Roles } from './roles';
 import type { TenantDto } from './tenantDto';
 
 export interface RoleDto {
-  assignmentIds: string[];
+  associationIds: string[];
   /** @nullable */
   classificationId: string | null;
   createdAt: string;

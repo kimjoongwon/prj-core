@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface UpdateAssignmentDto {
+export interface UpdateAssociationDto {
   /** @nullable */
   groupId?: string | null;
 }

@@ -7,7 +7,7 @@
 import type { GroupDto } from './groupDto';
 
 export interface SpaceDto {
-  assignmentIds: string[];
+  associationIds: string[];
   /** @nullable */
   classificationId: string | null;
   createdAt: string;

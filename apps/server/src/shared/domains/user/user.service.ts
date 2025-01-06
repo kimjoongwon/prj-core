@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AssignmentsService } from '../../entities/assignments/assignments.service';
-import { CreateUserAssignmentDto } from './dtos/create-user-assignment.dto';
+import { AssociationsService } from '../../entities/associations/associations.service';
+import { CreateUserAssociationDto } from './dtos/create-user-assignment.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly assignmentsService: AssignmentsService) {}
+  constructor(private readonly associationsService: AssociationsService) {}
 
-  createUserAssignment({ userId, groupId }: CreateUserAssignmentDto) {
-    return this.assignmentsService.create({
+  createUserAssociation({ userId, groupId }: CreateUserAssociationDto) {
+    return this.associationsService.create({
       data: {
         groupId,
         userId,

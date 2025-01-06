@@ -1,10 +1,10 @@
 import { TableBuilder } from '@shared/types';
 
-export const getAssignmentTable = (): TableBuilder => {
+export const getAssociationTable = (): TableBuilder => {
   return {
     columns: [
       {
-        accessorKey: 'assignment.user.name',
+        accessorKey: 'association.user.name',
         header: {
           name: '이름',
         },

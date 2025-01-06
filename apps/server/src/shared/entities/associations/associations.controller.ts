@@ -1,0 +1,133 @@
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  Patch,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Query,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ResponseEntity } from '../common/entities/response.entity';
+import { plainToInstance } from 'class-transformer';
+import { PageMetaDto } from '../common';
+import {
+  CreateAssociationDto,
+  AssociationDto,
+  UpdateAssociationDto,
+  AssociationQueryDto,
+  CreateAssociationDtos,
+} from './dtos';
+import { Auth } from '../../decorators/auth.decorator';
+import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
+import { AssociationsService } from './associations.service';
+
+@Controller()
+export class AssociationsController {
+  constructor(private readonly service: AssociationsService) {}
+
+  @Post()
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async createAssociation(
+    @Param('groupId') groupId: string,
+    @Body() createAssociationDto: CreateAssociationDto,
+  ) {
+    const association = await this.service.create({
+      data: {
+        ...createAssociationDto,
+      },
+    });
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
+  }
+
+  @Post('/bulk')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async createAssociations(@Body() createAssociationDtos: CreateAssociationDtos) {
+    const associations = await this.service.createMany({
+      data: createAssociationDtos.items,
+      skipDuplicates: true,
+    });
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(AssociationDto, associations.count),
+    );
+  }
+
+  @Get(':associationId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async getAssociation(@Param('associationId') associationId: string) {
+    const association = await this.service.getUnique({ where: { id: associationId } });
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
+  }
+
+  @Patch('removedAt')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async removeAssociations(@Body() associationIds: string[]) {
+    const associations = await this.service.updateMany({
+      where: { id: { in: associationIds } },
+      data: { removedAt: new Date() },
+    });
+    return new ResponseEntity(HttpStatus.OK, '성공', associations.count);
+  }
+
+  @Patch(':associationId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async updateAssociation(
+    @Param('associationId') associationId: string,
+    @Body() updateAssociationDto: UpdateAssociationDto,
+  ) {
+    const association = await this.service.update({
+      where: { id: associationId },
+      data: updateAssociationDto,
+    });
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
+  }
+
+  @Patch(':associationId/removedAt')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async removeAssociation(@Param('associationId') associationId: string) {
+    const association = await this.service.remove(associationId);
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
+  }
+
+  @Delete(':associationId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
+  async deleteAssociation(@Param('associationId') associationId: string) {
+    const association = await this.service.delete(associationId);
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
+  }
+
+  @Get()
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(AssociationDto, HttpStatus.OK, { isArray: true })
+  async getAssociationsByQuery(@Query() query: AssociationQueryDto) {
+    const { count, associations } = await this.service.getManyByQuery(query.toArgs());
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'success',
+      associations.map((association) => plainToInstance(AssociationDto, association)),
+      new PageMetaDto(query.skip, query.take, count),
+    );
+  }
+}

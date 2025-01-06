@@ -6,7 +6,7 @@
  */
 
 export interface UpdateSpaceDto {
-  assignmentIds?: string[];
+  associationIds?: string[];
   /** @nullable */
   classificationId?: string | null;
   createdAt?: string;

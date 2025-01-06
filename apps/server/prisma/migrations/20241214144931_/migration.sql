@@ -104,7 +104,7 @@ CREATE TABLE "Service" (
 );
 
 -- CreateTable
-CREATE TABLE "Assignment" (
+CREATE TABLE "Association" (
     "id" TEXT NOT NULL,
     "seq" SERIAL NOT NULL,
     "groupId" TEXT NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE "Assignment" (
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
 
-    CONSTRAINT "Assignment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Association_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -138,7 +138,7 @@ CREATE TABLE "User" (
     "phone" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "spaceId" TEXT NOT NULL,
-    "assignmentIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "associationIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "classificationId" TEXT,
     "updatedAt" TIMESTAMPTZ(6),
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -167,7 +167,7 @@ CREATE TABLE "Space" (
     "seq" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "classificationId" TEXT,
-    "assignmentIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "associationIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
@@ -270,7 +270,7 @@ CREATE TABLE "Role" (
     "id" TEXT NOT NULL,
     "seq" SERIAL NOT NULL,
     "name" "Roles" NOT NULL DEFAULT 'USER',
-    "assignmentIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "associationIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "classificationId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
@@ -417,7 +417,7 @@ CREATE TABLE "DepotFile" (
     "url" TEXT NOT NULL,
     "tenantId" TEXT NOT NULL,
     "depotId" TEXT NOT NULL,
-    "assignmentIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "associationIds" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "classificationId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
@@ -547,7 +547,7 @@ CREATE UNIQUE INDEX "Service_seq_key" ON "Service"("seq");
 CREATE UNIQUE INDEX "Service_name_key" ON "Service"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Assignment_seq_key" ON "Assignment"("seq");
+CREATE UNIQUE INDEX "Association_seq_key" ON "Association"("seq");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_seq_key" ON "Profile"("seq");
@@ -565,7 +565,7 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_assignmentIds_key" ON "User"("assignmentIds");
+CREATE UNIQUE INDEX "User_associationIds_key" ON "User"("associationIds");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tenant_seq_key" ON "Tenant"("seq");
@@ -577,7 +577,7 @@ CREATE UNIQUE INDEX "Space_seq_key" ON "Space"("seq");
 CREATE UNIQUE INDEX "Space_name_key" ON "Space"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Space_assignmentIds_key" ON "Space"("assignmentIds");
+CREATE UNIQUE INDEX "Space_associationIds_key" ON "Space"("associationIds");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SMS_seq_key" ON "SMS"("seq");
@@ -691,7 +691,7 @@ ALTER TABLE "Classification" ADD CONSTRAINT "Classification_categoryId_fkey" FOR
 ALTER TABLE "Group" ADD CONSTRAINT "Group_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Association" ADD CONSTRAINT "Association_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -12,8 +12,8 @@ import { groupEditPage } from './pages/group-edit.page';
 import { getUsersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
 import { getGroupPage } from './pages/group.page';
-import { getAssignmentsPage } from './pages/assignments.page';
 import { getGroupUsersPage } from './pages/group-users.page';
+import { getAssociationsPage } from './pages/assignments.page';
 
 @Injectable()
 export class BuilderService {
@@ -163,10 +163,10 @@ export class BuilderService {
                                 },
                                 {
                                   name: '그룹 할당',
-                                  pathname: 'assignments',
+                                  pathname: 'associations',
                                   layout: {
                                     type: 'Root',
-                                    page: getAssignmentsPage(),
+                                    page: getAssociationsPage(),
                                   },
                                 },
                               ],

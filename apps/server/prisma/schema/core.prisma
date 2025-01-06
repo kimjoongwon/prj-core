@@ -38,17 +38,17 @@ model Classification {
 }
 
 model Group {
-  id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
+  id          String        @id @default(uuid())
+  seq         Int           @unique @default(autoincrement())
   name        String
   serviceId   String
   spaceId     String
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?    @db.Timestamptz(6)
-  service     Service      @relation(fields: [serviceId], references: [id])
-  space       Space        @relation(fields: [spaceId], references: [id])
-  assignments Assignment[]
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime?     @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime?     @db.Timestamptz(6)
+  service     Service       @relation(fields: [serviceId], references: [id])
+  space       Space         @relation(fields: [spaceId], references: [id])
+  association Association[]
 }
 
 model Service {
@@ -63,7 +63,7 @@ model Service {
   categories Category[]
 }
 
-model Assignment {
+model Association {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
   groupId   String
@@ -105,7 +105,7 @@ model User {
   posts          Post[]
   profiles       Profile[]
   tenants        Tenant[]
-  assignments    Assignment[]
+  association    Association[]
   space          Space           @relation(fields: [spaceId], references: [id])
   classification Classification?
 }
@@ -134,7 +134,7 @@ model Space {
   tenants        Tenant[]
   groups         Group[]
   categories     Category[]
-  assignments    Assignment[]
+  association    Association[]
   file           File[]
   classification Classification?
   users          User[]
@@ -339,7 +339,7 @@ model Post {
   question       Question?
   template       Template?
   exercise       Exercise?
-  assignments    Assignment[]
+  association    Association[]
   classification Classification?
 }
 

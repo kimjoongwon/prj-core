@@ -7,15 +7,15 @@
 import type { SortOrder } from './sortOrder';
 
 export type GetSpacesByQueryParams = {
-id?: string;
-seq?: number;
-createdAt?: string;
-updatedAt?: string;
-removedAt?: string | null;
-classificationId?: string | null;
-assignmentIds?: unknown[];
-name?: string;
-nameSortOrder?: SortOrder;
-skip?: number;
-take?: number;
+  id?: string;
+  seq?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  removedAt?: string | null;
+  classificationId?: string | null;
+  associationIds?: unknown[];
+  name?: string;
+  nameSortOrder?: SortOrder;
+  skip?: number;
+  take?: number;
 };

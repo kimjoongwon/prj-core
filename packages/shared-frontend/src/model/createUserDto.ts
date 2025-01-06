@@ -7,7 +7,7 @@
 import type { UserDto } from './userDto';
 
 export interface CreateUserDto {
-  assignmentIds: string[];
+  associationIds: string[];
   /** @nullable */
   classificationId: string | null;
   email: string;

@@ -15,6 +15,6 @@ export * from './posts';
 export * from './system-emails';
 export * from './emails';
 export * from './pages';
-export * from './assignments';
+export * from './associations';
 export * from './classifications';
 export * from './lectures';

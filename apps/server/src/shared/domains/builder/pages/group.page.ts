@@ -40,7 +40,7 @@ export const getGroupPage = (): PageBuilder => {
                     {
                       key: 'members',
                       text: '멤버',
-                      value: 'assignments',
+                      value: 'associations',
                     },
                     {
                       key: 'users',

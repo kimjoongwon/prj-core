@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type RemoveAssignments200AllOfMeta = {
+export type RemoveAssociations200AllOfMeta = {
   /** */
   hasNextPage?: boolean;
   /** */

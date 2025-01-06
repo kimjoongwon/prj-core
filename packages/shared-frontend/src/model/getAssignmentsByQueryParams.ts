@@ -6,8 +6,8 @@
  */
 import type { SortOrder } from './sortOrder';
 
-export type GetAssignmentsByQueryParams = {
-skip?: number;
-take?: number;
-createdAtSortOrder?: SortOrder;
+export type GetAssociationsByQueryParams = {
+  skip?: number;
+  take?: number;
+  createdAtSortOrder?: SortOrder;
 };

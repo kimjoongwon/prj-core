@@ -8,7 +8,7 @@ import type { UpdateUserDtoPost } from './updateUserDtoPost';
 import type { UserDto } from './userDto';
 
 export interface UpdateUserDto {
-  assignmentIds?: string[];
+  associationIds?: string[];
   /** @nullable */
   classificationId?: string | null;
   email?: string;

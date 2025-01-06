@@ -9,7 +9,7 @@ import type { SpaceDto } from './spaceDto';
 import type { TenantDto } from './tenantDto';
 
 export interface UserDto {
-  assignmentIds: string[];
+  associationIds: string[];
   /** @nullable */
   classificationId: string | null;
   createdAt: string;

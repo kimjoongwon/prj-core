@@ -6,7 +6,7 @@
  */
 
 export interface CreateSpaceDto {
-  assignmentIds: string[];
+  associationIds: string[];
   /** @nullable */
   classificationId: string | null;
   name: string;

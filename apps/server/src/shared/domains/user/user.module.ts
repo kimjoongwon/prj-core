@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
-  AssignmentsRepository,
-  AssignmentsService,
+  AssociationsRepository,
+  AssociationsService,
   UsersRepository,
   UsersService,
 } from '../../entities';
@@ -11,9 +11,9 @@ import {
   providers: [
     UserService,
     UsersService,
-    AssignmentsService,
+    AssociationsService,
     UsersRepository,
-    AssignmentsRepository,
+    AssociationsRepository,
   ],
   exports: [UserService, UsersService],
 })

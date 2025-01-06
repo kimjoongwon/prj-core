@@ -32,7 +32,7 @@ export const getGroupUsersPage = (): PageBuilder => {
                       rowId: 'userId',
                       serviceId: 'serviceId',
                     },
-                    name: 'createUserAssignment',
+                    name: 'createUserAssociation',
                     hasPayload: true,
                     hasRowId: true,
                     hasServiceId: true,

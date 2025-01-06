@@ -16,7 +16,7 @@ import {
   AdminSubjectsModule,
   AdminTemplatesModule,
   AdminTimelineItemsModule,
-  AssignmentsEndpointModule,
+  AssociationsEndpointModule,
   UsersEndpointModule,
 } from './admin';
 import { AdminAppBuilderModule } from './admin/builder/admin-builder.module';
@@ -28,7 +28,7 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
     ...libModules,
     InitModule,
     UsersEndpointModule,
-    AssignmentsEndpointModule,
+    AssociationsEndpointModule,
     AdminCategoriesModule,
     AdminAbilityModule,
     AdminTemplatesModule,
@@ -70,16 +70,16 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                   {
                     path: 'users',
                     module: UsersEndpointModule,
-                    children: [
-                      {
-                        path: 'assignments',
-                        module: AssignmentsEndpointModule,
-                      },
-                    ],
                   },
                   {
                     path: 'groups',
                     module: AdminGroupsModule,
+                    children: [
+                      {
+                        path: ':groupId/associations',
+                        module: AssociationsEndpointModule,
+                      },
+                    ],
                   },
                   {
                     path: 'classifications',

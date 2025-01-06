@@ -4,8 +4,8 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateAssignmentDto } from './createAssignmentDto';
+import type { CreateAssociationDto } from './createAssociationDto';
 
-export interface CreateAssignmentDtos {
-  items: CreateAssignmentDto[];
+export interface CreateAssociationDtos {
+  items: CreateAssociationDto[];
 }

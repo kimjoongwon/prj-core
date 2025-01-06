@@ -6,7 +6,7 @@
  */
 import type { GroupDto } from './groupDto';
 
-export interface AssignmentDto {
+export interface AssociationDto {
   createdAt: string;
   group?: GroupDto;
   /** @nullable */

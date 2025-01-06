@@ -4,7 +4,7 @@ export * from './roles/admin-roles.module';
 export * from './spaces/spaces.module';
 export * from './subjects/admin-subjects.module';
 export * from './users/users-endpoint.module';
-export * from './users/assignments/assignments-endpoint.module';
+export * from './groups/associations/associations-endpoint.module';
 export * from './sessions/sessions.module';
 export * from './timeline-items/admin-timeline-items.module';
 export * from './templates/admin-templates.module';

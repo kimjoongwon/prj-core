@@ -4,14 +4,14 @@
  * Galaxy Server
  * OpenAPI spec version: 1.0.0
  */
-import type { AssignmentDto } from './assignmentDto';
-import type { CreateAssignment200AllOfMeta } from './createAssignment200AllOfMeta';
+import type { AssociationDto } from './associationDto';
+import type { CreateAssociation200AllOfMeta } from './createAssociation200AllOfMeta';
 
-export type CreateAssignment200AllOf = {
-  data?: AssignmentDto;
+export type CreateAssociation200AllOf = {
+  data?: AssociationDto;
   /** */
   httpStatus?: number;
   /** */
   message?: string;
-  meta?: CreateAssignment200AllOfMeta;
+  meta?: CreateAssociation200AllOfMeta;
 };
