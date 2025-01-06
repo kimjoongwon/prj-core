@@ -1,10 +1,11 @@
 import { QueryDto } from '../../common/dtos/query.dto';
 import { Prisma } from '@prisma/client';
-import { EnumFieldOptional } from '../../../decorators/field.decorators';
+import { EnumFieldOptional, UUIDFieldOptional } from '../../../decorators/field.decorators';
 
-class AssociationSortOrder extends QueryDto {
+export class AssociationQueryDto extends QueryDto {
+  @UUIDFieldOptional()
+  groupId: string;
+
   @EnumFieldOptional(() => Prisma.SortOrder)
   createdAtSortOrder: Prisma.SortOrder;
 }
-
-export class AssociationQueryDto extends AssociationSortOrder {}

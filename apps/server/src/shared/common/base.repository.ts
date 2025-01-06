@@ -1,7 +1,9 @@
 import { PrismaService } from 'nestjs-prisma';
 import { Prisma } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
+import { Constructor } from '../decorators/use-dto.decorator';
 
-export class BaseService<
+export class BaseRepository<
   CreateArgs,
   UpsertArgs,
   UpdateArgs,
@@ -15,61 +17,76 @@ export class BaseService<
   FindUniqueArgs,
   GroupByArgs,
   CreateManyAndReturnArgs,
+  R,
 > {
   constructor(
-    private prisma: PrismaService,
-    private model: Prisma.ModelName,
+    private readonly prisma: PrismaService,
+    private readonly model: Prisma.ModelName,
   ) {}
 
-  create(args: CreateArgs) {
-    return this.prisma[this.model.toLowerCase()].create(args);
+  private entityClass?: Constructor<any, any>;
+
+  async create(args: CreateArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].create(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  upsert(args: UpsertArgs) {
-    return this.prisma[this.model.toLowerCase()].upsert(args);
+  async upsert(args: UpsertArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].upsert(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  update(args: UpdateArgs) {
-    return this.prisma[this.model.toLowerCase()].update(args);
+  async update(args: UpdateArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].update(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  updateMany(args: UpdateManyArgs) {
-    return this.prisma[this.model.toLowerCase()].updateMany(args);
+  async updateMany(args: UpdateManyArgs): Promise<Prisma.BatchPayload> {
+    const result = await this.prisma[this.model.toLowerCase()].updateMany(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  delete(args: DeleteArgs) {
-    return this.prisma[this.model.toLowerCase()].delete(args);
+  async delete(args: DeleteArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].delete(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  findMany(args: FindManyArgs) {
-    return this.prisma[this.model.toLowerCase()].findMany(args);
+  async findMany(args: FindManyArgs): Promise<R[]> {
+    const result = await this.prisma[this.model.toLowerCase()].findMany(args);
+    return result.map((item) => plainToInstance(this.entityClass, item as R));
   }
 
-  findFirstOrThrow(args: FindFirstArgs) {
-    return this.prisma[this.model.toLowerCase()].findFirstOrThrow(args);
+  async findFirst(args: FindFirstArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].findFirst(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  findUniqueOrThrow(args: FindUniqueArgs) {
-    return this.prisma[this.model.toLowerCase()].findUniqueOrThrow(args);
+  async findUnique(args: FindUniqueArgs): Promise<R> {
+    const result = await this.prisma[this.model.toLowerCase()].findUnique(args);
+    return plainToInstance(this.entityClass, result as R);
   }
 
-  groupBy(args: GroupByArgs) {
-    return this.prisma[this.model.toLowerCase()].groupBy(args);
+  async groupBy(args: GroupByArgs): Promise<any> {
+    const result = await this.prisma[this.model.toLowerCase()].groupBy(args);
+    return result;
   }
 
-  createManyAndReturn(args: CreateManyAndReturnArgs) {
-    return this.prisma[this.model.toLowerCase()].createManyAndReturn(args);
+  async createManyAndReturn(args: CreateManyAndReturnArgs): Promise<R[]> {
+    const result = await this.prisma[this.model.toLowerCase()].createManyAndReturn(args);
+    return result.map((item) => plainToInstance(this.entityClass, item as R));
   }
 
-  deleteMany(args: DeleteManyArgs) {
-    return this.prisma[this.model.toLowerCase()].deleteMany(args);
+  async deleteMany(args: DeleteManyArgs): Promise<Prisma.BatchPayload> {
+    const result = await this.prisma[this.model.toLowerCase()].deleteMany(args);
+    return result;
   }
 
-  aggregate(args: AggregateArgs) {
-    return this.prisma[this.model.toLowerCase()].aggregate(args);
+  async aggregate(args: AggregateArgs): Promise<R[]> {
+    const result = await this.prisma[this.model.toLowerCase()].aggregate(args);
+    return result.map((item) => plainToInstance(this.entityClass, item as R));
   }
 
-  count(args: CountArgs) {
+  async count(args: CountArgs): Promise<number> {
     return this.prisma[this.model.toLowerCase()].count(args);
   }
 }

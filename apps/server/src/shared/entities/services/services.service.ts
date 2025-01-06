@@ -10,7 +10,7 @@ export class ServicesService {
   logger = new Logger(ServicesService.name);
   constructor(private readonly repository: ServicesRepository) {}
 
-  create(args: Prisma.ServiceCreateArgs) {
+  async create(args: Prisma.ServiceCreateArgs) {
     return this.repository.create(args);
   }
 

@@ -52,13 +52,13 @@ model Group {
 }
 
 model Service {
-  id         String     @id @default(uuid())
-  seq        Int        @unique @default(autoincrement())
-  name       String     @unique
-  label      String     @unique
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?  @db.Timestamptz(6)
+  id         String       @id @default(uuid())
+  seq        Int          @unique @default(autoincrement())
+  name       ServiceNames @unique
+  label      String
+  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime?    @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime?    @db.Timestamptz(6)
   groups     Group[]
   categories Category[]
 }
@@ -501,4 +501,12 @@ enum PostTypes {
 enum CategoryTypes {
   LEAF
   ROOT
+}
+
+enum ServiceNames {
+  auth
+  user
+  space
+  post
+  role
 }

@@ -35,7 +35,8 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByQuery(@Query() query: GroupQueryDto) {
+  async getGroupsByQuery(@Query() query: GroupQueryDto, @Param('serviceId') serviceId: string) {
+    query.serviceId = serviceId;
     const { totalCount, groups } = await this.groupService.getManyByQuery(query);
 
     return new ResponseEntity(

@@ -39,35 +39,24 @@ export class AssociationsController {
   ) {
     const association = await this.service.create({
       data: {
+        groupId,
         ...createAssociationDto,
       },
     });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }
 
-  @Post('/bulk')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(AssociationDto, HttpStatus.OK)
-  async createAssociations(@Body() createAssociationDtos: CreateAssociationDtos) {
-    const associations = await this.service.createMany({
-      data: createAssociationDtos.items,
-      skipDuplicates: true,
-    });
-
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(AssociationDto, associations.count),
-    );
-  }
-
   @Get(':associationId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK)
-  async getAssociation(@Param('associationId') associationId: string) {
-    const association = await this.service.getUnique({ where: { id: associationId } });
+  async getAssociation(
+    @Param('associationId') associationId: string,
+    @Param('groupId') groupId: string,
+  ) {
+    const association = await this.service.getUnique({
+      where: { id: associationId, groupId: groupId },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }
 
@@ -120,7 +109,12 @@ export class AssociationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK, { isArray: true })
-  async getAssociationsByQuery(@Query() query: AssociationQueryDto) {
+  async getAssociationsByQuery(
+    @Param('groupId') groupId: string,
+    @Query() query: AssociationQueryDto,
+  ) {
+    query.groupId = groupId;
+
     const { count, associations } = await this.service.getManyByQuery(query.toArgs());
 
     return new ResponseEntity(

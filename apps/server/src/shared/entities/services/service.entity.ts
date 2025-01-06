@@ -1,9 +1,9 @@
-import { Service as ServiceEntity } from '@prisma/client';
+import { $Enums, Service as ServiceEntity } from '@prisma/client';
 
 export class Service implements ServiceEntity {
   id: string;
   seq: number;
-  name: string;
+  name: $Enums.ServiceNames;
   label: string;
   createdAt: Date;
   updatedAt: Date;

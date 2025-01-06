@@ -10,7 +10,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { ServicesService } from '../../entities/services/services.service';
 
 @Injectable()
@@ -155,9 +155,9 @@ export class InitService {
   async createServices() {
     return await Promise.all(
       [
-        { name: 'USER', label: '유저' },
-        { name: 'SPACE', label: '공간' },
-      ].map(async (seedService) => {
+        { name: 'user', label: '이용자' },
+        { name: 'space', label: '공간' },
+      ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
         const service = await this.servicesService.getUnique({ where: { name: seedService.name } });
         if (!service) {
           return this.servicesService.create({ data: seedService });
@@ -175,7 +175,7 @@ export class InitService {
   async createUserCategories() {
     const userService = await this.servicesService.getUnique({
       where: {
-        name: 'USER',
+        name: $Enums.ServiceNames.user,
       },
     });
 

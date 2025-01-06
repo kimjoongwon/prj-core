@@ -22,6 +22,8 @@ import {
 import { AdminAppBuilderModule } from './admin/builder/admin-builder.module';
 import { CaslModule } from 'nest-casl';
 import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
+import { ServicesModule } from '../shared/entities/services';
+import { P } from 'ts-pattern';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
     CaslModule,
     AuthAdminModule,
     ServiceAuthModule,
+    ServicesModule,
     AdminSessionsModule,
     UsersModule,
     AdminRolesModule,
@@ -56,6 +59,16 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                 path: 'admin',
                 children: [
                   {
+                    path: 'services',
+                    module: ServicesModule,
+                    children: [
+                      {
+                        path: ':service-name/groups',
+                        module: AdminGroupsModule,
+                      },
+                    ],
+                  },
+                  {
                     path: 'app-builder',
                     module: AdminAppBuilderModule,
                   },
@@ -71,16 +84,16 @@ import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
                     path: 'users',
                     module: UsersEndpointModule,
                   },
-                  {
-                    path: 'groups',
-                    module: AdminGroupsModule,
-                    children: [
-                      {
-                        path: ':groupId/associations',
-                        module: AssociationsEndpointModule,
-                      },
-                    ],
-                  },
+                  // {
+                  //   path: 'groups',
+                  //   module: AdminGroupsModule,
+                  //   children: [
+                  //     {
+                  //       path: ':groupId/associations',
+                  //       module: AssociationsEndpointModule,
+                  //     },
+                  //   ],
+                  // },
                   {
                     path: 'classifications',
                     module: AdminClassificationsModule,

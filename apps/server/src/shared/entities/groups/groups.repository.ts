@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
-import { GroupDto } from './dtos';
 import { Group } from './group.entity';
 import { plainToInstance } from 'class-transformer';
 
