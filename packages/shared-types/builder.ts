@@ -86,7 +86,9 @@ export interface LayoutBuilder {
     | 'Service'
     | 'Master'
     | 'Detail'
-    | 'Tab';
+    | 'Tab'
+    | 'Spaces'
+    | 'Space';
   page?: PageBuilder;
 }
 

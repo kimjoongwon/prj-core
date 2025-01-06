@@ -11,11 +11,7 @@ import {
   AdminClassificationsModule,
   AdminGroupsModule,
   AdminRolesModule,
-  AdminSessionsModule,
   AdminSpacesModule,
-  AdminSubjectsModule,
-  AdminTemplatesModule,
-  AdminTimelineItemsModule,
   AssociationsEndpointModule,
   UsersEndpointModule,
 } from './admin';
@@ -23,26 +19,20 @@ import { AdminAppBuilderModule } from './admin/builder/admin-builder.module';
 import { CaslModule } from 'nest-casl';
 import { AdminAbilityModule } from './admin/abilities/admin-abilities.module';
 import { ServicesModule } from '../shared/entities/services';
-import { P } from 'ts-pattern';
-
 @Module({
   imports: [
     ...libModules,
+    CaslModule,
     InitModule,
     UsersEndpointModule,
     AssociationsEndpointModule,
     AdminCategoriesModule,
     AdminAbilityModule,
-    AdminTemplatesModule,
-    AdminTimelineItemsModule,
     AdminSpacesModule,
     AdminGroupsModule,
-    AdminSubjectsModule,
-    CaslModule,
     AuthAdminModule,
     ServiceAuthModule,
     ServicesModule,
-    AdminSessionsModule,
     UsersModule,
     AdminRolesModule,
     AuthModule,
@@ -59,48 +49,60 @@ import { P } from 'ts-pattern';
                 path: 'admin',
                 children: [
                   {
-                    path: 'services',
-                    module: ServicesModule,
+                    path: 'spaces',
+                    module: AdminSpacesModule,
                     children: [
                       {
-                        path: ':service-name/groups',
-                        module: AdminGroupsModule,
+                        path: ':spaceName',
+                        children: [
+                          {
+                            path: 'services',
+                            module: ServicesModule,
+                            children: [
+                              {
+                                path: ':serviceName',
+                                children: [
+                                  {
+                                    path: 'categories',
+                                    module: AdminCategoriesModule,
+                                    children: [
+                                      {
+                                        path: ':categoryId',
+                                        children: [
+                                          {
+                                            path: 'classifications',
+                                            module: AdminClassificationsModule,
+                                          },
+                                        ],
+                                      },
+                                    ],
+                                  },
+                                  {
+                                    path: 'groups',
+                                    module: AdminGroupsModule,
+                                    children: [
+                                      {
+                                        path: ':groupId',
+                                        children: [
+                                          {
+                                            path: 'associations',
+                                            module: AssociationsEndpointModule,
+                                          },
+                                        ],
+                                      },
+                                    ],
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
                       },
                     ],
                   },
                   {
                     path: 'app-builder',
                     module: AdminAppBuilderModule,
-                  },
-                  {
-                    path: 'templates',
-                    module: AdminTemplatesModule,
-                  },
-                  {
-                    path: 'categories',
-                    module: AdminCategoriesModule,
-                  },
-                  {
-                    path: 'users',
-                    module: UsersEndpointModule,
-                  },
-                  // {
-                  //   path: 'groups',
-                  //   module: AdminGroupsModule,
-                  //   children: [
-                  //     {
-                  //       path: ':groupId/associations',
-                  //       module: AssociationsEndpointModule,
-                  //     },
-                  //   ],
-                  // },
-                  {
-                    path: 'classifications',
-                    module: AdminClassificationsModule,
-                  },
-                  {
-                    path: 'spaces',
-                    module: AdminSpacesModule,
                   },
                 ],
               },

@@ -504,7 +504,6 @@ enum CategoryTypes {
 }
 
 enum ServiceNames {
-  auth
   user
   space
   post

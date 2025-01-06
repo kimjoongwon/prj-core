@@ -45,136 +45,146 @@ export class BuilderService {
             },
             children: [
               {
-                name: '메인',
-                pathname: 'main',
+                name: '공간',
+                pathname: 'spaces',
                 layout: {
-                  type: 'Main',
+                  type: 'Spaces',
                   page: {
-                    name: '메인',
-                    type: 'Outlet',
+                    name: '공간',
+                    type: 'Page',
                   },
                 },
                 children: [
                   {
-                    name: '서비스',
-                    pathname: 'services',
+                    name: '공간',
+                    pathname: ':spaceName',
                     layout: {
-                      type: 'Services',
-                      page: {
-                        name: '서비스',
-                        type: 'Outlet',
-                      },
+                      type: 'Main',
+                      page: spacesPage,
                     },
-                    children: services.map((service) => ({
-                      name: service.label,
-                      pathname: service.id,
-                      layout: {
-                        type: 'Service',
-                        page: {
-                          name: '서비스아이템',
-                          type: 'Outlet',
+                    children: [
+                      {
+                        name: '서비스',
+                        pathname: 'services',
+                        layout: {
+                          type: 'Services',
+                          page: {
+                            name: '서비스',
+                            type: 'Outlet',
+                          },
                         },
-                      },
-                      children: [
-                        {
+                        children: services.map((service) => ({
                           name: service.label,
                           pathname: service.name,
                           layout: {
-                            type: 'Master',
+                            type: 'Service',
                             page: {
-                              USER: getUsersPage(),
-                              SPACE: spacesPage,
-                            }[service.name],
-                          },
-                        },
-                        {
-                          name: '카테고리',
-                          pathname: 'categories',
-                          layout: {
-                            type: 'Master',
-                            page: categoriesPage,
+                              name: '서비스아이템',
+                              type: 'Outlet',
+                            },
                           },
                           children: [
                             {
-                              name: '카테고리 추가',
-                              pathname: ':parentId/add',
+                              name: service.label,
+                              pathname: service.name + 's',
                               layout: {
-                                type: 'Form',
-                                page: categoryAddPage,
+                                type: 'Master',
+                                page: {
+                                  USER: getUsersPage(),
+                                  SPACE: spacesPage,
+                                }[service.name],
                               },
                             },
                             {
-                              name: '카테고리 수정',
-                              pathname: ':resourceId/edit',
+                              name: '카테고리',
+                              pathname: 'categories',
                               layout: {
-                                type: 'Form',
-                                page: categoryEditPage,
-                              },
-                            },
-                            {
-                              name: '카테고리 새편집',
-                              pathname: 'new/edit',
-                              layout: {
-                                type: 'Form',
-                                page: categoryNewEditPage,
-                              },
-                            },
-                          ],
-                        },
-                        {
-                          name: '그룹',
-                          pathname: 'groups',
-                          layout: {
-                            type: 'Master',
-                            page: groupsPage,
-                          },
-                          children: [
-                            {
-                              name: '그룹 생성',
-                              pathname: 'new/edit',
-                              layout: {
-                                type: 'Form',
-                                page: groupNewEditPage,
-                              },
-                            },
-                            {
-                              name: '그룹 수정',
-                              pathname: ':resourceId/edit',
-                              layout: {
-                                type: 'Form',
-                                page: groupEditPage,
-                              },
-                            },
-                            {
-                              name: '그룹 상세',
-                              pathname: ':resourceId',
-                              layout: {
-                                type: 'Detail',
-                                page: getGroupPage(),
+                                type: 'Master',
+                                page: categoriesPage,
                               },
                               children: [
                                 {
-                                  name: '그룹 사용자',
-                                  pathname: 'users',
+                                  name: '카테고리 추가',
+                                  pathname: ':parentId/add',
                                   layout: {
-                                    type: 'Root',
-                                    page: getGroupUsersPage(),
+                                    type: 'Form',
+                                    page: categoryAddPage,
                                   },
                                 },
                                 {
-                                  name: '그룹 할당',
-                                  pathname: 'associations',
+                                  name: '카테고리 수정',
+                                  pathname: ':resourceId/edit',
                                   layout: {
-                                    type: 'Root',
-                                    page: getAssociationsPage(),
+                                    type: 'Form',
+                                    page: categoryEditPage,
+                                  },
+                                },
+                                {
+                                  name: '카테고리 새편집',
+                                  pathname: 'new/edit',
+                                  layout: {
+                                    type: 'Form',
+                                    page: categoryNewEditPage,
                                   },
                                 },
                               ],
                             },
+                            {
+                              name: '그룹',
+                              pathname: 'groups',
+                              layout: {
+                                type: 'Master',
+                                page: groupsPage,
+                              },
+                              children: [
+                                {
+                                  name: '그룹 생성',
+                                  pathname: 'new/edit',
+                                  layout: {
+                                    type: 'Form',
+                                    page: groupNewEditPage,
+                                  },
+                                },
+                                {
+                                  name: '그룹 수정',
+                                  pathname: ':resourceId/edit',
+                                  layout: {
+                                    type: 'Form',
+                                    page: groupEditPage,
+                                  },
+                                },
+                                {
+                                  name: '그룹 상세',
+                                  pathname: ':resourceId',
+                                  layout: {
+                                    type: 'Detail',
+                                    page: getGroupPage(),
+                                  },
+                                  children: [
+                                    {
+                                      name: '그룹 사용자',
+                                      pathname: 'users',
+                                      layout: {
+                                        type: 'Root',
+                                        page: getGroupUsersPage(),
+                                      },
+                                    },
+                                    {
+                                      name: '그룹 할당',
+                                      pathname: 'associations',
+                                      layout: {
+                                        type: 'Root',
+                                        page: getAssociationsPage(),
+                                      },
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
                           ],
-                        },
-                      ],
-                    })),
+                        })),
+                      },
+                    ],
                   },
                 ],
               },

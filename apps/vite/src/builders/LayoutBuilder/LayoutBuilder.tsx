@@ -162,6 +162,21 @@ export const MainLayout = observer((props: MainLayoutProps) => {
   return children;
 });
 
+export const SpacesLayout = observer((props: FormLayoutProps) => {
+  const { children } = props;
+  const navigate = useNavigate();
+
+  return (
+    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
+      <ModalContent>
+        <ModalHeader>
+          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
+        </ModalHeader>
+        <ModalBody>{children}</ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+});
 export const FormLayout = observer((props: FormLayoutProps) => {
   const { children } = props;
   const navigate = useNavigate();
@@ -237,7 +252,6 @@ type LayoutBuilderProps = Layout;
 type FormLayoutProps = Layout;
 type MasterLayoutProps = Layout;
 type DetailLayoutProps = Layout;
-type TabLayoutProps = Layout;
 interface AuthLayoutProps {
   children: ReactNode;
 }
