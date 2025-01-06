@@ -1,9 +1,9 @@
-import { Tenant } from '../tenant.entity';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { RoleDto } from '../../roles';
 import { UserDto } from '../../users';
 import { SpaceDto } from '../../spaces';
 import { BooleanField, ClassField, StringField } from '../../../decorators/field.decorators';
+import { Tenant } from '@prisma/client';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @StringField()

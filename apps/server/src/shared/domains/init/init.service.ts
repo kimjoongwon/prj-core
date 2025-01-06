@@ -42,7 +42,6 @@ export class InitService {
       const role = await this.rolesService.create({
         data: {
           name: 'SUPER_ADMIN',
-          assignmentIds: [],
         },
       });
 
@@ -63,7 +62,6 @@ export class InitService {
       await this.rolesService.create({
         data: {
           name: 'USER',
-          assignmentIds: [],
         },
       });
     } else {
@@ -125,7 +123,6 @@ export class InitService {
           name: appConfig.name,
           phone: '01073162347',
           spaceId,
-          assignmentIds: [],
           tenants: {
             create: {
               spaceId,

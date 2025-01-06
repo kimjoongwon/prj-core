@@ -20,6 +20,6 @@ export class GroupDto extends AbstractDto implements Group {
   @ClassField(() => SpaceDto)
   space: SpaceDto;
 
-  @ClassField(() => UserDto)
+  @ClassField(() => UserDto, { each: true })
   users: UserDto[];
 }

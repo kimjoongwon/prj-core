@@ -45,4 +45,3 @@ export {
   IsTmpKey,
   IsUndefinable,
 } from './validator.decorators';
-export { User } from './user.decorator';
