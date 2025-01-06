@@ -10,7 +10,6 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/entities/response.entity';
 import { plainToInstance } from 'class-transformer';
 import { PageMetaDto } from '../common';
@@ -19,7 +18,6 @@ import {
   AssociationDto,
   UpdateAssociationDto,
   AssociationQueryDto,
-  CreateAssociationDtos,
 } from './dtos';
 import { Auth } from '../../decorators/auth.decorator';
 import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
@@ -35,11 +33,14 @@ export class AssociationsController {
   @ApiResponseEntity(AssociationDto, HttpStatus.OK)
   async createAssociation(
     @Param('groupId') groupId: string,
-    @Body() createAssociationDto: CreateAssociationDto,
+    @Param('serviceId') serviceId: string,
+    @Body()
+    createAssociationDto: CreateAssociationDto,
   ) {
     const association = await this.service.create({
       data: {
         groupId,
+        serviceId,
         ...createAssociationDto,
       },
     });
@@ -111,9 +112,11 @@ export class AssociationsController {
   @ApiResponseEntity(AssociationDto, HttpStatus.OK, { isArray: true })
   async getAssociationsByQuery(
     @Param('groupId') groupId: string,
+    @Param('serviceId') serviceId: string,
     @Query() query: AssociationQueryDto,
   ) {
     query.groupId = groupId;
+    query.serviceId = serviceId;
 
     const { count, associations } = await this.service.getManyByQuery(query.toArgs());
 

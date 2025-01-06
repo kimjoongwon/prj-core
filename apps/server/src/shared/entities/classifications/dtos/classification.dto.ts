@@ -6,6 +6,7 @@ import { PostDto } from '../../posts';
 import { RoleDto } from '../../roles/dto/';
 import { SpaceDto } from '../../spaces/dtos/space.dto';
 import { UserDto } from '../../users/dtos/user.dto';
+import { ServiceDto } from '../../services/dtos/service.dto';
 
 export class ClassificationDto extends AbstractDto implements Classification {
   @UUIDField({ nullable: true, default: null })
@@ -23,6 +24,9 @@ export class ClassificationDto extends AbstractDto implements Classification {
   @UUIDField()
   categoryId: string;
 
+  @UUIDField()
+  serviceId: string;
+
   @ClassField(() => CategoryDto, { required: false })
   category?: CategoryDto;
 
@@ -37,4 +41,7 @@ export class ClassificationDto extends AbstractDto implements Classification {
 
   @ClassField(() => PostDto, { required: false })
   post?: PostDto;
+
+  @ClassField(() => ServiceDto, { required: false })
+  service?: ServiceDto;
 }
