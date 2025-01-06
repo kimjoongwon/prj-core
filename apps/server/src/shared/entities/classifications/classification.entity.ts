@@ -5,16 +5,19 @@ import { Post } from '../posts/post.entity';
 import { Space } from '../spaces/space.entity';
 import { User } from '../users/user.entity';
 import { Role } from '../roles/role.entity';
+import { Service } from '../services/service.entity';
 export class Classification extends AbstractEntity implements ClassificationEntity {
   categoryId: string;
   userId: string;
   postId: string;
   spaceId: string;
   roleId: string;
+  serviceId: string;
 
   category?: Category;
   role?: Role;
   user?: User;
   space?: Space;
   post?: Post;
+  service?: Service;
 }

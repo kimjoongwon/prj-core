@@ -23,6 +23,7 @@ model Classification {
   postId     String?   @unique
   spaceId    String?   @unique
   roleId     String?   @unique
+  serviceId  String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
@@ -30,6 +31,7 @@ model Classification {
   post       Post?     @relation(fields: [postId], references: [id])
   space      Space?    @relation(fields: [spaceId], references: [id])
   role       Role?     @relation(fields: [roleId], references: [id])
+  service    Service   @relation(fields: [serviceId], references: [id])
 
   @@unique([categoryId, userId])
   @@unique([categoryId, postId])
@@ -52,15 +54,17 @@ model Group {
 }
 
 model Service {
-  id         String       @id @default(uuid())
-  seq        Int          @unique @default(autoincrement())
-  name       ServiceNames @unique
-  label      String
-  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?    @db.Timestamptz(6)
-  groups     Group[]
-  categories Category[]
+  id              String           @id @default(uuid())
+  seq             Int              @unique @default(autoincrement())
+  name            ServiceNames     @unique
+  label           String
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?        @db.Timestamptz(6)
+  groups          Group[]
+  categories      Category[]
+  classifications Classification[]
+  associations    Association[]
 }
 
 model Association {
@@ -70,6 +74,7 @@ model Association {
   userId    String?
   postId    String?
   spaceId   String?
+  serviceId String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
@@ -77,6 +82,7 @@ model Association {
   user      User?     @relation(fields: [userId], references: [id])
   post      Post?     @relation(fields: [postId], references: [id])
   space     Space?    @relation(fields: [spaceId], references: [id])
+  service   Service   @relation(fields: [serviceId], references: [id])
 }
 
 model Profile {

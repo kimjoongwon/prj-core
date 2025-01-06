@@ -49,48 +49,36 @@ import { ServicesModule } from '../shared/entities/services';
                 path: 'admin',
                 children: [
                   {
-                    path: 'spaces',
-                    module: AdminSpacesModule,
+                    path: 'services',
                     children: [
                       {
-                        path: ':spaceName',
+                        path: ':serviceId',
                         children: [
                           {
-                            path: 'services',
-                            module: ServicesModule,
+                            path: 'categories',
+                            module: AdminCategoriesModule,
                             children: [
                               {
-                                path: ':serviceName',
+                                path: ':categoryId',
                                 children: [
                                   {
-                                    path: 'categories',
-                                    module: AdminCategoriesModule,
-                                    children: [
-                                      {
-                                        path: ':categoryId',
-                                        children: [
-                                          {
-                                            path: 'classifications',
-                                            module: AdminClassificationsModule,
-                                          },
-                                        ],
-                                      },
-                                    ],
+                                    path: 'classifications',
+                                    module: AdminClassificationsModule,
                                   },
+                                ],
+                              },
+                            ],
+                          },
+                          {
+                            path: 'groups',
+                            module: AdminGroupsModule,
+                            children: [
+                              {
+                                path: ':groupId',
+                                children: [
                                   {
-                                    path: 'groups',
-                                    module: AdminGroupsModule,
-                                    children: [
-                                      {
-                                        path: ':groupId',
-                                        children: [
-                                          {
-                                            path: 'associations',
-                                            module: AssociationsEndpointModule,
-                                          },
-                                        ],
-                                      },
-                                    ],
+                                    path: 'associations',
+                                    module: AssociationsEndpointModule,
                                   },
                                 ],
                               },

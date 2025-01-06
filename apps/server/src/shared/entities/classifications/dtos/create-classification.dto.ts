@@ -10,6 +10,7 @@ export class CreateClassificationDto extends OmitType(ClassificationDto, [
   'role',
   'space',
   'user',
+  'serviceId',
 ]) {}
 
 export class CreateClassificationDtos {

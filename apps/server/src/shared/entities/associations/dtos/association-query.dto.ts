@@ -6,6 +6,9 @@ export class AssociationQueryDto extends QueryDto {
   @UUIDFieldOptional()
   groupId: string;
 
+  @UUIDFieldOptional()
+  serviceId: string;
+
   @EnumFieldOptional(() => Prisma.SortOrder)
   createdAtSortOrder: Prisma.SortOrder;
 }
