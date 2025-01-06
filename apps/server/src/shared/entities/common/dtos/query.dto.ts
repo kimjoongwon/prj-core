@@ -2,8 +2,6 @@ import { PaginationUtil } from '@shared/utils';
 import { NumberFieldOptional } from '../../../decorators';
 import { PageMetaDto } from './page-meta.dto';
 
-type Include = Record<string, boolean>;
-
 export class QueryDto {
   @NumberFieldOptional({
     minimum: 1,

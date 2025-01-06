@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssociationsRepository } from './associations.repository';
 import { Prisma } from '@prisma/client';
+import { AssociationQueryDto } from './dtos';
 
 @Injectable()
 export class AssociationsService {
@@ -30,9 +31,11 @@ export class AssociationsService {
     return this.repository.create(args);
   }
 
-  async getManyByQuery(args: Prisma.AssociationFindManyArgs) {
+  async getManyByQuery(query: AssociationQueryDto) {
+    const args = query.toArgs();
+    const countArgs = query.toCountArgs();
     const associations = await this.repository.findMany(args);
-    const count = await this.repository.count(args as Prisma.AssociationCountArgs);
+    const count = await this.repository.count(countArgs);
     return {
       associations,
       count,
