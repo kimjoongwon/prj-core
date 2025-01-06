@@ -9,11 +9,11 @@ import {
 import { ProfileDto } from '../../profiles/profile.dto';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
 import { TenantDto } from '../../tenants';
-import { UserEntity } from '../user.entity';
 import { Exclude } from 'class-transformer';
 import { SpaceDto } from '../../spaces';
+import { User } from '@prisma/client';
 
-export class UserDto extends AbstractDto implements UserEntity {
+export class UserDto extends AbstractDto implements User {
   @UUIDField()
   spaceId: string;
 
@@ -32,12 +32,6 @@ export class UserDto extends AbstractDto implements UserEntity {
   @Exclude()
   @PasswordField()
   password: string;
-
-  @StringField({ each: true, default: [] })
-  assignmentIds: string[];
-
-  @UUIDField({ nullable: true })
-  classificationId: string | null;
 
   @ClassField(() => ProfileDto, { each: true, required: false })
   profiles?: ProfileDto[];

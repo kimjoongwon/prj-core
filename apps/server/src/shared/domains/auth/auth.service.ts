@@ -59,7 +59,6 @@ export class AuthService {
         phone,
         password,
         spaceId,
-        assignmentIds: [],
         profiles: {
           create: {
             nickname,

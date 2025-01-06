@@ -1,21 +1,39 @@
-import { $Enums } from '@prisma/client';
-import { EnumField, StringField, UUIDField } from '../../../decorators/field.decorators';
+import { $Enums, Category } from '@prisma/client';
+import {
+  ClassField,
+  EnumField,
+  StringField,
+  UUIDField,
+} from '../../../decorators/field.decorators';
 import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { CategoryEntity } from '../category.entity';
+import { ServiceDto } from '../../services/dtos/service.dto';
+import { SpaceDto } from '../../spaces/dtos/space.dto';
 
-export class CategoryDto extends AbstractDto implements CategoryEntity {
-  @UUIDField()
-  spaceId: string;
+export class CategoryDto extends AbstractDto implements Category {
+  @StringField({ default: '' })
+  name: string;
 
   @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.LEAF })
   type: $Enums.CategoryTypes;
 
-  @StringField({ default: '' })
-  name: string;
-
   @StringField({ nullable: true, default: null })
   parentId: string | null;
 
+  @UUIDField()
+  spaceId: string;
+
   @StringField({ default: '' })
   serviceId: string;
+
+  @ClassField(() => CategoryDto, { required: false })
+  parent?: CategoryDto;
+
+  @ClassField(() => CategoryDto, { each: true, required: false })
+  children?: CategoryDto[];
+
+  @ClassField(() => SpaceDto, { required: false })
+  space?: SpaceDto;
+
+  @ClassField(() => ServiceDto, { required: false })
+  service?: ServiceDto;
 }

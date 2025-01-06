@@ -1,10 +1,19 @@
-import { $Enums, Category } from '@prisma/client';
+import { $Enums, Category as CategoryEntity } from '@prisma/client';
 import { AbstractEntity } from '../common/entities/abstract.entity';
+import { Space } from '../spaces/space.entity';
+import { Service } from '../services/service.entity';
+import { User } from '../users/user.entity';
 
-export class CategoryEntity extends AbstractEntity implements Category {
+export class Category extends AbstractEntity implements CategoryEntity {
   name: string;
   type: $Enums.CategoryTypes;
   parentId: string;
   spaceId: string;
   serviceId: string;
+
+  parent?: Category;
+  children?: Category[];
+  space?: Space;
+  user?: User;
+  service?: Service;
 }
