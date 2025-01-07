@@ -7,7 +7,14 @@ import { User } from './user.entity';
 // import { Role } from './role.entity';
 import { Space } from './space.entity';
 import { Tenancy } from './tenancy.entity';
-export class Classification extends AbstractEntity implements ClassificationEntity {
+import { ClassificationDto } from '../dtos';
+import { UseDto } from '../decorators/use-dto.decorator';
+
+@UseDto(ClassificationDto)
+export class Classification
+  extends AbstractEntity<ClassificationDto>
+  implements ClassificationEntity
+{
   categoryId: string;
   userId: string | null;
   postId: string | null;

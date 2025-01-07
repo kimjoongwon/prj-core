@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   async login({ email, password }: LoginPayloadDto) {
-    const user = await this.prisma.user.findUniqueOrThrow({
+    const user = await this.usersService.getUnique({
       where: { email },
       include: {
         profiles: true,

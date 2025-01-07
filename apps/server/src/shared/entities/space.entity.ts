@@ -4,8 +4,11 @@ import { Classification } from './classification.entity';
 import { Association } from './association.entity';
 import { Tenancy } from './tenancy.entity';
 import { Tenant } from './tenant.entity';
+import { UseDto } from '../decorators/use-dto.decorator';
+import { SpaceDto } from '../dtos';
 
-export class Space extends AbstractEntity implements SpaceEntity {
+@UseDto(SpaceDto)
+export class Space extends AbstractEntity<SpaceDto> implements SpaceEntity {
   name: string;
   classificationId: string | null;
 

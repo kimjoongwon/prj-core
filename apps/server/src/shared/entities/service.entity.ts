@@ -1,11 +1,10 @@
 import { $Enums, Service as ServiceEntity } from '@prisma/client';
+import { UseDto } from '../decorators/use-dto.decorator';
+import { ServiceDto } from '../dtos';
+import { AbstractEntity } from './abstract.entity';
 
-export class Service implements ServiceEntity {
-  id: string;
-  seq: number;
+@UseDto(ServiceDto)
+export class Service extends AbstractEntity<ServiceDto> implements ServiceEntity {
   name: $Enums.ServiceNames;
   label: string;
-  createdAt: Date;
-  updatedAt: Date;
-  removedAt: Date;
 }

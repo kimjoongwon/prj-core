@@ -1,22 +1,17 @@
-import { DateField, NumberField, UUIDField } from '../decorators/field.decorators';
+import { plainToInstance } from 'class-transformer';
+import { AbstractDto } from '../dtos/abstract.dto';
+import { Constructor } from '../decorators/use-dto.decorator';
 
-export abstract class AbstractEntity {
-  @UUIDField()
+export class AbstractEntity<DTO extends AbstractDto, O = never> {
   id: string;
-
-  @NumberField()
   seq: number;
-
-  @DateField()
   createdAt: Date;
-
-  @DateField({
-    nullable: true,
-  })
   updatedAt: Date | null;
-
-  @DateField({
-    nullable: true,
-  })
   removedAt: Date | null;
+
+  private dtoClass?: Constructor<any, any>;
+
+  toDto(options?: O): DTO {
+    return plainToInstance(this.dtoClass, this, options);
+  }
 }

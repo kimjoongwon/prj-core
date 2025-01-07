@@ -1,4 +1,5 @@
 export * from './abstract.dto';
+export * from './user.dto';
 export * from './association.dto';
 export * from './group.dto';
 export * from './tenancy.dto';
@@ -6,11 +7,9 @@ export * from './space.dto';
 export * from './classification.dto';
 export * from './category.dto';
 export * from './service.dto';
-export * from './user.dto';
 export * from './tenant.dto';
 export * from './profile.dto';
-// export * from './post.dto';
-// export * from './role.dto';
 export * from './create';
 export * from './update';
 export * from './query';
+export * from './role.dto';

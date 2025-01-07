@@ -1,8 +1,11 @@
 import { Profile as ProfileEntity } from '@prisma/client';
 import { AbstractEntity } from './abstract.entity';
 import { User } from './user.entity';
+import { UseDto } from '../decorators/use-dto.decorator';
+import { ProfileDto } from '../dtos';
 
-export class Profile extends AbstractEntity implements ProfileEntity {
+@UseDto(ProfileDto)
+export class Profile extends AbstractEntity<ProfileDto> implements ProfileEntity {
   depotId: string | null;
   nickname: string;
   userId: string;

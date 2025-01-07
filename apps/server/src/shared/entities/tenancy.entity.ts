@@ -6,9 +6,11 @@ import { Category } from './category.entity';
 import { Classification } from './classification.entity';
 import { Association } from './association.entity';
 import { User } from './user.entity';
-// import { Post } from './post.entity';
+import { UseDto } from '../decorators/use-dto.decorator';
+import { TenancyDto } from '../dtos';
 
-export class Tenancy extends AbstractEntity implements TenancyEntity {
+@UseDto(TenancyDto)
+export class Tenancy extends AbstractEntity<TenancyDto> implements TenancyEntity {
   spaceId: string;
 
   space?: Space;

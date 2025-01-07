@@ -37,7 +37,7 @@ export class AuthEndpoint {
       plainToInstance(TokenDto, {
         accessToken,
         refreshToken,
-        user: plainToInstance(UserDto, user),
+        user: user.toDto(),
       }),
     );
   }

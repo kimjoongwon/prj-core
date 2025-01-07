@@ -1,5 +1,6 @@
 export * from './configs';
 export * from './decorators';
+export * from './dtos';
 export * from './entities';
 export * from './services';
 export * from './repositories';
@@ -12,4 +13,3 @@ export * from './providers';
 export * from './guards';
 export * from './libs';
 export * from './domains';
-export * from './dtos';
