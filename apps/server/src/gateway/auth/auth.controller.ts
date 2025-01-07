@@ -27,7 +27,7 @@ export class AuthController {
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
-    res.cookie('spaceId', user.spaceId, { httpOnly: true });
+    res.cookie('tenancyId', user.tenancyId, { httpOnly: true });
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
     res.cookie('accessToken', accessToken, { httpOnly: true });
 

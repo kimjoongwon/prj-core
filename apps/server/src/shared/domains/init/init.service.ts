@@ -1,23 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CategoriesService,
-  RolesService,
-  SpacesService,
-  SubjectsService,
-  TenantsService,
-  UsersService,
-} from '../../entities';
+import { RolesService, SpacesService, SubjectsService, UsersService } from '../../entities';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
 import { PasswordService } from '../password/password.service';
 import { $Enums, Prisma } from '@prisma/client';
 import { ServicesService } from '../../entities/services/services.service';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class InitService {
   logger = new Logger(InitService.name);
   LOG_PREFIX = `${InitService.name}`;
   constructor(
+    private readonly prisma: PrismaService,
     private readonly rolesService: RolesService,
     private readonly spacesService: SpacesService,
     private readonly configService: ConfigService,
@@ -25,8 +20,6 @@ export class InitService {
     private readonly passwordService: PasswordService,
     private readonly subjectsService: SubjectsService,
     private readonly servicesService: ServicesService,
-    private readonly categoriesService: CategoriesService,
-    private readonly tenantsService: TenantsService,
   ) {}
 
   async createDefaultRoles() {
@@ -90,7 +83,11 @@ export class InitService {
 
       this.logger.log(`[${this.LOG_PREFIX}] 기본 공간이 이미 존재합니다.`);
     } else {
-      const space = await this.spacesService.create({ data: { name: appName } });
+      const space = await this.prisma.space.create({
+        data: {
+          name: appName,
+        },
+      });
 
       spaceId = space.id;
 
@@ -102,7 +99,7 @@ export class InitService {
     };
   }
 
-  async createDefaultUser(roleId, spaceId) {
+  async createDefaultUser(roleId, spaceId, tenancyId) {
     const appConfig = this.configService.get<AppConfig>('app');
     const hashedPassword = await this.passwordService.hashPassword('rkdmf12!@');
 
@@ -112,17 +109,20 @@ export class InitService {
       },
     });
 
+    let userId = adminUser?.id;
+
     if (adminUser) {
       this.logger.log(`[${this.LOG_PREFIX}] 관리자가 이미 존재합니다.`);
+      return userId;
     } else {
       this.logger.log(`[${this.LOG_PREFIX}] 관리자 생성`);
-      await this.usersService.create({
+      const user = await this.usersService.create({
         data: {
           email: appConfig.adminEmail,
           password: hashedPassword,
           name: appConfig.name,
           phone: '01073162347',
-          spaceId,
+          tenancyId,
           tenants: {
             create: {
               spaceId,
@@ -136,6 +136,55 @@ export class InitService {
           },
         },
       });
+
+      const userService = await this.prisma.service.findUnique({
+        where: {
+          name: 'USER',
+        },
+      });
+
+      const category = await this.prisma.category.create({
+        data: {
+          name: '공통',
+          type: 'ROOT',
+          tenancyId,
+          serviceId: userService.id,
+        },
+      });
+
+      const group = await this.prisma.group.create({
+        data: {
+          name: '공통',
+          tenancyId,
+          serviceId: userService.id,
+        },
+      });
+
+      await this.prisma.association.create({
+        data: {
+          groupId: group.id,
+          serviceId: userService.id,
+          userId: user.id,
+          tenancyId,
+        },
+      });
+
+      await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          classification: {
+            create: {
+              categoryId: category.id,
+              serviceId: userService.id,
+              tenancyId,
+            },
+          },
+        },
+      });
+
+      userId = user.id;
     }
   }
 
@@ -155,8 +204,8 @@ export class InitService {
   async createServices() {
     return await Promise.all(
       [
-        { name: 'user', label: '이용자' },
-        { name: 'space', label: '공간' },
+        { name: $Enums.ServiceNames.USER, label: '이용자' },
+        { name: $Enums.ServiceNames.SPACE, label: '공간' },
       ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
         const service = await this.servicesService.getUnique({ where: { name: seedService.name } });
         if (!service) {
@@ -172,54 +221,22 @@ export class InitService {
     this.logger.log(`[${this.LOG_PREFIX}] 페이지 생성`);
   }
 
-  async createUserCategories() {
-    const userService = await this.servicesService.getUnique({
-      where: {
-        name: $Enums.ServiceNames.user,
-      },
+  async createDefaultTenancy(spaceId: string) {
+    this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
+    const tenancy = await this.prisma.tenancy.findUnique({
+      where: { spaceId },
     });
 
-    const tenant = await this.tenantsService.getUnique({
-      where: {
-        seq: 1,
-      },
-    });
-
-    const category = await this.categoriesService.getFirst({
-      where: {
-        name: '이용자',
-      },
-    });
-
-    if (!category) {
-      await this.categoriesService.create({
+    if (!tenancy) {
+      this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
+      return this.prisma.tenancy.create({
         data: {
-          spaceId: tenant.spaceId,
-          serviceId: userService.id,
-          name: '이용자',
-          parentId: null,
-          type: 'ROOT',
-          children: {
-            createMany: {
-              data: [
-                {
-                  name: '회원',
-                  serviceId: userService.id,
-                  type: 'LEAF',
-                  spaceId: tenant.spaceId,
-                },
-                {
-                  spaceId: tenant.spaceId,
-                  serviceId: userService.id,
-                  type: 'LEAF',
-                  name: '비회원',
-                },
-              ],
-            },
-          },
+          spaceId,
         },
       });
     }
+
+    return tenancy;
   }
 
   async initApp() {
@@ -227,7 +244,7 @@ export class InitService {
     await this.createServices();
     const { adminRoleId } = await this.createDefaultRoles();
     const { spaceId } = await this.createDefaultSpace();
-    await this.createDefaultUser(adminRoleId, spaceId);
-    await this.createUserCategories();
+    const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
+    await this.createDefaultUser(adminRoleId, spaceId, tenancyId);
   }
 }

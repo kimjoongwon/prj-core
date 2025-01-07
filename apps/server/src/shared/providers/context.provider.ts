@@ -1,6 +1,6 @@
 import { ClsServiceManager } from 'nestjs-cls';
 import { LanguageCode } from '../constants/language-code.constant';
-import { UserDto } from '../entities/users/dtos/user.dto';
+import { UserDto } from '../dtos/user.dto';
 import { TenantDto } from '../entities/tenants/dtos/tenant.dto';
 
 export class ContextProvider {
