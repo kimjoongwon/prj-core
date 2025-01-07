@@ -3,21 +3,22 @@ import { InitModule, JwtStrategy, LoggerMiddleware, UsersRepository, UsersServic
 import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
-import { CategoriesEndpointModule } from './admin/tenancies/tenancyId/services/serviceId/categories/categories-endpoint.module';
-import { ClassificationsEndpointModule } from './admin/tenancies/tenancyId/services/serviceId/categories/categoryId/classifications/classifications-endpoint.module';
-import { AssociationsEndpointModule } from './admin/tenancies/tenancyId/services/serviceId/groups/groupId/associations/associations-endpoint.module';
+import { CategoriesEndpointModule } from './categories/categories-endpoint.module';
+import { ClassificationsEndpointModule } from './classifications/classifications-endpoint.module';
+import { AssociationsEndpointModule } from './associations/associations-endpoint.module';
 import { BuilderEndpointModule } from './builder/builder-endpoint.module';
-import { SpacesEndpointModule } from './admin/spaces/spaces-endpoint.module';
-import { GroupsEndpointModule } from './admin/tenancies/tenancyId/services/serviceId/groups/groups-endpoint.module';
-import { UsersEndpointModule } from './admin/tenancies/tenancyId/services/serviceId/groups/groupId/users/users-endpoint.module';
+import { GroupsEndpointModule } from './groups/groups-endpoint.module';
+import { UsersEndpointModule } from './users/users-endpoint.module';
 import { AuthEndpointModule } from './auth/auth-endpoint.module';
+import { SpacesEndpointModule } from './spaces/spaces-endpoint.module';
+
 @Module({
   imports: [
     ...libModules,
     CaslModule,
     InitModule,
+    ClassificationsEndpointModule,
     AssociationsEndpointModule,
-    SpacesEndpointModule,
     BuilderEndpointModule,
     CategoriesEndpointModule,
     UsersEndpointModule,
@@ -30,71 +31,36 @@ import { AuthEndpointModule } from './auth/auth-endpoint.module';
             path: 'v1',
             children: [
               {
+                path: 'associations',
+                module: AssociationsEndpointModule,
+              },
+              {
+                path: 'auth',
+                module: AuthEndpointModule,
+              },
+              {
                 path: 'builder',
                 module: BuilderEndpointModule,
               },
               {
-                path: 'admin',
-                children: [
-                  {
-                    path: 'auth',
-                    module: AuthEndpointModule,
-                  },
-                  {
-                    path: 'tenancies',
-                    children: [
-                      {
-                        path: ':tenancyId',
-                        children: [
-                          {
-                            path: 'services',
-                            children: [
-                              {
-                                path: ':serviceId',
-                                children: [
-                                  {
-                                    path: 'categories',
-                                    module: CategoriesEndpointModule,
-                                    children: [
-                                      {
-                                        path: ':categoryId',
-                                        children: [
-                                          {
-                                            path: 'classifications',
-                                            module: ClassificationsEndpointModule,
-                                          },
-                                        ],
-                                      },
-                                    ],
-                                  },
-                                  {
-                                    path: 'groups',
-                                    module: GroupsEndpointModule,
-                                    children: [
-                                      {
-                                        path: ':groupId',
-                                        children: [
-                                          {
-                                            path: 'associations',
-                                            module: AssociationsEndpointModule,
-                                          },
-                                          {
-                                            path: 'users',
-                                            module: UsersEndpointModule,
-                                          },
-                                        ],
-                                      },
-                                    ],
-                                  },
-                                ],
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
+                path: 'categories',
+                module: CategoriesEndpointModule,
+              },
+              {
+                path: 'classifications',
+                module: ClassificationsEndpointModule,
+              },
+              {
+                path: 'groups',
+                module: GroupsEndpointModule,
+              },
+              {
+                path: 'spaces',
+                module: SpacesEndpointModule,
+              },
+              {
+                path: 'users',
+                module: UsersEndpointModule,
               },
             ],
           },

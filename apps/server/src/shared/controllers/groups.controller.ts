@@ -16,7 +16,7 @@ import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from '../dtos
 import { ResponseEntity } from '../entities/response.entity';
 import { GroupsService } from '../services';
 
-@ApiTags('ADMIN_GROUPS')
+@ApiTags('GROUPS')
 @Controller()
 export class GroupsController {
   constructor(private readonly groupService: GroupsService) {}
@@ -35,14 +35,13 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByQuery(@Query() query: GroupQueryDto, @Param('serviceId') serviceId: string) {
-    query.serviceId = serviceId;
+  async getGroupsByQuery(@Query() query: GroupQueryDto) {
     const { totalCount, groups } = await this.groupService.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
-      groups.map((group) => plainToInstance(GroupDto, group)),
+      groups.map((group) => group.toDto()),
       query.toPageMetaDto(totalCount),
     );
   }

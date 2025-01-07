@@ -8,7 +8,6 @@ import { categoryEditPage } from './pages/category-edit.page';
 import { groupNewEditPage } from './pages/group-new-edit.page';
 import { groupsPage } from './pages/groups.page';
 import { groupEditPage } from './pages/group-edit.page';
-import { getUsersPage } from './pages/users.page';
 import { spacesPage } from './pages/spaces.page';
 import { getGroupPage } from './pages/group.page';
 import { getGroupUsersPage } from './pages/group-users.page';
@@ -75,7 +74,7 @@ export class BuilderService {
                         },
                         children: services.map((service) => ({
                           name: service.label,
-                          pathname: service.name,
+                          pathname: service.name.toLowerCase(),
                           layout: {
                             type: 'Service',
                             page: {
@@ -84,17 +83,6 @@ export class BuilderService {
                             },
                           },
                           children: [
-                            {
-                              name: service.label,
-                              pathname: service.name + 's',
-                              layout: {
-                                type: 'Master',
-                                page: {
-                                  USER: getUsersPage(),
-                                  SPACE: spacesPage,
-                                }[service.name],
-                              },
-                            },
                             {
                               name: '카테고리',
                               pathname: 'categories',

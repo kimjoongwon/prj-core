@@ -21,7 +21,9 @@ import {
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { AssociationsService } from '../services';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('ASSOCIATIONS')
 @Controller()
 export class AssociationsController {
   constructor(private readonly service: AssociationsService) {}
@@ -42,7 +44,7 @@ export class AssociationsController {
     createAssociationDto.tenancyId = tenancyId;
 
     const association = await this.service.create(createAssociationDto);
-    
+
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }
 
@@ -109,20 +111,13 @@ export class AssociationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK, { isArray: true })
-  async getAssociationsByQuery(
-    @Param('groupId') groupId: string,
-    @Param('serviceId') serviceId: string,
-    @Query() query: AssociationQueryDto,
-  ) {
-    query.groupId = groupId;
-    query.serviceId = serviceId;
-
+  async getAssociationsByQuery(@Query() query: AssociationQueryDto) {
     const { count, associations } = await this.service.getManyByQuery(query.toArgs());
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      associations.map((association) => plainToInstance(AssociationDto, association)),
+      associations.map((association) => association.toDto()),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

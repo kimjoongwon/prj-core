@@ -14,6 +14,7 @@ import { TenantDto } from './tenant.dto';
 import { TenancyDto } from './tenancy.dto';
 import { AssociationDto } from './association.dto';
 import { ClassificationDto } from './classification.dto';
+import { Profile, Tenant } from '../entities';
 
 export class UserDto extends AbstractDto implements User {
   @UUIDField()
@@ -38,18 +39,18 @@ export class UserDto extends AbstractDto implements User {
   @PasswordField()
   password: string;
 
-  @ClassField(() => ProfileDto, { each: true, required: false })
+  @ClassField(() => Profile, { each: true, required: false, swagger: false })
   profiles?: ProfileDto[];
 
-  @ClassField(() => TenantDto, { each: true, required: false })
+  @ClassField(() => Tenant, { each: true, required: false, swagger: false })
   tenants?: TenantDto[];
 
-  @ClassField(() => AssociationDto, { each: true, required: false })
+  @ClassField(() => AssociationDto, { each: true, required: false, swagger: false })
   associations?: AssociationDto[];
 
-  @ClassField(() => ClassificationDto, { required: false })
+  @ClassField(() => ClassificationDto, { required: false, swagger: false })
   classification?: ClassificationDto;
 
-  @ClassField(() => TenancyDto, { required: false })
+  @ClassField(() => TenancyDto, { required: false, swagger: false })
   tenancy?: TenancyDto;
 }

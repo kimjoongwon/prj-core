@@ -9,7 +9,6 @@ import {
   ResponseEntity,
   SignUpPayloadDto,
   TokenDto,
-  TokenService,
   UserDto,
 } from '@shared';
 import { plainToInstance } from 'class-transformer';
@@ -18,10 +17,7 @@ import { Response, Request } from 'express';
 @ApiTags('AUTH')
 @Controller()
 export class AuthEndpoint {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly tokenService: TokenService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
@@ -47,17 +43,10 @@ export class AuthEndpoint {
   @Get('new-token')
   async getNewToken(@Req() req: Request & { user: UserDto }, @Res({ passthrough: true }) res) {
     const refreshToken = req.cookies['refreshToken'];
-    const { userId } = await this.tokenService.validateToken(refreshToken);
-
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-      this.tokenService.generateTokens({
-        userId,
-      });
+    const { newAccessToken, newRefreshToken } = await this.authService.getNewToken(refreshToken);
 
     res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
-
-    const user = req.user;
 
     return {
       accessToken: newAccessToken,

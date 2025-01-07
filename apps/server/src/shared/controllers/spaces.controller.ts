@@ -18,7 +18,7 @@ import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities';
 import { SpacesService } from '../services';
 
-@ApiTags('ADMIN_SPACES')
+@ApiTags('SPACES')
 @Controller()
 export class SpacesController {
   constructor(private readonly service: SpacesService) {}
@@ -72,14 +72,14 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
-  async getSpacesByQuery(@Query() pageQueryDto: SpaceQueryDto) {
-    const { count, spaces } = await this.service.getManyByQuery(pageQueryDto);
+  async getSpacesByQuery(@Query() query: SpaceQueryDto) {
+    const { count, spaces } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      spaces.map((space) => plainToInstance(SpaceDto, space)),
-      new PageMetaDto(pageQueryDto.skip, pageQueryDto.take, count),
+      spaces.map((space) => space.toDto()),
+      query.toPageMetaDto(count),
     );
   }
 }

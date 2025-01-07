@@ -21,15 +21,15 @@ export class AssociationDto extends AbstractDto implements Association {
   @UUIDField({ nullable: true })
   postId: string | null;
 
-  @ClassField(() => TenancyDto, { required: false })
+  @ClassField(() => TenancyDto, { required: false, swagger: false })
   tenancy?: TenancyDto;
 
-  @ClassField(() => GroupDto, { required: false })
+  @ClassField(() => GroupDto, { required: false, swagger: false })
   group?: GroupDto;
 
-  @ClassField(() => UserDto, { required: false })
+  @ClassField(() => UserDto, { required: false, swagger: false })
   user?: GroupDto;
 
-  @ClassField(() => ServiceDto, { required: false })
+  @ClassField(() => ServiceDto, { required: false, swagger: false })
   service?: ServiceDto;
 }

@@ -36,6 +36,23 @@ export class AuthService {
     return this.usersService.getUnique({ where: { id: userId } });
   }
 
+  async getNewToken(refreshToken: string) {
+    const [err, { userId }] = goTryRawSync<Error, { userId: string }>(() =>
+      this.jwtService.verify<{ userId: string }>(refreshToken),
+    );
+    if (err) throw new BadRequestException('Invalid token');
+
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      this.tokenService.generateTokens({
+        userId,
+      });
+
+    return {
+      newAccessToken,
+      newRefreshToken,
+    };
+  }
+
   async validateUser(email: string, password: string) {
     const user = await this.usersService.getUnique({ where: { email } });
 

@@ -15,16 +15,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 
-  const config = new DocumentBuilder()
-    .setVersion('1.0.0')
-    .setTitle('Galaxy Server')
-    .addTag('Galaxy')
-    .addBearerAuth()
-    .build();
+  const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();
 
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
+
   const document = SwaggerModule.createDocument(app, config, options);
 
   SwaggerModule.setup('api', app, document);

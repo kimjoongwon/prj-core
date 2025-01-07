@@ -9,7 +9,6 @@ import {
   HttpCode,
   Param,
   Query,
-  Headers,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -23,7 +22,8 @@ import {
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { ClassificationsService } from '../services';
-@ApiTags('ADMIN_CLASSIFICATIONS')
+
+@ApiTags('CLASSIFICATIONS')
 @Controller()
 export class ClassificationsController {
   constructor(private readonly service: ClassificationsService) {}
@@ -36,11 +36,7 @@ export class ClassificationsController {
     const classification = await this.service.create({
       data: createClassificationDto,
     });
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(ClassificationDto, classification),
-    );
+    return new ResponseEntity(HttpStatus.OK, '성공', classification.toDto());
   }
 
   @Get(':classificationId')
@@ -49,11 +45,7 @@ export class ClassificationsController {
   @ApiResponseEntity(ClassificationDto, HttpStatus.OK)
   async getClassification(@Param('classificationId') classificationId: string) {
     const classification = await this.service.getUnique({ where: { id: classificationId } });
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(ClassificationDto, classification),
-    );
+    return new ResponseEntity(HttpStatus.OK, '성공', classification.toDto());
   }
 
   @Patch('removedAt')
@@ -77,11 +69,7 @@ export class ClassificationsController {
       where: { id: classificationId },
       data: updateClassificationDto,
     });
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(ClassificationDto, classification),
-    );
+    return new ResponseEntity(HttpStatus.OK, '성공', classification.toDto());
   }
 
   @Patch(':classificationId/removedAt')
@@ -114,10 +102,7 @@ export class ClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ClassificationDto, HttpStatus.OK, { isArray: true })
-  async getClassificationsByQuery(
-    @Query() query: ClassificationQueryDto,
-    @Headers('tenantId') tenantId: string,
-  ) {
+  async getClassificationsByQuery(@Query() query: ClassificationQueryDto) {
     const { count, classifications } = await this.service.getManyByQuery(query.toArgs());
 
     return new ResponseEntity(

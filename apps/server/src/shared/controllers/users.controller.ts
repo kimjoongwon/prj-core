@@ -13,10 +13,11 @@ import {
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto } from '../dtos';
-import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { UsersService } from '../services';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('USERS')
 @Controller()
 export class UsersController {
   constructor(private readonly service: UsersService) {}
@@ -90,8 +91,8 @@ export class UsersController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      users.map((user) => plainToInstance(UserDto, user)),
-      new PageMetaDto(query.skip, query.take, count),
+      users.map((user) => user.toDto()),
+      query.toPageMetaDto(count),
     );
   }
 }

@@ -1,23 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AuthEndpoint } from './auth.endpoint';
-import {
-  AuthService,
-  LocalStrategy,
-  PasswordService,
-  TokenService,
-  UsersRepository,
-  UsersService,
-} from '@shared';
+import { AuthModule } from '@shared';
 
 @Module({
-  providers: [
-    AuthService,
-    PasswordService,
-    TokenService,
-    LocalStrategy,
-    UsersService,
-    UsersRepository,
-  ],
+  imports: [AuthModule],
   controllers: [AuthEndpoint],
 })
 export class AuthEndpointModule {}
