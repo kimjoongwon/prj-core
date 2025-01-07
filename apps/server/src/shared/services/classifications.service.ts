@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ClassificationsRepository } from '../../_repo/classifications.repository';
 import { Prisma } from '@prisma/client';
+import { ClassificationsRepository } from '../repositories/classifications.repository';
 
 @Injectable()
 export class ClassificationsService {
@@ -11,10 +11,6 @@ export class ClassificationsService {
 
   getUnique(args: Prisma.ClassificationFindUniqueArgs) {
     return this.repository.findUnique(args);
-  }
-
-  createMany(args: Prisma.ClassificationCreateManyArgs) {
-    return this.repository.createMany(args);
   }
 
   getFirst(id: string) {

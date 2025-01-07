@@ -1,6 +1,6 @@
-import { QueryDto } from '../../common/dtos/query.dto';
 import { Prisma } from '@prisma/client';
-import { EnumFieldOptional, UUIDFieldOptional } from '../../../decorators/field.decorators';
+import { UUIDFieldOptional, EnumFieldOptional } from '../../decorators/field.decorators';
+import { QueryDto } from './query.dto';
 
 export class AssociationQueryDto extends QueryDto {
   @UUIDFieldOptional()

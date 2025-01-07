@@ -6,14 +6,14 @@ import {
   UUIDField,
   UUIDFieldOptional,
 } from '../decorators/field.decorators';
-import { Exclude } from 'class-transformer';
 import { User } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 import { AbstractDto } from './abstract.dto';
 import { ProfileDto } from './profile.dto';
 import { TenantDto } from './tenant.dto';
-import { SpaceDto } from './space.dto';
 import { AssociationDto } from './association.dto';
 import { ClassificationDto } from './classification.dto';
+import { TenancyDto } from './tenancy.dto';
 
 export class UserDto extends AbstractDto implements User {
   @UUIDField()
@@ -34,9 +34,6 @@ export class UserDto extends AbstractDto implements User {
   @StringField()
   phone: string;
 
-  @UUIDFieldOptional({ nullable: true, default: null })
-  tenantId: string | null;
-
   @Exclude()
   @PasswordField()
   password: string;
@@ -53,6 +50,6 @@ export class UserDto extends AbstractDto implements User {
   @ClassField(() => ClassificationDto, { required: false })
   classification?: ClassificationDto;
 
-  @ClassField(() => TenantDto, { required: false })
-  tenant?: TenantDto;
+  @ClassField(() => TenancyDto, { required: false })
+  tenancy?: TenancyDto;
 }

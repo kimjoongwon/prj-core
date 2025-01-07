@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PaginationUtil } from '@shared/utils';
 import { SpacesRepository } from '../repositories/spaces.repository';
 import { UpdateSpaceDto } from '../dtos/update/update-space.dto';
+import { SpaceQueryDto } from '../dtos/query/space-query.dto';
 
 @Injectable()
 export class SpacesService {
@@ -55,19 +56,5 @@ export class SpacesService {
       count: spaceCount,
       spaces,
     };
-  }
-
-  async getAllSpace() {
-    return this.repository.findMany({
-      where: {
-        removedAt: null,
-      },
-    });
-  }
-
-  getAccessibleSpaces() {
-    const user = ContextProvider.getTenant();
-    const spaceIds = user.tenants.map((tenant) => tenant.spaceId);
-    return this.repository.findMany({ where: { id: { in: spaceIds } } });
   }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { GroupsRepository } from '../../_repo/groups.repository';
-import { CreateGroupDto } from './dtos/create-group.dto';
-import { UpdateGroupDto } from './dtos/update-group.dto';
 import { Prisma } from '@prisma/client';
-import { GroupQueryDto } from './dtos';
+import { GroupsRepository } from '../repositories/groups.repository';
+import { CreateGroupDto } from '../dtos/create/create-group.dto';
+import { GroupQueryDto } from '../dtos/query/group-query.dto';
+import { UpdateGroupDto } from '../dtos/update/update-group.dto';
 
 @Injectable()
 export class GroupsService {
@@ -15,7 +15,7 @@ export class GroupsService {
   async getManyByQuery(query: GroupQueryDto) {
     const args = query.toArgs<Prisma.GroupFindManyArgs>();
     const countArgs = query.toCountArgs<Prisma.GroupCountArgs>();
-    const groups = await this.repository.findManyByQuery(args);
+    const groups = await this.repository.findMany(args);
     const totalCount = await this.repository.count(countArgs);
 
     return {

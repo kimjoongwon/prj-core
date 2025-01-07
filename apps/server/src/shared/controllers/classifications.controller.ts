@@ -12,20 +12,17 @@ import {
   Headers,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity } from '../common/entities/response.entity';
 import { plainToInstance } from 'class-transformer';
-import { PageMetaDto } from '../common';
+import { Auth, ApiResponseEntity } from '../decorators';
 import {
-  CreateClassificationDto,
   ClassificationDto,
+  CreateClassificationDto,
   UpdateClassificationDto,
   ClassificationQueryDto,
-  CreateClassificationDtos,
-} from '../classifications/dtos';
-import { Auth } from '../../decorators/auth.decorator';
-import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
-import { ClassificationsService } from './classifications.service';
-
+} from '../dtos';
+import { PageMetaDto } from '../dtos/query/page-meta.dto';
+import { ResponseEntity } from '../entities/response.entity';
+import { ClassificationsService } from '../services';
 @ApiTags('ADMIN_CLASSIFICATIONS')
 @Controller()
 export class ClassificationsController {
@@ -43,22 +40,6 @@ export class ClassificationsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(ClassificationDto, classification),
-    );
-  }
-
-  @Post('/bulk')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(ClassificationDto, HttpStatus.OK)
-  async createClassifications(@Body() createClassificationDtos: CreateClassificationDtos) {
-    const classifications = await this.service.createMany({
-      data: createClassificationDtos.items,
-      skipDuplicates: true,
-    });
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(ClassificationDto, classifications.count),
     );
   }
 

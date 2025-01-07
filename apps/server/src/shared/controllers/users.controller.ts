@@ -10,16 +10,13 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity } from '../common/entities/response.entity';
 import { plainToInstance } from 'class-transformer';
-import { PageMetaDto } from '../common';
-import { CreateUserDto, UserDto, UpdateUserDto, UserQueryDto } from '../users/dtos';
-import { Auth } from '../../decorators/auth.decorator';
-import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
-import { UsersService } from '../../_service/users.service';
+import { Auth, ApiResponseEntity } from '../decorators';
+import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto } from '../dtos';
+import { PageMetaDto } from '../dtos/query/page-meta.dto';
+import { ResponseEntity } from '../entities/response.entity';
+import { UsersService } from '../services';
 
-@ApiTags('ADMIN_USERS')
 @Controller()
 export class UsersController {
   constructor(private readonly service: UsersService) {}

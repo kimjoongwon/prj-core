@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../../decorators';
-import { ResponseEntity } from '../common';
-import { CategoriesService } from './categories.service';
-import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from './dtos';
+import { Auth, ApiResponseEntity } from '../decorators';
+import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from '../dtos';
+import { ResponseEntity } from '../entities/response.entity';
+import { CategoriesService } from '../services';
 
 @ApiTags('ADMIN_CATEGORY')
 @Controller()

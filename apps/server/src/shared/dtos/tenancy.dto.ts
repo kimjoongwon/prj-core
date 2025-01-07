@@ -1,12 +1,14 @@
 import { Tenancy } from '@prisma/client';
 import { ClassField, UUIDField } from '../decorators';
-import { AbstractDto } from './abstract.dto';
-import { SpaceDto } from './space.dto';
-import { GroupDto } from './group.dto';
-import { CategoryDto } from './category.dto';
-import { ClassificationDto } from './classification.dto';
-import { AssociationDto } from './association.dto';
-import { UserDto } from './user.dto';
+import {
+  AbstractDto,
+  SpaceDto,
+  GroupDto,
+  CategoryDto,
+  ClassificationDto,
+  AssociationDto,
+  UserDto,
+} from '.';
 export class TenancyDto extends AbstractDto implements Tenancy {
   @UUIDField()
   spaceId: string;

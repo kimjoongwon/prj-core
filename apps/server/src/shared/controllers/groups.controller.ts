@@ -10,11 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Public, ApiResponseEntity, Auth } from '../../decorators';
-import { ResponseEntity } from '../common';
-import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from './dtos';
-import { GroupsService } from './groups.service';
 import { plainToInstance } from 'class-transformer';
+import { Auth, Public, ApiResponseEntity } from '../decorators';
+import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from '../dtos';
+import { ResponseEntity } from '../entities/response.entity';
+import { GroupsService } from '../services';
 
 @ApiTags('ADMIN_GROUPS')
 @Controller()

@@ -1,9 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { CreateUserDto } from './create-user.dto';
-import { UpdatePostDto } from '../../posts';
-import { ClassField } from '../../decorators';
+import { CreateUserDto } from '../create/create-user.dto';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @ClassField(() => UpdatePostDto, { nullable: true, required: false })
-  post?: UpdatePostDto;
-}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}

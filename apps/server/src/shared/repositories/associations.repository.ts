@@ -1,48 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { UseEntity } from '../decorators/use-dto.decorator';
+import { BaseRepository } from '../common/base.repository';
+import { Association } from '../entities/association.entity';
 
 @Injectable()
-export class AssociationsRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
-  create(args: Prisma.AssociationCreateArgs) {
-    return this.prisma.association.create(args);
-  }
-
-  upsert(args: Prisma.AssociationUpsertArgs) {
-    return this.prisma.association.upsert(args);
-  }
-
-  update(args: Prisma.AssociationUpdateArgs) {
-    return this.prisma.association.update(args);
-  }
-
-  updateMany(args: Prisma.AssociationUpdateManyArgs) {
-    return this.prisma.association.updateMany(args);
-  }
-
-  delete(args: Prisma.AssociationDeleteArgs) {
-    return this.prisma.association.delete(args);
-  }
-
-  findMany(args: Prisma.AssociationFindManyArgs) {
-    return this.prisma.association.findMany(args);
-  }
-
-  findUnique(args: Prisma.AssociationFindUniqueArgs) {
-    return this.prisma.association.findUnique(args);
-  }
-
-  findFirst(args: Prisma.AssociationFindFirstArgs) {
-    return this.prisma.association.findFirst(args);
-  }
-
-  count(args: Prisma.AssociationCountArgs) {
-    return this.prisma.association.count(args);
-  }
-
-  createMany(args: Prisma.AssociationCreateManyArgs) {
-    return this.prisma.association.createMany(args);
+@UseEntity(Association)
+export class AssociationsRepository extends BaseRepository<
+  Prisma.AssociationCreateArgs,
+  Prisma.AssociationUpsertArgs,
+  Prisma.AssociationUpdateArgs,
+  Prisma.AssociationUpdateManyArgs,
+  Prisma.AssociationDeleteArgs,
+  Prisma.AssociationFindManyArgs,
+  Prisma.AssociationCountArgs,
+  Prisma.AssociationAggregateArgs,
+  Prisma.AssociationDeleteManyArgs,
+  Prisma.AssociationFindFirstArgs,
+  Prisma.AssociationFindUniqueArgs,
+  Prisma.AssociationGroupByArgs,
+  Prisma.GroupCreateManyArgs,
+  Association
+> {
+  constructor(prisma: PrismaService) {
+    super(prisma, 'Association');
   }
 }

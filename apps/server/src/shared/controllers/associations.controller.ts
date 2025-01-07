@@ -10,18 +10,17 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { ResponseEntity } from '../common/entities/response.entity';
 import { plainToInstance } from 'class-transformer';
-import { PageMetaDto } from '../common';
+import { Auth, ApiResponseEntity } from '../decorators';
 import {
-  CreateAssociationDto,
   AssociationDto,
+  CreateAssociationDto,
   UpdateAssociationDto,
   AssociationQueryDto,
-} from './dtos';
-import { Auth } from '../../decorators/auth.decorator';
-import { ApiResponseEntity } from '../../decorators/api-response-entity.decorator';
-import { AssociationsService } from './associations.service';
+} from '../dtos';
+import { PageMetaDto } from '../dtos/query/page-meta.dto';
+import { ResponseEntity } from '../entities/response.entity';
+import { AssociationsService } from '../services';
 
 @Controller()
 export class AssociationsController {

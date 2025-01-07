@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AssociationsRepository } from '../../_repo/associations.repository';
 import { Prisma } from '@prisma/client';
-import { AssociationQueryDto } from './dtos';
+import { AssociationsRepository } from '../repositories/associations.repository';
+import { AssociationQueryDto } from '../dtos/query/association-query.dto';
 
 @Injectable()
 export class AssociationsService {
@@ -9,10 +9,6 @@ export class AssociationsService {
 
   getUnique(args: Prisma.AssociationFindUniqueArgs) {
     return this.repository.findUnique(args);
-  }
-
-  createMany(args: Prisma.AssociationCreateManyArgs) {
-    return this.repository.createMany(args);
   }
 
   getFirst(args: Prisma.AssociationFindFirstArgs) {

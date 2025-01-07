@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, HttpException, HttpServer, HttpStatus } from '@nestjs/common';
 import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
-import { ResponseEntity } from '../entities';
+import { ResponseEntity } from '../entities/response.entity';
 
 export declare type GqlContextType = 'graphql';
 

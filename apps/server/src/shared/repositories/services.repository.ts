@@ -3,25 +3,25 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { UseEntity } from '../decorators/use-dto.decorator';
 import { BaseRepository } from '../common/base.repository';
-import { User } from '../entities/user.entity';
+import { Service } from '../entities/service.entity';
 
 @Injectable()
-@UseEntity(User)
-export class UsersRepository extends BaseRepository<
-  Prisma.UserCreateArgs,
-  Prisma.UserUpsertArgs,
-  Prisma.UserUpdateArgs,
-  Prisma.UserUpdateManyArgs,
-  Prisma.UserDeleteArgs,
-  Prisma.UserFindManyArgs,
-  Prisma.UserCountArgs,
-  Prisma.UserAggregateArgs,
-  Prisma.UserDeleteManyArgs,
-  Prisma.UserFindFirstArgs,
-  Prisma.UserFindUniqueArgs,
-  Prisma.UserGroupByArgs,
-  Prisma.UserCreateManyArgs,
-  User
+@UseEntity(Service)
+export class ServicesRepository extends BaseRepository<
+  Prisma.ServiceCreateArgs,
+  Prisma.ServiceUpsertArgs,
+  Prisma.ServiceUpdateArgs,
+  Prisma.ServiceUpdateManyArgs,
+  Prisma.ServiceDeleteArgs,
+  Prisma.ServiceFindManyArgs,
+  Prisma.ServiceCountArgs,
+  Prisma.ServiceAggregateArgs,
+  Prisma.ServiceDeleteManyArgs,
+  Prisma.ServiceFindFirstArgs,
+  Prisma.ServiceFindUniqueArgs,
+  Prisma.ServiceGroupByArgs,
+  Prisma.ServiceCreateManyArgs,
+  Service
 > {
   constructor(prisma: PrismaService) {
     super(prisma, 'Service');

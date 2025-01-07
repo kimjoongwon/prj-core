@@ -1,10 +1,6 @@
 import { $Enums, Service } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
 import { ClassField, EnumField, StringField } from '../decorators/field.decorators';
-import { GroupDto } from './group.dto';
-import { CategoryDto } from './category.dto';
-import { ClassificationDto } from './classification.dto';
-import { AssociationDto } from './association.dto';
+import { AbstractDto, GroupDto, CategoryDto, ClassificationDto, AssociationDto } from '.';
 
 export class ServiceDto extends AbstractDto implements Service {
   @EnumField(() => $Enums.ServiceNames)

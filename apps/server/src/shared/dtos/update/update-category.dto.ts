@@ -1,6 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
-import { CategoryDto } from '../../../dtos/category.dto';
+import { PartialType } from '@nestjs/swagger';
+import { CreateCategoryDto } from '../create';
 
-export class UpdateCategoryDto extends PartialType(
-  OmitType(CategoryDto, ['parent', 'children', 'space', 'service']),
-) {}
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

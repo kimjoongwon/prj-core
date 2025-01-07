@@ -1,10 +1,6 @@
 import { Classification } from '@prisma/client';
 import { ClassField, UUIDField } from '../decorators';
-import { SpaceDto } from './space.dto';
-import { UserDto } from './user.dto';
-import { AbstractDto } from './abstract.dto';
-import { CategoryDto } from './category.dto';
-import { TenancyDto } from './tenancy.dto';
+import { SpaceDto, UserDto, AbstractDto, CategoryDto, TenancyDto } from '.';
 
 export class ClassificationDto extends AbstractDto implements Classification {
   @UUIDField()

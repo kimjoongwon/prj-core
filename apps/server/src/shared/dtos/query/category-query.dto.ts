@@ -2,9 +2,9 @@ import {
   EnumFieldOptional,
   StringField,
   StringFieldOptional,
-} from '../../../decorators/field.decorators';
+} from '../../decorators/field.decorators';
 import { $Enums, Prisma } from '@prisma/client';
-import { QueryDto } from '../../common';
+import { QueryDto } from './query.dto';
 
 export class CategoryQueryDto extends QueryDto {
   @StringFieldOptional()
