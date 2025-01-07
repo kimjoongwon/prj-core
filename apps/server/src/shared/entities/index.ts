@@ -9,5 +9,6 @@ export * from './service.entity';
 export * from './user.entity';
 export * from './tenant.entity';
 export * from './profile.entity';
+export * from './response.entity';
 // export * from './post.entity';
 // export * from './role.entity';

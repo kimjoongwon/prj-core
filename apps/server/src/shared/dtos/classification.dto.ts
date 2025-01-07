@@ -30,7 +30,7 @@ export class ClassificationDto extends AbstractDto implements Classification {
   @ClassField(() => TenancyDto, { required: false })
   tenancy?: TenancyDto;
 
-  @ClassField(() => UserDto, { required: false, each: true }) 0;
+  @ClassField(() => UserDto, { required: false, each: true })
   users?: UserDto[];
 
   @ClassField(() => SpaceDto, { required: false, each: true })
