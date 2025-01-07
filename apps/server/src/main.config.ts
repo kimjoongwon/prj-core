@@ -1,7 +1,7 @@
 import { ClsModule } from 'nestjs-cls';
 import { CaslModule } from './shared/casl/casl.module';
 import { Logger } from '@nestjs/common';
-import { appConfig, AuthConfig, authConfig, corsConfig, UsersModule } from '@shared';
+import { appConfig, AuthConfig, authConfig, corsConfig } from '@shared';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';

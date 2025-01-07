@@ -9,8 +9,8 @@ import { Request } from 'express';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly config: ConfigService,
-    private readonly usersService: UsersService,
+    readonly config: ConfigService,
+    readonly usersService: UsersService,
   ) {
     const authConfig = config.get<AuthConfig>('auth');
     super({

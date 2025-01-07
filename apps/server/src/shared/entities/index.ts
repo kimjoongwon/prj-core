@@ -11,4 +11,4 @@ export * from './tenant.entity';
 export * from './profile.entity';
 export * from './response.entity';
 // export * from './post.entity';
-// export * from './role.entity';
+export * from './role.entity';

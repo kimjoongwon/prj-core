@@ -3,7 +3,6 @@ import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
 import { categoriesPage } from './pages/categories.page';
 import { categoryAddPage } from './pages/category-add.page';
-import { ServicesService } from '../../entities/services';
 import { categoryNewEditPage } from './pages/category-new-edit.page';
 import { categoryEditPage } from './pages/category-edit.page';
 import { groupNewEditPage } from './pages/group-new-edit.page';
@@ -14,13 +13,14 @@ import { spacesPage } from './pages/spaces.page';
 import { getGroupPage } from './pages/group.page';
 import { getGroupUsersPage } from './pages/group-users.page';
 import { getAssociationsPage } from './pages/assignments.page';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class BuilderService {
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
-    const services = await this.servicesService.findManyByQuery();
+    const services = await this.prisma.service.findMany();
     return [
       {
         name: 'ROOT',

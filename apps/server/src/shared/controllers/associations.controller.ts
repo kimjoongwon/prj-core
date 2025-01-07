@@ -36,13 +36,7 @@ export class AssociationsController {
     @Body()
     createAssociationDto: CreateAssociationDto,
   ) {
-    const association = await this.service.create({
-      data: {
-        groupId,
-        serviceId,
-        ...createAssociationDto,
-      },
-    });
+    const association = await this.service.create(createAssociationDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }
 
@@ -101,7 +95,7 @@ export class AssociationsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK)
   async deleteAssociation(@Param('associationId') associationId: string) {
-    const association = await this.service.delete(associationId);
+    const association = await this.service.deleteById(associationId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }
 

@@ -5,3 +5,4 @@ export * from './groups.repository';
 export * from './services.repository';
 export * from './spaces.repository';
 export * from './users.repository';
+export * from './categories.repository';

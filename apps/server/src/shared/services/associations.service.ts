@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { AssociationsRepository } from '../repositories/associations.repository';
 import { AssociationQueryDto } from '../dtos/query/association-query.dto';
+import { CreateAssociationDto } from '../dtos';
 
 @Injectable()
 export class AssociationsService {
@@ -19,12 +20,14 @@ export class AssociationsService {
     return this.repository.updateMany(args);
   }
 
-  delete(id: string) {
+  deleteById(id: string) {
     return this.repository.delete({ where: { id } });
   }
 
-  create(args: Prisma.AssociationCreateArgs) {
-    return this.repository.create(args);
+  create(createAssociationDto: CreateAssociationDto) {
+    return this.repository.create({
+      data: createAssociationDto,
+    });
   }
 
   async getManyByQuery(query: AssociationQueryDto) {
