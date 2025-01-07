@@ -2,14 +2,17 @@ import { AbstractEntity } from './abstract.entity';
 import { Tenant as TenantEntity } from '@prisma/client';
 import { Space } from './space.entity';
 import { User } from './user.entity';
-// import { Role } from './role.entity';
+import { UseDto } from '../decorators/use-dto.decorator';
+import { TenantDto } from '../dtos';
+import { Role } from './role.entity';
 
-export class Tenant extends AbstractEntity implements TenantEntity {
+@UseDto(TenantDto)
+export class Tenant extends AbstractEntity<TenantDto> implements TenantEntity {
   spaceId: string;
   userId: string;
   roleId: string;
 
   space?: Space;
   user?: User;
-  // role?: Role;
+  role?: Role;
 }

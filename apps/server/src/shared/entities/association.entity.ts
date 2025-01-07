@@ -5,7 +5,11 @@ import { AbstractEntity } from './abstract.entity';
 import { Space } from './space.entity';
 import { Tenancy } from './tenancy.entity';
 import { Group } from './group.entity';
-export class Association extends AbstractEntity implements AssociationEntity {
+import { UseDto } from '../decorators/use-dto.decorator';
+import { AssociationDto } from '../dtos';
+
+@UseDto(AssociationDto)
+export class Association extends AbstractEntity<AssociationDto> implements AssociationEntity {
   groupId: string;
   userId: string | null;
   spaceId: string | null;

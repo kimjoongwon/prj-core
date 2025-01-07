@@ -3,8 +3,11 @@ import { Service } from './service.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Tenancy } from './tenancy.entity';
 import { Classification } from './classification.entity';
+import { CategoryDto } from '../dtos';
+import { UseDto } from '../decorators/use-dto.decorator';
 
-export class Category extends AbstractEntity implements CategoryEntity {
+@UseDto(CategoryDto)
+export class Category extends AbstractEntity<CategoryDto> implements CategoryEntity {
   name: string;
   type: $Enums.CategoryTypes;
   parentId: string | null;
