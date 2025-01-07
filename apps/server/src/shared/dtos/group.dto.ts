@@ -1,25 +1,26 @@
 import { Group } from '@prisma/client';
-import { ClassField, StringField } from '../../../decorators';
-import { AbstractDto } from '../../common/dtos/abstract.dto';
-import { UserDto } from '../../users';
-import { SpaceDto } from '../../spaces';
+import { AbstractDto } from './abstract.dto';
+import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
+import { ServiceDto } from './service.dto';
+import { AssociationDto } from './association.dto';
+import { TenancyDto } from './tenancy.dto';
 
 export class GroupDto extends AbstractDto implements Group {
   @StringField()
-  spaceId: string;
-
-  @StringField()
-  id: string;
-
-  @StringField()
   name: string;
+
+  @UUIDField()
+  tenancyId: string;
 
   @StringField()
   serviceId: string;
 
-  @ClassField(() => SpaceDto)
-  space: SpaceDto;
+  @ClassField(() => ServiceDto, { required: false })
+  service?: ServiceDto;
 
-  @ClassField(() => UserDto, { each: true })
-  users: UserDto[];
+  @ClassField(() => AssociationDto, { each: true, required: false })
+  associations?: AssociationDto[];
+
+  @ClassField(() => TenancyDto, { required: false })
+  tenancy?: TenancyDto;
 }

@@ -1,14 +1,18 @@
-import { StringField, UUIDField } from '../../decorators/field.decorators';
-import { AbstractDto } from '../common/dtos/abstract.dto';
-import { ProfileEntity } from '../profile.entity';
+import { Profile } from '@prisma/client';
+import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
+import { User } from '../entities/user.entity';
+import { AbstractDto } from './abstract.dto';
 
-export class ProfileDto extends AbstractDto implements ProfileEntity {
-  @UUIDField({ nullable: true })
-  depotFileId: string | null;
+export class ProfileDto extends AbstractDto implements Profile {
+  @UUIDField()
+  depotId: string;
 
   @StringField()
   nickname: string;
 
   @StringField()
   userId: string;
+
+  @ClassField(() => User, { required: false })
+  user?: User;
 }

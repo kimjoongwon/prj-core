@@ -6,14 +6,22 @@ import {
   UUIDField,
   UUIDFieldOptional,
 } from '../decorators/field.decorators';
-import { ProfileDto } from '../../profiles/profile.dto';
-import { AbstractDto } from '../entities/common/dtos/abstract.dto';
-import { TenantDto } from '../entities/tenants';
 import { Exclude } from 'class-transformer';
-import { SpaceDto } from '../entities/spaces';
 import { User } from '@prisma/client';
+import { AbstractDto } from './abstract.dto';
+import { ProfileDto } from './profile.dto';
+import { TenantDto } from './tenant.dto';
+import { SpaceDto } from './space.dto';
+import { AssociationDto } from './association.dto';
+import { ClassificationDto } from './classification.dto';
 
 export class UserDto extends AbstractDto implements User {
+  @UUIDField()
+  tenancyId: string;
+
+  @UUIDFieldOptional()
+  classificationId: string | null;
+
   @UUIDField()
   spaceId: string;
 
@@ -39,9 +47,12 @@ export class UserDto extends AbstractDto implements User {
   @ClassField(() => TenantDto, { each: true, required: false })
   tenants?: TenantDto[];
 
-  @ClassField(() => UserDto, { required: false })
-  user?: UserDto;
+  @ClassField(() => AssociationDto, { each: true, required: false })
+  associations?: AssociationDto[];
 
-  @ClassField(() => SpaceDto, { required: false })
-  space?: SpaceDto;
+  @ClassField(() => ClassificationDto, { required: false })
+  classification?: ClassificationDto;
+
+  @ClassField(() => TenantDto, { required: false })
+  tenant?: TenantDto;
 }

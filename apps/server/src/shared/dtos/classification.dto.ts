@@ -1,14 +1,15 @@
 import { Classification } from '@prisma/client';
 import { ClassField, UUIDField } from '../decorators';
-import { CategoryDto } from '../entities/categories';
-import { AbstractDto } from '../entities/common/dtos/abstract.dto';
-import { PostDto } from '../../posts';
-import { RoleDto } from '../entities/roles/dto';
 import { SpaceDto } from './space.dto';
 import { UserDto } from './user.dto';
-import { ServiceDto } from '../../services/dtos/service.dto';
+import { AbstractDto } from './abstract.dto';
+import { CategoryDto } from './category.dto';
+import { TenancyDto } from './tenancy.dto';
 
 export class ClassificationDto extends AbstractDto implements Classification {
+  @UUIDField()
+  tenancyId: string;
+
   @UUIDField({ nullable: true, default: null })
   userId: string | null;
 
@@ -30,18 +31,12 @@ export class ClassificationDto extends AbstractDto implements Classification {
   @ClassField(() => CategoryDto, { required: false })
   category?: CategoryDto;
 
-  @ClassField(() => RoleDto, { required: false })
-  role?: RoleDto;
+  @ClassField(() => TenancyDto, { required: false })
+  tenancy?: TenancyDto;
 
-  @ClassField(() => UserDto, { required: false })
-  user?: UserDto;
+  @ClassField(() => UserDto, { required: false, each: true }) 0;
+  users?: UserDto[];
 
-  @ClassField(() => SpaceDto, { required: false })
-  space?: SpaceDto;
-
-  @ClassField(() => PostDto, { required: false })
-  post?: PostDto;
-
-  @ClassField(() => ServiceDto, { required: false })
-  service?: ServiceDto;
+  @ClassField(() => SpaceDto, { required: false, each: true })
+  spaces?: SpaceDto[];
 }

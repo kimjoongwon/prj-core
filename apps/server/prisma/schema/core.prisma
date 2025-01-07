@@ -1,18 +1,21 @@
 model Category {
-  id        String        @id @default(uuid())
-  seq       Int           @unique @default(autoincrement())
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
   name      String
   type      CategoryTypes @default(ROOT)
   parentId  String?
   serviceId String
   tenancyId String
-  createdAt DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?     @db.Timestamptz(6)
-  service   Service       @relation(fields: [serviceId], references: [id])
-  parent    Category?     @relation("CategoryToCategory", fields: [parentId], references: [id])
-  children  Category[]    @relation("CategoryToCategory")
-  tenancy   Tenancy       @relation(fields: [tenancyId], references: [id])
+
+  service         Service          @relation(fields: [serviceId], references: [id])
+  parent          Category?        @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children        Category[]       @relation("CategoryToCategory")
+  tenancy         Tenancy          @relation(fields: [tenancyId], references: [id])
+  classifications Classification[]
 }
 
 model Classification {
@@ -28,12 +31,14 @@ model Classification {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
-  service    Service   @relation(fields: [serviceId], references: [id])
-  tenancy    Tenancy   @relation(fields: [tenancyId], references: [id])
-  users      User[]
-  roles      Role[]
-  posts      Post[]
-  spaces     Space[]
+
+  category Category @relation(fields: [categoryId], references: [id])
+  service  Service  @relation(fields: [serviceId], references: [id])
+  tenancy  Tenancy  @relation(fields: [tenancyId], references: [id])
+  users    User[]
+  // roles    Role[]
+  // posts    Post[]
+  spaces   Space[]
 
   @@unique([categoryId, userId])
   @@unique([categoryId, postId])
@@ -42,27 +47,31 @@ model Classification {
 }
 
 model Group {
-  id          String        @id @default(uuid())
-  seq         Int           @unique @default(autoincrement())
-  name        String
-  serviceId   String
-  tenancyId   String
-  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?     @db.Timestamptz(6)
-  service     Service       @relation(fields: [serviceId], references: [id])
-  association Association[]
-  tenancy     Tenancy       @relation(fields: [tenancyId], references: [id])
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name      String
+  serviceId String
+  tenancyId String
+
+  service      Service       @relation(fields: [serviceId], references: [id])
+  associations Association[]
+  tenancy      Tenancy       @relation(fields: [tenancyId], references: [id])
 }
 
 model Service {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  name            ServiceNames     @unique
-  label           String
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name  ServiceNames @unique
+  label String
+
   groups          Group[]
   categories      Category[]
   classifications Classification[]
@@ -72,315 +81,330 @@ model Service {
 model Association {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  groupId   String
-  userId    String?
-  postId    String?
-  spaceId   String?
-  serviceId String
-  tenancyId String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-  group     Group     @relation(fields: [groupId], references: [id])
-  user      User?     @relation(fields: [userId], references: [id])
-  post      Post?     @relation(fields: [postId], references: [id])
-  space     Space?    @relation(fields: [spaceId], references: [id])
-  service   Service   @relation(fields: [serviceId], references: [id])
-  tenancy   Tenancy   @relation(fields: [tenancyId], references: [id])
+
+  groupId   String
+  userId    String?
+  spaceId   String?
+  serviceId String
+  tenancyId String
+
+  group   Group   @relation(fields: [groupId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id])
+  // post    Post?   @relation(fields: [postId], references: [id])
+  space   Space?  @relation(fields: [spaceId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+  tenancy Tenancy @relation(fields: [tenancyId], references: [id])
 }
 
 model Profile {
-  id          String    @id @default(uuid())
-  seq         Int       @unique @default(autoincrement())
-  depotFileId String?
-  nickname    String
-  userId      String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime? @db.Timestamptz(6)
-  user        User      @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  depotId  String?
+  nickname String
+  userId   String
+
+  user  User   @relation(fields: [userId], references: [id])
+  depot Depot? @relation(fields: [depotId], references: [id])
 }
 
 model User {
-  id               String          @id @default(uuid())
-  seq              Int             @unique @default(autoincrement())
-  email            String          @unique
-  name             String          @unique
-  phone            String          @unique
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  email            String  @unique
+  name             String  @unique
+  phone            String  @unique
   password         String
   tenancyId        String
   classificationId String?
-  updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-  createdAt        DateTime        @default(now()) @db.Timestamptz(6)
-  removedAt        DateTime?       @db.Timestamptz(6)
-  posts            Post[]
-  profiles         Profile[]
-  tenants          Tenant[]
-  association      Association[]
-  classification   Classification? @relation(fields: [classificationId], references: [id])
-  tenancy          Tenancy         @relation(fields: [tenancyId], references: [id])
+
+  // posts          Post[]
+  profiles       Profile[]
+  tenants        Tenant[]
+  associations   Association[]
+  classification Classification? @relation(fields: [classificationId], references: [id])
+  tenancy        Tenancy         @relation(fields: [tenancyId], references: [id])
 }
 
 model Tenant {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  userId    String
-  roleId    String
-  spaceId   String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-  role      Role      @relation(fields: [roleId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+
+  userId  String
+  // roleId  String
+  spaceId String
+
+  // role  Role  @relation(fields: [roleId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  space Space @relation(fields: [spaceId], references: [id])
 }
 
 model Space {
-  id               String          @id @default(uuid())
-  seq              Int             @unique @default(autoincrement())
-  name             String          @unique
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name             String  @unique
   classificationId String?
-  createdAt        DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt        DateTime?       @db.Timestamptz(6)
-  classification   Classification? @relation(fields: [classificationId], references: [id])
-  associations     Association[]
-  tenancy          Tenancy?
+
+  classification Classification? @relation(fields: [classificationId], references: [id])
+  associations   Association[]
+  tenancy        Tenancy?
+  tenants        Tenant[]
 }
 
 model Tenancy {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  spaceId         String           @unique
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  spaceId String @unique
+
   space           Space            @relation(fields: [spaceId], references: [id])
   groups          Group[]
   categories      Category[]
   classifications Classification[]
   associations    Association[]
   users           User[]
-  timelines       Timeline[]
-  posts           Post[]
+  // posts           Post[]
 }
 
 model SMS {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  toUserIds  String[]
-  fromUserId String?
-  spaceId    String
-  status     SMSStatus @default(PROGRESS)
-  sentAt     DateTime?
-  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
-}
-
-model SystemEmail {
-  id         String      @id @default(uuid())
-  seq        Int         @unique @default(autoincrement())
-  status     EmailStatus @default(PROGRESS)
-  emailId    String
-  templateId String
-  spaceId    String
-  createdAt  DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?   @db.Timestamptz(6)
-  email      Email       @relation(fields: [emailId], references: [id])
-  template   Template    @relation(fields: [templateId], references: [id])
-}
-
-model Email {
-  id           String        @id @default(uuid())
-  seq          Int           @unique @default(autoincrement())
-  toUserIds    String[]
-  fromUserId   String
-  sentAt       DateTime      @db.Timestamptz(6)
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime?     @db.Timestamptz(6)
-  postId       String
-  post         Post          @relation(fields: [postId], references: [id])
-  systemEmails SystemEmail[]
-}
-
-model Timeline {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  sentAt    DateTime @db.Timestamptz(6)
   tenancyId String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  sessions  Session[]
-  tenancy   Tenancy   @relation(fields: [tenancyId], references: [id])
+  messageId String
+
+  status SMSStatus @default(PROGRESS)
 }
 
-model Session {
-  id                    String                  @id @default(uuid())
-  seq                   Int                     @unique @default(autoincrement())
-  type                  SessionTypes            @default(ONE_TIME)
-  startDate             DateTime                @db.Date
-  endDate               DateTime?               @db.Date
-  timelineId            String
-  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
-  repeatCycle           Int                     @default(1)
-  repeatCycleType       RepeatCycleTypes        @default(WEEK)
-  createdAt             DateTime                @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-  removedAt             DateTime?               @db.Timestamptz(6)
-  timeline              Timeline                @relation(fields: [timelineId], references: [id])
-  timelineItems         TimelineItem[]
-}
+// model SystemEmail {
+//   id        String    @id @default(uuid())
+//   seq       Int       @unique @default(autoincrement())
+//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime? @db.Timestamptz(6)
 
-model TimelineItem {
-  id            String    @id @default(uuid())
-  seq           Int       @unique @default(autoincrement())
-  sessionId     String
-  startDateTime DateTime  @db.Timestamptz(6)
-  endDateTime   DateTime  @db.Timestamptz(6)
-  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt     DateTime? @db.Timestamptz(6)
-  session       Session   @relation(fields: [sessionId], references: [id])
-}
+//   status     EmailStatus @default(PROGRESS)
+//   messageId  String
+//   templateId String
+//   tenancyId  String
+//   sentAt     DateTime    @db.Timestamptz(6)
 
-model Role {
-  id               String          @id @default(uuid())
-  seq              Int             @unique @default(autoincrement())
-  name             Roles           @unique @default(USER)
-  classificationId String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt        DateTime?       @db.Timestamptz(6)
-  abilities        Ability[]
-  tenant           Tenant[]
-  classification   Classification? @relation(fields: [classificationId], references: [id])
-}
+//   template Template @relation(fields: [templateId], references: [id])
+// }
 
-model Action {
-  id         String         @id @default(uuid())
-  seq        Int            @unique @default(autoincrement())
-  name       AbilityActions @default(CREATE)
-  conditions Json?
-  subjectId  String
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime?      @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?      @db.Timestamptz(6)
-  subject    Subject        @relation(fields: [subjectId], references: [id])
-}
+// model Message {
+//   id        String    @id @default(uuid())
+//   seq       Int       @unique @default(autoincrement())
+//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime? @db.Timestamptz(6)
 
-model Subject {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  abilities Ability[]
-  actions   Action[]
-}
+//   toUserIds  String[]
+//   fromUserId String
+//   postId     String
 
-model Ability {
-  id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
-  type        AbilityTypes
-  roleId      String
-  subjectId   String
-  description String?
-  conditions  Json?
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?    @db.Timestamptz(6)
-  role        Role         @relation(fields: [roleId], references: [id])
-  subject     Subject      @relation(fields: [subjectId], references: [id])
-}
+//   post         Post          @relation(fields: [postId], references: [id])
+//   systemEmails SystemEmail[]
+// }
 
-model Template {
-  id           String        @id @default(uuid())
-  seq          Int           @unique @default(autoincrement())
-  name         TemplateNames @unique @default(WELCOME)
-  postId       String        @unique
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime?     @db.Timestamptz(6)
-  systemEmails SystemEmail[]
-  post         Post          @relation(fields: [postId], references: [id])
-}
+// model Timeline {
+//   id        String    @id @default(uuid())
+//   seq       Int       @unique @default(autoincrement())
+//   tenancyId String
+//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime? @db.Timestamptz(6)
+//   sessions  Session[]
+//   tenancy   Tenancy   @relation(fields: [tenancyId], references: [id])
+// }
 
-model Qna {
-  id        String     @id @default(uuid())
-  seq       Int        @unique @default(autoincrement())
-  status    QnaStatus  @default(OPEN)
-  spaceId   String
-  createdAt DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?  @db.Timestamptz(6)
-  question  Question[]
-}
+// model Session {
+//   id                    String                  @id @default(uuid())
+//   seq                   Int                     @unique @default(autoincrement())
+//   type                  SessionTypes            @default(ONE_TIME)
+//   startDate             DateTime                @db.Date
+//   endDate               DateTime?               @db.Date
+//   timelineId            String
+//   recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+//   repeatCycle           Int                     @default(1)
+//   repeatCycleType       RepeatCycleTypes        @default(WEEK)
+//   createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+//   updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
+//   removedAt             DateTime?               @db.Timestamptz(6)
+//   timeline              Timeline                @relation(fields: [timelineId], references: [id])
+//   timelineItems         TimelineItem[]
+// }
 
-model Question {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  postId    String    @unique
-  qnaId     String
-  spaceId   String
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  answers   Answer[]
-  post      Post      @relation(fields: [postId], references: [id])
-  qna       Qna       @relation(fields: [qnaId], references: [id])
-}
+// model TimelineItem {
+//   id            String    @id @default(uuid())
+//   seq           Int       @unique @default(autoincrement())
+//   sessionId     String
+//   startDateTime DateTime  @db.Timestamptz(6)
+//   endDateTime   DateTime  @db.Timestamptz(6)
+//   createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt     DateTime? @db.Timestamptz(6)
+//   session       Session   @relation(fields: [sessionId], references: [id])
+// }
 
-model Answer {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  questionId String
-  postId     String
-  spaceId    String
-  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
-  post       Post      @relation(fields: [postId], references: [id])
-  question   Question  @relation(fields: [questionId], references: [id])
-}
+// model Role {
+//   id               String          @id @default(uuid())
+//   seq              Int             @unique @default(autoincrement())
+//   name             Roles           @unique @default(USER)
+//   classificationId String?
+//   createdAt        DateTime        @default(now())
+//   updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
+//   removedAt        DateTime?       @db.Timestamptz(6)
+//   abilities        Ability[]
+//   tenant           Tenant[]
+//   classification   Classification? @relation(fields: [classificationId], references: [id])
+// }
 
-model Post {
-  id               String          @id @default(uuid())
-  seq              Int             @unique @default(autoincrement())
-  type             PostTypes       @default(TEXT)
-  title            String?
-  description      String?
-  content          String          @db.VarChar(1000)
-  dopotId          String
-  authorId         String
-  tenancyId        String
-  classificationId String?
-  createdAt        DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt        DateTime?       @db.Timestamptz(6)
-  answers          Answer[]
-  emails           Email[]
-  author           User            @relation(fields: [authorId], references: [id])
-  question         Question?
-  template         Template?
-  exercise         Exercise?
-  association      Association[]
-  classification   Classification? @relation(fields: [classificationId], references: [id])
-  tenancy          Tenancy         @relation(fields: [tenancyId], references: [id])
-}
+// model Action {
+//   id         String         @id @default(uuid())
+//   seq        Int            @unique @default(autoincrement())
+//   name       AbilityActions @default(CREATE)
+//   conditions Json?
+//   subjectId  String
+//   createdAt  DateTime       @default(now())
+//   updatedAt  DateTime?      @updatedAt @db.Timestamptz(6)
+//   removedAt  DateTime?      @db.Timestamptz(6)
+//   subject    Subject        @relation(fields: [subjectId], references: [id])
+// }
+
+// model Subject {
+//   id        String    @id @default(uuid())
+//   seq       Int       @unique @default(autoincrement())
+//   name      String    @unique
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime? @db.Timestamptz(6)
+//   abilities Ability[]
+//   actions   Action[]
+// }
+
+// model Ability {
+//   id          String       @id @default(uuid())
+//   seq         Int          @unique @default(autoincrement())
+//   type        AbilityTypes
+//   roleId      String
+//   subjectId   String
+//   description String?
+//   conditions  Json?
+//   createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+//   updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
+//   removedAt   DateTime?    @db.Timestamptz(6)
+//   role        Role         @relation(fields: [roleId], references: [id])
+//   subject     Subject      @relation(fields: [subjectId], references: [id])
+// }
+
+// model Template {
+//   id           String        @id @default(uuid())
+//   seq          Int           @unique @default(autoincrement())
+//   name         TemplateNames @unique @default(WELCOME)
+//   postId       String        @unique
+//   createdAt    DateTime      @default(now()) @db.Timestamptz(6)
+//   updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
+//   removedAt    DateTime?     @db.Timestamptz(6)
+//   systemEmails SystemEmail[]
+//   post         Post          @relation(fields: [postId], references: [id])
+// }
+
+// model Qna {
+//   id        String     @id @default(uuid())
+//   seq       Int        @unique @default(autoincrement())
+//   status    QnaStatus  @default(OPEN)
+//   spaceId   String
+//   createdAt DateTime   @default(now()) @db.Timestamptz(6)
+//   updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime?  @db.Timestamptz(6)
+//   question  Question[]
+// }
+
+// model Question {
+//   id        String    @id @default(uuid())
+//   seq       Int       @unique @default(autoincrement())
+//   postId    String    @unique
+//   qnaId     String
+//   spaceId   String
+//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt DateTime? @db.Timestamptz(6)
+//   answers   Answer[]
+//   post      Post      @relation(fields: [postId], references: [id])
+//   qna       Qna       @relation(fields: [qnaId], references: [id])
+// }
+
+// model Answer {
+//   id         String    @id @default(uuid())
+//   seq        Int       @unique @default(autoincrement())
+//   questionId String
+//   postId     String
+//   spaceId    String
+//   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt  DateTime? @db.Timestamptz(6)
+//   post       Post      @relation(fields: [postId], references: [id])
+//   question   Question  @relation(fields: [questionId], references: [id])
+// }
+
+// model Post {
+//   id               String          @id @default(uuid())
+//   seq              Int             @unique @default(autoincrement())
+//   type             PostTypes       @default(TEXT)
+//   title            String?
+//   description      String?
+//   content          String          @db.VarChar(1000)
+//   dopotId          String
+//   authorId         String
+//   tenancyId        String
+//   classificationId String?
+//   createdAt        DateTime        @default(now()) @db.Timestamptz(6)
+//   updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
+//   removedAt        DateTime?       @db.Timestamptz(6)
+//   author           User            @relation(fields: [authorId], references: [id])
+//   exercise         Exercise?
+//   association      Association[]
+//   classification   Classification? @relation(fields: [classificationId], references: [id])
+//   tenancy          Tenancy         @relation(fields: [tenancyId], references: [id])
+// }
 
 model Depot {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
+  id        String     @id @default(uuid())
+  seq       Int        @unique @default(autoincrement())
+  type      DepotTypes @default(LEAF)
   parentId  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  removedAt DateTime?  @db.Timestamptz(6)
   files     File[]
-  children  Depot[]   @relation("DepotToDepot")
-  parent    Depot?    @relation("DepotToDepot", fields: [parentId], references: [id])
+  children  Depot[]    @relation("DepotToDepot")
+  parent    Depot?     @relation("DepotToDepot", fields: [parentId], references: [id])
+  profiles  Profile[]
 }
 
 model File {
@@ -533,4 +557,9 @@ enum ServiceNames {
   SPACE
   POST
   ROLE
+}
+
+enum DepotTypes {
+  ROOT
+  LEAF
 }

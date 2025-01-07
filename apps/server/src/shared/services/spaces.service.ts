@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ContextProvider } from '../../providers/context.provider';
-import { SpacesRepository } from './spaces.repository';
-import { SpaceQueryDto, UpdateSpaceDto } from '../../dtos/update';
 import { Prisma } from '@prisma/client';
 import { PaginationUtil } from '@shared/utils';
+import { SpacesRepository } from '../repositories/spaces.repository';
+import { UpdateSpaceDto } from '../dtos/update/update-space.dto';
 
 @Injectable()
 export class SpacesService {
