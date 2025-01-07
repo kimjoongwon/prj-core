@@ -57,7 +57,7 @@ export const libModules = [
       middlewares: [
         loggingMiddleware({
           logger: new Logger('PrismaMiddleware'),
-          logLevel: 'debug',
+          logLevel: 'log',
           logMessage: (query: QueryInfo) =>
             `[Prisma Query] ${query.model}.${query.action} - ${query.executionTime}ms`,
         }),
