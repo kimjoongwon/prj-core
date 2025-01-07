@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SpacesService } from './spaces.service';
-import { SpacesRepository } from './spaces.repository';
+import { SpacesRepository } from '../../repositories/spaces.repository';
 
 @Module({
   providers: [SpacesService, SpacesRepository],
