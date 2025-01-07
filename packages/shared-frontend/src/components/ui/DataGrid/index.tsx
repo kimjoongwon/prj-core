@@ -20,9 +20,7 @@ import {
 } from '@nextui-org/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';
-import { MobxProps, PageState } from '@shared/types';
-import { useMobxHookForm } from '../../../hooks';
-import { get } from 'lodash-es';
+import { PageState } from '@shared/types';
 
 export type Key = string | number;
 
@@ -103,8 +101,8 @@ export const DataGrid = observer(
 
     return (
       <Table
-        selectionMode={selectionMode}
         fullWidth
+        selectionMode={selectionMode}
         aria-label="datagrid"
         isHeaderSticky
         isCompact

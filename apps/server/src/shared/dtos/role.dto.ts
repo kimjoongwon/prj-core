@@ -1,13 +1,16 @@
-import { $Enums } from '@prisma/client';
-import { AbstractDto } from '../entities/common/dtos/abstract.dto';
-import { TenantDto } from '../../tenants';
-import { Role } from '../role.entity';
-import { ClassField, EnumField } from '../decorators/field.decorators';
+// import { $Enums } from '@prisma/client';
+// import { ClassField, EnumField, UUIDField } from '../decorators/field.decorators';
+// import { AbstractDto } from './abstract.dto';
+// import { TenantDto } from './tenant.dto';
+// import { Role } from '../entities/role.entity';
 
-export class RoleDto extends AbstractDto implements Role {
-  @EnumField(() => $Enums.Roles)
-  name: $Enums.Roles;
+// export class RoleDto extends AbstractDto implements Role {
+//   @EnumField(() => $Enums.Roles)
+//   name: $Enums.Roles;
 
-  @ClassField(() => TenantDto, { required: false })
-  tenant?: TenantDto;
-}
+//   @UUIDField()
+//   classificationId: string;
+
+//   @ClassField(() => TenantDto, { required: false })
+//   tenant?: TenantDto;
+// }

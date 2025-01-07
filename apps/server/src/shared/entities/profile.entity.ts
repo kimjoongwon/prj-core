@@ -1,8 +1,11 @@
-import { Profile } from '@prisma/client';
-import { AbstractEntity } from './common/entities/abstract.entity';
+import { Profile as ProfileEntity } from '@prisma/client';
+import { AbstractEntity } from './abstract.entity';
+import { User } from './user.entity';
 
-export class ProfileEntity extends AbstractEntity implements Profile {
-  depotFileId: string;
+export class Profile extends AbstractEntity implements ProfileEntity {
+  depotId: string | null;
   nickname: string;
   userId: string;
+
+  user?: User;
 }
