@@ -1,38 +1,31 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RolesService, SpacesService, SubjectsService, UsersService } from '../../entities';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../configs';
-import { PasswordService } from '../password/password.service';
 import { $Enums, Prisma } from '@prisma/client';
-import { ServicesService } from '../../entities/services/services.service';
 import { PrismaService } from 'nestjs-prisma';
+import { PasswordService } from '../password/password.service';
 
 @Injectable()
 export class InitService {
   logger = new Logger(InitService.name);
   LOG_PREFIX = `${InitService.name}`;
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly rolesService: RolesService,
-    private readonly spacesService: SpacesService,
-    private readonly configService: ConfigService,
-    private readonly usersService: UsersService,
     private readonly passwordService: PasswordService,
-    private readonly subjectsService: SubjectsService,
-    private readonly servicesService: ServicesService,
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
   ) {}
 
   async createDefaultRoles() {
     let adminRoleId = null;
     this.logger.log(`[${this.LOG_PREFIX}] 앱시작 ROLE 생성`);
 
-    const superAdminRole = await this.rolesService.getUnique({
+    const superAdminRole = await this.prisma.role.findUnique({
       where: { name: 'SUPER_ADMIN' },
     });
 
     if (!superAdminRole) {
       this.logger.log(`[${this.LOG_PREFIX}] 슈퍼어드민 생성`);
-      const role = await this.rolesService.create({
+      const role = await this.prisma.role.create({
         data: {
           name: 'SUPER_ADMIN',
         },
@@ -47,12 +40,12 @@ export class InitService {
 
     this.logger.log(`[${this.LOG_PREFIX}] USER ROLE 생성`);
 
-    const userRole = await this.rolesService.getUnique({ where: { name: 'USER' } });
+    const userRole = await this.prisma.role.findUnique({ where: { name: 'USER' } });
 
     if (!userRole) {
       this.logger.log(`[${this.LOG_PREFIX}] USER 생성`);
 
-      await this.rolesService.create({
+      await this.prisma.role.create({
         data: {
           name: 'USER',
         },
@@ -74,7 +67,7 @@ export class InitService {
 
     const appName = appConfig.name;
 
-    const defaultSpace = await this.spacesService.getUnique({
+    const defaultSpace = await this.prisma.space.findUnique({
       where: { name: appName },
     });
 
@@ -103,7 +96,7 @@ export class InitService {
     const appConfig = this.configService.get<AppConfig>('app');
     const hashedPassword = await this.passwordService.hashPassword('rkdmf12!@');
 
-    const adminUser = await this.usersService.getUnique({
+    const adminUser = await this.prisma.user.findUnique({
       where: {
         email: appConfig.adminEmail,
       },
@@ -116,7 +109,7 @@ export class InitService {
       return userId;
     } else {
       this.logger.log(`[${this.LOG_PREFIX}] 관리자 생성`);
-      const user = await this.usersService.create({
+      const user = await this.prisma.user.create({
         data: {
           email: appConfig.adminEmail,
           password: hashedPassword,
@@ -191,9 +184,9 @@ export class InitService {
   async createSubjects() {
     return await Promise.all(
       Object.keys(Prisma.ModelName).map(async (key) => {
-        const subject = await this.subjectsService.getUnique({ where: { name: key } });
+        const subject = await this.prisma.subject.findUnique({ where: { name: key } });
         if (!subject) {
-          return this.subjectsService.create({ data: { name: key } });
+          return this.prisma.subject.create({ data: { name: key } });
         } else {
           return null;
         }
@@ -207,9 +200,9 @@ export class InitService {
         { name: $Enums.ServiceNames.USER, label: '이용자' },
         { name: $Enums.ServiceNames.SPACE, label: '공간' },
       ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
-        const service = await this.servicesService.getUnique({ where: { name: seedService.name } });
+        const service = await this.prisma.service.findUnique({ where: { name: seedService.name } });
         if (!service) {
-          return this.servicesService.create({ data: seedService });
+          return this.prisma.service.create({ data: seedService });
         } else {
           return null;
         }

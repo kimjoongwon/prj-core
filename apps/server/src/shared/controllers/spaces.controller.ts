@@ -11,19 +11,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  ApiResponseEntity,
-  Auth,
-  CreateSpaceDto,
-  PageMetaDto,
-  RemoveManySpaceDto,
-  ResponseEntity,
-  SpaceDto,
-  SpaceQueryDto,
-  SpacesService,
-  UpdateSpaceDto,
-} from '@shared';
 import { plainToInstance } from 'class-transformer';
+import { Auth, ApiResponseEntity } from '../decorators';
+import { SpaceDto, CreateSpaceDto, UpdateSpaceDto, SpaceQueryDto } from '../dtos';
+import { PageMetaDto } from '../dtos/query/page-meta.dto';
+import { ResponseEntity } from '../entities';
+import { SpacesService } from '../services';
 
 @ApiTags('ADMIN_SPACES')
 @Controller()
@@ -46,15 +39,6 @@ export class SpacesController {
   async getSpace(@Param('spaceId') spaceId: string) {
     const space = await this.service.getUnique({ where: { id: spaceId } });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
-  }
-
-  @Patch('removedAt')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceDto, HttpStatus.OK)
-  async removeSpaces(@Body() { spaceIds }: RemoveManySpaceDto) {
-    const spaces = await this.service.removeMany(spaceIds);
-    return new ResponseEntity(HttpStatus.OK, '성공', spaces.count);
   }
 
   @Patch(':spaceId')
@@ -96,19 +80,6 @@ export class SpacesController {
       'success',
       spaces.map((space) => plainToInstance(SpaceDto, space)),
       new PageMetaDto(pageQueryDto.skip, pageQueryDto.take, count),
-    );
-  }
-
-  @Get('accessible-spaces')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
-  async getAccessibleSpaces() {
-    const spaces = await this.service.getAccessibleSpaces();
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'success',
-      spaces.map((space) => plainToInstance(SpaceDto, space)),
     );
   }
 }

@@ -17,7 +17,7 @@ import { Response, Request } from 'express';
 
 @ApiTags('AUTH')
 @Controller()
-export class AuthController {
+export class AuthEndpoint {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,

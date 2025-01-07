@@ -16,7 +16,7 @@ import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } f
 import { ResponseEntity } from '../entities/response.entity';
 import { CategoriesService } from '../services';
 
-@ApiTags('ADMIN_CATEGORY')
+@ApiTags('CATEGORIES')
 @Controller()
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

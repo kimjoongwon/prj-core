@@ -39,6 +39,7 @@ model Classification {
   // roles    Role[]
   // posts    Post[]
   spaces   Space[]
+  roles    Role[]
 
   @@unique([categoryId, userId])
   @@unique([categoryId, postId])
@@ -144,12 +145,12 @@ model Tenant {
   removedAt DateTime? @db.Timestamptz(6)
 
   userId  String
-  // roleId  String
+  roleId  String
   spaceId String
 
-  // role  Role  @relation(fields: [roleId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
   space Space @relation(fields: [spaceId], references: [id])
+  role  Role  @relation(fields: [roleId], references: [id])
 }
 
 model Space {
@@ -271,56 +272,64 @@ model SMS {
 //   session       Session   @relation(fields: [sessionId], references: [id])
 // }
 
-// model Role {
-//   id               String          @id @default(uuid())
-//   seq              Int             @unique @default(autoincrement())
-//   name             Roles           @unique @default(USER)
-//   classificationId String?
-//   createdAt        DateTime        @default(now())
-//   updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-//   removedAt        DateTime?       @db.Timestamptz(6)
-//   abilities        Ability[]
-//   tenant           Tenant[]
-//   classification   Classification? @relation(fields: [classificationId], references: [id])
-// }
+model Role {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
 
-// model Action {
-//   id         String         @id @default(uuid())
-//   seq        Int            @unique @default(autoincrement())
-//   name       AbilityActions @default(CREATE)
-//   conditions Json?
-//   subjectId  String
-//   createdAt  DateTime       @default(now())
-//   updatedAt  DateTime?      @updatedAt @db.Timestamptz(6)
-//   removedAt  DateTime?      @db.Timestamptz(6)
-//   subject    Subject        @relation(fields: [subjectId], references: [id])
-// }
+  name             Roles   @unique @default(USER)
+  classificationId String?
 
-// model Subject {
-//   id        String    @id @default(uuid())
-//   seq       Int       @unique @default(autoincrement())
-//   name      String    @unique
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime? @db.Timestamptz(6)
-//   abilities Ability[]
-//   actions   Action[]
-// }
+  abilities      Ability[]
+  classification Classification? @relation(fields: [classificationId], references: [id])
+  tenants        Tenant[]
+}
 
-// model Ability {
-//   id          String       @id @default(uuid())
-//   seq         Int          @unique @default(autoincrement())
-//   type        AbilityTypes
-//   roleId      String
-//   subjectId   String
-//   description String?
-//   conditions  Json?
-//   createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-//   updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-//   removedAt   DateTime?    @db.Timestamptz(6)
-//   role        Role         @relation(fields: [roleId], references: [id])
-//   subject     Subject      @relation(fields: [subjectId], references: [id])
-// }
+model Action {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name       AbilityActions @default(CREATE)
+  conditions Json?
+  subjectId  String
+
+  subject Subject @relation(fields: [subjectId], references: [id])
+}
+
+model Subject {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name String @unique
+
+  abilities Ability[]
+  actions   Action[]
+}
+
+model Ability {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  type        AbilityTypes
+  roleId      String
+  subjectId   String
+  description String?
+  conditions  Json?
+
+  role    Role    @relation(fields: [roleId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+}
 
 // model Template {
 //   id           String        @id @default(uuid())

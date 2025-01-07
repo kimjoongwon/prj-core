@@ -1,9 +1,12 @@
 import { Tenant } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import { UserDto, SpaceDto } from '.';
-import { ClassField, StringField } from '../decorators/field.decorators';
+import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
 
 export class TenantDto extends AbstractDto implements Tenant {
+  @UUIDField()
+  roleId: string;
+
   @StringField()
   userId: string;
 

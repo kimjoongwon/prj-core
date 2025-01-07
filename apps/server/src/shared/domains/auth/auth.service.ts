@@ -8,11 +8,12 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { UsersService, ResponseEntity } from '../../entities';
+import { ResponseEntity } from '../../entities';
 import { goTryRawSync } from '../../libs';
 import { TokenService } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
+import { UsersService } from '../../services/users.service';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +59,11 @@ export class AuthService {
         name,
         phone,
         password,
-        spaceId,
+        tenancy: {
+          create: {
+            spaceId,
+          },
+        },
         profiles: {
           create: {
             nickname,
