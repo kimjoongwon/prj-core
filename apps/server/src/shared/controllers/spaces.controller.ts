@@ -14,7 +14,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { SpaceDto, CreateSpaceDto, UpdateSpaceDto, SpaceQueryDto } from '../dtos';
-import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities';
 import { SpacesService } from '../services';
 

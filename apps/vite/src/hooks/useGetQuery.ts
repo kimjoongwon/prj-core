@@ -1,22 +1,33 @@
 import { APIManager } from '@shared/frontend';
 import { Query } from '@shared/types';
+import { get, isEmpty } from 'lodash-es';
 import { useParams } from 'react-router-dom';
 
 export const useGetQuery = (query?: Query) => {
-  const params = useParams();
-  const serviceId = window.location.pathname.split('/')[4];
+  let params = useParams();
+  const serviceId = window.location.pathname.split('/')[5];
   const apiArgs: unknown[] = [];
 
-  if (query?.hasResourceId) {
-    apiArgs.push(params?.resourceId);
-  }
+  const context = {
+    ...params,
+    serviceId,
+  };
 
-  if (query?.hasServiceId) {
-    query.params.serviceId = serviceId;
-  }
+  let queryParams = {
+    ...query?.params,
+  };
 
-  if (query?.hasParams) {
-    apiArgs.push(query?.params);
+  if (query?.mapper) {
+    Object.keys(query.mapper).map(key => {
+      const value = get(context, key);
+      queryParams = {
+        ...queryParams,
+        [query.mapper[key]]: value,
+      };
+    });
+  }
+  if (!isEmpty(queryParams)) {
+    apiArgs.push(queryParams);
   }
 
   apiArgs.push({
@@ -29,7 +40,7 @@ export const useGetQuery = (query?: Query) => {
       // @ts-expect-error
       APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
-
+  console.log('getQuery', getQuery);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const data = getQuery?.data?.data;

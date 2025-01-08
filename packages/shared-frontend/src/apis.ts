@@ -33,11 +33,16 @@ import type {
   CreateCategoryDto,
   CreateClassification200AllOf,
   CreateClassificationDto,
+  CreateGroupDto,
+  CreateSpace200AllOf,
+  CreateSpaceDto,
   CreateUser200AllOf,
   CreateUserDto,
   DeleteAssociation200AllOf,
   DeleteCategory200AllOf,
   DeleteClassification200AllOf,
+  DeleteGroup200AllOf,
+  DeleteSpace200AllOf,
   DeleteUser200AllOf,
   GetAssociation200AllOf,
   GetAssociationsByQuery200AllOf,
@@ -48,15 +53,24 @@ import type {
   GetClassification200AllOf,
   GetClassificationsByQuery200AllOf,
   GetClassificationsByQueryParams,
+  GetGroup200AllOf,
+  GetGroupsByQuery200AllOf,
+  GetGroupsByQueryParams,
+  GetSpace200AllOf,
+  GetSpacesByQuery200AllOf,
+  GetSpacesByQueryParams,
   GetToken200AllOf,
   GetUser200AllOf,
   GetUsersByQuery200AllOf,
   GetUsersByQueryParams,
+  GroupDto,
   LoginPayloadDto,
   RemoveAssociation200AllOf,
   RemoveAssociations200AllOf,
   RemoveClassification200AllOf,
   RemoveClassifications200AllOf,
+  RemoveGroups200AllOf,
+  RemoveSpace200AllOf,
   RemoveUser200AllOf,
   RemoveUsers200AllOf,
   SignUpPayloadDto,
@@ -68,6 +82,10 @@ import type {
   UpdateCategoryDto,
   UpdateClassification200AllOf,
   UpdateClassificationDto,
+  UpdateGroup200AllOf,
+  UpdateGroupDto,
+  UpdateSpace200AllOf,
+  UpdateSpaceDto,
   UpdateUser200AllOf,
   UpdateUserDto
 } from './model'
@@ -2035,6 +2053,1154 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getDeleteCategoryMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createGroup = (
+    createGroupDto: BodyType<CreateGroupDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<GroupDto>(
+      {url: `http://localhost:3005/api/v1/groups`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createGroupDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateGroupMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGroup>>, {data: BodyType<CreateGroupDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createGroup(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof createGroup>>>
+    export type CreateGroupMutationBody = BodyType<CreateGroupDto>
+    export type CreateGroupMutationError = ErrorType<void>
+
+    export const useCreateGroup = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGroup>>, TError,{data: BodyType<CreateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createGroup>>,
+        TError,
+        {data: BodyType<CreateGroupDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateGroupMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getGroupsByQuery = (
+    params?: GetGroupsByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetGroupsByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/groups`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetGroupsByQueryQueryKey = (params?: GetGroupsByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/groups`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetGroupsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
+export type GetGroupsByQueryQueryError = ErrorType<unknown>
+
+
+export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGroupsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGroupsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroupsByQuery<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupsByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetGroupsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
+export type GetGroupsByQuerySuspenseQueryError = ErrorType<unknown>
+
+
+export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroupsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroupsByQuery>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupsByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetGroupsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupsByQuery>>> = ({ signal }) => getGroupsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupsByQuery>>>
+export type GetGroupsByQuerySuspenseInfiniteQueryError = ErrorType<unknown>
+
+
+export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
+ params: undefined |  GetGroupsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupsByQuery>>>, TError = ErrorType<unknown>>(
+ params?: GetGroupsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupsByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGroup = (
+    groupId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetGroup200AllOf>(
+      {url: `http://localhost:3005/api/v1/groups/${groupId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetGroupQueryKey = (groupId: string,) => {
+    return [`http://localhost:3005/api/v1/groups/${groupId}`] as const;
+    }
+
+    
+export const getGetGroupQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
+export type GetGroupQueryError = ErrorType<unknown>
+
+
+export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGroup>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getGroup>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupQueryOptions(groupId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetGroupSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
+export type GetGroupSuspenseQueryError = ErrorType<unknown>
+
+
+export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupSuspenseQueryOptions(groupId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetGroupSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetGroupSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
+export type GetGroupSuspenseInfiniteQueryError = ErrorType<unknown>
+
+
+export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetGroupSuspenseInfiniteQueryOptions(groupId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateGroup = (
+    groupId: string,
+    updateGroupDto: BodyType<UpdateGroupDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateGroup200AllOf>(
+      {url: `http://localhost:3005/api/v1/groups/${groupId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateGroupDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateGroupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroup>>, {groupId: string;data: BodyType<UpdateGroupDto>}> = (props) => {
+          const {groupId,data} = props ?? {};
+
+          return  updateGroup(groupId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroup>>>
+    export type UpdateGroupMutationBody = BodyType<UpdateGroupDto>
+    export type UpdateGroupMutationError = ErrorType<unknown>
+
+    export const useUpdateGroup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateGroup>>,
+        TError,
+        {groupId: string;data: BodyType<UpdateGroupDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateGroupMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteGroup = (
+    groupId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteGroup200AllOf>(
+      {url: `http://localhost:3005/api/v1/groups/${groupId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteGroupMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGroup>>, {groupId: string}> = (props) => {
+          const {groupId} = props ?? {};
+
+          return  deleteGroup(groupId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteGroupMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGroup>>>
+    
+    export type DeleteGroupMutationError = ErrorType<unknown>
+
+    export const useDeleteGroup = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGroup>>, TError,{groupId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteGroup>>,
+        TError,
+        {groupId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteGroupMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeGroups = (
+    groupIds: string[],
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveGroups200AllOf>(
+      {url: `http://localhost:3005/api/v1/groups/${groupIds}`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveGroupsMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGroups>>, {groupIds: string[]}> = (props) => {
+          const {groupIds} = props ?? {};
+
+          return  removeGroups(groupIds,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveGroupsMutationResult = NonNullable<Awaited<ReturnType<typeof removeGroups>>>
+    
+    export type RemoveGroupsMutationError = ErrorType<unknown>
+
+    export const useRemoveGroups = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroups>>, TError,{groupIds: string[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeGroups>>,
+        TError,
+        {groupIds: string[]},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveGroupsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createSpace = (
+    createSpaceDto: BodyType<CreateSpaceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSpaceDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSpace>>, {data: BodyType<CreateSpaceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSpace(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof createSpace>>>
+    export type CreateSpaceMutationBody = BodyType<CreateSpaceDto>
+    export type CreateSpaceMutationError = ErrorType<void>
+
+    export const useCreateSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createSpace>>,
+        TError,
+        {data: BodyType<CreateSpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getSpacesByQuery = (
+    params?: GetSpacesByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSpacesByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetSpacesByQueryQueryKey = (params?: GetSpacesByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/spaces`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSpacesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQueryQueryError = ErrorType<void>
+
+
+export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSpacesByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSpacesByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpacesByQuery<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpacesByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpacesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQuerySuspenseQueryError = ErrorType<void>
+
+
+export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpacesByQuerySuspense<TData = Awaited<ReturnType<typeof getSpacesByQuery>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpacesByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpacesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpacesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByQuery>>> = ({ signal }) => getSpacesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpacesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpacesByQuery>>>
+export type GetSpacesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
+ params: undefined |  GetSpacesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpacesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSpacesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpacesByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces/${spaceId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetSpaceQueryKey = (spaceId: string,) => {
+    return [`http://localhost:3005/api/v1/spaces/${spaceId}`] as const;
+    }
+
+    
+export const getGetSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceQueryError = ErrorType<void>
+
+
+export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSpace>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSpace>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpace<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpaceQueryOptions(spaceId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceSuspenseQueryError = ErrorType<void>
+
+
+export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpaceSuspense<TData = Awaited<ReturnType<typeof getSpace>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpaceSuspenseQueryOptions(spaceId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSpaceQueryKey(spaceId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpace>>> = ({ signal }) => getSpace(spaceId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpace>>>
+export type GetSpaceSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
+ spaceId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpace>>>, TError = ErrorType<void>>(
+ spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpace>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSpaceSuspenseInfiniteQueryOptions(spaceId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateSpace = (
+    spaceId: string,
+    updateSpaceDto: BodyType<UpdateSpaceDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces/${spaceId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSpaceDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSpace>>, {spaceId: string;data: BodyType<UpdateSpaceDto>}> = (props) => {
+          const {spaceId,data} = props ?? {};
+
+          return  updateSpace(spaceId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof updateSpace>>>
+    export type UpdateSpaceMutationBody = BodyType<UpdateSpaceDto>
+    export type UpdateSpaceMutationError = ErrorType<void>
+
+    export const useUpdateSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpace>>, TError,{spaceId: string;data: BodyType<UpdateSpaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateSpace>>,
+        TError,
+        {spaceId: string;data: BodyType<UpdateSpaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces/${spaceId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSpace>>, {spaceId: string}> = (props) => {
+          const {spaceId} = props ?? {};
+
+          return  deleteSpace(spaceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSpace>>>
+    
+    export type DeleteSpaceMutationError = ErrorType<void>
+
+    export const useDeleteSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSpace>>,
+        TError,
+        {spaceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSpaceMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSpace = (
+    spaceId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSpace200AllOf>(
+      {url: `http://localhost:3005/api/v1/spaces/${spaceId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSpaceMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSpace>>, {spaceId: string}> = (props) => {
+          const {spaceId} = props ?? {};
+
+          return  removeSpace(spaceId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof removeSpace>>>
+    
+    export type RemoveSpaceMutationError = ErrorType<void>
+
+    export const useRemoveSpace = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSpace>>, TError,{spaceId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSpace>>,
+        TError,
+        {spaceId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSpaceMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

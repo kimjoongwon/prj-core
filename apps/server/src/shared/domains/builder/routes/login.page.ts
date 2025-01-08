@@ -15,12 +15,14 @@ export const loginPage: PageBuilder = {
     name: '로그인',
     button: {
       name: '로그인',
-      mutation: { name: 'getToken', hasPayload: true },
+      mutation: {
+        name: 'getToken',
+      },
       alert: {
         message: '로그인 성공',
       },
       navigator: {
-        pathname: '/admin/main/services',
+        pathname: 'spaces',
       },
     },
     sections: [

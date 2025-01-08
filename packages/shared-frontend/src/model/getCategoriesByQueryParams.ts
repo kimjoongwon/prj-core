@@ -12,7 +12,7 @@ take?: number;
 name?: string;
 type?: CategoryTypes;
 parentId?: string;
-spaceId: string;
+tenancyId: string;
 serviceId?: string;
 nameSortOrder?: SortOrder;
 };

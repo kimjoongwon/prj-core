@@ -19,9 +19,10 @@ export const categoryAddPage: PageBuilder = {
       name: '저장',
       mutation: {
         name: 'createCategory',
-        hasPayload: true,
-        hasParentId: true,
-        hasServiceId: true,
+        mapper: {
+          serviceId: 'serviceId',
+          parentId: 'parentId',
+        },
       },
       alert: {
         message: '카테고리가 추가되었습니다.',

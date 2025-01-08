@@ -1,5 +1,6 @@
 import { APIManager } from '@shared/frontend';
 import { TableBuilder } from '@shared/types';
+import { get, isEmpty } from 'lodash-es';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
@@ -8,25 +9,35 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   const query = tableBuilder.query;
   const searchParamsObject = Object.fromEntries(searchParams.entries());
 
-  const serviceId = window.location.pathname.split('/')[4];
+  const serviceId = window.location.pathname.split('/')[5];
   const apiArgs: unknown[] = [];
+  const context = {
+    ...params,
+    serviceId,
+  };
 
-  if (query?.hasResourceId) {
-    apiArgs.push(params?.resourceId);
+  let queryParams = {
+    ...query?.params,
+    ...searchParamsObject,
+  };
+
+  if (query?.mapper) {
+    Object.keys(query.mapper).map(key => {
+      const value = get(context, key);
+      queryParams = {
+        ...queryParams,
+        [query.mapper[key]]: value,
+      };
+    });
   }
-
-  if (query?.hasServiceId) {
-    query.params.serviceId = serviceId;
-  }
-
-  if (query?.hasParams) {
-    apiArgs.push({ ...query?.params, ...searchParamsObject });
+  if (!isEmpty(queryParams)) {
+    apiArgs.push(queryParams);
   }
 
   apiArgs.push({
     enabled: !!query?.name,
   });
-  console.log('queryName', query?.name);
+
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, get, isEmpty } from 'lodash-es';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePageState } from '../Page/PageBuilder';
 
@@ -18,13 +18,13 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   const { buttonBuilder, row } = props;
   const state = usePageState();
   const params = useParams();
-  const serviceId = window.location.pathname.split('/')[4];
+  const serviceId = window.location.pathname.split('/')[5];
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const makeContext = (): any => {
     return {
-      rowId: row?.id,
+      ...row,
       serviceId,
       ...params,
     };
@@ -50,23 +50,13 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
           [button.mutation?.mapper[key]]: value,
         };
       });
-
-      if (button.mutation.hasServiceId) {
-        formData = {
-          ...formData,
-          serviceId,
-        };
-      }
-
-      args.push(formData);
     }
+    if (!isEmpty(formData)) args.push(formData);
 
     const navigator = button.navigator;
 
     try {
       if (button.mutation?.name) {
-        console.log('formData', formData);
-        console.log('args', args);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
@@ -78,22 +68,24 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       }
 
       if (navigator) {
-        const resourceId = row?.id;
-        if (navigator.params) {
-          if (navigator.hasParentId) {
-            navigator.params.parentId = resourceId;
-          }
-
-          if (navigator.hasResourceId) {
-            navigator.params.resourceId = resourceId;
-          }
+        let params = {};
+        if (navigator.mapper) {
+          Object.keys(navigator.mapper).map(key => {
+            const value = get(context, key);
+            params = {
+              ...params,
+              [navigator.mapper[key]]: value,
+            };
+          });
         }
+
+        console.log('params', params);
 
         const pathname = PathUtil.getUrlWithParamsAndQueryString(
           navigator.pathname,
-          navigator.params,
+          params,
         );
-
+        console.log('pathname', pathname);
         queryClient.refetchQueries();
 
         if (pathname === '..') {

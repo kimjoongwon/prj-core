@@ -39,7 +39,7 @@ export const DataGridBuilder = observer(
     const skip = Number(searchParams.get('skip'));
     const take = Number(searchParams.get('take'));
     const currentPage = Math.floor(skip / take) + 1;
-    console.log('searchParams', searchParams);
+
     return (
       <>
         <HStack>
@@ -56,7 +56,7 @@ export const DataGridBuilder = observer(
         />
         {table.query?.params?.take && (
           <Pagination
-            total={meta.pageCount}
+            total={meta?.pageCount ?? 1}
             initialPage={currentPage}
             page={currentPage}
             onChange={page => {
