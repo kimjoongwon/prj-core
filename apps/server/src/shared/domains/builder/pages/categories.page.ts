@@ -6,11 +6,12 @@ export const categoriesPage: PageBuilder = {
     table: {
       query: {
         name: 'useGetCategoriesByQuery',
-        hasParams: true,
-        hasServiceId: true,
         params: {
           serviceId: '',
           type: 'ROOT',
+        },
+        mapper: {
+          serviceId: 'serviceId',
         },
       },
       columns: [
@@ -36,9 +37,8 @@ export const categoriesPage: PageBuilder = {
                 name: '추가',
                 navigator: {
                   pathname: ':parentId/add',
-                  hasParentId: true,
-                  params: {
-                    parentId: '',
+                  mapper: {
+                    id: 'parentId',
                   },
                 },
               },
@@ -46,10 +46,9 @@ export const categoriesPage: PageBuilder = {
                 color: 'warning',
                 name: '수정',
                 navigator: {
-                  pathname: ':resourceId/edit',
-                  hasResourceId: true,
-                  params: {
-                    resourceId: '',
+                  pathname: ':categoryId/edit',
+                  mapper: {
+                    id: 'categoryId',
                   },
                 },
               },

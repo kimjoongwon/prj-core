@@ -21,6 +21,8 @@ import { SpacesEndpointModule } from './spaces/spaces-endpoint.module';
     AssociationsEndpointModule,
     BuilderEndpointModule,
     CategoriesEndpointModule,
+    GroupsEndpointModule,
+    SpacesEndpointModule,
     UsersEndpointModule,
     AuthEndpointModule,
     RouterModule.register([

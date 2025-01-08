@@ -10,7 +10,6 @@ export class PathUtil {
     const path = new Path(url);
 
     let pathWithParams = '';
-
     if (R.isEmpty(params)) {
       pathWithParams = url;
     } else {

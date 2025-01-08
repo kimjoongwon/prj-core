@@ -6,12 +6,13 @@ export const groupsPage: PageBuilder = {
     table: {
       query: {
         name: 'useGetGroupsByQuery',
-        hasParams: true,
-        hasServiceId: true,
         params: {
           serviceId: '',
           skip: 0,
           take: 2,
+        },
+        mapper: {
+          serviceId: 'serviceId',
         },
       },
       columns: [
@@ -36,10 +37,9 @@ export const groupsPage: PageBuilder = {
                 color: 'primary',
                 name: '수정',
                 navigator: {
-                  pathname: ':resourceId/edit',
-                  hasResourceId: true,
-                  params: {
-                    resourceId: '',
+                  pathname: ':groupId/edit',
+                  mapper: {
+                    id: 'groupId',
                   },
                 },
               },
@@ -47,10 +47,9 @@ export const groupsPage: PageBuilder = {
                 color: 'secondary',
                 name: '상세',
                 navigator: {
-                  pathname: ':resourceId',
-                  hasResourceId: true,
-                  params: {
-                    resourceId: '',
+                  pathname: ':groupId',
+                  mapper: {
+                    id: 'groupId',
                   },
                 },
               },

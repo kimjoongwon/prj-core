@@ -5,9 +5,7 @@ export type Constructor<T = any, Arguments extends unknown[] = any[]> = new (
 
 export function UseDto(dtoClass: Constructor): ClassDecorator {
   return (ctor) => {
-    // console.log('??');
     // FIXME make dtoClass function returning dto
-    console.log('dtoClass', dtoClass?.name);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     ctor.prototype.dtoClass = dtoClass;
   };

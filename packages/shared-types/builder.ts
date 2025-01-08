@@ -49,10 +49,7 @@ export interface Alert {
 
 export interface Navigator {
   pathname: string;
-  hasResourceId?: boolean;
-  hasParentId?: boolean;
-  hasParams?: boolean;
-  params?: object & { resourceId?: string; parentId?: string };
+  mapper?: any;
 }
 
 export interface SuccessOrFailure {
@@ -87,8 +84,8 @@ export interface LayoutBuilder {
     | 'Master'
     | 'Detail'
     | 'Tab'
-    | 'Spaces'
-    | 'Space';
+    | 'Tenancies'
+    | 'Tenancy';
   page?: PageBuilder;
 }
 
@@ -102,21 +99,14 @@ export interface RouteBuilder {
 
 export interface Query {
   name: string;
-  hasResourceId?: boolean;
-  hasParams?: boolean;
-  hasServiceId?: boolean;
-  params?: any & { serviceId?: string };
+  params?: any;
+  mapper?: any;
 }
 
 export interface Mutation {
   name: string;
   mapper?: any;
   idMapper?: string;
-  hasResourceId?: boolean;
-  hasServiceId?: boolean;
-  hasParentId?: boolean;
-  hasPayload?: boolean;
-  hasRowId?: boolean;
 }
 
 export type Key = string | number;
@@ -180,6 +170,7 @@ export interface ColumnBuilder {
 export interface Cell {
   buttons?: ButtonBuilder[];
   expandable?: boolean;
+  link?: string;
 }
 export interface Header {
   name: string;

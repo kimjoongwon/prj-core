@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { AppBar, Button, HStack, Layout, List, VStack } from '@shared/frontend';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
@@ -24,6 +24,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (layoutBuilder?.type === 'Admin') {
     return <AdminLayout>{children}</AdminLayout>;
+  }
+
+  if (layoutBuilder?.type === 'Tenancies') {
+    return <TenanciesLayout>{children}</TenanciesLayout>;
   }
 
   if (layoutBuilder?.type === 'Auth') {
@@ -162,7 +166,7 @@ export const MainLayout = observer((props: MainLayoutProps) => {
   return children;
 });
 
-export const SpacesLayout = observer((props: FormLayoutProps) => {
+export const TenanciesLayout = observer((props: FormLayoutProps) => {
   const { children } = props;
   const navigate = useNavigate();
 
@@ -185,7 +189,9 @@ export const FormLayout = observer((props: FormLayoutProps) => {
     <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
         <ModalHeader>
-          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
+          {`${props.layoutBuilder?.page?.name || ''}  ${
+            props.layoutBuilder?.name || ''
+          }`}
         </ModalHeader>
         <ModalBody>
           {children}

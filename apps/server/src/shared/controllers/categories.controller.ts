@@ -25,6 +25,7 @@ export class CategoriesController {
   @Get()
   async getCategoriesByQuery(@Query() query: CategoryQueryDto) {
     const { categories, count } = await this.categoriesService.getManyByQuery(query);
+    console.log('query', query);
     return new ResponseEntity(
       HttpStatus.OK,
       'Successfully fetched categories',

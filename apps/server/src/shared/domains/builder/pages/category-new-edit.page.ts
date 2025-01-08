@@ -18,8 +18,9 @@ export const categoryNewEditPage: PageBuilder = {
       name: '저장',
       mutation: {
         name: 'createCategory',
-        hasPayload: true,
-        hasServiceId: true,
+        mapper: {
+          serviceId: 'serviceId',
+        },
       },
       alert: {
         message: '!!!',

@@ -32,17 +32,7 @@ export class AssociationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK)
-  async createAssociation(
-    @Param('groupId') groupId: string,
-    @Param('serviceId') serviceId: string,
-    @Param('tenancyId') tenancyId: string,
-    @Body()
-    createAssociationDto: CreateAssociationDto,
-  ) {
-    createAssociationDto.groupId = groupId;
-    createAssociationDto.serviceId = serviceId;
-    createAssociationDto.tenancyId = tenancyId;
-
+  async createAssociation(@Body() createAssociationDto: CreateAssociationDto) {
     const association = await this.service.create(createAssociationDto);
 
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));

@@ -11,18 +11,17 @@ import { UserDto } from '../dtos/user.dto';
 export class AuthUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): any {
     const request = context.switchToHttp().getRequest();
-    const spaceId = request.cookies['spaceId'];
+    const tenancyId = request.cookies['tenancyId'];
 
-    console.log('spaceId', spaceId);
     // ContextProvider에 tenantId 설정
 
     // request의 body와 query에 tenantId 추가
-    if (spaceId) {
+    if (tenancyId) {
       if (request.body) {
-        request.body.spaceId = spaceId;
+        request.body.tenancyId = tenancyId;
       }
       if (request.query) {
-        request.query.spaceId = spaceId;
+        request.query.tenancyId = tenancyId;
       }
     }
     if (request?.user?.id && request?.user?.tenants) {
