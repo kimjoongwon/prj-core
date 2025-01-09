@@ -101,6 +101,7 @@ export interface Query {
   name: string;
   params?: any;
   mapper?: any;
+  idMapper?: any;
 }
 
 export interface Mutation {

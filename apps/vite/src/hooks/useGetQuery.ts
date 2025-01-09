@@ -26,6 +26,13 @@ export const useGetQuery = (query?: Query) => {
       };
     });
   }
+
+  if (query?.idMapper) {
+    // @ts-ignore
+    const resourceId = context?.[query.idMapper];
+    apiArgs.push(resourceId);
+  }
+
   if (!isEmpty(queryParams)) {
     apiArgs.push(queryParams);
   }
