@@ -22,7 +22,7 @@ export const loginPage: PageBuilder = {
         message: '로그인 성공',
       },
       navigator: {
-        pathname: 'spaces',
+        pathname: '../spaces',
       },
     },
     sections: [

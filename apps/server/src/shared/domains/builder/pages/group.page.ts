@@ -6,8 +6,7 @@ export const getGroupPage = (): PageBuilder => {
     type: 'Page',
     query: {
       name: 'useGetGroup',
-      hasResourceId: true,
-      hasParams: true,
+      idMapper: 'groupId',
     },
     state: {
       form: {

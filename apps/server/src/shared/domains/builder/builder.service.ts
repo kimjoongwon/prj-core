@@ -127,7 +127,7 @@ export class BuilderService {
                             },
                             {
                               name: '그룹 수정',
-                              pathname: ':resourceId/edit',
+                              pathname: ':groupId/edit',
                               layout: {
                                 type: 'Form',
                                 page: groupEditPage,
@@ -135,7 +135,7 @@ export class BuilderService {
                             },
                             {
                               name: '그룹 상세',
-                              pathname: ':resourceId',
+                              pathname: ':groupId',
                               layout: {
                                 type: 'Detail',
                                 page: getGroupPage(),
