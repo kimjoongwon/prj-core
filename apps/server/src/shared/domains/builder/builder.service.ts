@@ -1,19 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { loginPage } from './routes/login.page';
 import { type RouteBuilder, type AppBuilder } from '@shared/types';
-import { categoriesPage } from './pages/categories.page';
-import { categoryAddPage } from './pages/category-add.page';
-import { categoryNewEditPage } from './pages/category-new-edit.page';
-import { categoryEditPage } from './pages/category-edit.page';
-import { groupNewEditPage } from './pages/group-new-edit.page';
-import { groupsPage } from './pages/groups.page';
-import { groupEditPage } from './pages/group-edit.page';
-import { spacesPage } from './pages/spaces.page';
-import { getGroupPage } from './pages/group.page';
-import { getGroupUsersPage } from './pages/group-users.page';
-import { getAssociationsPage } from './pages/assignments.page';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { getTenanciesLayout } from './layouts/tenancies.layout';
+import { serviceLayout } from './layouts/service.layout';
+import { rootRoute } from './routes/root.route';
+import { adminRoute } from './routes/admin.route';
+import { spaceIdRoute } from './routes/space-id.route';
+import { servicesRoute } from './routes/services.route';
+import { categoriesRoute } from './routes/categories.route';
+import { categoryAddRoute } from './routes/category-add.route';
+import { categoryEditRoute } from './routes/category-edit.route';
+import { categoryNewEdit } from './routes/category-new-edit.route';
+import { groupsRoute } from './routes/groups.route';
+import { groupNewEditRoute } from './routes/group-new-edit.route';
+import { groupEditRoute } from './routes/group-edit.route';
+import { groupIdRoute } from './routes/group-id.route';
+import { groupIdUsersRoute } from './routes/group-id-users.route';
+import { groupIdAssociationsRoute } from './routes/group-id-associations.route';
+import { authRoute } from './routes/auth.route';
+import { loginRoute } from './routes/login.route';
+import { spacesRoute } from './routes/spaces.route';
 
 @Injectable()
 export class BuilderService {
@@ -23,141 +28,33 @@ export class BuilderService {
     const services = await this.prisma.service.findMany();
     return [
       {
-        name: 'ROOT',
-        pathname: '/',
-        layout: {
-          type: 'Root',
-          page: {
-            name: 'ROOT',
-            type: 'Outlet',
-          },
-        },
+        ...rootRoute,
         children: [
           {
-            name: '어드민',
-            pathname: 'admin',
-            layout: {
-              type: 'Admin',
-              page: {
-                name: '어드민',
-                type: 'Outlet',
-              },
-            },
+            ...adminRoute,
             children: [
               {
-                name: '공간',
-                pathname: 'spaces/:spaceId',
-                layout: {
-                  type: 'Root',
-                  page: {
-                    type: 'Outlet',
-                  },
-                },
+                ...spaceIdRoute,
                 children: [
                   {
-                    name: '서비스',
-                    pathname: 'services',
-                    layout: {
-                      type: 'Services',
-                      page: {
-                        name: '서비스',
-                        type: 'Outlet',
-                      },
-                    },
+                    ...servicesRoute,
                     children: services.map((service) => ({
                       name: service.label,
                       pathname: service.id,
-                      layout: {
-                        type: 'Service',
-                        page: {
-                          name: '서비스아이템',
-                          type: 'Outlet',
-                        },
-                      },
+                      layout: serviceLayout,
                       children: [
                         {
-                          name: '카테고리',
-                          pathname: 'categories',
-                          layout: {
-                            type: 'Master',
-                            page: categoriesPage,
-                          },
-                          children: [
-                            {
-                              name: '카테고리 추가',
-                              pathname: ':parentId/add',
-                              layout: {
-                                type: 'Form',
-                                page: categoryAddPage,
-                              },
-                            },
-                            {
-                              name: '카테고리 수정',
-                              pathname: ':resourceId/edit',
-                              layout: {
-                                type: 'Form',
-                                page: categoryEditPage,
-                              },
-                            },
-                            {
-                              name: '카테고리 새편집',
-                              pathname: 'new/edit',
-                              layout: {
-                                type: 'Form',
-                                page: categoryNewEditPage,
-                              },
-                            },
-                          ],
+                          ...categoriesRoute,
+                          children: [categoryAddRoute, categoryEditRoute, categoryNewEdit],
                         },
                         {
-                          name: '그룹',
-                          pathname: 'groups',
-                          layout: {
-                            type: 'Master',
-                            page: groupsPage,
-                          },
+                          ...groupsRoute,
                           children: [
+                            groupNewEditRoute,
+                            groupEditRoute,
                             {
-                              name: '그룹 생성',
-                              pathname: 'new/edit',
-                              layout: {
-                                type: 'Form',
-                                page: groupNewEditPage,
-                              },
-                            },
-                            {
-                              name: '그룹 수정',
-                              pathname: ':groupId/edit',
-                              layout: {
-                                type: 'Form',
-                                page: groupEditPage,
-                              },
-                            },
-                            {
-                              name: '그룹 상세',
-                              pathname: ':groupId',
-                              layout: {
-                                type: 'Detail',
-                                page: getGroupPage(),
-                              },
-                              children: [
-                                {
-                                  name: '그룹 사용자',
-                                  pathname: 'users',
-                                  layout: {
-                                    type: 'Root',
-                                    page: getGroupUsersPage(),
-                                  },
-                                },
-                                {
-                                  name: '그룹 할당',
-                                  pathname: 'associations',
-                                  layout: {
-                                    type: 'Root',
-                                    page: getAssociationsPage(),
-                                  },
-                                },
-                              ],
+                              ...groupIdRoute,
+                              children: [groupIdUsersRoute, groupIdAssociationsRoute],
                             },
                           ],
                         },
@@ -167,29 +64,8 @@ export class BuilderService {
                 ],
               },
               {
-                name: '인증',
-                pathname: 'auth',
-                layout: {
-                  page: {
-                    type: 'Outlet',
-                  },
-                },
-                children: [
-                  {
-                    name: '로그인',
-                    pathname: 'login',
-                    children: [],
-                    layout: {
-                      type: 'Auth',
-                      page: loginPage,
-                    },
-                  },
-                  {
-                    name: '공간',
-                    pathname: 'spaces',
-                    layout: getTenanciesLayout(),
-                  },
-                ],
+                ...authRoute,
+                children: [loginRoute, spacesRoute],
               },
             ],
           },

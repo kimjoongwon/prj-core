@@ -5,7 +5,7 @@ export const categoryEditPage: PageBuilder = {
   name: '카테고리 편집',
   query: {
     name: 'useGetCategoryById',
-    hasResourceId: true,
+    idMapper: 'categoryId',
   },
   state: {
     form: {
@@ -20,8 +20,7 @@ export const categoryEditPage: PageBuilder = {
       name: '저장',
       mutation: {
         name: 'updateCategory',
-        hasResourceId: true,
-        hasPayload: true,
+        idMapper: 'categoryId',
       },
       alert: {
         message: '카테고리가 수정되었습니다.',

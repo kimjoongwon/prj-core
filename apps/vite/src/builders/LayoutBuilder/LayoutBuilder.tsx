@@ -60,6 +60,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     );
   }
 
+  if (!layoutBuilder) {
+    return <Outlet />;
+  }
+
   return children;
 });
 

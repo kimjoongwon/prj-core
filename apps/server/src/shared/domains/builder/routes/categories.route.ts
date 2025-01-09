@@ -1,34 +1,9 @@
 import { RouteBuilder } from '@shared/types';
+import { categoriesLayout } from '../layouts/categories.layout';
 
-const services = [
-  {
-    name: '유저 서비스',
-    pathname: '/user-service',
-  },
-  {
-    name: '공간 서비스',
-    pathname: '/space-service',
-  },
-  {
-    name: '창고 서비스',
-    pathname: '/depot-service',
-  },
-  {
-    name: '게시물 서비스',
-    pathname: '/post-service',
-  },
-];
-export const getCategoriesRoute = (pathname: string) => {
-  const name = services.find((service) => service.pathname === '/' + pathname)?.name + '카테고리';
-
-  return {
-    pathname: `/admin/main/services/${pathname}/categories`,
-    name,
-    active: false,
-    layout: {
-      page: {
-        name,
-      },
-    },
-  } as RouteBuilder;
+export const categoriesRoute: RouteBuilder = {
+  name: '카테고리',
+  pathname: 'categories',
+  layout: categoriesLayout,
+  children: [],
 };
