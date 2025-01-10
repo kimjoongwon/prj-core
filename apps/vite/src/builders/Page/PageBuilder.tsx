@@ -8,6 +8,7 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import { Spinner } from '@nextui-org/react';
 import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
+import { Text } from '@shared/frontend';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -69,7 +70,8 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         <Form formBuilder={pageBuilder.form!}>
           {pageBuilder?.form?.sections?.map(section => {
             return (
-              <div>
+              <div className="border-1 p-4 rounded-xl space-y-2">
+                <Text variant="h5">{section.name}</Text>
                 {section.components?.map(component => (
                   <div className="space-y-2">
                     <ComponentBuilder

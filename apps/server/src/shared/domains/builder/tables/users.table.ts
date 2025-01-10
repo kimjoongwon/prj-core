@@ -6,7 +6,6 @@ export const getUserTable = (tableBuilder?: TableBuilder): TableBuilder => {
     ...tableBuilder,
     query: {
       name: 'useGetUsersByQuery',
-      hasParams: true,
     },
     columns: getUserColumn(tableBuilder?.columns || []),
   };

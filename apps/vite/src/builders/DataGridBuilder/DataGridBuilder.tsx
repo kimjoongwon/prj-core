@@ -4,7 +4,7 @@ import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { ButtonGroup, Pagination, Spinner } from '@nextui-org/react';
+import { ButtonGroup, Card, Pagination, Spinner } from '@nextui-org/react';
 import { observer } from 'mobx-react-lite';
 import { useGetTableQuery } from '../../hooks/useGetTableQuery';
 import { useSearchParams } from 'react-router-dom';
@@ -41,7 +41,7 @@ export const DataGridBuilder = observer(
     const currentPage = Math.floor(skip / take) + 1;
 
     return (
-      <>
+      <Card className="flex-1 p-4 space-y-2">
         <HStack>
           <ButtonGroup size="sm">
             {dataGridBuilder.buttons?.map(button => {
@@ -66,7 +66,7 @@ export const DataGridBuilder = observer(
             }}
           />
         )}
-      </>
+      </Card>
     );
   },
 );

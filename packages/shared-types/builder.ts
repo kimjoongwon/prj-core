@@ -75,17 +75,11 @@ export interface LayoutBuilder {
   type?:
     | 'Outlet'
     | 'Auth'
-    | 'Main'
-    | 'Root'
-    | 'Admin'
-    | 'Form'
+    | 'Modal'
     | 'Services'
     | 'Service'
-    | 'Master'
-    | 'Detail'
     | 'Tab'
-    | 'Tenancies'
-    | 'Tenancy';
+    | 'DataGrid';
   page?: PageBuilder;
 }
 
@@ -138,7 +132,6 @@ export interface PageBuilder {
   type?: 'Outlet' | 'Page';
   name?: string;
   state?: PageState;
-  params?: any & { serviceId?: string };
   query?: Query;
   form?: FormBuilder;
   dataGrid?: DataGridBuilder;

@@ -5,7 +5,6 @@ export const groupIdAssociationsRoute: RouteBuilder = {
   name: '그룹 할당',
   pathname: 'associations',
   layout: {
-    type: 'Root',
     page: getAssociationsPage(),
   },
 };
