@@ -2,14 +2,9 @@ import { LayoutBuilder } from '@shared/types';
 
 export const getTenanciesLayout = (): LayoutBuilder => {
   return {
-    type: 'Tenancies',
+    type: 'Modal',
     page: {
       type: 'Page',
-      state: {
-        dataGrid: {
-          selectedRowId: '',
-        },
-      },
       name: '공간',
       dataGrid: {
         table: {

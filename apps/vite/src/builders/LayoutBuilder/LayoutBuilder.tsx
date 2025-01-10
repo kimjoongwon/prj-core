@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { AppBar, Button, HStack, Layout, List, VStack } from '@shared/frontend';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
@@ -18,24 +18,8 @@ import {
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
 
-  if (layoutBuilder?.type === 'Root') {
-    return <RootLayout>{children}</RootLayout>;
-  }
-
-  if (layoutBuilder?.type === 'Admin') {
-    return <AdminLayout>{children}</AdminLayout>;
-  }
-
-  if (layoutBuilder?.type === 'Tenancies') {
-    return <TenanciesLayout>{children}</TenanciesLayout>;
-  }
-
   if (layoutBuilder?.type === 'Auth') {
     return <AuthLayout>{children}</AuthLayout>;
-  }
-
-  if (layoutBuilder?.type === 'Main') {
-    return <MainLayout>{children}</MainLayout>;
   }
 
   if (layoutBuilder?.type === 'Services') {
@@ -46,18 +30,12 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     return <ServiceLayout>{children}</ServiceLayout>;
   }
 
-  if (layoutBuilder?.type === 'Master') {
-    return <MasterLayout>{children}</MasterLayout>;
+  if (layoutBuilder?.type === 'DataGrid') {
+    return <DataGridLayout>{children}</DataGridLayout>;
   }
 
-  if (layoutBuilder?.type === 'Form') {
-    return <FormLayout layoutBuilder={layoutBuilder}>{children}</FormLayout>;
-  }
-
-  if (layoutBuilder?.type === 'Detail') {
-    return (
-      <DetailLayout layoutBuilder={layoutBuilder}>{children}</DetailLayout>
-    );
+  if (layoutBuilder?.type === 'Modal') {
+    return <ModalLayout layoutBuilder={layoutBuilder}>{children}</ModalLayout>;
   }
 
   if (!layoutBuilder) {
@@ -127,7 +105,7 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
   const { children } = props;
 
   return (
-    <VStack className="flex-1 space-y-2">
+    <VStack className="flex-1 w-full space-y-2">
       <Header />
       {children}
       <Footer />
@@ -135,7 +113,7 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
   );
 });
 
-export const MasterLayout = observer((props: MasterLayoutProps) => {
+export const DataGridLayout = observer((props: DataGridLayoutProps) => {
   const { children } = props;
 
   return (
@@ -146,61 +124,20 @@ export const MasterLayout = observer((props: MasterLayoutProps) => {
   );
 });
 
-export const DetailLayout = observer((props: DetailLayoutProps) => {
-  const { children } = props;
-  const navigate = useNavigate();
-
-  return (
-    <Modal size="full" isOpen={true} isDismissable onClose={() => navigate(-1)}>
-      <ModalContent>
-        <ModalHeader>
-          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
-        </ModalHeader>
-        <ModalBody>
-          {children}
-          <Outlet />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-});
-
 export const MainLayout = observer((props: MainLayoutProps) => {
   const { children } = props;
   return children;
 });
 
-export const TenanciesLayout = observer((props: FormLayoutProps) => {
-  const { children } = props;
+export const ModalLayout = observer((props: ModalLayoutProps) => {
+  const { children, layoutBuilder } = props;
   const navigate = useNavigate();
 
   return (
-    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
+    <Modal size="full" isOpen={true} isDismissable onClose={() => navigate(-1)}>
       <ModalContent>
-        <ModalHeader>
-          {`${props.layoutBuilder?.page?.name}  ${props.layoutBuilder?.name}`}
-        </ModalHeader>
+        <ModalHeader>{layoutBuilder?.page?.name}</ModalHeader>
         <ModalBody>{children}</ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-});
-export const FormLayout = observer((props: FormLayoutProps) => {
-  const { children } = props;
-  const navigate = useNavigate();
-
-  return (
-    <Modal size="5xl" isOpen={true} isDismissable onClose={() => navigate(-1)}>
-      <ModalContent>
-        <ModalHeader>
-          {`${props.layoutBuilder?.page?.name || ''}  ${
-            props.layoutBuilder?.name || ''
-          }`}
-        </ModalHeader>
-        <ModalBody>
-          {children}
-          <Outlet />
-        </ModalBody>
       </ModalContent>
     </Modal>
   );
@@ -259,9 +196,8 @@ interface Layout {
 
 type RootLayoutProps = Layout;
 type LayoutBuilderProps = Layout;
-type FormLayoutProps = Layout;
-type MasterLayoutProps = Layout;
-type DetailLayoutProps = Layout;
+type ModalLayoutProps = Layout;
+type DataGridLayoutProps = Layout;
 interface AuthLayoutProps {
   children: ReactNode;
 }

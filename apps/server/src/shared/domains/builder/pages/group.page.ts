@@ -18,7 +18,7 @@ export const getGroupPage = (): PageBuilder => {
     form: {
       sections: [
         {
-          name: '그룹 정보',
+          name: '기본 정보',
           components: [
             {
               path: 'name',
@@ -31,6 +31,11 @@ export const getGroupPage = (): PageBuilder => {
                 isRequired: true,
               },
             },
+          ],
+        },
+        {
+          name: '관련 정보',
+          components: [
             {
               type: 'TabNavigation',
               props: {
