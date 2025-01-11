@@ -44,7 +44,7 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
       // @ts-expect-error
       APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
-
+  console.log('getQuery', getQuery);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const data = getQuery?.data?.data;

@@ -31,7 +31,12 @@ export class AssociationsService {
   }
 
   async getManyByQuery(query: AssociationQueryDto) {
-    const args = query.toArgs();
+    const include = {
+      user: true,
+      group: true,
+      space: true,
+    };
+    const args = query.toArgs(include);
     const countArgs = query.toCountArgs();
     const associations = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);

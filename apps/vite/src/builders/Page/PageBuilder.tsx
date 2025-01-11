@@ -17,6 +17,7 @@ interface PageBuilderProps {
 interface PageProviderProps {
   state: PageBuilderInterface['state'];
   data: any;
+  isFetchedAfterMount?: boolean;
   children: React.ReactNode;
 }
 
@@ -24,23 +25,22 @@ const PageContext = createContext<PageBuilderInterface['state']>(
   {} as PageBuilderInterface['state'],
 );
 
-const PageProvder = (props: PageProviderProps) => {
+const PageProvder = observer((props: PageProviderProps) => {
   const { data } = props;
-  const state = useLocalObservable(() => {
-    const pageState = cloneDeep(props.state) || {};
-    if (data && pageState) {
-      pageState.form = {
-        ...pageState.form,
-        data,
-      };
-    }
-    return pageState;
-  });
+  const pageState = cloneDeep(props.state) || {};
+  if (data && pageState) {
+    pageState.form = {
+      ...pageState.form,
+      data,
+    };
+  }
+
+  const state = useLocalObservable(() => pageState);
 
   return (
     <PageContext.Provider value={state}>{props.children}</PageContext.Provider>
   );
-};
+});
 
 export const usePageState = (): PageBuilderInterface['state'] => {
   const state = React.useContext(PageContext);
@@ -54,9 +54,9 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
   const query = pageBuilder?.query;
 
-  const { data, isLoading } = useGetQuery(query);
+  const { data, isFetchedAfterMount } = useGetQuery(query);
 
-  if (isLoading) {
+  if (!isFetchedAfterMount) {
     return <Spinner />;
   }
 
@@ -70,15 +70,10 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         <Form formBuilder={pageBuilder.form!}>
           {pageBuilder?.form?.sections?.map(section => {
             return (
-              <div className="border-1 p-4 rounded-xl space-y-2">
+              <div className="border-1 p-4 rounded-xl space-y-4">
                 <Text variant="h5">{section.name}</Text>
                 {section.components?.map(component => (
-                  <div className="space-y-2">
-                    <ComponentBuilder
-                      componentBuilder={component}
-                      data={data}
-                    />
-                  </div>
+                  <ComponentBuilder componentBuilder={component} data={data} />
                 ))}
               </div>
             );

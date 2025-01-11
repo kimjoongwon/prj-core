@@ -1,4 +1,3 @@
-import { makeAutoObservable } from 'mobx';
 import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 
@@ -34,7 +33,9 @@ export class Navigation {
       urlSearchParams,
     );
 
-    this.navigateFunction?.(pathnameWithSearchParams);
+    window.history.pushState({}, '', pathnameWithSearchParams);
+
+    this.activateRoute();
   }
 
   private findRouteByPath(pathname: string) {

@@ -2,7 +2,7 @@ import { PageBuilder } from '@shared/types';
 
 export const categoryNewEditPage: PageBuilder = {
   type: 'Page',
-  name: '카테고리 새편집',
+  name: '새편집',
   state: {
     form: {
       data: {

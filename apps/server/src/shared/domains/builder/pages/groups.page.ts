@@ -2,6 +2,7 @@ import { PageBuilder } from '@shared/types';
 
 export const groupsPage: PageBuilder = {
   type: 'Page',
+  name: '목록',
   dataGrid: {
     table: {
       query: {

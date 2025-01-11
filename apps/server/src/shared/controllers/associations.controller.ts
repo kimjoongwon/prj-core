@@ -102,7 +102,7 @@ export class AssociationsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK, { isArray: true })
   async getAssociationsByQuery(@Query() query: AssociationQueryDto) {
-    const { count, associations } = await this.service.getManyByQuery(query.toArgs());
+    const { count, associations } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,

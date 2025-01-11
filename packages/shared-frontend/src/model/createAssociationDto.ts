@@ -6,13 +6,13 @@
 
 export interface CreateAssociationDto {
   /** @nullable */
-  groupId: string | null;
+  groupId?: string | null;
   /** @nullable */
-  postId: string | null;
+  postId?: string | null;
   serviceId: string;
   /** @nullable */
-  spaceId: string | null;
+  spaceId?: string | null;
   tenancyId: string;
   /** @nullable */
-  userId: string | null;
+  userId?: string | null;
 }

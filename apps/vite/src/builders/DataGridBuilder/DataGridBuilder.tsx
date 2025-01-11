@@ -18,6 +18,7 @@ interface DataGridBuilderProps {
 export const DataGridBuilder = observer(
   ({ dataGridBuilder }: DataGridBuilderProps) => {
     const table = dataGridBuilder?.table!;
+    console.log('dataGridBuilder', dataGridBuilder);
     const { data, isLoading, meta } = useGetTableQuery(table);
     const urlSearchParams = new URLSearchParams(table?.query?.params);
     const [searchParams, setSearchParams] = useSearchParams(urlSearchParams);
@@ -41,7 +42,7 @@ export const DataGridBuilder = observer(
     const currentPage = Math.floor(skip / take) + 1;
 
     return (
-      <Card className="flex-1 p-4 space-y-2">
+      <>
         <HStack>
           <ButtonGroup size="sm">
             {dataGridBuilder.buttons?.map(button => {
@@ -66,7 +67,7 @@ export const DataGridBuilder = observer(
             }}
           />
         )}
-      </Card>
+      </>
     );
   },
 );
