@@ -51,5 +51,3 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
     </div>
   );
 });
-
-Input.displayName = 'Input';

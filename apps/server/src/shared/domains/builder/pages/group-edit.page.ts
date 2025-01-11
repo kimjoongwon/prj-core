@@ -5,8 +5,7 @@ export const groupEditPage: PageBuilder = {
   type: 'Page',
   query: {
     name: 'useGetGroup',
-    hasResourceId: true,
-    hasParams: true,
+    idMapper: 'groupId',
   },
   state: {
     form: {
@@ -22,10 +21,10 @@ export const groupEditPage: PageBuilder = {
       name: '저장',
       mutation: {
         name: 'updateGroup',
-        idMapper: 'resourceId',
-        hasServiceId: true,
-        hasResourceId: true,
-        hasPayload: true,
+        idMapper: 'groupId',
+        mapper: {
+          serviceId: 'serviceId',
+        },
       },
       alert: {
         message: '!!!',

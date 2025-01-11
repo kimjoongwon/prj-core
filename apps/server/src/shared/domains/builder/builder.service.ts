@@ -19,6 +19,7 @@ import { groupIdAssociationsRoute } from './routes/group-id-associations.route';
 import { authRoute } from './routes/auth.route';
 import { loginRoute } from './routes/login.route';
 import { spacesRoute } from './routes/spaces.route';
+import { getEntitiesRoute } from './routes/entities.route';
 
 @Injectable()
 export class BuilderService {
@@ -43,6 +44,9 @@ export class BuilderService {
                       pathname: service.id,
                       layout: serviceLayout,
                       children: [
+                        {
+                          ...getEntitiesRoute(service.name),
+                        },
                         {
                           ...categoriesRoute,
                           children: [categoryAddRoute, categoryEditRoute, categoryNewEdit],

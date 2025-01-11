@@ -27,12 +27,12 @@ export const getGroupUsersPage = (): PageBuilder => {
                   name: '추가',
                   color: 'primary',
                   mutation: {
+                    name: 'createAssociation',
                     mapper: {
-                      resourceId: 'groupId',
-                      rowId: 'userId',
+                      groupId: 'groupId',
+                      id: 'userId',
                       serviceId: 'serviceId',
                     },
-                    name: 'createUserAssociation',
                   },
                 },
               ],

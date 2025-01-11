@@ -2,7 +2,7 @@ import { PageBuilder } from '@shared/types';
 
 export const categoryEditPage: PageBuilder = {
   type: 'Page',
-  name: '카테고리 편집',
+  name: '편집',
   query: {
     name: 'useGetCategoryById',
     idMapper: 'categoryId',

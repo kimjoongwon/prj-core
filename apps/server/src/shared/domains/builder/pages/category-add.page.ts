@@ -2,7 +2,7 @@ import { PageBuilder } from '@shared/types';
 
 export const categoryAddPage: PageBuilder = {
   type: 'Page',
-  name: '카테고리 추가',
+  name: '추가',
   state: {
     form: {
       data: {

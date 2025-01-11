@@ -51,7 +51,7 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
   if (componentBuilder.type === 'TabNavigation') {
     return <TabNavigation tabBuilder={componentBuilder.props.tabBuilder} />;
   }
-
+  console.log('component render', state?.form?.data.name);
   return (
     <Component
       {...componentBuilder.props}

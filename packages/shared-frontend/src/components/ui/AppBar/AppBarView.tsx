@@ -7,7 +7,7 @@ import { AppBarViewProps } from '.';
 export const AppBarView = (props: AppBarViewProps) => {
   const { content } = props;
   return (
-    <Card className="flex h-[62px] flex-col justify-center rounded-t-none">
+    <Card className="flex h-[62px] flex-col justify-center rounded-none">
       <HStack className="flex flex-1 items-center justify-evenly px-4">
         <div className="flex-1">
           <Logo variants={'text'} />

@@ -1,6 +1,7 @@
 import { PageBuilder } from '@shared/types';
 
 export const categoriesPage: PageBuilder = {
+  name: '목록',
   type: 'Page',
   dataGrid: {
     table: {
@@ -57,7 +58,7 @@ export const categoriesPage: PageBuilder = {
                 name: '삭제',
                 mutation: {
                   name: 'deleteCategory',
-                  hasRowId: true,
+                  idMapper: 'id',
                 },
               },
             ],

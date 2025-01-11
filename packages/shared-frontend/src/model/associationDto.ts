@@ -7,18 +7,18 @@
 export interface AssociationDto {
   createdAt: string;
   /** @nullable */
-  groupId: string | null;
+  groupId?: string | null;
   id: string;
   /** @nullable */
-  postId: string | null;
+  postId?: string | null;
   /** @nullable */
   removedAt: string | null;
   seq: number;
   serviceId: string;
   /** @nullable */
-  spaceId: string | null;
+  spaceId?: string | null;
   tenancyId: string;
   updatedAt: string;
   /** @nullable */
-  userId: string | null;
+  userId?: string | null;
 }

@@ -1,5 +1,13 @@
 import { ReactNode } from 'react';
-import { AppBar, Button, HStack, Layout, List, VStack } from '@shared/frontend';
+import {
+  AppBar,
+  Button,
+  HStack,
+  Layout,
+  List,
+  VStack,
+  Text,
+} from '@shared/frontend';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useStore } from '@shared/stores';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
@@ -9,10 +17,14 @@ import { v4 } from 'uuid';
 import { PathUtil } from '@shared/utils';
 import {
   Card,
+  CardBody,
+  CardHeader,
+  Divider,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
+  Spacer,
 } from '@nextui-org/react';
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
@@ -31,7 +43,9 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   if (layoutBuilder?.type === 'DataGrid') {
-    return <DataGridLayout>{children}</DataGridLayout>;
+    return (
+      <DataGridLayout layoutBuilder={layoutBuilder}>{children}</DataGridLayout>
+    );
   }
 
   if (layoutBuilder?.type === 'Modal') {
@@ -73,27 +87,33 @@ export const ServiceLayout = observer((props: ServiceLayoutProps) => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2">
-        <Card className="rounded-xl p-2 w-full md:w-[200px]">
-          <List
-            className="flex flex-row md:flex-col"
-            data={store.navigation.serviceRoute?.children || []}
-            renderItem={route => {
-              return (
-                <Button
-                  variant="light"
-                  key={v4()}
-                  color={route.active ? 'primary' : 'default'}
-                  onPress={() => {
-                    navigate(route.pathname);
-                    store.navigation.activateRoute();
-                  }}
-                >
-                  {route.name}
-                </Button>
-              );
-            }}
-          />
+      <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">
+        <Card className="rounded-xl w-full md:w-[200px]">
+          <CardHeader>
+            <Text variant="h6">{store.navigation.serviceRoute?.name} </Text>
+          </CardHeader>
+          <Divider />
+          <CardBody>
+            <List
+              className="flex flex-row md:flex-col"
+              data={store.navigation.serviceRoute?.children || []}
+              renderItem={route => {
+                return (
+                  <Button
+                    variant="light"
+                    key={v4()}
+                    color={route.active ? 'primary' : 'default'}
+                    onPress={() => {
+                      navigate(route.pathname);
+                      store.navigation.activateRoute();
+                    }}
+                  >
+                    {route.name}
+                  </Button>
+                );
+              }}
+            />
+          </CardBody>
         </Card>
         {children}
       </div>
@@ -105,8 +125,9 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
   const { children } = props;
 
   return (
-    <VStack className="flex-1 w-full space-y-2">
+    <VStack className="flex-1 w-full">
       <Header />
+      <Spacer y={1} />
       {children}
       <Footer />
     </VStack>
@@ -114,11 +135,14 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
 });
 
 export const DataGridLayout = observer((props: DataGridLayoutProps) => {
-  const { children } = props;
-
+  const { children, layoutBuilder } = props;
   return (
-    <Card className="w-full rounded-xl p-2 rounded-b-none space-y-2">
-      {children}
+    <Card className="flex-1 flex-col">
+      <CardHeader>
+        <Text variant="h6">{layoutBuilder?.page?.name}</Text>
+      </CardHeader>
+      <Divider />
+      <CardBody className="flex flex-1 flex-col space-y-2">{children}</CardBody>
       <Outlet />
     </Card>
   );
@@ -134,17 +158,19 @@ export const ModalLayout = observer((props: ModalLayoutProps) => {
   const navigate = useNavigate();
 
   return (
-    <Modal size="full" isOpen={true} isDismissable onClose={() => navigate(-1)}>
+    <Modal
+      size="full"
+      isOpen={true}
+      isDismissable
+      onClose={() => navigate(-1)}
+      scrollBehavior="inside"
+    >
       <ModalContent>
         <ModalHeader>{layoutBuilder?.page?.name}</ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
   );
-});
-
-export const ServiceNavigator = observer(() => {
-  return <ServicesRoutes />;
 });
 
 export const ServicesRoutes = observer(() => {
@@ -162,7 +188,7 @@ export const ServicesRoutes = observer(() => {
             onPress={action(() => {
               navigate(
                 PathUtil.getUrlWithParamsAndQueryString(
-                  route.pathname,
+                  route.pathname + '/categories',
                   route.params,
                 ),
               );

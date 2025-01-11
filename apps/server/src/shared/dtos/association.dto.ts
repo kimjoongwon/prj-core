@@ -6,20 +6,20 @@ export class AssociationDto extends AbstractDto implements Association {
   @UUIDField()
   tenancyId: string;
 
-  @UUIDField({ nullable: true })
+  @UUIDField({ nullable: true, required: false })
   groupId: string | null;
 
-  @UUIDField({ nullable: true })
+  @UUIDField({ nullable: true, required: false })
   userId: string | null;
 
-  @UUIDField({ nullable: true })
+  @UUIDField({ nullable: true, required: false })
   spaceId: string | null;
+
+  @UUIDField({ nullable: true, required: false })
+  postId: string | null;
 
   @UUIDField()
   serviceId: string;
-
-  @UUIDField({ nullable: true })
-  postId: string | null;
 
   @ClassField(() => TenancyDto, { required: false, swagger: false })
   tenancy?: TenancyDto;
