@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CategoriesController, CategoriesRepository, CategoriesService } from '@shared';
+import { CategoriesController, CategoryLogicModule } from '@shared';
 
 @Module({
-  providers: [CategoriesService, CategoriesRepository],
+  imports: [CategoryLogicModule],
   controllers: [CategoriesController],
 })
 export class CategoriesEndpointModule {}

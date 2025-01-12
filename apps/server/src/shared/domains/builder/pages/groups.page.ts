@@ -59,7 +59,7 @@ export const groupsPage: PageBuilder = {
                 name: '삭제',
                 mutation: {
                   name: 'deleteGroup',
-                  idMapper: 'rowId',
+                  idMapper: 'id',
                 },
                 alert: {
                   message: '!!!',

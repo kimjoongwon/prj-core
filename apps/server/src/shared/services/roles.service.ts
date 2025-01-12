@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RolesRepository } from '../repositories/role.repository';
+import { CreateRoleDto, UpdateRoleDto } from '../dtos';
 
 @Injectable()
 export class RolesService {
@@ -31,8 +32,10 @@ export class RolesService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(args: Prisma.RoleCreateArgs) {
-    return this.repository.create(args);
+  createRoleDto(createRoleDto: CreateRoleDto) {
+    return this.repository.create({
+      data: createRoleDto,
+    });
   }
 
   async getManyByQuery(args: Prisma.RoleFindManyArgs) {
@@ -44,8 +47,11 @@ export class RolesService {
     };
   }
 
-  update(args: Prisma.RoleUpdateArgs) {
-    return this.repository.update(args);
+  update(roleId, updateRoleDto: UpdateRoleDto) {
+    return this.repository.update({
+      where: { id: roleId },
+      data: updateRoleDto,
+    });
   }
 
   remove(id: string) {

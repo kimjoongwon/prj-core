@@ -26,20 +26,35 @@ import {
   ModalHeader,
   Spacer,
 } from '@nextui-org/react';
+interface Layout {
+  children: ReactNode;
+  layoutBuilder?: LayoutBuilderInterface;
+}
+
+type LayoutBuilderProps = Layout;
+type ModalLayoutProps = Layout;
+type DataGridLayoutProps = Layout;
+type AuthLayoutProps = Layout;
+type ServiceLayoutProps = Layout;
+type ServicesLayoutProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
 
   if (layoutBuilder?.type === 'Auth') {
-    return <AuthLayout>{children}</AuthLayout>;
+    return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
   }
 
   if (layoutBuilder?.type === 'Services') {
-    return <ServicesLayout>{children}</ServicesLayout>;
+    return (
+      <ServicesLayout layoutBuilder={layoutBuilder}>{children}</ServicesLayout>
+    );
   }
 
   if (layoutBuilder?.type === 'Service') {
-    return <ServiceLayout>{children}</ServiceLayout>;
+    return (
+      <ServiceLayout layoutBuilder={layoutBuilder}>{children}</ServiceLayout>
+    );
   }
 
   if (layoutBuilder?.type === 'DataGrid') {
@@ -57,16 +72,6 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   return children;
-});
-
-export const RootLayout = observer((props: RootLayoutProps) => {
-  const { children } = props;
-  return <VStack className="w-full h-screen">{children}</VStack>;
-});
-
-export const AdminLayout = observer((props: AdminLayoutProps) => {
-  const { children } = props;
-  return <>{children}</>;
 });
 
 export const AuthLayout = observer((props: AuthLayoutProps) => {
@@ -126,16 +131,19 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
 
   return (
     <VStack className="flex-1 w-full">
-      <Header />
+      <AppBar content={<ServicesRoutes />} />;
       <Spacer y={1} />
       {children}
-      <Footer />
+      <Card className="relative bottom-0 w-full flex sm:hidden h-[64px] justify-center items-center rounded-t-none rounded-b-none">
+        <ServicesRoutes />
+      </Card>
     </VStack>
   );
 });
 
 export const DataGridLayout = observer((props: DataGridLayoutProps) => {
   const { children, layoutBuilder } = props;
+
   return (
     <Card className="flex-1 flex-col">
       <CardHeader>
@@ -146,11 +154,6 @@ export const DataGridLayout = observer((props: DataGridLayoutProps) => {
       <Outlet />
     </Card>
   );
-});
-
-export const MainLayout = observer((props: MainLayoutProps) => {
-  const { children } = props;
-  return children;
 });
 
 export const ModalLayout = observer((props: ModalLayoutProps) => {
@@ -202,44 +205,3 @@ export const ServicesRoutes = observer(() => {
     </HStack>
   );
 });
-
-export const Header = () => {
-  return <AppBar content={<ServicesRoutes />} />;
-};
-
-export const Footer = () => {
-  return (
-    <Card className="relative bottom-0 w-full flex sm:hidden h-[64px] justify-center items-center rounded-t-none rounded-b-none">
-      <ServicesRoutes />
-    </Card>
-  );
-};
-
-interface Layout {
-  children: ReactNode;
-  layoutBuilder?: LayoutBuilderInterface;
-}
-
-type RootLayoutProps = Layout;
-type LayoutBuilderProps = Layout;
-type ModalLayoutProps = Layout;
-type DataGridLayoutProps = Layout;
-interface AuthLayoutProps {
-  children: ReactNode;
-}
-
-interface AdminLayoutProps {
-  children: ReactNode;
-}
-
-interface ServiceLayoutProps {
-  children: ReactNode;
-}
-
-interface ServicesLayoutProps {
-  children: ReactNode;
-}
-
-interface MainLayoutProps {
-  children: ReactNode;
-}

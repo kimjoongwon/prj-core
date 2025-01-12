@@ -5,10 +5,7 @@ export const groupNewEditPage: PageBuilder = {
   type: 'Page',
   state: {
     form: {
-      data: {
-        name: '',
-        serviceId: '',
-      },
+      data: {},
     },
   },
   form: {

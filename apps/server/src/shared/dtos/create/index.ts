@@ -6,3 +6,4 @@ export * from './create-user.dto';
 export * from './create-service.dto';
 export * from './create-category.dto';
 export * from './create-classification.dto';
+export * from './create-role.dto';
