@@ -6,3 +6,4 @@ export * from './update-tenant.dto';
 export * from './update-space.dto';
 export * from './update-user.dto';
 export * from './update-classification.dto';
+export * from './update-role.dto';

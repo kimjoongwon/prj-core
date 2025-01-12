@@ -23,12 +23,15 @@ import { usersRoute } from './routes/users.route';
 import { spacesRoute } from './routes/spaces.route';
 import { SpaceNewEditRoute } from './routes/space-new-edit';
 import { CategoryRoute } from './routes/category.route';
+import { rolesRoute } from './routes/roles.route';
+import { RoleNewEditRoute } from './routes/role-new-edit.route';
 
 @Injectable()
 export class BuilderService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly spaceNewEditRoute: SpaceNewEditRoute,
+    private readonly roleNewEditRoute: RoleNewEditRoute,
     private readonly categoryRoute: CategoryRoute,
   ) {}
 
@@ -36,6 +39,7 @@ export class BuilderService {
     const services = await this.prisma.service.findMany();
     const spaceNewEditRoute = await this.spaceNewEditRoute.getRoute();
     const categoryRoute = await this.categoryRoute.getRoute();
+    const roleNewEditRoute = await this.roleNewEditRoute.getRoute();
 
     return [
       {
@@ -55,6 +59,10 @@ export class BuilderService {
                       layout: serviceLayout,
                       children: [
                         {
+                          ROLE: {
+                            ...rolesRoute,
+                            children: [roleNewEditRoute],
+                          },
                           SPACE: {
                             ...spacesRoute,
                             children: [spaceNewEditRoute],

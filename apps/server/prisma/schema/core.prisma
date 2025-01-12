@@ -36,7 +36,6 @@ model Classification {
   service  Service  @relation(fields: [serviceId], references: [id])
   tenancy  Tenancy  @relation(fields: [tenancyId], references: [id])
   users    User[]
-  // roles    Role[]
   // posts    Post[]
   spaces   Space[]
   roles    Role[]

@@ -36,7 +36,6 @@ export {
   ToInt,
   ToLowerCase,
   ToUpperCase,
-  Trim,
 } from './transform.decorators';
 export {
   IsNullable,
