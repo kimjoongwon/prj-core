@@ -30,13 +30,13 @@ const App = observer(() => {
   const routeObjects = store.navigation.routeBuilders?.map(routeBuilder => {
     const getRouteObjects = (routeBuilder: IRouteBuilder) => {
       const _route: RouteObject = {
-        path: routeBuilder.pathname,
+        path: routeBuilder?.pathname,
         element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
         children: [],
         errorElement: <div>error</div>,
       };
 
-      if (routeBuilder.children) {
+      if (routeBuilder?.children) {
         const children = routeBuilder.children.map(getRouteObjects);
         _route.children = children;
       }
@@ -45,12 +45,12 @@ const App = observer(() => {
     };
 
     const _route: RouteObject = {
-      path: routeBuilder.pathname,
+      path: routeBuilder?.pathname,
       element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
       errorElement: <div>error</div>,
     };
 
-    if (routeBuilder.children) {
+    if (routeBuilder?.children) {
       const children = routeBuilder.children.map(getRouteObjects);
       _route.children = children;
     }

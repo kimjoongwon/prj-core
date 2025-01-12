@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { UpdateCategoryDto } from '../dtos/update/update-category.dto';
 import { CategoryQueryDto } from '../dtos/query/category-query.dto';
+import { CategoriesRepository } from '../repositories';
+import { Category } from '../entities';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly repository: CategoriesRepository,
+  ) {}
 
   async create(args: Prisma.CategoryCreateArgs) {
     const services = await this.prisma.category.create(args);
@@ -70,4 +75,6 @@ export class CategoriesService {
       count,
     };
   }
+
+  
 }

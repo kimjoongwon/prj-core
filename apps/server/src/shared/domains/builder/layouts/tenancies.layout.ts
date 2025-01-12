@@ -28,9 +28,9 @@ export const getTenanciesLayout = (): LayoutBuilder => {
                   {
                     name: '선택',
                     navigator: {
-                      pathname: '/admin/spaces/:spaceId/services',
+                      pathname: '/admin/tenancies/:tenancyId/services',
                       mapper: {
-                        id: 'spaceId',
+                        id: 'tenancyId',
                       },
                     },
                   },

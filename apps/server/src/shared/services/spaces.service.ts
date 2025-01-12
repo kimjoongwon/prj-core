@@ -4,13 +4,29 @@ import { PaginationUtil } from '@shared/utils';
 import { SpacesRepository } from '../repositories/spaces.repository';
 import { UpdateSpaceDto } from '../dtos/update/update-space.dto';
 import { SpaceQueryDto } from '../dtos/query/space-query.dto';
+import { CreateSpaceDto } from '../dtos';
+import { ContextProvider } from '../providers';
 
 @Injectable()
 export class SpacesService {
   constructor(private readonly repository: SpacesRepository) {}
 
-  create(args: Prisma.SpaceCreateArgs) {
-    return this.repository.create(args);
+  async create({ categoryId, serviceId, classificationId, ...createSpaceDto }: CreateSpaceDto) {
+    const tenancyId = ContextProvider.getTanancyId();
+    const space = await this.repository.create({
+      data: {
+        ...createSpaceDto,
+        classification: {
+          create: {
+            serviceId,
+            categoryId,
+            tenancyId,
+          },
+        },
+      },
+    });
+
+    return space;
   }
 
   update(spaceId: string, updateSpaceDto: UpdateSpaceDto) {

@@ -46,8 +46,8 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       Object.keys(button.mutation.mapper).map(key => {
         const value = context?.[key];
         formData = {
-          ...formData,
           [button.mutation?.mapper[key]]: value,
+          ...formData,
         };
       });
     }

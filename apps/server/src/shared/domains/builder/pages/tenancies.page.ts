@@ -7,8 +7,9 @@ export const spacesPage: PageBuilder = {
     table: {
       query: {
         name: 'useGetSpacesByQuery',
-        hasParams: true,
-        params: {},
+        mapper: {
+          serviceId: 'serviceId',
+        },
       },
       columns: [
         {

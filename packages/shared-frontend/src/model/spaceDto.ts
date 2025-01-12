@@ -9,7 +9,8 @@ import type { ClassificationDto } from './classificationDto';
 export interface SpaceDto {
   associations?: AssociationDto;
   classification?: ClassificationDto;
-  classificationId: string;
+  /** @nullable */
+  classificationId?: string | null;
   createdAt: string;
   id: string;
   name: string;

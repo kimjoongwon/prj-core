@@ -35,6 +35,16 @@ export const categoriesPage: PageBuilder = {
             buttons: [
               {
                 color: 'primary',
+                name: '상세',
+                navigator: {
+                  pathname: ':categoryId',
+                  mapper: {
+                    id: 'categoryId',
+                  },
+                },
+              },
+              {
+                color: 'primary',
                 name: '추가',
                 navigator: {
                   pathname: ':parentId/add',

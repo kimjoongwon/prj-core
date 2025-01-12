@@ -19,4 +19,12 @@ export class Category extends AbstractEntity<CategoryDto> implements CategoryEnt
   service?: Service;
   tenancy?: Tenancy;
   classification?: Classification;
+
+  toOption() {
+    return {
+      key: this.id,
+      value: this.id,
+      text: this.name,
+    };
+  }
 }

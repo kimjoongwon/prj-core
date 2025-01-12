@@ -1,8 +1,54 @@
 import { RouteBuilder } from '@shared/types';
-import { getTenanciesLayout } from '../layouts/tenancies.layout';
 
 export const spacesRoute: RouteBuilder = {
-  name: '공간',
+  name: '목록',
   pathname: 'spaces',
-  layout: getTenanciesLayout(),
+  layout: {
+    name: '자원',
+    type: 'DataGrid',
+    page: {
+      name: '목록',
+      dataGrid: {
+        buttons: [
+          {
+            name: '생성',
+            navigator: {
+              pathname: 'new/edit',
+            },
+          },
+        ],
+        table: {
+          query: {
+            name: `useGetSpacesByQuery`,
+          },
+          columns: [
+            {
+              accessorKey: 'name',
+              header: {
+                name: '이름',
+              },
+            },
+            {
+              id: 'action',
+              header: {
+                name: '액션',
+              },
+              cell: {
+                buttons: [
+                  {
+                    color: 'danger',
+                    name: '삭제',
+                    mutation: {
+                      name: 'deleteSpace',
+                      idMapper: 'id',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
 };

@@ -4,7 +4,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { serviceLayout } from './layouts/service.layout';
 import { rootRoute } from './routes/root.route';
 import { adminRoute } from './routes/admin.route';
-import { spaceIdRoute } from './routes/space-id.route';
+import { tenancyIdRoute } from './routes/tenancy-id.route';
 import { servicesRoute } from './routes/services.route';
 import { categoriesRoute } from './routes/categories.route';
 import { categoryAddRoute } from './routes/category-add.route';
@@ -18,15 +18,25 @@ import { groupIdUsersRoute } from './routes/group-id-users.route';
 import { groupIdAssociationsRoute } from './routes/group-id-associations.route';
 import { authRoute } from './routes/auth.route';
 import { loginRoute } from './routes/login.route';
+import { tenancies } from './routes/tenancies.route';
+import { usersRoute } from './routes/users.route';
 import { spacesRoute } from './routes/spaces.route';
-import { getEntitiesRoute } from './routes/entities.route';
+import { SpaceNewEditRoute } from './routes/space-new-edit';
+import { CategoryRoute } from './routes/category.route';
 
 @Injectable()
 export class BuilderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly spaceNewEditRoute: SpaceNewEditRoute,
+    private readonly categoryRoute: CategoryRoute,
+  ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
     const services = await this.prisma.service.findMany();
+    const spaceNewEditRoute = await this.spaceNewEditRoute.getRoute();
+    const categoryRoute = await this.categoryRoute.getRoute();
+
     return [
       {
         ...rootRoute,
@@ -35,7 +45,7 @@ export class BuilderService {
             ...adminRoute,
             children: [
               {
-                ...spaceIdRoute,
+                ...tenancyIdRoute,
                 children: [
                   {
                     ...servicesRoute,
@@ -45,11 +55,20 @@ export class BuilderService {
                       layout: serviceLayout,
                       children: [
                         {
-                          ...getEntitiesRoute(service.name),
-                        },
+                          SPACE: {
+                            ...spacesRoute,
+                            children: [spaceNewEditRoute],
+                          },
+                          USER: { ...usersRoute, children: [] },
+                        }?.[service.name] as RouteBuilder,
                         {
                           ...categoriesRoute,
-                          children: [categoryAddRoute, categoryEditRoute, categoryNewEdit],
+                          children: [
+                            categoryRoute,
+                            categoryAddRoute,
+                            categoryEditRoute,
+                            categoryNewEdit,
+                          ],
                         },
                         {
                           ...groupsRoute,
@@ -69,7 +88,7 @@ export class BuilderService {
               },
               {
                 ...authRoute,
-                children: [loginRoute, spacesRoute],
+                children: [loginRoute, tenancies],
               },
             ],
           },

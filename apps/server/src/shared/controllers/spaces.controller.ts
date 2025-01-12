@@ -27,7 +27,7 @@ export class SpacesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK)
   async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
-    const space = await this.service.create({ data: createSpaceDto });
+    const space = await this.service.create(createSpaceDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SpaceDto, space));
   }
 

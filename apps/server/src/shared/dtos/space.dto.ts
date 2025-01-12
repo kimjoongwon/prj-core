@@ -1,16 +1,16 @@
 import { Space } from '@prisma/client';
-import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
+import { ClassField, StringField, UUIDFieldOptional } from '../decorators/field.decorators';
 import { Association } from '../entities/association.entity';
 import { AbstractDto } from './abstract.dto';
 import { AssociationDto } from './association.dto';
 import { ClassificationDto } from './classification.dto';
 
 export class SpaceDto extends AbstractDto implements Space {
-  @StringField()
+  @StringField({})
   name: string;
 
-  @UUIDField()
-  classificationId: string;
+  @UUIDFieldOptional({ nullable: true })
+  classificationId: string | null;
 
   @ClassField(() => ClassificationDto, { required: false })
   classification?: ClassificationDto;

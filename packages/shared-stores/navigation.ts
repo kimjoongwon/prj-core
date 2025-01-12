@@ -116,7 +116,7 @@ export class Navigation {
         children: [],
       };
 
-      if (routeBuilder.children) {
+      if (routeBuilder?.children) {
         route.children = routeBuilder.children.map(convertRouteBuilderToRoute);
       }
 

@@ -15,6 +15,10 @@ export class AuthUserInterceptor implements NestInterceptor {
 
     // ContextProvider에 tenantId 설정
 
+    if (tenancyId) {
+      ContextProvider.setTanancyId(tenancyId);
+    }
+
     // request의 body와 query에 tenantId 추가
     if (tenancyId) {
       if (request.body) {

@@ -13,3 +13,4 @@ export * from './providers';
 export * from './guards';
 export * from './libs';
 export * from './domains';
+export * from './modules';

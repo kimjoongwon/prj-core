@@ -5,6 +5,9 @@
  */
 
 export interface CreateSpaceDto {
-  classificationId: string;
+  categoryId: string;
+  /** @nullable */
+  classificationId?: string | null;
   name: string;
+  serviceId: string;
 }

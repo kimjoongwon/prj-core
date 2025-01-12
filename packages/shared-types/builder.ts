@@ -84,8 +84,8 @@ export interface LayoutBuilder {
 }
 
 export interface RouteBuilder {
-  name: string;
-  pathname: string;
+  name?: string;
+  pathname?: string;
   layout?: LayoutBuilder;
   params?: object;
   children?: RouteBuilder[];
