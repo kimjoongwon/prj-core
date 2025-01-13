@@ -20,7 +20,7 @@ import { authRoute } from './routes/auth.route';
 import { loginRoute } from './routes/login.route';
 import { tenancies } from './routes/tenancies.route';
 import { usersRoute } from './routes/users.route';
-import { spacesRoute } from './routes/spaces.route';
+import { SpacesRoute } from './routes/spaces.route';
 import { SpaceNewEditRoute } from './routes/space-new-edit';
 import { CategoryRoute } from './routes/category.route';
 import { rolesRoute } from './routes/roles.route';
@@ -33,6 +33,7 @@ export class BuilderService {
     private readonly spaceNewEditRoute: SpaceNewEditRoute,
     private readonly roleNewEditRoute: RoleNewEditRoute,
     private readonly categoryRoute: CategoryRoute,
+    private readonly spaceRoute: SpacesRoute,
   ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
@@ -40,6 +41,7 @@ export class BuilderService {
     const spaceNewEditRoute = await this.spaceNewEditRoute.getRoute();
     const categoryRoute = await this.categoryRoute.getRoute();
     const roleNewEditRoute = await this.roleNewEditRoute.getRoute();
+    const spacesRoute = await this.spaceRoute.getRoute();
 
     return [
       {

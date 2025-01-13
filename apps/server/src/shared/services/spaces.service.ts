@@ -11,7 +11,7 @@ import { ContextProvider } from '../providers';
 export class SpacesService {
   constructor(private readonly repository: SpacesRepository) {}
 
-  async create({ categoryId, serviceId, classificationId, ...createSpaceDto }: CreateSpaceDto) {
+  async create({ categoryId, serviceId, ...createSpaceDto }: CreateSpaceDto) {
     const tenancyId = ContextProvider.getTanancyId();
     const space = await this.repository.create({
       data: {

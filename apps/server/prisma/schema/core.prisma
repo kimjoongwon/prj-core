@@ -22,10 +22,10 @@ model Classification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
   categoryId String
-  userId     String?
-  postId     String?
-  spaceId    String?
-  roleId     String?
+  userId     String?   @unique
+  postId     String?   @unique
+  spaceId    String?   @unique
+  roleId     String?   @unique
   serviceId  String
   tenancyId  String
   createdAt  DateTime  @default(now())
@@ -35,10 +35,9 @@ model Classification {
   category Category @relation(fields: [categoryId], references: [id])
   service  Service  @relation(fields: [serviceId], references: [id])
   tenancy  Tenancy  @relation(fields: [tenancyId], references: [id])
-  users    User[]
-  // posts    Post[]
-  spaces   Space[]
-  roles    Role[]
+  user     User?    @relation(fields: [userId], references: [id])
+  space    Space?   @relation(fields: [spaceId], references: [id])
+  role     Role?    @relation(fields: [roleId], references: [id])
 
   @@unique([categoryId, userId])
   @@unique([categoryId, postId])
@@ -121,19 +120,18 @@ model User {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  email            String  @unique
-  name             String  @unique
-  phone            String  @unique
-  password         String
-  tenancyId        String
-  classificationId String?
+  email     String @unique
+  name      String @unique
+  phone     String @unique
+  password  String
+  tenancyId String
 
   // posts          Post[]
   profiles       Profile[]
   tenants        Tenant[]
   associations   Association[]
-  classification Classification? @relation(fields: [classificationId], references: [id])
   tenancy        Tenancy         @relation(fields: [tenancyId], references: [id])
+  classification Classification?
 }
 
 model Tenant {
@@ -159,10 +157,9 @@ model Space {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name             String  @unique
-  classificationId String?
+  name String @unique
 
-  classification Classification? @relation(fields: [classificationId], references: [id])
+  classification Classification?
   associations   Association[]
   tenancy        Tenancy?
   tenants        Tenant[]
@@ -278,11 +275,10 @@ model Role {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name             Roles   @unique @default(USER)
-  classificationId String?
+  name Roles @unique @default(USER)
 
   abilities      Ability[]
-  classification Classification? @relation(fields: [classificationId], references: [id])
+  classification Classification?
   tenants        Tenant[]
 }
 

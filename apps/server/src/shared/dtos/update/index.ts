@@ -7,3 +7,4 @@ export * from './update-space.dto';
 export * from './update-user.dto';
 export * from './update-classification.dto';
 export * from './update-role.dto';
+export * from './update-action.dto';

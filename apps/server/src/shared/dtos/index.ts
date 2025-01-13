@@ -9,6 +9,7 @@ export * from './category.dto';
 export * from './service.dto';
 export * from './tenant.dto';
 export * from './profile.dto';
+export * from './action.dto';
 export * from './create';
 export * from './update';
 export * from './query';

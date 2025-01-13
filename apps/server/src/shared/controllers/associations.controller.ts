@@ -42,12 +42,9 @@ export class AssociationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssociationDto, HttpStatus.OK)
-  async getAssociation(
-    @Param('associationId') associationId: string,
-    @Param('groupId') groupId: string,
-  ) {
+  async getAssociation(@Param('associationId') associationId: string) {
     const association = await this.service.getUnique({
-      where: { id: associationId, groupId: groupId },
+      where: { id: associationId },
     });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssociationDto, association));
   }

@@ -10,7 +10,6 @@ export class CategoryLogic {
   async getLastLeafCategoriesByServiceName(serviceName: $Enums.ServiceNames) {
     return this.repository.findMany({
       where: {
-        type: 'LEAF',
         service: {
           name: serviceName,
         },

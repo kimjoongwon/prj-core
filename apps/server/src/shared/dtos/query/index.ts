@@ -8,3 +8,4 @@ export * from './group-query.dto';
 export * from './service-query.dto';
 export * from './category-query.dto';
 export * from './classification-query.dto';
+export * from './action-query.dto';
