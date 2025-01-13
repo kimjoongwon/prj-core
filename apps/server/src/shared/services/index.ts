@@ -6,3 +6,4 @@ export * from './users.service';
 export * from './spaces.service';
 export * from './roles.service';
 export * from './actions.service';
+export * from './ability.service';

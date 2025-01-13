@@ -8,3 +8,4 @@ export * from './create-category.dto';
 export * from './create-classification.dto';
 export * from './create-role.dto';
 export * from './create-action.dto';
+export * from './create-ability.dto';

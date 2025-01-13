@@ -8,3 +8,4 @@ export * from './update-user.dto';
 export * from './update-classification.dto';
 export * from './update-role.dto';
 export * from './update-action.dto';
+export * from './update-ability.dto';

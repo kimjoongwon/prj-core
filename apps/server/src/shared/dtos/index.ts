@@ -14,3 +14,4 @@ export * from './create';
 export * from './update';
 export * from './query';
 export * from './role.dto';
+export * from './ability.dto';
