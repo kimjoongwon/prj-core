@@ -3,19 +3,16 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { AbilityActions } from './abilityActions';
 
-export interface UserDto {
+export interface ActionDto {
+  conditions?: string;
   createdAt: string;
-  email: string;
   id: string;
-  name: string;
-  /** @minLength 6 */
-  password: string;
-  phone: string;
+  name: AbilityActions;
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  spaceId: string;
-  tenancyId: string;
+  subjectId: string;
   updatedAt: string;
 }

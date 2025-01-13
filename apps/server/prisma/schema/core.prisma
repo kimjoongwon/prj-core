@@ -275,7 +275,8 @@ model Role {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name Roles @unique @default(USER)
+  name      Roles  @unique @default(USER)
+  tenancyId String
 
   abilities      Ability[]
   classification Classification?

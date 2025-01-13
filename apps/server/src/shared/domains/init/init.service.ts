@@ -15,7 +15,7 @@ export class InitService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createDefaultRoles() {
+  async createDefaultRoles(tenancyId: string) {
     let adminRoleId = null;
     this.logger.log(`[${this.LOG_PREFIX}] 앱시작 ROLE 생성`);
 
@@ -28,6 +28,7 @@ export class InitService {
       const role = await this.prisma.role.create({
         data: {
           name: 'SUPER_ADMIN',
+          tenancyId,
         },
       });
 
@@ -48,6 +49,7 @@ export class InitService {
       await this.prisma.role.create({
         data: {
           name: 'USER',
+          tenancyId,
         },
       });
     } else {
@@ -236,9 +238,9 @@ export class InitService {
   async initApp() {
     await this.createSubjects();
     await this.createServices();
-    const { adminRoleId } = await this.createDefaultRoles();
     const { spaceId } = await this.createDefaultSpace();
     const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
+    const { adminRoleId } = await this.createDefaultRoles(tenancyId);
     await this.createDefaultUser(adminRoleId, spaceId, tenancyId);
   }
 }
