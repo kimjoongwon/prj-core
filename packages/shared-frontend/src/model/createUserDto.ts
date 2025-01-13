@@ -5,7 +5,6 @@
  */
 
 export interface CreateUserDto {
-  classificationId?: string;
   email: string;
   name: string;
   /** @minLength 6 */

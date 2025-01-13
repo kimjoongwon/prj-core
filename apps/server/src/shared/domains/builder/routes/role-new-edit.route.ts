@@ -2,6 +2,7 @@ import { RouteBuilder } from '@shared/types';
 import { InputProps } from '@nextui-org/react';
 import { Injectable } from '@nestjs/common';
 import { CategoryLogic } from '../../../logic/category.logic';
+import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class RoleNewEditRoute {
@@ -9,6 +10,11 @@ export class RoleNewEditRoute {
 
   async getRoute(): Promise<RouteBuilder> {
     const options = await this.categoryLogic.getLastLeafCategoryOptionsBy('ROLE');
+    const roleOptions = Object.keys($Enums.Roles).map((role) => ({
+      key: role,
+      text: role,
+      value: role,
+    }));
 
     return {
       name: '그룹새편집',
@@ -30,8 +36,6 @@ export class RoleNewEditRoute {
                 name: 'createRole',
                 mapper: {
                   serviceId: 'serviceId',
-                  categoryId: 'categoryId',
-                  name: 'name',
                 },
               },
               navigator: {
@@ -43,10 +47,11 @@ export class RoleNewEditRoute {
                 name: '기본정보',
                 components: [
                   {
-                    type: 'Input',
+                    type: 'Select',
                     path: 'name',
                     props: {
                       label: '역할 이름',
+                      options: roleOptions,
                       placeholder: '역할 이름을 입력해주세요.',
                     } as InputProps,
                   },

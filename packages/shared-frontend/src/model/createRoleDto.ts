@@ -3,9 +3,11 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { Roles } from './roles';
 
-export interface CreateSpaceDto {
+export interface CreateRoleDto {
   categoryId: string;
-  name: string;
+  name: Roles;
   serviceId: string;
+  tenancyId: string;
 }

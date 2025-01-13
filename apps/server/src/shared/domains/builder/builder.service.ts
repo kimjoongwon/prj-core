@@ -25,6 +25,8 @@ import { SpaceNewEditRoute } from './routes/space-new-edit';
 import { CategoryRoute } from './routes/category.route';
 import { rolesRoute } from './routes/roles.route';
 import { RoleNewEditRoute } from './routes/role-new-edit.route';
+import { actionsRoute } from './routes/actions.route';
+import { ActionNewEditRoute } from './routes/action-new-edit.route';
 
 @Injectable()
 export class BuilderService {
@@ -34,6 +36,7 @@ export class BuilderService {
     private readonly roleNewEditRoute: RoleNewEditRoute,
     private readonly categoryRoute: CategoryRoute,
     private readonly spaceRoute: SpacesRoute,
+    private readonly actionNewEdit: ActionNewEditRoute,
   ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
@@ -42,6 +45,7 @@ export class BuilderService {
     const categoryRoute = await this.categoryRoute.getRoute();
     const roleNewEditRoute = await this.roleNewEditRoute.getRoute();
     const spacesRoute = await this.spaceRoute.getRoute();
+    const actionNewEditRoute = await this.actionNewEdit.getRoute();
 
     return [
       {
@@ -55,44 +59,59 @@ export class BuilderService {
                 children: [
                   {
                     ...servicesRoute,
-                    children: services.map((service) => ({
-                      name: service.label,
-                      pathname: service.id,
-                      layout: serviceLayout,
-                      children: [
-                        {
-                          ROLE: {
-                            ...rolesRoute,
-                            children: [roleNewEditRoute],
-                          },
-                          SPACE: {
-                            ...spacesRoute,
-                            children: [spaceNewEditRoute],
-                          },
-                          USER: { ...usersRoute, children: [] },
-                        }?.[service.name] as RouteBuilder,
-                        {
-                          ...categoriesRoute,
-                          children: [
-                            categoryRoute,
-                            categoryAddRoute,
-                            categoryEditRoute,
-                            categoryNewEdit,
-                          ],
-                        },
-                        {
-                          ...groupsRoute,
-                          children: [
-                            groupNewEditRoute,
-                            groupEditRoute,
-                            {
-                              ...groupIdRoute,
-                              children: [groupIdUsersRoute, groupIdAssociationsRoute],
+                    children: services.map((service) => {
+                      const routes = {
+                        name: service.label,
+                        pathname: service.id,
+                        layout: serviceLayout,
+                        children: [
+                          {
+                            ROLE: {
+                              ...rolesRoute,
+                              children: [roleNewEditRoute],
                             },
-                          ],
+                            SPACE: {
+                              ...spacesRoute,
+                              children: [spaceNewEditRoute],
+                            },
+                            USER: { ...usersRoute, children: [] },
+                          }?.[service.name] as RouteBuilder,
+                          {
+                            ...categoriesRoute,
+                            children: [
+                              categoryRoute,
+                              categoryAddRoute,
+                              categoryEditRoute,
+                              categoryNewEdit,
+                            ],
+                          },
+                          {
+                            ...groupsRoute,
+                            children: [
+                              groupNewEditRoute,
+                              groupEditRoute,
+                              {
+                                ...groupIdRoute,
+                                children: [groupIdUsersRoute, groupIdAssociationsRoute],
+                              },
+                            ],
+                          },
+                        ],
+                      };
+
+                      const _actionsRoutes: RouteBuilder = {
+                        ROLE: {
+                          ...actionsRoute,
+                          children: [actionNewEditRoute],
                         },
-                      ],
-                    })),
+                      }[service.name];
+
+                      if (_actionsRoutes) {
+                        routes.children.push(_actionsRoutes);
+                      }
+
+                      return routes;
+                    }),
                   },
                 ],
               },

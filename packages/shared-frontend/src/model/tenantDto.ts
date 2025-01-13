@@ -3,19 +3,19 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { SpaceDto } from './spaceDto';
+import type { UserDto } from './userDto';
 
-export interface UserDto {
+export interface TenantDto {
   createdAt: string;
-  email: string;
   id: string;
-  name: string;
-  /** @minLength 6 */
-  password: string;
-  phone: string;
   /** @nullable */
   removedAt: string | null;
+  roleId: string;
   seq: number;
+  space?: SpaceDto;
   spaceId: string;
-  tenancyId: string;
   updatedAt: string;
+  user?: UserDto;
+  userId: string;
 }

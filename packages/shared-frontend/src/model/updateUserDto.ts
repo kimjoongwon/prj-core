@@ -5,7 +5,6 @@
  */
 
 export interface UpdateUserDto {
-  classificationId?: string;
   email?: string;
   name?: string;
   /** @minLength 6 */
