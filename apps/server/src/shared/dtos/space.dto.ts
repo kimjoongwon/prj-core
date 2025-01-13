@@ -9,9 +9,6 @@ export class SpaceDto extends AbstractDto implements Space {
   @StringField({})
   name: string;
 
-  @UUIDFieldOptional({ nullable: true })
-  classificationId: string | null;
-
   @ClassField(() => ClassificationDto, { required: false })
   classification?: ClassificationDto;
 

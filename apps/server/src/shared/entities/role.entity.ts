@@ -5,6 +5,5 @@ import { RoleDto } from '../dtos';
 
 @UseDto(RoleDto)
 export class Role extends AbstractEntity<RoleDto> implements RoleEntity {
-  classificationId: string | null;
   name: $Enums.Roles;
 }

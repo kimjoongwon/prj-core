@@ -9,7 +9,7 @@ export class SpaceNewEditRoute {
 
   async getRoute(): Promise<RouteBuilder> {
     const options = await this.categoryLogic.getLastLeafCategoryOptionsBy('SPACE');
-
+    console.log('options', options);
     return {
       name: '그룹새편집',
       pathname: 'new/edit',

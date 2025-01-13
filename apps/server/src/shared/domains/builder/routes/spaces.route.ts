@@ -1,54 +1,60 @@
+import { Injectable } from '@nestjs/common';
 import { RouteBuilder } from '@shared/types';
 
-export const spacesRoute: RouteBuilder = {
-  name: '목록',
-  pathname: 'spaces',
-  layout: {
-    name: '자원',
-    type: 'DataGrid',
-    page: {
+@Injectable()
+export class SpacesRoute {
+  async getRoute(): Promise<RouteBuilder> {
+    return {
       name: '목록',
-      dataGrid: {
-        buttons: [
-          {
-            name: '생성',
-            navigator: {
-              pathname: 'new/edit',
-            },
-          },
-        ],
-        table: {
-          query: {
-            name: `useGetSpacesByQuery`,
-          },
-          columns: [
-            {
-              accessorKey: 'name',
-              header: {
-                name: '이름',
+      pathname: 'spaces',
+      layout: {
+        name: '자원',
+        type: 'DataGrid',
+        page: {
+          name: '목록',
+          dataGrid: {
+            buttons: [
+              {
+                name: '생성',
+                navigator: {
+                  pathname: 'new/edit',
+                },
               },
-            },
-            {
-              id: 'action',
-              header: {
-                name: '액션',
+            ],
+            table: {
+              query: {
+                name: `useGetSpacesByQuery`,
               },
-              cell: {
-                buttons: [
-                  {
-                    color: 'danger',
-                    name: '삭제',
-                    mutation: {
-                      name: 'deleteSpace',
-                      idMapper: 'id',
-                    },
+              columns: [
+                {
+                  accessorKey: 'name',
+                  header: {
+                    name: '이름',
                   },
-                ],
-              },
+                },
+                {
+                  id: 'action',
+                  header: {
+                    name: '액션',
+                  },
+                  cell: {
+                    buttons: [
+                      {
+                        color: 'danger',
+                        name: '삭제',
+                        mutation: {
+                          name: 'deleteSpace',
+                          idMapper: 'id',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
-          ],
+          },
         },
       },
-    },
-  },
-};
+    };
+  }
+}

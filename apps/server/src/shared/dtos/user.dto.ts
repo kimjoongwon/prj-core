@@ -20,9 +20,6 @@ export class UserDto extends AbstractDto implements User {
   @UUIDField()
   tenancyId: string;
 
-  @UUIDFieldOptional()
-  classificationId: string | null;
-
   @UUIDField()
   spaceId: string;
 
