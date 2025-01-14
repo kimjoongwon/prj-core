@@ -29,9 +29,9 @@ export class SubjectsService {
     });
   }
 
-  async getManyByQuery(query: SubjectQueryDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+  async getManyByQuery(query?: SubjectQueryDto) {
+    const args = query?.toArgs();
+    const countArgs = query?.toCountArgs();
     const subjects = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

@@ -16,7 +16,7 @@ export class AbilitiesRoute {
                 color: 'primary',
                 name: '추가',
                 navigator: {
-                  pathname: 'add',
+                  pathname: 'new/edit',
                 },
               },
             ],

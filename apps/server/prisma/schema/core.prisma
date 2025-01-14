@@ -292,9 +292,7 @@ model Action {
 
   name       AbilityActions @default(CREATE)
   conditions Json?
-  subjectId  String
-
-  subject Subject @relation(fields: [subjectId], references: [id])
+  tenancyId  String
 }
 
 model Subject {
@@ -304,10 +302,8 @@ model Subject {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name String @unique
-
-  abilities Ability[]
-  actions   Action[]
+  name      String @unique
+  tenancyId String
 }
 
 model Ability {
@@ -318,13 +314,14 @@ model Ability {
   removedAt DateTime? @db.Timestamptz(6)
 
   type        AbilityTypes
-  roleId      String
   subjectId   String
+  actionId    String
+  roleId      String
   description String?
   conditions  Json?
+  tenancyId   String
 
-  role    Role    @relation(fields: [roleId], references: [id])
-  subject Subject @relation(fields: [subjectId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
 }
 
 // model Template {
