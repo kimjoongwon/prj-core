@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RoleLogicModule, RolesController, RolesService } from '@shared';
+import { RoleLogicModule, RolesController } from '@shared';
 
 @Module({
   imports: [RoleLogicModule],

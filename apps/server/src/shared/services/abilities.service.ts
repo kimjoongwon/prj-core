@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { AbilitysRepository } from '../repositories/abilities.repository';
+import { AbilitiesRepository } from '../repositories/abilities.repository';
 import { AbilityQueryDto } from '../dtos/query/ability-query.dto';
 import { CreateAbilityDto } from '../dtos';
 
 @Injectable()
-export class AbilitysService {
-  constructor(private readonly repository: AbilitysRepository) {}
+export class AbilitiesService {
+  constructor(private readonly repository: AbilitiesRepository) {}
 
   getUnique(args: Prisma.AbilityFindUniqueArgs) {
     return this.repository.findUnique(args);
@@ -31,12 +31,7 @@ export class AbilitysService {
   }
 
   async getManyByQuery(query: AbilityQueryDto) {
-    const include = {
-      user: true,
-      group: true,
-      space: true,
-    };
-    const args = query.toArgs(include);
+    const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const abilitys = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);

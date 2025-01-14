@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ActionLogicModule } from '@shared';
-import { ActionsController } from '../../shared/controllers/actions.controller';
+import { ActionLogicModule, ActionsController } from '@shared';
 
 @Module({
   imports: [ActionLogicModule],

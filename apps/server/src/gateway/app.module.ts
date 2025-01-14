@@ -13,6 +13,7 @@ import { AuthEndpointModule } from './auth/auth-endpoint.module';
 import { SpacesEndpointModule } from './spaces/spaces-endpoint.module';
 import { RolesEndpointModule } from './roles/roles-endpoint.module';
 import { ActionsEndpointModule } from './actions/actions-endpoint.module';
+import { AbilitiesEndpointModule } from './abilities/abilities-endpoint.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ActionsEndpointModule } from './actions/actions-endpoint.module';
     AuthEndpointModule,
     RolesEndpointModule,
     ActionsEndpointModule,
+    AbilitiesEndpointModule,
     RouterModule.register([
       {
         path: 'api',
@@ -75,6 +77,10 @@ import { ActionsEndpointModule } from './actions/actions-endpoint.module';
               {
                 path: 'actions',
                 module: ActionsEndpointModule,
+              },
+              {
+                path: 'abilities',
+                module: AbilitiesEndpointModule,
               },
             ],
           },

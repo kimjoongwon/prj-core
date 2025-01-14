@@ -131,7 +131,7 @@ export const ServicesLayout = observer((props: ServicesLayoutProps) => {
 
   return (
     <VStack className="flex-1 w-full">
-      <AppBar content={<ServicesRoutes />} />;
+      <AppBar content={<ServicesRoutes />} />
       <Spacer y={1} />
       {children}
       <Card className="relative bottom-0 w-full flex sm:hidden h-[64px] justify-center items-center rounded-t-none rounded-b-none">

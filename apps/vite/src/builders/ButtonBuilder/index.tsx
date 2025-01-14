@@ -57,6 +57,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
     try {
       if (button.mutation?.name) {
+        console.log('args', args);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
