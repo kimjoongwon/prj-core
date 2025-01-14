@@ -7,3 +7,4 @@ export * from './spaces.controller';
 export * from './roles.controller';
 export * from './abilities.controller';
 export * from './actions.controller';
+export * from './subjects.controller';

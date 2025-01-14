@@ -14,6 +14,7 @@ import { SpacesEndpointModule } from './spaces/spaces-endpoint.module';
 import { RolesEndpointModule } from './roles/roles-endpoint.module';
 import { ActionsEndpointModule } from './actions/actions-endpoint.module';
 import { AbilitiesEndpointModule } from './abilities/abilities-endpoint.module';
+import { SubjectsEndpointModule } from './subjects/subjects-endpoint.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AbilitiesEndpointModule } from './abilities/abilities-endpoint.module';
     RolesEndpointModule,
     ActionsEndpointModule,
     AbilitiesEndpointModule,
+    SubjectsEndpointModule,
     RouterModule.register([
       {
         path: 'api',
@@ -81,6 +83,10 @@ import { AbilitiesEndpointModule } from './abilities/abilities-endpoint.module';
               {
                 path: 'abilities',
                 module: AbilitiesEndpointModule,
+              },
+              {
+                path: 'subjects',
+                module: SubjectsEndpointModule,
               },
             ],
           },

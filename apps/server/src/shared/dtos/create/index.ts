@@ -9,3 +9,4 @@ export * from './create-classification.dto';
 export * from './create-role.dto';
 export * from './create-action.dto';
 export * from './create-ability.dto';
+export * from './create-subject.dto';

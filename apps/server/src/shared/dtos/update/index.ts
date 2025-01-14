@@ -9,3 +9,4 @@ export * from './update-classification.dto';
 export * from './update-role.dto';
 export * from './update-action.dto';
 export * from './update-ability.dto';
+export * from './update-subject.dto';

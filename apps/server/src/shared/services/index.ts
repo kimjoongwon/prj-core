@@ -7,3 +7,4 @@ export * from './spaces.service';
 export * from './roles.service';
 export * from './actions.service';
 export * from './abilities.service';
+export * from './subjects.service';

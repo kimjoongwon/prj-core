@@ -15,3 +15,4 @@ export * from './update';
 export * from './query';
 export * from './role.dto';
 export * from './ability.dto';
+export * from './subject.dto';

@@ -13,3 +13,4 @@ export * from './role.entity';
 export * from './user.entity';
 export * from './action.entity';
 export * from './ability.entity';
+export * from './subject.entity';
