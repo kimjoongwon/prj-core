@@ -24,9 +24,6 @@ export class ActionNewEditRoute {
               name: '저장',
               mutation: {
                 name: 'createAction',
-                mapper: {
-                  serviceId: 'serviceId',
-                },
               },
               navigator: {
                 pathname: '..',

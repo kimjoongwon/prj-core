@@ -5,3 +5,5 @@ export * from './categories.controller';
 export * from './classifications.controller';
 export * from './spaces.controller';
 export * from './roles.controller';
+export * from './abilities.controller';
+export * from './actions.controller';

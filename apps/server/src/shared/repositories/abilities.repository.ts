@@ -7,7 +7,7 @@ import { Ability } from '../entities/ability.entity';
 
 @Injectable()
 @UseEntity(Ability)
-export class AbilitysRepository extends BaseRepository<
+export class AbilitiesRepository extends BaseRepository<
   Prisma.AbilityCreateArgs,
   Prisma.AbilityUpsertArgs,
   Prisma.AbilityUpdateArgs,

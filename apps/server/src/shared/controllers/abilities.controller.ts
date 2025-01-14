@@ -15,13 +15,13 @@ import { Auth, ApiResponseEntity } from '../decorators';
 import { AbilityDto, CreateAbilityDto, UpdateAbilityDto, AbilityQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
-import { AbilitysService } from '../services';
+import { AbilitiesService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Abilities')
+@ApiTags('ABILITIES')
 @Controller()
-export class AbilitysController {
-  constructor(private readonly service: AbilitysService) {}
+export class AbilitiesController {
+  constructor(private readonly service: AbilitiesService) {}
 
   @Post()
   @Auth([])
@@ -48,7 +48,7 @@ export class AbilitysController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AbilityDto, HttpStatus.OK)
-  async removeAbilitys(@Body() abilityIds: string[]) {
+  async removeAbilities(@Body() abilityIds: string[]) {
     const abilitys = await this.service.updateMany({
       where: { id: { in: abilityIds } },
       data: { removedAt: new Date() },
@@ -93,7 +93,7 @@ export class AbilitysController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AbilityDto, HttpStatus.OK, { isArray: true })
-  async getAbilitysByQuery(@Query() query: AbilityQueryDto) {
+  async getAbilitiesByQuery(@Query() query: AbilityQueryDto) {
     const { count, abilitys } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

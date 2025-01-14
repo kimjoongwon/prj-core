@@ -23,9 +23,39 @@ export class AuthEndpoint {
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
-    res.cookie('tenancyId', user.tenancyId, { httpOnly: true });
-    res.cookie('refreshToken', refreshToken, { httpOnly: true });
-    res.cookie('accessToken', accessToken, { httpOnly: true });
+    // res.cookie('tenancyId', user.tenancyId, {
+    //   httpOnly: true,
+    //   sameSite: 'none',
+    //   // domain: 'http://192.168.233.197:5173',
+    // });
+    // res.cookie('refreshToken', refreshToken, {
+    //   httpOnly: true,
+    //   sameSite: 'none',
+    //   // domain: 'http://192.168.233.197:5173',
+    // });
+    // res.cookie('accessToken', accessToken, {
+    //   httpOnly: true,
+    //   sameSite: 'none',
+    //   // domain: 'http://192.168.233.197:5173',
+    // });
+    res.cookie('tenancyId', user.tenancyId, {
+      httpOnly: true,
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+    });
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+    });
+    // res.cookie('tenancyId', user.tenancyId, {
+    //   httpOnly: true,
+    // });
+    // res.cookie('refreshToken', refreshToken, {
+    //   httpOnly: true,
+    // });
+    // res.cookie('accessToken', accessToken, {
+    //   httpOnly: true,
+    // });
 
     return new ResponseEntity(
       HttpStatus.OK,

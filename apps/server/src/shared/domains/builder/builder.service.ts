@@ -27,6 +27,7 @@ import { rolesRoute } from './routes/roles.route';
 import { RoleNewEditRoute } from './routes/role-new-edit.route';
 import { actionsRoute } from './routes/actions.route';
 import { ActionNewEditRoute } from './routes/action-new-edit.route';
+import { AbilitiesRoute } from './routes/abilities.route';
 
 @Injectable()
 export class BuilderService {
@@ -37,6 +38,7 @@ export class BuilderService {
     private readonly categoryRoute: CategoryRoute,
     private readonly spaceRoute: SpacesRoute,
     private readonly actionNewEdit: ActionNewEditRoute,
+    private readonly abilitiesRoute: AbilitiesRoute,
   ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
@@ -46,6 +48,7 @@ export class BuilderService {
     const roleNewEditRoute = await this.roleNewEditRoute.getRoute();
     const spacesRoute = await this.spaceRoute.getRoute();
     const actionNewEditRoute = await this.actionNewEdit.getRoute();
+    const abilitiesRoute = await this.abilitiesRoute.getRoute();
 
     return [
       {
@@ -99,15 +102,13 @@ export class BuilderService {
                         ],
                       };
 
-                      const _actionsRoutes: RouteBuilder = {
-                        ROLE: {
+                      if (service.name === 'ROLE') {
+                        routes.children.push(abilitiesRoute);
+
+                        routes.children.push({
                           ...actionsRoute,
                           children: [actionNewEditRoute],
-                        },
-                      }[service.name];
-
-                      if (_actionsRoutes) {
-                        routes.children.push(_actionsRoutes);
+                        });
                       }
 
                       return routes;

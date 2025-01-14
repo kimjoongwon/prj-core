@@ -23,7 +23,8 @@ export class SpacesRoute {
             ],
             table: {
               query: {
-                name: `useGetSpacesByQuery`,
+                name: 'useGetSpacesByQuery',
+                params: {},
               },
               columns: [
                 {

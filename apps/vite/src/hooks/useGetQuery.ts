@@ -32,14 +32,21 @@ export const useGetQuery = (query?: Query) => {
     const resourceId = context?.[query.idMapper];
     apiArgs.push(resourceId);
   }
+  if (JSON.stringify(queryParams) === '{}') {
+    apiArgs.push({});
+  }
 
   if (!isEmpty(queryParams)) {
     apiArgs.push(queryParams);
   }
 
-  apiArgs.push({
-    enabled: !!query?.name,
-  });
+  if (apiArgs.length > 0) {
+    apiArgs.push({
+      query: {
+        enabled: !!query?.name,
+      },
+    });
+  }
 
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name

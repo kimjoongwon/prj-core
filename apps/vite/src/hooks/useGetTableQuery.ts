@@ -1,6 +1,6 @@
 import { APIManager } from '@shared/frontend';
 import { TableBuilder } from '@shared/types';
-import { get, isEmpty } from 'lodash-es';
+import { escape, get, isEmpty } from 'lodash-es';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
@@ -30,13 +30,27 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
       };
     });
   }
+  if (query?.idMapper) {
+    // @ts-ignore
+    const resourceId = context?.[query.idMapper];
+    apiArgs.push(resourceId);
+  }
+
+  if (JSON.stringify(queryParams) === '{}') {
+    apiArgs.push({});
+  }
+
   if (!isEmpty(queryParams)) {
     apiArgs.push(queryParams);
   }
 
-  apiArgs.push({
-    enabled: !!query?.name,
-  });
+  if (apiArgs.length > 0) {
+    apiArgs.push({
+      query: {
+        enabled: !!query?.name,
+      },
+    });
+  }
 
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name

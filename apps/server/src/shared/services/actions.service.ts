@@ -31,12 +31,7 @@ export class ActionsService {
   }
 
   async getManyByQuery(query: ActionQueryDto) {
-    const include = {
-      user: true,
-      group: true,
-      space: true,
-    };
-    const args = query.toArgs(include);
+    const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const actions = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
