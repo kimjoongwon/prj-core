@@ -4,6 +4,12 @@ import { JsonValue } from '@prisma/client/runtime/library';
 import { EnumField, StringFieldOptional, UUIDField } from '../decorators';
 
 export class AbilityDto extends AbstractDto implements Ability {
+  @UUIDField()
+  tenancyId: string;
+
+  @UUIDField()
+  actionId: string;
+
   @StringFieldOptional({ nullable: true })
   conditions: JsonValue | null;
 

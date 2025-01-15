@@ -10,6 +10,7 @@ export class AbilitiesRoute {
       layout: {
         type: 'DataGrid',
         page: {
+          name: '목록',
           dataGrid: {
             buttons: [
               {
@@ -23,13 +24,12 @@ export class AbilitiesRoute {
             table: {
               query: {
                 name: 'useGetAbilitiesByQuery',
-                params: {},
               },
               columns: [
                 {
-                  accessorKey: 'name',
+                  accessorKey: 'id',
                   header: {
-                    name: '이름',
+                    name: 'Identifier',
                   },
                 },
               ],

@@ -94,12 +94,12 @@ export class AbilitiesController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AbilityDto, HttpStatus.OK, { isArray: true })
   async getAbilitiesByQuery(@Query() query: AbilityQueryDto) {
-    const { count, abilitys } = await this.service.getManyByQuery(query);
+    const { count, abilities } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      abilitys.map((ability) => ability.toDto()),
+      abilities.map((ability) => ability.toDto()),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

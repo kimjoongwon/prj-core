@@ -4,12 +4,12 @@ import { JsonValue } from '@prisma/client/runtime/library';
 import { EnumField, StringFieldOptional, UUIDField } from '../decorators';
 
 export class ActionDto extends AbstractDto implements Action {
+  @UUIDField()
+  tenancyId: string;
+
   @EnumField(() => $Enums.AbilityActions)
   name: $Enums.AbilityActions;
 
   @StringFieldOptional()
   conditions: JsonValue | null;
-
-  @UUIDField()
-  subjectId: string;
 }
