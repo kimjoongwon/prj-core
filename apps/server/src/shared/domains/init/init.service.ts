@@ -183,12 +183,12 @@ export class InitService {
     }
   }
 
-  async createSubjects() {
+  async createSubjects(tenancyId: string) {
     return await Promise.all(
       Object.keys(Prisma.ModelName).map(async (key) => {
         const subject = await this.prisma.subject.findUnique({ where: { name: key } });
         if (!subject) {
-          return this.prisma.subject.create({ data: { name: key } });
+          return this.prisma.subject.create({ data: { name: key, tenancyId } });
         } else {
           return null;
         }
@@ -236,10 +236,10 @@ export class InitService {
   }
 
   async initApp() {
-    await this.createSubjects();
     await this.createServices();
     const { spaceId } = await this.createDefaultSpace();
     const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
+    await this.createSubjects(tenancyId);
     const { adminRoleId } = await this.createDefaultRoles(tenancyId);
     await this.createDefaultUser(adminRoleId, spaceId, tenancyId);
   }

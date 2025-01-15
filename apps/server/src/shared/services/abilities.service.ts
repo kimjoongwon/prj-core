@@ -33,10 +33,10 @@ export class AbilitiesService {
   async getManyByQuery(query: AbilityQueryDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
-    const abilitys = await this.repository.findMany(args);
+    const abilities = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {
-      abilitys,
+      abilities,
       count,
     };
   }

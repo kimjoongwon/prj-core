@@ -16,38 +16,38 @@ export type AppAbility = PureAbility<
 
 @Injectable()
 export class CaslAbilityFactory {
-  constructor(private prisma: PrismaService) {}
-  async createForUser(user: UserDto) {
-    const { can, cannot, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
-    const tenants = await this.prisma.tenant.findMany({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        role: {
-          include: {
-            abilities: {
-              include: {
-                subject: true,
-              },
-            },
-          },
-        },
-      },
-    });
+  // constructor(private prisma: PrismaService) {}
+  // async createForUser(user: UserDto) {
+  //   const { can, cannot, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+  //   const tenants = await this.prisma.tenant.findMany({
+  //     where: {
+  //       userId: user.id,
+  //     },
+  //     include: {
+  //       role: {
+  //         include: {
+  //           abilities: {
+  //             include: {
+  //               subject: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
 
-    // @ts-ignore
-    const tenant = tenants[0];
-    tenant.role.abilities.forEach((ability) => {
-      if (ability.type === 'CAN') {
-        // @ts-ignore
-        can(ability.action, ability.subject.name, ability.conditions);
-      } else {
-        // @ts-ignore
-        cannot(ability.action, ability.subject.name, ability.conditions);
-      }
-    });
+  //   // @ts-ignore
+  //   const tenant = tenants[0];
+  //   tenant.role.abilities.forEach((ability) => {
+  //     if (ability.type === 'CAN') {
+  //       // @ts-ignore
+  //       can(ability.action, ability.subject.name, ability.conditions);
+  //     } else {
+  //       // @ts-ignore
+  //       cannot(ability.action, ability.subject.name, ability.conditions);
+  //     }
+  //   });
 
-    return build();
-  }
+  //   return build();
+  // }
 }
