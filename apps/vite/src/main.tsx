@@ -13,6 +13,7 @@ import { RouteBuilder } from './builders/Route/RouteBuilder';
 import { ReactQueryProvider } from '@shared/frontend';
 import { v4 } from 'uuid';
 import './index.css';
+import { Spinner } from '@nextui-org/react';
 
 const rootElement = document.getElementById('root')!;
 
@@ -23,52 +24,27 @@ export const store = observable({
   },
 });
 
-// eslint-disable-next-line react-refresh/only-export-components
+const generateRouteObject = ({
+  pathname,
+  children,
+}: IRouteBuilder): RouteObject => ({
+  path: pathname,
+  element: <RouteBuilder key={v4()} routeBuilder={{ pathname, children }} />,
+  errorElement: <div>error</div>,
+  children: children?.map(generateRouteObject),
+});
+
 const App = observer(() => {
-  const store = useStore();
+  const { navigation, isInitialized } = useStore();
+  const router = createBrowserRouter(
+    navigation.routeBuilders?.map(generateRouteObject),
+  );
 
-  const routeObjects = store.navigation.routeBuilders?.map(routeBuilder => {
-    const getRouteObjects = (routeBuilder: IRouteBuilder) => {
-      const _route: RouteObject = {
-        path: routeBuilder?.pathname,
-        element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
-        children: [],
-        errorElement: <div>error</div>,
-      };
-
-      if (routeBuilder?.children) {
-        const children = routeBuilder.children.map(getRouteObjects);
-        _route.children = children;
-      }
-
-      return _route;
-    };
-
-    const _route: RouteObject = {
-      path: routeBuilder?.pathname,
-      element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
-      errorElement: <div>error</div>,
-    };
-
-    if (routeBuilder?.children) {
-      const children = routeBuilder.children.map(getRouteObjects);
-      _route.children = children;
-    }
-
-    return _route;
-  });
-
-  const router = createBrowserRouter(routeObjects);
-
-  if (!store.isInitialized) return <div>init...</div>;
-
-  return <RouterProvider router={router} />;
+  return !isInitialized ? <Spinner /> : <RouterProvider router={router} />;
 });
 
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
+  ReactDOM.createRoot(rootElement).render(
     <ReactQueryProvider>
       <Providers>
         <App />

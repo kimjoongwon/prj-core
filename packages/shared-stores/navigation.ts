@@ -38,29 +38,21 @@ export class Navigation {
     this.activateRoute();
   }
 
-  private findRouteByPath(pathname: string) {
-    let findedRoute: Route;
-    const findRoute = (route: Route) => {
-      if (route.pathname === pathname) {
-        findedRoute = route;
+  private findRouteByPath(pathname: string): Route | undefined {
+    const findRoute = (routes: Route[]): Route | undefined => {
+      for (const route of routes) {
+        if (route.pathname === pathname) {
+          return route;
+        }
+        const found = route.children ? findRoute(route.children) : undefined;
+        if (found) {
+          return found;
+        }
       }
-
-      if (route.children) {
-        return route.children.forEach(findRoute);
-      }
+      return undefined;
     };
 
-    this.routes.forEach(route => {
-      if (route.pathname === pathname) {
-        findedRoute = route;
-      }
-
-      if (route.children) {
-        route.children.forEach(findRoute);
-      }
-    });
-
-    return findedRoute!;
+    return findRoute(this.routes);
   }
 
   get servicesRoute() {
@@ -69,7 +61,7 @@ export class Navigation {
   }
 
   get serviceRoute() {
-    const serviceRoute = this.servicesRoute.children?.find(
+    const serviceRoute = this.servicesRoute?.children?.find(
       serviceRoute => serviceRoute.active,
     );
 
@@ -80,65 +72,23 @@ export class Navigation {
     const segments = window.location.pathname;
 
     const changeRouteActiveState = (route: Route) => {
-      if (segments.includes(route.pathname)) {
-        route.active = true;
-      } else {
-        route.active = false;
-      }
-
-      if (route.children) {
-        route.children.forEach(changeRouteActiveState);
-      }
-    };
-
-    this.routes.forEach(route => {
-      const url = PathUtil.getUrlWithParamsAndQueryString(
-        route.pathname,
-        route.params,
-      );
-      if (segments.includes(url)) {
-        route.active = true;
-      } else {
-        route.active = false;
-      }
+      route.active = segments.includes(route.pathname);
 
       route.children?.forEach(changeRouteActiveState);
-    });
+    };
+
+    this.routes.forEach(changeRouteActiveState);
   }
 
   getRoutes() {
-    const convertRouteBuilderToRoute = (routeBuilder: RouteBuilder) => {
-      const route: Route = {
-        name: routeBuilder?.name,
-        pathname: routeBuilder?.pathname,
-        params: routeBuilder?.params,
-        active: false,
-        children: [],
-      };
-
-      if (routeBuilder?.children) {
-        route.children = routeBuilder.children.map(convertRouteBuilderToRoute);
-      }
-
-      return route;
-    };
-
-    const routes = this.routeBuilders.map(routeBuilder => {
-      const route: Route = {
-        name: routeBuilder.name,
-        pathname: routeBuilder.pathname,
-        active: false,
-        params: routeBuilder.params,
-        children: [],
-      };
-
-      if (routeBuilder.children) {
-        route.children = routeBuilder.children.map(convertRouteBuilderToRoute);
-      }
-
-      return route;
+    const convertRouteBuilderToRoute = (routeBuilder: RouteBuilder): Route => ({
+      name: routeBuilder.name || '',
+      pathname: routeBuilder.pathname || '',
+      params: routeBuilder.params,
+      active: false,
+      children: routeBuilder.children?.map(convertRouteBuilderToRoute) || [],
     });
 
-    this.routes = routes;
+    this.routes = this.routeBuilders.map(convertRouteBuilderToRoute);
   }
 }

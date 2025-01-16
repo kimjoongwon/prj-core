@@ -42,6 +42,8 @@ import type {
   CreateRoleDto,
   CreateSpace200AllOf,
   CreateSpaceDto,
+  CreateSubject200AllOf,
+  CreateSubjectDto,
   CreateUser200AllOf,
   CreateUserDto,
   DeleteAbility200AllOf,
@@ -52,6 +54,7 @@ import type {
   DeleteGroup200AllOf,
   DeleteRole200AllOf,
   DeleteSpace200AllOf,
+  DeleteSubject200AllOf,
   DeleteUser200AllOf,
   GetAbilitiesByQuery200AllOf,
   GetAbilitiesByQueryParams,
@@ -77,6 +80,9 @@ import type {
   GetSpace200AllOf,
   GetSpacesByQuery200AllOf,
   GetSpacesByQueryParams,
+  GetSubject200AllOf,
+  GetSubjectsByQuery200AllOf,
+  GetSubjectsByQueryParams,
   GetToken200AllOf,
   GetUser200AllOf,
   GetUsersByQuery200AllOf,
@@ -94,6 +100,8 @@ import type {
   RemoveGroups200AllOf,
   RemoveRole200AllOf,
   RemoveSpace200AllOf,
+  RemoveSubject200AllOf,
+  RemoveSubjects200AllOf,
   RemoveUser200AllOf,
   RemoveUsers200AllOf,
   SignUpPayloadDto,
@@ -115,6 +123,8 @@ import type {
   UpdateRoleDto,
   UpdateSpace200AllOf,
   UpdateSpaceDto,
+  UpdateSubject200AllOf,
+  UpdateSubjectDto,
   UpdateUser200AllOf,
   UpdateUserDto
 } from './model'
@@ -5970,6 +5980,632 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
       > => {
 
       const mutationOptions = getRemoveAbilityMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const createSubject = (
+    createSubjectDto: BodyType<CreateSubjectDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<CreateSubject200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSubjectDto
+    },
+      options);
+    }
+  
+
+
+export const getCreateSubjectMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSubject>>, {data: BodyType<CreateSubjectDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSubject(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof createSubject>>>
+    export type CreateSubjectMutationBody = BodyType<CreateSubjectDto>
+    export type CreateSubjectMutationError = ErrorType<void>
+
+    export const useCreateSubject = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSubject>>, TError,{data: BodyType<CreateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof createSubject>>,
+        TError,
+        {data: BodyType<CreateSubjectDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateSubjectMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getSubjectsByQuery = (
+    params?: GetSubjectsByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSubjectsByQuery200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetSubjectsByQueryQueryKey = (params?: GetSubjectsByQueryParams,) => {
+    return [`http://localhost:3005/api/v1/subjects`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetSubjectsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByQuery>>> = ({ signal }) => getSubjectsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByQuery>>>
+export type GetSubjectsByQueryQueryError = ErrorType<void>
+
+
+export function useGetSubjectsByQuery<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetSubjectsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubjectsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuery<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubjectsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuery<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubjectsByQuery<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectsByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSubjectsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByQuery>>> = ({ signal }) => getSubjectsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByQuery>>>
+export type GetSubjectsByQuerySuspenseQueryError = ErrorType<void>
+
+
+export function useGetSubjectsByQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetSubjectsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubjectsByQuerySuspense<TData = Awaited<ReturnType<typeof getSubjectsByQuery>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectsByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSubjectsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByQuery>>>, TError = ErrorType<void>>(params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubjectsByQuery>>> = ({ signal }) => getSubjectsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubjectsByQuery>>>
+export type GetSubjectsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSubjectsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByQuery>>>, TError = ErrorType<void>>(
+ params: undefined |  GetSubjectsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubjectsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubjectsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetSubjectsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubjectsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectsByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getSubject = (
+    subjectId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetSubject200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects/${subjectId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetSubjectQueryKey = (subjectId: string,) => {
+    return [`http://localhost:3005/api/v1/subjects/${subjectId}`] as const;
+    }
+
+    
+export const getGetSubjectQueryOptions = <TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectQueryKey(subjectId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubject>>> = ({ signal }) => getSubject(subjectId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectQueryResult = NonNullable<Awaited<ReturnType<typeof getSubject>>>
+export type GetSubjectQueryError = ErrorType<void>
+
+
+export function useGetSubject<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubject>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubject<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSubject>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubject<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubject<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectQueryOptions(subjectId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSubjectSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectQueryKey(subjectId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubject>>> = ({ signal }) => getSubject(subjectId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSubject>>>
+export type GetSubjectSuspenseQueryError = ErrorType<void>
+
+
+export function useGetSubjectSuspense<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectSuspense<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectSuspense<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubjectSuspense<TData = Awaited<ReturnType<typeof getSubject>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectSuspenseQueryOptions(subjectId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetSubjectSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSubject>>>, TError = ErrorType<void>>(subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSubjectQueryKey(subjectId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSubject>>> = ({ signal }) => getSubject(subjectId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(subjectId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSubjectSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSubject>>>
+export type GetSubjectSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetSubjectSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubject>>>, TError = ErrorType<void>>(
+ subjectId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubject>>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetSubjectSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubject>>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+
+export function useGetSubjectSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSubject>>>, TError = ErrorType<void>>(
+ subjectId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSubject>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSubjectSuspenseInfiniteQueryOptions(subjectId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateSubject = (
+    subjectId: string,
+    updateSubjectDto: BodyType<UpdateSubjectDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateSubject200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects/${subjectId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSubjectDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateSubjectMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubject>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSubject>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSubject>>, {subjectId: string;data: BodyType<UpdateSubjectDto>}> = (props) => {
+          const {subjectId,data} = props ?? {};
+
+          return  updateSubject(subjectId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof updateSubject>>>
+    export type UpdateSubjectMutationBody = BodyType<UpdateSubjectDto>
+    export type UpdateSubjectMutationError = ErrorType<void>
+
+    export const useUpdateSubject = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSubject>>, TError,{subjectId: string;data: BodyType<UpdateSubjectDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateSubject>>,
+        TError,
+        {subjectId: string;data: BodyType<UpdateSubjectDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSubjectMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteSubject = (
+    subjectId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteSubject200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects/${subjectId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteSubjectMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSubject>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteSubject>>, TError,{subjectId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteSubject>>, {subjectId: string}> = (props) => {
+          const {subjectId} = props ?? {};
+
+          return  deleteSubject(subjectId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof deleteSubject>>>
+    
+    export type DeleteSubjectMutationError = ErrorType<void>
+
+    export const useDeleteSubject = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteSubject>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof deleteSubject>>,
+        TError,
+        {subjectId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteSubjectMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSubjects = (
+    removeSubjectsBody: BodyType<string[]>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSubjects200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects/removedAt`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: removeSubjectsBody
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSubjectsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjects>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSubjects>>, TError,{data: BodyType<string[]>}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSubjects>>, {data: BodyType<string[]>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  removeSubjects(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSubjectsMutationResult = NonNullable<Awaited<ReturnType<typeof removeSubjects>>>
+    export type RemoveSubjectsMutationBody = BodyType<string[]>
+    export type RemoveSubjectsMutationError = ErrorType<void>
+
+    export const useRemoveSubjects = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubjects>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSubjects>>,
+        TError,
+        {data: BodyType<string[]>},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSubjectsMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeSubject = (
+    subjectId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveSubject200AllOf>(
+      {url: `http://localhost:3005/api/v1/subjects/${subjectId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveSubjectMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubject>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeSubject>>, TError,{subjectId: string}, TContext> => {
+const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeSubject>>, {subjectId: string}> = (props) => {
+          const {subjectId} = props ?? {};
+
+          return  removeSubject(subjectId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveSubjectMutationResult = NonNullable<Awaited<ReturnType<typeof removeSubject>>>
+    
+    export type RemoveSubjectMutationError = ErrorType<void>
+
+    export const useRemoveSubject = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeSubject>>, TError,{subjectId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof removeSubject>>,
+        TError,
+        {subjectId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveSubjectMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

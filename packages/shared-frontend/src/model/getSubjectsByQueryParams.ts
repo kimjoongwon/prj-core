@@ -4,7 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetAbilitiesByQueryParams = {
+export type GetSubjectsByQueryParams = {
 skip?: number;
 take?: number;
 };

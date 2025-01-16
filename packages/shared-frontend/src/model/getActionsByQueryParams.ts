@@ -3,12 +3,8 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityActions } from './abilityActions';
 
 export type GetActionsByQueryParams = {
 skip?: number;
 take?: number;
-name?: AbilityActions;
-conditions?: string;
-subjectId?: string;
 };

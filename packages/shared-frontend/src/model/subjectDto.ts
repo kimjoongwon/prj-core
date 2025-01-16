@@ -3,13 +3,11 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityActions } from './abilityActions';
 
-export interface ActionDto {
-  conditions?: string;
+export interface SubjectDto {
   createdAt: string;
   id: string;
-  name: AbilityActions;
+  name: string;
   /** @nullable */
   removedAt: string | null;
   seq: number;

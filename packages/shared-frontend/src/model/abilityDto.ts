@@ -6,6 +6,7 @@
 import type { AbilityTypes } from './abilityTypes';
 
 export interface AbilityDto {
+  actionId: string;
   /** @nullable */
   conditions?: string | null;
   createdAt: string;
@@ -17,6 +18,7 @@ export interface AbilityDto {
   roleId: string;
   seq: number;
   subjectId: string;
+  tenancyId: string;
   type: AbilityTypes;
   updatedAt: string;
 }

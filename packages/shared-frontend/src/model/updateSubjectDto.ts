@@ -4,7 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetAbilitiesByQueryParams = {
-skip?: number;
-take?: number;
-};
+export interface UpdateSubjectDto {
+  name?: string;
+  tenancyId?: string;
+}

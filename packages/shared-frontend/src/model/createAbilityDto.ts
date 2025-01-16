@@ -6,11 +6,13 @@
 import type { AbilityTypes } from './abilityTypes';
 
 export interface CreateAbilityDto {
+  actionId: string;
   /** @nullable */
   conditions?: string | null;
   /** @nullable */
   description?: string | null;
   roleId: string;
   subjectId: string;
+  tenancyId: string;
   type: AbilityTypes;
 }

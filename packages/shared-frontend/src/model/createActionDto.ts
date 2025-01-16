@@ -8,5 +8,5 @@ import type { AbilityActions } from './abilityActions';
 export interface CreateActionDto {
   conditions?: string;
   name: AbilityActions;
-  subjectId: string;
+  tenancyId: string;
 }
