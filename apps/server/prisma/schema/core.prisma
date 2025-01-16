@@ -180,7 +180,6 @@ model Tenancy {
   classifications Classification[]
   associations    Association[]
   users           User[]
-  // posts           Post[]
 }
 
 model SMS {
@@ -228,45 +227,69 @@ model SMS {
 //   systemEmails SystemEmail[]
 // }
 
-// model Timeline {
-//   id        String    @id @default(uuid())
-//   seq       Int       @unique @default(autoincrement())
-//   tenancyId String
-//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime? @db.Timestamptz(6)
-//   sessions  Session[]
-//   tenancy   Tenancy   @relation(fields: [tenancyId], references: [id])
-// }
+// 나눔 //
+model Timeline {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
 
-// model Session {
-//   id                    String                  @id @default(uuid())
-//   seq                   Int                     @unique @default(autoincrement())
-//   type                  SessionTypes            @default(ONE_TIME)
-//   startDate             DateTime                @db.Date
-//   endDate               DateTime?               @db.Date
-//   timelineId            String
-//   recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
-//   repeatCycle           Int                     @default(1)
-//   repeatCycleType       RepeatCycleTypes        @default(WEEK)
-//   createdAt             DateTime                @default(now()) @db.Timestamptz(6)
-//   updatedAt             DateTime?               @updatedAt @db.Timestamptz(6)
-//   removedAt             DateTime?               @db.Timestamptz(6)
-//   timeline              Timeline                @relation(fields: [timelineId], references: [id])
-//   timelineItems         TimelineItem[]
-// }
+  name          String   @unique
+  tenancyId     String
+  tenantId      String
+  startDateTime DateTime @db.Timestamptz(6)
+  endDateTime   DateTime @db.Timestamptz(6)
 
-// model TimelineItem {
-//   id            String    @id @default(uuid())
-//   seq           Int       @unique @default(autoincrement())
-//   sessionId     String
-//   startDateTime DateTime  @db.Timestamptz(6)
-//   endDateTime   DateTime  @db.Timestamptz(6)
-//   createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-//   updatedAt     DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt     DateTime? @db.Timestamptz(6)
-//   session       Session   @relation(fields: [sessionId], references: [id])
-// }
+  sessions Session[]
+}
+
+model Session {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  type                  SessionTypes            @default(ONE_TIME)
+  name                  String
+  startTime             DateTime                @db.Time()
+  endTime               DateTime                @db.Time()
+  timelineId            String
+  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+  repeatCycle           Int                     @default(1)
+  repeatCycleType       RepeatCycleTypes        @default(WEEK)
+
+  timeline Timeline @relation(fields: [timelineId], references: [id])
+}
+
+// 나눔 //
+model Routine {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  name      String  @unique
+  sessionId String?
+  contentId String
+  tenancyId String
+}
+
+model Sequence {
+  id  String @id @default(uuid())
+  seq Int    @unique @default(autoincrement())
+
+  name      String @unique
+  routineId String
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+}
+
+//
 
 model Role {
   id        String    @id @default(uuid())
@@ -374,26 +397,31 @@ model Ability {
 //   question   Question  @relation(fields: [questionId], references: [id])
 // }
 
-// model Post {
-//   id               String          @id @default(uuid())
-//   seq              Int             @unique @default(autoincrement())
-//   type             PostTypes       @default(TEXT)
-//   title            String?
-//   description      String?
-//   content          String          @db.VarChar(1000)
-//   dopotId          String
-//   authorId         String
-//   tenancyId        String
-//   classificationId String?
-//   createdAt        DateTime        @default(now()) @db.Timestamptz(6)
-//   updatedAt        DateTime?       @updatedAt @db.Timestamptz(6)
-//   removedAt        DateTime?       @db.Timestamptz(6)
-//   author           User            @relation(fields: [authorId], references: [id])
-//   exercise         Exercise?
-//   association      Association[]
-//   classification   Classification? @relation(fields: [classificationId], references: [id])
-//   tenancy          Tenancy         @relation(fields: [tenancyId], references: [id])
-// }
+model Post {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  contentId String
+  authorId  String
+  tenancyId String
+}
+
+model Content {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  title       String?
+  description String?
+  dopotId     String
+  type        TextTypes @default(HTML)
+  text        String?   @db.VarChar(1000)
+}
 
 model Depot {
   id        String     @id @default(uuid())
@@ -544,9 +572,10 @@ enum QnaStatus {
   CLOSED
 }
 
-enum PostTypes {
+enum TextTypes {
   HTML
-  TEXT
+  MARKDOWN
+  STRING
 }
 
 enum CategoryTypes {
@@ -559,6 +588,8 @@ enum ServiceNames {
   SPACE
   POST
   ROLE
+  TIMELINE
+  ROUTINE
 }
 
 enum DepotTypes {

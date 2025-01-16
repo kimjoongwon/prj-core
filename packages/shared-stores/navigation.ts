@@ -82,11 +82,11 @@ export class Navigation {
 
   getRoutes() {
     const convertRouteBuilderToRoute = (routeBuilder: RouteBuilder): Route => ({
-      name: routeBuilder.name || '',
-      pathname: routeBuilder.pathname || '',
-      params: routeBuilder.params,
+      name: routeBuilder?.name || '',
+      pathname: routeBuilder?.pathname || '',
+      params: routeBuilder?.params,
       active: false,
-      children: routeBuilder.children?.map(convertRouteBuilderToRoute) || [],
+      children: routeBuilder?.children?.map(convertRouteBuilderToRoute) || [],
     });
 
     this.routes = this.routeBuilders.map(convertRouteBuilderToRoute);
