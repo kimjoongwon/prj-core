@@ -29,6 +29,7 @@ import { actionsRoute } from './routes/actions.route';
 import { ActionNewEditRoute } from './routes/action-new-edit.route';
 import { AbilitiesRoute } from './routes/abilities.route';
 import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
+import { sessionsRoute } from './routes/session/sessions.route';
 
 @Injectable()
 export class BuilderService {
@@ -114,6 +115,13 @@ export class BuilderService {
                         routes.children.push({
                           ...actionsRoute,
                           children: [actionNewEditRoute],
+                        });
+                      }
+
+                      if (service.name === 'TIMELINE') {
+                        routes.children.push({
+                          ...sessionsRoute,
+                          children: [],
                         });
                       }
 

@@ -202,6 +202,8 @@ export class InitService {
         { name: $Enums.ServiceNames.USER, label: '이용자' },
         { name: $Enums.ServiceNames.SPACE, label: '공간' },
         { name: $Enums.ServiceNames.ROLE, label: '역할' },
+        { name: $Enums.ServiceNames.TIMELINE, label: '타임라인' },
+        { name: $Enums.ServiceNames.ROUTINE, label: '루틴' },
       ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
         const service = await this.prisma.service.findUnique({ where: { name: seedService.name } });
         if (!service) {

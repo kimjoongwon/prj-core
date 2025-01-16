@@ -4,7 +4,6 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@shared/stores';
 import { Providers } from './Providers';
@@ -17,21 +16,11 @@ import { Spinner } from '@nextui-org/react';
 
 const rootElement = document.getElementById('root')!;
 
-export const store = observable({
-  snackbar: {
-    open: false,
-    message: '',
-  },
-});
-
-const generateRouteObject = ({
-  pathname,
-  children,
-}: IRouteBuilder): RouteObject => ({
-  path: pathname,
-  element: <RouteBuilder key={v4()} routeBuilder={{ pathname, children }} />,
+const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
+  path: routeBuilder?.pathname,
+  element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
   errorElement: <div>error</div>,
-  children: children?.map(generateRouteObject),
+  children: routeBuilder?.children?.map(generateRouteObject),
 });
 
 const App = observer(() => {
