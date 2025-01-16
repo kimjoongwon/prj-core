@@ -11,3 +11,5 @@ export * from './classification-query.dto';
 export * from './action-query.dto';
 export * from './ability-query.dto';
 export * from './subject-query.dto';
+export * from './session-query.dto';
+export * from './timeline-query.dto';

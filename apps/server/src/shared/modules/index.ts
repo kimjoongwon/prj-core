@@ -3,3 +3,5 @@ export * from './role-logic.module';
 export * from './action-logic.module';
 export * from './ability-logic.module';
 export * from './subject-logic.module';
+export * from './session-logic.module';
+export * from './timeline-logic.module';

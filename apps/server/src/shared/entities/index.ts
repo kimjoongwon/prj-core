@@ -14,3 +14,5 @@ export * from './user.entity';
 export * from './action.entity';
 export * from './ability.entity';
 export * from './subject.entity';
+export * from './session.entity';
+export * from './timeline.entity';

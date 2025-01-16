@@ -8,3 +8,5 @@ export * from './roles.service';
 export * from './actions.service';
 export * from './abilities.service';
 export * from './subjects.service';
+export * from './session.service';
+export * from './timeline.service';
