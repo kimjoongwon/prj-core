@@ -1,5 +1,5 @@
 import { RouteBuilder } from '@shared/types';
-import { InputProps } from '@nextui-org/react';
+import { InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
 import { CategoryLogic } from '../../../logic/category.logic';
 import { $Enums } from '@prisma/client';

@@ -9,7 +9,7 @@ import {
   CardFooter,
   ButtonProps,
   Button,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { Text } from '../../ui/Text';
 import { v4 } from 'uuid';
 

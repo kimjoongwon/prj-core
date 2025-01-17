@@ -28,8 +28,11 @@ import { RoleNewEditRoute } from './routes/role-new-edit.route';
 import { actionsRoute } from './routes/actions.route';
 import { ActionNewEditRoute } from './routes/action-new-edit.route';
 import { AbilitiesRoute } from './routes/abilities.route';
-import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
 import { sessionsRoute } from './routes/session/sessions.route';
+import { SessionNewEdit } from './routes/session/session-new-edit.route';
+import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
+import { TimelinesRoute } from './routes/timeline/timelines.route';
+import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
 
 @Injectable()
 export class BuilderService {
@@ -42,6 +45,9 @@ export class BuilderService {
     private readonly actionNewEdit: ActionNewEditRoute,
     private readonly abilitiesRoute: AbilitiesRoute,
     private readonly abilityNewEditRoute: AbilityNewEditRoute,
+    private readonly sessionNewEdit: SessionNewEdit,
+    private readonly timelinesRoute: TimelinesRoute,
+    private readonly timelineNewEdit: TimelineNewEdit,
   ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
@@ -53,6 +59,9 @@ export class BuilderService {
     const actionNewEditRoute = await this.actionNewEdit.getRoute();
     const abilitiesRoute = await this.abilitiesRoute.getRoute();
     const abilityNewEditRoute = await this.abilityNewEditRoute.getRoute();
+    const sessionNewEditRoute = await this.sessionNewEdit.getRoute();
+    const timelinesRoute = await this.timelinesRoute.getRoute();
+    const timelineNewEditRoute = await this.timelineNewEdit.getRoute();
 
     return [
       {
@@ -77,11 +86,9 @@ export class BuilderService {
                               ...rolesRoute,
                               children: [roleNewEditRoute],
                             },
-                            SPACE: {
-                              ...spacesRoute,
-                              children: [spaceNewEditRoute],
-                            },
+                            SPACE: { ...spacesRoute, children: [spaceNewEditRoute] },
                             USER: { ...usersRoute, children: [] },
+                            TIMELINE: { ...timelinesRoute, children: [timelineNewEditRoute] },
                           }?.[service.name] as RouteBuilder,
                           {
                             ...categoriesRoute,
@@ -121,7 +128,7 @@ export class BuilderService {
                       if (service.name === 'TIMELINE') {
                         routes.children.push({
                           ...sessionsRoute,
-                          children: [],
+                          children: [sessionNewEditRoute],
                         });
                       }
 

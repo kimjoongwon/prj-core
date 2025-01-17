@@ -1,4 +1,4 @@
-import { Input, InputProps } from '@nextui-org/react';
+import { Input, InputProps } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 
 export const InputView = observer((props: InputProps) => {

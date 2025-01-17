@@ -1,4 +1,4 @@
-import { Tab, Tabs, TabsProps } from '@nextui-org/react';
+import { Tab, Tabs, TabsProps } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 import { Option } from './Tabs';
 

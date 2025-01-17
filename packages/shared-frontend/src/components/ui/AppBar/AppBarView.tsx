@@ -1,5 +1,5 @@
 import { Logo } from '../Logo';
-import { Card } from '@nextui-org/react';
+import { Card } from "@heroui/react";
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
 import { AppBarViewProps } from '.';

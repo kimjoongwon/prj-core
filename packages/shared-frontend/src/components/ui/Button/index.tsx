@@ -1,5 +1,5 @@
 'use client';
 
-import { ButtonProps } from '@nextui-org/react';
+import { ButtonProps } from "@heroui/react";
 export interface ButtonViewProps extends ButtonProps {}
 export { ButtonView as Button } from './ButtonView';

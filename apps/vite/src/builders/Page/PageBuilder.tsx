@@ -5,7 +5,7 @@ import { ComponentBuilder } from '../ComponentBuilder';
 import { Form } from '../FormBuilder';
 import { Outlet } from 'react-router-dom';
 import { useGetQuery } from '../../hooks/useGetQuery';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from '@heroui/react';
 import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { Text } from '@shared/frontend';

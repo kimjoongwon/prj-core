@@ -13,4 +13,6 @@ export const ServiceNames = {
   SPACE: 'SPACE',
   POST: 'POST',
   ROLE: 'ROLE',
+  TIMELINE: 'TIMELINE',
+  ROUTINE: 'ROUTINE',
 } as const;

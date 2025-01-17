@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableProps,
   TableRow,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';
 import { PageState } from '@shared/types';

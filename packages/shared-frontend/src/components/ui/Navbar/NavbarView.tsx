@@ -3,7 +3,7 @@
 import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
 import { Logo } from '../Logo';
-import { Button, Card } from '@nextui-org/react';
+import { Button, Card } from "@heroui/react";
 import { Paths } from '../../../constants/Paths';
 import { v4 } from 'uuid';
 

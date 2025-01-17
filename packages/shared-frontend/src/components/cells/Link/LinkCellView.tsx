@@ -1,4 +1,4 @@
-import { Link } from '@nextui-org/react';
+import { Link } from "@heroui/react";
 import { LinkCellProps } from '.';
 import { observer } from 'mobx-react-lite';
 

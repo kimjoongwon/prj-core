@@ -1,5 +1,5 @@
 'use client';
-import { Link } from '@nextui-org/react';
+import { Link } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { Button } from '../Button';

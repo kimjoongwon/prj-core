@@ -1,15 +1,17 @@
 import { RouteBuilder } from '@shared/types';
 
-export class Timeline {
+export class TimelinesRoute {
   constructor() {}
 
   getRoute(): RouteBuilder {
     return {
-      name: 'TIMELINE',
+      name: '목록',
       pathname: 'timeline',
       layout: {
-        name: 'TIMELINE',
+        type: 'DataGrid',
+        name: '목록',
         page: {
+          name: '목록',
           state: {
             form: {
               data: {
@@ -20,6 +22,14 @@ export class Timeline {
             },
           },
           dataGrid: {
+            buttons: [
+              {
+                name: '추가',
+                navigator: {
+                  pathname: 'new/edit',
+                },
+              },
+            ],
             table: {
               query: {
                 name: 'useGetTimelinesByQuery',

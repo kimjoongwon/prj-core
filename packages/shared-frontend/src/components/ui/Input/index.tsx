@@ -2,7 +2,7 @@
 
 import { ChangeEventHandler } from 'react';
 import { MobxProps } from '../types';
-import { InputProps as NextUIInputProps } from '@nextui-org/react';
+import { InputProps as NextUIInputProps } from '@heroui/react';
 import { useMobxHookForm } from '../../../hooks';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
@@ -18,6 +18,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
     onChange,
     errorMessage = ' ',
     type,
+    size = 'sm',
     ...rest
   } = props;
 
@@ -37,17 +38,16 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
   );
 
   return (
-    <div className="h-20">
-      <InputView
-        {...rest}
-        type={type}
-        onChange={handleChange}
-        // onBlur={e => {
-        //   rest?.onBlur?.(e.target.value);
-        // }}
-        errorMessage={errorMessage}
-        value={String(localState.value)}
-      />
-    </div>
+    <InputView
+      {...rest}
+      type={type}
+      size={size}
+      onChange={handleChange}
+      // onBlur={e => {
+      //   rest?.onBlur?.(e.target.value);
+      // }}
+      errorMessage={errorMessage}
+      value={String(localState.value)}
+    />
   );
 });

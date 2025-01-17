@@ -4,7 +4,7 @@
 // import { get } from 'lodash-es';
 // import { observer, useLocalObservable } from 'mobx-react-lite';
 // import { useMobxHookForm } from '../../../hooks/useMobxHookForm';
-// import { TimeInput, TimeInputProps, TimeInputValue } from '@nextui-org/react';
+// import { TimeInput, TimeInputProps, TimeInputValue } from '@heroui/react';
 // import { HStack } from '../HStack';
 // import { Time } from '@internationalized/date';
 
