@@ -41,6 +41,23 @@ export class TimelinesRoute {
                     name: '이름',
                   },
                 },
+                {
+                  id: 'actions',
+                  header: {
+                    name: '액션',
+                  },
+                  cell: {
+                    buttons: [
+                      {
+                        name: '상세',
+                        color: 'primary',
+                        navigator: {
+                          pathname: ':timelineId',
+                        },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },

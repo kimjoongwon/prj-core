@@ -6,17 +6,6 @@ export class TimelineNewEdit {
   constructor() {}
 
   getRoute(): RouteBuilder {
-    const tabOptions = [
-      {
-        text: '현재세션',
-        value: 'sessions',
-      },
-      {
-        text: '세션목록',
-        value: '../sessions',
-      },
-    ];
-
     return {
       name: '타임라인',
       pathname: 'new/edit',
@@ -37,6 +26,9 @@ export class TimelineNewEdit {
               mutation: {
                 name: 'createTimeline',
               },
+              navigator: {
+                pathname: '..',
+              },
               name: '저장',
             },
             sections: [
@@ -49,14 +41,6 @@ export class TimelineNewEdit {
                     props: {
                       label: '타임라인명',
                       placeholder: '타임라인명을 입력하세요',
-                    },
-                  },
-                  {
-                    type: 'TabNavigation',
-                    props: {
-                      tabBuilder: {
-                        options: tabOptions,
-                      } as TabBuilder,
                     },
                   },
                 ],
