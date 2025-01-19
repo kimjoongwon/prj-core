@@ -3,10 +3,10 @@ ARG PNPM_VERSION=9.6.0
 ENV PNPM_HOME=/usr/local/bin
 RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 RUN pnpm add -g nest
+RUN pnpm add -g turbo
 WORKDIR /app
 
 FROM base AS setup
-RUN pnpm add -g turbo
 COPY . .
 RUN turbo prune --scope=server --docker
 
