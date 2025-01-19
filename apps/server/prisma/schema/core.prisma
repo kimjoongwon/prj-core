@@ -235,13 +235,10 @@ model Timeline {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name          String   @unique
-  tenancyId     String
-  tenantId      String
-  startDateTime DateTime @db.Timestamptz(6)
-  endDateTime   DateTime @db.Timestamptz(6)
-
-  sessions Session[]
+  name      String    @unique
+  tenancyId String
+  tenantId  String
+  sessions  Session[]
 }
 
 model Session {
@@ -255,12 +252,14 @@ model Session {
   name                  String
   startTime             DateTime                @db.Time()
   endTime               DateTime                @db.Time()
-  timelineId            String
-  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
-  repeatCycle           Int                     @default(1)
+  timelineId            String?                 @unique
   repeatCycleType       RepeatCycleTypes        @default(WEEK)
+  baseDate              DateTime?               @db.Date()
+  startDateTime         DateTime?               @db.Timestamptz(6)
+  endDateTime           DateTime?               @db.Timestamptz(6)
+  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
 
-  timeline Timeline @relation(fields: [timelineId], references: [id])
+  timeline Timeline? @relation(fields: [timelineId], references: [id])
 }
 
 // 나눔 //

@@ -6,7 +6,7 @@
 //   ModalFooter,
 //   ModalHeader,
 //   Modal as NextUIModal,
-// } from '@nextui-org/react';
+// } from '@heroui/react';
 
 // // import { galaxy } from '../../../providers/App';
 

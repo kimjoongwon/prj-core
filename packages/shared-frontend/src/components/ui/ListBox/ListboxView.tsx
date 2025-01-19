@@ -1,4 +1,4 @@
-import { Listbox, ListboxItem } from '@nextui-org/react';
+import { Listbox, ListboxItem } from "@heroui/react";
 import { ListBoxProps } from '.';
 
 export interface ListboxViewProps extends ListBoxProps<any> {

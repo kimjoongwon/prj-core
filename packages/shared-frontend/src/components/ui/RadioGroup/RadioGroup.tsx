@@ -6,7 +6,7 @@ import {
   Radio,
   RadioGroup as NextUIRadioGroup,
   RadioGroupProps,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { get } from 'lodash-es';
 
 interface RadioOption {

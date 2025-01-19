@@ -8,6 +8,9 @@ import { SpacesRoute } from './routes/spaces.route';
 import { ActionNewEditRoute } from './routes/action-new-edit.route';
 import { AbilitiesRoute } from './routes/abilities.route';
 import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
+import { SessionNewEdit } from './routes/session/session-new-edit.route';
+import { TimelinesRoute } from './routes/timeline/timelines.route';
+import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
 
 @Module({
   imports: [CategoryLogicModule],
@@ -20,6 +23,9 @@ import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
     ActionNewEditRoute,
     AbilitiesRoute,
     AbilityNewEditRoute,
+    SessionNewEdit,
+    TimelinesRoute,
+    TimelineNewEdit,
   ],
   exports: [BuilderService],
 })

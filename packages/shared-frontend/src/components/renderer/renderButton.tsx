@@ -1,4 +1,4 @@
-import { ButtonProps } from '@nextui-org/react';
+import { ButtonProps } from "@heroui/react";
 import { Button } from '../ui/Button';
 
 export const renderButton = (props: ButtonProps) => {

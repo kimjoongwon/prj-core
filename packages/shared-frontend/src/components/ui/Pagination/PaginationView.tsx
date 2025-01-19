@@ -1,6 +1,6 @@
 'use client';
 
-import { Pagination, PaginationProps } from '@nextui-org/react';
+import { Pagination, PaginationProps } from "@heroui/react";
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 

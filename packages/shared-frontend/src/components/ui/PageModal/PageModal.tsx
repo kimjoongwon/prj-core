@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalProps } from '@nextui-org/react';
+import { Modal, ModalContent, ModalProps } from "@heroui/react";
 
 interface CoCModalProps extends ModalProps {
   children: React.ReactNode;

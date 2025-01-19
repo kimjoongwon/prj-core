@@ -1,6 +1,6 @@
 import { StoreProvider, Store, Navigation } from '@shared/stores';
 import { useGetAppBuilderSuspense } from '@shared/frontend';
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from "@heroui/react";
 import { AppBuilder } from '@shared/types';
 
 interface ProvidersProps {
@@ -27,7 +27,7 @@ export const Providers = (props: ProvidersProps) => {
 
   return (
     <StoreProvider value={store}>
-      <NextUIProvider>{children}</NextUIProvider>
+      <HeroUIProvider>{children}</HeroUIProvider>
     </StoreProvider>
   );
 };

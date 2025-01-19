@@ -25,7 +25,7 @@ import {
   ModalContent,
   ModalHeader,
   Spacer,
-} from '@nextui-org/react';
+} from '@heroui/react';
 interface Layout {
   children: ReactNode;
   layoutBuilder?: LayoutBuilderInterface;
@@ -40,7 +40,6 @@ type ServicesLayoutProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
-
   if (layoutBuilder?.type === 'Auth') {
     return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
   }

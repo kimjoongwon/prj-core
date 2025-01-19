@@ -1,7 +1,7 @@
 import { CellBuilderProps } from '@shared/types';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { v4 } from 'uuid';
-import { ButtonGroup } from '@nextui-org/react';
+import { ButtonGroup } from "@heroui/react";
 
 export const CellBuilder = ({
   row,

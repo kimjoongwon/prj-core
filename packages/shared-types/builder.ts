@@ -22,7 +22,7 @@ export interface InputBuilder {
 
 export interface ComponentBuilder {
   type: string;
-  props: any;
+  props?: any;
   path?: string;
   gridProps?: object;
   validation?: ValidationBuilder;

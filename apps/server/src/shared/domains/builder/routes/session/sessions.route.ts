@@ -4,6 +4,7 @@ export const sessionsRoute: RouteBuilder = {
   name: '세션',
   pathname: 'sessions',
   layout: {
+    type: 'DataGrid',
     page: {
       name: '세션',
       dataGrid: {
@@ -20,6 +21,14 @@ export const sessionsRoute: RouteBuilder = {
             },
           ],
         },
+        buttons: [
+          {
+            name: '추가',
+            navigator: {
+              pathname: 'new/edit',
+            },
+          },
+        ],
       },
     },
   },

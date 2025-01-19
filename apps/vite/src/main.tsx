@@ -12,7 +12,7 @@ import { RouteBuilder } from './builders/Route/RouteBuilder';
 import { ReactQueryProvider } from '@shared/frontend';
 import { v4 } from 'uuid';
 import './index.css';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 
 const rootElement = document.getElementById('root')!;
 

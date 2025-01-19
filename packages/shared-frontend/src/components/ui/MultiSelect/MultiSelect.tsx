@@ -3,7 +3,7 @@ import {
   Select as NextSelect,
   SelectItem,
   SelectProps as NextUISelectProps,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { MobxProps } from '../types';
 import { useEffect } from 'react';
 import { reaction } from 'mobx';

@@ -5,7 +5,7 @@ import { MobxProps } from '@shared/types';
 import {
   ListboxItemProps,
   type ListboxProps as NextUIListboxProps,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { ListboxView } from './ListboxView';
 
 export interface ListBoxProps<T>

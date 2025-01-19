@@ -5,4 +5,4 @@ export {
   CardFooter,
   Card,
   Spacer,
-} from '@nextui-org/react';
+} from '@heroui/react';

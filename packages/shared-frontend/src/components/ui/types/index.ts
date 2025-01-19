@@ -1,4 +1,4 @@
-import { ButtonProps, LinkProps } from '@nextui-org/react';
+import { ButtonProps, LinkProps } from "@heroui/react";
 import { HeaderContext } from '@tanstack/react-table';
 
 export type Join<K, P> = K extends string | number

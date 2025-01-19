@@ -1,7 +1,7 @@
 'use client';
 // import Image, { ImageProps } from 'next/image';
 import { Button } from '../Button';
-import { cn } from '@nextui-org/react';
+import { cn } from "@heroui/react";
 
 interface LogoProps {
   variants: 'text' | 'icon';

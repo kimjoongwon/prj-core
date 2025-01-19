@@ -1,4 +1,4 @@
-import { Button as NextUIButton } from '@nextui-org/react';
+import { Button as NextUIButton } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 import { ButtonViewProps } from '.';
 

@@ -5,7 +5,7 @@ import { MobxProps } from '../types';
 import { MultiInputView } from './MultiInputView';
 import { useInputState } from '../../../hooks/useInputState';
 import { get } from 'lodash-es';
-import { InputProps } from '@nextui-org/react';
+import { InputProps } from "@heroui/react";
 
 interface MultiInputProps<T> extends MobxProps<T>, InputProps {}
 

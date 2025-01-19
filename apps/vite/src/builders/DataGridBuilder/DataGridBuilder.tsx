@@ -4,7 +4,7 @@ import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { ButtonGroup, Card, Pagination, Spinner } from '@nextui-org/react';
+import { ButtonGroup, Card, Pagination, Spinner } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 import { useGetTableQuery } from '../../hooks/useGetTableQuery';
 import { useSearchParams } from 'react-router-dom';

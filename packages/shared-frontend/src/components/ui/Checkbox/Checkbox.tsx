@@ -4,7 +4,7 @@ import { MobxProps } from '../types';
 import {
   Checkbox as NextUICheckbox,
   CheckboxProps as NextUICheckboxProps,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { get } from 'lodash-es';
 import { Text } from '../Text';
 

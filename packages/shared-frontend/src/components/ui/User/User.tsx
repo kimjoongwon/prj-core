@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   User as BaseUser,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 // import { useApp } from '../../../providers/App';
 

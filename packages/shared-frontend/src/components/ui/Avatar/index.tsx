@@ -1,4 +1,4 @@
-import { User } from '@nextui-org/react';
+import { User } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 // @ts-ignore
 import image from './image.png';

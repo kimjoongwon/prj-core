@@ -7,7 +7,7 @@ import {
   ListboxProps,
   ScrollShadow,
   SelectionMode,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { get } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
 import { ReactNode } from 'react';
