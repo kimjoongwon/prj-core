@@ -4,7 +4,6 @@ import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { cloneDeep, get, isEmpty } from 'lodash-es';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePageState } from '../Page/PageBuilder';
@@ -65,7 +64,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       }
 
       if (button.alert) {
-        toast(button.alert?.message);
+        alert(button.alert?.message);
       }
 
       if (navigator) {
@@ -98,7 +97,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       }
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        toast(error.response?.data?.message || '');
+        alert(error.response?.data?.message || '');
       }
     }
   };

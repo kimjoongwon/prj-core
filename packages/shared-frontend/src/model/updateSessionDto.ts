@@ -8,7 +8,9 @@ import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { SessionTypes } from './sessionTypes';
 
 export interface UpdateSessionDto {
+  baseDate?: string;
   createdAt?: string;
+  endDateTime?: string;
   endTime?: string;
   id?: string;
   name?: string;
@@ -18,6 +20,7 @@ export interface UpdateSessionDto {
   repeatCycle?: number;
   repeatCycleType?: RepeatCycleTypes;
   seq?: number;
+  startDateTime?: string;
   startTime?: string;
   timelineId?: string;
   type?: SessionTypes;

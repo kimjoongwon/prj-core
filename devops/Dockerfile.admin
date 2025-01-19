@@ -1,0 +1,29 @@
+# Base 이미지 설정
+FROM node:22-alpine AS base
+ARG PNPM_VERSION=9.6.0
+ENV PNPM_HOME=/usr/local/bin
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+WORKDIR /app
+
+# Setup 단계
+FROM base AS setup
+RUN pnpm add -g turbo
+COPY . .
+RUN turbo prune --scope=admin --docker
+
+# Builder 단계
+FROM base AS builder
+RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
+COPY .gitignore .gitignore
+WORKDIR /app
+COPY --from=setup /app/out/full/ ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+COPY turbo.json turbo.json
+WORKDIR /app/apps/admin
+RUN pnpm run build
+
+# Final 단계
+FROM nginx:alpine AS runner
+COPY --from=builder /app/apps/admin/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

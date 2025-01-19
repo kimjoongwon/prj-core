@@ -8,11 +8,14 @@ import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { SessionTypes } from './sessionTypes';
 
 export interface CreateSessionDto {
+  baseDate: string;
+  endDateTime: string;
   endTime: string;
   name: string;
   recurringDayOfTheWeek: RecurringDayOfTheWeek;
   repeatCycle: number;
   repeatCycleType: RepeatCycleTypes;
+  startDateTime: string;
   startTime: string;
   timelineId: string;
   type: SessionTypes;

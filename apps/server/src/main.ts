@@ -37,6 +37,7 @@ async function bootstrap() {
       'http://192.168.233.197:5173',
       'http://192.168.233.197',
       'http://localhost',
+      'https://wallyops.com',
     ],
     credentials: true,
   });
