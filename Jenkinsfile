@@ -18,9 +18,21 @@ podTemplate(
 
                 // Docker 이미지 빌드
                 sh 'docker build -t myapp .'
+                
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                }
 
-                // Docker 컨테이너 실행
-                sh 'docker run myapp'
+                // Docker 이미지 빌드
+                dockerImage = docker.build("kimjoongwon/prj-core:${env.BUILD_NUMBER}")
+
+                // Docker 이미지 푸시
+                dockerImage.push()
+                
+                // latest 태그로도 푸시
+                dockerImage.push("latest")
+
+
             }
         }
     }

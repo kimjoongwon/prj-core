@@ -33,11 +33,3 @@ RUN pnpm prisma generate
 RUN pnpm prisma db push
 RUN pnpm run build --filter=server
 
-FROM node:22-alpine AS runner
-WORKDIR /app
-COPY ./dist .
-# Don't run production as root
-USER root
-EXPOSE 8080
-
-CMD ["node", "./server.js"]
