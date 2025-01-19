@@ -5,7 +5,7 @@ import { MobxProps } from '@shared/types';
 import {
   ListboxItemProps,
   type ListboxProps as NextUIListboxProps,
-} from "@heroui/react";
+} from '@heroui/react';
 import { ListboxView } from './ListboxView';
 
 export interface ListBoxProps<T>
@@ -20,6 +20,7 @@ export const Listbox = observer(<T extends object>(props: ListBoxProps<T>) => {
   const { localState } = useMobxHookForm(value, state, path);
 
   return (
+    // @ts-ignore
     <ListboxView
       {...rest}
       value={localState.value}
