@@ -2,6 +2,7 @@ FROM node:22-alpine AS base
 ARG PNPM_VERSION=9.6.0
 ENV PNPM_HOME=/usr/local/bin
 RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+RUN pnpm add -g nest
 WORKDIR /app
 
 FROM base AS setup
@@ -14,13 +15,13 @@ RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
 COPY .gitignore .gitignore
 WORKDIR /app
 COPY --from=setup /app/out/full/ ./ 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 COPY turbo.json turbo.json
 # RUN pnpm install
 WORKDIR /app/apps/server
-RUN pnpm dlx prisma generate
-RUN pnpm dlx prisma db push
-RUN pnpm dlx run build
+RUN pnpm prisma generate
+RUN pnpm prisma db push
+RUN pnpm build
 
 FROM node:22-alpine AS dev
 WORKDIR /app
