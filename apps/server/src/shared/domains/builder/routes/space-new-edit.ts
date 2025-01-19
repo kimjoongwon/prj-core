@@ -1,5 +1,4 @@
 import { RouteBuilder } from '@shared/types';
-import { InputProps } from "@heroui/react";
 import { Injectable } from '@nestjs/common';
 import { CategoryLogic } from '../../../logic/category.logic';
 
@@ -48,7 +47,7 @@ export class SpaceNewEditRoute {
                     props: {
                       label: '그룹 이름',
                       placeholder: '그룹 이름을 입력해주세요.',
-                    } as InputProps,
+                    },
                   },
                   {
                     type: 'Select',

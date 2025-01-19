@@ -21,7 +21,7 @@ COPY turbo.json turbo.json
 WORKDIR /app/apps/server
 RUN pnpm prisma db push --force-reset
 RUN pnpm prisma generate
-RUN pnpm build
+RUN pnpm run build
 
 FROM node:22-alpine AS dev
 WORKDIR /app
