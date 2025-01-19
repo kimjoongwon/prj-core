@@ -9,6 +9,15 @@ import {
 } from '../decorators/field.decorators';
 
 export class SessionDto extends AbstractDto implements Session {
+  @DateField()
+  baseDate: Date;
+
+  @DateField()
+  startDateTime: Date;
+
+  @DateField()
+  endDateTime: Date;
+
   @StringField()
   name: string;
 

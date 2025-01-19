@@ -5,6 +5,9 @@ import { $Enums, Session as SessionEntity } from '@prisma/client';
 
 @UseDto(SessionDto)
 export class Session extends AbstractEntity<SessionDto> implements SessionEntity {
+  baseDate: Date;
+  startDateTime: Date;
+  endDateTime: Date;
   name: string;
   type: $Enums.SessionTypes;
   startTime: Date;

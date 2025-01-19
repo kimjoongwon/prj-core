@@ -1,5 +1,4 @@
 import { RouteBuilder } from '@shared/types';
-import { InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
 import { CategoryLogic } from '../../../logic/category.logic';
 import { $Enums } from '@prisma/client';
@@ -53,7 +52,7 @@ export class RoleNewEditRoute {
                       label: '역할 이름',
                       options: roleOptions,
                       placeholder: '역할 이름을 입력해주세요.',
-                    } as InputProps,
+                    },
                   },
                   {
                     type: 'Select',
