@@ -19,8 +19,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 COPY turbo.json turbo.json
 # RUN pnpm install
 WORKDIR /app/apps/server
+RUN pnpm prisma db push --force-reset
 RUN pnpm prisma generate
-RUN pnpm prisma db push
 RUN pnpm build
 
 FROM node:22-alpine AS dev
