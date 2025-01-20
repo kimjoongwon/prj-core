@@ -3,8 +3,8 @@ FROM node:22-alpine AS base
 ARG PNPM_VERSION=9.6.0
 ENV PNPM_HOME=/usr/local/bin
 RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
-RUN pnpm add -g turbo
 RUN apk add --update --no-cache libc6-compat && rm -rf /var/cache/apk/*
+RUN pnpm add -g turbo
 WORKDIR /app
 
 # Setup 단계
