@@ -25,6 +25,6 @@ RUN turbo build --filter admin
 FROM nginx:alpine AS runner
 RUN ls -al
 RUN pwd
-COPY --from=builder /app/apps/admin/dist/ /usr/share/nginx/html
+COPY --from=builder /app/apps/admin /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
