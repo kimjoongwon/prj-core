@@ -32,9 +32,7 @@ export class SessionNewEdit {
         page: {
           state: {
             form: {
-              data: {
-                startTime: new Date().toISOString(),
-              },
+              data: {},
             },
           },
           name: '새편집',
@@ -80,7 +78,7 @@ export class SessionNewEdit {
                   },
                   {
                     type: 'DateRangePicker',
-                    path: 'startdatetime,enddatetime',
+                    path: 'startDateTime,endDateTime',
                     props: {
                       label: '시작일자 ~ 종료일자',
                     },
