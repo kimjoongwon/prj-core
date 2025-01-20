@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=setup /app/out/full/ ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 COPY turbo.json turbo.json
-RUN pnpm build 
+RUN pnpm build
 
 # Final 단계
 FROM nginx:alpine AS runner
