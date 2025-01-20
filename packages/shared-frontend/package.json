@@ -10,7 +10,7 @@
   },
   "main": "./index.ts",
   "scripts": {
-    "build": "pnpm orval --config ./orval.stg.config.js & tsup --config ./tsup.config.js",
+    "build": "pnpm orval --config ./orval.stg.config.js && tsup --config tsup.config.ts",
     "start:dev": "",
     "copy-css": "copyfiles --all \"./globals.css\" dist",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
