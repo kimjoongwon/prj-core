@@ -20,10 +20,7 @@ export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor
       : this.transformToPlain(response, options);
   }
 
-  transformToPlain(
-    plainOrClass: any,
-    options: ClassSerializerContextOptions,
-  ): PlainLiteralObject {
+  transformToPlain(plainOrClass: any, options: ClassSerializerContextOptions): PlainLiteralObject {
     return plainOrClass ? instanceToPlain(plainOrClass, options) : plainOrClass;
   }
 }

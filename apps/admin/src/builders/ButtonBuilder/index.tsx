@@ -35,7 +35,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     const args = [];
     let formData = cloneDeep(state?.form?.data);
     let resourceId = null;
-
+    console.log('formData', formData);
     if (button.mutation?.idMapper) {
       resourceId = context?.[button.mutation?.idMapper];
       args.push(resourceId);
@@ -79,14 +79,10 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
           });
         }
 
-        console.log('params', params);
-
         const pathname = PathUtil.getUrlWithParamsAndQueryString(
           navigator.pathname,
           params,
         );
-        console.log('pathname', pathname);
-        queryClient.refetchQueries();
 
         if (pathname === '..') {
           navigate(-1);

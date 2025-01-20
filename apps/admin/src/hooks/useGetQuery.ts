@@ -59,7 +59,6 @@ export const useGetQuery = (query?: Query) => {
   const data = getQuery?.data?.data;
   const isLoading = getQuery?.isLoading;
   const isFetchedAfterMount = getQuery?.isFetchedAfterMount;
-
   return {
     data,
     isFetchedAfterMount: isFetchedAfterMount ?? true,

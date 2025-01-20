@@ -54,16 +54,12 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
   const query = pageBuilder?.query;
 
-  const { data, isFetchedAfterMount } = useGetQuery(query);
-
-  if (!isFetchedAfterMount) {
-    return <Spinner />;
-  }
+  const { data } = useGetQuery(query);
 
   if (pageBuilder?.type === 'Outlet') {
     return <Outlet />;
   }
-  console.log('두번 도니?');
+
   return (
     <PageProvder state={pageBuilder?.state} data={data}>
       {pageBuilder.form && (

@@ -7,9 +7,11 @@ import {
   StringField,
   UUIDField,
 } from '../decorators/field.decorators';
+import { Transform, Type } from 'class-transformer';
 
 export class SessionDto extends AbstractDto implements Session {
   @DateField()
+  @Type(() => Date)
   baseDate: Date;
 
   @DateField()

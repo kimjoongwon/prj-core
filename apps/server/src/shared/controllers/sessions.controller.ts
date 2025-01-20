@@ -28,6 +28,7 @@ export class SessionsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async createSession(@Body() createSessionDto: CreateSessionDto) {
+    console.log('createSessionDto', createSessionDto);
     const session = await this.service.create(createSessionDto);
 
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
