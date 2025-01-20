@@ -4,8 +4,10 @@ import {
   DateRangePickerProps as HeroUiDateRangePickerProps,
 } from '@heroui/react';
 import { MobxProps } from '@shared/types';
-import { get } from 'lodash-es';
+import { get, set } from 'lodash-es';
 import { parseAbsoluteToLocal } from '@internationalized/date';
+import { useEffect } from 'react';
+import { reaction } from 'mobx';
 
 export interface DateRangePickerProps<T extends object>
   extends HeroUiDateRangePickerProps,
@@ -25,10 +27,40 @@ export const DateRangePicker = observer(
       endDateTime: parseAbsoluteToLocal(endDateTime),
     }));
 
+    console.log('path', path);
+
+    useEffect(() => {
+      const disposer = reaction(
+        () => JSON.stringify(localState),
+        () => {
+          console.log(
+            'newState.startDateTime',
+            localState.startDateTime.toAbsoluteString(),
+          );
+          set(
+            state,
+            (path as string)?.split(',')?.[0],
+            localState.startDateTime.toAbsoluteString(),
+          );
+          set(
+            state,
+            (path as string)?.split(',')?.[1],
+            localState.endDateTime.toAbsoluteString(),
+          );
+        },
+      );
+
+      return disposer;
+    }, []);
+
     return (
       <HeroUiDateRangePicker
         hideTimeZone
         {...rest}
+        onChange={value => {
+          localState.startDateTime = value.start;
+          localState.endDateTime = value.end;
+        }}
         defaultValue={{
           // @ts-ignore
           start: localState.startDateTime,
