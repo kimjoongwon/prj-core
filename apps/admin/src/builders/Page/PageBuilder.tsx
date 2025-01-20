@@ -63,7 +63,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   if (pageBuilder?.type === 'Outlet') {
     return <Outlet />;
   }
-
+  console.log('두번 도니?');
   return (
     <PageProvder state={pageBuilder?.state} data={data}>
       {pageBuilder.form && (
