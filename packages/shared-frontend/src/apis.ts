@@ -162,7 +162,7 @@ export const createClassification = (
       
       
       return customInstance<CreateClassification200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications`, method: 'POST',
+      {url: `/api/v1/classifications`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createClassificationDto
     },
@@ -215,7 +215,7 @@ export const getClassificationsByQuery = (
       
       
       return customInstance<GetClassificationsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications`, method: 'GET',
+      {url: `/api/v1/classifications`, method: 'GET',
         params, signal
     },
       options);
@@ -223,7 +223,7 @@ export const getClassificationsByQuery = (
   
 
 export const getGetClassificationsByQueryQueryKey = (params?: GetClassificationsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/classifications`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/classifications`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -400,14 +400,14 @@ export const getClassification = (
       
       
       return customInstance<GetClassification200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications/${classificationId}`, method: 'GET', signal
+      {url: `/api/v1/classifications/${classificationId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetClassificationQueryKey = (classificationId: string,) => {
-    return [`https://wallyops.com/api/v1/classifications/${classificationId}`] as const;
+    return [`/api/v1/classifications/${classificationId}`] as const;
     }
 
     
@@ -584,7 +584,7 @@ export const updateClassification = (
       
       
       return customInstance<UpdateClassification200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications/${classificationId}`, method: 'PATCH',
+      {url: `/api/v1/classifications/${classificationId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateClassificationDto
     },
@@ -636,7 +636,7 @@ export const deleteClassification = (
       
       
       return customInstance<DeleteClassification200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications/${classificationId}`, method: 'DELETE'
+      {url: `/api/v1/classifications/${classificationId}`, method: 'DELETE'
     },
       options);
     }
@@ -686,7 +686,7 @@ export const removeClassifications = (
       
       
       return customInstance<RemoveClassifications200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications/removedAt`, method: 'PATCH',
+      {url: `/api/v1/classifications/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeClassificationsBody
     },
@@ -738,7 +738,7 @@ export const removeClassification = (
       
       
       return customInstance<RemoveClassification200AllOf>(
-      {url: `https://wallyops.com/api/v1/classifications/${classificationId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/classifications/${classificationId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -788,7 +788,7 @@ export const createAssociation = (
       
       
       return customInstance<CreateAssociation200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations`, method: 'POST',
+      {url: `/api/v1/associations`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createAssociationDto
     },
@@ -841,7 +841,7 @@ export const getAssociationsByQuery = (
       
       
       return customInstance<GetAssociationsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations`, method: 'GET',
+      {url: `/api/v1/associations`, method: 'GET',
         params, signal
     },
       options);
@@ -849,7 +849,7 @@ export const getAssociationsByQuery = (
   
 
 export const getGetAssociationsByQueryQueryKey = (params?: GetAssociationsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/associations`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/associations`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -1026,14 +1026,14 @@ export const getAssociation = (
       
       
       return customInstance<GetAssociation200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations/${associationId}`, method: 'GET', signal
+      {url: `/api/v1/associations/${associationId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetAssociationQueryKey = (associationId: string,) => {
-    return [`https://wallyops.com/api/v1/associations/${associationId}`] as const;
+    return [`/api/v1/associations/${associationId}`] as const;
     }
 
     
@@ -1210,7 +1210,7 @@ export const updateAssociation = (
       
       
       return customInstance<UpdateAssociation200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations/${associationId}`, method: 'PATCH',
+      {url: `/api/v1/associations/${associationId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateAssociationDto
     },
@@ -1262,7 +1262,7 @@ export const deleteAssociation = (
       
       
       return customInstance<DeleteAssociation200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations/${associationId}`, method: 'DELETE'
+      {url: `/api/v1/associations/${associationId}`, method: 'DELETE'
     },
       options);
     }
@@ -1312,7 +1312,7 @@ export const removeAssociations = (
       
       
       return customInstance<RemoveAssociations200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations/removedAt`, method: 'PATCH',
+      {url: `/api/v1/associations/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeAssociationsBody
     },
@@ -1364,7 +1364,7 @@ export const removeAssociation = (
       
       
       return customInstance<RemoveAssociation200AllOf>(
-      {url: `https://wallyops.com/api/v1/associations/${associationId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/associations/${associationId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -1415,14 +1415,14 @@ export const getAppBuilder = (
       
       
       return customInstance<unknown>(
-      {url: `https://wallyops.com/api/v1/builder`, method: 'GET', signal
+      {url: `/api/v1/builder`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetAppBuilderQueryKey = () => {
-    return [`https://wallyops.com/api/v1/builder`] as const;
+    return [`/api/v1/builder`] as const;
     }
 
     
@@ -1599,7 +1599,7 @@ export const getCategoriesByQuery = (
       
       
       return customInstance<GetCategoriesByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/categories`, method: 'GET',
+      {url: `/api/v1/categories`, method: 'GET',
         params, signal
     },
       options);
@@ -1607,7 +1607,7 @@ export const getCategoriesByQuery = (
   
 
 export const getGetCategoriesByQueryQueryKey = (params: GetCategoriesByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/categories`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/categories`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -1783,7 +1783,7 @@ export const createCategory = (
       
       
       return customInstance<CreateCategory200AllOf>(
-      {url: `https://wallyops.com/api/v1/categories`, method: 'POST',
+      {url: `/api/v1/categories`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCategoryDto
     },
@@ -1836,14 +1836,14 @@ export const getCategoryById = (
       
       
       return customInstance<GetCategoryById200AllOf>(
-      {url: `https://wallyops.com/api/v1/categories/${categoryId}`, method: 'GET', signal
+      {url: `/api/v1/categories/${categoryId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetCategoryByIdQueryKey = (categoryId: string,) => {
-    return [`https://wallyops.com/api/v1/categories/${categoryId}`] as const;
+    return [`/api/v1/categories/${categoryId}`] as const;
     }
 
     
@@ -2020,7 +2020,7 @@ export const updateCategory = (
       
       
       return customInstance<UpdateCategory200AllOf>(
-      {url: `https://wallyops.com/api/v1/categories/${categoryId}`, method: 'PATCH',
+      {url: `/api/v1/categories/${categoryId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateCategoryDto
     },
@@ -2072,7 +2072,7 @@ export const deleteCategory = (
       
       
       return customInstance<DeleteCategory200AllOf>(
-      {url: `https://wallyops.com/api/v1/categories/${categoryId}`, method: 'DELETE'
+      {url: `/api/v1/categories/${categoryId}`, method: 'DELETE'
     },
       options);
     }
@@ -2122,7 +2122,7 @@ export const createGroup = (
       
       
       return customInstance<GroupDto>(
-      {url: `https://wallyops.com/api/v1/groups`, method: 'POST',
+      {url: `/api/v1/groups`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createGroupDto
     },
@@ -2175,7 +2175,7 @@ export const getGroupsByQuery = (
       
       
       return customInstance<GetGroupsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/groups`, method: 'GET',
+      {url: `/api/v1/groups`, method: 'GET',
         params, signal
     },
       options);
@@ -2183,7 +2183,7 @@ export const getGroupsByQuery = (
   
 
 export const getGetGroupsByQueryQueryKey = (params?: GetGroupsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/groups`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/groups`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -2360,14 +2360,14 @@ export const getGroup = (
       
       
       return customInstance<GetGroup200AllOf>(
-      {url: `https://wallyops.com/api/v1/groups/${groupId}`, method: 'GET', signal
+      {url: `/api/v1/groups/${groupId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetGroupQueryKey = (groupId: string,) => {
-    return [`https://wallyops.com/api/v1/groups/${groupId}`] as const;
+    return [`/api/v1/groups/${groupId}`] as const;
     }
 
     
@@ -2544,7 +2544,7 @@ export const updateGroup = (
       
       
       return customInstance<UpdateGroup200AllOf>(
-      {url: `https://wallyops.com/api/v1/groups/${groupId}`, method: 'PATCH',
+      {url: `/api/v1/groups/${groupId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateGroupDto
     },
@@ -2596,7 +2596,7 @@ export const deleteGroup = (
       
       
       return customInstance<DeleteGroup200AllOf>(
-      {url: `https://wallyops.com/api/v1/groups/${groupId}`, method: 'DELETE'
+      {url: `/api/v1/groups/${groupId}`, method: 'DELETE'
     },
       options);
     }
@@ -2646,7 +2646,7 @@ export const removeGroups = (
       
       
       return customInstance<RemoveGroups200AllOf>(
-      {url: `https://wallyops.com/api/v1/groups/${groupIds}`, method: 'PATCH'
+      {url: `/api/v1/groups/${groupIds}`, method: 'PATCH'
     },
       options);
     }
@@ -2696,7 +2696,7 @@ export const createSpace = (
       
       
       return customInstance<CreateSpace200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces`, method: 'POST',
+      {url: `/api/v1/spaces`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createSpaceDto
     },
@@ -2749,7 +2749,7 @@ export const getSpacesByQuery = (
       
       
       return customInstance<GetSpacesByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces`, method: 'GET',
+      {url: `/api/v1/spaces`, method: 'GET',
         params, signal
     },
       options);
@@ -2757,7 +2757,7 @@ export const getSpacesByQuery = (
   
 
 export const getGetSpacesByQueryQueryKey = (params?: GetSpacesByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/spaces`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/spaces`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -2934,14 +2934,14 @@ export const getSpace = (
       
       
       return customInstance<GetSpace200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces/${spaceId}`, method: 'GET', signal
+      {url: `/api/v1/spaces/${spaceId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetSpaceQueryKey = (spaceId: string,) => {
-    return [`https://wallyops.com/api/v1/spaces/${spaceId}`] as const;
+    return [`/api/v1/spaces/${spaceId}`] as const;
     }
 
     
@@ -3118,7 +3118,7 @@ export const updateSpace = (
       
       
       return customInstance<UpdateSpace200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces/${spaceId}`, method: 'PATCH',
+      {url: `/api/v1/spaces/${spaceId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateSpaceDto
     },
@@ -3170,7 +3170,7 @@ export const deleteSpace = (
       
       
       return customInstance<DeleteSpace200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces/${spaceId}`, method: 'DELETE'
+      {url: `/api/v1/spaces/${spaceId}`, method: 'DELETE'
     },
       options);
     }
@@ -3220,7 +3220,7 @@ export const removeSpace = (
       
       
       return customInstance<RemoveSpace200AllOf>(
-      {url: `https://wallyops.com/api/v1/spaces/${spaceId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/spaces/${spaceId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -3270,7 +3270,7 @@ export const createUser = (
       
       
       return customInstance<CreateUser200AllOf>(
-      {url: `https://wallyops.com/api/v1/users`, method: 'POST',
+      {url: `/api/v1/users`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createUserDto
     },
@@ -3323,7 +3323,7 @@ export const getUsersByQuery = (
       
       
       return customInstance<GetUsersByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/users`, method: 'GET',
+      {url: `/api/v1/users`, method: 'GET',
         params, signal
     },
       options);
@@ -3331,7 +3331,7 @@ export const getUsersByQuery = (
   
 
 export const getGetUsersByQueryQueryKey = (params?: GetUsersByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/users`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/users`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -3508,14 +3508,14 @@ export const getUser = (
       
       
       return customInstance<GetUser200AllOf>(
-      {url: `https://wallyops.com/api/v1/users/${userId}`, method: 'GET', signal
+      {url: `/api/v1/users/${userId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetUserQueryKey = (userId: string,) => {
-    return [`https://wallyops.com/api/v1/users/${userId}`] as const;
+    return [`/api/v1/users/${userId}`] as const;
     }
 
     
@@ -3692,7 +3692,7 @@ export const updateUser = (
       
       
       return customInstance<UpdateUser200AllOf>(
-      {url: `https://wallyops.com/api/v1/users/${userId}`, method: 'PATCH',
+      {url: `/api/v1/users/${userId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateUserDto
     },
@@ -3744,7 +3744,7 @@ export const deleteUser = (
       
       
       return customInstance<DeleteUser200AllOf>(
-      {url: `https://wallyops.com/api/v1/users/${userId}`, method: 'DELETE'
+      {url: `/api/v1/users/${userId}`, method: 'DELETE'
     },
       options);
     }
@@ -3794,7 +3794,7 @@ export const removeUsers = (
       
       
       return customInstance<RemoveUsers200AllOf>(
-      {url: `https://wallyops.com/api/v1/users/removedAt`, method: 'PATCH',
+      {url: `/api/v1/users/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeUsersBody
     },
@@ -3846,7 +3846,7 @@ export const removeUser = (
       
       
       return customInstance<RemoveUser200AllOf>(
-      {url: `https://wallyops.com/api/v1/users/${userId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/users/${userId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -3896,7 +3896,7 @@ export const getToken = (
       
       
       return customInstance<GetToken200AllOf>(
-      {url: `https://wallyops.com/api/v1/auth/token`, method: 'POST',
+      {url: `/api/v1/auth/token`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: loginPayloadDto
     },
@@ -3949,14 +3949,14 @@ export const getNewToken = (
       
       
       return customInstance<TokenDto>(
-      {url: `https://wallyops.com/api/v1/auth/new-token`, method: 'GET', signal
+      {url: `/api/v1/auth/new-token`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetNewTokenQueryKey = () => {
-    return [`https://wallyops.com/api/v1/auth/new-token`] as const;
+    return [`/api/v1/auth/new-token`] as const;
     }
 
     
@@ -4132,7 +4132,7 @@ export const signUpUser = (
       
       
       return customInstance<SignUpUser201AllOf>(
-      {url: `https://wallyops.com/api/v1/auth/sign-up`, method: 'POST',
+      {url: `/api/v1/auth/sign-up`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: signUpPayloadDto
     },
@@ -4184,7 +4184,7 @@ export const createRole = (
       
       
       return customInstance<CreateRole200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles`, method: 'POST',
+      {url: `/api/v1/roles`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createRoleDto
     },
@@ -4237,7 +4237,7 @@ export const getRolesByQuery = (
       
       
       return customInstance<GetRolesByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles`, method: 'GET',
+      {url: `/api/v1/roles`, method: 'GET',
         params, signal
     },
       options);
@@ -4245,7 +4245,7 @@ export const getRolesByQuery = (
   
 
 export const getGetRolesByQueryQueryKey = (params?: GetRolesByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/roles`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/roles`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -4422,14 +4422,14 @@ export const getRole = (
       
       
       return customInstance<GetRole200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles/${roleId}`, method: 'GET', signal
+      {url: `/api/v1/roles/${roleId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetRoleQueryKey = (roleId: string,) => {
-    return [`https://wallyops.com/api/v1/roles/${roleId}`] as const;
+    return [`/api/v1/roles/${roleId}`] as const;
     }
 
     
@@ -4606,7 +4606,7 @@ export const updateRole = (
       
       
       return customInstance<UpdateRole200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles/${roleId}`, method: 'PATCH',
+      {url: `/api/v1/roles/${roleId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateRoleDto
     },
@@ -4658,7 +4658,7 @@ export const deleteRole = (
       
       
       return customInstance<DeleteRole200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles/${roleId}`, method: 'DELETE'
+      {url: `/api/v1/roles/${roleId}`, method: 'DELETE'
     },
       options);
     }
@@ -4708,7 +4708,7 @@ export const removeRole = (
       
       
       return customInstance<RemoveRole200AllOf>(
-      {url: `https://wallyops.com/api/v1/roles/${roleId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/roles/${roleId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -4758,7 +4758,7 @@ export const createAction = (
       
       
       return customInstance<CreateAction200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions`, method: 'POST',
+      {url: `/api/v1/actions`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createActionDto
     },
@@ -4811,7 +4811,7 @@ export const getActionsByQuery = (
       
       
       return customInstance<GetActionsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions`, method: 'GET',
+      {url: `/api/v1/actions`, method: 'GET',
         params, signal
     },
       options);
@@ -4819,7 +4819,7 @@ export const getActionsByQuery = (
   
 
 export const getGetActionsByQueryQueryKey = (params?: GetActionsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/actions`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/actions`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -4996,14 +4996,14 @@ export const getAction = (
       
       
       return customInstance<GetAction200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions/${actionId}`, method: 'GET', signal
+      {url: `/api/v1/actions/${actionId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetActionQueryKey = (actionId: string,) => {
-    return [`https://wallyops.com/api/v1/actions/${actionId}`] as const;
+    return [`/api/v1/actions/${actionId}`] as const;
     }
 
     
@@ -5180,7 +5180,7 @@ export const updateAction = (
       
       
       return customInstance<UpdateAction200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions/${actionId}`, method: 'PATCH',
+      {url: `/api/v1/actions/${actionId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateActionDto
     },
@@ -5232,7 +5232,7 @@ export const deleteAction = (
       
       
       return customInstance<DeleteAction200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions/${actionId}`, method: 'DELETE'
+      {url: `/api/v1/actions/${actionId}`, method: 'DELETE'
     },
       options);
     }
@@ -5282,7 +5282,7 @@ export const removeActions = (
       
       
       return customInstance<RemoveActions200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions/removedAt`, method: 'PATCH',
+      {url: `/api/v1/actions/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeActionsBody
     },
@@ -5334,7 +5334,7 @@ export const removeAction = (
       
       
       return customInstance<RemoveAction200AllOf>(
-      {url: `https://wallyops.com/api/v1/actions/${actionId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/actions/${actionId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -5384,7 +5384,7 @@ export const createAbility = (
       
       
       return customInstance<CreateAbility200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities`, method: 'POST',
+      {url: `/api/v1/abilities`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createAbilityDto
     },
@@ -5437,7 +5437,7 @@ export const getAbilitiesByQuery = (
       
       
       return customInstance<GetAbilitiesByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities`, method: 'GET',
+      {url: `/api/v1/abilities`, method: 'GET',
         params, signal
     },
       options);
@@ -5445,7 +5445,7 @@ export const getAbilitiesByQuery = (
   
 
 export const getGetAbilitiesByQueryQueryKey = (params?: GetAbilitiesByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/abilities`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/abilities`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -5622,14 +5622,14 @@ export const getAbility = (
       
       
       return customInstance<GetAbility200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities/${abilityId}`, method: 'GET', signal
+      {url: `/api/v1/abilities/${abilityId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetAbilityQueryKey = (abilityId: string,) => {
-    return [`https://wallyops.com/api/v1/abilities/${abilityId}`] as const;
+    return [`/api/v1/abilities/${abilityId}`] as const;
     }
 
     
@@ -5806,7 +5806,7 @@ export const updateAbility = (
       
       
       return customInstance<UpdateAbility200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities/${abilityId}`, method: 'PATCH',
+      {url: `/api/v1/abilities/${abilityId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateAbilityDto
     },
@@ -5858,7 +5858,7 @@ export const deleteAbility = (
       
       
       return customInstance<DeleteAbility200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities/${abilityId}`, method: 'DELETE'
+      {url: `/api/v1/abilities/${abilityId}`, method: 'DELETE'
     },
       options);
     }
@@ -5908,7 +5908,7 @@ export const removeAbilities = (
       
       
       return customInstance<RemoveAbilities200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities/removedAt`, method: 'PATCH',
+      {url: `/api/v1/abilities/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeAbilitiesBody
     },
@@ -5960,7 +5960,7 @@ export const removeAbility = (
       
       
       return customInstance<RemoveAbility200AllOf>(
-      {url: `https://wallyops.com/api/v1/abilities/${abilityId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/abilities/${abilityId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -6010,7 +6010,7 @@ export const createSubject = (
       
       
       return customInstance<CreateSubject200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects`, method: 'POST',
+      {url: `/api/v1/subjects`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createSubjectDto
     },
@@ -6063,7 +6063,7 @@ export const getSubjectsByQuery = (
       
       
       return customInstance<GetSubjectsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects`, method: 'GET',
+      {url: `/api/v1/subjects`, method: 'GET',
         params, signal
     },
       options);
@@ -6071,7 +6071,7 @@ export const getSubjectsByQuery = (
   
 
 export const getGetSubjectsByQueryQueryKey = (params?: GetSubjectsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/subjects`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/subjects`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -6248,14 +6248,14 @@ export const getSubject = (
       
       
       return customInstance<GetSubject200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects/${subjectId}`, method: 'GET', signal
+      {url: `/api/v1/subjects/${subjectId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetSubjectQueryKey = (subjectId: string,) => {
-    return [`https://wallyops.com/api/v1/subjects/${subjectId}`] as const;
+    return [`/api/v1/subjects/${subjectId}`] as const;
     }
 
     
@@ -6432,7 +6432,7 @@ export const updateSubject = (
       
       
       return customInstance<UpdateSubject200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects/${subjectId}`, method: 'PATCH',
+      {url: `/api/v1/subjects/${subjectId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateSubjectDto
     },
@@ -6484,7 +6484,7 @@ export const deleteSubject = (
       
       
       return customInstance<DeleteSubject200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects/${subjectId}`, method: 'DELETE'
+      {url: `/api/v1/subjects/${subjectId}`, method: 'DELETE'
     },
       options);
     }
@@ -6534,7 +6534,7 @@ export const removeSubjects = (
       
       
       return customInstance<RemoveSubjects200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects/removedAt`, method: 'PATCH',
+      {url: `/api/v1/subjects/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeSubjectsBody
     },
@@ -6586,7 +6586,7 @@ export const removeSubject = (
       
       
       return customInstance<RemoveSubject200AllOf>(
-      {url: `https://wallyops.com/api/v1/subjects/${subjectId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/subjects/${subjectId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -6636,7 +6636,7 @@ export const createTimeline = (
       
       
       return customInstance<CreateTimeline200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines`, method: 'POST',
+      {url: `/api/v1/timelines`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createTimelineDto
     },
@@ -6689,7 +6689,7 @@ export const getTimelinesByQuery = (
       
       
       return customInstance<GetTimelinesByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines`, method: 'GET',
+      {url: `/api/v1/timelines`, method: 'GET',
         params, signal
     },
       options);
@@ -6697,7 +6697,7 @@ export const getTimelinesByQuery = (
   
 
 export const getGetTimelinesByQueryQueryKey = (params?: GetTimelinesByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/timelines`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/timelines`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -6874,14 +6874,14 @@ export const getTimeline = (
       
       
       return customInstance<GetTimeline200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines/${timelineId}`, method: 'GET', signal
+      {url: `/api/v1/timelines/${timelineId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetTimelineQueryKey = (timelineId: string,) => {
-    return [`https://wallyops.com/api/v1/timelines/${timelineId}`] as const;
+    return [`/api/v1/timelines/${timelineId}`] as const;
     }
 
     
@@ -7058,7 +7058,7 @@ export const updateTimeline = (
       
       
       return customInstance<UpdateTimeline200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines/${timelineId}`, method: 'PATCH',
+      {url: `/api/v1/timelines/${timelineId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateTimelineDto
     },
@@ -7110,7 +7110,7 @@ export const deleteTimeline = (
       
       
       return customInstance<DeleteTimeline200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines/${timelineId}`, method: 'DELETE'
+      {url: `/api/v1/timelines/${timelineId}`, method: 'DELETE'
     },
       options);
     }
@@ -7160,7 +7160,7 @@ export const removeTimelines = (
       
       
       return customInstance<RemoveTimelines200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines/removedAt`, method: 'PATCH',
+      {url: `/api/v1/timelines/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeTimelinesBody
     },
@@ -7212,7 +7212,7 @@ export const removeTimeline = (
       
       
       return customInstance<RemoveTimeline200AllOf>(
-      {url: `https://wallyops.com/api/v1/timelines/${timelineId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/timelines/${timelineId}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -7262,7 +7262,7 @@ export const createSession = (
       
       
       return customInstance<CreateSession200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions`, method: 'POST',
+      {url: `/api/v1/sessions`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createSessionDto
     },
@@ -7315,7 +7315,7 @@ export const getSessionsByQuery = (
       
       
       return customInstance<GetSessionsByQuery200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions`, method: 'GET',
+      {url: `/api/v1/sessions`, method: 'GET',
         params, signal
     },
       options);
@@ -7323,7 +7323,7 @@ export const getSessionsByQuery = (
   
 
 export const getGetSessionsByQueryQueryKey = (params?: GetSessionsByQueryParams,) => {
-    return [`https://wallyops.com/api/v1/sessions`, ...(params ? [params]: [])] as const;
+    return [`/api/v1/sessions`, ...(params ? [params]: [])] as const;
     }
 
     
@@ -7500,14 +7500,14 @@ export const getSession = (
       
       
       return customInstance<GetSession200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions/${sessionId}`, method: 'GET', signal
+      {url: `/api/v1/sessions/${sessionId}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetSessionQueryKey = (sessionId: string,) => {
-    return [`https://wallyops.com/api/v1/sessions/${sessionId}`] as const;
+    return [`/api/v1/sessions/${sessionId}`] as const;
     }
 
     
@@ -7684,7 +7684,7 @@ export const updateSession = (
       
       
       return customInstance<UpdateSession200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions/${sessionId}`, method: 'PATCH',
+      {url: `/api/v1/sessions/${sessionId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateSessionDto
     },
@@ -7736,7 +7736,7 @@ export const deleteSession = (
       
       
       return customInstance<DeleteSession200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions/${sessionId}`, method: 'DELETE'
+      {url: `/api/v1/sessions/${sessionId}`, method: 'DELETE'
     },
       options);
     }
@@ -7786,7 +7786,7 @@ export const removeSessions = (
       
       
       return customInstance<RemoveSessions200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions/removedAt`, method: 'PATCH',
+      {url: `/api/v1/sessions/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: removeSessionsBody
     },
@@ -7838,7 +7838,7 @@ export const removeSession = (
       
       
       return customInstance<RemoveSession200AllOf>(
-      {url: `https://wallyops.com/api/v1/sessions/${sessionId}/removedAt`, method: 'PATCH'
+      {url: `/api/v1/sessions/${sessionId}/removedAt`, method: 'PATCH'
     },
       options);
     }

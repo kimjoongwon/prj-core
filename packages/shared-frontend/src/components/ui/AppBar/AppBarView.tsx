@@ -1,5 +1,5 @@
 import { Logo } from '../Logo';
-import { Card } from "@heroui/react";
+import { Card, Chip } from '@heroui/react';
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
 import { AppBarViewProps } from '.';
@@ -13,7 +13,10 @@ export const AppBarView = (props: AppBarViewProps) => {
           <Logo variants={'text'} />
         </div>
         <div className="flex-1 sm:flex hidden justify-center">{content}</div>
-        <div className="flex flex-1 justify-end">
+        <div className="flex flex-1 justify-end items-center space-x-1">
+          <Chip color="primary">
+            {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
+          </Chip>
           <Avatar />
         </div>
       </HStack>

@@ -1,6 +1,11 @@
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
-export const AXIOS_INSTANCE = Axios.create(); // use your own URL here or environment variable
+export const AXIOS_INSTANCE = Axios.create({
+  baseURL:
+    process.env.NODE_ENV === 'production'
+      ? 'https://wallyops.com'
+      : 'http://localhost:3005',
+}); // use your own URL here or environment variable
 
 // add a second `options` argument here if you want to pass extra options to each generated query
 export const customInstance = <T>(
