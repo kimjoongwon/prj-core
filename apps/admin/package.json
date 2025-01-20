@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "vite",
-    "build": "vite build",
+    "build": "vite build --max-old-space-size=4096",
     "lint": "eslint .",
     "preview": "vite preview"
   },
