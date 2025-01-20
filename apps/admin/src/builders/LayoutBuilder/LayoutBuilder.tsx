@@ -40,6 +40,7 @@ type ServicesLayoutProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
+  console.log('layoutBuilder', layoutBuilder);
   if (layoutBuilder?.type === 'Auth') {
     return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
   }
