@@ -21,6 +21,12 @@ export interface InputBuilder {
 }
 
 export interface ComponentBuilder {
+  visibleCondition?: {
+    eq: {
+      path: string;
+      value: any;
+    };
+  };
   type: string;
   props?: any;
   path?: string;

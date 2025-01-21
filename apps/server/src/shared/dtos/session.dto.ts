@@ -1,46 +1,36 @@
 import { $Enums, Session } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import {
-  DateField,
+  DateFieldOptional,
   EnumField,
-  NumberField,
+  EnumFieldOptional,
+  NumberFieldOptional,
   StringField,
-  UUIDField,
+  UUIDFieldOptional,
 } from '../decorators/field.decorators';
-import { Transform, Type } from 'class-transformer';
 
 export class SessionDto extends AbstractDto implements Session {
-  @DateField()
-  @Type(() => Date)
-  baseDate: Date;
-
-  @DateField()
-  startDateTime: Date;
-
-  @DateField()
-  endDateTime: Date;
-
   @StringField()
   name: string;
 
   @EnumField(() => $Enums.SessionTypes)
   type: $Enums.SessionTypes;
 
-  @DateField()
-  startTime: Date;
+  @DateFieldOptional()
+  startDateTime: Date | null;
 
-  @DateField()
-  endTime: Date;
+  @DateFieldOptional()
+  endDateTime: Date | null;
 
-  @UUIDField()
-  timelineId: string;
+  @UUIDFieldOptional({ nullable: true })
+  timelineId: string | null;
 
-  @EnumField(() => $Enums.RecurringDayOfTheWeek)
-  recurringDayOfTheWeek: $Enums.RecurringDayOfTheWeek[];
+  @EnumFieldOptional(() => $Enums.RepeatCycleTypes, { nullable: true })
+  repeatCycleType: $Enums.RepeatCycleTypes | null;
 
-  @NumberField()
-  repeatCycle: number;
+  @EnumFieldOptional(() => $Enums.RecurringDayOfTheWeek, { nullable: true })
+  recurringDayOfWeek: $Enums.RecurringDayOfTheWeek | null;
 
-  @EnumField(() => $Enums.RepeatCycleTypes)
-  repeatCycleType: $Enums.RepeatCycleTypes;
+  @NumberFieldOptional({ nullable: true })
+  recurringMonth: number | null;
 }

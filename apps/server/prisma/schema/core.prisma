@@ -248,16 +248,14 @@ model Session {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  type                  SessionTypes            @default(ONE_TIME)
-  name                  String
-  startTime             DateTime                @db.Time()
-  endTime               DateTime                @db.Time()
-  timelineId            String?                 @unique
-  repeatCycleType       RepeatCycleTypes        @default(WEEK)
-  baseDate              DateTime?               @db.Date()
-  startDateTime         DateTime?               @db.Timestamptz(6)
-  endDateTime           DateTime?               @db.Timestamptz(6)
-  recurringDayOfTheWeek RecurringDayOfTheWeek[] @default([])
+  type               SessionTypes           @default(ONE_TIME)
+  name               String
+  timelineId         String?                @unique
+  repeatCycleType    RepeatCycleTypes?
+  startDateTime      DateTime?              @db.Timestamptz(6)
+  endDateTime        DateTime?              @db.Timestamptz(6)
+  recurringDayOfWeek RecurringDayOfTheWeek?
+  recurringMonth     Int?
 
   timeline Timeline? @relation(fields: [timelineId], references: [id])
 }
@@ -520,9 +518,8 @@ enum SessionTypes {
 }
 
 enum RepeatCycleTypes {
-  WEEK
-  MONTH
-  YEAR
+  WEEKLY
+  MONTHLY
 }
 
 enum SessionEndTypes {

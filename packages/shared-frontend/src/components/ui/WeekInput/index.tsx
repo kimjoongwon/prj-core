@@ -18,17 +18,8 @@ export const WeekInput = observer(
     const initialValue = get(state, path);
     const { localState } = useMobxHookForm(initialValue, state, path);
 
-    if (!isArray(localState.value)) {
-      throw new Error('배열을 이용해주세요.');
-    }
-
-    // 포함되어 있으면 제거하고 포함되어 있지 않으면 넣는다.
     const onChange = (value: RecurringDayOfTheWeek) => {
-      if (localState.value.includes(value)) {
-        localState.value = localState.value.filter(v => v !== value);
-      } else {
-        localState.value = [...localState.value, value];
-      }
+      localState.value = value;
     };
 
     return (

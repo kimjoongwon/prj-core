@@ -33,9 +33,8 @@ export const TimeInput = observer(
 
     return (
       <NextUiTimeInput
-        hideTimeZone
         {...rest}
-        // @ts-ignore
+        hideTimeZone
         value={localState.value}
         onChange={action(value => {
           localState.value = value as unknown as ZonedDateTime;
