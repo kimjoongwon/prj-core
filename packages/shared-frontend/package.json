@@ -10,7 +10,7 @@
   },
   "main": "./index.ts",
   "scripts": {
-    "build": "pnpm orval --config ./orval.stg.config.js",
+    "build": "pnpm orval --config ./orval.stg.config.js && tsup --config tsup.config.ts",
     "start:dev": "",
     "copy-css": "copyfiles --all \"./globals.css\" dist",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
@@ -61,6 +61,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@types/lodash-es": "^4.17.12",
+    "@types/node": "20.14.12",
     "@types/react": "18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/uuid": "^10.0.0",

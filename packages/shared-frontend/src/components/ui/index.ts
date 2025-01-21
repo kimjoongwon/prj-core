@@ -44,7 +44,6 @@ export * from './Copyright';
 export * from './AppBar';
 export * from './Tabs/Tabs';
 export * from './Meta';
-export { Listbox } from './Listbox';
 export * from './TimeInput/TimeInput';
 export * from './DateRangePicker/DateRangePicker';
 export { DatePicker } from './DatePicker/DatePicker';
