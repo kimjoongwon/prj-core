@@ -1,12 +1,7 @@
 podTemplate(
     label: 'builder',
     containers: [
-        containerTemplate(
-            name: 'docker', 
-            image: 'docker:dind', 
-            resourceRequestMemory: '1Gi', 
-            resourceLimitMemory: '1Gi'
-        )
+        containerTemplate(name: 'docker', image: 'docker:dind', privileged: true)
     ]
 ) {
     node('builder') {
@@ -26,7 +21,7 @@ podTemplate(
                 }
 
                 // Docker 이미지 빌드
-                dockerImage = docker.build("kimjoongwon/admin:${env.BUILD_NUMBER}", "--progress=plain -f ./devops/Dockerfile.admin .")
+                dockerImage = docker.build("kimjoongwon/admin:${env.BUILD_NUMBER}", "-f ./devops/Dockerfile.admin .")
                 
                 // Docker 이미지 푸시
                 dockerImage.push()
