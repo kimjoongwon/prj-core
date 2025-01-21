@@ -4,6 +4,8 @@ podTemplate(
         containerTemplate(
             name: 'docker', 
             image: 'docker:dind', 
+            resourceRequestMemory: '1Gi', 
+            resourceLimitMemory: '1Gi'
         )
     ]
 ) {
