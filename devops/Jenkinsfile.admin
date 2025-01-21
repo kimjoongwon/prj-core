@@ -5,8 +5,8 @@ podTemplate(
             name: 'docker', 
             image: 'docker:dind', 
             privileged: true, 
-            resourceRequestMemory: '1Gi', 
-            resourceLimitMemory: '1Gi'
+            resourceRequestMemory: '4Gi', 
+            resourceLimitMemory: '4Gi'
         )
     ]
 ) {
