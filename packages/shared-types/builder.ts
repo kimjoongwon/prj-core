@@ -1,4 +1,4 @@
-import { type InputProps, Selection, TableProps } from '@nextui-org/react';
+import { type InputProps, Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
