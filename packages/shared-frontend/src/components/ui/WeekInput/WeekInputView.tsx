@@ -3,17 +3,17 @@ import { HStack } from '../HStack';
 import { Text } from '../Text';
 import { VStack } from '../VStack';
 import { RecurringDayOfTheWeek } from '../../../model/recurringDayOfTheWeek';
-import { Chip } from '@mui/material';
+import { Chip } from '@heroui/chip';
 import { observer } from 'mobx-react-lite';
 
 export interface WeekInputViewProps {
   onChange: (value: RecurringDayOfTheWeek) => void;
-  value: RecurringDayOfTheWeek[];
+  value: RecurringDayOfTheWeek;
   disabled?: boolean;
 }
 
 export const WeekInputView = observer((props: WeekInputViewProps) => {
-  const { onChange, value, disabled } = props;
+  const { onChange, value } = props;
   const dayOptions: {
     text: string;
     value: RecurringDayOfTheWeek;
@@ -55,13 +55,13 @@ export const WeekInputView = observer((props: WeekInputViewProps) => {
         {dayOptions.map(day => {
           return (
             <Chip
-              disabled={disabled}
+              className="cursor-pointer"
               onClick={() => onChange(day.value)}
               key={day.value}
-              clickable
-              color={value.includes(day.value) ? 'primary' : 'default'}
-              label={day.text}
-            />
+              color={value === day.value ? 'primary' : 'default'}
+            >
+              {day.text}
+            </Chip>
           );
         })}
       </HStack>

@@ -1,7 +1,7 @@
 module.exports = {
   store: {
     mode: 'tags-split',
-    input: 'https://wallyops.com/api-json',
+    input: 'http://localhost:3005/api-json',
     output: {
       target: 'src/apis.ts',
       schemas: 'src/model',

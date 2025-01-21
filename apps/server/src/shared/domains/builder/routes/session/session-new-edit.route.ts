@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { RouteBuilder } from '@shared/types';
-import { P } from 'ts-pattern';
 
 @Injectable()
 export class SessionNewEdit {
@@ -17,10 +16,21 @@ export class SessionNewEdit {
         text: '반복',
         value: $Enums.SessionTypes.RECURRING,
       },
-      {
-        text: '일회성 범위',
-        value: $Enums.SessionTypes.ONE_TIME_RANGE,
-      },
+    ];
+
+    const monthOptions = [
+      { text: '1월', value: 1 },
+      { text: '2월', value: 2 },
+      { text: '3월', value: 3 },
+      { text: '4월', value: 4 },
+      { text: '5월', value: 5 },
+      { text: '6월', value: 6 },
+      { text: '7월', value: 7 },
+      { text: '8월', value: 8 },
+      { text: '9월', value: 9 },
+      { text: '10월', value: 10 },
+      { text: '11월', value: 11 },
+      { text: '12월', value: 12 },
     ];
 
     return {
@@ -48,6 +58,13 @@ export class SessionNewEdit {
                 name: '기본정보',
                 components: [
                   {
+                    type: 'Input',
+                    path: 'name',
+                    props: {
+                      label: '이름',
+                    },
+                  },
+                  {
                     type: 'Select',
                     path: 'type',
                     props: {
@@ -56,38 +73,55 @@ export class SessionNewEdit {
                     },
                   },
                   {
-                    type: 'Input',
-                    props: {
-                      label: '이름',
-                      name: 'name',
-                    },
-                  },
-                  {
-                    type: 'TimeInput',
-                    path: 'startTime',
-                    props: {
-                      label: '시작시간',
-                    },
-                  },
-                  {
-                    type: 'TimeInput',
-                    path: 'endTime',
-                    props: {
-                      label: '종료시간',
-                    },
-                  },
-                  {
                     type: 'DateRangePicker',
                     path: 'startDateTime,endDateTime',
                     props: {
-                      label: '시작일자 ~ 종료일자',
+                      label: '시작 ~ 종료',
                     },
                   },
                   {
-                    type: 'DatePicker',
-                    path: 'baseDate',
+                    type: 'Select',
+                    path: 'repeatCycleType',
+                    visibleCondition: {
+                      eq: {
+                        path: 'type',
+                        value: $Enums.SessionTypes.RECURRING,
+                      },
+                    },
                     props: {
-                      label: '기준일자',
+                      label: '반복유형',
+                      options: Object.keys($Enums.RepeatCycleTypes).map((key) => ({
+                        key,
+                        text: $Enums.RepeatCycleTypes[key],
+                        value: $Enums.RepeatCycleTypes[key],
+                      })),
+                    },
+                  },
+                  {
+                    visibleCondition: {
+                      eq: {
+                        path: 'repeatCycleType',
+                        value: $Enums.RepeatCycleTypes.WEEKLY,
+                      },
+                    },
+                    type: 'WeekInput',
+                    path: 'recurringDayOfWeek',
+                    props: {
+                      label: '반복일',
+                    },
+                  },
+                  {
+                    visibleCondition: {
+                      eq: {
+                        path: 'repeatCycleType',
+                        value: $Enums.RepeatCycleTypes.MONTHLY,
+                      },
+                    },
+                    type: 'Select',
+                    path: 'recurringMonth',
+                    props: {
+                      label: '반복월',
+                      options: monthOptions,
                     },
                   },
                 ],

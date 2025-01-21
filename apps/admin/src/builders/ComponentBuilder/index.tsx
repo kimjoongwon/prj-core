@@ -52,6 +52,14 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
     return <TabNavigation tabBuilder={componentBuilder.props.tabBuilder} />;
   }
 
+  if (componentBuilder.visibleCondition) {
+    const { eq } = componentBuilder.visibleCondition;
+    const value = state?.form?.data[eq.path];
+    if (value !== eq.value) {
+      return null;
+    }
+  }
+
   return (
     <Component
       {...componentBuilder.props}

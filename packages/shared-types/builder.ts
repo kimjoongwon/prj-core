@@ -1,4 +1,4 @@
-import { type InputProps, Selection, TableProps } from '@nextui-org/react';
+import { type InputProps, Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
@@ -21,6 +21,12 @@ export interface InputBuilder {
 }
 
 export interface ComponentBuilder {
+  visibleCondition?: {
+    eq: {
+      path: string;
+      value: any;
+    };
+  };
   type: string;
   props?: any;
   path?: string;
