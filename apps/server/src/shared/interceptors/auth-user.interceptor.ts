@@ -14,7 +14,6 @@ export class AuthUserInterceptor implements NestInterceptor {
     const tenancyId = request.cookies['tenancyId'];
 
     // ContextProvider에 tenantId 설정
-
     if (tenancyId) {
       ContextProvider.setTanancyId(tenancyId);
     }

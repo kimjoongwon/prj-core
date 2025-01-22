@@ -65,6 +65,7 @@
     "reflect-metadata": "^0.2.2",
     "remeda": "^2.11.0",
     "rxjs": "^7.8.1",
+    "ts-jenum": "^2.2.2",
     "ts-pattern": "^5.2.0",
     "uuid": "^10.0.0"
   },

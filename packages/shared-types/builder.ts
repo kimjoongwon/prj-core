@@ -118,7 +118,7 @@ export interface PageState {
   };
   dataGrid?: {
     selectedRowIds?: Key[];
-    selectedRowId: Key;
+    selectedRowId?: Key;
     filter?: any;
     sortings?: any;
   };
@@ -165,9 +165,10 @@ export interface ColumnBuilder {
   id?: string;
   accessorKey?: string;
   header: Header;
-  cell?: Cell;
+  cell?: CellBuilder;
 }
-export interface Cell {
+export interface CellBuilder {
+  type?: 'date' | 'time' | 'dateTime';
   buttons?: ButtonBuilder[];
   expandable?: boolean;
   link?: string;
@@ -183,7 +184,7 @@ export interface HeaderBuilderProps
 
 export interface CellBuilderProps
   extends CellContext<unknown & { id: string }, unknown>,
-    Cell {}
+    CellBuilder {}
 
 export interface SectionBuilder {
   name: string;

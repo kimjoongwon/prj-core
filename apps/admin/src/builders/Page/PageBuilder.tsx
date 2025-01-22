@@ -5,10 +5,10 @@ import { ComponentBuilder } from '../ComponentBuilder';
 import { Form } from '../FormBuilder';
 import { Outlet } from 'react-router-dom';
 import { useGetQuery } from '../../hooks/useGetQuery';
-import { Spinner } from '@heroui/react';
 import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { Text } from '@shared/frontend';
+import { v4 } from 'uuid';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -66,10 +66,14 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         <Form formBuilder={pageBuilder.form!}>
           {pageBuilder?.form?.sections?.map(section => {
             return (
-              <div className="border-1 p-4 rounded-xl space-y-4">
+              <div key={v4()} className="border-1 p-4 rounded-xl space-y-4">
                 <Text variant="h5">{section.name}</Text>
                 {section.components?.map(component => (
-                  <ComponentBuilder componentBuilder={component} data={data} />
+                  <ComponentBuilder
+                    key={v4()}
+                    componentBuilder={component}
+                    data={data}
+                  />
                 ))}
               </div>
             );

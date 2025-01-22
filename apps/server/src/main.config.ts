@@ -71,7 +71,7 @@ export const libModules = [
   }),
   LoggerModule.forRoot({
     pinoHttp: {
-      level: 'debug',
+      level: 'error',
       customProps: () => ({
         context: 'HTTP',
       }),

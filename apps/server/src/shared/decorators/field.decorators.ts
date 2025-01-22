@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -116,6 +116,9 @@ export function StringField(
   const decorators = [Type(() => String), IsString({ each: options.each })];
 
   if (options.nullable) {
+    decorators.push(
+      Transform(({ value }) => (value === 'null' ? null : value), { toClassOnly: true }),
+    );
     decorators.push(IsNullable({ each: options.each }));
   } else {
     decorators.push(NotEquals(null, { each: options.each }));
@@ -308,6 +311,9 @@ export function UUIDField(
   const decorators = [Type(() => String)];
 
   if (options.nullable) {
+    decorators.push(
+      Transform(({ value }) => (value === 'null' ? null : value), { toClassOnly: true }),
+    );
     decorators.push(IsNullable());
   } else {
     decorators.push(NotEquals(null));

@@ -61,7 +61,6 @@ export class GroupsController {
   @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Patch(':groupId')
   async updateGroup(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
-    console.log('updateGroupDto', updateGroupDto);
     const group = await this.groupService.update(groupId, updateGroupDto);
     return new ResponseEntity(
       HttpStatus.OK,

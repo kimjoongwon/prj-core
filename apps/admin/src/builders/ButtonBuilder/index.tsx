@@ -22,10 +22,12 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   const queryClient = useQueryClient();
 
   const makeContext = (): any => {
+    const clonedState = cloneDeep(state);
     return {
       ...row,
       serviceId,
       ...params,
+      ...clonedState,
     };
   };
 
@@ -33,21 +35,22 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     const button = cloneDeep(buttonBuilder);
     const context = makeContext();
     const args = [];
-    let formData = cloneDeep(state?.form?.data);
+    const clonedState = cloneDeep(state);
+    const formData = cloneDeep(clonedState?.form?.data);
+
     let resourceId = null;
-    console.log('formData', formData);
     if (button.mutation?.idMapper) {
-      resourceId = context?.[button.mutation?.idMapper];
+      resourceId = get(context, button.mutation.idMapper);
       args.push(resourceId);
     }
 
     if (button.mutation?.mapper) {
       Object.keys(button.mutation.mapper).map(key => {
-        const value = context?.[key];
-        formData = {
+        const value = get(context, key);
+
+        Object.assign(formData, {
           [button.mutation?.mapper[key]]: value,
-          ...formData,
-        };
+        });
       });
     }
     if (!isEmpty(formData)) args.push(formData);

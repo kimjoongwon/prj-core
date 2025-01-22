@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash-es';
 import { usePageState } from '../Page/PageBuilder';
 import { TabNavigation } from '../TabNavigation/TabNavigation';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
+import { Outlet } from 'react-router-dom';
 
 interface ComponentBuilderProps {
   componentBuilder: ComponentBuilderState;
@@ -50,6 +51,10 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
 
   if (componentBuilder.type === 'TabNavigation') {
     return <TabNavigation tabBuilder={componentBuilder.props.tabBuilder} />;
+  }
+
+  if (componentBuilder.type === 'Outlet') {
+    return <Outlet />;
   }
 
   if (componentBuilder.visibleCondition) {

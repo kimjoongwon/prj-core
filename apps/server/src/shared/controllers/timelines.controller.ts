@@ -10,7 +10,7 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { TimelineDto, CreateTimelineDto, UpdateTimelineDto, TimelineQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
@@ -95,7 +95,6 @@ export class TimelinesController {
   @ApiResponseEntity(TimelineDto, HttpStatus.OK, { isArray: true })
   async getTimelinesByQuery(@Query() query: TimelineQueryDto) {
     const { count, timelines } = await this.service.getManyByQuery(query);
-
     return new ResponseEntity(
       HttpStatus.OK,
       'success',

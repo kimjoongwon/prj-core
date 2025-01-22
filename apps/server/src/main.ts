@@ -1,9 +1,9 @@
 import { AppModule } from './gateway/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { CustomClassSerializerInterceptor, PrismaClientExceptionFilter } from '@shared';
+import { PrismaClientExceptionFilter } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -15,9 +15,14 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
       whitelist: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+        exposeDefaultValues: true,
+        exposeUnsetFields: true,
+      },
     }),
   );
-  app.useGlobalInterceptors(new CustomClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors();
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 
   const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();

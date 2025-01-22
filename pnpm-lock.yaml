@@ -269,6 +269,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
+      ts-jenum:
+        specifier: ^2.2.2
+        version: 2.2.2(typescript@5.5.4)
       ts-pattern:
         specifier: ^5.2.0
         version: 5.2.0
@@ -7808,6 +7811,11 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  ts-jenum@2.2.2:
+    resolution: {integrity: sha512-vykqLRRmbgyKOE/XgLPd9Vbm03LHF3IYqNZAVGDY0GiHazerKSdfXi41KYCP6vV3wHpm2sgLEnXwXHFGQtDhHw==}
+    peerDependencies:
+      typescript: '>= 2.2.2'
 
   ts-pattern@5.2.0:
     resolution: {integrity: sha512-aGaSpOlDcns7ZoeG/OMftWyQG1KqPVhgplhJxNCvyIXqWrumM5uIoOSarw/hmmi/T1PnuQ/uD8NaFHvLpHicDg==}
@@ -17702,6 +17710,10 @@ snapshots:
       typescript: 5.6.3
 
   ts-interface-checker@0.1.13: {}
+
+  ts-jenum@2.2.2(typescript@5.5.4):
+    dependencies:
+      typescript: 5.5.4
 
   ts-pattern@5.2.0: {}
 

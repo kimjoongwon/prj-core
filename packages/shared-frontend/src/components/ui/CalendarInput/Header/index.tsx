@@ -18,7 +18,7 @@ export const Header = observer((props: HeaderProps) => {
           size="sm"
           variant="light"
           // @ts-ignore
-          onClick={state.calendarInput.header.decreaseMonth}
+          onPress={state.calendarInput.header.decreaseMonth}
           startContent={<FcPrevious />}
         />
         <div className="flex space-x-2">
@@ -29,7 +29,7 @@ export const Header = observer((props: HeaderProps) => {
           size="sm"
           variant="light"
           // @ts-ignore
-          onClick={state.calendarInput.header.increaseMonth}
+          onPress={state.calendarInput.header.increaseMonth}
           endContent={<FcNext />}
         />
       </HStack>

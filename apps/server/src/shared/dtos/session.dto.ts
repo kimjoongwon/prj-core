@@ -8,12 +8,16 @@ import {
   StringField,
   UUIDFieldOptional,
 } from '../decorators/field.decorators';
+import { Transform } from 'class-transformer';
+import { SessionTypes } from '../enums/session-types.enum';
+import { RepeatCycleTypes } from '../enums/repeat-cycle-types.enum';
 
 export class SessionDto extends AbstractDto implements Session {
   @StringField()
   name: string;
 
   @EnumField(() => $Enums.SessionTypes)
+  @Transform(({ value }) => SessionTypes.findName(value))
   type: $Enums.SessionTypes;
 
   @DateFieldOptional()
@@ -26,10 +30,11 @@ export class SessionDto extends AbstractDto implements Session {
   timelineId: string | null;
 
   @EnumFieldOptional(() => $Enums.RepeatCycleTypes, { nullable: true })
+  @Transform(({ value }) => RepeatCycleTypes.findName(value))
   repeatCycleType: $Enums.RepeatCycleTypes | null;
 
-  @EnumFieldOptional(() => $Enums.RecurringDayOfTheWeek, { nullable: true })
-  recurringDayOfWeek: $Enums.RecurringDayOfTheWeek | null;
+  @EnumFieldOptional(() => $Enums.RecurringDayOfWeek, { nullable: true })
+  recurringDayOfWeek: $Enums.RecurringDayOfWeek | null;
 
   @NumberFieldOptional({ nullable: true })
   recurringMonth: number | null;

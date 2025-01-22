@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RouteBuilder, TabBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/types';
 
 @Injectable()
 export class TimelineNewEdit {
@@ -42,6 +42,9 @@ export class TimelineNewEdit {
                       label: '타임라인명',
                       placeholder: '타임라인명을 입력하세요',
                     },
+                  },
+                  {
+                    type: 'Outlet',
                   },
                 ],
               },

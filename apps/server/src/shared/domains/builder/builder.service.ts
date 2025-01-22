@@ -33,6 +33,7 @@ import { SessionNewEdit } from './routes/session/session-new-edit.route';
 import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
 import { TimelinesRoute } from './routes/timeline/timelines.route';
 import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
+import { timelineSessionsRoute } from './routes/timeline/sessions/timeline-sessions.route';
 
 @Injectable()
 export class BuilderService {
@@ -88,7 +89,12 @@ export class BuilderService {
                             },
                             SPACE: { ...spacesRoute, children: [spaceNewEditRoute] },
                             USER: { ...usersRoute, children: [] },
-                            TIMELINE: { ...timelinesRoute, children: [timelineNewEditRoute] },
+                            TIMELINE: {
+                              ...timelinesRoute,
+                              children: [
+                                { ...timelineNewEditRoute, children: [timelineSessionsRoute] },
+                              ],
+                            },
                           }?.[service.name] as RouteBuilder,
                           {
                             ...categoriesRoute,

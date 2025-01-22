@@ -26,7 +26,7 @@ export class TimelinesRoute {
               {
                 name: '추가',
                 navigator: {
-                  pathname: 'new/edit',
+                  pathname: 'new/edit/sessions',
                 },
               },
             ],
