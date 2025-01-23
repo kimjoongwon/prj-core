@@ -10,6 +10,14 @@ export const sessionsRoute: RouteBuilder = {
     page: {
       name: '세션',
       dataGrid: {
+        buttons: [
+          {
+            name: '추가',
+            navigator: {
+              pathname: 'new/edit',
+            },
+          },
+        ],
         table: {
           query: {
             params: {
@@ -68,14 +76,6 @@ export const sessionsRoute: RouteBuilder = {
             },
           ],
         },
-        buttons: [
-          {
-            name: '추가',
-            navigator: {
-              pathname: 'new/edit',
-            },
-          },
-        ],
       },
     },
   },

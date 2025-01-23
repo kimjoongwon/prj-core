@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { TimelineRepository } from '../repositories/timeline.repository';
 import { CreateTimelineDto, TimelineQueryDto } from '../dtos';
@@ -23,9 +23,18 @@ export class TimelineService {
     return this.repository.delete({ where: { id } });
   }
 
-  create(createTimelineDto: CreateTimelineDto) {
+  create({ sessionIds, ...createTimelineDto }: CreateTimelineDto) {
+    const isAll = sessionIds.find((id) => id === 'all');
+
+    if (isAll) {
+      throw new BadRequestException('전체 세션을 선택할 수 없습니다.');
+    }
+
     return this.repository.create({
-      data: createTimelineDto,
+      data: {
+        ...createTimelineDto,
+        sessions: { connect: sessionIds?.map((id) => ({ id })) },
+      },
     });
   }
 

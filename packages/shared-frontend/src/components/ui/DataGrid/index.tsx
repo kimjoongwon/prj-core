@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableProps,
   TableRow,
-} from "@heroui/react";
+} from '@heroui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';
 import { PageState } from '@shared/types';
@@ -92,7 +92,11 @@ export const DataGrid = observer(
             state.selectedRowIds = Array.from(localState.selection).slice(-1);
             return;
           }
-          state.selectedRowIds = Array.from(localState.selection);
+          if (localState.selection === 'all') {
+            state.selectedRowIds = ['all'];
+          } else {
+            state.selectedRowIds = Array.from(localState.selection);
+          }
         },
       );
 
@@ -127,7 +131,7 @@ export const DataGrid = observer(
         <TableBody emptyContent={emptyContent}>
           {table.getRowModel().rows.map(row => {
             return (
-              <TableRow key={row.id}>
+              <TableRow key={row.original.id}>
                 {row.getVisibleCells().map(cell => {
                   return (
                     <TableCell key={cell.id}>

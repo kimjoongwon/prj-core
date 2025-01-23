@@ -16,8 +16,11 @@ export class TimelineNewEdit {
           state: {
             form: {
               data: {
-                startTime: new Date().toISOString(),
+                name: '',
               },
+            },
+            dataGrid: {
+              selectedRowIds: [],
             },
           },
           name: '새편집',
@@ -25,6 +28,9 @@ export class TimelineNewEdit {
             button: {
               mutation: {
                 name: 'createTimeline',
+                mapper: {
+                  selectedRowIds: 'sessionIds',
+                },
               },
               navigator: {
                 pathname: '..',
@@ -44,7 +50,52 @@ export class TimelineNewEdit {
                     },
                   },
                   {
-                    type: 'Outlet',
+                    type: 'DataGridBuilder',
+                    props: {
+                      dataGridBuilder: {
+                        table: {
+                          selectionMode: 'multiple',
+                          query: {
+                            name: 'useGetSessionsByQuery',
+                            params: {
+                              timelineId: undefined,
+                            },
+                          },
+                          columns: [
+                            {
+                              accessorKey: 'name',
+                              header: {
+                                name: '이름',
+                              },
+                            },
+                            {
+                              accessorKey: 'type',
+                              header: {
+                                name: '유형',
+                              },
+                            },
+                            {
+                              accessorKey: 'startDateTime',
+                              header: {
+                                name: '시작일',
+                              },
+                              cell: {
+                                type: 'dateTime',
+                              },
+                            },
+                            {
+                              accessorKey: 'endDateTime',
+                              header: {
+                                name: '종료일',
+                              },
+                              cell: {
+                                type: 'dateTime',
+                              },
+                            },
+                          ],
+                        },
+                      } as any,
+                    },
                   },
                 ],
               },

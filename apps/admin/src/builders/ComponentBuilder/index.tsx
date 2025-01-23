@@ -43,9 +43,11 @@ export const ComponentBuilder = observer((props: ComponentBuilderProps) => {
     return { ...acc, ...callback };
   });
 
-  if (componentBuilder.type === 'TableBuilder') {
+  if (componentBuilder.type === 'DataGridBuilder') {
     return (
-      <DataGridBuilder dataGridBuilder={componentBuilder.props.tableBuilder} />
+      <DataGridBuilder
+        dataGridBuilder={componentBuilder.props.dataGridBuilder}
+      />
     );
   }
 

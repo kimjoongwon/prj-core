@@ -4,12 +4,13 @@ import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { ButtonGroup, Card, Pagination, Spinner } from "@heroui/react";
+import { ButtonGroup, Pagination, Spinner } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { useGetTableQuery } from '../../hooks/useGetTableQuery';
 import { useSearchParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { toJS } from 'mobx';
+import { usePageState } from '../Page/PageBuilder';
 
 interface DataGridBuilderProps {
   dataGridBuilder: DataGridBuilderInterface;
@@ -18,7 +19,7 @@ interface DataGridBuilderProps {
 export const DataGridBuilder = observer(
   ({ dataGridBuilder }: DataGridBuilderProps) => {
     const table = dataGridBuilder?.table!;
-    console.log('dataGridBuilder', dataGridBuilder);
+    const pageState = usePageState();
     const { data, isLoading, meta } = useGetTableQuery(table);
     const urlSearchParams = new URLSearchParams(table?.query?.params);
     const [searchParams, setSearchParams] = useSearchParams(urlSearchParams);
@@ -51,11 +52,12 @@ export const DataGridBuilder = observer(
           </ButtonGroup>
         </HStack>
         <DataGrid
+          state={pageState?.dataGrid}
           data={toJS(data || [])}
           columns={toJS(columns) || []}
           selectionMode={table.selectionMode}
         />
-        {table.query?.params?.take && (
+        {table?.query?.params?.take && (
           <Pagination
             total={meta?.pageCount ?? 1}
             initialPage={currentPage}
