@@ -6,6 +6,7 @@ export const timelineSessionsRoute: RouteBuilder = {
   layout: {
     type: 'DataGrid',
     page: {
+      type: 'Page',
       state: {
         dataGrid: {
           selectedRowIds: [],
@@ -19,7 +20,7 @@ export const timelineSessionsRoute: RouteBuilder = {
           query: {
             name: 'useGetSessionsByQuery',
             params: {
-              timelineId: 'null',
+              timelineId: null,
             },
           },
           columns: [
@@ -33,6 +34,24 @@ export const timelineSessionsRoute: RouteBuilder = {
               accessorKey: 'type',
               header: {
                 name: '유형',
+              },
+            },
+            {
+              accessorKey: 'startDateTime',
+              header: {
+                name: '시작일',
+              },
+              cell: {
+                type: 'dateTime',
+              },
+            },
+            {
+              accessorKey: 'endDateTime',
+              header: {
+                name: '종료일',
+              },
+              cell: {
+                type: 'dateTime',
               },
             },
           ],

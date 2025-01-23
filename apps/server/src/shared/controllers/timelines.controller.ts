@@ -10,7 +10,7 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { TimelineDto, CreateTimelineDto, UpdateTimelineDto, TimelineQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';

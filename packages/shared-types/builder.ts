@@ -117,7 +117,7 @@ export interface PageState {
     data?: any;
   };
   dataGrid?: {
-    selectedRowIds?: Key[];
+    selectedRowIds?: Key[] | 'all';
     selectedRowId?: Key;
     filter?: any;
     sortings?: any;

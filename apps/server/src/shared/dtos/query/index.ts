@@ -13,3 +13,4 @@ export * from './ability-query.dto';
 export * from './subject-query.dto';
 export * from './session-query.dto';
 export * from './timeline-query.dto';
+export * from './routine-query.dto';

@@ -18,3 +18,4 @@ export * from './ability.dto';
 export * from './subject.dto';
 export * from './session.dto';
 export * from './timeline.dto';
+export * from './routine.dto';

@@ -6,11 +6,12 @@ export class TimelinesRoute {
   getRoute(): RouteBuilder {
     return {
       name: '목록',
-      pathname: 'timeline',
+      pathname: 'timelines',
       layout: {
         type: 'DataGrid',
         name: '목록',
         page: {
+          type: 'Page',
           name: '목록',
           state: {
             form: {
@@ -26,7 +27,7 @@ export class TimelinesRoute {
               {
                 name: '추가',
                 navigator: {
-                  pathname: 'new/edit/sessions',
+                  pathname: 'new/edit',
                 },
               },
             ],

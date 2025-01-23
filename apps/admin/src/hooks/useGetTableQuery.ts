@@ -1,6 +1,6 @@
 import { APIManager } from '@shared/frontend';
 import { TableBuilder } from '@shared/types';
-import { escape, get, isEmpty } from 'lodash-es';
+import { get, isEmpty } from 'lodash-es';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
@@ -51,7 +51,7 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
       },
     });
   }
-
+  console.log('apiArgs', apiArgs);
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
     ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment

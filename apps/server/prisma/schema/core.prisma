@@ -237,7 +237,6 @@ model Timeline {
 
   name      String    @unique
   tenancyId String
-  tenantId  String
   sessions  Session[]
 }
 
@@ -250,7 +249,7 @@ model Session {
 
   type               SessionTypes        @default(ONE_TIME)
   name               String
-  timelineId         String?             @unique
+  timelineId         String?
   repeatCycleType    RepeatCycleTypes?
   startDateTime      DateTime?           @db.Timestamptz(6)
   endDateTime        DateTime?           @db.Timestamptz(6)
@@ -260,7 +259,18 @@ model Session {
   timeline Timeline? @relation(fields: [timelineId], references: [id])
 }
 
-// 나눔 //
+model Program {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  routineId String
+  sessionId String
+  tenancyId String
+}
+
 model Routine {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -268,8 +278,7 @@ model Routine {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String  @unique
-  sessionId String?
+  name      String @unique
   contentId String
   tenancyId String
 }
@@ -280,6 +289,7 @@ model Sequence {
 
   name      String @unique
   routineId String
+  contentId String
 
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)

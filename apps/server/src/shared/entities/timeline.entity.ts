@@ -7,7 +7,6 @@ import { Timeline as TimelineEntity } from '@prisma/client';
 export class Timeline extends AbstractEntity<TimelineDto> implements TimelineEntity {
   name: string;
   tenancyId: string;
-  tenantId: string;
   startDateTime: Date;
   endDateTime: Date;
 }

@@ -21,13 +21,18 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  // pathParam(serviceId) is the serviceId from the URL
+  // row is the data from the row of the table
+  // form is the form data
+  // dataGrid is the data from the table
   const makeContext = (): any => {
     const clonedState = cloneDeep(state);
     return {
       ...row,
       serviceId,
       ...params,
-      ...clonedState,
+      ...clonedState?.form?.data,
+      ...clonedState?.dataGrid,
     };
   };
 
@@ -35,8 +40,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     const button = cloneDeep(buttonBuilder);
     const context = makeContext();
     const args = [];
-    const clonedState = cloneDeep(state);
-    const formData = cloneDeep(clonedState?.form?.data);
+    const formData = cloneDeep(state?.form?.data);
 
     let resourceId = null;
     if (button.mutation?.idMapper) {
@@ -59,7 +63,6 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
     try {
       if (button.mutation?.name) {
-        console.log('args', args);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         await APIManager[button.mutation.name].apply(null, args);
