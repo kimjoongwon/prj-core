@@ -9,6 +9,7 @@ import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { Text } from '@shared/frontend';
 import { v4 } from 'uuid';
+import { Input } from '@heroui/react';
 
 interface PageBuilderProps {
   pageBuilder: PageBuilderInterface;
@@ -66,15 +67,20 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
         <Form formBuilder={pageBuilder.form!}>
           {pageBuilder?.form?.sections?.map(section => {
             return (
-              <div key={v4()} className="border-1 p-4 rounded-xl space-y-4">
+              <div
+                key={v4()}
+                className="flex flex-1 flex-col border-1 p-4 rounded-xl space-y-4"
+              >
                 <Text variant="h5">{section.name}</Text>
-                {section.components?.map(component => (
-                  <ComponentBuilder
-                    key={v4()}
-                    componentBuilder={component}
-                    data={data}
-                  />
-                ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {section.components?.map(component => (
+                    <ComponentBuilder
+                      key={v4()}
+                      componentBuilder={component}
+                      data={data}
+                    />
+                  ))}
+                </div>
               </div>
             );
           })}

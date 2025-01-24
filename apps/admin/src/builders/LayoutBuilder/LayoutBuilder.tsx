@@ -164,6 +164,7 @@ export const ModalLayout = observer((props: ModalLayoutProps) => {
     <Modal
       size="full"
       isOpen={true}
+      className="relative"
       isDismissable
       onClose={() => navigate(-1)}
       scrollBehavior="inside"
