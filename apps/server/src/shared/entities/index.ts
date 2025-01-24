@@ -16,3 +16,4 @@ export * from './ability.entity';
 export * from './subject.entity';
 export * from './session.entity';
 export * from './timeline.entity';
+export * from './program.entity';

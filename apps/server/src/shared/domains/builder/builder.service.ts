@@ -34,6 +34,7 @@ import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
 import { TimelinesRoute } from './routes/timeline/timelines.route';
 import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
 import { timelineSessionsRoute } from './routes/timeline/sessions/timeline-sessions.route';
+import { RoutinesBuilder } from './routes/routines.route';
 
 @Injectable()
 export class BuilderService {
@@ -49,6 +50,7 @@ export class BuilderService {
     private readonly sessionNewEdit: SessionNewEdit,
     private readonly timelinesRoute: TimelinesRoute,
     private readonly timelineNewEdit: TimelineNewEdit,
+    private readonly routinesBuilder: RoutinesBuilder,
   ) {}
 
   async getRoutes(): Promise<RouteBuilder[]> {
@@ -63,6 +65,7 @@ export class BuilderService {
     const sessionNewEditRoute = await this.sessionNewEdit.getRoute();
     const timelinesRoute = await this.timelinesRoute.getRoute();
     const timelineNewEditRoute = await this.timelineNewEdit.getRoute();
+    const routinesRoute = await this.routinesBuilder.getRoutineRoute();
 
     return [
       {
@@ -95,6 +98,7 @@ export class BuilderService {
                                 { ...timelineNewEditRoute, children: [timelineSessionsRoute] },
                               ],
                             },
+                            ROUTINE: { ...routinesRoute },
                           }?.[service.name] as RouteBuilder,
                           {
                             ...categoriesRoute,

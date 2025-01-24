@@ -5,3 +5,5 @@ export * from './ability-logic.module';
 export * from './subject-logic.module';
 export * from './session-logic.module';
 export * from './timeline-logic.module';
+export * from './routines.module';
+export * from './programs.module';

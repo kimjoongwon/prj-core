@@ -17,6 +17,8 @@ import { AbilitiesEndpointModule } from './abilities/abilities-endpoint.module';
 import { SubjectsEndpointModule } from './subjects/subjects-endpoint.module';
 import { TimelinesEndpointModule } from './timelines/timelines-endpoint.module';
 import { SessionsEndpointModule } from './sessions/sessions-endpoint.module';
+import { RoutinesEndpointModule } from './routines/routines-endpoint.module';
+import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { SessionsEndpointModule } from './sessions/sessions-endpoint.module';
     SubjectsEndpointModule,
     TimelinesEndpointModule,
     SessionsEndpointModule,
+    RoutinesEndpointModule,
+    ProgramsEndpointModule,
     RouterModule.register([
       {
         path: 'api',
@@ -99,6 +103,10 @@ import { SessionsEndpointModule } from './sessions/sessions-endpoint.module';
               {
                 path: 'timelines',
                 module: TimelinesEndpointModule,
+              },
+              {
+                path: 'programs',
+                module: ProgramsEndpointModule,
               },
             ],
           },

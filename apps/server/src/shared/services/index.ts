@@ -10,3 +10,5 @@ export * from './abilities.service';
 export * from './subjects.service';
 export * from './session.service';
 export * from './timeline.service';
+export * from './routines.service';
+export * from './programs.service';

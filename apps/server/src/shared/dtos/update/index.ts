@@ -13,3 +13,4 @@ export * from './update-subject.dto';
 export * from './update-session.dto';
 export * from './update-timeline.dto';
 export * from './update-routine.dto';
+export * from './update-program.dto';

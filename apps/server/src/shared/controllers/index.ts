@@ -10,3 +10,5 @@ export * from './actions.controller';
 export * from './subjects.controller';
 export * from './sessions.controller';
 export * from './timelines.controller';
+export * from './routines.controller';
+export * from './programs.controller';

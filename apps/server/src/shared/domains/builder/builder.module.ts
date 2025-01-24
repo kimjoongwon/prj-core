@@ -11,6 +11,7 @@ import { AbilityNewEditRoute } from './routes/ability-new-edit.route';
 import { SessionNewEdit } from './routes/session/session-new-edit.route';
 import { TimelinesRoute } from './routes/timeline/timelines.route';
 import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
+import { RoutinesBuilder } from './routes/routines.route';
 
 @Module({
   imports: [CategoryLogicModule],
@@ -26,6 +27,7 @@ import { TimelineNewEdit } from './routes/timeline/timeline-new-edit.route';
     SessionNewEdit,
     TimelinesRoute,
     TimelineNewEdit,
+    RoutinesBuilder,
   ],
   exports: [BuilderService],
 })
