@@ -39,8 +39,8 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
     SubjectsEndpointModule,
     TimelinesEndpointModule,
     SessionsEndpointModule,
-    RoutinesEndpointModule,
     ProgramsEndpointModule,
+    RoutinesEndpointModule,
     RouterModule.register([
       {
         path: 'api',
@@ -107,6 +107,10 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
               {
                 path: 'programs',
                 module: ProgramsEndpointModule,
+              },
+              {
+                path: 'routines',
+                module: RoutinesEndpointModule,
               },
             ],
           },

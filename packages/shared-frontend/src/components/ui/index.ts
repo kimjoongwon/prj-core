@@ -49,3 +49,4 @@ export * from './DateRangePicker/DateRangePicker';
 export { DatePicker } from './DatePicker/DatePicker';
 export { WeekInput } from './WeekInput';
 export * from './FileUploader/FileUploader';
+export * from './Content/Content';

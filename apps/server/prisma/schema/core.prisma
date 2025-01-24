@@ -423,7 +423,7 @@ model Content {
 
   title       String?
   description String?
-  dopotId     String
+  dopotId     String?
   type        TextTypes @default(HTML)
   text        String?   @db.VarChar(1000)
 }
