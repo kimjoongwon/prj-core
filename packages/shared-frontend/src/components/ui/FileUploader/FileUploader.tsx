@@ -21,15 +21,9 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Card } from '@heroui/react';
 
-interface UploadedFile {
-  id: string;
-  url: string;
-  name: string;
-}
-
 interface SortableFileProps {
-  file: UploadedFile;
-  onRemove: (id: string) => void;
+  file: File;
+  onRemove: (name: string) => void;
 }
 
 function SortableFile({ file, onRemove }: SortableFileProps) {
@@ -40,7 +34,7 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: file.id });
+  } = useSortable({ id: file.name });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -57,9 +51,9 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
       {...attributes}
       {...listeners}
     >
-      {file.url ? (
+      {file.type.startsWith('image/') ? (
         <img
-          src={file.url}
+          src={URL.createObjectURL(file)}
           alt={file.name}
           className="w-full h-full object-cover rounded-lg"
         />
@@ -69,7 +63,7 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
         </div>
       )}
       <button
-        onClick={() => onRemove(file.id)}
+        onClick={() => onRemove(file.name)}
         className="absolute -top-2 -right-2 bg-gray-800 rounded-full p-1"
       >
         <X className="h-4 w-4 text-white" />
@@ -82,7 +76,7 @@ interface FileUploaderProps {
   mode: 'single' | 'multiple';
   maxFiles?: number;
   uploadType: 'image' | 'file' | 'both';
-  onFilesChange?: (files: UploadedFile[]) => void;
+  onFilesChange?: (files: File[]) => void;
 }
 
 export function FileUploader({
@@ -91,7 +85,7 @@ export function FileUploader({
   uploadType = 'image',
   onFilesChange,
 }: FileUploaderProps) {
-  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
     if (onFilesChange) {
@@ -114,8 +108,8 @@ export function FileUploader({
     const { active, over } = event;
     if (over && active.id !== over.id) {
       setFiles(items => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
+        const oldIndex = items.findIndex(item => item.name === active.id);
+        const newIndex = items.findIndex(item => item.name === over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
@@ -124,11 +118,7 @@ export function FileUploader({
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      const newFiles = Array.from(files).map(file => ({
-        id: Math.random().toString(),
-        url: file.type.startsWith('image/') ? URL.createObjectURL(file) : '',
-        name: file.name,
-      }));
+      const newFiles = Array.from(files);
 
       if (mode === 'single') {
         setFiles([newFiles[0]]);
@@ -138,8 +128,8 @@ export function FileUploader({
     }
   };
 
-  const removeFile = (id: string) => {
-    setFiles(files.filter(file => file.id !== id));
+  const removeFile = (name: string) => {
+    setFiles(files.filter(file => file.name !== name));
   };
 
   return (
@@ -163,7 +153,10 @@ export function FileUploader({
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={files} strategy={rectSortingStrategy}>
+            <SortableContext
+              items={files.map(file => file.name)}
+              strategy={rectSortingStrategy}
+            >
               <div
                 className={
                   mode === 'single'
@@ -173,7 +166,7 @@ export function FileUploader({
               >
                 {files.map(file => (
                   <SortableFile
-                    key={file.id}
+                    key={file.name}
                     file={file}
                     onRemove={removeFile}
                   />
