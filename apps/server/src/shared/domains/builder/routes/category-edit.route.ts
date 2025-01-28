@@ -1,8 +1,20 @@
 import { RouteBuilder } from '@shared/types';
-import { categoryEditLayout } from '../layouts/category-edit.layout';
+import { CategoryEditPage } from '../pages/category-edit.page';
+import { Injectable } from '@nestjs/common';
 
-export const categoryEditRoute: RouteBuilder = {
-  name: '수정',
-  pathname: ':categoryId/edit',
-  layout: categoryEditLayout,
-};
+@Injectable()
+export class CategoryEditRoute {
+  constructor(private readonly categoryEditPage: CategoryEditPage) {}
+
+  async getMeta(categoryId: string | 'new', type: 'edit' | 'add') {
+    const page = await this.categoryEditPage.getMeta(categoryId, type);
+
+    const route: RouteBuilder = {
+      name: '편집',
+      pathname: `${categoryId}/:type`,
+      page,
+    };
+
+    return route;
+  }
+}

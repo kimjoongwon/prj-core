@@ -36,15 +36,20 @@ export const groupEditPage: PageBuilder = {
     sections: [
       {
         name: '그룹 정보',
-        components: [
+        stacks: [
           {
-            type: 'Input',
-            path: 'name',
-            props: {
-              fullWidth: true,
-              label: '그룹 이름',
-              placeholder: '그룹 이름을 입력해주세요.',
-            },
+            type: 'VStack',
+            inputs: [
+              {
+                type: 'Input',
+                path: 'name',
+                props: {
+                  fullWidth: true,
+                  label: '그룹 이름',
+                  placeholder: '그룹 이름을 입력해주세요.',
+                },
+              },
+            ],
           },
         ],
       },

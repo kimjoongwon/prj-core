@@ -26,7 +26,7 @@ export * from './Textarea';
 export * from './CalendarInput';
 export * from './Calendar';
 export * from './AutoComplete';
-export * from './Editor';
+// export * from './Editor';
 export * from './Skeleton';
 export * from './Button';
 export * from './User';

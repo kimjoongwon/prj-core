@@ -12,7 +12,8 @@ import { RouteBuilder } from './builders/Route/RouteBuilder';
 import { ReactQueryProvider } from '@shared/frontend';
 import { v4 } from 'uuid';
 import './index.css';
-import { Spinner } from "@heroui/react";
+import { Spinner } from '@heroui/react';
+import { RoutineNewEdit } from './pages/RoutineNewEdit';
 
 const rootElement = document.getElementById('root')!;
 
@@ -26,7 +27,10 @@ const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
 const App = observer(() => {
   const { navigation, isInitialized } = useStore();
   const router = createBrowserRouter(
-    navigation.routeBuilders?.map(generateRouteObject),
+    navigation.routeBuilders?.map(generateRouteObject).concat({
+      path: '/admin/tenancies/:tenancyId/services/:serviceId/routines/new/edit',
+      element: <RoutineNewEdit />,
+    }),
   );
 
   return !isInitialized ? <Spinner /> : <RouterProvider router={router} />;

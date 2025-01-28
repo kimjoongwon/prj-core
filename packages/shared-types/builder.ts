@@ -14,13 +14,6 @@ export interface ValidationBuilder {
 }
 
 export interface InputBuilder {
-  type: InputProps['type'];
-  label: string;
-  placeholder: string;
-  value: InputProps['value'];
-}
-
-export interface ComponentBuilder {
   visibleCondition?: {
     eq: {
       path: string;
@@ -42,6 +35,7 @@ export interface FormBuilder {
 }
 
 export interface ButtonBuilder {
+  icon?: string;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   name: string;
   mutation?: Mutation;
@@ -86,13 +80,13 @@ export interface LayoutBuilder {
     | 'Service'
     | 'Tab'
     | 'DataGrid';
-  page?: PageBuilder;
 }
 
 export interface RouteBuilder {
   name?: string;
   pathname?: string;
   layout?: LayoutBuilder;
+  page?: PageBuilder;
   params?: object;
   children?: RouteBuilder[];
 }
@@ -188,6 +182,10 @@ export interface CellBuilderProps
 
 export interface SectionBuilder {
   name: string;
-  gridProps?: object;
-  components: ComponentBuilder[];
+  stacks: StackBuilder[];
+}
+
+export interface StackBuilder {
+  type: 'VStack' | 'HStack';
+  inputs: InputBuilder[];
 }

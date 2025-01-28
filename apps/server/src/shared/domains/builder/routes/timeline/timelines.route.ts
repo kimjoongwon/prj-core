@@ -7,60 +7,56 @@ export class TimelinesRoute {
     return {
       name: '목록',
       pathname: 'timelines',
-      layout: {
-        type: 'DataGrid',
+      page: {
+        type: 'Page',
         name: '목록',
-        page: {
-          type: 'Page',
-          name: '목록',
-          state: {
-            form: {
-              data: {
-                categoryId: '',
-                tenantId: '',
-                timelineName: '',
-              },
+        state: {
+          form: {
+            data: {
+              categoryId: '',
+              tenantId: '',
+              timelineName: '',
             },
           },
-          dataGrid: {
-            buttons: [
+        },
+        dataGrid: {
+          buttons: [
+            {
+              name: '추가',
+              navigator: {
+                pathname: 'new/edit',
+              },
+            },
+          ],
+          table: {
+            query: {
+              name: 'useGetTimelinesByQuery',
+            },
+            columns: [
               {
-                name: '추가',
-                navigator: {
-                  pathname: 'new/edit',
+                accessorKey: 'name',
+                header: {
+                  name: '이름',
+                },
+              },
+              {
+                id: 'actions',
+                header: {
+                  name: '액션',
+                },
+                cell: {
+                  buttons: [
+                    {
+                      name: '상세',
+                      color: 'primary',
+                      navigator: {
+                        pathname: ':timelineId',
+                      },
+                    },
+                  ],
                 },
               },
             ],
-            table: {
-              query: {
-                name: 'useGetTimelinesByQuery',
-              },
-              columns: [
-                {
-                  accessorKey: 'name',
-                  header: {
-                    name: '이름',
-                  },
-                },
-                {
-                  id: 'actions',
-                  header: {
-                    name: '액션',
-                  },
-                  cell: {
-                    buttons: [
-                      {
-                        name: '상세',
-                        color: 'primary',
-                        navigator: {
-                          pathname: ':timelineId',
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
           },
         },
       },

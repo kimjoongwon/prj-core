@@ -1,5 +1,6 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
+import { makeAutoObservable } from 'mobx';
 
 type NavigateFunction = (pathnameWithSearchParams: string) => void;
 
@@ -11,7 +12,8 @@ export class Navigation {
   constructor(routeBuilders: RouteBuilder[]) {
     this.routeBuilders = routeBuilders;
     this.getRoutes();
-    this.activateRoute();
+    this.activateRoute(window.location.pathname);
+    makeAutoObservable(this);
   }
 
   setNavigateFunction(navigateFunction: NavigateFunction) {
@@ -56,7 +58,10 @@ export class Navigation {
   }
 
   get servicesRoute() {
-    const servicesRoute = this.findRouteByPath('services');
+    const servicesRoute = this.findRouteByPath(
+      '/admin/main/tenancies/:tenancyId/services',
+    );
+    console.log('servicesRoute', servicesRoute);
     return servicesRoute;
   }
 
@@ -68,16 +73,13 @@ export class Navigation {
     return serviceRoute;
   }
 
-  activateRoute() {
-    const segments = window.location.pathname;
-
+  activateRoute(currentPathname: string) {
     const changeRouteActiveState = (route: Route) => {
-      route.active = segments.includes(route.pathname);
-
+      route.active = currentPathname?.includes(route.pathname);
       route.children?.forEach(changeRouteActiveState);
     };
 
-    this.routes.forEach(changeRouteActiveState);
+    this.routes?.forEach(changeRouteActiveState);
   }
 
   getRoutes() {
@@ -89,6 +91,6 @@ export class Navigation {
       children: routeBuilder?.children?.map(convertRouteBuilderToRoute) || [],
     });
 
-    this.routes = this.routeBuilders.map(convertRouteBuilderToRoute);
+    this.routes = this.routeBuilders?.map(convertRouteBuilderToRoute);
   }
 }

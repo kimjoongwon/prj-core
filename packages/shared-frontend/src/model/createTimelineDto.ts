@@ -5,9 +5,7 @@
  */
 
 export interface CreateTimelineDto {
-  endDateTime: string;
   name: string;
-  startDateTime: string;
+  sessionIds: string[];
   tenancyId: string;
-  tenantId: string;
 }

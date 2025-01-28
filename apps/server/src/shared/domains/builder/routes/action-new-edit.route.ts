@@ -21,52 +21,53 @@ export class ActionNewEditRoute {
     return {
       name: '액션새편집',
       pathname: 'new/edit',
-      layout: {
+      page: {
         name: '새편집',
-        type: 'Modal',
-        page: {
-          name: '새편집',
-          state: {
-            form: {
-              data: {},
-            },
-          },
+        state: {
           form: {
-            button: {
-              name: '저장',
-              mutation: {
-                name: 'createAction',
-              },
-              navigator: {
-                pathname: '..',
-              },
-            },
-            sections: [
-              {
-                name: '기본정보',
-                components: [
-                  {
-                    path: 'name',
-                    type: 'Input',
-                    props: {
-                      fullWidth: true,
-                      label: '액션 이름',
-                      placeholder: '액션 이름을 입력해주세요.',
-                    },
-                  },
-                  {
-                    path: 'subjectId',
-                    type: 'Select',
-                    props: {
-                      fullWidth: true,
-                      label: '과목',
-                      options: subjectOptions,
-                    },
-                  },
-                ],
-              },
-            ],
+            data: {},
           },
+        },
+        form: {
+          button: {
+            name: '저장',
+            mutation: {
+              name: 'createAction',
+            },
+            navigator: {
+              pathname: '..',
+            },
+          },
+          sections: [
+            {
+              name: '기본정보',
+              stacks: [
+                {
+                  type: 'VStack',
+                  inputs: [
+                    {
+                      path: 'name',
+                      type: 'Input',
+                      props: {
+                        fullWidth: true,
+                        label: '액션 이름',
+                        placeholder: '액션 이름을 입력해주세요.',
+                      },
+                    },
+                    {
+                      path: 'subjectId',
+                      type: 'Select',
+                      props: {
+                        fullWidth: true,
+                        label: '과목',
+                        options: subjectOptions,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       },
     };

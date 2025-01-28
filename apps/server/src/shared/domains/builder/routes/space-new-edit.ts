@@ -11,55 +11,56 @@ export class SpaceNewEditRoute {
     return {
       name: '그룹새편집',
       pathname: 'new/edit',
-      layout: {
+      page: {
         name: '새편집',
-        type: 'Modal',
-        page: {
-          name: '새편집',
-          state: {
-            form: {
-              data: {},
-            },
-          },
+        state: {
           form: {
-            button: {
-              name: '저장',
-              mutation: {
-                name: 'createSpace',
-                mapper: {
-                  serviceId: 'serviceId',
-                  categoryId: 'categoryId',
-                  name: 'name',
-                },
-              },
-              navigator: {
-                pathname: '..',
+            data: {},
+          },
+        },
+        form: {
+          button: {
+            name: '저장',
+            mutation: {
+              name: 'createSpace',
+              mapper: {
+                serviceId: 'serviceId',
+                categoryId: 'categoryId',
+                name: 'name',
               },
             },
-            sections: [
-              {
-                name: '기본정보',
-                components: [
-                  {
-                    type: 'Input',
-                    path: 'name',
-                    props: {
-                      label: '그룹 이름',
-                      placeholder: '그룹 이름을 입력해주세요.',
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'categoryId',
-                    props: {
-                      label: '카테고리',
-                      options,
-                    },
-                  },
-                ],
-              },
-            ],
+            navigator: {
+              pathname: '..',
+            },
           },
+          sections: [
+            {
+              name: '기본정보',
+              stacks: [
+                {
+                  type: 'VStack',
+                  inputs: [
+                    {
+                      type: 'Input',
+                      path: 'name',
+                      props: {
+                        label: '그룹 이름',
+                        placeholder: '그룹 이름을 입력해주세요.',
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'categoryId',
+                      props: {
+                        label: '카테고리',
+                        options,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       },
     };

@@ -3,34 +3,30 @@ import { RouteBuilder } from '@shared/types';
 export const rolesRoute: RouteBuilder = {
   name: '목록',
   pathname: 'roles',
-  layout: {
-    name: '자원',
-    type: 'DataGrid',
-    page: {
-      name: '목록',
-      dataGrid: {
-        buttons: [
+  page: {
+    name: '목록',
+    dataGrid: {
+      buttons: [
+        {
+          name: '생성',
+          color: 'primary',
+          navigator: {
+            pathname: 'new/edit',
+          },
+        },
+      ],
+      table: {
+        query: {
+          name: `useGetRolesByQuery`,
+        },
+        columns: [
           {
-            name: '생성',
-            color: 'primary',
-            navigator: {
-              pathname: 'new/edit',
+            accessorKey: 'name',
+            header: {
+              name: '이름',
             },
           },
         ],
-        table: {
-          query: {
-            name: `useGetRolesByQuery`,
-          },
-          columns: [
-            {
-              accessorKey: 'name',
-              header: {
-                name: '이름',
-              },
-            },
-          ],
-        },
       },
     },
   },

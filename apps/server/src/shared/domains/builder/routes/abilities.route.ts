@@ -7,33 +7,30 @@ export class AbilitiesRoute {
     return {
       name: '능력',
       pathname: 'abilities',
-      layout: {
-        type: 'DataGrid',
-        page: {
-          name: '목록',
-          dataGrid: {
-            buttons: [
+      page: {
+        name: '목록',
+        dataGrid: {
+          buttons: [
+            {
+              color: 'primary',
+              name: '추가',
+              navigator: {
+                pathname: 'new/edit',
+              },
+            },
+          ],
+          table: {
+            query: {
+              name: 'useGetAbilitiesByQuery',
+            },
+            columns: [
               {
-                color: 'primary',
-                name: '추가',
-                navigator: {
-                  pathname: 'new/edit',
+                accessorKey: 'id',
+                header: {
+                  name: 'Identifier',
                 },
               },
             ],
-            table: {
-              query: {
-                name: 'useGetAbilitiesByQuery',
-              },
-              columns: [
-                {
-                  accessorKey: 'id',
-                  header: {
-                    name: 'Identifier',
-                  },
-                },
-              ],
-            },
           },
         },
       },

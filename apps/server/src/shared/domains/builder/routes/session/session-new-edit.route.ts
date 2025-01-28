@@ -36,98 +36,99 @@ export class SessionNewEdit {
     return {
       name: '세션',
       pathname: 'new/edit',
-      layout: {
-        type: 'Modal',
-        name: '새편집',
-        page: {
-          state: {
-            form: {
-              data: {},
-            },
-          },
-          name: '새편집',
+      page: {
+        state: {
           form: {
-            button: {
-              mutation: {
-                name: 'createSession',
-              },
-              name: '저장',
-            },
-            sections: [
-              {
-                name: '기본정보',
-                components: [
-                  {
-                    type: 'Input',
-                    path: 'name',
-                    props: {
-                      label: '이름',
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'type',
-                    props: {
-                      label: '세션타입',
-                      options: sessionTypeOptions,
-                    },
-                  },
-                  {
-                    type: 'DateRangePicker',
-                    path: 'startDateTime,endDateTime',
-                    props: {
-                      label: '시작 ~ 종료',
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'repeatCycleType',
-                    visibleCondition: {
-                      eq: {
-                        path: 'type',
-                        value: $Enums.SessionTypes.RECURRING,
-                      },
-                    },
-                    props: {
-                      label: '반복유형',
-                      options: Object.keys($Enums.RepeatCycleTypes).map((key) => ({
-                        key,
-                        text: $Enums.RepeatCycleTypes[key],
-                        value: $Enums.RepeatCycleTypes[key],
-                      })),
-                    },
-                  },
-                  {
-                    visibleCondition: {
-                      eq: {
-                        path: 'repeatCycleType',
-                        value: $Enums.RepeatCycleTypes.WEEKLY,
-                      },
-                    },
-                    type: 'WeekInput',
-                    path: 'recurringDayOfWeek',
-                    props: {
-                      label: '반복일',
-                    },
-                  },
-                  {
-                    visibleCondition: {
-                      eq: {
-                        path: 'repeatCycleType',
-                        value: $Enums.RepeatCycleTypes.MONTHLY,
-                      },
-                    },
-                    type: 'Select',
-                    path: 'recurringMonth',
-                    props: {
-                      label: '반복월',
-                      options: monthOptions,
-                    },
-                  },
-                ],
-              },
-            ],
+            data: {},
           },
+        },
+        name: '새편집',
+        form: {
+          button: {
+            mutation: {
+              name: 'createSession',
+            },
+            name: '저장',
+          },
+          sections: [
+            {
+              name: '기본정보',
+              stacks: [
+                {
+                  type: 'VStack',
+                  inputs: [
+                    {
+                      type: 'Input',
+                      path: 'name',
+                      props: {
+                        label: '이름',
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'type',
+                      props: {
+                        label: '세션타입',
+                        options: sessionTypeOptions,
+                      },
+                    },
+                    {
+                      type: 'DateRangePicker',
+                      path: 'startDateTime,endDateTime',
+                      props: {
+                        label: '시작 ~ 종료',
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'repeatCycleType',
+                      visibleCondition: {
+                        eq: {
+                          path: 'type',
+                          value: $Enums.SessionTypes.RECURRING,
+                        },
+                      },
+                      props: {
+                        label: '반복유형',
+                        options: Object.keys($Enums.RepeatCycleTypes).map((key) => ({
+                          key,
+                          text: $Enums.RepeatCycleTypes[key],
+                          value: $Enums.RepeatCycleTypes[key],
+                        })),
+                      },
+                    },
+                    {
+                      visibleCondition: {
+                        eq: {
+                          path: 'repeatCycleType',
+                          value: $Enums.RepeatCycleTypes.WEEKLY,
+                        },
+                      },
+                      type: 'WeekInput',
+                      path: 'recurringDayOfWeek',
+                      props: {
+                        label: '반복일',
+                      },
+                    },
+                    {
+                      visibleCondition: {
+                        eq: {
+                          path: 'repeatCycleType',
+                          value: $Enums.RepeatCycleTypes.MONTHLY,
+                        },
+                      },
+                      type: 'Select',
+                      path: 'recurringMonth',
+                      props: {
+                        label: '반복월',
+                        options: monthOptions,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       },
     };
