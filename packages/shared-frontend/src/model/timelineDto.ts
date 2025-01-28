@@ -6,14 +6,11 @@
 
 export interface TimelineDto {
   createdAt: string;
-  endDateTime: string;
   id: string;
   name: string;
   /** @nullable */
   removedAt: string | null;
   seq: number;
-  startDateTime: string;
   tenancyId: string;
-  tenantId: string;
   updatedAt: string;
 }

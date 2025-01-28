@@ -3,59 +3,56 @@ import { RouteBuilder } from '@shared/types';
 export const timelineSessionsRoute: RouteBuilder = {
   name: '세션',
   pathname: 'sessions',
-  layout: {
-    type: 'DataGrid',
-    page: {
-      type: 'Page',
-      state: {
-        dataGrid: {
-          selectedRowIds: [],
-        },
-      },
-      name: '세션',
+  page: {
+    type: 'Page',
+    state: {
       dataGrid: {
-        buttons: [],
-        table: {
-          selectionMode: 'multiple',
-          query: {
-            name: 'useGetSessionsByQuery',
-            params: {
-              timelineId: null,
+        selectedRowIds: [],
+      },
+    },
+    name: '세션',
+    dataGrid: {
+      buttons: [],
+      table: {
+        selectionMode: 'multiple',
+        query: {
+          name: 'useGetSessionsByQuery',
+          params: {
+            timelineId: null,
+          },
+        },
+        columns: [
+          {
+            accessorKey: 'name',
+            header: {
+              name: '이름',
             },
           },
-          columns: [
-            {
-              accessorKey: 'name',
-              header: {
-                name: '이름',
-              },
+          {
+            accessorKey: 'type',
+            header: {
+              name: '유형',
             },
-            {
-              accessorKey: 'type',
-              header: {
-                name: '유형',
-              },
+          },
+          {
+            accessorKey: 'startDateTime',
+            header: {
+              name: '시작일',
             },
-            {
-              accessorKey: 'startDateTime',
-              header: {
-                name: '시작일',
-              },
-              cell: {
-                type: 'dateTime',
-              },
+            cell: {
+              type: 'dateTime',
             },
-            {
-              accessorKey: 'endDateTime',
-              header: {
-                name: '종료일',
-              },
-              cell: {
-                type: 'dateTime',
-              },
+          },
+          {
+            accessorKey: 'endDateTime',
+            header: {
+              name: '종료일',
             },
-          ],
-        },
+            cell: {
+              type: 'dateTime',
+            },
+          },
+        ],
       },
     },
   },

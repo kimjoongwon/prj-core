@@ -1,88 +1,41 @@
+import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
+import { TenancyColumns } from '../columns/tenancy.columns';
+import { CategoryColumns } from '../columns/category.columns';
 
-export const categoriesPage: PageBuilder = {
-  name: '목록',
-  type: 'Page',
-  dataGrid: {
-    table: {
-      query: {
-        name: 'useGetCategoriesByQuery',
-        params: {
-          serviceId: '',
-          type: 'ROOT',
+@Injectable()
+export class CategoriesPage {
+  constructor(private readonly categoryColumns: CategoryColumns) {}
+
+  getMeta(): PageBuilder {
+    const page: PageBuilder = {
+      name: '목록',
+      type: 'Page',
+      dataGrid: {
+        table: {
+          query: {
+            name: 'useGetCategoriesByQuery',
+            params: {
+              serviceId: '',
+              type: 'ROOT',
+            },
+            mapper: {
+              serviceId: 'serviceId',
+            },
+          },
+          columns: this.categoryColumns.getMeta(),
         },
-        mapper: {
-          serviceId: 'serviceId',
-        },
+        buttons: [
+          {
+            name: '생성',
+            navigator: {
+              pathname: 'categories/new/edit',
+            },
+          },
+        ],
       },
-      columns: [
-        {
-          accessorKey: 'name',
-          header: {
-            name: '이름',
-            expandable: true,
-          },
-          cell: {
-            expandable: true,
-          },
-        },
-        {
-          id: 'action',
-          header: {
-            name: '액션',
-          },
-          cell: {
-            buttons: [
-              {
-                color: 'primary',
-                name: '상세',
-                navigator: {
-                  pathname: ':categoryId',
-                  mapper: {
-                    id: 'categoryId',
-                  },
-                },
-              },
-              {
-                color: 'primary',
-                name: '추가',
-                navigator: {
-                  pathname: ':parentId/add',
-                  mapper: {
-                    id: 'parentId',
-                  },
-                },
-              },
-              {
-                color: 'warning',
-                name: '수정',
-                navigator: {
-                  pathname: ':categoryId/edit',
-                  mapper: {
-                    id: 'categoryId',
-                  },
-                },
-              },
-              {
-                color: 'danger',
-                name: '삭제',
-                mutation: {
-                  name: 'deleteCategory',
-                  idMapper: 'id',
-                },
-              },
-            ],
-          },
-        },
-      ],
-    },
-    buttons: [
-      {
-        name: '생성',
-        navigator: {
-          pathname: 'new/edit',
-        },
-      },
-    ],
-  },
-};
+    };
+
+    return page;
+  }
+}

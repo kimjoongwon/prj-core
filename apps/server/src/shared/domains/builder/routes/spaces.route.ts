@@ -7,52 +7,48 @@ export class SpacesRoute {
     return {
       name: '목록',
       pathname: 'spaces',
-      layout: {
-        name: '자원',
-        type: 'DataGrid',
-        page: {
-          name: '목록',
-          dataGrid: {
-            buttons: [
+      page: {
+        name: '목록',
+        dataGrid: {
+          buttons: [
+            {
+              name: '생성',
+              navigator: {
+                pathname: 'new/edit',
+              },
+            },
+          ],
+          table: {
+            query: {
+              name: 'useGetSpacesByQuery',
+              params: {},
+            },
+            columns: [
               {
-                name: '생성',
-                navigator: {
-                  pathname: 'new/edit',
+                accessorKey: 'name',
+                header: {
+                  name: '이름',
+                },
+              },
+              {
+                id: 'action',
+                header: {
+                  name: '액션',
+                },
+                cell: {
+                  buttons: [
+                    {
+                      color: 'danger',
+                      name: '삭제',
+                      mutation: {
+                        name: 'deleteSpace',
+                        idMapper: 'id',
+                      },
+                    },
+                  ],
                 },
               },
             ],
-            table: {
-              query: {
-                name: 'useGetSpacesByQuery',
-                params: {},
-              },
-              columns: [
-                {
-                  accessorKey: 'name',
-                  header: {
-                    name: '이름',
-                  },
-                },
-                {
-                  id: 'action',
-                  header: {
-                    name: '액션',
-                  },
-                  cell: {
-                    buttons: [
-                      {
-                        color: 'danger',
-                        name: '삭제',
-                        mutation: {
-                          name: 'deleteSpace',
-                          idMapper: 'id',
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
           },
         },
       },

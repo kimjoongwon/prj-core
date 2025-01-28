@@ -18,54 +18,55 @@ export class RoleNewEditRoute {
     return {
       name: '그룹새편집',
       pathname: 'new/edit',
-      layout: {
+      page: {
         name: '새편집',
-        type: 'Modal',
-        page: {
-          name: '새편집',
-          state: {
-            form: {
-              data: {},
-            },
-          },
+        state: {
           form: {
-            button: {
-              name: '저장',
-              mutation: {
-                name: 'createRole',
-                mapper: {
-                  serviceId: 'serviceId',
-                },
-              },
-              navigator: {
-                pathname: '..',
+            data: {},
+          },
+        },
+        form: {
+          button: {
+            name: '저장',
+            mutation: {
+              name: 'createRole',
+              mapper: {
+                serviceId: 'serviceId',
               },
             },
-            sections: [
-              {
-                name: '기본정보',
-                components: [
-                  {
-                    type: 'Select',
-                    path: 'name',
-                    props: {
-                      label: '역할 이름',
-                      options: roleOptions,
-                      placeholder: '역할 이름을 입력해주세요.',
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'categoryId',
-                    props: {
-                      label: '카테고리',
-                      options,
-                    },
-                  },
-                ],
-              },
-            ],
+            navigator: {
+              pathname: '..',
+            },
           },
+          sections: [
+            {
+              name: '기본정보',
+              stacks: [
+                {
+                  type: 'VStack',
+                  inputs: [
+                    {
+                      type: 'Select',
+                      path: 'name',
+                      props: {
+                        label: '역할 이름',
+                        options: roleOptions,
+                        placeholder: '역할 이름을 입력해주세요.',
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'categoryId',
+                      props: {
+                        label: '카테고리',
+                        options,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       },
     };

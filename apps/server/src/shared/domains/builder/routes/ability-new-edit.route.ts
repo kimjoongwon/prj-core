@@ -59,79 +59,80 @@ export class AbilityNewEditRoute {
     return {
       name: '새편집',
       pathname: 'new/edit',
-      layout: {
+      page: {
         name: '새편집',
-        type: 'Modal',
-        page: {
-          name: '새편집',
-          state: {
-            form: {
-              data: {},
-            },
-          },
+        state: {
           form: {
-            button: {
-              name: '저장',
-              mutation: {
-                name: 'createAbility',
-              },
-              navigator: {
-                pathname: '..',
-              },
-            },
-            sections: [
-              {
-                name: '기본정보',
-                components: [
-                  {
-                    type: 'Input',
-                    path: 'name',
-                    props: {
-                      fullWidth: true,
-                      label: '능력 이름',
-                      placeholder: '능력 이름을 입력해주세요.',
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'roleId',
-                    props: {
-                      fullWidth: true,
-                      label: '역할',
-                      options: roleOptions,
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'type',
-                    props: {
-                      fullWidth: true,
-                      label: '능력 타입',
-                      options: abilityTypeOptions,
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'actionId',
-                    props: {
-                      fullWidth: true,
-                      label: '액션',
-                      options: actionOptions,
-                    },
-                  },
-                  {
-                    type: 'Select',
-                    path: 'subjectId',
-                    props: {
-                      fullWidth: true,
-                      label: '과목',
-                      options: subjectOptions,
-                    },
-                  },
-                ],
-              },
-            ],
+            data: {},
           },
+        },
+        form: {
+          button: {
+            name: '저장',
+            mutation: {
+              name: 'createAbility',
+            },
+            navigator: {
+              pathname: '..',
+            },
+          },
+          sections: [
+            {
+              name: '기본정보',
+              stacks: [
+                {
+                  type: 'VStack',
+                  inputs: [
+                    {
+                      type: 'Input',
+                      path: 'name',
+                      props: {
+                        fullWidth: true,
+                        label: '능력 이름',
+                        placeholder: '능력 이름을 입력해주세요.',
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'roleId',
+                      props: {
+                        fullWidth: true,
+                        label: '역할',
+                        options: roleOptions,
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'type',
+                      props: {
+                        fullWidth: true,
+                        label: '능력 타입',
+                        options: abilityTypeOptions,
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'actionId',
+                      props: {
+                        fullWidth: true,
+                        label: '액션',
+                        options: actionOptions,
+                      },
+                    },
+                    {
+                      type: 'Select',
+                      path: 'subjectId',
+                      props: {
+                        fullWidth: true,
+                        label: '과목',
+                        options: subjectOptions,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       },
     };

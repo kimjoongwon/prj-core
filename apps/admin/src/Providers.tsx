@@ -13,8 +13,7 @@ export const Providers = (props: ProvidersProps) => {
   const { data: getAppBuilderResponse, isLoading } = useGetAppBuilderSuspense();
   const appBuilder = (
     getAppBuilderResponse as {
-      data: AppBuilder;
-    }
+      data: AppBuilder; }
   )?.data;
 
   const navigation = new Navigation(appBuilder.routes);

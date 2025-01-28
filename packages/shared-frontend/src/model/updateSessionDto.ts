@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RecurringDayOfTheWeek } from './recurringDayOfTheWeek';
+import type { RecurringDayOfWeek } from './recurringDayOfWeek';
 import type { RepeatCycleTypes } from './repeatCycleTypes';
 import type { SessionTypes } from './sessionTypes';
 
@@ -13,7 +13,7 @@ export interface UpdateSessionDto {
   id?: string;
   name?: string;
   /** @nullable */
-  recurringDayOfWeek?: RecurringDayOfTheWeek;
+  recurringDayOfWeek?: RecurringDayOfWeek;
   /** @nullable */
   recurringMonth?: number | null;
   /** @nullable */

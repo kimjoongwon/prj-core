@@ -9,13 +9,9 @@ export class RoutineNewEditBuilder {
     return {
       name: '루틴',
       pathname: 'new/edit',
-      layout: {
-        name: '자원',
-        type: 'Modal',
-        page: {
-          name: '목록',
-          type: 'Page',
-        },
+      page: {
+        name: '목록',
+        type: 'Page',
       },
     };
   }
@@ -31,17 +27,19 @@ export class RoutineNewEditBuilder {
       sections: [
         {
           name: '기본정보',
-          components: [
+          stacks: [
             {
-              type: 'Input',
-              path: 'name',
-              props: {
-                label: '루틴 이름',
-                placeholder: '루틴 이름을 입력해주세요.',
-              },
-            },
-            {
-              type: '',
+              type: 'VStack',
+              inputs: [
+                {
+                  type: 'Input',
+                  path: 'name',
+                  props: {
+                    label: '루틴 이름',
+                    placeholder: '루틴 이름을 입력해주세요.',
+                  },
+                },
+              ],
             },
           ],
         },

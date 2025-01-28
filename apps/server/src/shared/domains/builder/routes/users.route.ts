@@ -3,25 +3,21 @@ import { RouteBuilder } from '@shared/types';
 export const usersRoute: RouteBuilder = {
   name: '목록',
   pathname: 'users',
-  layout: {
-    name: '자원',
-    type: 'DataGrid',
-    page: {
-      name: '목록',
-      dataGrid: {
-        table: {
-          query: {
-            name: `useGetUsersByQuery`,
-          },
-          columns: [
-            {
-              accessorKey: 'name',
-              header: {
-                name: '이름',
-              },
-            },
-          ],
+  page: {
+    name: '목록',
+    dataGrid: {
+      table: {
+        query: {
+          name: `useGetUsersByQuery`,
         },
+        columns: [
+          {
+            accessorKey: 'name',
+            header: {
+              name: '이름',
+            },
+          },
+        ],
       },
     },
   },

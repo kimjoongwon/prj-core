@@ -1,24 +1,20 @@
 import { PageBuilder } from '@shared/types';
+import { TenancyTable } from '../tables/tenancy.table';
+import { Injectable } from '@nestjs/common';
 
-export const spacesPage: PageBuilder = {
-  name: '공간',
-  type: 'Page',
-  dataGrid: {
-    table: {
-      query: {
-        name: 'useGetSpacesByQuery',
-        mapper: {
-          serviceId: 'serviceId',
-        },
+@Injectable()
+export class TenanciesPage {
+  constructor(private readonly tenancyTable: TenancyTable) {}
+  getMeta(): PageBuilder {
+    const table = this.tenancyTable.getMeta();
+    const page: PageBuilder = {
+      type: 'Page',
+      name: '공간',
+      dataGrid: {
+        table,
       },
-      columns: [
-        {
-          accessorKey: 'name',
-          header: {
-            name: '이름',
-          },
-        },
-      ],
-    },
-  },
-};
+    };
+
+    return page;
+  }
+}

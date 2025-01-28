@@ -19,6 +19,8 @@ import { TimelinesEndpointModule } from './timelines/timelines-endpoint.module';
 import { SessionsEndpointModule } from './sessions/sessions-endpoint.module';
 import { RoutinesEndpointModule } from './routines/routines-endpoint.module';
 import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
+import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
+import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
     SessionsEndpointModule,
     ProgramsEndpointModule,
     RoutinesEndpointModule,
+    AdminAuthRouteEndpointModule,
+    AdminMainRouteEndpointModule,
     RouterModule.register([
       {
         path: 'api',
@@ -48,6 +52,14 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
           {
             path: 'v1',
             children: [
+              {
+                path: 'admin/auth',
+                module: AdminAuthRouteEndpointModule,
+              },
+              {
+                path: 'admin/main',
+                module: AdminMainRouteEndpointModule,
+              },
               {
                 path: 'associations',
                 module: AssociationsEndpointModule,

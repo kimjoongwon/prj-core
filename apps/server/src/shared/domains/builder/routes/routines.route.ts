@@ -8,14 +8,10 @@ export class RoutinesBuilder {
     return {
       name: '루틴',
       pathname: 'routines',
-      layout: {
-        name: '자원',
-        type: 'DataGrid',
-        page: {
-          name: '목록',
-          type: 'Page',
-          dataGrid: this.getDataGrid(),
-        },
+      page: {
+        name: '목록',
+        type: 'Page',
+        dataGrid: this.getDataGrid(),
       },
     };
   }
