@@ -109,8 +109,7 @@ model Profile {
   nickname String
   userId   String
 
-  user  User   @relation(fields: [userId], references: [id])
-  depot Depot? @relation(fields: [depotId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model User {
@@ -429,17 +428,12 @@ model Content {
 }
 
 model Depot {
-  id        String     @id @default(uuid())
-  seq       Int        @unique @default(autoincrement())
-  type      DepotTypes @default(LEAF)
-  parentId  String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?  @db.Timestamptz(6)
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
   files     File[]
-  children  Depot[]    @relation("DepotToDepot")
-  parent    Depot?     @relation("DepotToDepot", fields: [parentId], references: [id])
-  profiles  Profile[]
 }
 
 model File {
@@ -579,7 +573,8 @@ enum QnaStatus {
 enum TextTypes {
   HTML
   MARKDOWN
-  STRING
+  TEXT_AREA
+  NORMAL
 }
 
 enum CategoryTypes {

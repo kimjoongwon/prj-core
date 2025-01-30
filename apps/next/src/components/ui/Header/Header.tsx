@@ -2,9 +2,9 @@
 
 import { HStack, Button, AppBar } from '@shared/frontend';
 import { useStore } from '@shared/stores';
-import { action, toJS } from 'mobx';
+import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const Header = observer(() => {
   const router = useRouter();

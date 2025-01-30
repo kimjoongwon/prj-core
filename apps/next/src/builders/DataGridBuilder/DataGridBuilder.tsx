@@ -1,17 +1,16 @@
+import { ColumnDef } from '@tanstack/react-table';
+import { ButtonGroup, Pagination, Spinner } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { v4 } from 'uuid';
+import { toJS } from 'mobx';
+import { parseAsInteger, useQueryState } from 'nuqs';
 import { DataGrid, HStack } from '@shared/frontend';
 import { DataGridBuilder as DataGridBuilderInterface } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
-import { ColumnDef } from '@tanstack/react-table';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { ButtonGroup, Pagination, Spinner } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
 import { useGetTableQuery } from '../../hooks/useGetTableQuery';
-import { v4 } from 'uuid';
-import { toJS } from 'mobx';
 import { usePageState } from '../Page/PageBuilder';
-import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface DataGridBuilderProps {
   dataGridBuilder: DataGridBuilderInterface;
@@ -19,11 +18,11 @@ interface DataGridBuilderProps {
 
 export const DataGridBuilder = observer(
   ({ dataGridBuilder }: DataGridBuilderProps) => {
-    const table = dataGridBuilder?.table!;
+    const table = dataGridBuilder?.table;
     const pageState = usePageState();
     const { data, isLoading, meta } = useGetTableQuery(table);
-    // const urlSearchParams = new URLSearchParams(table?.query?.params);
-    const searchParams = useSearchParams();
+    const [skip, setSkip] = useQueryState('skip', parseAsInteger);
+    const [take, setTake] = useQueryState('take', parseAsInteger);
 
     const columns = table?.columns?.map(column => {
       return {
@@ -40,9 +39,7 @@ export const DataGridBuilder = observer(
       return <Spinner />;
     }
 
-    const skip = Number(searchParams.get('skip'));
-    const take = Number(searchParams.get('take'));
-    const currentPage = Math.floor(skip / take) + 1;
+    const currentPage = Math.floor((skip || 0) / (take || 10)) + 1;
 
     return (
       <>
@@ -57,20 +54,19 @@ export const DataGridBuilder = observer(
           state={pageState?.dataGrid}
           data={toJS(data || [])}
           columns={toJS(columns) || []}
-          selectionMode={table.selectionMode}
+          selectionMode={table?.selectionMode}
         />
-        {/* {table?.query?.params?.take && (
+        {table?.query?.params?.take && (
           <Pagination
             total={meta?.pageCount ?? 1}
             initialPage={currentPage}
             page={currentPage}
-            onChange={page => {
-              searchParams.set('take', take.toString());
-              searchParams.set('skip', ((page - 1) * take).toString());
-              setSearchParams(searchParams);
+            onChange={async page => {
+              setSkip((page - 1) * (take || 10));
+              setTake(take || 10);
             }}
           />
-        )} */}
+        )}
       </>
     );
   },

@@ -6,7 +6,13 @@ import {
   CategoryRouteModule,
   GroupEditRouteModule,
   GroupsRouteModule,
+  SessionEditRouteModule,
+  SessionsRouteModule,
   TenanciesRouteModule,
+  TimelineEditRouteModule,
+  TimelinesRouteModule,
+  RoutinesRouteModule,
+  RoutineEditRouteModule,
 } from '@shared';
 
 @Module({
@@ -17,6 +23,12 @@ import {
     CategoryRouteModule,
     GroupsRouteModule,
     GroupEditRouteModule,
+    TimelinesRouteModule,
+    TimelineEditRouteModule,
+    SessionsRouteModule,
+    SessionEditRouteModule,
+    RoutinesRouteModule,
+    RoutineEditRouteModule,
   ],
   controllers: [AdminMainRouteController],
 })

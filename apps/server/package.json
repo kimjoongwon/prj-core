@@ -18,9 +18,11 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push",
-    "db:prod:generate": "dotenv -e .env.prod npx prisma db pull"
+    "db:prod:generate": "dotenv -e .env.prod npx prisma db pull",
+    "clean": "rm -rf dist && rm -rf node_modules"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.738.0",
     "@casl/ability": "^6.7.1",
     "@casl/prisma": "^1.4.1",
     "@nestjs-modules/mailer": "^2.0.2",
@@ -79,6 +81,7 @@
     "@swc/core": "^1.3.75",
     "@types/cookie-parser": "^1.4.7",
     "@types/lodash": "^4.17.14",
+    "@types/multer": "^1.4.12",
     "@types/mustache": "^4.2.5",
     "@types/node": "20.14.12",
     "@types/nodemailer": "^6.4.16",

@@ -48,7 +48,8 @@ export interface Alert {
 }
 
 export interface Navigator {
-  pathname: string;
+  type?: 'push' | 'replace' | 'back';
+  pathname?: string;
   mapper?: any;
 }
 
@@ -100,6 +101,7 @@ export interface Query {
 
 export interface Mutation {
   name: string;
+  invalidationKey?: string;
   mapper?: any;
   idMapper?: string;
 }
@@ -125,7 +127,7 @@ export interface TabBuilder {
 export interface DataGridBuilder {
   buttons?: ButtonBuilder[];
   filter?: FilterBuilder;
-  table?: TableBuilder;
+  table: TableBuilder;
 }
 
 export interface PageBuilder {

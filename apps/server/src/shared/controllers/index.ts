@@ -12,3 +12,4 @@ export * from './sessions.controller';
 export * from './timelines.controller';
 export * from './routines.controller';
 export * from './programs.controller';
+export * from './depots.controller';

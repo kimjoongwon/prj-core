@@ -14,6 +14,7 @@ export interface TimeInputProps<T> extends HeroUiTimeInputProps, MobxProps<T> {}
 export const TimeInput = observer(
   <T extends object>(props: TimeInputProps<T>) => {
     const { state, path, ...rest } = props;
+    // @ts-ignore
     const defaultValue = (get(state, path) ||
       new Date().toISOString()) as string;
 
@@ -36,7 +37,9 @@ export const TimeInput = observer(
         {...rest}
         hideTimeZone
         value={localState.value}
+        // @ts-ignore
         onChange={action(value => {
+          // @ts-ignore
           localState.value = value as unknown as ZonedDateTime;
         })}
       />

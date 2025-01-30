@@ -3,7 +3,7 @@ import {
   Select as NextSelect,
   SelectItem,
   SelectProps as NextUISelectProps,
-} from "@heroui/react";
+} from '@heroui/react';
 import { MobxProps } from '../types';
 import { cloneDeep, get } from 'lodash-es';
 import { useMobxHookForm } from '../../../hooks';

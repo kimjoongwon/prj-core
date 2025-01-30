@@ -2,7 +2,6 @@ import { APIManager } from '@shared/frontend';
 import { TableBuilder } from '@shared/types';
 import { get, isEmpty } from 'lodash-es';
 import { useParams, useSearchParams } from 'next/navigation';
-// import { useParams, useSearchParams } from 'react-router-dom';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   const params = useParams();
@@ -52,16 +51,13 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   console.log('apiArgs', apiArgs);
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
-    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+    ? // @ts-ignore
       APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
-  console.log('getQuery', getQuery);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+
+  // @ts-ignore
   const data = getQuery?.data?.data;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-ignore
   const pageMeta = getQuery?.data?.meta;
   const isLoading = getQuery?.isLoading;
 

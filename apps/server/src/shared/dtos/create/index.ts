@@ -15,3 +15,4 @@ export * from './create-timeline.dto';
 export * from './create-routine.dto';
 export * from './create-program.dto';
 export * from './create-content.dto';
+export * from './create-depot.dto';

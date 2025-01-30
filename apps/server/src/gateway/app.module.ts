@@ -21,6 +21,7 @@ import { RoutinesEndpointModule } from './routines/routines-endpoint.module';
 import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
+import { DepotsEndpointModule } from './depots/depots-endpoint.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
     SessionsEndpointModule,
     ProgramsEndpointModule,
     RoutinesEndpointModule,
+    DepotsEndpointModule,
     AdminAuthRouteEndpointModule,
     AdminMainRouteEndpointModule,
     RouterModule.register([
@@ -123,6 +125,10 @@ import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
               {
                 path: 'routines',
                 module: RoutinesEndpointModule,
+              },
+              {
+                path: 'depots',
+                module: DepotsEndpointModule,
               },
             ],
           },

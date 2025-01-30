@@ -1,9 +1,8 @@
-import { CellBuilderProps } from '@shared/types';
-import { ButtonBuilder } from '../ButtonBuilder';
-import { Tooltip } from '@heroui/react';
 import { v4 } from 'uuid';
 import dayjs from 'dayjs';
 import { Delete, Edit, List, Plus } from 'lucide-react';
+import { CellBuilderProps } from '@shared/types';
+import { ButtonBuilder } from '../ButtonBuilder';
 
 export const CellBuilder = ({
   row,
@@ -78,7 +77,15 @@ export const CellBuilder = ({
             );
           }
 
-          return null;
+          return (
+            <ButtonBuilder
+              size="sm"
+              key={v4()}
+              variant="flat"
+              buttonBuilder={button}
+              row={row.original}
+            />
+          );
         })}
       </div>
     );

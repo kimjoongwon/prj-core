@@ -10,10 +10,5 @@ const Util = {
   ValidationUtil,
 };
 
-export {
-  Util as default,
-  DateTimeUtil,
-  PathUtil,
-  PaginationUtil,
-  ValidationUtil,
-};
+export default Util;
+export { DateTimeUtil, PathUtil, PaginationUtil, ValidationUtil };

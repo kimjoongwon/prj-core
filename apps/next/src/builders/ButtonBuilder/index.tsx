@@ -4,6 +4,7 @@ import {
   Button as BaseButton,
   APIManager,
   ButtonViewProps,
+  getQueryClient,
 } from '@shared/frontend';
 import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { PathUtil } from '@shared/utils';
@@ -24,13 +25,12 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   const state = usePageState();
   const params = useParams();
   const router = useRouter();
-  // const queryClient = useQueryClient();
 
   // pathParam(serviceId) is the serviceId from the URL
   // row is the data from the row of the table
   // form is the form data
   // dataGrid is the data from the table
-  const makeContext = (): any => {
+  const makeContext = () => {
     const clonedState = cloneDeep(state);
     return {
       ...row,
@@ -71,15 +71,15 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
     try {
       if (button.mutation?.name) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
+        // @ts-ignore
         await APIManager[button.mutation.name].apply(null, args);
-        // queryClient?.refetchQueries();
+        getQueryClient().invalidateQueries({
+          queryKey: [button.mutation?.invalidationKey || ''],
+        });
       }
 
       if (button.alert) {
-        console.log('ha');
-        // alert(button.alert?.message);
+        console.log('success');
       }
 
       if (navigator) {
@@ -93,23 +93,20 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
             };
           });
         }
-
-        const pathname = PathUtil.getUrlWithParamsAndQueryString(
-          navigator.pathname,
-          params,
-        );
-
-        if (pathname === '..') {
+        if (navigator.type === 'back') {
           router.back();
           return;
         }
+        const pathname = PathUtil.getUrlWithParamsAndQueryString(
+          navigator?.pathname || '',
+          params,
+        );
 
         router.push(pathname);
       }
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         console.log('error', error);
-        // alert(error.response?.data?.message || '');
       }
     }
   };

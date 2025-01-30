@@ -20,3 +20,5 @@ export * from './session.dto';
 export * from './timeline.dto';
 export * from './routine.dto';
 export * from './program.dto';
+export * from './file.dto';
+export * from './depot.dto';

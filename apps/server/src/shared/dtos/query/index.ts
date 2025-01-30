@@ -15,3 +15,4 @@ export * from './session-query.dto';
 export * from './timeline-query.dto';
 export * from './routine-query.dto';
 export * from './program-query.dto';
+export * from './depot-query.dto';

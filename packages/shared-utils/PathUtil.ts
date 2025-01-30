@@ -30,6 +30,9 @@ export class PathUtil {
     pathParamKeys: string[];
     pathParams: object;
   }) {
-    return Object.fromEntries(pathParamKeys.map(key => [key, pathParams[key]]));
+    return Object.fromEntries(
+      // @ts-ignore
+      pathParamKeys.map(key => [key, pathParams?.[key]]),
+    );
   }
 }

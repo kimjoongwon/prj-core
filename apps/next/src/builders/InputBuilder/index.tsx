@@ -14,9 +14,7 @@ interface InputBuilderProps {
 export const InputBuilder = observer((props: InputBuilderProps) => {
   const state = usePageState();
   const { inputBuilder } = props;
-  console.log({ ...state });
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-ignore
   const Component = ComponentManager[inputBuilder.type];
   const callbacks = inputBuilder.validation?.timings?.map(timing => {
     return {
@@ -59,8 +57,7 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
       return null;
     }
   }
-  console.log('inputBuilder', inputBuilder);
-  console.log('state', state);
+
   return (
     <Component
       {...inputBuilder.props}

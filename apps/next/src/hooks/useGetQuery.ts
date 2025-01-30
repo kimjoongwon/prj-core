@@ -4,7 +4,7 @@ import { get, isEmpty } from 'lodash-es';
 import { useParams } from 'next/navigation';
 
 export const useGetQuery = (query?: Query) => {
-  let params = useParams();
+  const params = useParams();
   const apiArgs: unknown[] = [];
 
   const context = {
@@ -48,12 +48,10 @@ export const useGetQuery = (query?: Query) => {
 
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
-    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+    ? // @ts-ignore
       APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-ignore
   const data = getQuery?.data?.data;
   const isLoading = getQuery?.isLoading;
   const isFetchedAfterMount = getQuery?.isFetchedAfterMount;

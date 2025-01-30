@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import path from 'path';
 import { ContextProvider } from '../../providers';
-import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class BuilderService {
@@ -10,10 +8,8 @@ export class BuilderService {
   async getRoute() {
     const services = await this.prisma.service.findMany();
     const tenancyId = ContextProvider.getTenantId();
-    const userService = services.find((service) => service.name === $Enums.ServiceNames.USER);
-    const spaceService = services.find((service) => service.name === $Enums.ServiceNames.SPACE);
 
-    return [
+    const routes = [
       {
         name: 'admin',
         pathname: '/admin',
@@ -29,10 +25,8 @@ export class BuilderService {
                   {
                     name: 'services',
                     pathname: `/admin/main/tenancies/:tenancyId/services`,
-                    children: services.map((service) => ({
-                      name: service.name,
-                      pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}`,
-                      children: [
+                    children: services.map((service) => {
+                      const serviceChildren = [
                         {
                           name: '카테고리',
                           pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/categories`,
@@ -53,8 +47,46 @@ export class BuilderService {
                             },
                           ],
                         },
-                      ],
-                    })),
+                      ];
+
+                      if (service.name === 'TIMELINE') {
+                        serviceChildren.unshift({
+                          name: '목록',
+                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/timelines`,
+                          children: [],
+                        });
+
+                        serviceChildren.push({
+                          name: '세션',
+                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions`,
+                          children: [
+                            {
+                              name: '편집',
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions/new/edit`,
+                            },
+                          ],
+                        });
+                      }
+
+                      if (service.name === 'ROUTINE') {
+                        serviceChildren.unshift({
+                          name: '목록',
+                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines`,
+                          children: [
+                            {
+                              name: '생성',
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/new/edit`,
+                            },
+                          ],
+                        });
+                      }
+
+                      return {
+                        name: service.name,
+                        pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}`,
+                        children: serviceChildren,
+                      };
+                    }),
                   },
                 ],
               },
@@ -83,5 +115,7 @@ export class BuilderService {
         ],
       },
     ];
+
+    return routes;
   }
 }

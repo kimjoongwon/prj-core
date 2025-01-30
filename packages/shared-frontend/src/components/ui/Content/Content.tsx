@@ -1,14 +1,20 @@
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
-import { Input } from '../Input';
+import { Input } from '../Input/Input';
 import { Select } from '../Select/Select';
-import { FileUploader } from '../FileUploader/FileUploader';
-import { Depot } from '../Depot/Depot';
+import { Editor } from '../Editor';
+
+export enum TextTypes {
+  MARKDOWN = 'MARKDOWN',
+  HTML = 'HTML',
+  NORMAL = 'NORMAL',
+}
 
 interface State {
   title: string;
   description: string;
-  type: string;
+  type: TextTypes;
   depotId: string;
+  text: string;
 }
 
 interface ContentProps {
@@ -25,18 +31,40 @@ export const Content = (props: ContentProps) => {
     },
   } = props;
 
+  const textTypeOptions = [
+    { text: '마크다운', value: TextTypes.MARKDOWN },
+    { text: 'HTML', value: TextTypes.HTML },
+    { text: '일반', value: TextTypes.NORMAL },
+  ];
+
   return (
     <Card>
       <CardHeader>
-        <Input state={state} path="title" />
+        <Input
+          label="제목"
+          placeholder="제목을 입력하세요."
+          state={state}
+          path="title"
+        />
       </CardHeader>
       <CardBody>
-        <Select state={state} path="type" />
-        <Input state={state} path="description" />
+        <Input
+          state={state}
+          path="description"
+          label="설명"
+          placeholder="설명을 입력하세요."
+        />
+        {state.type === TextTypes.NORMAL && (
+          <Input
+            label="내용"
+            placeholder="내용을 입력하세요."
+            state={state}
+            path="text"
+          />
+        )}
+        {state.type === TextTypes.HTML && <Editor state={state} path="text" />}
       </CardBody>
-      <CardFooter>
-        <Depot state={state} />
-      </CardFooter>
+      <CardFooter></CardFooter>
     </Card>
   );
 };

@@ -14,6 +14,7 @@ interface DatePickerProps<T> extends HeroUiDatePickerProps, MobxProps<T> {}
 export const DatePicker = observer(
   <T extends object>(props: DatePickerProps<T>) => {
     const { state, path = '', ...rest } = props;
+    // @ts-ignore
     const defaultValue = (get(state, path) ||
       new Date().toISOString()) as string;
 

@@ -66,7 +66,6 @@ AXIOS_INSTANCE.interceptors.request.use(
 export const ReactQueryProvider = (props: InitContainerProps) => {
   const { children } = props;
   const queryClient = getQueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
       {children}

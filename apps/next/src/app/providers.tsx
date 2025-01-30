@@ -8,24 +8,24 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 
 interface ProvidersProps {
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
-let store: Store | null = null;
+let store: Store;
 export const Providers = observer((props: ProvidersProps) => {
   const { children } = props;
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { data: response } = useGetAppBuilder();
-  const routes = (response as any)?.data as RouteBuilder[];
+  const routes = (response as { data: RouteBuilder })?.data as RouteBuilder[];
 
   useEffect(() => {
-    if (response) {
+    if (routes) {
       const navigation = new Navigation(routes);
       store = new Store(navigation);
       setIsInitialized(true);
     }
-  }, [response]);
+  }, [routes]);
 
   if (!isInitialized) {
     return null;
@@ -33,7 +33,7 @@ export const Providers = observer((props: ProvidersProps) => {
 
   return (
     <HeroUIProvider>
-      <StoreProvider value={store!}>{children}</StoreProvider>
+      <StoreProvider value={store}>{children}</StoreProvider>
     </HeroUIProvider>
   );
 });

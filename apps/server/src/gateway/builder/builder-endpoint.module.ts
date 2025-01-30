@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { BuilderService } from '@shared';
 import { BuilderEndpoint } from './builder.endpoint';
-import { BuilderModule } from '../../shared/domains/builder/builder.module';
+import { BuilderService } from '@shared';
 
 @Module({
-  imports: [BuilderModule],
+  providers: [BuilderService],
   controllers: [BuilderEndpoint],
 })
 export class BuilderEndpointModule {}

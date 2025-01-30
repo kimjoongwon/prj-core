@@ -7,11 +7,15 @@ import { v4 } from 'uuid';
 export const BottomTab = () => {
   const router = useRouter();
   const { data: response } = useGetAdminMainServicesRoute();
-  const serviceRoutes = response?.data as any;
+  const serviceRoutes = response?.data as {
+    name: string;
+    pathname: string;
+    active: boolean;
+  }[];
 
   return (
     <HStack className="justify-center">
-      {serviceRoutes?.map((route: any) => {
+      {serviceRoutes?.map(route => {
         return (
           <Button
             key={v4()}

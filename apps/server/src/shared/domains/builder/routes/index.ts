@@ -5,3 +5,5 @@ export * from './category-edit.route';
 export * from './groups.route';
 export * from './group-edit.route';
 export * from './group.route';
+export * from './routine-edit.route';
+export * from './routines.route';

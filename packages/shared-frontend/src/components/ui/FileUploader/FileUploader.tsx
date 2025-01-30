@@ -202,15 +202,6 @@ export function FileUploader({
             </SortableContext>
           </DndContext>
         </div>
-
-        <div className="space-y-2">
-          <Button className="w-full" size="md" color="primary">
-            저장
-          </Button>
-          <Button variant="bordered" className="w-full" size="md">
-            취소
-          </Button>
-        </div>
       </div>
     </Card>
   );

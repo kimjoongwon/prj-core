@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuthEndpoint } from './auth.endpoint';
-import { AuthModule } from '@shared';
+import { AuthService, LocalStrategy, PasswordService, TokenService, UsersModule } from '@shared';
 
 @Module({
-  imports: [AuthModule],
+  imports: [UsersModule],
+  providers: [AuthService, PasswordService, TokenService, LocalStrategy],
   controllers: [AuthEndpoint],
 })
 export class AuthEndpointModule {}

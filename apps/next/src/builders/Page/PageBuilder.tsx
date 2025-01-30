@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext } from 'react';
+import React, { createContext, Suspense } from 'react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { InputBuilder } from '../InputBuilder';
@@ -10,14 +10,15 @@ import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { HStack, Text, VStack } from '@shared/frontend';
 import { v4 } from 'uuid';
+import { Skeleton } from '@heroui/react';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
 }
 
-interface PageProviderProps {
+interface PageProviderProps<T> {
   state: PageBuilderInterface['state'];
-  data: any;
+  data: T;
   isFetchedAfterMount?: boolean;
   children: React.ReactNode;
 }
@@ -26,25 +27,26 @@ const PageContext = createContext<PageBuilderInterface['state']>(
   {} as PageBuilderInterface['state'],
 );
 
-const PageProvder = observer((props: PageProviderProps) => {
-  console.log('props.state', props.state);
-  const { data } = props;
-  const pageState = cloneDeep(props.state) || {};
-  if (data && pageState) {
-    pageState.form = {
-      ...pageState.form,
-      data,
-    };
-  }
+const PageProvder = observer(
+  <T extends object>(props: PageProviderProps<T>) => {
+    const { data } = props;
+    const pageState = cloneDeep(props.state) || {};
+    if (data && pageState) {
+      pageState.form = {
+        ...pageState.form,
+        data,
+      };
+    }
 
-  const state = useLocalObservable(() => pageState);
+    const state = useLocalObservable(() => pageState);
 
-  console.log('state', state);
-
-  return (
-    <PageContext.Provider value={state}>{props.children}</PageContext.Provider>
-  );
-});
+    return (
+      <PageContext.Provider value={state}>
+        {props.children}
+      </PageContext.Provider>
+    );
+  },
+);
 
 export const usePageState = (): PageBuilderInterface['state'] => {
   const state = React.useContext(PageContext);
@@ -57,13 +59,12 @@ export const usePageState = (): PageBuilderInterface['state'] => {
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
   const query = pageBuilder?.query;
-  console.log('pageBuilder', pageBuilder);
   const { data } = useGetQuery(query);
 
   return (
     <PageProvder state={pageBuilder?.state} data={data}>
       {pageBuilder?.form && (
-        <Form formBuilder={pageBuilder?.form!}>
+        <Form formBuilder={pageBuilder?.form}>
           {pageBuilder?.form?.sections?.map(section => {
             return (
               <div
@@ -71,26 +72,30 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                 className="border-1 p-4 rounded-xl space-y-4 flex flex-1 flex-col w-full"
               >
                 <Text variant="h5">{section.name}</Text>
-                {section.stacks?.map(stack => {
-                  if (stack.type === 'VStack') {
+                <Suspense fallback={<Skeleton />}>
+                  {section.stacks?.map(stack => {
+                    if (stack.type === 'VStack') {
+                      return (
+                        <VStack key={v4()} className="space-y-2">
+                          {stack.inputs?.map(input => {
+                            return (
+                              <InputBuilder key={v4()} inputBuilder={input} />
+                            );
+                          })}
+                        </VStack>
+                      );
+                    }
                     return (
-                      <VStack key={v4()} className="space-y-2">
+                      <HStack key={v4()} className="space-y-2">
                         {stack.inputs?.map(input => {
                           return (
                             <InputBuilder key={v4()} inputBuilder={input} />
                           );
                         })}
-                      </VStack>
+                      </HStack>
                     );
-                  }
-                  return (
-                    <HStack key={v4()} className="space-y-2">
-                      {stack.inputs?.map(input => {
-                        return <InputBuilder key={v4()} inputBuilder={input} />;
-                      })}
-                    </HStack>
-                  );
-                })}
+                  })}
+                </Suspense>
               </div>
             );
           })}

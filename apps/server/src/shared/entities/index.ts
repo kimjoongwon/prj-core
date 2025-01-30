@@ -17,3 +17,5 @@ export * from './subject.entity';
 export * from './session.entity';
 export * from './timeline.entity';
 export * from './program.entity';
+export * from './depot.entity';
+export * from './file.entity';

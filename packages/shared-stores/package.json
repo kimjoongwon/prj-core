@@ -2,7 +2,9 @@
   "name": "@shared/stores",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +15,8 @@
     "lodash-es": "4.17.21",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.0.7",
-    "react": "18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-router-dom": "^6.28.0",
     "to-path-tree": "^1.2.3"
   },
@@ -21,6 +24,7 @@
     "@shared/utils": "workspace:*",
     "@shared/types": "workspace:*",
     "@types/lodash-es": "^4.17.12",
-    "@types/react": "18.3.12"
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
   }
 }

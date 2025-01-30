@@ -36,8 +36,6 @@ export class Navigation {
     );
 
     window.history.pushState({}, '', pathnameWithSearchParams);
-
-    this.activateRoute();
   }
 
   private findRouteByPath(pathname: string): Route | undefined {

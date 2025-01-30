@@ -1,7 +1,6 @@
 export * from './associations.repository';
 export * from './classifications.repository';
 export * from './groups.repository';
-// export * from './roles.repository';
 export * from './services.repository';
 export * from './spaces.repository';
 export * from './users.repository';
@@ -13,3 +12,4 @@ export * from './actions.repository';
 export * from './timeline.repository';
 export * from './programs.repository';
 export * from './routines.repository';
+export * from './files.repository';

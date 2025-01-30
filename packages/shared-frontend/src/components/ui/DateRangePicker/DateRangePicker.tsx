@@ -58,8 +58,10 @@ export const DateRangePicker = observer(
         hideTimeZone
         {...rest}
         onChange={value => {
-          localState.startDateTime = value.start;
-          localState.endDateTime = value.end;
+          if (value) {
+            localState.startDateTime = value.start;
+            localState.endDateTime = value.end;
+          }
         }}
         defaultValue={{
           // @ts-ignore

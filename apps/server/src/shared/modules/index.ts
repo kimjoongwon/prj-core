@@ -7,3 +7,5 @@ export * from './session-logic.module';
 export * from './timeline-logic.module';
 export * from './routines.module';
 export * from './programs.module';
+export * from './depots.module';
+export * from './users.module';

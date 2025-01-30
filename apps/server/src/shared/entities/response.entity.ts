@@ -33,6 +33,10 @@ export class ResponseEntity<T> {
     return new ResponseEntity(httpStatus, message || '실패', null);
   }
 
+  static WITH_ROUTE<T>(data: T): ResponseEntity<T> {
+    return new ResponseEntity(HttpStatus.OK, '성공', data);
+  }
+
   from(data: T): ResponseEntity<T> {
     return new ResponseEntity(this.httpStatus, '성공', data, this.meta);
   }

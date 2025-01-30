@@ -1,6 +1,7 @@
 'use client';
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
+import { ModalLayout } from '@/components/layouts';
 import { useGetAdminMainCategoriesEditRoute } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';
@@ -17,7 +18,11 @@ const CategoryEditPage = () => {
     return null;
   }
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return (
+    <ModalLayout>
+      <PageBuilder pageBuilder={route?.page} />
+    </ModalLayout>
+  );
 };
 
 export default CategoryEditPage;

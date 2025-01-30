@@ -11,6 +11,13 @@ export type AppConfig = {
   headerLanguage: string;
 };
 
+export type AwsConfig = {
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+  s3BucketName: string;
+};
+
 export type SMTPConfig = {
   username: string;
   password;

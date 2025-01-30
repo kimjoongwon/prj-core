@@ -29,7 +29,7 @@ export const TabNavigation = observer((props: TabNavigationProps) => {
     );
 
     return disposer;
-  }, []);
+  }, [router, state.currentPath]);
 
   return (
     <>

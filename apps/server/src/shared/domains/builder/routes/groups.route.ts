@@ -42,7 +42,7 @@ export class GroupsRoute {
                       color: 'primary',
                       name: '수정',
                       navigator: {
-                        pathname: ':groupId/edit',
+                        pathname: 'groups/:groupId/edit',
                         mapper: {
                           id: 'groupId',
                         },
@@ -52,7 +52,7 @@ export class GroupsRoute {
                       color: 'secondary',
                       name: '상세',
                       navigator: {
-                        pathname: ':groupId',
+                        pathname: 'groups/:groupId',
                         mapper: {
                           id: 'groupId',
                         },
@@ -78,7 +78,7 @@ export class GroupsRoute {
             {
               name: '생성',
               navigator: {
-                pathname: 'new/edit',
+                pathname: 'groups/new/edit',
               },
             },
           ],

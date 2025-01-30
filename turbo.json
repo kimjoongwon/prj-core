@@ -5,6 +5,7 @@
       "outputs": ["dist/**"],
       "dependsOn": ["^build"]
     },
+    "packages/shared-frontend#build": {},
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []

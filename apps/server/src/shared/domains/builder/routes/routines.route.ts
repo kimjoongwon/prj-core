@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder, DataGridBuilder, RouteBuilder } from '@shared/types';
+import { DataGridBuilder, RouteBuilder } from '@shared/types';
+import { RoutineColumns } from '../columns';
 
 @Injectable()
-export class RoutinesBuilder {
-  constructor() {}
-  getRoutineRoute(): RouteBuilder {
+export class RoutinesRoute {
+  constructor(readonly routineColumns: RoutineColumns) {}
+  getMeta(): RouteBuilder {
     return {
       name: '루틴',
       pathname: 'routines',
@@ -23,7 +24,7 @@ export class RoutinesBuilder {
           name: '생성',
           color: 'primary',
           navigator: {
-            pathname: 'new/edit',
+            pathname: 'routines/new/edit',
           },
         },
       ],
@@ -31,19 +32,8 @@ export class RoutinesBuilder {
         query: {
           name: 'useGetRoutinesByQuery',
         },
-        columns: this.getColumns(),
+        columns: this.routineColumns.getMeta(),
       },
     };
-  }
-
-  getColumns(): ColumnBuilder[] {
-    return [
-      {
-        accessorKey: 'name',
-        header: {
-          name: '이름',
-        },
-      },
-    ];
   }
 }

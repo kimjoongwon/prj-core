@@ -4,7 +4,7 @@ import React from 'react';
 import { WeekInputView } from './WeekInputView';
 import { MobxProps } from '../types';
 import { useMobxHookForm } from '../../../hooks';
-import { get, isArray } from 'lodash-es';
+import { get } from 'lodash-es';
 import { RecurringDayOfTheWeek } from '../../../model';
 import { observer } from 'mobx-react-lite';
 

@@ -10,10 +10,10 @@ import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
 import { ResponseEntity } from '../../entities';
 import { goTryRawSync } from '../../libs';
-import { TokenService } from '../token';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 import { UsersService } from '../../services/users.service';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
