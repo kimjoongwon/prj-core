@@ -7,13 +7,15 @@
 export interface CreateClassificationDto {
   categoryId: string;
   /** @nullable */
-  postId: string | null;
+  postId?: string | null;
   /** @nullable */
-  roleId: string | null;
+  roleId?: string | null;
+  /** @nullable */
+  routineId?: string | null;
   serviceId: string;
   /** @nullable */
-  spaceId: string | null;
+  spaceId?: string | null;
   tenancyId: string;
   /** @nullable */
-  userId: string | null;
+  userId?: string | null;
 }

@@ -19,7 +19,7 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Card } from '@heroui/react';
+import { Card } from '@heroui/react';
 
 interface SortableFileProps {
   file: File;
@@ -72,11 +72,13 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
   );
 }
 
-interface FileUploaderProps {
+export interface FileUploaderProps {
+  title?: string;
   mode: 'single' | 'multiple';
   maxFiles?: number;
   uploadType: 'image' | 'file' | 'both';
   onFilesChange?: (files: File[]) => void;
+  value: File[];
 }
 
 export function FileUploader({
@@ -84,8 +86,10 @@ export function FileUploader({
   maxFiles = 9,
   uploadType = 'image',
   onFilesChange,
+  title,
+  value = [],
 }: FileUploaderProps) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>(value);
 
   useEffect(() => {
     if (onFilesChange) {
@@ -133,11 +137,9 @@ export function FileUploader({
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto p-6">
+    <Card className="p-6">
       <div className="space-y-6">
-        <h1 className="text-xl font-semibold text-center">
-          {uploadType === 'image' ? '이미지 업로드' : '파일 업로드'}
-        </h1>
+        <h1 className="text-xl font-semibold text-center">{title || ''}</h1>
 
         <div className="space-y-4">
           {mode === 'multiple' && (

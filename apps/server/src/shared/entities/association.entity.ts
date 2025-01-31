@@ -11,6 +11,7 @@ import { AssociationDto } from '../dtos';
 @UseDto(AssociationDto)
 export class Association extends AbstractEntity<AssociationDto> implements AssociationEntity {
   groupId: string;
+  routineId: string | null;
   userId: string | null;
   spaceId: string | null;
   serviceId: string;

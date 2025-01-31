@@ -15,7 +15,8 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
   const state = usePageState();
   const { inputBuilder } = props;
   // @ts-ignore
-  const Component = ComponentManager[inputBuilder.type];
+  const Component = ComponentManager?.[inputBuilder.type];
+
   const callbacks = inputBuilder.validation?.timings?.map(timing => {
     return {
       [timing]: (value: unknown) => {
@@ -56,6 +57,10 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
     if (value !== eq.value) {
       return null;
     }
+  }
+
+  if (!Component) {
+    return null;
   }
 
   return (

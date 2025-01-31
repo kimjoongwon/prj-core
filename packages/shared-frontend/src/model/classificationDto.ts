@@ -4,6 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CategoryDto } from './categoryDto';
+import type { RoutineDto } from './routineDto';
 import type { SpaceDto } from './spaceDto';
 import type { TenancyDto } from './tenancyDto';
 import type { UserDto } from './userDto';
@@ -14,20 +15,23 @@ export interface ClassificationDto {
   createdAt: string;
   id: string;
   /** @nullable */
-  postId: string | null;
+  postId?: string | null;
   /** @nullable */
   removedAt: string | null;
   /** @nullable */
-  roleId: string | null;
+  roleId?: string | null;
+  routine?: RoutineDto;
+  /** @nullable */
+  routineId?: string | null;
   seq: number;
   serviceId: string;
+  space?: SpaceDto;
   /** @nullable */
-  spaceId: string | null;
-  spaces?: SpaceDto;
+  spaceId?: string | null;
   tenancy?: TenancyDto;
   tenancyId: string;
   updatedAt: string;
+  user?: UserDto;
   /** @nullable */
-  userId: string | null;
-  users?: UserDto;
+  userId?: string | null;
 }

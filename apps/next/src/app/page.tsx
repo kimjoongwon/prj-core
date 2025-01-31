@@ -1,24 +1,8 @@
 'use client';
-import { createDepot, FileUploader } from '@shared/frontend';
-import axios from 'axios';
+import { FileUploader } from '@shared/frontend';
 import Image from 'next/image';
-import { AXIOS_INSTANCE } from '../../../../packages/shared-frontend/src/libs/customAxios';
 
 export default function Home() {
-  const handleFilesChange = async (files: File[]) => {
-    // console.log(files);
-    // const formData = new FormData();
-    // files.forEach(file => {
-    //   formData.append('files', file);
-    // });
-    // try {
-    //   await createDepot({
-    //     files,
-    //   });
-    // } catch (error) {
-    //   console.error('Upload failed:', error);
-    // }
-  };
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -39,11 +23,6 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
-        <FileUploader
-          mode={'single'}
-          uploadType={'image'}
-          onFilesChange={handleFilesChange}
-        />
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a

@@ -21,7 +21,7 @@ import { DepotDto, CreateDepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { DepotsService } from '../services/depots.service';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import _ from 'lodash';
 import { ApiFile } from '../decorators/swagger.schema';
@@ -34,7 +34,6 @@ export class DepotsController {
   @Post()
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  @ApiConsumes('multipart/form-data')
   @ApiFile(
     { name: 'files', isArray: true },
     {
@@ -54,7 +53,7 @@ export class DepotsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async getDepot(@Param('depotId') depotId: string) {
+  async getDepotById(@Param('depotId') depotId: string) {
     const depot = await this.service.getById(depotId);
     return new ResponseEntity(HttpStatus.OK, '성공', depot.toDto());
   }

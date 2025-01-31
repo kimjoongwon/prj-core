@@ -1,7 +1,8 @@
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
 import { Input } from '../Input/Input';
-import { Select } from '../Select/Select';
 import { Editor } from '../Editor';
+import { Depot } from '../Depot/Depot';
+import { observer } from 'mobx-react-lite';
 
 export enum TextTypes {
   MARKDOWN = 'MARKDOWN',
@@ -21,7 +22,7 @@ interface ContentProps {
   state: State;
 }
 
-export const Content = (props: ContentProps) => {
+export const Content = observer((props: ContentProps) => {
   const {
     state = {
       title: '',
@@ -64,7 +65,14 @@ export const Content = (props: ContentProps) => {
         )}
         {state.type === TextTypes.HTML && <Editor state={state} path="text" />}
       </CardBody>
-      <CardFooter></CardFooter>
+      <CardFooter>
+        <Depot
+          state={state}
+          path="depotId"
+          mode="single"
+          uploadType="image"
+        />
+      </CardFooter>
     </Card>
   );
-};
+});

@@ -22,6 +22,7 @@ export function Auth(
   ];
 
   decorators.push(UseInterceptors(AuthUserInterceptor));
+
   if (!isPublicRoute) {
     decorators.push(UseGuards(JwtAuthGuard, PoliciesGuard, RolesGuard));
   }

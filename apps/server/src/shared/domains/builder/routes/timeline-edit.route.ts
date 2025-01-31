@@ -108,7 +108,7 @@ export class TimelineEditRoute {
 
     if (timelineId !== 'new' && type === 'edit') {
       route.page.form.button.mutation.name = 'updateTimeline';
-      route.page.form.button.mutation.idMapper = 'timelineId';
+      route.page.form.button.mutation.id = timelineId;
     }
 
     return route;

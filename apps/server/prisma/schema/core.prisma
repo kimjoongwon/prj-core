@@ -26,6 +26,7 @@ model Classification {
   postId     String?   @unique
   spaceId    String?   @unique
   roleId     String?   @unique
+  routineId  String?   @unique
   serviceId  String
   tenancyId  String
   createdAt  DateTime  @default(now())
@@ -38,11 +39,13 @@ model Classification {
   user     User?    @relation(fields: [userId], references: [id])
   space    Space?   @relation(fields: [spaceId], references: [id])
   role     Role?    @relation(fields: [roleId], references: [id])
+  routine  Routine? @relation(fields: [routineId], references: [id])
 
   @@unique([categoryId, userId])
   @@unique([categoryId, postId])
   @@unique([categoryId, spaceId])
   @@unique([categoryId, roleId])
+  @@unique([categoryId, routineId])
 }
 
 model Group {
@@ -87,12 +90,12 @@ model Association {
   groupId   String
   userId    String?
   spaceId   String?
+  routineId String?
   serviceId String
   tenancyId String
 
   group   Group   @relation(fields: [groupId], references: [id])
   user    User?   @relation(fields: [userId], references: [id])
-  // post    Post?   @relation(fields: [postId], references: [id])
   space   Space?  @relation(fields: [spaceId], references: [id])
   service Service @relation(fields: [serviceId], references: [id])
   tenancy Tenancy @relation(fields: [tenancyId], references: [id])
@@ -277,9 +280,12 @@ model Routine {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String
-  contentId String
-  tenancyId String
+  name           String
+  contentId      String
+  tenancyId      String
+  classification Classification?
+
+  content Content @relation(fields: [contentId], references: [id])
 }
 
 model Sequence {
@@ -423,8 +429,9 @@ model Content {
   title       String?
   description String?
   dopotId     String?
-  type        TextTypes @default(HTML)
+  type        TextTypes @default(Editor)
   text        String?   @db.VarChar(1000)
+  routines    Routine[]
 }
 
 model Depot {
@@ -571,10 +578,9 @@ enum QnaStatus {
 }
 
 enum TextTypes {
-  HTML
-  MARKDOWN
-  TEXT_AREA
-  NORMAL
+  Editor
+  Input
+  Textarea
 }
 
 enum CategoryTypes {

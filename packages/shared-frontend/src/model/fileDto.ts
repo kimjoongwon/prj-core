@@ -3,14 +3,18 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { FileDto } from './fileDto';
 
-export interface DepotDto {
+export interface FileDto {
   createdAt: string;
-  files: FileDto[];
+  depotId: string;
   id: string;
+  mimeType: string;
+  name: string;
   /** @nullable */
   removedAt: string | null;
   seq: number;
+  size: number;
+  tenancyId: string;
   updatedAt: string;
+  url: string;
 }

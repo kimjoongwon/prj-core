@@ -3,7 +3,7 @@ import { RouteBuilder } from '@shared/types';
 
 @Injectable()
 export class SpacesRoute {
-  async getRoute(): Promise<RouteBuilder> {
+  async getMeta(): Promise<RouteBuilder> {
     return {
       name: '목록',
       pathname: 'spaces',
@@ -42,7 +42,7 @@ export class SpacesRoute {
                       name: '삭제',
                       mutation: {
                         name: 'deleteSpace',
-                        idMapper: 'id',
+                        idName: 'spaceId',
                       },
                     },
                   ],

@@ -2,6 +2,7 @@ import { PageBuilder } from '@shared/types';
 import { CategoryForm } from '../forms/category.form';
 import { PrismaService } from 'nestjs-prisma';
 import { Injectable } from '@nestjs/common';
+import { CreateCategoryDto } from '../../../dtos';
 
 @Injectable()
 export class CategoryEditPage {
@@ -11,7 +12,6 @@ export class CategoryEditPage {
   ) {}
 
   async getMeta(categoryId: string | 'new', type: 'edit' | 'add') {
-    console.log('type', type);
     const form = this.categoryForm.getMeta();
 
     const page: PageBuilder = {
@@ -23,7 +23,7 @@ export class CategoryEditPage {
             name: '',
             type: 'ROOT',
             parentId: null,
-          },
+          } as CreateCategoryDto,
         },
       },
       form,

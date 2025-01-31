@@ -2,14 +2,22 @@
 
 import { HStack, Button, AppBar } from '@shared/frontend';
 import { useStore } from '@shared/stores';
+import { useSetCookie } from 'cookies-next';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export const Header = observer(() => {
   const router = useRouter();
   const store = useStore();
   const pathname = usePathname();
+  const setCookie = useSetCookie();
+  const { serviceId = '' } = useParams();
+
+  useEffect(() => {
+    setCookie('serviceId', serviceId);
+  }, [serviceId]);
 
   return (
     <AppBar

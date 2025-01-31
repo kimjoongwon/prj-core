@@ -5,11 +5,11 @@
  */
 import type { TextTypes } from './textTypes';
 
-export interface CreateRoutineDto {
+export interface CreateContentDto {
   /** @nullable */
   description?: string | null;
-  name: string;
-  tenancyId: string;
+  /** @nullable */
+  dopotId?: string | null;
   /** @nullable */
   text?: string | null;
   /** @nullable */

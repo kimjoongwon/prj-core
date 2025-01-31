@@ -52,7 +52,7 @@ export class DepotsService {
                 url,
                 mimeType: file.mimetype,
                 size: file.size,
-                tenancyId: '7917db05-d15d-4e67-8bd1-5da3d36b66ed',
+                tenancyId,
               };
             }),
           ),

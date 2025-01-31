@@ -1,8 +1,7 @@
 import { v4 } from 'uuid';
 import dayjs from 'dayjs';
-import { Delete, Edit, List, Plus } from 'lucide-react';
 import { CellBuilderProps } from '@shared/types';
-import { ButtonBuilder } from '../ButtonBuilder';
+import { CellButtonBuilder } from '../CellButtonBuilder';
 
 export const CellBuilder = ({
   row,
@@ -27,60 +26,10 @@ export const CellBuilder = ({
     return (
       <div className="flex space-x-1">
         {buttons.map(button => {
-          if (button.icon === 'add') {
-            return (
-              <ButtonBuilder
-                key={v4()}
-                size="sm"
-                variant="flat"
-                icon={<Plus />}
-                buttonBuilder={button}
-                row={row.original}
-              />
-            );
-          }
-          if (button.icon === 'edit') {
-            return (
-              <ButtonBuilder
-                key={v4()}
-                size="sm"
-                variant="flat"
-                icon={<Edit />}
-                buttonBuilder={button}
-                row={row.original}
-              />
-            );
-          }
-
-          if (button.icon === 'delete') {
-            return (
-              <ButtonBuilder
-                size="sm"
-                key={v4()}
-                icon={<Delete />}
-                variant="flat"
-                buttonBuilder={button}
-                row={row.original}
-              />
-            );
-          }
-          if (button.icon === 'detail') {
-            return (
-              <ButtonBuilder
-                size="sm"
-                key={v4()}
-                variant="flat"
-                icon={<List />}
-                buttonBuilder={button}
-                row={row.original}
-              />
-            );
-          }
-
           return (
-            <ButtonBuilder
-              size="sm"
+            <CellButtonBuilder
               key={v4()}
+              size="sm"
               variant="flat"
               buttonBuilder={button}
               row={row.original}

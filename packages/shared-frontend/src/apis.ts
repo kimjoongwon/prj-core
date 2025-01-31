@@ -45,7 +45,7 @@ import type {
   CreateRole200AllOf,
   CreateRoleDto,
   CreateRoutine200AllOf,
-  CreateRoutineDto,
+  CreateRoutineBody,
   CreateSession200AllOf,
   CreateSessionDto,
   CreateSpace200AllOf,
@@ -100,7 +100,7 @@ import type {
   GetClassification200AllOf,
   GetClassificationsByQuery200AllOf,
   GetClassificationsByQueryParams,
-  GetDepot200AllOf,
+  GetDepotById200AllOf,
   GetDepotsByQuery200AllOf,
   GetDepotsByQueryParams,
   GetGroup200AllOf,
@@ -8553,14 +8553,16 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
     }
     
 export const createRoutine = (
-    createRoutineDto: BodyType<CreateRoutineDto>,
+    createRoutineBody?: BodyType<CreateRoutineBody>,
  options?: SecondParameter<typeof customInstance>,) => {
       
-      
+      const formData = new FormData();
+formData.append('data', createRoutineBody)
+
       return customInstance<CreateRoutine200AllOf>(
       {url: `/api/v1/routines`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createRoutineDto
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
       options);
     }
@@ -8568,14 +8570,14 @@ export const createRoutine = (
 
 
 export const getCreateRoutineMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineBody>}, TContext> => {
 const {mutation: mutationOptions, request: requestOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRoutine>>, {data: BodyType<CreateRoutineDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRoutine>>, {data: BodyType<CreateRoutineBody>}> = (props) => {
           const {data} = props ?? {};
 
           return  createRoutine(data,requestOptions)
@@ -8587,15 +8589,15 @@ const {mutation: mutationOptions, request: requestOptions} = options ?? {};
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateRoutineMutationResult = NonNullable<Awaited<ReturnType<typeof createRoutine>>>
-    export type CreateRoutineMutationBody = BodyType<CreateRoutineDto>
+    export type CreateRoutineMutationBody = BodyType<CreateRoutineBody>
     export type CreateRoutineMutationError = ErrorType<void>
 
     export const useCreateRoutine = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
         Awaited<ReturnType<typeof createRoutine>>,
         TError,
-        {data: BodyType<CreateRoutineDto>},
+        {data: BodyType<CreateRoutineBody>},
         TContext
       > => {
 
@@ -9417,77 +9419,77 @@ export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited
 
 
 
-export const getDepot = (
+export const getDepotById = (
     depotId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetDepot200AllOf>(
+      return customInstance<GetDepotById200AllOf>(
       {url: `/api/v1/depots/${depotId}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetDepotQueryKey = (depotId: string,) => {
+export const getGetDepotByIdQueryKey = (depotId: string,) => {
     return [`/api/v1/depots/${depotId}`] as const;
     }
 
     
-export const getGetDepotQueryOptions = <TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetDepotByIdQueryOptions = <TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotQueryKey(depotId);
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotByIdQueryKey(depotId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepot>>> = ({ signal }) => getDepot(depotId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotById>>> = ({ signal }) => getDepotById(depotId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetDepotQueryResult = NonNullable<Awaited<ReturnType<typeof getDepot>>>
-export type GetDepotQueryError = ErrorType<void>
+export type GetDepotByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotById>>>
+export type GetDepotByIdQueryError = ErrorType<void>
 
 
-export function useGetDepot<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>> & Pick<
+export function useGetDepotById<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDepot>>,
+          Awaited<ReturnType<typeof getDepotById>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepot<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>> & Pick<
+export function useGetDepotById<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDepot>>,
+          Awaited<ReturnType<typeof getDepotById>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepot<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotById<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetDepot<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotById<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getGetDepotQueryOptions(depotId,options)
+  const queryOptions = getGetDepotByIdQueryOptions(depotId,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -9498,47 +9500,47 @@ export function useGetDepot<TData = Awaited<ReturnType<typeof getDepot>>, TError
 
 
 
-export const getGetDepotSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetDepotByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotQueryKey(depotId);
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotByIdQueryKey(depotId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepot>>> = ({ signal }) => getDepot(depotId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotById>>> = ({ signal }) => getDepotById(depotId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetDepotSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getDepot>>>
-export type GetDepotSuspenseQueryError = ErrorType<void>
+export type GetDepotByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotById>>>
+export type GetDepotByIdSuspenseQueryError = ErrorType<void>
 
 
-export function useGetDepotSuspense<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepotSuspense<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspense<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepotSuspense<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspense<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetDepotByIdSuspense<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetDepotSuspense<TData = Awaited<ReturnType<typeof getDepot>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspense<TData = Awaited<ReturnType<typeof getDepotById>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getGetDepotSuspenseQueryOptions(depotId,options)
+  const queryOptions = getGetDepotByIdSuspenseQueryOptions(depotId,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -9549,47 +9551,47 @@ export function useGetDepotSuspense<TData = Awaited<ReturnType<typeof getDepot>>
 
 
 
-export const getGetDepotSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getDepot>>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetDepotByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getDepotById>>>, TError = ErrorType<void>>(depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotQueryKey(depotId);
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotByIdQueryKey(depotId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepot>>> = ({ signal }) => getDepot(depotId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotById>>> = ({ signal }) => getDepotById(depotId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData> & { queryKey: QueryKey }
+   return  { queryKey, queryFn, enabled: !!(depotId), ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData> & { queryKey: QueryKey }
 }
 
-export type GetDepotSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getDepot>>>
-export type GetDepotSuspenseInfiniteQueryError = ErrorType<void>
+export type GetDepotByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotById>>>
+export type GetDepotByIdSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetDepotSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepot>>>, TError = ErrorType<void>>(
- depotId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepotSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepot>>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotById>>>, TError = ErrorType<void>>(
+ depotId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetDepotSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepot>>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotById>>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
+export function useGetDepotByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotById>>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetDepotSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepot>>>, TError = ErrorType<void>>(
- depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepot>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetDepotByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotById>>>, TError = ErrorType<void>>(
+ depotId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getGetDepotSuspenseInfiniteQueryOptions(depotId,options)
+  const queryOptions = getGetDepotByIdSuspenseInfiniteQueryOptions(depotId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -10192,7 +10194,7 @@ export const getGetAdminMainCategoriesRouteQueryKey = () => {
     }
 
     
-export const getGetAdminMainCategoriesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10211,10 +10213,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesRouteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>,
@@ -10224,7 +10226,7 @@ export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>,
@@ -10234,12 +10236,12 @@ export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -10255,7 +10257,7 @@ export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof
 
 
 
-export const getGetAdminMainCategoriesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10274,23 +10276,23 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteSuspenseQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesRouteSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -10306,7 +10308,7 @@ export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnTyp
 
 
 
-export const getGetAdminMainCategoriesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10325,23 +10327,23 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesRouteSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
   options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey }
 
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {

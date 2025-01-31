@@ -39,8 +39,9 @@ export class AdminMainRouteController {
     return new ResponseEntity(HttpStatus.OK, 'Tenancies is OK', route);
   }
 
-  @Get('categories')
+  @Auth()
   @ApiResponseEntity(Object)
+  @Get('categories')
   getAdminMainCategoriesRoute() {
     const route = this.categoriesRoute.getMeta();
     return new ResponseEntity(HttpStatus.OK, 'Categories is OK', route);

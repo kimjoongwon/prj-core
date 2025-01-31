@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RoutinesRepository } from '../repositories/routines.repository';
 import { CreateRoutineDto, RoutineQueryDto } from '../dtos';
+import { DepotsRepository } from '../repositories/depots.repository';
 
 @Injectable()
 export class RoutinesService {
@@ -34,10 +35,13 @@ export class RoutinesService {
     });
   }
 
-  create(createRoutineDto: CreateRoutineDto) {
-    return this.repository.create({
-      data: createRoutineDto,
-    });
+  create(createRoutineDto: CreateRoutineDto, contentFiles: Express.Multer.File[]) {
+    return {
+      data: {
+        ...createRoutineDto,
+        contentFiles,
+      },
+    };
   }
 
   async getManyByQuery(query: RoutineQueryDto) {

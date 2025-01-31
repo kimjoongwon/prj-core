@@ -14,6 +14,7 @@ export class Classification
   extends AbstractEntity<ClassificationDto>
   implements ClassificationEntity
 {
+  routineId: string | null;
   categoryId: string;
   userId: string | null;
   postId: string | null;

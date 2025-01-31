@@ -12,7 +12,6 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
   const { children } = props;
   const store = useStore();
   const router = useRouter();
-  console.log('serviceLayout', toJS(store.navigation.serviceRoute));
 
   return (
     <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">

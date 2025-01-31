@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ColumnBuilder } from '@shared/types';
+import { Context } from 'effect';
+import { ContextProvider } from '../../../providers';
 
 @Injectable()
 export class CategoryColumns {
   constructor() {}
 
   getMeta(): ColumnBuilder[] {
+    const tenancyId = ContextProvider.getTanancyId();
+    const serviceId = ContextProvider.getServiceId();
+
     const columns: ColumnBuilder[] = [
       {
         accessorKey: 'name',
@@ -29,10 +34,7 @@ export class CategoryColumns {
               color: 'primary',
               name: '상세',
               navigator: {
-                pathname: '/admin/main/tenancies/:tenancyId/services/:service/:categoryId',
-                mapper: {
-                  id: 'categoryId',
-                },
+                pathname: `/admin/main/tenancies/${tenancyId}/services/${serviceId}/:rowId`,
               },
             },
             {
@@ -40,10 +42,7 @@ export class CategoryColumns {
               color: 'secondary',
               name: '추가',
               navigator: {
-                pathname: 'categories/:categoryId/add',
-                mapper: {
-                  id: 'categoryId',
-                },
+                pathname: `categories/:rowId/add`,
               },
             },
             {
@@ -51,10 +50,7 @@ export class CategoryColumns {
               color: 'warning',
               name: '수정',
               navigator: {
-                pathname: 'categories/:categoryId/edit',
-                mapper: {
-                  id: 'categoryId',
-                },
+                pathname: `categories/:rowId/edit`,
               },
             },
             {
@@ -63,7 +59,6 @@ export class CategoryColumns {
               name: '삭제',
               mutation: {
                 name: 'deleteCategory',
-                idMapper: 'id',
               },
             },
           ],

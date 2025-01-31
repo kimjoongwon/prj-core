@@ -10,6 +10,8 @@ export interface UpdateClassificationDto {
   postId?: string | null;
   /** @nullable */
   roleId?: string | null;
+  /** @nullable */
+  routineId?: string | null;
   serviceId?: string;
   /** @nullable */
   spaceId?: string | null;

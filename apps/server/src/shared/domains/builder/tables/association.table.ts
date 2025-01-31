@@ -22,15 +22,16 @@ export const getAssociationTable = (): TableBuilder => {
           name: '액션',
         },
         cell: {
-          buttons: [
-            {
-              name: '삭제',
-              mutation: {
-                name: 'deleteAssociation',
-                idMapper: 'id',
-              },
-            },
-          ],
+          // buttons: [
+          //   {
+          //     name: '삭제',
+          //     mutation: {
+          //       name: 'deleteAssociation',
+          //       id: 
+          //       idMapper: 'id',
+          //     },
+          //   },
+          // ],
         },
       },
     ],

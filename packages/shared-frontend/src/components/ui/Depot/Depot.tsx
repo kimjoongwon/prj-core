@@ -1,50 +1,62 @@
-// import { useLocalObservable } from 'mobx-react-lite';
-// import { FileUploader } from '../FileUploader/FileUploader';
-// import { get } from 'lodash-es';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import { FileUploader, FileUploaderProps } from '../FileUploader/FileUploader';
+import { get, set } from 'lodash-es';
+import { getDepotById } from '../../../apis';
+import { useEffect } from 'react';
+import { DepotService } from '../../../store';
+import { reaction } from 'mobx';
+import { MobxProps } from '@shared/types';
 
-// interface State {
-//   depotId: string;
-// }
+interface DepotProps<T>
+  extends MobxProps<T>,
+    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
 
-// interface DepotProps {
-//   state: State;
-//   path: string;
-// }
+export const Depot = observer(<T extends object>(props: DepotProps<T>) => {
+  const { state, path, ...rest } = props;
 
-// export const Depot = (props: DepotProps) => {
-//   const { state, path } = props;
+  const localState = useLocalObservable<{ value: File[] }>(() => {
+    return {
+      value: [],
+    };
+  });
 
-//   const urlToFile = async (
-//     url: string,
-//     filename: string,
-//     mimeType: string,
-//   ): Promise<File> => {
-//     const response = await fetch(url);
-//     const blob = await response.blob();
-//     return new File([blob], filename, { type: mimeType });
-//   };
+  useEffect(() => {
+    const disposer = reaction(
+      () => localState.value,
+      () => {
+        set(state, path, localState.value);
+      },
+    );
 
-//   // const localState = useLocalObservable(async () => {
-//   //   const files = await Promise.all(
-//   //     get(state, path)?.map(async (url: string) => {
-//   //       // const depot = await getDepot(id);
-//   //       return urlToFile(depot.url, depot.filename, depot.mimeType);
-//   //     }),
-//   //   );
-//   //   return {
-//   //     value: get(state, path),
-//   //   };
-//   // });
+    return disposer;
+  }, []);
 
-//   // const handleFilesChange = (files: File[]) => {
-//   //   localState.value = files;
-//   // };
+  useEffect(() => {
+    const setInitialValue = async () => {
+      const depotId = get(state, path) as unknown as string;
+      if (depotId) {
+        const { data: depot } = await getDepotById(depotId);
+        if (depot?.files) {
+          const files = await Promise.all(
+            depot.files?.map(async file => {
+              return DepotService.urlToFile(file.url, file.name, file.mimeType);
+            }),
+          );
 
-//   return (
-//     <FileUploader
-//       mode="multiple"
-//       uploadType="image"
-//       onFilesChange={handleFilesChange}
-//     />
-//   );
-// };
+          localState.value = files;
+        }
+      }
+    };
+
+    setInitialValue();
+  }, []);
+
+  const handleFilesChange = (files: File[]) => {
+    if (files.length === 0) {
+      return null;
+    }
+    localState.value = files;
+  };
+
+  return <FileUploader {...rest} onFilesChange={handleFilesChange} />;
+});

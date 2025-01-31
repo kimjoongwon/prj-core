@@ -45,6 +45,14 @@ export class ContextProvider {
     ContextProvider.set('tenantId', tenantId);
   }
 
+  static setServiceId(serviceId: string): void {
+    ContextProvider.set('serviceId', serviceId);
+  }
+
+  static getServiceId(): string {
+    return ContextProvider.get('serviceId');
+  }
+
   static getTanancyId(): string {
     return ContextProvider.get('tenantId');
   }

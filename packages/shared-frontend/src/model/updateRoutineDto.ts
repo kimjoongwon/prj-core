@@ -3,12 +3,17 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { TextTypes } from './textTypes';
 
 export interface UpdateRoutineDto {
-  contentId?: string;
-  name?: string;
   /** @nullable */
-  removedAt?: string | null;
-  seq?: number;
+  description?: string | null;
+  name?: string;
   tenancyId?: string;
+  /** @nullable */
+  text?: string | null;
+  /** @nullable */
+  title?: string | null;
+  /** @nullable */
+  type?: TextTypes;
 }

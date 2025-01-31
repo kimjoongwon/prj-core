@@ -13,6 +13,8 @@ export interface AssociationDto {
   postId?: string | null;
   /** @nullable */
   removedAt: string | null;
+  /** @nullable */
+  routineId?: string | null;
   seq: number;
   serviceId: string;
   /** @nullable */

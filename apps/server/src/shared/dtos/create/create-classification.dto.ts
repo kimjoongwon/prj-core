@@ -5,7 +5,8 @@ import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
 export class CreateClassificationDto extends OmitType(ClassificationDto, [
   ...COMMON_ENTITY_FIELDS,
   'category',
-  'spaces',
+  'space',
   'tenancy',
-  'users',
+  'user',
+  'routine',
 ]) {}

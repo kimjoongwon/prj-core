@@ -9,6 +9,8 @@ import {
   HttpCode,
   Param,
   Query,
+  UploadedFiles,
+  UploadedFile,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
@@ -17,6 +19,7 @@ import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { RoutinesService } from '../services/routines.service';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiFile } from '../decorators/swagger.schema';
 
 @ApiTags('ROUTINE')
 @Controller()
@@ -27,10 +30,15 @@ export class RoutinesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoutineDto, HttpStatus.OK)
-  async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
-    const routine = await this.service.create(createRoutineDto);
+  @ApiFile({ name: 'files', isArray: true }, { isRequired: false })
+  async createRoutine(
+    @Body() createRoutineDto: CreateRoutineDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    console.log('files', files);
+    // const routine = await this.service.create(createRoutineDto, files);
 
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoutineDto, routine));
+    return new ResponseEntity(HttpStatus.OK, '성공');
   }
 
   @Get(':routineId')

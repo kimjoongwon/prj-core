@@ -1,21 +1,24 @@
 import { Association } from '@prisma/client';
-import { ClassField, UUIDField } from '../decorators/field.decorators';
-import { AbstractDto, GroupDto, UserDto, ServiceDto, TenancyDto } from '.';
+import { ClassField, UUIDField, UUIDFieldOptional } from '../decorators/field.decorators';
+import { AbstractDto, GroupDto, UserDto, ServiceDto, TenancyDto, RoutineDto } from '.';
 
 export class AssociationDto extends AbstractDto implements Association {
   @UUIDField()
   tenancyId: string;
 
-  @UUIDField({ nullable: true, required: false })
+  @UUIDFieldOptional({ nullable: true })
+  routineId: string;
+
+  @UUIDFieldOptional({ nullable: true })
   groupId: string | null;
 
-  @UUIDField({ nullable: true, required: false })
+  @UUIDFieldOptional({ nullable: true })
   userId: string | null;
 
-  @UUIDField({ nullable: true, required: false })
+  @UUIDFieldOptional({ nullable: true })
   spaceId: string | null;
 
-  @UUIDField({ nullable: true, required: false })
+  @UUIDFieldOptional({ nullable: true })
   postId: string | null;
 
   @UUIDField()
@@ -32,4 +35,7 @@ export class AssociationDto extends AbstractDto implements Association {
 
   @ClassField(() => ServiceDto, { required: false, swagger: false })
   service?: ServiceDto;
+
+  @ClassField(() => RoutineDto, { required: false, swagger: false })
+  routine?: RoutineDto;
 }

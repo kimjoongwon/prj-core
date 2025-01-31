@@ -42,7 +42,14 @@ export interface ButtonBuilder {
   navigator?: Navigator;
   alert?: Alert;
 }
-
+export interface CellButtonBuilder {
+  icon?: string;
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  name: string;
+  mutation?: CellMutation;
+  navigator?: Navigator;
+  alert?: Alert;
+}
 export interface Alert {
   message: string;
 }
@@ -50,7 +57,7 @@ export interface Alert {
 export interface Navigator {
   type?: 'push' | 'replace' | 'back';
   pathname?: string;
-  mapper?: any;
+  idName?: string;
 }
 
 export interface SuccessOrFailure {
@@ -102,8 +109,13 @@ export interface Query {
 export interface Mutation {
   name: string;
   invalidationKey?: string;
+  id?: string;
   mapper?: any;
-  idMapper?: string;
+}
+
+export interface CellMutation {
+  name: string;
+  idName?: string;
 }
 
 export type Key = string | number;
@@ -165,7 +177,7 @@ export interface ColumnBuilder {
 }
 export interface CellBuilder {
   type?: 'date' | 'time' | 'dateTime';
-  buttons?: ButtonBuilder[];
+  buttons?: CellButtonBuilder[];
   expandable?: boolean;
   link?: string;
 }

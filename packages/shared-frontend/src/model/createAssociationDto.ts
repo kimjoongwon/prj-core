@@ -9,6 +9,8 @@ export interface CreateAssociationDto {
   groupId?: string | null;
   /** @nullable */
   postId?: string | null;
+  /** @nullable */
+  routineId?: string | null;
   serviceId: string;
   /** @nullable */
   spaceId?: string | null;
