@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ActionLogicModule, ActionsController } from '@shared';
+import { ActionsController } from '@shared';
 
 @Module({
-  imports: [ActionLogicModule],
   controllers: [ActionsController],
 })
 export class ActionsEndpointModule {}

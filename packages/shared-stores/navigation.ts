@@ -59,7 +59,6 @@ export class Navigation {
     const servicesRoute = this.findRouteByPath(
       '/admin/main/tenancies/:tenancyId/services',
     );
-    console.log('servicesRoute', servicesRoute);
     return servicesRoute;
   }
 

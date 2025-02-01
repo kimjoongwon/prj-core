@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RoutinesRepository } from '../repositories/routines.repository';
 import { CreateRoutineDto, RoutineQueryDto } from '../dtos';
-import { DepotsRepository } from '../repositories/depots.repository';
+import { DepotsService } from './depots.service';
 
 @Injectable()
 export class RoutinesService {
-  constructor(private readonly repository: RoutinesRepository) {}
+  constructor(
+    private readonly repository: RoutinesRepository,
+    private readonly depotsService: DepotsService,
+  ) {}
 
   getById(id: string) {
     return this.repository.findUnique({
@@ -35,13 +38,29 @@ export class RoutinesService {
     });
   }
 
-  create(createRoutineDto: CreateRoutineDto, contentFiles: Express.Multer.File[]) {
-    return {
+  async create(
+    { description, title, type, text, name, tenancyId }: CreateRoutineDto,
+    files: Express.Multer.File[],
+  ) {
+    const depot = await this.depotsService.create(files);
+
+    const routine = await this.repository.create({
       data: {
-        ...createRoutineDto,
-        contentFiles,
+        name,
+        tenancyId,
+        content: {
+          create: {
+            description,
+            title,
+            type,
+            text,
+            dopotId: depot.id,
+          },
+        },
       },
-    };
+    });
+
+    return routine;
   }
 
   async getManyByQuery(query: RoutineQueryDto) {

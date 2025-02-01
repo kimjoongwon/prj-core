@@ -1,13 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
-import { TenancyColumns } from '../columns/tenancy.columns';
 import { CategoryColumns } from '../columns/category.columns';
+import { ActionColumns } from '../columns/action.columns';
+import { ContextProvider } from '../../../providers/context.provider';
 
 @Injectable()
 export class CategoriesPage {
-  constructor(private readonly categoryColumns: CategoryColumns) {}
+  constructor(
+    private readonly categoryColumns: CategoryColumns,
+    private readonly actionColumns: ActionColumns,
+  ) {}
 
   getMeta(): PageBuilder {
+    const serviceId = ContextProvider.getServiceId();
+    const tenancyId = ContextProvider.getTenancyId();
+    const categoryColumns = this.categoryColumns.getMeta();
+    const actionColumns = this.actionColumns.getMeta();
+    const columns = categoryColumns.concat(actionColumns);
+
     const page: PageBuilder = {
       name: '목록',
       type: 'Page',
@@ -16,14 +26,12 @@ export class CategoriesPage {
           query: {
             name: 'useGetCategoriesByQuery',
             params: {
-              serviceId: '',
+              serviceId,
+              tenancyId,
               type: 'ROOT',
             },
-            mapper: {
-              serviceId: 'serviceId',
-            },
           },
-          columns: this.categoryColumns.getMeta(),
+          columns,
         },
         buttons: [
           {

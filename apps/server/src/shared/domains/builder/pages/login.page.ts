@@ -1,9 +1,9 @@
-import { Injectable, Module } from '@nestjs/common';
-import { LoginFormBuilder, LoginFormBuilderModule } from '../forms/login.form';
+import { Injectable } from '@nestjs/common';
+import { LoginForm } from '../forms/login.form';
 
 @Injectable()
-export class LoginPageBuilder {
-  constructor(readonly loginFormBuilder: LoginFormBuilder) {}
+export class LoginPage {
+  constructor(readonly loginForm: LoginForm) {}
 
   getState() {
     const state = {
@@ -19,7 +19,7 @@ export class LoginPageBuilder {
   }
 
   getMeta() {
-    const loginForm = this.loginFormBuilder.getMeta();
+    const loginForm = this.loginForm.getMeta();
     const loginPage = {
       name: '로그인',
       state: this.getState(),
@@ -29,10 +29,3 @@ export class LoginPageBuilder {
     return loginPage;
   }
 }
-
-@Module({
-  imports: [LoginFormBuilderModule],
-  providers: [LoginPageBuilder],
-  exports: [LoginPageBuilder],
-})
-export class LoginPageBuilderModule {}

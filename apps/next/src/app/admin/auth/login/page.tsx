@@ -1,14 +1,10 @@
 'use client';
 
 import { useGetAdminAuthLoginRoute } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 
 const LoginPage = () => {
   const { data, isFetchedAfterMount } = useGetAdminAuthLoginRoute();
-  const loginRouteBuilder = data?.data as RouteBuilder;
-
-  console.log('loginRouteBuilder', loginRouteBuilder);
 
   if (!isFetchedAfterMount) {
     return null;
@@ -16,7 +12,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-1 flex-col w-full">
-      <PageBuilder pageBuilder={loginRouteBuilder?.page} />
+      <PageBuilder pageBuilder={data?.data} />
     </div>
   );
 };

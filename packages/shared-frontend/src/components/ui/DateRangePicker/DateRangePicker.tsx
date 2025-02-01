@@ -27,16 +27,10 @@ export const DateRangePicker = observer(
       endDateTime: parseAbsoluteToLocal(endDateTime),
     }));
 
-    console.log('path', path);
-
     useEffect(() => {
       const disposer = reaction(
         () => JSON.stringify(localState),
         () => {
-          console.log(
-            'newState.startDateTime',
-            localState.startDateTime.toAbsoluteString(),
-          );
           set(
             state,
             (path as string)?.split(',')?.[0],

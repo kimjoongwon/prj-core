@@ -1,7 +1,31 @@
-export * from './email.input';
-export * from './password.input';
-export * from './name.input';
-export * from './title.input';
-export * from './description.input';
-export * from './depot.input';
-export * from './text.input';
+import { Global, Module } from '@nestjs/common';
+import { DepotInput } from './depot.input';
+import { DescriptionInput } from './description.input';
+import { EmailInput } from './email.input';
+import { NameInput } from './name.input';
+import { PasswordInput } from './password.input';
+import { TextInput } from './text.input';
+import { TitleInput } from './title.input';
+
+@Global()
+@Module({
+  providers: [
+    DepotInput,
+    DescriptionInput,
+    EmailInput,
+    NameInput,
+    PasswordInput,
+    TextInput,
+    TitleInput,
+  ],
+  exports: [
+    DepotInput,
+    DescriptionInput,
+    EmailInput,
+    NameInput,
+    PasswordInput,
+    TextInput,
+    TitleInput,
+  ],
+})
+export class InputsModule {}

@@ -2,13 +2,12 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { useGetAdminMainCategoriesRoute } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
 
 const CategoriesPage = () => {
   const { data: response } = useGetAdminMainCategoriesRoute();
-  const route = response?.data as RouteBuilder;
+  const page = response?.data;
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default CategoriesPage;

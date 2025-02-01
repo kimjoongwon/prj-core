@@ -12,15 +12,15 @@ const CategoryEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainCategoriesEditRoute(categoryId, type);
-  const route = response?.data as RouteBuilder;
-  console.log('type', type);
+  const page = response?.data as RouteBuilder;
+
   if (!isFetchedAfterMount) {
     return null;
   }
 
   return (
     <ModalLayout>
-      <PageBuilder pageBuilder={route?.page} />
+      <PageBuilder pageBuilder={page} />
     </ModalLayout>
   );
 };

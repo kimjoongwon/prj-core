@@ -38,7 +38,6 @@ export const EditorView = observer(
         }}
         onChange={(event, editor) => {
           const data = editor.getData();
-          console.log({ event, editor, data });
           localState.value = data;
         }}
         onBlur={(_, editor) => {

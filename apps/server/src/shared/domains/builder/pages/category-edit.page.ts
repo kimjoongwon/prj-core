@@ -38,7 +38,7 @@ export class CategoryEditPage {
 
       page.state.form.data = category;
       page.form.button.mutation.name = 'updateCategory';
-      page.form.button.mutation.idMapper = 'categoryId';
+      page.form.button.mutation.id = categoryId;
     }
 
     if (categoryId !== 'new' && type === 'add') {
@@ -46,7 +46,7 @@ export class CategoryEditPage {
       page.state.form.data.parentId = categoryId;
       page.form.button.mutation.name = 'createCategory';
     }
-    console.log('page', page.state.form, 4);
+
     return page;
   }
 }

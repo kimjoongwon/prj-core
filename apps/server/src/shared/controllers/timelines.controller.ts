@@ -15,13 +15,13 @@ import { Auth, ApiResponseEntity } from '../decorators';
 import { TimelineDto, CreateTimelineDto, UpdateTimelineDto, TimelineQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
-import { TimelineService } from '../services';
+import { TimelinesService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('TIMELINE')
 @Controller()
 export class TimelinesController {
-  constructor(private readonly service: TimelineService) {}
+  constructor(private readonly service: TimelinesService) {}
 
   @Post()
   @Auth([])

@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repositories/depots.repository';
-import { CreateDepotDto, DepotQueryDto, UpdateDepotDto } from '../dtos';
+import { DepotQueryDto, UpdateDepotDto } from '../dtos';
 import { ContextProvider } from '../providers';
 import { AwsService } from '../domains/aws/aws.service';
+import { FilesService } from './files.service';
 
 @Injectable()
 export class DepotsService {
   constructor(
     private readonly repository: DepotsRepository,
     private readonly awsService: AwsService,
+    private readonly filesService: FilesService,
   ) {}
 
   getUnique(args: Prisma.DepotFindUniqueArgs) {
@@ -32,28 +34,14 @@ export class DepotsService {
     return this.repository.delete({ where: { id } });
   }
 
-  async create(createDepotDto: CreateDepotDto, files: Express.Multer.File[]) {
-    const tenancyId = ContextProvider.getTanancyId();
-
+  async create(files: Express.Multer.File[]) {
     return this.repository.create({
       data: {
-        ...createDepotDto,
         files: {
           create: await Promise.all(
             files.map(async (file) => {
-              const url = await this.awsService.uploadToS3(
-                file.originalname,
-                file,
-                file.mimetype.split('/')[1],
-              );
-
-              return {
-                name: file.originalname,
-                url,
-                mimeType: file.mimetype,
-                size: file.size,
-                tenancyId,
-              };
+              const depotFile = await this.filesService.getDepotFile(file);
+              return depotFile;
             }),
           ),
         },
@@ -73,11 +61,10 @@ export class DepotsService {
   }
 
   updateById(depotId: string, updateDepotDto: UpdateDepotDto) {
-    const { files, ...data } = updateDepotDto;
     // 추가 로직 필요
     return this.repository.update({
       where: { id: depotId },
-      data: data,
+      data: updateDepotDto,
     });
   }
 

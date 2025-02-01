@@ -1,16 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ColumnBuilder } from '@shared/types';
-import { Context } from 'effect';
-import { ContextProvider } from '../../../providers';
 
 @Injectable()
 export class CategoryColumns {
-  constructor() {}
-
   getMeta(): ColumnBuilder[] {
-    const tenancyId = ContextProvider.getTanancyId();
-    const serviceId = ContextProvider.getServiceId();
-
     const columns: ColumnBuilder[] = [
       {
         accessorKey: 'name',
@@ -20,48 +13,6 @@ export class CategoryColumns {
         },
         cell: {
           expandable: true,
-        },
-      },
-      {
-        id: 'action',
-        header: {
-          name: '액션',
-        },
-        cell: {
-          buttons: [
-            {
-              icon: 'detail',
-              color: 'primary',
-              name: '상세',
-              navigator: {
-                pathname: `/admin/main/tenancies/${tenancyId}/services/${serviceId}/:rowId`,
-              },
-            },
-            {
-              icon: 'add',
-              color: 'secondary',
-              name: '추가',
-              navigator: {
-                pathname: `categories/:rowId/add`,
-              },
-            },
-            {
-              icon: 'edit',
-              color: 'warning',
-              name: '수정',
-              navigator: {
-                pathname: `categories/:rowId/edit`,
-              },
-            },
-            {
-              icon: 'delete',
-              color: 'danger',
-              name: '삭제',
-              mutation: {
-                name: 'deleteCategory',
-              },
-            },
-          ],
         },
       },
     ];

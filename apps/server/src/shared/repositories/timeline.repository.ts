@@ -7,7 +7,7 @@ import { Timeline } from '../entities/timeline.entity';
 
 @Injectable()
 @UseEntity(Timeline)
-export class TimelineRepository extends BaseRepository<
+export class TimelinesRepository extends BaseRepository<
   Prisma.TimelineCreateArgs,
   Prisma.TimelineUpsertArgs,
   Prisma.TimelineUpdateArgs,

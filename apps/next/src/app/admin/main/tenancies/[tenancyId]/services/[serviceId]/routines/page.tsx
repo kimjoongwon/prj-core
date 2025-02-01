@@ -6,9 +6,9 @@ import { RouteBuilder } from '@shared/types';
 
 const RoutinesPage = () => {
   const { data: response } = useGetAdminMainRoutinesRoute();
-  const route = response?.data as RouteBuilder;
+  const page = response?.data;
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default RoutinesPage;

@@ -36,9 +36,3 @@ export class ContentForm {
     return form;
   }
 }
-
-@Module({
-  providers: [TitleInput, DescriptionInput, DepotInput, TextInput, ContentForm],
-  exports: [ContentForm],
-})
-export class ContentFormModule {}

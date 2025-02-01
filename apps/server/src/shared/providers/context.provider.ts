@@ -53,7 +53,7 @@ export class ContextProvider {
     return ContextProvider.get('serviceId');
   }
 
-  static getTanancyId(): string {
+  static getTenancyId(): string {
     return ContextProvider.get('tenantId');
   }
 

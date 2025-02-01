@@ -11,13 +11,13 @@ const SessionEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainSessionEditRoute(sessionId, type);
-  const route = response?.data as RouteBuilder;
+  const page = response?.data;
 
   if (!isFetchedAfterMount) {
     return null;
   }
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default SessionEditPage;

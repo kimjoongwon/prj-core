@@ -12,7 +12,7 @@ const TimelineEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainTimelineEditRoute(timelineId, type);
-  const route = response?.data as RouteBuilder;
+  const page = response?.data;
 
   if (!isFetchedAfterMount) {
     return null;
@@ -20,7 +20,7 @@ const TimelineEditPage = () => {
 
   return (
     <ModalLayout>
-      <PageBuilder pageBuilder={route?.page} />
+      <PageBuilder pageBuilder={page} />
     </ModalLayout>
   );
 };

@@ -8,11 +8,11 @@ import { RouteBuilder } from '@shared/types';
 const TenanciesPage = () => {
   const { data: response } = useGetAdminMainTenanciesRoute();
 
-  const routeBuilder = response?.data as RouteBuilder;
+  const page = response?.data as RouteBuilder;
 
   return (
     <ModalLayout>
-      <PageBuilder pageBuilder={routeBuilder?.page} />;
+      <PageBuilder pageBuilder={page} />;
     </ModalLayout>
   );
 };

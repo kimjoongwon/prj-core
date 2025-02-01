@@ -6,9 +6,9 @@ import { RouteBuilder } from '@shared/types';
 
 const GroupsPage = () => {
   const { data: response } = useGetAdminMainGroupsRoute();
-  const route = response?.data as RouteBuilder;
+  const page = response?.data as RouteBuilder;
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default GroupsPage;
