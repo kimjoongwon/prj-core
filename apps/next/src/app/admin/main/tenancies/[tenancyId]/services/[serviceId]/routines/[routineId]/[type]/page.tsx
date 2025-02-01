@@ -12,13 +12,13 @@ const RoutineEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainRoutineEditRoute(routineId, type);
-  const route = response?.data as RouteBuilder;
+  const page = response?.data as RouteBuilder;
 
   if (!isFetchedAfterMount) {
     return null;
   }
 
-  return <PageBuilder pageBuilder={route?.page} />;
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default RoutineEditPage;

@@ -1,9 +1,10 @@
 // aws.service.ts
-import { Injectable } from '@nestjs/common';
+import { Global, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { AwsConfig } from '../../configs';
 
+@Global()
 @Injectable()
 export class AwsService {
   s3Client: S3Client;

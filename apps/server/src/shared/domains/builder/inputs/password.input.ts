@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InputBuilder } from '@shared/types';
 
 @Injectable()
-export class PasswordInputBuilder {
+export class PasswordInput {
   getMeta(): InputBuilder {
     const input: InputBuilder = {
       type: 'Input',

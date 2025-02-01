@@ -7,7 +7,7 @@ export * from './users.repository';
 export * from './categories.repository';
 export * from './abilities.repository';
 export * from './subjects.repository';
-export * from './session.repository';
+export * from './sessions.repository';
 export * from './actions.repository';
 export * from './timeline.repository';
 export * from './programs.repository';

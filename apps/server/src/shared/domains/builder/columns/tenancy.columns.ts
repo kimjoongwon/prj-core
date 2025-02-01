@@ -21,10 +21,8 @@ export class TenancyColumns {
             {
               name: '선택',
               navigator: {
-                pathname: '/admin/main/tenancies/:tenancyId/services',
-                mapper: {
-                  id: 'tenancyId',
-                },
+                pathname: '/admin/main/tenancies/:rowId/services',
+                idName: 'tenancyId',
               },
             },
           ],

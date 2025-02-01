@@ -14,7 +14,7 @@ const GroupEditPage = () => {
     groupId,
     type,
   );
-  const route = response?.data as RouteBuilder;
+  const page = response?.data as RouteBuilder;
 
   if (!isFetchedAfterMount) {
     return null;
@@ -22,7 +22,7 @@ const GroupEditPage = () => {
 
   return (
     <ModalLayout>
-      <PageBuilder pageBuilder={route?.page} />
+      <PageBuilder pageBuilder={page} />
     </ModalLayout>
   );
 };

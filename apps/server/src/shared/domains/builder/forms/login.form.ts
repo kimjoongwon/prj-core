@@ -1,18 +1,18 @@
-import { Injectable, Module } from '@nestjs/common';
-import { PasswordInputBuilder } from '../inputs/password.input';
-import { EmailInputBuilder } from '../inputs/email.input';
+import { Injectable } from '@nestjs/common';
 import { FormBuilder } from '@shared/types';
+import { EmailInput } from '../inputs/email.input';
+import { PasswordInput } from '../inputs/password.input';
 
 @Injectable()
-export class LoginFormBuilder {
+export class LoginForm {
   constructor(
-    readonly passwordInputBuilder: PasswordInputBuilder,
-    readonly emailInputBuilder: EmailInputBuilder,
+    readonly passwordInput: PasswordInput,
+    readonly emailInput: EmailInput,
   ) {}
 
   getMeta(): FormBuilder {
-    const passwordInput = this.passwordInputBuilder.getMeta();
-    const emailInput = this.emailInputBuilder.getMeta();
+    const passwordInput = this.passwordInput.getMeta();
+    const emailInput = this.emailInput.getMeta();
 
     return {
       isInValid: false,
@@ -43,9 +43,3 @@ export class LoginFormBuilder {
     };
   }
 }
-
-@Module({
-  providers: [EmailInputBuilder, PasswordInputBuilder, LoginFormBuilder],
-  exports: [LoginFormBuilder],
-})
-export class LoginFormBuilderModule {}

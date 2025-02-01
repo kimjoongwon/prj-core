@@ -12,7 +12,7 @@ export class SpacesService {
   constructor(private readonly repository: SpacesRepository) {}
 
   async create({ categoryId, serviceId, ...createSpaceDto }: CreateSpaceDto) {
-    const tenancyId = ContextProvider.getTanancyId();
+    const tenancyId = ContextProvider.getTenancyId();
     const space = await this.repository.create({
       data: {
         ...createSpaceDto,

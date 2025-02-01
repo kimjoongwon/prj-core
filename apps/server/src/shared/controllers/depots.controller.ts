@@ -21,10 +21,9 @@ import { DepotDto, CreateDepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { DepotsService } from '../services/depots.service';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import _ from 'lodash';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiFile } from '../decorators/swagger.schema';
+import _ from 'lodash';
 
 @ApiTags('DEPOTS')
 @Controller()
@@ -41,11 +40,10 @@ export class DepotsController {
     },
   )
   async createDepot(
-    @Body() createDepotDto: CreateDepotDto,
     @UploadedFiles()
     files: Express.Multer.File[],
   ) {
-    const depot = await this.service.create(createDepotDto, files);
+    const depot = await this.service.create(files);
     return new ResponseEntity(HttpStatus.OK, '성공', depot.toDto());
   }
 

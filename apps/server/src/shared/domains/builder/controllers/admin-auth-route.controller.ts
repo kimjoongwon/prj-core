@@ -1,16 +1,16 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { LoginRouteBuilder } from '../routes/login.route';
 import { ApiResponseEntity } from '../../../decorators';
 import { ResponseEntity } from '../../../entities';
+import { LoginPage } from '../pages/login.page';
 
 @Controller()
 export class AdminAuthRouteController {
-  constructor(readonly loginRouteBuilder: LoginRouteBuilder) {}
+  constructor(readonly loginPage: LoginPage) {}
 
   @Get('login')
   @ApiResponseEntity(Object)
   getAdminAuthLoginRoute() {
-    const loginRouteBuilder = this.loginRouteBuilder.getMeta();
-    return new ResponseEntity(HttpStatus.OK, '로그인 페이지', loginRouteBuilder);
+    const loginPage = this.loginPage.getMeta();
+    return new ResponseEntity(HttpStatus.OK, '로그인 페이지', loginPage);
   }
 }

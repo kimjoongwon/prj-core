@@ -1,12 +1,7 @@
 import { Module } from '@nestjs/common';
-import {
-  ClassificationsController,
-  ClassificationsRepository,
-  ClassificationsService,
-} from '@shared';
+import { ClassificationsController } from '@shared';
 
 @Module({
-  providers: [ClassificationsService, ClassificationsRepository],
   controllers: [ClassificationsController],
 })
 export class ClassificationsEndpointModule {}

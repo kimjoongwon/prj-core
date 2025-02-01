@@ -1,12 +1,24 @@
 import { PageBuilder } from '@shared/types';
-import { getUserTable } from '../tables/users.table';
-
-export const getUsersPage = (): PageBuilder => {
-  return {
-    name: '이용자',
-    type: 'Page',
-    dataGrid: {
-      table: getUserTable(),
-    },
-  };
-};
+export class UsersPage {
+  getMeta() {
+    const page: PageBuilder = {
+      name: '목록',
+      dataGrid: {
+        table: {
+          query: {
+            name: `useGetUsersByQuery`,
+          },
+          columns: [
+            {
+              accessorKey: 'name',
+              header: {
+                name: '이름',
+              },
+            },
+          ],
+        },
+      },
+    };
+    return page;
+  }
+}

@@ -1,2 +1,82 @@
-export * from './login.page';
-export * from './category-edit.page';
+import { Global, Module } from '@nestjs/common';
+import { AbilitiesPage } from './abilities.page';
+import { AbilityEditPage } from './ability-edit.page';
+import { ActionEditPage } from './action-edit.page';
+import { ActionsPage } from './actions.page';
+import { CategoriesPage } from './categories.page';
+import { CategoryAddPage } from './category-add.page';
+import { CategoryEditPage } from './category-edit.page';
+import { CategoryPage } from './category.page';
+import { GroupEditPage } from './group-edit.page';
+import { GroupPage } from './group.page';
+import { GroupsPage } from './groups.page';
+import { LoginPage } from './login.page';
+import { RoleEditPage } from './role-edit.page';
+import { RolesPage } from './roles.page';
+import { RoutineEditPage } from './routine-edit.page';
+import { RoutinesPage } from './routines.page';
+import { SessionEditPage } from './session-edit.page';
+import { SessionsPage } from './sessions.page';
+import { SpaceEditPage } from './space-edit.page';
+import { SpacesPage } from './spaces.page';
+import { TenanciesPage } from './tenancies.page';
+import { TimelineEditPage } from './timeline-edit.page';
+import { TimelinesPage } from './timelines.page';
+import { UsersPage } from './users.page';
+
+@Global()
+@Module({
+  providers: [
+    AbilitiesPage,
+    AbilityEditPage,
+    ActionEditPage,
+    ActionsPage,
+    CategoriesPage,
+    CategoryAddPage,
+    CategoryEditPage,
+    CategoryPage,
+    GroupEditPage,
+    GroupPage,
+    GroupsPage,
+    LoginPage,
+    RoleEditPage,
+    RolesPage,
+    RoutineEditPage,
+    RoutinesPage,
+    SessionEditPage,
+    SessionsPage,
+    SpaceEditPage,
+    SpacesPage,
+    TenanciesPage,
+    TimelineEditPage,
+    TimelinesPage,
+    UsersPage,
+  ],
+  exports: [
+    AbilitiesPage,
+    AbilityEditPage,
+    ActionEditPage,
+    ActionsPage,
+    CategoriesPage,
+    CategoryAddPage,
+    CategoryEditPage,
+    CategoryPage,
+    GroupEditPage,
+    GroupPage,
+    GroupsPage,
+    LoginPage,
+    RoleEditPage,
+    RolesPage,
+    RoutineEditPage,
+    RoutinesPage,
+    SessionEditPage,
+    SessionsPage,
+    SpaceEditPage,
+    SpacesPage,
+    TenanciesPage,
+    TimelineEditPage,
+    TimelinesPage,
+    UsersPage,
+  ],
+})
+export class PagesModule {}

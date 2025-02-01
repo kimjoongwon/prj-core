@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InputBuilder } from '@shared/types';
 
 @Injectable()
-export class EmailInputBuilder {
+export class EmailInput {
   getMeta(): InputBuilder {
     return {
       type: 'Input',

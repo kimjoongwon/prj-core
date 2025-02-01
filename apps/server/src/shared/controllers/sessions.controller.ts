@@ -15,13 +15,13 @@ import { Auth, ApiResponseEntity } from '../decorators';
 import { SessionDto, CreateSessionDto, UpdateSessionDto, SessionQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
-import { SessionService } from '../services';
+import { SessionsService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('SESSION')
 @Controller()
 export class SessionsController {
-  constructor(private readonly service: SessionService) {}
+  constructor(private readonly service: SessionsService) {}
 
   @Post()
   @Auth([])

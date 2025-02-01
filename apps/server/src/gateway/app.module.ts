@@ -1,5 +1,13 @@
 import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
-import { InitModule, JwtStrategy, LoggerMiddleware, UsersRepository, UsersService } from '@shared';
+import {
+  FormsModule,
+  InitModule,
+  InputsModule,
+  JwtStrategy,
+  LoggerMiddleware,
+  PagesModule,
+  GlobalModule,
+} from '@shared';
 import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
@@ -22,12 +30,20 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
+import { TablesModule } from '../shared/domains/builder/tables';
+import { ColumnsModule } from '../shared/domains/builder/columns';
 
 @Module({
   imports: [
     ...libModules,
+    ColumnsModule,
+    InputsModule,
+    FormsModule,
+    PagesModule,
+    TablesModule,
     CaslModule,
     InitModule,
+    GlobalModule,
     ClassificationsEndpointModule,
     AssociationsEndpointModule,
     BuilderEndpointModule,
@@ -136,7 +152,7 @@ import { DepotsEndpointModule } from './depots/depots-endpoint.module';
       },
     ]),
   ],
-  providers: [JwtStrategy, UsersService, UsersRepository],
+  providers: [JwtStrategy],
 })
 export class AppModule implements OnModuleInit {
   logger = new Logger(AppModule.name);

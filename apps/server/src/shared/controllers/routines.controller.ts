@@ -10,7 +10,6 @@ import {
   Param,
   Query,
   UploadedFiles,
-  UploadedFile,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
@@ -35,10 +34,9 @@ export class RoutinesController {
     @Body() createRoutineDto: CreateRoutineDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    console.log('files', files);
-    // const routine = await this.service.create(createRoutineDto, files);
+    const routine = await this.service.create(createRoutineDto, files);
 
-    return new ResponseEntity(HttpStatus.OK, '성공');
+    return new ResponseEntity(HttpStatus.OK, '성공', routine.toDto());
   }
 
   @Get(':routineId')
