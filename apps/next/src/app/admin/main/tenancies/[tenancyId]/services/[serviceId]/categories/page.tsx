@@ -1,10 +1,10 @@
 'use client';
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainCategoriesRoute } from '@shared/frontend';
+import { useGetAdminMainCategoriesPage } from '@shared/frontend';
 
 const CategoriesPage = () => {
-  const { data: response } = useGetAdminMainCategoriesRoute();
+  const { data: response } = useGetAdminMainCategoriesPage();
   const page = response?.data;
 
   return <PageBuilder pageBuilder={page} />;

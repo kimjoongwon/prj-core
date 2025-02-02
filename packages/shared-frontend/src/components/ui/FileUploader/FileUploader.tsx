@@ -41,13 +41,15 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
     transition,
     zIndex: isDragging ? 1 : 0,
     opacity: isDragging ? 0.5 : 1,
+    width: '100px',
+    height: '100px',
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className="relative aspect-square touch-none"
+      className="relative touch-none"
       {...attributes}
       {...listeners}
     >
@@ -137,7 +139,7 @@ export function FileUploader({
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6" style={{ width: '400px' }}>
       <div className="space-y-6">
         <h1 className="text-xl font-semibold text-center">{title || ''}</h1>
 
@@ -180,6 +182,7 @@ export function FileUploader({
                     className={`${
                       mode === 'single' ? 'w-full max-w-[200px]' : ''
                     } aspect-square border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50`}
+                    style={{ width: '100px', height: '100px' }}
                   >
                     <input
                       type="file"

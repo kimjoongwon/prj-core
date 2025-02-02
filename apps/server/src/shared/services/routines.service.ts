@@ -38,30 +38,7 @@ export class RoutinesService {
     });
   }
 
-  async create(
-    { description, title, type, text, name, tenancyId }: CreateRoutineDto,
-    files: Express.Multer.File[],
-  ) {
-    const depot = await this.depotsService.create(files);
 
-    const routine = await this.repository.create({
-      data: {
-        name,
-        tenancyId,
-        content: {
-          create: {
-            description,
-            title,
-            type,
-            text,
-            dopotId: depot.id,
-          },
-        },
-      },
-    });
-
-    return routine;
-  }
 
   async getManyByQuery(query: RoutineQueryDto) {
     const args = query.toArgs();

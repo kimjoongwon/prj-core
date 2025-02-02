@@ -1,9 +1,7 @@
 'use client';
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { ModalLayout } from '@/components/layouts';
-import { useGetAdminMainRoutineEditRoute } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
+import { useGetAdminMainRoutineEditPage } from '@shared/frontend';
 import { useParams } from 'next/navigation';
 
 const RoutineEditPage = () => {
@@ -11,8 +9,8 @@ const RoutineEditPage = () => {
   const routineId = params.routineId as string;
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
-    useGetAdminMainRoutineEditRoute(routineId, type);
-  const page = response?.data as RouteBuilder;
+    useGetAdminMainRoutineEditPage(routineId, type);
+  const page = response?.data;
 
   if (!isFetchedAfterMount) {
     return null;

@@ -30,23 +30,6 @@ import _ from 'lodash';
 export class DepotsController {
   constructor(private readonly service: DepotsService) {}
 
-  @Post()
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  @ApiFile(
-    { name: 'files', isArray: true },
-    {
-      isRequired: false,
-    },
-  )
-  async createDepot(
-    @UploadedFiles()
-    files: Express.Multer.File[],
-  ) {
-    const depot = await this.service.create(files);
-    return new ResponseEntity(HttpStatus.OK, '성공', depot.toDto());
-  }
-
   @Get(':depotId')
   @Auth([])
   @HttpCode(HttpStatus.OK)

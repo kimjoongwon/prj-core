@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RoutinesController, RoutinesRepository, RoutinesService } from '@shared';
+import { RoutinesController, RoutineService } from '@shared';
 
 @Module({
-  providers: [RoutinesService, RoutinesRepository],
+  providers: [RoutineService],
   controllers: [RoutinesController],
 })
 export class RoutinesEndpointModule {}

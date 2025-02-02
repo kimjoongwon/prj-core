@@ -15,8 +15,7 @@ export class FilesService {
 
     return url;
   }
-
-  async getDepotFile(file: Express.Multer.File) {
+  async buildDepotFile(file: Express.Multer.File) {
     const tenancyId = ContextProvider.getTenancyId();
     const url = await this.upload(file);
 

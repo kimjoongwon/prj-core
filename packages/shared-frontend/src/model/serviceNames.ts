@@ -15,4 +15,5 @@ export const ServiceNames = {
   ROLE: 'ROLE',
   TIMELINE: 'TIMELINE',
   ROUTINE: 'ROUTINE',
+  TASK: 'TASK',
 } as const;

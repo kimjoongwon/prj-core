@@ -42,4 +42,14 @@ export class AwsService {
     // 업로드된 이미지의 URL을 반환합니다.
     return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${this.aws.s3BucketName}/${fileName}`;
   }
+
+  // async upload(file: Express.Multer.File) {
+  //   const url = await this.awsService.uploadToS3(
+  //     file.originalname,
+  //     file,
+  //     file.mimetype.split('/')[1],
+  //   );
+
+  //   return url;
+  // }
 }

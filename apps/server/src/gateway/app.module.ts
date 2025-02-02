@@ -7,6 +7,9 @@ import {
   LoggerMiddleware,
   PagesModule,
   GlobalModule,
+  ColumnsModule,
+  ButtonsModule,
+  TablesModule,
 } from '@shared';
 import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
@@ -30,8 +33,6 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
-import { TablesModule } from '../shared/domains/builder/tables';
-import { ColumnsModule } from '../shared/domains/builder/columns';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ColumnsModule } from '../shared/domains/builder/columns';
     InputsModule,
     FormsModule,
     PagesModule,
+    ButtonsModule,
     TablesModule,
     CaslModule,
     InitModule,

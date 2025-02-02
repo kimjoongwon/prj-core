@@ -15,6 +15,8 @@ import { SessionsPage } from '../pages/sessions.page';
 import { SessionEditPage } from '../pages/session-edit.page';
 import { RoutinesPage } from '../pages/routines.page';
 import { RoutineEditPage } from '../pages/routine-edit.page';
+import { TasksPage } from '../pages/tasks.page';
+import { TaskEditPage } from '../pages/task-edit.page';
 
 @Controller()
 export class AdminMainRouteController {
@@ -31,6 +33,8 @@ export class AdminMainRouteController {
     readonly sessinoEditPage: SessionEditPage,
     readonly routinesPage: RoutinesPage,
     readonly routineEditPage: RoutineEditPage,
+    readonly tasksPage: TasksPage,
+    readonly taskEditPage: TaskEditPage,
     readonly prisma: PrismaService,
   ) {}
 
@@ -160,6 +164,26 @@ export class AdminMainRouteController {
     @Param('type') type: 'edit' | 'add',
   ) {
     const route = await this.routineEditPage.getMeta(routineId, type);
+    return ResponseEntity.WITH_ROUTE(route);
+  }
+
+  @Auth()
+  @Get('tasks')
+  @ApiResponseEntity(Object, HttpStatus.OK)
+  getAdminMainTasksPage() {
+    const route = this.tasksPage.getMeta();
+    return ResponseEntity.WITH_ROUTE(route);
+  }
+
+  @Auth()
+  @Get('tasks/:taskId/:type')
+  @ApiResponseEntity(Object, HttpStatus.OK)
+  async getAdminMainTaskEditPage(
+    @Param('taskId') taskId: string,
+    @Param('type') type: 'edit' | 'add',
+  ) {
+    const route = await this.taskEditPage.getMeta(taskId, type);
+    console.log('route', route);
     return ResponseEntity.WITH_ROUTE(route);
   }
 }

@@ -16,3 +16,4 @@ export * from './update-routine.dto';
 export * from './update-program.dto';
 export * from './update-content.dto';
 export * from './update-depot.dto';
+export * from './update-task.dto';

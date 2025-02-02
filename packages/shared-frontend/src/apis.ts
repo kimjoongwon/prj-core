@@ -38,8 +38,6 @@ import type {
   CreateCategoryDto,
   CreateClassification200AllOf,
   CreateClassificationDto,
-  CreateDepot200AllOf,
-  CreateDepotBody,
   CreateGroupDto,
   CreateProgram200AllOf,
   CreateProgramDto,
@@ -79,19 +77,21 @@ import type {
   GetActionsByQuery200AllOf,
   GetActionsByQueryParams,
   GetAdminAuthLoginRoute200AllOf,
-  GetAdminMainCategoriesEditRoute200AllOf,
-  GetAdminMainCategoriesRoute200AllOf,
-  GetAdminMainCategoryRoute200AllOf,
-  GetAdminMainGroupEditRoute200AllOf,
-  GetAdminMainGroupsRoute200AllOf,
-  GetAdminMainRoutineEditRoute200AllOf,
-  GetAdminMainRoutinesRoute200AllOf,
-  GetAdminMainServicesRoute200AllOf,
-  GetAdminMainSessionEditRoute200AllOf,
-  GetAdminMainSessionsRoute200AllOf,
-  GetAdminMainTenanciesRoute200AllOf,
-  GetAdminMainTimelineEditRoute200AllOf,
-  GetAdminMainTimelinesRoute200AllOf,
+  GetAdminMainCategoriesEditPage200AllOf,
+  GetAdminMainCategoriesPage200AllOf,
+  GetAdminMainCategoryPage200AllOf,
+  GetAdminMainGroupEditPage200AllOf,
+  GetAdminMainGroupsPage200AllOf,
+  GetAdminMainRoutineEditPage200AllOf,
+  GetAdminMainRoutinesPage200AllOf,
+  GetAdminMainServicesPage200AllOf,
+  GetAdminMainSessionEditPage200AllOf,
+  GetAdminMainSessionsPage200AllOf,
+  GetAdminMainTaskEditPage200AllOf,
+  GetAdminMainTasksPage200AllOf,
+  GetAdminMainTenanciesPage200AllOf,
+  GetAdminMainTimelineEditPage200AllOf,
+  GetAdminMainTimelinesPage200AllOf,
   GetAssociation200AllOf,
   GetAssociationsByQuery200AllOf,
   GetAssociationsByQueryParams,
@@ -9553,253 +9553,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions);
     }
     
-export const createDepot = (
-    createDepotBody?: BodyType<CreateDepotBody>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      const formData = new FormData();
-if(createDepotBody?.files !== undefined) {
- createDepotBody?.files.forEach(value => formData.append('files', value));
- }
-
-      return customInstance<CreateDepot200AllOf>(
-      {url: `/api/v1/depots`, method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data', },
-       data: formData, signal
-    },
-      options);
-    }
-  
-
-
-export const getCreateDepotMutationOptions = <TData = Awaited<ReturnType<typeof createDepot>>, TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateDepotBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
-) => {
-const mutationKey = ['createDepot'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createDepot>>, {data: BodyType<CreateDepotBody>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createDepot(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<CreateDepotBody>}, TContext>}
-
-    export type CreateDepotMutationResult = NonNullable<Awaited<ReturnType<typeof createDepot>>>
-    export type CreateDepotMutationBody = BodyType<CreateDepotBody>
-    export type CreateDepotMutationError = ErrorType<unknown>
-
-    export const useCreateDepot = <TData = Awaited<ReturnType<typeof createDepot>>, TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateDepotBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        TData,
-        TError,
-        {data: BodyType<CreateDepotBody>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateDepotMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const getDepotsByQuery = (
-    params?: GetDepotsByQueryParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetDepotsByQuery200AllOf>(
-      {url: `/api/v1/depots`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
-
-export const getGetDepotsByQueryQueryKey = (params?: GetDepotsByQueryParams,) => {
-    return [`/api/v1/depots`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetDepotsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
-}
-
-export type GetDepotsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
-export type GetDepotsByQueryQueryError = ErrorType<void>
-
-
-export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDepotsByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getDepotsByQuery>>,
-          TError,
-          TData
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-
-export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
-
-  const queryOptions = getGetDepotsByQueryQueryOptions(params,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetDepotsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
-}
-
-export type GetDepotsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
-export type GetDepotsByQuerySuspenseQueryError = ErrorType<void>
-
-
-export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-
-export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
-
-  const queryOptions = getGetDepotsByQuerySuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetDepotsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
-}
-
-export type GetDepotsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
-export type GetDepotsByQuerySuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-
-export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
- params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
-
-  const queryOptions = getGetDepotsByQuerySuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
 export const getDepotById = (
     depotId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -10209,6 +9962,191 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions);
     }
     
+export const getDepotsByQuery = (
+    params?: GetDepotsByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetDepotsByQuery200AllOf>(
+      {url: `/api/v1/depots`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetDepotsByQueryQueryKey = (params?: GetDepotsByQueryParams,) => {
+    return [`/api/v1/depots`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetDepotsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetDepotsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
+export type GetDepotsByQueryQueryError = ErrorType<void>
+
+
+export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDepotsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDepotsByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetDepotsByQuery<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetDepotsByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetDepotsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetDepotsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
+export type GetDepotsByQuerySuspenseQueryError = ErrorType<void>
+
+
+export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetDepotsByQuerySuspense<TData = Awaited<ReturnType<typeof getDepotsByQuery>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetDepotsByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetDepotsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDepotsByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDepotsByQuery>>> = ({ signal }) => getDepotsByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetDepotsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getDepotsByQuery>>>
+export type GetDepotsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
+ params: undefined |  GetDepotsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getDepotsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetDepotsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getDepotsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetDepotsByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 export const getAdminAuthLoginRoute = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -10393,77 +10331,77 @@ export function useGetAdminAuthLoginRouteSuspenseInfinite<TData = InfiniteData<A
 
 
 
-export const getAdminMainTenanciesRoute = (
+export const getAdminMainTenanciesPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainTenanciesRoute200AllOf>(
+      return customInstance<GetAdminMainTenanciesPage200AllOf>(
       {url: `/api/v1/admin/main/tenancies`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainTenanciesRouteQueryKey = () => {
+export const getGetAdminMainTenanciesPageQueryKey = () => {
     return [`/api/v1/admin/main/tenancies`] as const;
     }
 
     
-export const getGetAdminMainTenanciesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTenanciesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>> = ({ signal }) => getAdminMainTenanciesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>> = ({ signal }) => getAdminMainTenanciesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTenanciesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>
-export type GetAdminMainTenanciesRouteQueryError = ErrorType<unknown>
+export type GetAdminMainTenanciesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>
+export type GetAdminMainTenanciesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTenanciesRoute<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainTenanciesPage<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTenanciesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRoute<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainTenanciesPage<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTenanciesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRoute<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPage<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTenanciesRoute<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPage<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTenanciesRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainTenanciesPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10474,47 +10412,47 @@ export function useGetAdminMainTenanciesRoute<TData = Awaited<ReturnType<typeof 
 
 
 
-export const getGetAdminMainTenanciesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTenanciesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>> = ({ signal }) => getAdminMainTenanciesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>> = ({ signal }) => getAdminMainTenanciesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTenanciesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>
-export type GetAdminMainTenanciesRouteSuspenseQueryError = ErrorType<unknown>
+export type GetAdminMainTenanciesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>
+export type GetAdminMainTenanciesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTenanciesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTenanciesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTenanciesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTenanciesRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainTenanciesPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10525,47 +10463,47 @@ export function useGetAdminMainTenanciesRouteSuspense<TData = Awaited<ReturnType
 
 
 
-export const getGetAdminMainTenanciesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTenanciesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTenanciesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>> = ({ signal }) => getAdminMainTenanciesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>> = ({ signal }) => getAdminMainTenanciesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTenanciesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>
-export type GetAdminMainTenanciesRouteSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetAdminMainTenanciesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>
+export type GetAdminMainTenanciesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTenanciesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTenanciesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTenanciesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTenanciesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTenanciesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTenanciesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTenanciesRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainTenanciesPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10577,77 +10515,77 @@ export function useGetAdminMainTenanciesRouteSuspenseInfinite<TData = InfiniteDa
 
 
 
-export const getAdminMainCategoriesRoute = (
+export const getAdminMainCategoriesPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainCategoriesRoute200AllOf>(
+      return customInstance<GetAdminMainCategoriesPage200AllOf>(
       {url: `/api/v1/admin/main/categories`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainCategoriesRouteQueryKey = () => {
+export const getGetAdminMainCategoriesPageQueryKey = () => {
     return [`/api/v1/admin/main/categories`] as const;
     }
 
     
-export const getGetAdminMainCategoriesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>> = ({ signal }) => getAdminMainCategoriesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>> = ({ signal }) => getAdminMainCategoriesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteQueryError = ErrorType<void>
+export type GetAdminMainCategoriesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
+export type GetAdminMainCategoriesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoriesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoriesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainCategoriesPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10658,47 +10596,47 @@ export function useGetAdminMainCategoriesRoute<TData = Awaited<ReturnType<typeof
 
 
 
-export const getGetAdminMainCategoriesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>> = ({ signal }) => getAdminMainCategoriesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>> = ({ signal }) => getAdminMainCategoriesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainCategoriesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
+export type GetAdminMainCategoriesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainCategoriesPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10709,47 +10647,47 @@ export function useGetAdminMainCategoriesRouteSuspense<TData = Awaited<ReturnTyp
 
 
 
-export const getGetAdminMainCategoriesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>> = ({ signal }) => getAdminMainCategoriesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>> = ({ signal }) => getAdminMainCategoriesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>
-export type GetAdminMainCategoriesRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainCategoriesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
+export type GetAdminMainCategoriesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainCategoriesPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10761,77 +10699,77 @@ export function useGetAdminMainCategoriesRouteSuspenseInfinite<TData = InfiniteD
 
 
 
-export const getAdminMainCategoryRoute = (
+export const getAdminMainCategoryPage = (
     categoryId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainCategoryRoute200AllOf>(
+      return customInstance<GetAdminMainCategoryPage200AllOf>(
       {url: `/api/v1/admin/main/categories/${categoryId}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainCategoryRouteQueryKey = (categoryId: string,) => {
+export const getGetAdminMainCategoryPageQueryKey = (categoryId: string,) => {
     return [`/api/v1/admin/main/categories/${categoryId}`] as const;
     }
 
     
-export const getGetAdminMainCategoryRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoryPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryRouteQueryKey(categoryId);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryPageQueryKey(categoryId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>> = ({ signal }) => getAdminMainCategoryRoute(categoryId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryPage>>> = ({ signal }) => getAdminMainCategoryPage(categoryId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(categoryId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoryRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>
-export type GetAdminMainCategoryRouteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoryPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>
+export type GetAdminMainCategoryPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoryRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainCategoryPage<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoryRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoryPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainCategoryPage<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoryRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoryPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPage<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoryRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPage<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoryRouteQueryOptions(categoryId,options)
+  const queryOptions = getGetAdminMainCategoryPageQueryOptions(categoryId,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10842,47 +10780,47 @@ export function useGetAdminMainCategoryRoute<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getGetAdminMainCategoryRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoryPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryRouteQueryKey(categoryId);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryPageQueryKey(categoryId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>> = ({ signal }) => getAdminMainCategoryRoute(categoryId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryPage>>> = ({ signal }) => getAdminMainCategoryPage(categoryId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoryRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>
-export type GetAdminMainCategoryRouteSuspenseQueryError = ErrorType<unknown>
+export type GetAdminMainCategoryPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>
+export type GetAdminMainCategoryPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoryRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainCategoryPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoryRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoryRouteSuspenseQueryOptions(categoryId,options)
+  const queryOptions = getGetAdminMainCategoryPageSuspenseQueryOptions(categoryId,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10893,47 +10831,47 @@ export function useGetAdminMainCategoryRouteSuspense<TData = Awaited<ReturnType<
 
 
 
-export const getGetAdminMainCategoryRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>, TError = ErrorType<unknown>>(categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoryPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>, TError = ErrorType<void>>(categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryRouteQueryKey(categoryId);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoryPageQueryKey(categoryId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>> = ({ signal }) => getAdminMainCategoryRoute(categoryId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoryPage>>> = ({ signal }) => getAdminMainCategoryPage(categoryId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoryRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>
-export type GetAdminMainCategoryRouteSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoryPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>
+export type GetAdminMainCategoryPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoryRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>, TError = ErrorType<unknown>>(
- categoryId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>, TError = ErrorType<void>>(
+ categoryId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoryRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainCategoryPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoryRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>>, TError = ErrorType<unknown>>(
- categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainCategoryPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoryPage>>>, TError = ErrorType<void>>(
+ categoryId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoryPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoryRouteSuspenseInfiniteQueryOptions(categoryId,options)
+  const queryOptions = getGetAdminMainCategoryPageSuspenseInfiniteQueryOptions(categoryId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -10945,84 +10883,84 @@ export function useGetAdminMainCategoryRouteSuspenseInfinite<TData = InfiniteDat
 
 
 
-export const getAdminMainCategoriesEditRoute = (
+export const getAdminMainCategoriesEditPage = (
     categoryId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainCategoriesEditRoute200AllOf>(
+      return customInstance<GetAdminMainCategoriesEditPage200AllOf>(
       {url: `/api/v1/admin/main/categories/${categoryId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainCategoriesEditRouteQueryKey = (categoryId: string,
+export const getGetAdminMainCategoriesEditPageQueryKey = (categoryId: string,
     type: string,) => {
     return [`/api/v1/admin/main/categories/${categoryId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainCategoriesEditRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(categoryId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(categoryId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditRouteQueryKey(categoryId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditPageQueryKey(categoryId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>> = ({ signal }) => getAdminMainCategoriesEditRoute(categoryId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>> = ({ signal }) => getAdminMainCategoriesEditPage(categoryId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(categoryId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(categoryId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesEditRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>
-export type GetAdminMainCategoriesEditRouteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>
+export type GetAdminMainCategoriesEditPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesEditRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>> & Pick<
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>> & Pick<
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesEditRoute<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesEditRouteQueryOptions(categoryId,type,options)
+  const queryOptions = getGetAdminMainCategoriesEditPageQueryOptions(categoryId,type,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11033,52 +10971,52 @@ export function useGetAdminMainCategoriesEditRoute<TData = Awaited<ReturnType<ty
 
 
 
-export const getGetAdminMainCategoriesEditRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(categoryId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditRouteQueryKey(categoryId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditPageQueryKey(categoryId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>> = ({ signal }) => getAdminMainCategoriesEditRoute(categoryId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>> = ({ signal }) => getAdminMainCategoriesEditPage(categoryId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesEditRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>
-export type GetAdminMainCategoriesEditRouteSuspenseQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>
+export type GetAdminMainCategoriesEditPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesEditRouteSuspenseQueryOptions(categoryId,type,options)
+  const queryOptions = getGetAdminMainCategoriesEditPageSuspenseQueryOptions(categoryId,type,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11089,52 +11027,52 @@ export function useGetAdminMainCategoriesEditRouteSuspense<TData = Awaited<Retur
 
 
 
-export const getGetAdminMainCategoriesEditRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>, TError = ErrorType<unknown>>(categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>, TError = ErrorType<void>>(categoryId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditRouteQueryKey(categoryId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainCategoriesEditPageQueryKey(categoryId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>> = ({ signal }) => getAdminMainCategoriesEditRoute(categoryId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>> = ({ signal }) => getAdminMainCategoriesEditPage(categoryId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainCategoriesEditRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>
-export type GetAdminMainCategoriesEditRouteSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>
+export type GetAdminMainCategoriesEditPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>>, TError = ErrorType<void>>(
  categoryId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainCategoriesEditRouteSuspenseInfiniteQueryOptions(categoryId,type,options)
+  const queryOptions = getGetAdminMainCategoriesEditPageSuspenseInfiniteQueryOptions(categoryId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11146,77 +11084,77 @@ export function useGetAdminMainCategoriesEditRouteSuspenseInfinite<TData = Infin
 
 
 
-export const getAdminMainServicesRoute = (
+export const getAdminMainServicesPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainServicesRoute200AllOf>(
+      return customInstance<GetAdminMainServicesPage200AllOf>(
       {url: `/api/v1/admin/main/services`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainServicesRouteQueryKey = () => {
+export const getGetAdminMainServicesPageQueryKey = () => {
     return [`/api/v1/admin/main/services`] as const;
     }
 
     
-export const getGetAdminMainServicesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainServicesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesRoute>>> = ({ signal }) => getAdminMainServicesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesPage>>> = ({ signal }) => getAdminMainServicesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainServicesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>
-export type GetAdminMainServicesRouteQueryError = ErrorType<void>
+export type GetAdminMainServicesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesPage>>>
+export type GetAdminMainServicesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainServicesRoute<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainServicesPage<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainServicesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainServicesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRoute<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainServicesPage<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainServicesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainServicesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRoute<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPage<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainServicesRoute<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPage<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainServicesRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainServicesPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11227,47 +11165,47 @@ export function useGetAdminMainServicesRoute<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getGetAdminMainServicesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainServicesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesRoute>>> = ({ signal }) => getAdminMainServicesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesPage>>> = ({ signal }) => getAdminMainServicesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainServicesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>
-export type GetAdminMainServicesRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainServicesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesPage>>>
+export type GetAdminMainServicesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainServicesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainServicesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainServicesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainServicesRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainServicesPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11278,47 +11216,47 @@ export function useGetAdminMainServicesRouteSuspense<TData = Awaited<ReturnType<
 
 
 
-export const getGetAdminMainServicesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainServicesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainServicesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesRoute>>> = ({ signal }) => getAdminMainServicesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainServicesPage>>> = ({ signal }) => getAdminMainServicesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainServicesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>
-export type GetAdminMainServicesRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainServicesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainServicesPage>>>
+export type GetAdminMainServicesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainServicesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainServicesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainServicesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainServicesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainServicesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainServicesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainServicesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainServicesRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainServicesPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11330,77 +11268,77 @@ export function useGetAdminMainServicesRouteSuspenseInfinite<TData = InfiniteDat
 
 
 
-export const getAdminMainGroupsRoute = (
+export const getAdminMainGroupsPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainGroupsRoute200AllOf>(
+      return customInstance<GetAdminMainGroupsPage200AllOf>(
       {url: `/api/v1/admin/main/groups`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainGroupsRouteQueryKey = () => {
+export const getGetAdminMainGroupsPageQueryKey = () => {
     return [`/api/v1/admin/main/groups`] as const;
     }
 
     
-export const getGetAdminMainGroupsRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupsPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>> = ({ signal }) => getAdminMainGroupsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsPage>>> = ({ signal }) => getAdminMainGroupsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupsRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>
-export type GetAdminMainGroupsRouteQueryError = ErrorType<void>
+export type GetAdminMainGroupsPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>
+export type GetAdminMainGroupsPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupsRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainGroupsPage<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGroupsRoute>>,
+          Awaited<ReturnType<typeof getAdminMainGroupsPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainGroupsPage<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGroupsRoute>>,
+          Awaited<ReturnType<typeof getAdminMainGroupsPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPage<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupsRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPage<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupsRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainGroupsPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11411,47 +11349,47 @@ export function useGetAdminMainGroupsRoute<TData = Awaited<ReturnType<typeof get
 
 
 
-export const getGetAdminMainGroupsRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupsPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>> = ({ signal }) => getAdminMainGroupsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsPage>>> = ({ signal }) => getAdminMainGroupsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupsRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>
-export type GetAdminMainGroupsRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainGroupsPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>
+export type GetAdminMainGroupsPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainGroupsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupsRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainGroupsPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11462,47 +11400,47 @@ export function useGetAdminMainGroupsRouteSuspense<TData = Awaited<ReturnType<ty
 
 
 
-export const getGetAdminMainGroupsRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupsPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>> = ({ signal }) => getAdminMainGroupsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupsPage>>> = ({ signal }) => getAdminMainGroupsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupsRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>
-export type GetAdminMainGroupsRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainGroupsPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>
+export type GetAdminMainGroupsPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainGroupsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroupsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupsRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainGroupsPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11514,84 +11452,84 @@ export function useGetAdminMainGroupsRouteSuspenseInfinite<TData = InfiniteData<
 
 
 
-export const getAdminMainGroupEditRoute = (
+export const getAdminMainGroupEditPage = (
     groupId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainGroupEditRoute200AllOf>(
+      return customInstance<GetAdminMainGroupEditPage200AllOf>(
       {url: `/api/v1/admin/main/groups/${groupId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainGroupEditRouteQueryKey = (groupId: string,
+export const getGetAdminMainGroupEditPageQueryKey = (groupId: string,
     type: string,) => {
     return [`/api/v1/admin/main/groups/${groupId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainGroupEditRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(groupId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(groupId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditRouteQueryKey(groupId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditPageQueryKey(groupId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>> = ({ signal }) => getAdminMainGroupEditRoute(groupId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>> = ({ signal }) => getAdminMainGroupEditPage(groupId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(groupId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(groupId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupEditRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>
-export type GetAdminMainGroupEditRouteQueryError = ErrorType<void>
+export type GetAdminMainGroupEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>
+export type GetAdminMainGroupEditPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupEditRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPage<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>> & Pick<
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainGroupEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPage<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>> & Pick<
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainGroupEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPage<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupEditRoute<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPage<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupEditRouteQueryOptions(groupId,type,options)
+  const queryOptions = getGetAdminMainGroupEditPageQueryOptions(groupId,type,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11602,52 +11540,52 @@ export function useGetAdminMainGroupEditRoute<TData = Awaited<ReturnType<typeof 
 
 
 
-export const getGetAdminMainGroupEditRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(groupId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditRouteQueryKey(groupId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditPageQueryKey(groupId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>> = ({ signal }) => getAdminMainGroupEditRoute(groupId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>> = ({ signal }) => getAdminMainGroupEditPage(groupId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupEditRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>
-export type GetAdminMainGroupEditRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainGroupEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>
+export type GetAdminMainGroupEditPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupEditRouteSuspenseQueryOptions(groupId,type,options)
+  const queryOptions = getGetAdminMainGroupEditPageSuspenseQueryOptions(groupId,type,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11658,52 +11596,52 @@ export function useGetAdminMainGroupEditRouteSuspense<TData = Awaited<ReturnType
 
 
 
-export const getGetAdminMainGroupEditRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>, TError = ErrorType<void>>(groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroupEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>, TError = ErrorType<void>>(groupId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditRouteQueryKey(groupId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroupEditPageQueryKey(groupId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>> = ({ signal }) => getAdminMainGroupEditRoute(groupId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>> = ({ signal }) => getAdminMainGroupEditPage(groupId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainGroupEditRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>
-export type GetAdminMainGroupEditRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainGroupEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>
+export type GetAdminMainGroupEditPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGroupEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainGroupEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainGroupEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainGroupEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>>, TError = ErrorType<void>>(
  groupId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroupEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainGroupEditRouteSuspenseInfiniteQueryOptions(groupId,type,options)
+  const queryOptions = getGetAdminMainGroupEditPageSuspenseInfiniteQueryOptions(groupId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11715,77 +11653,77 @@ export function useGetAdminMainGroupEditRouteSuspenseInfinite<TData = InfiniteDa
 
 
 
-export const getAdminMainTimelinesRoute = (
+export const getAdminMainTimelinesPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainTimelinesRoute200AllOf>(
+      return customInstance<GetAdminMainTimelinesPage200AllOf>(
       {url: `/api/v1/admin/main/timelines`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainTimelinesRouteQueryKey = () => {
+export const getGetAdminMainTimelinesPageQueryKey = () => {
     return [`/api/v1/admin/main/timelines`] as const;
     }
 
     
-export const getGetAdminMainTimelinesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelinesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>> = ({ signal }) => getAdminMainTimelinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>> = ({ signal }) => getAdminMainTimelinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelinesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>
-export type GetAdminMainTimelinesRouteQueryError = ErrorType<void>
+export type GetAdminMainTimelinesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>
+export type GetAdminMainTimelinesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelinesRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainTimelinesPage<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTimelinesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainTimelinesPage<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTimelinesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPage<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelinesRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPage<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelinesRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainTimelinesPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11796,47 +11734,47 @@ export function useGetAdminMainTimelinesRoute<TData = Awaited<ReturnType<typeof 
 
 
 
-export const getGetAdminMainTimelinesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelinesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>> = ({ signal }) => getAdminMainTimelinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>> = ({ signal }) => getAdminMainTimelinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelinesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>
-export type GetAdminMainTimelinesRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainTimelinesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>
+export type GetAdminMainTimelinesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTimelinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelinesRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainTimelinesPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11847,47 +11785,47 @@ export function useGetAdminMainTimelinesRouteSuspense<TData = Awaited<ReturnType
 
 
 
-export const getGetAdminMainTimelinesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelinesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>> = ({ signal }) => getAdminMainTimelinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>> = ({ signal }) => getAdminMainTimelinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelinesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>
-export type GetAdminMainTimelinesRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainTimelinesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>
+export type GetAdminMainTimelinesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTimelinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainTimelinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelinesRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainTimelinesPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11899,84 +11837,84 @@ export function useGetAdminMainTimelinesRouteSuspenseInfinite<TData = InfiniteDa
 
 
 
-export const getAdminMainTimelineEditRoute = (
+export const getAdminMainTimelineEditPage = (
     timelineId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainTimelineEditRoute200AllOf>(
+      return customInstance<GetAdminMainTimelineEditPage200AllOf>(
       {url: `/api/v1/admin/main/timelines/${timelineId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainTimelineEditRouteQueryKey = (timelineId: string,
+export const getGetAdminMainTimelineEditPageQueryKey = (timelineId: string,
     type: string,) => {
     return [`/api/v1/admin/main/timelines/${timelineId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainTimelineEditRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(timelineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelineEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(timelineId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditRouteQueryKey(timelineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditPageQueryKey(timelineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>> = ({ signal }) => getAdminMainTimelineEditRoute(timelineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>> = ({ signal }) => getAdminMainTimelineEditPage(timelineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(timelineId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(timelineId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelineEditRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>
-export type GetAdminMainTimelineEditRouteQueryError = ErrorType<void>
+export type GetAdminMainTimelineEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>
+export type GetAdminMainTimelineEditPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPage<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>> & Pick<
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPage<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>> & Pick<
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPage<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPage<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelineEditRouteQueryOptions(timelineId,type,options)
+  const queryOptions = getGetAdminMainTimelineEditPageQueryOptions(timelineId,type,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -11987,52 +11925,52 @@ export function useGetAdminMainTimelineEditRoute<TData = Awaited<ReturnType<type
 
 
 
-export const getGetAdminMainTimelineEditRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelineEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(timelineId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditRouteQueryKey(timelineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditPageQueryKey(timelineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>> = ({ signal }) => getAdminMainTimelineEditRoute(timelineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>> = ({ signal }) => getAdminMainTimelineEditPage(timelineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelineEditRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>
-export type GetAdminMainTimelineEditRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainTimelineEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>
+export type GetAdminMainTimelineEditPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelineEditRouteSuspenseQueryOptions(timelineId,type,options)
+  const queryOptions = getGetAdminMainTimelineEditPageSuspenseQueryOptions(timelineId,type,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12043,52 +11981,52 @@ export function useGetAdminMainTimelineEditRouteSuspense<TData = Awaited<ReturnT
 
 
 
-export const getGetAdminMainTimelineEditRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>, TError = ErrorType<void>>(timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainTimelineEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>, TError = ErrorType<void>>(timelineId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditRouteQueryKey(timelineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTimelineEditPageQueryKey(timelineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>> = ({ signal }) => getAdminMainTimelineEditRoute(timelineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>> = ({ signal }) => getAdminMainTimelineEditPage(timelineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainTimelineEditRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>
-export type GetAdminMainTimelineEditRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainTimelineEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>
+export type GetAdminMainTimelineEditPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainTimelineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainTimelineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainTimelineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainTimelineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>>, TError = ErrorType<void>>(
  timelineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTimelineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainTimelineEditRouteSuspenseInfiniteQueryOptions(timelineId,type,options)
+  const queryOptions = getGetAdminMainTimelineEditPageSuspenseInfiniteQueryOptions(timelineId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12100,77 +12038,77 @@ export function useGetAdminMainTimelineEditRouteSuspenseInfinite<TData = Infinit
 
 
 
-export const getAdminMainSessionsRoute = (
+export const getAdminMainSessionsPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainSessionsRoute200AllOf>(
+      return customInstance<GetAdminMainSessionsPage200AllOf>(
       {url: `/api/v1/admin/main/sessions`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainSessionsRouteQueryKey = () => {
+export const getGetAdminMainSessionsPageQueryKey = () => {
     return [`/api/v1/admin/main/sessions`] as const;
     }
 
     
-export const getGetAdminMainSessionsRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionsPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>> = ({ signal }) => getAdminMainSessionsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsPage>>> = ({ signal }) => getAdminMainSessionsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionsRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>
-export type GetAdminMainSessionsRouteQueryError = ErrorType<void>
+export type GetAdminMainSessionsPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>
+export type GetAdminMainSessionsPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionsRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainSessionsPage<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainSessionsRoute>>,
+          Awaited<ReturnType<typeof getAdminMainSessionsPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainSessionsPage<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainSessionsRoute>>,
+          Awaited<ReturnType<typeof getAdminMainSessionsPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPage<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionsRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPage<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionsRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainSessionsPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12181,47 +12119,47 @@ export function useGetAdminMainSessionsRoute<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getGetAdminMainSessionsRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionsPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>> = ({ signal }) => getAdminMainSessionsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsPage>>> = ({ signal }) => getAdminMainSessionsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionsRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>
-export type GetAdminMainSessionsRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainSessionsPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>
+export type GetAdminMainSessionsPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainSessionsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionsRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionsRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainSessionsPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12232,47 +12170,47 @@ export function useGetAdminMainSessionsRouteSuspense<TData = Awaited<ReturnType<
 
 
 
-export const getGetAdminMainSessionsRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionsPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>> = ({ signal }) => getAdminMainSessionsRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionsPage>>> = ({ signal }) => getAdminMainSessionsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionsRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>
-export type GetAdminMainSessionsRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainSessionsPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>
+export type GetAdminMainSessionsPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainSessionsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionsRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainSessionsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionsRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainSessionsPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12284,84 +12222,84 @@ export function useGetAdminMainSessionsRouteSuspenseInfinite<TData = InfiniteDat
 
 
 
-export const getAdminMainSessionEditRoute = (
+export const getAdminMainSessionEditPage = (
     sessionId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainSessionEditRoute200AllOf>(
+      return customInstance<GetAdminMainSessionEditPage200AllOf>(
       {url: `/api/v1/admin/main/sessions/${sessionId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainSessionEditRouteQueryKey = (sessionId: string,
+export const getGetAdminMainSessionEditPageQueryKey = (sessionId: string,
     type: string,) => {
     return [`/api/v1/admin/main/sessions/${sessionId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainSessionEditRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(sessionId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(sessionId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditRouteQueryKey(sessionId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditPageQueryKey(sessionId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>> = ({ signal }) => getAdminMainSessionEditRoute(sessionId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>> = ({ signal }) => getAdminMainSessionEditPage(sessionId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(sessionId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(sessionId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionEditRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>
-export type GetAdminMainSessionEditRouteQueryError = ErrorType<void>
+export type GetAdminMainSessionEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>
+export type GetAdminMainSessionEditPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionEditRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPage<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>> & Pick<
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainSessionEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPage<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>> & Pick<
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainSessionEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPage<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionEditRoute<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPage<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionEditRouteQueryOptions(sessionId,type,options)
+  const queryOptions = getGetAdminMainSessionEditPageQueryOptions(sessionId,type,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12372,52 +12310,52 @@ export function useGetAdminMainSessionEditRoute<TData = Awaited<ReturnType<typeo
 
 
 
-export const getGetAdminMainSessionEditRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(sessionId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditRouteQueryKey(sessionId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditPageQueryKey(sessionId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>> = ({ signal }) => getAdminMainSessionEditRoute(sessionId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>> = ({ signal }) => getAdminMainSessionEditPage(sessionId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionEditRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>
-export type GetAdminMainSessionEditRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainSessionEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>
+export type GetAdminMainSessionEditPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionEditRouteSuspenseQueryOptions(sessionId,type,options)
+  const queryOptions = getGetAdminMainSessionEditPageSuspenseQueryOptions(sessionId,type,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12428,52 +12366,52 @@ export function useGetAdminMainSessionEditRouteSuspense<TData = Awaited<ReturnTy
 
 
 
-export const getGetAdminMainSessionEditRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>, TError = ErrorType<void>>(sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainSessionEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>, TError = ErrorType<void>>(sessionId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditRouteQueryKey(sessionId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainSessionEditPageQueryKey(sessionId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>> = ({ signal }) => getAdminMainSessionEditRoute(sessionId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>> = ({ signal }) => getAdminMainSessionEditPage(sessionId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainSessionEditRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>
-export type GetAdminMainSessionEditRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainSessionEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>
+export type GetAdminMainSessionEditPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainSessionEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainSessionEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainSessionEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainSessionEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>>, TError = ErrorType<void>>(
  sessionId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainSessionEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainSessionEditRouteSuspenseInfiniteQueryOptions(sessionId,type,options)
+  const queryOptions = getGetAdminMainSessionEditPageSuspenseInfiniteQueryOptions(sessionId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12485,77 +12423,77 @@ export function useGetAdminMainSessionEditRouteSuspenseInfinite<TData = Infinite
 
 
 
-export const getAdminMainRoutinesRoute = (
+export const getAdminMainRoutinesPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainRoutinesRoute200AllOf>(
+      return customInstance<GetAdminMainRoutinesPage200AllOf>(
       {url: `/api/v1/admin/main/routines`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainRoutinesRouteQueryKey = () => {
+export const getGetAdminMainRoutinesPageQueryKey = () => {
     return [`/api/v1/admin/main/routines`] as const;
     }
 
     
-export const getGetAdminMainRoutinesRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutinesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>> = ({ signal }) => getAdminMainRoutinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>> = ({ signal }) => getAdminMainRoutinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutinesRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>
-export type GetAdminMainRoutinesRouteQueryError = ErrorType<void>
+export type GetAdminMainRoutinesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>
+export type GetAdminMainRoutinesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutinesRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainRoutinesPage<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainRoutinesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>> & Pick<
+export function useGetAdminMainRoutinesPage<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>,
+          Awaited<ReturnType<typeof getAdminMainRoutinesPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPage<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutinesRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPage<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutinesRouteQueryOptions(options)
+  const queryOptions = getGetAdminMainRoutinesPageQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12566,47 +12504,47 @@ export function useGetAdminMainRoutinesRoute<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getGetAdminMainRoutinesRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutinesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>> = ({ signal }) => getAdminMainRoutinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>> = ({ signal }) => getAdminMainRoutinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutinesRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>
-export type GetAdminMainRoutinesRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainRoutinesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>
+export type GetAdminMainRoutinesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainRoutinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutinesRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutinesRouteSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainRoutinesPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12617,47 +12555,47 @@ export function useGetAdminMainRoutinesRouteSuspense<TData = Awaited<ReturnType<
 
 
 
-export const getGetAdminMainRoutinesRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutinesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesRouteQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutinesPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>> = ({ signal }) => getAdminMainRoutinesRoute(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>> = ({ signal }) => getAdminMainRoutinesPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutinesRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>
-export type GetAdminMainRoutinesRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainRoutinesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>
+export type GetAdminMainRoutinesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainRoutinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutinesRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainRoutinesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutinesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutinesRouteSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainRoutinesPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12669,84 +12607,84 @@ export function useGetAdminMainRoutinesRouteSuspenseInfinite<TData = InfiniteDat
 
 
 
-export const getAdminMainRoutineEditRoute = (
+export const getAdminMainRoutineEditPage = (
     routineId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainRoutineEditRoute200AllOf>(
+      return customInstance<GetAdminMainRoutineEditPage200AllOf>(
       {url: `/api/v1/admin/main/routines/${routineId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainRoutineEditRouteQueryKey = (routineId: string,
+export const getGetAdminMainRoutineEditPageQueryKey = (routineId: string,
     type: string,) => {
     return [`/api/v1/admin/main/routines/${routineId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainRoutineEditRouteQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(routineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutineEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(routineId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditRouteQueryKey(routineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditPageQueryKey(routineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>> = ({ signal }) => getAdminMainRoutineEditRoute(routineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>> = ({ signal }) => getAdminMainRoutineEditPage(routineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(routineId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, enabled: !!(routineId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutineEditRouteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>
-export type GetAdminMainRoutineEditRouteQueryError = ErrorType<void>
+export type GetAdminMainRoutineEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>
+export type GetAdminMainRoutineEditPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPage<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>> & Pick<
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPage<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>> & Pick<
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>,
+          Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>,
           TError,
           TData
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPage<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutineEditRoute<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPage<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutineEditRouteQueryOptions(routineId,type,options)
+  const queryOptions = getGetAdminMainRoutineEditPageQueryOptions(routineId,type,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12757,52 +12695,52 @@ export function useGetAdminMainRoutineEditRoute<TData = Awaited<ReturnType<typeo
 
 
 
-export const getGetAdminMainRoutineEditRouteSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutineEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(routineId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditRouteQueryKey(routineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditPageQueryKey(routineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>> = ({ signal }) => getAdminMainRoutineEditRoute(routineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>> = ({ signal }) => getAdminMainRoutineEditPage(routineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutineEditRouteSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>
-export type GetAdminMainRoutineEditRouteSuspenseQueryError = ErrorType<void>
+export type GetAdminMainRoutineEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>
+export type GetAdminMainRoutineEditPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutineEditRouteSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutineEditRouteSuspenseQueryOptions(routineId,type,options)
+  const queryOptions = getGetAdminMainRoutineEditPageSuspenseQueryOptions(routineId,type,options)
 
   const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
@@ -12813,52 +12751,437 @@ export function useGetAdminMainRoutineEditRouteSuspense<TData = Awaited<ReturnTy
 
 
 
-export const getGetAdminMainRoutineEditRouteSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>, TError = ErrorType<void>>(routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainRoutineEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>, TError = ErrorType<void>>(routineId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditRouteQueryKey(routineId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainRoutineEditPageQueryKey(routineId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>> = ({ signal }) => getAdminMainRoutineEditRoute(routineId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>> = ({ signal }) => getAdminMainRoutineEditPage(routineId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export type GetAdminMainRoutineEditRouteSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>
-export type GetAdminMainRoutineEditRouteSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainRoutineEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>
+export type GetAdminMainRoutineEditPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainRoutineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainRoutineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainRoutineEditRouteSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>>, TError = ErrorType<void>>(
+export function useGetAdminMainRoutineEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>>, TError = ErrorType<void>>(
  routineId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditRoute>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainRoutineEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetAdminMainRoutineEditRouteSuspenseInfiniteQueryOptions(routineId,type,options)
+  const queryOptions = getGetAdminMainRoutineEditPageSuspenseInfiniteQueryOptions(routineId,type,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAdminMainTasksPage = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAdminMainTasksPage200AllOf>(
+      {url: `/api/v1/admin/main/tasks`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAdminMainTasksPageQueryKey = () => {
+    return [`/api/v1/admin/main/tasks`] as const;
+    }
+
+    
+export const getGetAdminMainTasksPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTasksPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTasksPage>>> = ({ signal }) => getAdminMainTasksPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTasksPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTasksPage>>>
+export type GetAdminMainTasksPageQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTasksPage<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainTasksPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPage<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainTasksPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPage<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTasksPage<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTasksPageQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainTasksPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTasksPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTasksPage>>> = ({ signal }) => getAdminMainTasksPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTasksPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTasksPage>>>
+export type GetAdminMainTasksPageSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTasksPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTasksPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTasksPageSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainTasksPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTasksPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTasksPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTasksPage>>> = ({ signal }) => getAdminMainTasksPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTasksPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTasksPage>>>
+export type GetAdminMainTasksPageSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTasksPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTasksPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTasksPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTasksPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTasksPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTasksPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTasksPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTasksPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTasksPageSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAdminMainTaskEditPage = (
+    taskId: string,
+    type: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAdminMainTaskEditPage200AllOf>(
+      {url: `/api/v1/admin/main/tasks/${taskId}/${type}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAdminMainTaskEditPageQueryKey = (taskId: string,
+    type: string,) => {
+    return [`/api/v1/admin/main/tasks/${taskId}/${type}`] as const;
+    }
+
+    
+export const getGetAdminMainTaskEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(taskId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTaskEditPageQueryKey(taskId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>> = ({ signal }) => getAdminMainTaskEditPage(taskId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(taskId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTaskEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>
+export type GetAdminMainTaskEditPageQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTaskEditPage<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainTaskEditPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPage<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainTaskEditPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPage<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTaskEditPage<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTaskEditPageQueryOptions(taskId,type,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainTaskEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTaskEditPageQueryKey(taskId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>> = ({ signal }) => getAdminMainTaskEditPage(taskId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTaskEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>
+export type GetAdminMainTaskEditPageSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTaskEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTaskEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTaskEditPageSuspenseQueryOptions(taskId,type,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainTaskEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>, TError = ErrorType<void>>(taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainTaskEditPageQueryKey(taskId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>> = ({ signal }) => getAdminMainTaskEditPage(taskId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainTaskEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>
+export type GetAdminMainTaskEditPageSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAdminMainTaskEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainTaskEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainTaskEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>>, TError = ErrorType<void>>(
+ taskId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainTaskEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainTaskEditPageSuspenseInfiniteQueryOptions(taskId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 

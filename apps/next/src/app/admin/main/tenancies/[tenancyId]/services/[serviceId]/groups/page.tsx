@@ -1,12 +1,11 @@
 'use client';
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainGroupsRoute } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
+import { useGetAdminMainGroupsPage } from '@shared/frontend';
 
 const GroupsPage = () => {
-  const { data: response } = useGetAdminMainGroupsRoute();
-  const page = response?.data as RouteBuilder;
+  const { data: response } = useGetAdminMainGroupsPage();
+  const page = response?.data as any;
 
   return <PageBuilder pageBuilder={page} />;
 };

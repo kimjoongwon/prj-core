@@ -270,7 +270,17 @@ model Program {
 
   routineId String
   sessionId String
-  tenancyId String
+}
+
+model Activity {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  taskId    String
+  routineId String
 }
 
 model Routine {
@@ -280,25 +290,28 @@ model Routine {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name           String
-  contentId      String
-  tenancyId      String
-  classification Classification?
+  name      String
+  contentId String
+  tenancyId String
 
-  content Content @relation(fields: [contentId], references: [id])
+  classification Classification?
+  content        Content         @relation(fields: [contentId], references: [id])
 }
 
-model Sequence {
+model Task {
   id  String @id @default(uuid())
   seq Int    @unique @default(autoincrement())
 
-  name      String @unique
+  name      String
+  label     String
   routineId String
   contentId String
 
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
+
+  content Content @relation(fields: [contentId], references: [id])
 }
 
 model Role {
@@ -432,6 +445,7 @@ model Content {
   type        TextTypes @default(Editor)
   text        String?   @db.VarChar(1000)
   routines    Routine[]
+  tasks       Task[]
 }
 
 model Depot {
@@ -595,6 +609,7 @@ enum ServiceNames {
   ROLE
   TIMELINE
   ROUTINE
+  TASK
 }
 
 enum DepotTypes {

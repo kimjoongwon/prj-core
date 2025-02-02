@@ -3,3 +3,6 @@ export * from './inputs';
 export * from './pages';
 export * from './forms';
 export * from './controllers';
+export * from './buttons';
+export * from './columns';
+export * from './tables';

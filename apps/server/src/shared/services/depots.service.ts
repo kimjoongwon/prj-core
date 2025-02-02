@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repositories/depots.repository';
-import { DepotQueryDto, UpdateDepotDto } from '../dtos';
-import { ContextProvider } from '../providers';
-import { AwsService } from '../domains/aws/aws.service';
-import { FilesService } from './files.service';
+import { CreateDepotDto, CreateFileDto, DepotQueryDto, UpdateDepotDto } from '../dtos';
 
 @Injectable()
 export class DepotsService {
-  constructor(
-    private readonly repository: DepotsRepository,
-    private readonly awsService: AwsService,
-    private readonly filesService: FilesService,
-  ) {}
+  constructor(private readonly repository: DepotsRepository) {}
 
   getUnique(args: Prisma.DepotFindUniqueArgs) {
     return this.repository.findUnique(args);
@@ -20,6 +13,16 @@ export class DepotsService {
 
   getById(id: string) {
     return this.repository.findUnique({ where: { id } });
+  }
+
+  create(files: CreateFileDto[]) {
+    return this.repository.create({
+      data: {
+        files: {
+          create: files,
+        },
+      },
+    });
   }
 
   getFirst(args: Prisma.DepotFindFirstArgs) {
@@ -32,21 +35,6 @@ export class DepotsService {
 
   deleteById(id: string) {
     return this.repository.delete({ where: { id } });
-  }
-
-  async create(files: Express.Multer.File[]) {
-    return this.repository.create({
-      data: {
-        files: {
-          create: await Promise.all(
-            files.map(async (file) => {
-              const depotFile = await this.filesService.getDepotFile(file);
-              return depotFile;
-            }),
-          ),
-        },
-      },
-    });
   }
 
   async getManyByQuery(query: DepotQueryDto) {

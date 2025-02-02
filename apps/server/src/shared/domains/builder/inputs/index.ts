@@ -6,6 +6,7 @@ import { NameInput } from './name.input';
 import { PasswordInput } from './password.input';
 import { TextInput } from './text.input';
 import { TitleInput } from './title.input';
+import { LabelInput } from './label.input';
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import { TitleInput } from './title.input';
     PasswordInput,
     TextInput,
     TitleInput,
+    LabelInput,
   ],
   exports: [
     DepotInput,
@@ -26,6 +28,7 @@ import { TitleInput } from './title.input';
     PasswordInput,
     TextInput,
     TitleInput,
+    LabelInput,
   ],
 })
 export class InputsModule {}

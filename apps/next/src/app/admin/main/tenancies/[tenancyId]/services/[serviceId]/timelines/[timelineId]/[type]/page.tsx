@@ -2,7 +2,7 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { ModalLayout } from '@/components/layouts';
-import { useGetAdminMainTimelineEditRoute } from '@shared/frontend';
+import { useGetAdminMainTimelineEditPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';
 
@@ -11,7 +11,7 @@ const TimelineEditPage = () => {
   const timelineId = params.timelineId as string;
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
-    useGetAdminMainTimelineEditRoute(timelineId, type);
+    useGetAdminMainTimelineEditPage(timelineId, type);
   const page = response?.data;
 
   if (!isFetchedAfterMount) {

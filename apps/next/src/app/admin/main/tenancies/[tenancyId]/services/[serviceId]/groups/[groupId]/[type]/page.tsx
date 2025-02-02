@@ -2,7 +2,7 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { ModalLayout } from '@/components/layouts';
-import { useGetAdminMainGroupEditRoute } from '@shared/frontend';
+import { useGetAdminMainGroupEditPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';
 
@@ -10,7 +10,7 @@ const GroupEditPage = () => {
   const params = useParams();
   const groupId = params.groupId as string;
   const type = params.type as 'edit' | 'add';
-  const { data: response, isFetchedAfterMount } = useGetAdminMainGroupEditRoute(
+  const { data: response, isFetchedAfterMount } = useGetAdminMainGroupEditPage(
     groupId,
     type,
   );

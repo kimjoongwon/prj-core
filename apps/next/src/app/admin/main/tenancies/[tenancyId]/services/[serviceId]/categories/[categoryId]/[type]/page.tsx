@@ -2,7 +2,7 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { ModalLayout } from '@/components/layouts';
-import { useGetAdminMainCategoriesEditRoute } from '@shared/frontend';
+import { useGetAdminMainCategoriesEditPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';
 
@@ -11,7 +11,7 @@ const CategoryEditPage = () => {
   const categoryId = params.categoryId as string;
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
-    useGetAdminMainCategoriesEditRoute(categoryId, type);
+    useGetAdminMainCategoriesEditPage(categoryId, type);
   const page = response?.data as RouteBuilder;
 
   if (!isFetchedAfterMount) {

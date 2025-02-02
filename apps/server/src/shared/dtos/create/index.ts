@@ -16,3 +16,5 @@ export * from './create-routine.dto';
 export * from './create-program.dto';
 export * from './create-content.dto';
 export * from './create-depot.dto';
+export * from './create-file.dto';
+export * from './create-task.dto';

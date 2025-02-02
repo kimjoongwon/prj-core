@@ -62,7 +62,7 @@ export class BuilderService {
                           children: [
                             {
                               name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions/new/edit`,
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions/:sessionId/:type`,
                             },
                           ],
                         });
@@ -74,8 +74,21 @@ export class BuilderService {
                           pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines`,
                           children: [
                             {
+                              name: '편집',
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/:routineId/:type`,
+                            },
+                          ],
+                        });
+                      }
+
+                      if (service.name === 'TASK') {
+                        serviceChildren.unshift({
+                          name: '목록',
+                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/tasks`,
+                          children: [
+                            {
                               name: '생성',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/new/edit`,
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/tasks/new/edit`,
                             },
                           ],
                         });

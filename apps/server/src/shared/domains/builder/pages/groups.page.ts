@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
+import { ContextProvider } from '../../../providers';
 
 @Injectable()
 export class GroupsPage {
   getMeta() {
+    const serviceId = ContextProvider.getServiceId();
     const page: PageBuilder = {
       type: 'Page',
       name: '목록',
@@ -12,7 +14,7 @@ export class GroupsPage {
           query: {
             name: 'useGetGroupsByQuery',
             params: {
-              serviceId: '',
+              serviceId,
               skip: 0,
               take: 2,
             },

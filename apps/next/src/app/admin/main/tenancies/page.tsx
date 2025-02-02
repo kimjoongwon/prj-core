@@ -2,11 +2,11 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { ModalLayout } from '@/components/layouts/ModalLayout';
-import { useGetAdminMainTenanciesRoute } from '@shared/frontend';
+import { useGetAdminMainTenanciesPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 
 const TenanciesPage = () => {
-  const { data: response } = useGetAdminMainTenanciesRoute();
+  const { data: response } = useGetAdminMainTenanciesPage();
 
   const page = response?.data as RouteBuilder;
 
