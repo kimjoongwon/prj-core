@@ -21,7 +21,7 @@ export class LoginForm {
         name: '로그인',
         mutation: {
           name: 'getToken',
-          payloadPath: 'form',
+          payloadPath: 'form.input',
         },
         alert: {
           message: '로그인 성공',

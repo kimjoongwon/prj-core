@@ -121,7 +121,7 @@ export interface CellMutation {
 export type Key = string | number;
 
 export interface PageState {
-  form?: object;
+  form?: any;
   dataGrid?: {
     selectedRowIds?: Key[] | 'all';
     selectedRowId?: Key;

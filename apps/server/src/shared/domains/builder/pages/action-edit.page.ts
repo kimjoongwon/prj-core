@@ -44,7 +44,7 @@ export class ActionEditPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'form.name',
+                    path: 'form.input.name',
                     type: 'Input',
                     props: {
                       fullWidth: true,
@@ -53,7 +53,7 @@ export class ActionEditPage {
                     },
                   },
                   {
-                    path: 'form.subjectId',
+                    path: 'form.input.subjectId',
                     type: 'Select',
                     props: {
                       fullWidth: true,

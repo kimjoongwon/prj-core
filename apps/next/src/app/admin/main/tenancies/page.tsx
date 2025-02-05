@@ -12,7 +12,7 @@ const TenanciesPage = () => {
 
   return (
     <ModalLayout>
-      <PageBuilder pageBuilder={page} />;
+      <PageBuilder pageBuilder={page} />
     </ModalLayout>
   );
 };
