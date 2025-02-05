@@ -6,7 +6,7 @@ export class EmailInput {
   getMeta(): InputBuilder {
     return {
       type: 'Input',
-      path: 'form.email',
+      path: 'form.input.email',
       props: {
         type: 'email',
         label: '이메일',

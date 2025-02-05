@@ -35,7 +35,7 @@ export class SpaceEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'form.name',
+                    path: 'form.input.name',
                     props: {
                       label: '그룹 이름',
                       placeholder: '그룹 이름을 입력해주세요.',
@@ -43,7 +43,7 @@ export class SpaceEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.categoryId',
+                    path: 'form.input.categoryId',
                     props: {
                       label: '카테고리',
                       options,

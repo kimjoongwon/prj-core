@@ -39,7 +39,7 @@ export class CategoryAddPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'form.name',
+                    path: 'form.input.name',
                     props: {
                       fullWidth: true,
                       label: '카테고리 이름',

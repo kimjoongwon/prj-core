@@ -29,7 +29,7 @@ export class TimelineEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'form.name',
+                    path: 'form.input.name',
                     props: {
                       label: '타임라인명',
                       placeholder: '타임라인명을 입력하세요',
