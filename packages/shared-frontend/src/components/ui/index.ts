@@ -33,7 +33,7 @@ export * from './User';
 export * from './List';
 export * from './CategoryCard';
 export * from './FormGroup';
-export * from './SelectListBox';
+export * from './Listbox/Listbox';
 export * from './Text';
 export * from './Placeholder';
 export * from './Message';

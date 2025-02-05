@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RoutinesRepository } from '../repositories/routines.repository';
-import { CreateRoutineDto, RoutineQueryDto } from '../dtos';
-import { DepotsService } from './depots.service';
+import { RoutineQueryDto } from '../dtos';
 
 @Injectable()
 export class RoutinesService {
-  constructor(
-    private readonly repository: RoutinesRepository,
-    private readonly depotsService: DepotsService,
-  ) {}
+  constructor(private readonly repository: RoutinesRepository) {}
 
   getById(id: string) {
     return this.repository.findUnique({
@@ -37,8 +33,6 @@ export class RoutinesService {
       where: { id },
     });
   }
-
-
 
   async getManyByQuery(query: RoutineQueryDto) {
     const args = query.toArgs();

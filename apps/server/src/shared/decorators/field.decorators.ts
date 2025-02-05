@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -41,6 +41,7 @@ import {
 import { Constructor } from '../constants/types';
 
 interface IFieldOptions {
+  required?: boolean;
   each?: boolean;
   swagger?: boolean;
   nullable?: boolean;
@@ -76,7 +77,7 @@ export function NumberField(
   }
 
   if (options.swagger !== false) {
-    decorators.push(ApiProperty({ type: Number, ...options }));
+    decorators.push(ApiProperty({ type: 'number', ...options }));
   }
 
   if (options.each) {

@@ -19,3 +19,4 @@ export * from './timeline.entity';
 export * from './program.entity';
 export * from './depot.entity';
 export * from './file.entity';
+export * from './task.entity';

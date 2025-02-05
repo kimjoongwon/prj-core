@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TextTypes } from './textTypes';
+import type { UpdateRoutineDtoType } from './updateRoutineDtoType';
 
 export interface UpdateRoutineDto {
   name?: string;
@@ -13,7 +13,7 @@ export interface UpdateRoutineDto {
   /** @nullable */
   description?: string | null;
   /** @nullable */
-  type?: TextTypes;
+  type?: UpdateRoutineDtoType;
   /** @nullable */
   text?: string | null;
 }

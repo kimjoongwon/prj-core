@@ -38,7 +38,7 @@ export class RoutineService {
 
     const depot = await this.depotsService.create(depotFiles);
 
-    return this.repository.create({
+    const routine = await this.repository.create({
       data: {
         name,
         tenancyId,
@@ -53,5 +53,7 @@ export class RoutineService {
         },
       },
     });
+
+    return routine;
   }
 }

@@ -5,12 +5,14 @@ import { PrismaClientExceptionFilter } from '@shared';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -23,7 +25,6 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors();
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
 
   const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();
 

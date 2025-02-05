@@ -5,6 +5,7 @@ import { Task as TaskEntity } from '@prisma/client';
 
 @UseDto(TaskDto)
 export class Task extends AbstractEntity<TaskDto> implements TaskEntity {
+  tenancyId: string;
   name: string;
   label: string;
   routineId: string;

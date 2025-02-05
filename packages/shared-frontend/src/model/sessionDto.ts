@@ -4,8 +4,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SessionTypes } from './sessionTypes';
-import type { RepeatCycleTypes } from './repeatCycleTypes';
-import type { RecurringDayOfWeek } from './recurringDayOfWeek';
+import type { SessionDtoRepeatCycleType } from './sessionDtoRepeatCycleType';
+import type { SessionDtoRecurringDayOfWeek } from './sessionDtoRecurringDayOfWeek';
 
 export interface SessionDto {
   id: string;
@@ -21,9 +21,9 @@ export interface SessionDto {
   /** @nullable */
   timelineId?: string | null;
   /** @nullable */
-  repeatCycleType?: RepeatCycleTypes;
+  repeatCycleType?: SessionDtoRepeatCycleType;
   /** @nullable */
-  recurringDayOfWeek?: RecurringDayOfWeek;
+  recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
   /** @nullable */
   recurringMonth?: number | null;
 }

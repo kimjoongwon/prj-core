@@ -272,17 +272,6 @@ model Program {
   sessionId String
 }
 
-model Activity {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  taskId    String
-  routineId String
-}
-
 model Routine {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -298,6 +287,17 @@ model Routine {
   content        Content         @relation(fields: [contentId], references: [id])
 }
 
+model Activity {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  taskId    String
+  routineId String
+}
+
 model Task {
   id  String @id @default(uuid())
   seq Int    @unique @default(autoincrement())
@@ -306,6 +306,7 @@ model Task {
   label     String
   routineId String
   contentId String
+  tenancyId String
 
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)

@@ -1,10 +1,8 @@
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
 import { ValidationUtil } from '@shared/utils';
 
-export function ApiBooleanProperty(
-  options: Omit<ApiPropertyOptions, 'type'> = {},
-): PropertyDecorator {
-  return ApiProperty({ type: Boolean, ...options });
+export function ApiBooleanProperty(options: ApiPropertyOptions = {}): PropertyDecorator {
+  return ApiProperty({ type: 'boolean', ...options });
 }
 
 export function ApiBooleanPropertyOptional(
@@ -14,10 +12,10 @@ export function ApiBooleanPropertyOptional(
 }
 
 export function ApiUUIDProperty(
-  options: Omit<ApiPropertyOptions, 'type' | 'format'> & Partial<{ each: boolean }> = {},
+  options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
   return ApiProperty({
-    type: options.each ? [String] : String,
+    type: options.each ? [String] : 'string',
     format: 'uuid',
     isArray: options.each,
     ...options,
@@ -33,13 +31,12 @@ export function ApiUUIDPropertyOptional(
 
 export function ApiEnumProperty<TEnum>(
   getEnum: () => TEnum,
-  options: Omit<ApiPropertyOptions, 'type'> & { each?: boolean } = {},
+  options: ApiPropertyOptions & { each?: boolean } = {},
 ): PropertyDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const enumValue = getEnum() as any;
 
   return ApiProperty({
-    type: 'enum',
     // throw error during the compilation of swagger
     // isArray: options.each,
     enum: enumValue,
