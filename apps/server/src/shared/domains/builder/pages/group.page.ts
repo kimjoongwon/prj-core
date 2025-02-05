@@ -11,13 +11,7 @@ export class GroupPage {
         name: 'useGetGroup',
         idMapper: 'groupId',
       },
-      state: {
-        form: {
-          data: {
-            name: '',
-          },
-        },
-      },
+      state: {},
       form: {
         sections: [
           {
@@ -27,7 +21,7 @@ export class GroupPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'name',
+                    path: 'form.name',
                     type: 'Input',
                     props: {
                       fullWidth: true,

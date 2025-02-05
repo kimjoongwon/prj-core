@@ -33,7 +33,7 @@ export class CategoryPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       label: '카테고리 이름',
                       placeholder: '카테고리 이름을 입력해주세요.',

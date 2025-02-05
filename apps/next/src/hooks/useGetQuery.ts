@@ -52,6 +52,7 @@ export const useGetQuery = (query?: Query) => {
       APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
   // @ts-ignore
+
   const data = getQuery?.data?.data;
   const isLoading = getQuery?.isLoading;
   const isFetchedAfterMount = getQuery?.isFetchedAfterMount;

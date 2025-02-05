@@ -66,7 +66,7 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
   return (
     <Component
       {...inputBuilder.props}
-      state={state?.form?.data}
+      state={state}
       path={inputBuilder.path}
       inputBuilder={inputBuilder}
       errorMessage={inputBuilder.validation?.errorMessage || ' '}

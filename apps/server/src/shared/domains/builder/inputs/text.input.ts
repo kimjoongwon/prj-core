@@ -8,7 +8,7 @@ export class TextInput {
     return '내용';
   }
 
-  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'text') {
+  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'form.text') {
     const input: InputBuilder = {
       path,
       type,

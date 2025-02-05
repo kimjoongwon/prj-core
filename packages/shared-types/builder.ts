@@ -110,7 +110,7 @@ export interface Mutation {
   name: string;
   invalidationKey?: string;
   id?: string;
-  mapper?: any;
+  payloadPath: string;
 }
 
 export interface CellMutation {
@@ -121,9 +121,7 @@ export interface CellMutation {
 export type Key = string | number;
 
 export interface PageState {
-  form?: {
-    data?: any;
-  };
+  form?: object;
   dataGrid?: {
     selectedRowIds?: Key[] | 'all';
     selectedRowId?: Key;

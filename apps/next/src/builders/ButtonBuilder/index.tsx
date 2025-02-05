@@ -28,7 +28,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
   const onPress = async () => {
     const button = cloneDeep(buttonBuilder);
-    const formData = cloneDeep(state?.form?.data);
+    const formData = get(state, button.mutation?.payloadPath || '');
     const args = [];
 
     if (button.mutation?.id) {

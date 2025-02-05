@@ -40,6 +40,7 @@ export class RoutineEditPage {
       page.form.button.mutation = {
         name: 'updateRoutine',
         id: routineId,
+        payloadPath: 'form',
       };
     }
 
@@ -54,6 +55,7 @@ export class RoutineEditPage {
         name: '저장',
         mutation: {
           name: 'createRoutine',
+          payloadPath: 'form',
         },
       },
       ...contentForm,

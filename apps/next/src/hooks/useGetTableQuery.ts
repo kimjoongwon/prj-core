@@ -41,7 +41,7 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   // @ts-ignore
   const pageMeta = getQuery?.data?.meta;
   const isLoading = getQuery?.isLoading;
-
+  console.log('isLoading', isLoading);
   return {
     data,
     meta: pageMeta,

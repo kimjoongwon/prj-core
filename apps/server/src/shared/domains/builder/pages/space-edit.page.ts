@@ -20,11 +20,7 @@ export class SpaceEditPage {
           name: '저장',
           mutation: {
             name: 'createSpace',
-            mapper: {
-              serviceId: 'serviceId',
-              categoryId: 'categoryId',
-              name: 'name',
-            },
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',
@@ -39,7 +35,7 @@ export class SpaceEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       label: '그룹 이름',
                       placeholder: '그룹 이름을 입력해주세요.',
@@ -47,7 +43,7 @@ export class SpaceEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'categoryId',
+                    path: 'form.categoryId',
                     props: {
                       label: '카테고리',
                       options,

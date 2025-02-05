@@ -3,6 +3,7 @@ import { CategoryForm } from '../forms/category.form';
 import { PrismaService } from 'nestjs-prisma';
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from '../../../dtos';
+import { ContextProvider } from '../../../providers';
 
 @Injectable()
 export class CategoryEditPage {
@@ -13,18 +14,20 @@ export class CategoryEditPage {
 
   async getMeta(categoryId: string | 'new', type: 'edit' | 'add') {
     const form = this.categoryForm.getMeta();
+    const serviceId = ContextProvider.getServiceId();
+    const tenancyId = ContextProvider.getTenancyId();
 
     const page: PageBuilder = {
       type: 'Page',
       name: '새편집',
       state: {
         form: {
-          data: {
-            name: '',
-            type: 'ROOT',
-            parentId: null,
-          } as CreateCategoryDto,
-        },
+          serviceId,
+          tenancyId,
+          name: '',
+          type: 'ROOT',
+          parentId: null,
+        } as CreateCategoryDto,
       },
       form,
     };
@@ -45,6 +48,7 @@ export class CategoryEditPage {
       page.state.form.data.type = 'LEAF';
       page.state.form.data.parentId = categoryId;
       page.form.button.mutation.name = 'createCategory';
+      page.form.button.mutation.payloadPath = 'form.data';
     }
 
     return page;

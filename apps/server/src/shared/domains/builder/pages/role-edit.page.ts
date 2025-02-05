@@ -17,19 +17,13 @@ export class RoleEditPage {
 
     return {
       name: '새편집',
-      state: {
-        form: {
-          data: {},
-        },
-      },
+      state: {},
       form: {
         button: {
           name: '저장',
           mutation: {
             name: 'createRole',
-            mapper: {
-              serviceId: 'serviceId',
-            },
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',
@@ -44,7 +38,7 @@ export class RoleEditPage {
                 inputs: [
                   {
                     type: 'Select',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       label: '역할 이름',
                       options: roleOptions,
@@ -53,7 +47,7 @@ export class RoleEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'categoryId',
+                    path: 'form.categoryId',
                     props: {
                       label: '카테고리',
                       options,

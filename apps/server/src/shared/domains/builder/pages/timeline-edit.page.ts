@@ -7,24 +7,13 @@ export class TimelineEditPage {
 
   getMeta(timelineId: string | 'new', type: 'edit' | 'add') {
     const page: PageBuilder = {
-      state: {
-        form: {
-          data: {
-            name: '',
-          },
-        },
-        dataGrid: {
-          selectedRowIds: [],
-        },
-      },
+      state: {},
       name: '새편집',
       form: {
         button: {
           mutation: {
             name: 'createTimeline',
-            mapper: {
-              selectedRowIds: 'sessionIds',
-            },
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',
@@ -40,7 +29,7 @@ export class TimelineEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       label: '타임라인명',
                       placeholder: '타임라인명을 입력하세요',
