@@ -22,10 +22,7 @@ export class CategoryAddPage {
           name: '저장',
           mutation: {
             name: 'createCategory',
-            mapper: {
-              serviceId: 'serviceId',
-              parentId: 'parentId',
-            },
+            payloadPath: 'form',
           },
           alert: {
             message: '카테고리가 추가되었습니다.',
@@ -42,7 +39,7 @@ export class CategoryAddPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       fullWidth: true,
                       label: '카테고리 이름',

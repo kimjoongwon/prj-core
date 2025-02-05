@@ -46,6 +46,7 @@ export class TaskEditPage {
         button: {
           mutation: {
             name: 'createTask',
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',

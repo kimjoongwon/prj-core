@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
-import { PageBuilder, RouteBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/types';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -46,6 +46,7 @@ export class SessionEditPage {
           mutation: {
             name: 'createSession',
             invalidationKey: 'sessions',
+            payloadPath: 'form',
           },
           name: '저장',
           navigator: {
@@ -61,7 +62,7 @@ export class SessionEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       label: '이름',
                     },
@@ -69,7 +70,7 @@ export class SessionEditPage {
 
                   {
                     type: 'DateRangePicker',
-                    path: 'startDateTime,endDateTime',
+                    path: 'form.startDateTime,endDateTime',
                     props: {
                       label: '시작 ~ 종료',
                     },
@@ -79,7 +80,7 @@ export class SessionEditPage {
                     path: 'repeatCycleType',
                     visibleCondition: {
                       eq: {
-                        path: 'type',
+                        path: 'form.type',
                         value: $Enums.SessionTypes.RECURRING,
                       },
                     },
@@ -95,12 +96,12 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'repeatCycleType',
+                        path: 'form.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.WEEKLY,
                       },
                     },
                     type: 'WeekInput',
-                    path: 'recurringDayOfWeek',
+                    path: 'form.recurringDayOfWeek',
                     props: {
                       label: '반복일',
                     },
@@ -108,12 +109,12 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'repeatCycleType',
+                        path: 'form.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.MONTHLY,
                       },
                     },
                     type: 'Select',
-                    path: 'recurringMonth',
+                    path: 'form.recurringMonth',
                     props: {
                       label: '반복월',
                       options: monthOptions,
@@ -121,7 +122,7 @@ export class SessionEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'type',
+                    path: 'form.type',
                     props: {
                       label: '세션타입',
                       options: sessionTypeOptions,

@@ -30,6 +30,7 @@ export class ActionEditPage {
           name: '저장',
           mutation: {
             name: 'createAction',
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',
@@ -43,7 +44,7 @@ export class ActionEditPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'name',
+                    path: 'form.name',
                     type: 'Input',
                     props: {
                       fullWidth: true,
@@ -52,7 +53,7 @@ export class ActionEditPage {
                     },
                   },
                   {
-                    path: 'subjectId',
+                    path: 'form.subjectId',
                     type: 'Select',
                     props: {
                       fullWidth: true,

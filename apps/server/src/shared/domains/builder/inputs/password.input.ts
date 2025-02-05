@@ -6,7 +6,7 @@ export class PasswordInput {
   getMeta(): InputBuilder {
     const input: InputBuilder = {
       type: 'Input',
-      path: 'password',
+      path: 'form.password',
       props: {
         label: '비밀번호',
         type: 'password',

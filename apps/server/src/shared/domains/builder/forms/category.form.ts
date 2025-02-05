@@ -6,7 +6,7 @@ import { NameInput } from '../inputs/name.input';
 export class CategoryForm {
   constructor(private readonly nameInput: NameInput) {}
 
-  getMeta(isEdit: boolean = false) {
+  getMeta() {
     const nameInput = this.nameInput.getMeta();
     const form: FormBuilder = {
       name: '정보',
@@ -14,9 +14,7 @@ export class CategoryForm {
         name: '저장',
         mutation: {
           name: 'createCategory',
-          mapper: {
-            serviceId: 'serviceId',
-          },
+          payloadPath: 'form',
         },
         alert: {
           message: '!!!',
@@ -37,10 +35,6 @@ export class CategoryForm {
         },
       ],
     };
-
-    if (isEdit) {
-      form.button.mutation.mapper.idMapper = 'categoryId';
-    }
 
     return form;
   }

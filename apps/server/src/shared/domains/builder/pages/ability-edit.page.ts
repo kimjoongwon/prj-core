@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
-import { PageBuilder, RouteBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/types';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -68,6 +68,7 @@ export class AbilityEditPage {
           name: '저장',
           mutation: {
             name: 'createAbility',
+            payloadPath: 'form',
           },
           navigator: {
             pathname: '..',
@@ -82,7 +83,7 @@ export class AbilityEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       fullWidth: true,
                       label: '능력 이름',
@@ -91,7 +92,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'roleId',
+                    path: 'form.roleId',
                     props: {
                       fullWidth: true,
                       label: '역할',
@@ -100,7 +101,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'type',
+                    path: 'form.type',
                     props: {
                       fullWidth: true,
                       label: '능력 타입',
@@ -109,7 +110,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'actionId',
+                    path: 'form.actionId',
                     props: {
                       fullWidth: true,
                       label: '액션',
@@ -118,7 +119,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'subjectId',
+                    path: 'form.subjectId',
                     props: {
                       fullWidth: true,
                       label: '과목',

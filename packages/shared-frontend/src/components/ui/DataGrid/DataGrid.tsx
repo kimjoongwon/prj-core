@@ -20,7 +20,8 @@ import {
 } from '@heroui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';
-import { PageState } from '@shared/types';
+import { MobxProps } from '@shared/types';
+import { get, set } from 'lodash-es';
 
 export type Key = string | number;
 
@@ -29,25 +30,20 @@ export type DataGridState<T> = {
   selection?: Selection;
 };
 
-export interface DataGridProps<T> extends TableProps {
-  state?: PageState['dataGrid'];
-  data: T[];
-  columns: ColumnDef<T, any>[];
-  emptyContent?: string;
-}
+export type DataGridProps<T> = TableProps &
+  MobxProps<T> & {
+    data: T[];
+    columns: ColumnDef<T, any>[];
+    emptyContent?: string;
+  };
 
 export const DataGrid = observer(
-  <
-    T extends {
-      id: string;
-    },
-  >(
-    props: DataGridProps<T>,
-  ) => {
+  <T extends object>(props: DataGridProps<T>) => {
     const {
       data,
       columns = [],
-      state,
+      state = {},
+      path = '',
       emptyContent = '데이터가 없습니다.',
       selectionMode,
     } = props;
@@ -73,11 +69,12 @@ export const DataGrid = observer(
     });
 
     const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
+    const initialValue = get(state, path);
 
     const localState = useLocalObservable<{
       selection: Selection;
     }>(() => ({
-      selection: new Set(state?.selectedRowIds || []),
+      selection: new Set(initialValue ? [initialValue] : []),
     }));
 
     const onSelectionChange = action((selection: Selection) => {
@@ -88,17 +85,19 @@ export const DataGrid = observer(
       const disposer = reaction(
         () => localState.selection,
         () => {
-          if (state) {
-            if (selectionMode === 'single') {
-              state.selectedRowIds = Array.from(localState.selection).slice(-1);
-              return;
-            }
-            if (localState.selection === 'all') {
-              state.selectedRowIds = ['all'];
-            } else {
-              state.selectedRowIds = Array.from(localState.selection);
-            }
+          const selectedKeys = Array.from(localState.selection);
+
+          if (localState.selection === 'all') {
+            set(state, path, 'all');
+            return;
           }
+
+          if (selectionMode === 'single') {
+            set(state, path, selectedKeys[0]);
+            return;
+          }
+
+          set(state, path, selectedKeys);
         },
       );
 

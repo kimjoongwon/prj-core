@@ -20,10 +20,8 @@ export class GroupEditPage {
         button: {
           name: '저장',
           mutation: {
-            mapper: {
-              serviceId: 'serviceId',
-            },
             name: 'createGroup',
+            payloadPath: 'form',
           },
           alert: {
             message: '!!!',
@@ -41,7 +39,7 @@ export class GroupEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'name',
+                    path: 'form.name',
                     props: {
                       fullWidth: true,
                       label: '그룹 이름',
