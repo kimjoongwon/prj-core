@@ -25,6 +25,8 @@ import { TimelinesPage } from './timelines.page';
 import { UsersPage } from './users.page';
 import { TasksPage } from './tasks.page';
 import { TaskEditPage } from './task-edit.page';
+import { ExercisesPage } from './exercise.page';
+import { ExerciseEditPage } from './exercise-edit.page';
 const modules = [
   AbilitiesPage,
   AbilityEditPage,
@@ -52,6 +54,8 @@ const modules = [
   UsersPage,
   TasksPage,
   TaskEditPage,
+  ExercisesPage,
+  ExerciseEditPage,
 ];
 @Global()
 @Module({

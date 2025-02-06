@@ -9,20 +9,14 @@ import {
   HttpCode,
   Param,
   Query,
-  ParseFilePipe,
-  UseInterceptors,
-  UploadedFiles,
-  MaxFileSizeValidator,
-  FileTypeValidator,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { DepotDto, CreateDepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos';
+import { DepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { DepotsService } from '../services/depots.service';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiFile } from '../decorators/swagger.schema';
 import _ from 'lodash';
 
 @ApiTags('DEPOTS')
