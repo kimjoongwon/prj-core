@@ -5,6 +5,8 @@
  */
 
 export interface CreateProgramDto {
+  instructorId: string;
+  capacity: number;
   routineId: string;
   sessionId: string;
   tenancyId: string;

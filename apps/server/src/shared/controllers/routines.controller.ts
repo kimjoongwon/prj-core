@@ -19,15 +19,11 @@ import { ResponseEntity } from '../entities/response.entity';
 import { RoutinesService } from '../services/routines.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiFile } from '../decorators/swagger.schema';
-import { RoutineService } from '../domains/routine/routine.service';
 
 @ApiTags('ROUTINE')
 @Controller()
 export class RoutinesController {
-  constructor(
-    private readonly service: RoutinesService,
-    private readonly routineService: RoutineService,
-  ) {}
+  constructor(private readonly service: RoutinesService) {}
 
   @Post()
   @Auth([])
@@ -38,7 +34,7 @@ export class RoutinesController {
     @Body() createRoutineDto: CreateRoutineDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    const routine = await this.routineService.create(createRoutineDto, files);
+    const routine = await this.service.create(createRoutineDto, files);
 
     return new ResponseEntity(HttpStatus.OK, '성공', routine.toDto());
   }

@@ -95,7 +95,7 @@ export class BuilderService {
                       }
 
                       return {
-                        name: service.name,
+                        name: service.label,
                         pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}`,
                         children: serviceChildren,
                       };

@@ -9,7 +9,7 @@ export class DescriptionInput {
 
   getMeta() {
     const input: InputBuilder = {
-      path: 'form.input.description',
+      path: 'form.inputs.description',
       type: 'Input',
       props: {
         label: this.getLabel(),

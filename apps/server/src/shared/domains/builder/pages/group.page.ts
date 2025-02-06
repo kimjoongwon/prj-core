@@ -21,7 +21,7 @@ export class GroupPage {
                 type: 'VStack',
                 inputs: [
                   {
-                    path: 'form.input.name',
+                    path: 'form.inputs.name',
                     type: 'Input',
                     props: {
                       fullWidth: true,

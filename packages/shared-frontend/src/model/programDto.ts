@@ -11,6 +11,8 @@ export interface ProgramDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  instructorId: string;
+  capacity: number;
   routineId: string;
   sessionId: string;
   tenancyId: string;

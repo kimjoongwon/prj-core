@@ -3,4 +3,3 @@ export * from './auth';
 export * from './init';
 export * from './builder';
 export * from './password/password.service';
-export * from './routine/routine.service';

@@ -83,7 +83,7 @@ export class AbilityEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'form.input.name',
+                    path: 'form.inputs.name',
                     props: {
                       fullWidth: true,
                       label: '능력 이름',
@@ -92,7 +92,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.roleId',
+                    path: 'form.inputs.roleId',
                     props: {
                       fullWidth: true,
                       label: '역할',
@@ -101,7 +101,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.type',
+                    path: 'form.inputs.type',
                     props: {
                       fullWidth: true,
                       label: '능력 타입',
@@ -110,7 +110,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.actionId',
+                    path: 'form.inputs.actionId',
                     props: {
                       fullWidth: true,
                       label: '액션',
@@ -119,7 +119,7 @@ export class AbilityEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.subjectId',
+                    path: 'form.inputs.subjectId',
                     props: {
                       fullWidth: true,
                       label: '과목',

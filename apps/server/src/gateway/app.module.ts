@@ -33,6 +33,7 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
+import { AwsService } from '../shared/domains/aws/aws.service';
 
 @Module({
   imports: [
@@ -154,7 +155,7 @@ import { DepotsEndpointModule } from './depots/depots-endpoint.module';
       },
     ]),
   ],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, AwsService],
 })
 export class AppModule implements OnModuleInit {
   logger = new Logger(AppModule.name);

@@ -4,6 +4,7 @@ import { RoutinesService } from '../../../services';
 import { ContentForm } from '../forms/content.form';
 import { CreateRoutineDto } from '../../../dtos/create/create-routine.dto';
 import { NameInput } from '../inputs/name.input';
+import { ContextProvider } from '../../../providers/context.provider';
 
 @Injectable()
 export class RoutineEditPage {
@@ -14,6 +15,7 @@ export class RoutineEditPage {
   ) {}
 
   async getMeta(routineId: string, type: 'add' | 'edit') {
+    const tenancyId = ContextProvider.getTenancyId();
     const routine = await this.routinesService.getById(routineId);
 
     const page: PageBuilder = {
@@ -21,14 +23,14 @@ export class RoutineEditPage {
       name: '편집',
       state: {
         form: {
-          data: {
+          inputs: {
             name: '',
-            tenancyId: '',
-            title: '',
-            type: 'Textarea',
-            description: '',
-            dopotId: '',
-            text: '',
+            contentTitle: '',
+            contentDescription: '',
+            contentText: '',
+            contentType: 'Textarea',
+            taskIds: [],
+            tenancyId,
           } as CreateRoutineDto,
         },
       },

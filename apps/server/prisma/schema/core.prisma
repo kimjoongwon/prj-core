@@ -134,6 +134,7 @@ model User {
   associations   Association[]
   tenancy        Tenancy         @relation(fields: [tenancyId], references: [id])
   classification Classification?
+  Program        Program[]
 }
 
 model Tenant {
@@ -259,6 +260,7 @@ model Session {
   recurringMonth     Int?
 
   timeline Timeline? @relation(fields: [timelineId], references: [id])
+  program  Program?
 }
 
 model Program {
@@ -268,8 +270,13 @@ model Program {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  routineId String
-  sessionId String
+  routineId    String
+  sessionId    String @unique
+  instructorId String
+  capacity     Int
+
+  instructor User    @relation(fields: [instructorId], references: [id])
+  session    Session @relation(fields: [sessionId], references: [id])
 }
 
 model Routine {
@@ -304,7 +311,6 @@ model Task {
 
   name      String
   label     String
-  routineId String
   contentId String
   tenancyId String
 
@@ -312,7 +318,22 @@ model Task {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  content Content @relation(fields: [contentId], references: [id])
+  content   Content    @relation(fields: [contentId], references: [id])
+  exercises Exercise[]
+}
+
+model Exercise {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  duration Int
+  count    Int
+  taskId   String
+
+  task Task @relation(fields: [taskId], references: [id])
 }
 
 model Role {
@@ -429,7 +450,6 @@ model Post {
   removedAt DateTime? @db.Timestamptz(6)
 
   contentId String
-  authorId  String
   tenancyId String
 }
 
@@ -442,11 +462,13 @@ model Content {
 
   title       String?
   description String?
-  dopotId     String?
   type        TextTypes @default(Editor)
   text        String?   @db.VarChar(1000)
+  dopotId     String?
+  authorId    String
   routines    Routine[]
   tasks       Task[]
+  depot       Depot?    @relation(fields: [dopotId], references: [id])
 }
 
 model Depot {
@@ -456,6 +478,7 @@ model Depot {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
   files     File[]
+  contents  Content[]
 }
 
 model File {
@@ -471,55 +494,6 @@ model File {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
   depot     Depot     @relation(fields: [depotId], references: [id])
-}
-
-// model Page {
-//   id        String    @id @default(uuid())
-//   seq       Int       @unique @default(autoincrement())
-//   name      String    @unique
-//   pathname  String    @unique
-//   params    Json?
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime? @db.Timestamptz(6)
-//   elements  Element[]
-// }
-
-// enum ElementTypes {
-//   TABLE
-//   BUTTON
-//   INPUT
-//   SELECT
-//   TEXTAREA
-//   TILE
-// }
-
-// model Element {
-//   id        String       @id @default(uuid())
-//   seq       Int          @unique @default(autoincrement())
-//   label     String       @unique
-//   pageId    String
-//   type      ElementTypes @default(TABLE)
-//   createdAt DateTime     @default(now())
-//   updatedAt DateTime?    @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime?    @db.Timestamptz(6)
-//   page      Page         @relation(fields: [pageId], references: [id])
-// }
-
-// enum PageTypes {
-//   BOTTOM_TAB
-//   TOP_TAB
-//   BUTTON
-//   MENU
-//   LANDING
-// }
-
-enum EmailStatus {
-  PROGRESS
-  PENDING
-  SENT
-  FAILED
-  COMPLETED
 }
 
 enum SMSStatus {

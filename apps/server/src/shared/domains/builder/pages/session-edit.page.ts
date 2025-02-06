@@ -62,7 +62,7 @@ export class SessionEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'form.input.name',
+                    path: 'form.inputs.name',
                     props: {
                       label: '이름',
                     },
@@ -70,7 +70,7 @@ export class SessionEditPage {
 
                   {
                     type: 'DateRangePicker',
-                    path: 'form.input.startDateTime,endDateTime',
+                    path: 'form.inputs.startDateTime,endDateTime',
                     props: {
                       label: '시작 ~ 종료',
                     },
@@ -80,7 +80,7 @@ export class SessionEditPage {
                     path: 'repeatCycleType',
                     visibleCondition: {
                       eq: {
-                        path: 'form.input.type',
+                        path: 'form.inputs.type',
                         value: $Enums.SessionTypes.RECURRING,
                       },
                     },
@@ -96,12 +96,12 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'form.input.repeatCycleType',
+                        path: 'form.inputs.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.WEEKLY,
                       },
                     },
                     type: 'WeekInput',
-                    path: 'form.input.recurringDayOfWeek',
+                    path: 'form.inputs.recurringDayOfWeek',
                     props: {
                       label: '반복일',
                     },
@@ -109,12 +109,12 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'form.input.repeatCycleType',
+                        path: 'form.inputs.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.MONTHLY,
                       },
                     },
                     type: 'Select',
-                    path: 'form.input.recurringMonth',
+                    path: 'form.inputs.recurringMonth',
                     props: {
                       label: '반복월',
                       options: monthOptions,
@@ -122,7 +122,7 @@ export class SessionEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.type',
+                    path: 'form.inputs.type',
                     props: {
                       label: '세션타입',
                       options: sessionTypeOptions,
@@ -144,7 +144,7 @@ export class SessionEditPage {
       });
       page.form.button.mutation.name = 'updateSession';
       page.form.button.mutation.id = sessionId;
-      page.state.form.input = session;
+      page.state.form.inputs = session;
     }
 
     return page;

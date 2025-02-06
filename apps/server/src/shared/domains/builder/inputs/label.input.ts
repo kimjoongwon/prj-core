@@ -5,7 +5,7 @@ import { InputBuilder } from '@shared/types';
 export class LabelInput {
   getMeta() {
     const input: InputBuilder = {
-      path: 'form.input.name',
+      path: 'form.inputs.name',
       type: 'Input',
       props: {
         fullWidth: true,
