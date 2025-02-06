@@ -8,7 +8,7 @@ export class LoginPage {
   getState() {
     const state = {
       form: {
-        input: {
+        inputs: {
           email: 'galaxy@gmail.com',
           password: 'rkdmf12!@',
         },

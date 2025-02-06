@@ -83,6 +83,8 @@ export * from './getAdminMainCategoriesPage200AllOf';
 export * from './getAdminMainCategoriesRoute200AllOf';
 export * from './getAdminMainCategoryPage200AllOf';
 export * from './getAdminMainCategoryRoute200AllOf';
+export * from './getAdminMainExerciseEditPage200AllOf';
+export * from './getAdminMainExercisesPage200AllOf';
 export * from './getAdminMainGroupEditPage200AllOf';
 export * from './getAdminMainGroupEditRoute200AllOf';
 export * from './getAdminMainGroupsEditRoute200AllOf';

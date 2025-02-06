@@ -80,6 +80,8 @@ import type {
   GetAdminMainCategoriesEditPage200AllOf,
   GetAdminMainCategoriesPage200AllOf,
   GetAdminMainCategoryPage200AllOf,
+  GetAdminMainExerciseEditPage200AllOf,
+  GetAdminMainExercisesPage200AllOf,
   GetAdminMainGroupEditPage200AllOf,
   GetAdminMainGroupsPage200AllOf,
   GetAdminMainRoutineEditPage200AllOf,
@@ -8890,8 +8892,20 @@ if(createRoutineBody?.name !== undefined) {
 if(createRoutineBody?.tenancyId !== undefined) {
  formData.append('tenancyId', createRoutineBody.tenancyId)
  }
-if(createRoutineBody?.content !== undefined) {
- formData.append('content', JSON.stringify(createRoutineBody.content));
+if(createRoutineBody?.contentTitle !== undefined) {
+ formData.append('contentTitle', createRoutineBody.contentTitle)
+ }
+if(createRoutineBody?.contentDescription !== undefined) {
+ formData.append('contentDescription', createRoutineBody.contentDescription)
+ }
+if(createRoutineBody?.contentType !== undefined) {
+ formData.append('contentType', createRoutineBody.contentType)
+ }
+if(createRoutineBody?.contentText !== undefined) {
+ formData.append('contentText', createRoutineBody.contentText)
+ }
+if(createRoutineBody?.taskIds !== undefined) {
+ createRoutineBody?.taskIds.forEach(value => formData.append('taskIds', value));
  }
 
 if(createRoutineBody?.files !== undefined) {
@@ -13173,6 +13187,391 @@ export function useGetAdminMainTaskEditPageSuspenseInfinite<TData = InfiniteData
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
   const queryOptions = getGetAdminMainTaskEditPageSuspenseInfiniteQueryOptions(taskId,type,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAdminMainExercisesPage = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAdminMainExercisesPage200AllOf>(
+      {url: `/api/v1/admin/main/exercises`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAdminMainExercisesPageQueryKey = () => {
+    return [`/api/v1/admin/main/exercises`] as const;
+    }
+
+    
+export const getGetAdminMainExercisesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExercisesPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExercisesPage>>> = ({ signal }) => getAdminMainExercisesPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExercisesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>
+export type GetAdminMainExercisesPageQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExercisesPage<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainExercisesPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPage<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainExercisesPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPage<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExercisesPage<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExercisesPageQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainExercisesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExercisesPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExercisesPage>>> = ({ signal }) => getAdminMainExercisesPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExercisesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>
+export type GetAdminMainExercisesPageSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExercisesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExercisesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExercisesPageSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainExercisesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExercisesPageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExercisesPage>>> = ({ signal }) => getAdminMainExercisesPage(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExercisesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>
+export type GetAdminMainExercisesPageSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExercisesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExercisesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExercisesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExercisesPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExercisesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExercisesPageSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAdminMainExerciseEditPage = (
+    exerciseId: string,
+    type: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAdminMainExerciseEditPage200AllOf>(
+      {url: `/api/v1/admin/main/exercises/${exerciseId}/${type}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAdminMainExerciseEditPageQueryKey = (exerciseId: string,
+    type: string,) => {
+    return [`/api/v1/admin/main/exercises/${exerciseId}/${type}`] as const;
+    }
+
+    
+export const getGetAdminMainExerciseEditPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(exerciseId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExerciseEditPageQueryKey(exerciseId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>> = ({ signal }) => getAdminMainExerciseEditPage(exerciseId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(exerciseId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExerciseEditPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>
+export type GetAdminMainExerciseEditPageQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExerciseEditPage<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPage<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPage<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExerciseEditPage<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExerciseEditPageQueryOptions(exerciseId,type,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainExerciseEditPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExerciseEditPageQueryKey(exerciseId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>> = ({ signal }) => getAdminMainExerciseEditPage(exerciseId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExerciseEditPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>
+export type GetAdminMainExerciseEditPageSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExerciseEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExerciseEditPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExerciseEditPageSuspenseQueryOptions(exerciseId,type,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainExerciseEditPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>, TError = ErrorType<void>>(exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainExerciseEditPageQueryKey(exerciseId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>> = ({ signal }) => getAdminMainExerciseEditPage(exerciseId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetAdminMainExerciseEditPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>
+export type GetAdminMainExerciseEditPageSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAdminMainExerciseEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetAdminMainExerciseEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetAdminMainExerciseEditPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>>, TError = ErrorType<void>>(
+ exerciseId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainExerciseEditPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetAdminMainExerciseEditPageSuspenseInfiniteQueryOptions(exerciseId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 

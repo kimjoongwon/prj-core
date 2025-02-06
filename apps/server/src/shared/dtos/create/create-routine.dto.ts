@@ -17,6 +17,6 @@ export class CreateRoutineDto extends OmitType(RoutineDto, [...COMMON_ENTITY_FIE
   @StringField()
   contentText: string;
 
-  @UUIDField({ each: true })
+  @StringField({ each: true })
   taskIds: string[];
 }

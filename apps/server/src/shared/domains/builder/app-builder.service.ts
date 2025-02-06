@@ -79,16 +79,14 @@ export class BuilderService {
                             },
                           ],
                         });
-                      }
 
-                      if (service.name === 'TASK') {
-                        serviceChildren.unshift({
-                          name: '목록',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/tasks`,
+                        serviceChildren.push({
+                          name: '운동',
+                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises`,
                           children: [
                             {
-                              name: '생성',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/tasks/new/edit`,
+                              name: '편집',
+                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises/:exerciseId/:type`,
                             },
                           ],
                         });

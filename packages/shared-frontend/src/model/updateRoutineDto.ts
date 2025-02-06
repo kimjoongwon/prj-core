@@ -3,10 +3,14 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateContentDto } from './createContentDto';
+import type { TextTypes } from './textTypes';
 
 export interface UpdateRoutineDto {
   name?: string;
   tenancyId?: string;
-  content?: CreateContentDto;
+  contentTitle?: string;
+  contentDescription?: string;
+  contentType?: TextTypes;
+  contentText?: string;
+  taskIds?: string[];
 }

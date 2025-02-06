@@ -22,4 +22,7 @@ export class CreateExerciseDto extends OmitType(ExerciseDto, [...COMMON_ENTITY_F
 
   @UUIDField()
   contentAuthorId: string;
+
+  @UUIDField()
+  tenancyId: string;
 }
