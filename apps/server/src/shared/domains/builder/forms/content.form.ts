@@ -1,10 +1,9 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { FormBuilder } from '@shared/types';
 import { TitleInput } from '../inputs/title.input';
 import { DescriptionInput } from '../inputs/description.input';
 import { DepotInput } from '../inputs/depot.input';
 import { TextInput } from '../inputs/text.input';
-import { $Enums } from '@prisma/client';
 
 @Injectable()
 export class ContentForm {

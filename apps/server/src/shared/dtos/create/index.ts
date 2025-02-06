@@ -18,3 +18,4 @@ export * from './create-content.dto';
 export * from './create-depot.dto';
 export * from './create-file.dto';
 export * from './create-task.dto';
+export * from './create-exercise.dto';

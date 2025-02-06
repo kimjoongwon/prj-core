@@ -22,7 +22,7 @@ export class CategoryEditPage {
       name: '새편집',
       state: {
         form: {
-          input: {
+          inputs: {
             serviceId,
             tenancyId,
             name: '',
@@ -41,16 +41,16 @@ export class CategoryEditPage {
         },
       });
 
-      page.state.form.input = category;
+      page.state.form.inputs = category;
       page.form.button.mutation.name = 'updateCategory';
       page.form.button.mutation.id = categoryId;
     }
 
     if (categoryId !== 'new' && type === 'add') {
-      page.state.form.input.type = 'LEAF';
-      page.state.form.input.parentId = categoryId;
+      page.state.form.inputs.type = 'LEAF';
+      page.state.form.inputs.parentId = categoryId;
       page.form.button.mutation.name = 'createCategory';
-      page.form.button.mutation.payloadPath = 'form.input.data';
+      page.form.button.mutation.payloadPath = 'form.inputs';
     }
 
     return page;

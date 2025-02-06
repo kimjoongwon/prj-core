@@ -3,6 +3,9 @@ import { AbstractDto } from './abstract.dto';
 import { $Enums, Content as ContentEntity } from '@prisma/client';
 
 export class ContentDto extends AbstractDto implements ContentEntity {
+  @UUIDField()
+  authorId: string;
+
   @StringFieldOptional({ nullable: true })
   title: string | null;
 

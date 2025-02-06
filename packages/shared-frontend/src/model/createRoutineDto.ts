@@ -3,17 +3,10 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateRoutineDtoType } from './createRoutineDtoType';
+import type { CreateContentDto } from './createContentDto';
 
 export interface CreateRoutineDto {
   name: string;
   tenancyId: string;
-  /** @nullable */
-  title?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  type: CreateRoutineDtoType;
-  /** @nullable */
-  text?: string | null;
+  content: CreateContentDto;
 }

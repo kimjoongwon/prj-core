@@ -1,19 +1,22 @@
 import { OmitType } from '@nestjs/swagger';
 import { RoutineDto } from '../routine.dto';
 import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
-import { EnumField, StringFieldOptional } from '../../decorators';
-import { $Enums } from '@prisma/client';
+import { EnumField, StringField, UUIDField } from '../../decorators';
+import { TextTypes } from '@prisma/client';
 
 export class CreateRoutineDto extends OmitType(RoutineDto, [...COMMON_ENTITY_FIELDS, 'contentId']) {
-  @StringFieldOptional({ nullable: true })
-  title: string | null;
+  @StringField()
+  contentTitle: string;
 
-  @StringFieldOptional({ nullable: true })
-  description: string | null;
+  @StringField()
+  contentDescription: string;
 
-  @EnumField(() => $Enums.TextTypes, { nullable: true, default: $Enums.TextTypes.Textarea })
-  type: $Enums.TextTypes;
+  @EnumField(() => TextTypes)
+  contentType: TextTypes;
 
-  @StringFieldOptional({ nullable: true })
-  text: string;
+  @StringField()
+  contentText: string;
+
+  @UUIDField({ each: true })
+  taskIds: string[];
 }

@@ -5,7 +5,7 @@ import { InputBuilder } from '@shared/types';
 export class TitleInput {
   getMeta() {
     const input: InputBuilder = {
-      path: 'form.input.title',
+      path: 'form.inputs.title',
       type: 'Input',
       props: {
         label: '제목',

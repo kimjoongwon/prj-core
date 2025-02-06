@@ -73,7 +73,7 @@ export const CellButtonBuilder = observer((props: ButtonProps) => {
   return (
     <BaseButton
       {...rest}
-      isIconOnly={!!icon}
+      isIconOnly={true}
       onPress={onPress}
       color={buttonBuilder?.color || 'primary'}
     >

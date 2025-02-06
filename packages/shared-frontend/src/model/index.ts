@@ -23,6 +23,7 @@ export * from './createCategoryDto';
 export * from './createClassification200AllOf';
 export * from './createClassificationDto';
 export * from './createContentDto';
+export * from './createContentDtoType';
 export * from './createDepot200AllOf';
 export * from './createDepotBody';
 export * from './createDepotBodyAllOf';

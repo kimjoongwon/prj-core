@@ -39,7 +39,7 @@ export class GroupEditPage {
                 inputs: [
                   {
                     type: 'Input',
-                    path: 'form.input.name',
+                    path: 'form.inputs.name',
                     props: {
                       fullWidth: true,
                       label: '그룹 이름',
@@ -61,7 +61,7 @@ export class GroupEditPage {
         },
       });
 
-      page.state.form.input = group;
+      page.state.form.inputs = group;
       page.form.button.mutation.name = 'updateGroup';
       page.form.button.mutation.id = groupId;
     }

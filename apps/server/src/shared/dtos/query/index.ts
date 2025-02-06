@@ -17,3 +17,4 @@ export * from './routine-query.dto';
 export * from './program-query.dto';
 export * from './depot-query.dto';
 export * from './task-query.dto';
+export * from './exercise-query.dto';

@@ -14,7 +14,7 @@ export class CategoryForm {
         name: '저장',
         mutation: {
           name: 'createCategory',
-          payloadPath: 'form',
+          payloadPath: 'form.inputs',
         },
         alert: {
           message: '!!!',

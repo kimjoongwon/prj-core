@@ -38,7 +38,7 @@ export class RoleEditPage {
                 inputs: [
                   {
                     type: 'Select',
-                    path: 'form.input.name',
+                    path: 'form.inputs.name',
                     props: {
                       label: '역할 이름',
                       options: roleOptions,
@@ -47,7 +47,7 @@ export class RoleEditPage {
                   },
                   {
                     type: 'Select',
-                    path: 'form.input.categoryId',
+                    path: 'form.inputs.categoryId',
                     props: {
                       label: '카테고리',
                       options,

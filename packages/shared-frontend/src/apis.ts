@@ -8890,17 +8890,8 @@ if(createRoutineBody?.name !== undefined) {
 if(createRoutineBody?.tenancyId !== undefined) {
  formData.append('tenancyId', createRoutineBody.tenancyId)
  }
-if(createRoutineBody?.title !== undefined && createRoutineBody.title !== null) {
- formData.append('title', createRoutineBody.title)
- }
-if(createRoutineBody?.description !== undefined && createRoutineBody.description !== null) {
- formData.append('description', createRoutineBody.description)
- }
-if(createRoutineBody?.type !== undefined && createRoutineBody.type !== null) {
- formData.append('type', createRoutineBody.type)
- }
-if(createRoutineBody?.text !== undefined && createRoutineBody.text !== null) {
- formData.append('text', createRoutineBody.text)
+if(createRoutineBody?.content !== undefined) {
+ formData.append('content', JSON.stringify(createRoutineBody.content));
  }
 
 if(createRoutineBody?.files !== undefined) {
@@ -10533,7 +10524,7 @@ export const getGetAdminMainCategoriesPageQueryKey = () => {
     }
 
     
-export const getGetAdminMainCategoriesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10552,10 +10543,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
-export type GetAdminMainCategoriesPageQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMainCategoriesPage>>,
@@ -10565,7 +10556,7 @@ export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMainCategoriesPage>>,
@@ -10575,12 +10566,12 @@ export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
@@ -10596,7 +10587,7 @@ export function useGetAdminMainCategoriesPage<TData = Awaited<ReturnType<typeof 
 
 
 
-export const getGetAdminMainCategoriesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10615,23 +10606,23 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
-export type GetAdminMainCategoriesPageSuspenseQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
@@ -10647,7 +10638,7 @@ export function useGetAdminMainCategoriesPageSuspense<TData = Awaited<ReturnType
 
 
 
-export const getGetAdminMainCategoriesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainCategoriesPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -10666,23 +10657,23 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetAdminMainCategoriesPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>
-export type GetAdminMainCategoriesPageSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetAdminMainCategoriesPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
   options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 
-export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<unknown>>(
+export function useGetAdminMainCategoriesPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>>, TError = ErrorType<void>>(
   options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainCategoriesPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
