@@ -38,6 +38,8 @@ import type {
   CreateCategoryDto,
   CreateClassification200AllOf,
   CreateClassificationDto,
+  CreateExercise200AllOf,
+  CreateExerciseBody,
   CreateGroupDto,
   CreateProgram200AllOf,
   CreateProgramDto,
@@ -61,6 +63,7 @@ import type {
   DeleteCategory200AllOf,
   DeleteClassification200AllOf,
   DeleteDepot200AllOf,
+  DeleteExercise200AllOf,
   DeleteGroup200AllOf,
   DeleteProgram200AllOf,
   DeleteRole200AllOf,
@@ -106,6 +109,9 @@ import type {
   GetDepotById200AllOf,
   GetDepotsByQuery200AllOf,
   GetDepotsByQueryParams,
+  GetExercise200AllOf,
+  GetExercisesByQuery200AllOf,
+  GetExercisesByQueryParams,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
@@ -146,6 +152,7 @@ import type {
   RemoveClassifications200AllOf,
   RemoveDepot200AllOf,
   RemoveDepots200AllOf,
+  RemoveExercise200AllOf,
   RemoveGroups200AllOf,
   RemoveProgram200AllOf,
   RemovePrograms200AllOf,
@@ -176,6 +183,8 @@ import type {
   UpdateClassificationDto,
   UpdateDepot200AllOf,
   UpdateDepotDto,
+  UpdateExercise200AllOf,
+  UpdateExerciseDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdateProgram200AllOf,
@@ -10152,6 +10161,624 @@ export function useGetDepotsByQuerySuspenseInfinite<TData = InfiniteData<Awaited
 
 
 
+export const getExercisesByQuery = (
+    params?: GetExercisesByQueryParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetExercisesByQuery200AllOf>(
+      {url: `/api/v1/exercises`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetExercisesByQueryQueryKey = (params?: GetExercisesByQueryParams,) => {
+    return [`/api/v1/exercises`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetExercisesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(params?: GetExercisesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExercisesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercisesByQuery>>> = ({ signal }) => getExercisesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExercisesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getExercisesByQuery>>>
+export type GetExercisesByQueryQueryError = ErrorType<void>
+
+
+export function useGetExercisesByQuery<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetExercisesByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExercisesByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuery<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExercisesByQuery>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuery<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExercisesByQuery<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExercisesByQueryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetExercisesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExercisesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercisesByQuery>>> = ({ signal }) => getExercisesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExercisesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getExercisesByQuery>>>
+export type GetExercisesByQuerySuspenseQueryError = ErrorType<void>
+
+
+export function useGetExercisesByQuerySuspense<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetExercisesByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuerySuspense<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuerySuspense<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExercisesByQuerySuspense<TData = Awaited<ReturnType<typeof getExercisesByQuery>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExercisesByQuerySuspenseQueryOptions(params,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetExercisesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getExercisesByQuery>>>, TError = ErrorType<void>>(params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExercisesByQueryQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercisesByQuery>>> = ({ signal }) => getExercisesByQuery(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExercisesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getExercisesByQuery>>>
+export type GetExercisesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetExercisesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercisesByQuery>>>, TError = ErrorType<void>>(
+ params: undefined |  GetExercisesByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercisesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercisesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercisesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExercisesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercisesByQuery>>>, TError = ErrorType<void>>(
+ params?: GetExercisesByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercisesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExercisesByQuerySuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const createExercise = (
+    createExerciseBody?: BodyType<CreateExerciseBody>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      const formData = new FormData();
+if(createExerciseBody?.duration !== undefined) {
+ formData.append('duration', createExerciseBody.duration.toString())
+ }
+if(createExerciseBody?.count !== undefined) {
+ formData.append('count', createExerciseBody.count.toString())
+ }
+if(createExerciseBody?.taskName !== undefined) {
+ formData.append('taskName', createExerciseBody.taskName)
+ }
+if(createExerciseBody?.taskLabel !== undefined) {
+ formData.append('taskLabel', createExerciseBody.taskLabel)
+ }
+if(createExerciseBody?.content !== undefined) {
+ formData.append('content', JSON.stringify(createExerciseBody.content));
+ }
+if(createExerciseBody?.tenancyId !== undefined) {
+ formData.append('tenancyId', createExerciseBody.tenancyId)
+ }
+
+if(createExerciseBody?.files !== undefined) {
+ createExerciseBody?.files.forEach(value => formData.append('files', value));
+ }
+
+      return customInstance<CreateExercise200AllOf>(
+      {url: `/api/v1/exercises`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateExerciseMutationOptions = <TData = Awaited<ReturnType<typeof createExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['createExercise'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExercise>>, {data: BodyType<CreateExerciseBody>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createExercise(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>}
+
+    export type CreateExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof createExercise>>>
+    export type CreateExerciseMutationBody = BodyType<CreateExerciseBody>
+    export type CreateExerciseMutationError = ErrorType<void>
+
+    export const useCreateExercise = <TData = Awaited<ReturnType<typeof createExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {data: BodyType<CreateExerciseBody>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getExercise = (
+    exerciseId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetExercise200AllOf>(
+      {url: `/api/v1/exercises/${exerciseId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetExerciseQueryKey = (exerciseId: string,) => {
+    return [`/api/v1/exercises/${exerciseId}`] as const;
+    }
+
+    
+export const getGetExerciseQueryOptions = <TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(exerciseId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExerciseQueryKey(exerciseId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercise>>> = ({ signal }) => getExercise(exerciseId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(exerciseId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExerciseQueryResult = NonNullable<Awaited<ReturnType<typeof getExercise>>>
+export type GetExerciseQueryError = ErrorType<void>
+
+
+export function useGetExercise<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExercise>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercise<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getExercise>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExercise<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExercise<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExerciseQueryOptions(exerciseId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetExerciseSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(exerciseId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExerciseQueryKey(exerciseId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercise>>> = ({ signal }) => getExercise(exerciseId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExerciseSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getExercise>>>
+export type GetExerciseSuspenseQueryError = ErrorType<void>
+
+
+export function useGetExerciseSuspense<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExerciseSuspense<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExerciseSuspense<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExerciseSuspense<TData = Awaited<ReturnType<typeof getExercise>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExerciseSuspenseQueryOptions(exerciseId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetExerciseSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getExercise>>>, TError = ErrorType<void>>(exerciseId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetExerciseQueryKey(exerciseId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getExercise>>> = ({ signal }) => getExercise(exerciseId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetExerciseSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getExercise>>>
+export type GetExerciseSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercise>>>, TError = ErrorType<void>>(
+ exerciseId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercise>>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercise>>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetExerciseSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getExercise>>>, TError = ErrorType<void>>(
+ exerciseId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getExercise>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetExerciseSuspenseInfiniteQueryOptions(exerciseId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const updateExercise = (
+    exerciseId: string,
+    updateExerciseDto: BodyType<UpdateExerciseDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateExercise200AllOf>(
+      {url: `/api/v1/exercises/${exerciseId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateExerciseDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateExerciseMutationOptions = <TData = Awaited<ReturnType<typeof updateExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string;data: BodyType<UpdateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['updateExercise'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateExercise>>, {exerciseId: string;data: BodyType<UpdateExerciseDto>}> = (props) => {
+          const {exerciseId,data} = props ?? {};
+
+          return  updateExercise(exerciseId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{exerciseId: string;data: BodyType<UpdateExerciseDto>}, TContext>}
+
+    export type UpdateExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof updateExercise>>>
+    export type UpdateExerciseMutationBody = BodyType<UpdateExerciseDto>
+    export type UpdateExerciseMutationError = ErrorType<void>
+
+    export const useUpdateExercise = <TData = Awaited<ReturnType<typeof updateExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string;data: BodyType<UpdateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {exerciseId: string;data: BodyType<UpdateExerciseDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const deleteExercise = (
+    exerciseId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<DeleteExercise200AllOf>(
+      {url: `/api/v1/exercises/${exerciseId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteExerciseMutationOptions = <TData = Awaited<ReturnType<typeof deleteExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['deleteExercise'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteExercise>>, {exerciseId: string}> = (props) => {
+          const {exerciseId} = props ?? {};
+
+          return  deleteExercise(exerciseId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{exerciseId: string}, TContext>}
+
+    export type DeleteExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof deleteExercise>>>
+    
+    export type DeleteExerciseMutationError = ErrorType<void>
+
+    export const useDeleteExercise = <TData = Awaited<ReturnType<typeof deleteExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {exerciseId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeExercise = (
+    exerciseId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveExercise200AllOf>(
+      {url: `/api/v1/exercises/${exerciseId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveExerciseMutationOptions = <TData = Awaited<ReturnType<typeof removeExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['removeExercise'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeExercise>>, {exerciseId: string}> = (props) => {
+          const {exerciseId} = props ?? {};
+
+          return  removeExercise(exerciseId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{exerciseId: string}, TContext>}
+
+    export type RemoveExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof removeExercise>>>
+    
+    export type RemoveExerciseMutationError = ErrorType<void>
+
+    export const useRemoveExercise = <TData = Awaited<ReturnType<typeof removeExercise>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{exerciseId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {exerciseId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const getAdminAuthLoginRoute = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal

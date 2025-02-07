@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { FormBuilder } from '@shared/types';
+import { FormBuilder, SectionBuilder } from '@shared/types';
 import { TitleInput } from '../inputs/title.input';
 import { DescriptionInput } from '../inputs/description.input';
 import { DepotInput } from '../inputs/depot.input';
 import { TextInput } from '../inputs/text.input';
 
 @Injectable()
-export class ContentForm {
+export class ContentFormSection {
   constructor(
     readonly titleInput: TitleInput,
     readonly descriptionInput: DescriptionInput,
@@ -18,20 +18,16 @@ export class ContentForm {
     const descriptionInput = this.descriptionInput.getMeta();
     const depotInput = this.depotInput.getMeta();
     const textInput = this.textInput.getMeta();
-    const form: FormBuilder = {
-      sections: [
+    const section: SectionBuilder = {
+      name: '콘텐츠 정보',
+      stacks: [
         {
-          name: '콘텐츠 정보',
-          stacks: [
-            {
-              type: 'VStack',
-              inputs: [titleInput, descriptionInput, textInput, depotInput],
-            },
-          ],
+          type: 'VStack',
+          inputs: [titleInput, descriptionInput, textInput, depotInput],
         },
       ],
     };
 
-    return form;
+    return section;
   }
 }

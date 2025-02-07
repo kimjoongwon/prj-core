@@ -1,5 +1,5 @@
-import { PaginationUtil } from '@shared/utils';
 import { BooleanField, NumberField } from '../../decorators/field.decorators';
+import { PaginationUtil } from '../../libs/PaginationUtil';
 export class PageMetaDto {
   @NumberField()
   readonly skip: number;

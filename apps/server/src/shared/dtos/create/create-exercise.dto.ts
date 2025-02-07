@@ -1,8 +1,11 @@
 import { OmitType } from '@nestjs/swagger';
-import { EnumField, StringField, UUIDField } from '../../decorators/field.decorators';
+import { ClassField, EnumField, StringField, UUIDField } from '../../decorators/field.decorators';
 import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
 import { $Enums } from '@prisma/client';
 import { ExerciseDto } from '../exercise.dto';
+import { JSONSchema } from 'class-validator-jsonschema';
+import { CreateContentDto } from './create-content.dto';
+import { Exclude, Transform } from 'class-transformer';
 
 export class CreateExerciseDto extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskId']) {
   @StringField()
@@ -11,18 +14,20 @@ export class CreateExerciseDto extends OmitType(ExerciseDto, [...COMMON_ENTITY_F
   @StringField()
   taskLabel: string;
 
-  @StringField()
-  contentTitle: string;
+  // @StringField()
+  // contentTitle: string;
+
+  // @StringField()
+  // contentDescription: string;
+
+  // @EnumField(() => $Enums.TextTypes)
+  // contentType: $Enums.TextTypes;
+
+  // @StringField()
+  // contentAuthorId: string;
+  @ClassField(() => CreateContentDto)
+  content: CreateContentDto;
 
   @StringField()
-  contentDescription: string;
-
-  @EnumField(() => $Enums.TextTypes)
-  contentType: $Enums.TextTypes;
-
-  @UUIDField()
-  contentAuthorId: string;
-
-  @UUIDField()
   tenancyId: string;
 }

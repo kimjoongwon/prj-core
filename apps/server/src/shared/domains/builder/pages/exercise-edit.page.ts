@@ -7,24 +7,23 @@ import { TitleInput } from '../inputs/title.input';
 import { LabelInput } from '../inputs/label.input';
 import { NameInput } from '../inputs/name.input';
 import { ContextProvider } from '../../../providers';
+import { ContentFormSection } from '../forms/content-form.section';
 
 @Injectable()
 export class ExerciseEditPage {
   constructor(
-    private readonly titleInput: TitleInput,
-    private readonly descriptionInput: DescriptionInput,
     private readonly labelInput: LabelInput,
     private readonly nameInput: NameInput,
+    private readonly contentFormSection: ContentFormSection,
     readonly prisma: PrismaService,
   ) {}
 
   async getMeta(exerciseId: string | 'new', type: 'add' | 'edit'): Promise<PageBuilder> {
-    const contentTitle = this.titleInput.getMeta();
-    const contentDescription = this.descriptionInput.getMeta();
     const taskLabel = this.labelInput.getMeta();
     const taskName = this.nameInput.getMeta();
     const user = ContextProvider.getAuthUser();
     const tenancyId = ContextProvider.getTenancyId();
+    const contentFormSection = this.contentFormSection.getMeta();
 
     const page: PageBuilder = {
       name: '그룹',
@@ -32,8 +31,8 @@ export class ExerciseEditPage {
       state: {
         form: {
           inputs: {
-            contentAuthorId: user.id,
             duration: 0,
+            contentAuthorId: user.id,
             contentDescription: '',
             contentTitle: '',
             contentType: 'Textarea',
@@ -65,10 +64,11 @@ export class ExerciseEditPage {
             stacks: [
               {
                 type: 'VStack',
-                inputs: [contentTitle, contentDescription, taskLabel, taskName],
+                inputs: [taskLabel, taskName],
               },
             ],
           },
+          contentFormSection,
         ],
       },
     };

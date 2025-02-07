@@ -8,7 +8,7 @@ import type {
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import _ from 'lodash';
+import { castArray, Many, mapValues } from 'lodash';
 
 export interface IApiFile {
   name: string;
@@ -39,7 +39,7 @@ function explore(instance: object, propertyKey: string | symbol) {
   const routeArgsMetadata =
     Reflect.getMetadata(ROUTE_ARGS_METADATA, instance.constructor, propertyKey) || {};
 
-  const parametersWithType = _.mapValues(reverseObjectKeys(routeArgsMetadata), (param) => ({
+  const parametersWithType = mapValues(reverseObjectKeys(routeArgsMetadata), (param) => ({
     type: types[param.index],
     name: param.data,
     required: true,
@@ -110,10 +110,10 @@ function ApiFileDecorator(
 }
 
 export function ApiFile(
-  files: _.Many<IApiFile>,
+  files: Many<IApiFile>,
   options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
-  const filesArray = _.castArray(files);
+  const filesArray = castArray(files);
   const apiFileInterceptors = filesArray.map((file) =>
     file.isArray
       ? UseInterceptors(FilesInterceptor(file.name))

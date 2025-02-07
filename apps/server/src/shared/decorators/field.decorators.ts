@@ -12,7 +12,6 @@ import {
   IsPositive,
   IsString,
   IsUrl,
-  IsUUID,
   Max,
   MaxLength,
   Min,
@@ -46,6 +45,7 @@ interface IFieldOptions {
   swagger?: boolean;
   nullable?: boolean;
   groups?: string[];
+  message?: string;
 }
 
 interface INumberFieldOptions extends IFieldOptions {

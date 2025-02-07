@@ -33,7 +33,7 @@ import { ProgramsEndpointModule } from './programs/programs-endpoint.module';
 import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
-import { AwsService } from '../shared/domains/aws/aws.service';
+import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
 
 @Module({
   imports: [
@@ -64,6 +64,7 @@ import { AwsService } from '../shared/domains/aws/aws.service';
     ProgramsEndpointModule,
     RoutinesEndpointModule,
     DepotsEndpointModule,
+    ExercisesEndpointModule,
     AdminAuthRouteEndpointModule,
     AdminMainRouteEndpointModule,
     RouterModule.register([
@@ -149,13 +150,17 @@ import { AwsService } from '../shared/domains/aws/aws.service';
                 path: 'depots',
                 module: DepotsEndpointModule,
               },
+              {
+                path: 'exercises',
+                module: ExercisesEndpointModule,
+              },
             ],
           },
         ],
       },
     ]),
   ],
-  providers: [JwtStrategy, AwsService],
+  providers: [JwtStrategy],
 })
 export class AppModule implements OnModuleInit {
   logger = new Logger(AppModule.name);

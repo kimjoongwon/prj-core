@@ -15,10 +15,12 @@ export class ExercisesService {
     const {
       count,
       duration,
-      contentAuthorId,
-      contentDescription,
-      contentTitle,
-      contentType,
+      content: {
+        authorId,
+        description: contentDescription,
+        title: contentTitle,
+        type: contentType,
+      },
       taskLabel,
       taskName,
     } = createExerciseDto;
@@ -57,7 +59,7 @@ export class ExercisesService {
                 description: contentDescription,
                 title: contentTitle,
                 type: contentType,
-                authorId: contentAuthorId,
+                authorId,
                 depot: {
                   create: {
                     files: {

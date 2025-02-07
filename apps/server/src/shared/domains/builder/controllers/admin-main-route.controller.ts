@@ -104,7 +104,6 @@ export class AdminMainRouteController {
   @Auth()
   @Get('groups/:groupId/:type')
   @ApiResponseEntity(Object, HttpStatus.OK)
-
   async getAdminMainGroupEditPage(
     @Param('groupId') groupId: string,
     @Param('type') type: 'edit' | 'add',

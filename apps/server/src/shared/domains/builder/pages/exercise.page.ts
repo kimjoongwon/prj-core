@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
-import { ContextProvider } from '../../../providers';
 import { ActionColumns } from '../columns/action.columns';
 
 @Injectable()

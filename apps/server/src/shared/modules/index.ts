@@ -18,6 +18,7 @@ import {
   ActionsRepository,
   CategoriesRepository,
   ClassificationsRepository,
+  ExercisesRepository,
   FilesRepository,
   ProgramsRepository,
   RoutinesRepository,
@@ -30,6 +31,7 @@ import { DepotsRepository } from '../repositories/depots.repository';
 import { FilesService } from '../services/files.service';
 import { RolesRepository } from '../repositories/role.repository';
 import { AwsService } from '../domains/aws/aws.service';
+import { ExercisesService } from '../services/exercises.service';
 const modules = [
   AbilitiesService,
   AbilitiesRepository,
@@ -60,6 +62,8 @@ const modules = [
   ClassificationsService,
   ClassificationsRepository,
   AwsService,
+  ExercisesService,
+  ExercisesRepository,
 ];
 @Global()
 @Module({

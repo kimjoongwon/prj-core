@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FormBuilder, PageBuilder, RouteBuilder } from '@shared/types';
 import { RoutinesService } from '../../../services';
-import { ContentForm } from '../forms/content.form';
+import { ContentFormSection } from '../forms/content-form.section';
 import { CreateRoutineDto } from '../../../dtos/create/create-routine.dto';
 import { NameInput } from '../inputs/name.input';
 import { ContextProvider } from '../../../providers/context.provider';
@@ -10,7 +10,7 @@ import { ContextProvider } from '../../../providers/context.provider';
 export class RoutineEditPage {
   constructor(
     readonly routinesService: RoutinesService,
-    readonly contentForm: ContentForm,
+    readonly contentFormSection: ContentFormSection,
     readonly nameInput: NameInput,
   ) {}
 
@@ -50,7 +50,7 @@ export class RoutineEditPage {
   }
 
   getRoutineForm() {
-    const contentForm = this.contentForm.getMeta();
+    const contentFormSection = this.contentFormSection.getMeta();
     const nameInput = this.nameInput.getMeta();
     const form: FormBuilder = {
       button: {
@@ -60,18 +60,19 @@ export class RoutineEditPage {
           payloadPath: 'form',
         },
       },
-      ...contentForm,
-    };
-
-    form.sections.unshift({
-      name: '기본 정보',
-      stacks: [
+      sections: [
         {
-          type: 'VStack',
-          inputs: [nameInput],
+          name: '기본 정보',
+          stacks: [
+            {
+              type: 'VStack',
+              inputs: [nameInput],
+            },
+          ],
         },
+        contentFormSection,
       ],
-    });
+    };
 
     return form;
   }
