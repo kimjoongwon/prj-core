@@ -10,6 +10,7 @@ import {
   Param,
   Query,
   UploadedFiles,
+  UsePipes,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
@@ -19,6 +20,10 @@ import { ResponseEntity } from '../entities/response.entity';
 import { ExercisesService } from '../services/exercises.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiFile } from '../decorators/swagger.schema';
+import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
+import { ParseContentPipe } from '../pipes/parse-content.pipe';
 
 @ApiTags('EXERCISES')
 @Controller()
@@ -48,6 +53,7 @@ export class ExercisesController {
     @Body() createExerciseDto: CreateExerciseDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
+    console.log('createExerciseDto', createExerciseDto);
     const exercise = await this.service.create(createExerciseDto, files);
     return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
   }
