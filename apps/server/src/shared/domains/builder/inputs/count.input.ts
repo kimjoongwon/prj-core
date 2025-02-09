@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InputBuilder } from '@shared/types';
 
 @Injectable()
-export class EmailInput {
+export class CountInput {
   getMeta(): InputBuilder {
     return {
       type: 'Input',
-      path: 'email',
+      path: 'count',
       props: {
-        type: 'email',
-        label: '이메일',
-        placeholder: '이메일을 입력해주세요.',
+        type: 'number',
+        label: '개수',
+        placeholder: '개수을 입력해주세요.',
       },
       validation: {
         type: 'string',

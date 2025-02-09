@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateExerciseDto } from '../../../dtos';
-import { DescriptionInput } from '../inputs/description.input';
-import { TitleInput } from '../inputs/title.input';
+import { CreateExerciseDto, defaultCreateExerciseDto } from '../../../dtos';
 import { LabelInput } from '../inputs/label.input';
 import { NameInput } from '../inputs/name.input';
 import { ContextProvider } from '../../../providers';
 import { ContentFormSection } from '../forms/content-form.section';
+import { plainToInstance } from 'class-transformer';
+import { builder } from '../../../libs/builder';
 
 @Injectable()
 export class ExerciseEditPage {
@@ -25,22 +25,14 @@ export class ExerciseEditPage {
     const tenancyId = ContextProvider.getTenancyId();
     const contentFormSection = this.contentFormSection.getMeta();
 
+    const sections = builder(CreateExerciseDto, defaultCreateExerciseDto);
+
     const page: PageBuilder = {
       name: '그룹',
       type: 'Page',
       state: {
         form: {
-          inputs: {
-            duration: 0,
-            contentAuthorId: user.id,
-            contentDescription: '',
-            contentTitle: '',
-            contentType: 'Textarea',
-            count: 0,
-            taskLabel: '',
-            taskName: '',
-            tenancyId: tenancyId,
-          } as CreateExerciseDto,
+          inputs: {} as CreateExerciseDto,
         },
       },
       form: {
@@ -58,18 +50,7 @@ export class ExerciseEditPage {
             pathname: '..',
           },
         },
-        sections: [
-          {
-            name: '운동 정보',
-            stacks: [
-              {
-                type: 'VStack',
-                inputs: [taskLabel, taskName],
-              },
-            ],
-          },
-          contentFormSection,
-        ],
+        sections,
       },
     };
 

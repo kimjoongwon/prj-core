@@ -9,7 +9,7 @@ export class DescriptionInput {
 
   getMeta() {
     const input: InputBuilder = {
-      path: 'form.inputs.description',
+      path: 'description',
       type: 'Input',
       props: {
         label: this.getLabel(),
@@ -18,12 +18,12 @@ export class DescriptionInput {
       validation: {
         type: 'string',
         timings: ['onChange'],
-        required: true,
-        messages: {
+        errorMessages: {
           required: `${this.getLabel()}을 입력해주세요.`,
         },
-        errorMessage: '',
-        isInvalid: false,
+        conditions: {
+          required: true,
+        },
       },
     };
 

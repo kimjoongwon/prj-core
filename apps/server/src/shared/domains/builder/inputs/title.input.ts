@@ -5,7 +5,7 @@ import { InputBuilder } from '@shared/types';
 export class TitleInput {
   getMeta() {
     const input: InputBuilder = {
-      path: 'form.inputs.title',
+      path: 'form.inputs.content.title',
       type: 'Input',
       props: {
         label: '제목',
@@ -14,12 +14,12 @@ export class TitleInput {
       validation: {
         type: 'string',
         timings: ['onChange'],
-        required: true,
-        messages: {
+        errorMessages: {
           required: '제목을 입력해주세요.',
         },
-        errorMessage: '',
-        isInvalid: false,
+        conditions: {
+          required: true,
+        },
       },
     };
 

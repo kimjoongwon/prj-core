@@ -18,11 +18,7 @@ const ExerciseEditPage = () => {
     return null;
   }
 
-  return (
-    <ModalLayout>
-      <PageBuilder pageBuilder={page} />
-    </ModalLayout>
-  );
+  return <PageBuilder pageBuilder={page} />;
 };
 
 export default ExerciseEditPage;

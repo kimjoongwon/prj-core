@@ -1,33 +1,100 @@
-import { OmitType } from '@nestjs/swagger';
-import { ClassField, EnumField, StringField, UUIDField } from '../../decorators/field.decorators';
+import { IntersectionType, OmitType } from '@nestjs/swagger';
+import {
+  EnumField,
+  FormType,
+  NumberField,
+  StringField,
+  UUIDField,
+} from '../../decorators/field.decorators';
 import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
-import { $Enums } from '@prisma/client';
 import { ExerciseDto } from '../exercise.dto';
-import { JSONSchema } from 'class-validator-jsonschema';
+import { CreateTaskDto } from './create-task.dto';
 import { CreateContentDto } from './create-content.dto';
-import { Exclude, Transform } from 'class-transformer';
+import { $Enums } from '@prisma/client';
 
-export class CreateExerciseDto extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskId']) {
-  @StringField()
-  taskName: string;
+export const defaultCreateExerciseDto: CreateExerciseDto = {
+  name: '',
+  label: '',
+  title: '',
+  tenancyId: '',
+  type: 'Textarea',
+  description: '',
+  text: '',
+  duration: 0,
+  count: 0,
+  depotId: '',
+};
 
-  @StringField()
-  taskLabel: string;
+export type CreateDto = CreateTaskDto & CreateContentDto;
 
-  // @StringField()
-  // contentTitle: string;
+export class CreateExerciseDto
+  extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskId'])
+  implements CreateDto
+{
+  @StringField({
+    label: '업무명',
+    placeholder: '업무명을 입력해주세요',
+    sectionName: '업무 정보',
+  })
+  name: string;
 
-  // @StringField()
-  // contentDescription: string;
+  @StringField({
+    label: '업무 라벨',
+    placeholder: '업무 라벨을 입력해주세요',
+    sectionName: '업무 정보',
+  })
+  label: string;
 
-  // @EnumField(() => $Enums.TextTypes)
-  // contentType: $Enums.TextTypes;
+  @StringField({
+    label: '제목',
+    placeholder: '제목을 입력해주세요',
+    sectionName: '콘텐츠 정보',
+  })
+  title: string;
 
-  // @StringField()
-  // contentAuthorId: string;
-  @ClassField(() => CreateContentDto)
-  content: CreateContentDto;
-
-  @StringField()
+  @UUIDField()
   tenancyId: string;
+
+  @EnumField(() => $Enums.TextTypes)
+  type: $Enums.TextTypes;
+
+  @StringField({
+    label: '설명',
+    sectionName: '콘텐츠 정보',
+    placeholder: '설명을 입력해주세요',
+  })
+  description: string;
+
+  @StringField({
+    formType: 'Textarea',
+    label: '내용',
+    sectionName: '콘텐츠 정보',
+    placeholder: '내용을 입력해주세요',
+  })
+  text: string;
+
+  @NumberField({
+    min: 100,
+    max: 1000,
+    sectionName: '운동 정보',
+    label: '운동 시간',
+    placeholder: '운동 시간을 입력해주세요',
+  })
+  duration: number;
+
+  @NumberField({
+    min: 100,
+    max: 1000,
+    sectionName: '운동 정보',
+    label: '운동 횟수',
+    placeholder: '운동 횟수를 입력해주세요',
+  })
+  count: number;
+
+  @StringField({
+    label: '업무명',
+    placeholder: '업무명을 입력해주세요',
+    sectionName: '운동 정보',
+  })
+  depotId: string;
 }

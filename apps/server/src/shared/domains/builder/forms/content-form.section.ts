@@ -13,6 +13,7 @@ export class ContentFormSection {
     readonly depotInput: DepotInput,
     readonly textInput: TextInput,
   ) {}
+
   getMeta() {
     const titleInput = this.titleInput.getMeta();
     const descriptionInput = this.descriptionInput.getMeta();

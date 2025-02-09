@@ -1,5 +1,5 @@
-import { PaginationUtil } from '@shared/utils';
 import { NumberFieldOptional } from '../../decorators';
+import { PaginationUtil } from '../../libs/PaginationUtil';
 import { PageMetaDto } from './page-meta.dto';
 
 export class QueryDto {

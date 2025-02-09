@@ -1,16 +1,20 @@
-import { type InputProps, Selection, TableProps } from '@heroui/react';
+import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
 export interface ValidationBuilder {
-  timings: ('onBlur' | 'onChange' | 'onFocus')[];
+  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
   type?: string | number | boolean;
-  minLength?: number;
-  maxLength?: number;
-  regex?: string;
-  required: boolean;
-  messages: Partial<Record<keyof ValidationBuilder, string>>;
-  isInvalid: boolean;
-  errorMessage: string;
+  conditions?: {
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+    pattern?: string;
+    required?: boolean;
+  };
+  errorMessages?: Partial<
+    Record<keyof ValidationBuilder['conditions'], string>
+  >;
 }
 
 export interface InputBuilder {
@@ -20,10 +24,9 @@ export interface InputBuilder {
       value: any;
     };
   };
-  type: string;
+  type?: string;
   props?: any;
   path?: string;
-  gridProps?: object;
   validation?: ValidationBuilder;
 }
 

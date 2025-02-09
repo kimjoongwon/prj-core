@@ -8,7 +8,7 @@ export class TextInput {
     return '내용';
   }
 
-  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'form.inputs.text') {
+  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'form.inputs.content.text') {
     const input: InputBuilder = {
       path,
       type,
@@ -19,12 +19,12 @@ export class TextInput {
       validation: {
         type: 'string',
         timings: ['onChange'],
-        required: true,
-        messages: {
+        errorMessages: {
           required: `${this.getLabel()}을 입력해주세요.`,
         },
-        errorMessage: '',
-        isInvalid: false,
+        conditions: {
+          required: true,
+        },
       },
     };
 

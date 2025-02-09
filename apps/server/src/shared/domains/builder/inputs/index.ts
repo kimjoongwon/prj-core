@@ -8,27 +8,22 @@ import { TextInput } from './text.input';
 import { TitleInput } from './title.input';
 import { LabelInput } from './label.input';
 
+export const inputModules = {
+  DepotInput,
+  DescriptionInput,
+  EmailInput,
+  NameInput,
+  PasswordInput,
+  TextInput,
+  TitleInput,
+  LabelInput,
+};
+
+const inputModulesArray = Object.values(inputModules);
+
 @Global()
 @Module({
-  providers: [
-    DepotInput,
-    DescriptionInput,
-    EmailInput,
-    NameInput,
-    PasswordInput,
-    TextInput,
-    TitleInput,
-    LabelInput,
-  ],
-  exports: [
-    DepotInput,
-    DescriptionInput,
-    EmailInput,
-    NameInput,
-    PasswordInput,
-    TextInput,
-    TitleInput,
-    LabelInput,
-  ],
+  providers: inputModulesArray,
+  exports: inputModulesArray,
 })
 export class InputsModule {}

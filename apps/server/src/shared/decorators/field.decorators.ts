@@ -21,6 +21,7 @@ import {
 } from 'class-validator';
 
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
+import { InputProps } from '@heroui/react';
 
 import {
   PhoneNumberSerializer,
@@ -38,14 +39,17 @@ import {
   IsUndefinable,
 } from './validator.decorators';
 import { Constructor } from '../constants/types';
+import { InputBuilder, ValidationBuilder } from '@shared/types';
+import { inputModules } from '../domains';
 
-interface IFieldOptions {
+interface IFieldOptions extends Omit<InputProps, 'type'> {
   required?: boolean;
   each?: boolean;
   swagger?: boolean;
   nullable?: boolean;
   groups?: string[];
-  message?: string;
+  formType?: string;
+  sectionName?: string;
 }
 
 interface INumberFieldOptions extends IFieldOptions {
@@ -65,10 +69,51 @@ interface IStringFieldOptions extends IFieldOptions {
 type IBooleanFieldOptions = IFieldOptions;
 type IEnumFieldOptions = IFieldOptions;
 
+export const SectionNameKey = 'section-name';
+export const FormTypeKey = 'form-type';
+export const ValidationKey = 'validation';
+
+export function Input(input: InputBuilder) {
+  return (target: any, propertyKey: string) => {
+    input.path = propertyKey;
+    Reflect.defineMetadata(FormTypeKey, input, target, propertyKey);
+  };
+}
+
+export function SectionName(name: string) {
+  return (target: any, propertyKey: string) => {
+    Reflect.defineMetadata(SectionNameKey, name, target, propertyKey);
+  };
+}
+
 export function NumberField(
   options: Omit<ApiPropertyOptions, 'type'> & INumberFieldOptions = {},
 ): PropertyDecorator {
   const decorators = [Type(() => Number)];
+  decorators.push(
+    Input({
+      type: options.formType || 'Input',
+      props: {
+        type: 'number',
+        label: options.label,
+        placeholder: options.placeholder,
+      } as InputProps,
+      validation: {
+        type: 'number',
+        conditions: {
+          min: options.min,
+          max: options.max,
+          required: options.required || true,
+        },
+        errorMessages: {
+          min: options.min ? `최소값은 ${options.min}입니다.` : undefined,
+          max: options.max ? `최대값은 ${options.max}입니다.` : undefined,
+        },
+      },
+    }),
+  );
+
+  decorators.push(SectionName(options.sectionName));
 
   if (options.nullable) {
     decorators.push(IsNullable({ each: options.each }));
@@ -111,10 +156,52 @@ export function NumberFieldOptional(
   return applyDecorators(IsUndefinable(), NumberField({ required: false, ...options }));
 }
 
+export function Validation(validation: ValidationBuilder) {
+  return (target: any, propertyKey: string) => {
+    Reflect.defineMetadata(ValidationKey, validation, target, propertyKey);
+  };
+}
+
+export function FormType(type: keyof typeof inputModules) {
+  return (target: any, propertyKey: string) => {
+    Reflect.defineMetadata(FormTypeKey, type, target, propertyKey);
+  };
+}
+
 export function StringField(
   options: Omit<ApiPropertyOptions, 'type'> & IStringFieldOptions = {},
 ): PropertyDecorator {
   const decorators = [Type(() => String), IsString({ each: options.each })];
+
+  decorators.push(
+    Input({
+      type: options.formType || 'Input',
+      props: {
+        label: options.label,
+        placeholder: options.placeholder,
+      } as InputProps,
+      path: '',
+      validation: {
+        type: 'string',
+        conditions: {
+          minLength: options.minLength || 1,
+          maxLength: options.maxLength,
+          required: options.required || true,
+          pattern: options.pattern,
+        },
+        errorMessages: {
+          pattern: options.pattern ? `형식이 올바르지 않습니다.` : undefined,
+          minLength: `최소 ${options.minLength || 1}자 이상 입력해주세요.`,
+          maxLength: options.maxLength
+            ? `최대 ${options.maxLength}자까지 입력 가능합니다.`
+            : undefined,
+          required: options.required ? `필수 입력 항목입니다.` : undefined,
+        },
+      },
+    }),
+  );
+
+  decorators.push(SectionName(options.sectionName));
 
   if (options.nullable) {
     decorators.push(
@@ -128,7 +215,6 @@ export function StringField(
   if (options.swagger !== false) {
     decorators.push(ApiProperty({ type: String, ...options, isArray: options.each }));
   }
-
   const minLength = options.minLength || 1;
 
   decorators.push(MinLength(minLength, { each: options.each }));
