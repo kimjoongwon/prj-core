@@ -13,7 +13,6 @@ export class ExerciseEditPage {
     const page = pageBuilder(CreateExerciseDto, defaultCreateExerciseDto);
     const tenancyId = ContextProvider.getTenancyId();
     const serviceId = ContextProvider.getServiceId();
-
     page.form.button.mutation.name = 'createExercise';
     page.form.button.mutation.payloadPath = 'form.inputs';
 

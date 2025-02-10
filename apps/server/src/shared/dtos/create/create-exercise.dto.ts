@@ -15,9 +15,10 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   text: '',
   duration: 0,
   count: 0,
-  depotId: '',
+  thumbnails: [],
   tenancyId: '',
   serviceId: '',
+  videos: [],
 };
 
 export type CreateDto = CreateTaskDto & CreateContentDto;
@@ -26,17 +27,35 @@ export class CreateExerciseDto
   extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskId'])
   implements CreateDto
 {
+  @NumberField({
+    min: 0,
+    max: 1000,
+    sectionName: '운동 상세 정보',
+    label: '운동 시간',
+    placeholder: '운동 시간을 입력해주세요',
+  })
+  duration: number;
+
+  @NumberField({
+    min: 0,
+    max: 1000,
+    sectionName: '운동 상세 정보',
+    label: '운동 횟수',
+    placeholder: '운동 횟수를 입력해주세요',
+  })
+  count: number;
+
   @StringField({
-    label: '업무명',
-    placeholder: '업무명을 입력해주세요',
-    sectionName: '업무 정보',
+    label: '운동명',
+    placeholder: '운동명을 입력해주세요',
+    sectionName: '운동 정보',
   })
   name: string;
 
   @StringField({
-    label: '업무 라벨',
-    placeholder: '업무 라벨을 입력해주세요',
-    sectionName: '업무 정보',
+    label: '운동 라벨',
+    placeholder: '운동 라벨을 입력해주세요',
+    sectionName: '운동 정보',
   })
   label: string;
 
@@ -70,26 +89,18 @@ export class CreateExerciseDto
     label: '운동 이미지',
     sectionName: '콘텐츠 정보',
     placeholder: '운동 이미지를 입력해주세요',
+    isArray: true,
   })
-  depotId: string;
+  thumbnails: string[];
 
-  @NumberField({
-    min: 0,
-    max: 1000,
-    sectionName: '운동 정보',
-    label: '운동 시간',
-    placeholder: '운동 시간을 입력해주세요',
+  @StringField({
+    formType: 'Depot',
+    label: '운동 동영상',
+    sectionName: '콘텐츠 정보',
+    placeholder: '운동 동영상을 입력해주세요',
+    isArray: true,
   })
-  duration: number;
-
-  @NumberField({
-    min: 0,
-    max: 1000,
-    sectionName: '운동 정보',
-    label: '운동 횟수',
-    placeholder: '운동 횟수를 입력해주세요',
-  })
-  count: number;
+  videos: string[];
 
   @UUIDField()
   tenancyId: string;

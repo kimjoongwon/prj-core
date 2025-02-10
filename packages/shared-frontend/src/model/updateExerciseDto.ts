@@ -3,13 +3,18 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateContentDto } from './createContentDto';
+import type { TextTypes } from './textTypes';
 
 export interface UpdateExerciseDto {
   duration?: number;
   count?: number;
-  taskName?: string;
-  taskLabel?: string;
-  content?: CreateContentDto;
+  name?: string;
+  label?: string;
+  title?: string;
+  type?: TextTypes;
+  description?: string;
+  text?: string;
+  thumbnails?: string;
   tenancyId?: string;
+  serviceId?: string;
 }

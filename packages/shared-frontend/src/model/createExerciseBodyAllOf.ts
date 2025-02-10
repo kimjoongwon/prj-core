@@ -5,5 +5,6 @@
  */
 
 export type CreateExerciseBodyAllOf = {
-  files?: Blob[];
+  thumbnails?: Blob[];
+  exerciseVideos?: Blob[];
 };

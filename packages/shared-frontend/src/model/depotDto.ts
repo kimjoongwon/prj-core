@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { FileDto } from './fileDto';
 
 export interface DepotDto {
   id: string;
@@ -11,4 +12,5 @@ export interface DepotDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  files: FileDto[];
 }

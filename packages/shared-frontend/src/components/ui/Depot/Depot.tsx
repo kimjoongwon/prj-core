@@ -4,7 +4,7 @@ import { get, set } from 'lodash-es';
 import { getDepotById } from '../../../apis';
 import { useEffect } from 'react';
 import { DepotService } from '../../../store';
-import { reaction } from 'mobx';
+import { reaction, toJS } from 'mobx';
 import { MobxProps } from '@shared/types';
 
 interface DepotProps<T>
@@ -35,6 +35,7 @@ export const Depot = observer(<T extends object>(props: DepotProps<T>) => {
     const setInitialValue = async () => {
       const depotId = get(state, path) as unknown as string;
       if (depotId) {
+        console.log('depotId', depotId);
         const { data: depot } = await getDepotById(depotId);
         if (depot?.files) {
           const files = await Promise.all(
@@ -58,5 +59,11 @@ export const Depot = observer(<T extends object>(props: DepotProps<T>) => {
     localState.value = files;
   };
 
-  return <FileUploader {...rest} onFilesChange={handleFilesChange} />;
+  return (
+    <FileUploader
+      {...rest}
+      value={toJS(localState.value)}
+      onFilesChange={handleFilesChange}
+    />
+  );
 });

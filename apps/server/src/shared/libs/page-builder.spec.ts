@@ -1,4 +1,4 @@
-import { builder } from './page-builder';
+import { pageBuilder } from './page-builder';
 import { OmitType } from '@nestjs/swagger';
 import { ExerciseDto } from '../dtos/exercise.dto';
 import { COMMON_ENTITY_FIELDS } from '../constants/entity-common-fields';
@@ -32,6 +32,6 @@ export class Test extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskI
 
 describe('Test Class', () => {
   it('should create an instance of Test with provided values', () => {
-    builder(CreateExerciseDto, defaultCreateExerciseDto);
+    pageBuilder(CreateExerciseDto);
   });
 });

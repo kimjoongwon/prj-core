@@ -75,7 +75,7 @@ export const ValidationKey = 'validation';
 
 export function Input(input: InputBuilder) {
   return (target: any, propertyKey: string) => {
-    input.path = 'form.inputs' + propertyKey;
+    input.path = 'form.inputs.' + propertyKey;
     Reflect.defineMetadata(FormTypeKey, input, target, propertyKey);
   };
 }
@@ -90,6 +90,7 @@ export function NumberField(
   options: Omit<ApiPropertyOptions, 'type'> & INumberFieldOptions = {},
 ): PropertyDecorator {
   const decorators = [Type(() => Number)];
+  decorators.push(Default(options.default));
   decorators.push(
     Input({
       type: options.formType || 'Input',
@@ -166,10 +167,20 @@ export function FormType(type: keyof typeof inputModules) {
   };
 }
 
+export const DefaultKey = 'default';
+
+export function Default(value: any) {
+  return (target: any, propertyKey: string) => {
+    Reflect.defineMetadata(DefaultKey, value, target, propertyKey);
+  };
+}
+
 export function StringField(
   options: Omit<ApiPropertyOptions, 'type'> & IStringFieldOptions = {},
 ): PropertyDecorator {
   const decorators = [Type(() => String), IsString({ each: options.each })];
+
+  decorators.push(Default(options.default));
 
   decorators.push(
     Input({
@@ -393,6 +404,8 @@ export function UUIDField(
 ): PropertyDecorator {
   const decorators = [Type(() => String)];
 
+  decorators.push(Default(options.default));
+
   if (options.nullable) {
     decorators.push(
       Transform(({ value }) => (value === 'null' ? null : value), { toClassOnly: true }),
@@ -402,9 +415,7 @@ export function UUIDField(
     decorators.push(NotEquals(null));
   }
 
-  if (options.swagger !== false) {
-    decorators.push(ApiUUIDProperty(options));
-  }
+  decorators.push(ApiUUIDProperty(options));
 
   if (options.each) {
     decorators.push(ToArray());
