@@ -1,4 +1,4 @@
-import { builder } from './builder';
+import { builder } from './page-builder';
 import { OmitType } from '@nestjs/swagger';
 import { ExerciseDto } from '../dtos/exercise.dto';
 import { COMMON_ENTITY_FIELDS } from '../constants/entity-common-fields';

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
 import type { Type } from '@nestjs/common';
 import { applyDecorators, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import type {
   ReferenceObject,
@@ -114,16 +114,12 @@ export function ApiFile(
   options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
   const filesArray = castArray(files);
-  const apiFileInterceptors = filesArray.map((file) =>
-    file.isArray
-      ? UseInterceptors(FilesInterceptor(file.name))
-      : UseInterceptors(FileInterceptor(file.name)),
-  );
+  const fileNames = filesArray.map((file) => ({ name: file.name }));
 
   return applyDecorators(
     RegisterModels(),
     ApiConsumes('multipart/form-data'),
     ApiFileDecorator(filesArray, options),
-    ...apiFileInterceptors,
+    UseInterceptors(FileFieldsInterceptor(fileNames)),
   );
 }

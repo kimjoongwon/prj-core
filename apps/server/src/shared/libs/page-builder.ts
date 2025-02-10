@@ -3,9 +3,9 @@ import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { FormTypeKey, SectionNameKey } from '../decorators/field.decorators';
 import { CreateExerciseDto } from '../dtos';
 import { groupBy } from 'lodash';
-import { SectionBuilder } from '@shared/types';
+import { PageBuilder, SectionBuilder } from '@shared/types';
 
-export function builder<T extends object>(
+export function pageBuilder<T extends object>(
   ClassConstructor: ClassConstructor<unknown> = CreateExerciseDto,
   defaultObject: T,
 ) {
@@ -17,9 +17,6 @@ export function builder<T extends object>(
 
   const dto = plainToInstance(ClassConstructor, defaultObject);
   const metadata = getAllMetadata(dto);
-
-  // console.log('metadata', metadata);
-  console.log(metadata);
 
   const metaDataGroupedBySectionName = groupBy(metadata, (value) => value?.[SectionNameKey]);
   const metaDataKeysGroupedBySectionName = Object.keys(metaDataGroupedBySectionName);
@@ -39,14 +36,24 @@ export function builder<T extends object>(
     }
   });
 
-  console.log('sections', sections);
+  const page: PageBuilder = {
+    name: '정보',
+    type: 'Page',
+    form: {
+      name: '정보',
+      button: {
+        name: '저장',
+        mutation: {
+          name: '',
+          payloadPath: '',
+        },
+        navigator: {
+          pathname: '..',
+        },
+      },
+      sections,
+    },
+  };
 
-  // Object.entries(metadata).forEach(([key, value]) => {
-  //   if (value?.[FormTypeKey]) {
-  //     value[FormTypeKey].path = key;
-  //     inputs.push(value?.[FormTypeKey]);
-  //   }
-  // });
-
-  return sections;
+  return page;
 }

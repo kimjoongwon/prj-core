@@ -12,23 +12,13 @@ export class ExercisesService {
   ) {}
 
   async create(createExerciseDto: CreateExerciseDto, files: Express.Multer.File[]) {
-    const {
-      count,
-      duration,
-      content: {
-        authorId,
-        description: contentDescription,
-        title: contentTitle,
-        type: contentType,
-      },
-      taskLabel,
-      taskName,
-    } = createExerciseDto;
+    const { count, duration, description, label, name, text, title, type } = createExerciseDto;
 
     const tenancyId = ContextProvider.getTenancyId();
+    const authUser = ContextProvider.getAuthUser();
 
     const depotFiles = await Promise.all(
-      files.map(async (file) => {
+      files?.map(async (file) => {
         const url = await this.awsService.uploadToS3(
           file.originalname,
           file,
@@ -51,15 +41,15 @@ export class ExercisesService {
         duration,
         task: {
           create: {
-            label: taskLabel,
-            name: taskName,
+            label,
+            name,
             tenancyId,
             content: {
               create: {
-                description: contentDescription,
-                title: contentTitle,
-                type: contentType,
-                authorId,
+                description,
+                title,
+                type,
+                authorId: authUser.id,
                 depot: {
                   create: {
                     files: {

@@ -11,6 +11,7 @@ import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { HStack, Text, VStack } from '@shared/frontend';
 import { v4 } from 'uuid';
 import { Skeleton } from '@heroui/react';
+import { ButtonBuilder } from '../ButtonBuilder';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
@@ -64,7 +65,10 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   return (
     <PageProvder state={pageBuilder?.state} data={data}>
       {pageBuilder?.form && (
-        <Form formBuilder={pageBuilder?.form}>
+        <>
+          {pageBuilder.form?.button && (
+            <ButtonBuilder buttonBuilder={pageBuilder.form.button} />
+          )}
           {pageBuilder?.form?.sections?.map(section => {
             return (
               <div
@@ -99,7 +103,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
               </div>
             );
           })}
-        </Form>
+        </>
       )}
       {pageBuilder?.dataGrid && (
         <DataGridBuilder dataGridBuilder={pageBuilder.dataGrid} />

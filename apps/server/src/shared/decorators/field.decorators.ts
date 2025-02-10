@@ -75,7 +75,7 @@ export const ValidationKey = 'validation';
 
 export function Input(input: InputBuilder) {
   return (target: any, propertyKey: string) => {
-    input.path = propertyKey;
+    input.path = 'form.inputs' + propertyKey;
     Reflect.defineMetadata(FormTypeKey, input, target, propertyKey);
   };
 }
@@ -100,11 +100,9 @@ export function NumberField(
       } as InputProps,
       validation: {
         type: 'number',
-        conditions: {
-          min: options.min,
-          max: options.max,
-          required: options.required || true,
-        },
+        min: options.min,
+        max: options.max,
+        required: options.required || true,
         errorMessages: {
           min: options.min ? `최소값은 ${options.min}입니다.` : undefined,
           max: options.max ? `최대값은 ${options.max}입니다.` : undefined,
@@ -183,12 +181,10 @@ export function StringField(
       path: '',
       validation: {
         type: 'string',
-        conditions: {
-          minLength: options.minLength || 1,
-          maxLength: options.maxLength,
-          required: options.required || true,
-          pattern: options.pattern,
-        },
+        minLength: options.minLength || 1,
+        maxLength: options.maxLength,
+        required: options.required || true,
+        pattern: options.pattern,
         errorMessages: {
           pattern: options.pattern ? `형식이 올바르지 않습니다.` : undefined,
           minLength: `최소 ${options.minLength || 1}자 이상 입력해주세요.`,

@@ -20,10 +20,6 @@ import { ResponseEntity } from '../entities/response.entity';
 import { ExercisesService } from '../services/exercises.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiFile } from '../decorators/swagger.schema';
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
-import { validate } from 'class-validator';
-import { plainToClass } from 'class-transformer';
-import { ParseContentPipe } from '../pipes/parse-content.pipe';
 
 @ApiTags('EXERCISES')
 @Controller()
@@ -48,13 +44,24 @@ export class ExercisesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
-  @ApiFile({ name: 'files', isArray: true }, { isRequired: false })
+  @ApiFile(
+    [
+      { name: 'thumbnails', isArray: true },
+      { name: 'exerciseVideos', isArray: true },
+    ],
+    { isRequired: false },
+  )
   async createExercise(
     @Body() createExerciseDto: CreateExerciseDto,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles()
+    {
+      thumbnails,
+      exerciseVideos,
+    }: { thumbnails: Express.Multer.File[]; exerciseVideos: Express.Multer.File[] },
   ) {
-    console.log('createExerciseDto', createExerciseDto);
-    const exercise = await this.service.create(createExerciseDto, files);
+    console.log('thumbnails', thumbnails);
+    console.log('exerciseVideo', exerciseVideos);
+    const exercise = await this.service.create(createExerciseDto, thumbnails);
     return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
   }
 
