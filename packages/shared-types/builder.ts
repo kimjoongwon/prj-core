@@ -4,16 +4,17 @@ import { HeaderContext, CellContext } from '@tanstack/react-table';
 export interface ValidationBuilder {
   timings?: ('onBlur' | 'onChange' | 'onFocus')[];
   type?: string | number | boolean;
-  conditions?: {
-    minLength?: number;
-    maxLength?: number;
-    min?: number;
-    max?: number;
-    pattern?: string;
-    required?: boolean;
-  };
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  pattern?: string;
+  required?: boolean;
   errorMessages?: Partial<
-    Record<keyof ValidationBuilder['conditions'], string>
+    Record<
+      'minLength' | 'maxLength' | 'min' | 'max' | 'pattern' | 'required',
+      string
+    >
   >;
 }
 

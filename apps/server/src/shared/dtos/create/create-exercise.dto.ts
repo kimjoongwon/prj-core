@@ -1,11 +1,5 @@
-import { IntersectionType, OmitType } from '@nestjs/swagger';
-import {
-  EnumField,
-  FormType,
-  NumberField,
-  StringField,
-  UUIDField,
-} from '../../decorators/field.decorators';
+import { OmitType } from '@nestjs/swagger';
+import { EnumField, NumberField, StringField, UUIDField } from '../../decorators/field.decorators';
 import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
 import { ExerciseDto } from '../exercise.dto';
 import { CreateTaskDto } from './create-task.dto';
@@ -16,7 +10,6 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   name: '',
   label: '',
   title: '',
-  tenancyId: '',
   type: 'Textarea',
   description: '',
   text: '',
@@ -52,9 +45,6 @@ export class CreateExerciseDto
   })
   title: string;
 
-  @UUIDField()
-  tenancyId: string;
-
   @EnumField(() => $Enums.TextTypes)
   type: $Enums.TextTypes;
 
@@ -73,8 +63,16 @@ export class CreateExerciseDto
   })
   text: string;
 
+  @StringField({
+    formType: 'Depot',
+    label: '운동 이미지',
+    sectionName: '콘텐츠 정보',
+    placeholder: '운동 이미지를 입력해주세요',
+  })
+  depotId: string;
+
   @NumberField({
-    min: 100,
+    min: 0,
     max: 1000,
     sectionName: '운동 정보',
     label: '운동 시간',
@@ -83,7 +81,7 @@ export class CreateExerciseDto
   duration: number;
 
   @NumberField({
-    min: 100,
+    min: 0,
     max: 1000,
     sectionName: '운동 정보',
     label: '운동 횟수',
@@ -91,10 +89,9 @@ export class CreateExerciseDto
   })
   count: number;
 
-  @StringField({
-    label: '업무명',
-    placeholder: '업무명을 입력해주세요',
-    sectionName: '운동 정보',
-  })
-  depotId: string;
+  @UUIDField()
+  tenancyId: string;
+
+  @UUIDField()
+  serviceId: string;
 }

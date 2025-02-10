@@ -5,7 +5,6 @@ import { plainToClass } from 'class-transformer';
 @Injectable()
 export class ParseContentPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    console.log('value', value);
     if (value.content && typeof value.content === 'string') {
       try {
         value.content = JSON.parse(value.content);

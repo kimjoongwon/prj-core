@@ -76,6 +76,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   return (
     <BaseButton
       {...rest}
+      className="w-[140px] self-end sticky"
       isIconOnly={!!icon}
       onPress={onPress}
       color={buttonBuilder?.color || 'primary'}

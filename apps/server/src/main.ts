@@ -2,7 +2,6 @@ import { AppModule } from './gateway/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { PrismaClientExceptionFilter } from '@shared';
-import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';

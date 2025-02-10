@@ -15,12 +15,10 @@ export class PasswordInput {
       validation: {
         type: 'string',
         timings: ['onBlur'],
-        required: true,
-        messages: {
+        errorMessages: {
           required: '비밀번호를 입력해주세요.',
         },
-        errorMessage: '',
-        isInvalid: false,
+        required: true,
       },
     };
 

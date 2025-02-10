@@ -30,12 +30,7 @@ export class TaskEditPage {
     const page: PageBuilder = {
       state: {
         form: {
-          data: {
-            name: '',
-            label: '',
-            routineId: '',
-            contentId: '',
-          } as CreateTaskDto,
+          data: {},
         },
         dataGrid: {
           selectedRowIds: [],

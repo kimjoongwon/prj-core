@@ -18,9 +18,7 @@ export class EmailInput {
         errorMessages: {
           required: '이메일을 입력해주세요.',
         },
-        conditions: {
-          required: true,
-        },
+        required: true,
       },
     };
   }

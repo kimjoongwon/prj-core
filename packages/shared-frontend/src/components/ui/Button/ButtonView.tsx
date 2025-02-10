@@ -1,18 +1,12 @@
-import { Button as NextUIButton } from "@heroui/react";
+import { Button as NextUIButton } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { ButtonViewProps } from '.';
 
 export const ButtonView = observer((props: ButtonViewProps) => {
-  const { children, onPress, className = '', size, ...rest } = props;
+  const { children, onPress, ...rest } = props;
   return (
-    <>
-      <NextUIButton
-        className={'font-pretendard ' + className}
-        onPress={onPress}
-        {...rest}
-      >
-        {children}
-      </NextUIButton>
-    </>
+    <NextUIButton onPress={onPress} {...rest}>
+      {children}
+    </NextUIButton>
   );
 });
