@@ -16,6 +16,8 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   duration: 0,
   count: 0,
   depotId: '',
+  tenancyId: '',
+  serviceId: '',
 };
 
 export type CreateDto = CreateTaskDto & CreateContentDto;
