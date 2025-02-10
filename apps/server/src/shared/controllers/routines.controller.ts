@@ -35,7 +35,6 @@ export class RoutinesController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     const routine = await this.service.create(createRoutineDto, files);
-
     return new ResponseEntity(HttpStatus.OK, '성공', routine.toDto());
   }
 

@@ -13,33 +13,32 @@ interface InputBuilderProps {
 
 export const InputBuilder = observer((props: InputBuilderProps) => {
   const state = usePageState();
-  const { inputBuilder } = props;
-  // @ts-ignore
+  const { inputBuilder } = props; // @ts-ignore
   const Component = ComponentManager?.[inputBuilder.type];
 
-  const callbacks = inputBuilder.validation?.timings?.map(timing => {
-    return {
-      [timing]: (value: unknown) => {
-        if (!inputBuilder.validation) {
-          return null;
-        }
-        if (inputBuilder.validation?.required) {
-          if (isEmpty(value)) {
-            inputBuilder.validation.errorMessage = inputBuilder.validation
-              ?.messages?.required as string;
-            inputBuilder.validation.isInvalid = true;
-            return;
-          }
-        }
-        inputBuilder.validation.errorMessage = '';
-        inputBuilder.validation.isInvalid = false;
-      },
-    };
-  });
+  // const callbacks = inputBuilder.validation?.timings?.map(timing => {
+  //   return {
+  //     [timing]: (value: unknown) => {
+  //       if (!inputBuilder.validation) {
+  //         return null;
+  //       }
+  //       if (inputBuilder.validation?.required) {
+  //         if (isEmpty(value)) {
+  //           inputBuilder.validation.errorMessage = inputBuilder.validation
+  //             ?.messages?.required as string;
+  //           inputBuilder.validation.isInvalid = true;
+  //           return;
+  //         }
+  //       }
+  //       inputBuilder.validation.errorMessage = '';
+  //       inputBuilder.validation.isInvalid = false;
+  //     },
+  //   };
+  // });
 
-  const _props = callbacks?.reduce((acc, callback) => {
-    return { ...acc, ...callback };
-  });
+  // const _props = callbacks?.reduce((acc, callback) => {
+  //   return { ...acc, ...callback };
+  // });
 
   if (inputBuilder.type === 'DataGridBuilder') {
     return (
@@ -69,9 +68,9 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
       state={state}
       path={inputBuilder.path}
       inputBuilder={inputBuilder}
-      errorMessage={inputBuilder.validation?.errorMessage || ' '}
-      isInvalid={inputBuilder.validation?.isInvalid}
-      {..._props}
+      // errorMessage={inputBuilder.validation?.e|| ' '}
+      // isInvalid={inputBuilder.validation?.isInvalid}
+      // {..._props}
     />
   );
 });

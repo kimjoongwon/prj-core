@@ -39,6 +39,11 @@ export function pageBuilder<T extends object>(
   const page: PageBuilder = {
     name: '정보',
     type: 'Page',
+    state: {
+      form: {
+        inputs: defaultObject,
+      },
+    },
     form: {
       name: '정보',
       button: {

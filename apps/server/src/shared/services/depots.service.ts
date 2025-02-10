@@ -12,7 +12,7 @@ export class DepotsService {
   }
 
   getById(id: string) {
-    return this.repository.findUnique({ where: { id } });
+    return this.repository.findUnique({ where: { id }, include: { files: true } });
   }
 
   create(files: CreateFileDto[]) {

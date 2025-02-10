@@ -10358,21 +10358,39 @@ if(createExerciseBody?.duration !== undefined) {
 if(createExerciseBody?.count !== undefined) {
  formData.append('count', createExerciseBody.count.toString())
  }
-if(createExerciseBody?.taskName !== undefined) {
- formData.append('taskName', createExerciseBody.taskName)
+if(createExerciseBody?.name !== undefined) {
+ formData.append('name', createExerciseBody.name)
  }
-if(createExerciseBody?.taskLabel !== undefined) {
- formData.append('taskLabel', createExerciseBody.taskLabel)
+if(createExerciseBody?.label !== undefined) {
+ formData.append('label', createExerciseBody.label)
  }
-if(createExerciseBody?.content !== undefined) {
- formData.append('content', JSON.stringify(createExerciseBody.content));
+if(createExerciseBody?.title !== undefined) {
+ formData.append('title', createExerciseBody.title)
+ }
+if(createExerciseBody?.type !== undefined) {
+ formData.append('type', createExerciseBody.type)
+ }
+if(createExerciseBody?.description !== undefined) {
+ formData.append('description', createExerciseBody.description)
+ }
+if(createExerciseBody?.text !== undefined) {
+ formData.append('text', createExerciseBody.text)
+ }
+if(createExerciseBody?.thumbnails !== undefined) {
+ formData.append('thumbnails', createExerciseBody.thumbnails)
  }
 if(createExerciseBody?.tenancyId !== undefined) {
  formData.append('tenancyId', createExerciseBody.tenancyId)
  }
+if(createExerciseBody?.serviceId !== undefined) {
+ formData.append('serviceId', createExerciseBody.serviceId)
+ }
 
-if(createExerciseBody?.files !== undefined) {
- createExerciseBody?.files.forEach(value => formData.append('files', value));
+if(createExerciseBody?.thumbnails !== undefined) {
+ createExerciseBody?.thumbnails.forEach(value => formData.append('thumbnails', value));
+ }
+if(createExerciseBody?.exerciseVideos !== undefined) {
+ createExerciseBody?.exerciseVideos.forEach(value => formData.append('exerciseVideos', value));
  }
 
       return customInstance<CreateExercise200AllOf>(
