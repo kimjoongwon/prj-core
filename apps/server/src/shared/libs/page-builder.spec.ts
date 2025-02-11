@@ -32,6 +32,6 @@ export class Test extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskI
 
 describe('Test Class', () => {
   it('should create an instance of Test with provided values', () => {
-    pageBuilder(CreateExerciseDto);
+    pageBuilder(CreateExerciseDto, defaultCreateExerciseDto);
   });
 });

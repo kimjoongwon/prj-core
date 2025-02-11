@@ -40,6 +40,8 @@ import type {
   CreateClassificationDto,
   CreateExercise200AllOf,
   CreateExerciseBody,
+  CreateFile201AllOf,
+  CreateFileDto,
   CreateGroupDto,
   CreateProgram200AllOf,
   CreateProgramDto,
@@ -112,6 +114,7 @@ import type {
   GetExercise200AllOf,
   GetExercisesByQuery200AllOf,
   GetExercisesByQueryParams,
+  GetFileById200AllOf,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
@@ -10376,14 +10379,11 @@ if(createExerciseBody?.description !== undefined) {
 if(createExerciseBody?.text !== undefined) {
  formData.append('text', createExerciseBody.text)
  }
-if(createExerciseBody?.thumbnails !== undefined) {
- formData.append('thumbnails', createExerciseBody.thumbnails)
+if(createExerciseBody?.imageFileIds !== undefined) {
+ formData.append('imageFileIds', createExerciseBody.imageFileIds)
  }
-if(createExerciseBody?.tenancyId !== undefined) {
- formData.append('tenancyId', createExerciseBody.tenancyId)
- }
-if(createExerciseBody?.serviceId !== undefined) {
- formData.append('serviceId', createExerciseBody.serviceId)
+if(createExerciseBody?.videoFileId !== undefined) {
+ formData.append('videoFileId', createExerciseBody.videoFileId)
  }
 
 if(createExerciseBody?.thumbnails !== undefined) {
@@ -10793,6 +10793,248 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getRemoveExerciseMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getFileById = (
+    fileId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetFileById200AllOf>(
+      {url: `/api/v1/file/${fileId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetFileByIdQueryKey = (fileId: string,) => {
+    return [`/api/v1/file/${fileId}`] as const;
+    }
+
+    
+export const getGetFileByIdQueryOptions = <TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(fileId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFileByIdQueryKey(fileId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFileById>>> = ({ signal }) => getFileById(fileId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(fileId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFileByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFileById>>>
+export type GetFileByIdQueryError = ErrorType<void>
+
+
+export function useGetFileById<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFileById>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileById<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFileById>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileById<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetFileById<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFileByIdQueryOptions(fileId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetFileByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(fileId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFileByIdQueryKey(fileId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFileById>>> = ({ signal }) => getFileById(fileId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFileByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFileById>>>
+export type GetFileByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetFileByIdSuspense<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileByIdSuspense<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileByIdSuspense<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetFileByIdSuspense<TData = Awaited<ReturnType<typeof getFileById>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFileByIdSuspenseQueryOptions(fileId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetFileByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getFileById>>>, TError = ErrorType<void>>(fileId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFileByIdQueryKey(fileId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFileById>>> = ({ signal }) => getFileById(fileId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFileByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getFileById>>>
+export type GetFileByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetFileByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFileById>>>, TError = ErrorType<void>>(
+ fileId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFileById>>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFileByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFileById>>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetFileByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getFileById>>>, TError = ErrorType<void>>(
+ fileId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getFileById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFileByIdSuspenseInfiniteQueryOptions(fileId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const createFile = (
+    createFileDto: BodyType<CreateFileDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CreateFile201AllOf>(
+      {url: `/api/v1/file`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createFileDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateFileMutationOptions = <TData = Awaited<ReturnType<typeof createFile>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateFileDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['createFile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFile>>, {data: BodyType<CreateFileDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFile(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<CreateFileDto>}, TContext>}
+
+    export type CreateFileMutationResult = NonNullable<Awaited<ReturnType<typeof createFile>>>
+    export type CreateFileMutationBody = BodyType<CreateFileDto>
+    export type CreateFileMutationError = ErrorType<void>
+
+    export const useCreateFile = <TData = Awaited<ReturnType<typeof createFile>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateFileDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {data: BodyType<CreateFileDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateFileMutationOptions(options);
 
       return useMutation(mutationOptions);
     }

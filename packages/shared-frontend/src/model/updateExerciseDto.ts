@@ -14,7 +14,6 @@ export interface UpdateExerciseDto {
   type?: TextTypes;
   description?: string;
   text?: string;
-  thumbnails?: string;
-  tenancyId?: string;
-  serviceId?: string;
+  imageFileIds?: string;
+  videoFileId?: string;
 }

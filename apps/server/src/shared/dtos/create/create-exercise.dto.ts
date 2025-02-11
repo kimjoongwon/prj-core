@@ -15,10 +15,8 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   text: '',
   duration: 0,
   count: 0,
-  thumbnails: [],
-  tenancyId: '',
-  serviceId: '',
-  videos: [],
+  imageFileIds: [],
+  videoFileId: '',
 };
 
 export type CreateDto = CreateTaskDto & CreateContentDto;
@@ -91,20 +89,13 @@ export class CreateExerciseDto
     placeholder: '운동 이미지를 입력해주세요',
     isArray: true,
   })
-  thumbnails: string[];
+  imageFileIds: string[];
 
   @StringField({
     formType: 'Depot',
     label: '운동 동영상',
     sectionName: '콘텐츠 정보',
-    placeholder: '운동 동영상을 입력해주세요',
-    isArray: true,
+    placeholder: '운동 동영상을 업로드해주세요',
   })
-  videos: string[];
-
-  @UUIDField()
-  tenancyId: string;
-
-  @UUIDField()
-  serviceId: string;
+  videoFileId: string;
 }

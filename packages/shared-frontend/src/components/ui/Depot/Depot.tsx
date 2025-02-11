@@ -35,7 +35,6 @@ export const Depot = observer(<T extends object>(props: DepotProps<T>) => {
     const setInitialValue = async () => {
       const depotId = get(state, path) as unknown as string;
       if (depotId) {
-        console.log('depotId', depotId);
         const { data: depot } = await getDepotById(depotId);
         if (depot?.files) {
           const files = await Promise.all(

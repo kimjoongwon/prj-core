@@ -1,8 +1,10 @@
-import { EnumField, StringFieldOptional, UUIDField, UUIDFieldOptional } from '../decorators';
+import { EnumField, StringFieldOptional, UUIDField } from '../decorators';
 import { AbstractDto } from './abstract.dto';
 import { $Enums, Content as ContentEntity } from '@prisma/client';
-
 export class ContentDto extends AbstractDto implements ContentEntity {
+  @UUIDField()
+  dopotId: string;
+
   @UUIDField()
   authorId: string;
 
@@ -12,8 +14,11 @@ export class ContentDto extends AbstractDto implements ContentEntity {
   @StringFieldOptional({ nullable: true, label: '설명', placeholder: '설명을 입력해주세요' })
   description: string | null;
 
-  @UUIDFieldOptional({ nullable: true })
-  dopotId: string;
+  @UUIDField({ nullable: true })
+  imageFileIds: string[];
+
+  @UUIDField({ nullable: true })
+  videoFileId: string;
 
   @EnumField(() => $Enums.TextTypes, { nullable: true, default: $Enums.TextTypes.Textarea })
   type: $Enums.TextTypes;

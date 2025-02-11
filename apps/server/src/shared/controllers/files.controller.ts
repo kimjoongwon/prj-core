@@ -1,0 +1,31 @@
+import { Controller, Post, Body, HttpStatus, Get, HttpCode, Param } from '@nestjs/common';
+import { Auth, ApiResponseEntity } from '../decorators';
+import { CreateFileDto, FileDto } from '../dtos';
+import { ResponseEntity } from '../entities/response.entity';
+import { ApiTags } from '@nestjs/swagger';
+import { FilesService } from '../services/files.service';
+import _ from 'lodash';
+
+@ApiTags('FILES')
+@Controller()
+export class FilesController {
+  constructor(private readonly service: FilesService) {}
+
+  @Get(':fileId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(FileDto, HttpStatus.OK)
+  async getFileById(@Param('fileId') fileId: string) {
+    const file = await this.service.getById(fileId);
+    return new ResponseEntity(HttpStatus.OK, '성공', file.toDto());
+  }
+
+  @Post()
+  @Auth([])
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponseEntity(FileDto, HttpStatus.CREATED)
+  async createFile(@Body() createFileDto: CreateFileDto) {
+    const file = await this.service.create(createFileDto);
+    return new ResponseEntity(HttpStatus.CREATED, 'success', file.toDto());
+  }
+}

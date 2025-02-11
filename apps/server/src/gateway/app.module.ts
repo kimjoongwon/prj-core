@@ -34,6 +34,7 @@ import { AdminAuthRouteEndpointModule } from './app/admin-auth-endpoint.module';
 import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
 import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
+import { FilesEndpointModule } from './files/files-endpoint.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
     RoutinesEndpointModule,
     DepotsEndpointModule,
     ExercisesEndpointModule,
+    FilesEndpointModule,
     AdminAuthRouteEndpointModule,
     AdminMainRouteEndpointModule,
     RouterModule.register([
@@ -153,6 +155,10 @@ import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
               {
                 path: 'exercises',
                 module: ExercisesEndpointModule,
+              },
+              {
+                path: 'file',
+                module: FilesEndpointModule,
               },
             ],
           },
