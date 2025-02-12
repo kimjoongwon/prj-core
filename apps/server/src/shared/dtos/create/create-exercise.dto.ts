@@ -83,7 +83,7 @@ export class CreateExerciseDto
   text: string;
 
   @StringField({
-    formType: 'Depot',
+    formType: 'ImageDepot',
     label: '운동 이미지',
     sectionName: '콘텐츠 정보',
     placeholder: '운동 이미지를 입력해주세요',
@@ -92,7 +92,7 @@ export class CreateExerciseDto
   imageFileIds: string[];
 
   @StringField({
-    formType: 'Depot',
+    formType: 'VideoDepot',
     label: '운동 동영상',
     sectionName: '콘텐츠 정보',
     placeholder: '운동 동영상을 업로드해주세요',

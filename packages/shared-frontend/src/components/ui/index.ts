@@ -48,5 +48,6 @@ export * from './DatePicker/DatePicker';
 export * from './WeekInput';
 export * from './FileUploader/FileUploader';
 export * from './Content/Content';
-export * from './Depot/Depot';
+export * from './ImageDepot/ImageDepot';
+export * from './VideoDepot/VideoDepot';
 export * from './Textarea';

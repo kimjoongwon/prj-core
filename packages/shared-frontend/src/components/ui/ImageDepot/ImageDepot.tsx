@@ -11,7 +11,7 @@ interface DepotProps<T>
   extends MobxProps<T>,
     Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
 
-export const Depot = observer(<T extends object>(props: DepotProps<T>) => {
+export const ImageDepot = observer(<T extends object>(props: DepotProps<T>) => {
   const { state, path, ...rest } = props;
 
   const localState = useLocalObservable<{ value: File[] }>(() => {

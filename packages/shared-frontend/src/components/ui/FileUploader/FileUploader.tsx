@@ -76,7 +76,7 @@ function SortableFile({ file, onRemove }: SortableFileProps) {
 }
 
 export interface FileUploaderProps {
-  title?: string;
+  label?: string;
   mode: 'single' | 'multiple';
   maxFiles?: number;
   uploadType: 'image' | 'file' | 'both';
@@ -90,7 +90,7 @@ export const FileUploader = observer(
     maxFiles = 9,
     uploadType = 'image',
     onFilesChange,
-    title,
+    label,
     value,
   }: FileUploaderProps) => {
     const [files, setFiles] = useState<File[]>(value);
@@ -143,7 +143,7 @@ export const FileUploader = observer(
     return (
       <Card className="p-6" style={{ width: '400px' }}>
         <div className="space-y-6">
-          <h1 className="text-xl font-semibold text-center">{title || ''}</h1>
+          <h1 className="text-xl font-semibold text-center">{label || ''}</h1>
 
           <div className="space-y-4">
             {mode === 'multiple' && (

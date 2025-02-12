@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
 import { Input } from '../Input/Input';
 import { Editor } from '../Editor';
-import { Depot } from '../Depot/Depot';
+import { ImageDepot } from '../ImageDepot/ImageDepot';
 import { observer } from 'mobx-react-lite';
 
 export enum TextTypes {
@@ -66,12 +66,7 @@ export const Content = observer((props: ContentProps) => {
         {state.type === TextTypes.HTML && <Editor state={state} path="text" />}
       </CardBody>
       <CardFooter>
-        <Depot
-          state={state}
-          path="depotId"
-          mode="single"
-          uploadType="image"
-        />
+        <ImageDepot state={state} path="depotId" mode="single" uploadType="image" />
       </CardFooter>
     </Card>
   );

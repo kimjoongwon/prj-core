@@ -1,23 +1,23 @@
-import { readdir, mkdir } from 'fs/promises';
-import { join } from 'path';
+'use client';
 import { Video } from 'lucide-react';
 
 async function getVideos() {
-  const uploadsDir = join(process.cwd(), 'public', 'uploads');
   try {
-    await mkdir(uploadsDir, { recursive: true });
-
-    const files = await readdir(uploadsDir);
-    return files.filter(file => file.match(/\.(mp4|webm|ogg)$/i));
+    // public/uploads 디렉토리의 파일 목록을 가져오는 것은 서버 사이드에서만 가능합니다.
+    // 클라이언트 사이드에서는 직접 접근할 수 없습니다.
+    // 여기서는 빈 배열을 반환하거나, API를 통해 서버에서 파일 목록을 가져오는 것을 고려해야 합니다.
+    console.warn(
+      '클라이언트 사이드에서는 파일 시스템에 직접 접근할 수 없습니다.',
+    );
+    return [];
   } catch (error) {
-    console.error('업로드 디렉토리 접근 오류:', error);
+    console.error('파일 목록을 가져오는 중 오류 발생:', error);
     return [];
   }
 }
 
-export default async function Videos() {
-  const videos = await getVideos();
-
+export default function Videos() {
+  const videos = [];
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
@@ -31,30 +31,17 @@ export default async function Videos() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul>
           {videos.map(video => (
-            <div
-              key={video}
-              className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden"
-            >
-              <video controls className="w-full h-40 object-cover">
-                <source
-                  src={`/uploads/${video}`}
-                  type={`video/${video.split('.').pop()}`}
-                />
-                Your browser does not support the video tag.
-              </video>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white truncate">
-                  {video}
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {new Date().toLocaleDateString()}
-                </p>
-              </div>
-            </div>
+            <li key={video} className="mb-2">
+              <video
+                src={`/uploads/${video}`}
+                controls
+                className="w-full rounded-md shadow-md"
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
