@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repositories/depots.repository';
-import { CreateDepotDto, CreateFileDto, DepotQueryDto, UpdateDepotDto } from '../dtos';
+import { CreateFileDto, DepotQueryDto, UpdateDepotDto } from '../dtos';
 
 @Injectable()
 export class DepotsService {

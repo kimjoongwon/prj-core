@@ -2,9 +2,13 @@ import { observer } from 'mobx-react-lite';
 import Videos from '../Videos/Videos';
 import { Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { createFile } from '../../../apis';
 
-export const VideoUploader = observer(() => {
+interface VideoUploaderProps {
+  label: string;
+}
+
+export const VideoUploader = observer((props: VideoUploaderProps) => {
+  const { label } = props;
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -29,38 +33,38 @@ export const VideoUploader = observer(() => {
     setUploading(true);
     setUploadProgress(0);
 
-    const formData = new FormData();
-    formData.append('file', file);
+    // const formData = new FormData();
+    // formData.append('file', file);
 
-    try {
-      const result = await createFile();
-      if (result.success) {
-        setUploadProgress(100);
-        setTimeout(() => {
-          alert('비디오가 성공적으로 업로드되었습니다!');
-          setFile(null);
-          setUploadProgress(0);
-          if (videoRef.current) {
-            videoRef.current.src = '';
-          }
-          if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-          }
-        }, 1000);
-      } else {
-        throw new Error(result.error || '업로드 실패');
-      }
-    } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setUploading(false);
-    }
+    // try {
+    //   const result = await createFile();
+    //   if (result.success) {
+    //     setUploadProgress(100);
+    //     setTimeout(() => {
+    //       alert('비디오가 성공적으로 업로드되었습니다!');
+    //       setFile(null);
+    //       setUploadProgress(0);
+    //       if (videoRef.current) {
+    //         videoRef.current.src = '';
+    //       }
+    //       if (fileInputRef.current) {
+    //         fileInputRef.current.value = '';
+    //       }
+    //     }, 1000);
+    //   } else {
+    //     throw new Error(result.error || '업로드 실패');
+    //   }
+    // } catch (error) {
+    //   console.error('업로드 실패:', error);
+    //   alert('업로드에 실패했습니다. 다시 시도해주세요.');
+    // } finally {
+    //   setUploading(false);
+    // }
   };
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800 dark:text-white">
-        비디오 업로더
+      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800 dark:text-white">
+        {label}
       </h1>
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="mb-8">
