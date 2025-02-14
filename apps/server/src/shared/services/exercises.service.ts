@@ -39,6 +39,7 @@ export class ExercisesService {
       data: {
         count,
         duration,
+        depotId: '',
         task: {
           create: {
             label,
