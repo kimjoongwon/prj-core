@@ -19,8 +19,8 @@ export class CategoryNames extends EnumType<CategoryNames>() {
   ];
 
   private constructor(
-    readonly _code: string,
-    readonly _name: string,
+    private readonly _code: string,
+    private readonly _name: string,
   ) {
     super();
   }
