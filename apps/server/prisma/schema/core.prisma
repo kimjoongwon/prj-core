@@ -309,8 +309,6 @@ model Task {
   id  String @id @default(uuid())
   seq Int    @unique @default(autoincrement())
 
-  name      String
-  label     String
   contentId String
   tenancyId String
 
@@ -329,10 +327,11 @@ model Exercise {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
+  name     String
+  label    String
   duration Int
   count    Int
   taskId   String
-  depotId  String
 
   task Task @relation(fields: [taskId], references: [id])
 }
