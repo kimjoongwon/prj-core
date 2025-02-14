@@ -1,7 +1,7 @@
 import { CreateCategoryDto } from '../../../dtos';
 import { CategoryNames } from '../../../enums/category-names.enum';
 
-export const categories: CreateCategoryDto[] = [
+export const categroySeed: CreateCategoryDto[] = [
   {
     name: CategoryNames.VIDEO_CONTENT.name,
     type: 'ROOT',
