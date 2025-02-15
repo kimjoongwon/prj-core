@@ -6,8 +6,8 @@ import { AbilityDto } from '../dtos';
 
 @UseDto(AbilityDto)
 export class Ability extends AbstractEntity<AbilityDto> implements AbilityEntity {
+  tenantId: string;
   actionId: string;
-  tenancyId: string;
   conditions: JsonValue | null;
   subjectId: string;
   type: $Enums.AbilityTypes;

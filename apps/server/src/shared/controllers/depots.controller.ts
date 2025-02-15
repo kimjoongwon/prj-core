@@ -62,8 +62,8 @@ export class DepotsController {
       images: Express.Multer.File[];
     },
   ) {
-    const depot = await this.service.create(createDepotDto);
-    return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());
+    // const depot = await this.service.create(createDepotDto);
+    // return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());
   }
 
   @Get(':depotId')

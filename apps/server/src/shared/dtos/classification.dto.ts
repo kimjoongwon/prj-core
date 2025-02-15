@@ -1,20 +1,17 @@
 import { Classification } from '@prisma/client';
 import { ClassField, UUIDField, UUIDFieldOptional } from '../decorators';
-import { SpaceDto, UserDto, AbstractDto, CategoryDto, TenancyDto, RoutineDto } from '.';
-import { Class } from 'effect/Request';
+import { SpaceDto, UserDto, AbstractDto, CategoryDto, TimelineDto } from '.';
+import { ContentDto } from './content.dto';
 
 export class ClassificationDto extends AbstractDto implements Classification {
-  @UUIDField()
-  tenancyId: string;
+  @UUIDFieldOptional({ nullable: true, default: null })
+  contentId: string | null;
 
   @UUIDFieldOptional({ nullable: true, default: null })
-  routineId: string | null;
+  timelineId: string | null;
 
   @UUIDFieldOptional({ nullable: true, default: null })
   userId: string | null;
-
-  @UUIDFieldOptional({ nullable: true, default: null })
-  postId: string | null;
 
   @UUIDFieldOptional({ nullable: true, default: null })
   spaceId: string | null;
@@ -31,15 +28,15 @@ export class ClassificationDto extends AbstractDto implements Classification {
   @ClassField(() => CategoryDto, { required: false })
   category?: CategoryDto;
 
-  @ClassField(() => TenancyDto, { required: false })
-  tenancy?: TenancyDto;
-
   @ClassField(() => UserDto, { required: false })
   user?: UserDto[];
 
   @ClassField(() => SpaceDto, { required: false })
   space?: SpaceDto[];
 
-  @ClassField(() => RoutineDto, { required: false })
-  routine?: RoutineDto[];
+  @ClassField(() => TimelineDto, { required: false })
+  timeline?: TimelineDto[];
+
+  @ClassField(() => ContentDto, { required: false })
+  content?: ContentDto[];
 }

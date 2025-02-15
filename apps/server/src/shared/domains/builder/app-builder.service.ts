@@ -68,29 +68,29 @@ export class BuilderService {
                         });
                       }
 
-                      if (service.name === 'ROUTINE') {
-                        serviceChildren.unshift({
-                          name: '목록',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/:routineId/:type`,
-                            },
-                          ],
-                        });
+                      // if (service.name === 'ROUTINE') {
+                      //   serviceChildren.unshift({
+                      //     name: '목록',
+                      //     pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines`,
+                      //     children: [
+                      //       {
+                      //         name: '편집',
+                      //         pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/:routineId/:type`,
+                      //       },
+                      //     ],
+                      //   });
 
-                        serviceChildren.push({
-                          name: '운동',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises/:exerciseId/:type`,
-                            },
-                          ],
-                        });
-                      }
+                      //   serviceChildren.push({
+                      //     name: '운동',
+                      //     pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises`,
+                      //     children: [
+                      //       {
+                      //         name: '편집',
+                      //         pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises/:exerciseId/:type`,
+                      //       },
+                      //     ],
+                      //   });
+                      // }
 
                       return {
                         name: service.label,

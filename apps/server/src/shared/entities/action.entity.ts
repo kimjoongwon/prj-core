@@ -6,7 +6,7 @@ import { UseDto } from '../decorators/use-dto.decorator';
 
 @UseDto(ActionDto)
 export class Action extends AbstractEntity<ActionDto> implements ActionEntity {
-  tenancyId: string;
+  tenantId: string;
   name: $Enums.AbilityActions;
   conditions: JsonValue | null;
 }

@@ -4,8 +4,7 @@ import { StringField, UUIDField } from '../decorators/field.decorators';
 
 export class SubjectDto extends AbstractDto implements Subject {
   @UUIDField()
-  tenancyId: string;
-
+  tenantId: string;
   @StringField()
   name: string;
 }

@@ -7,6 +7,7 @@ export class CreateSpaceDto extends OmitType(SpaceDto, [
   ...COMMON_ENTITY_FIELDS,
   'associations',
   'classification',
+  'tenants',
 ]) {
   @UUIDField()
   categoryId: string;

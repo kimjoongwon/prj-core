@@ -6,9 +6,9 @@ import { ProfileDto } from '../dtos';
 
 @UseDto(ProfileDto)
 export class Profile extends AbstractEntity<ProfileDto> implements ProfileEntity {
-  depotId: string | null;
+  name: string;
   nickname: string;
+  depotId: string | null;
   userId: string;
-
   user?: User;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { RoutinesRepository } from '../repositories/routines.repository';
-import { CreateRoutineDto, RoutineQueryDto } from '../dtos';
+import { CreateFileDto, CreateRoutineDto, RoutineQueryDto } from '../dtos';
 import { AwsService } from '../domains/aws/aws.service';
 import { ContextProvider } from '../providers/context.provider';
 
@@ -13,48 +13,8 @@ export class RoutinesService {
   ) {}
 
   async create(createRoutineDto: CreateRoutineDto, files: Express.Multer.File[]) {
-    const { name, contentDescription, contentTitle, contentText, contentType } = createRoutineDto;
-    const tenancyId = ContextProvider.getTenancyId();
-    const user = ContextProvider.getAuthUser();
-    const depotFiles = await Promise.all(
-      files.map(async (file) => {
-        const url = await this.awsService.uploadToS3(
-          file.originalname,
-          file,
-          file.mimetype.split('/')[1],
-        );
-
-        return {
-          name: file.originalname,
-          url,
-          mimeType: file.mimetype,
-          size: file.size,
-          tenancyId,
-        };
-      }),
-    );
-
     const routine = await this.repository.create({
-      data: {
-        name,
-        tenancyId,
-        content: {
-          create: {
-            authorId: user.id,
-            title: contentTitle,
-            description: contentDescription,
-            type: contentType,
-            text: contentText,
-            depot: {
-              create: {
-                files: {
-                  create: depotFiles,
-                },
-              },
-            },
-          },
-        },
-      },
+      data: createRoutineDto,
     });
 
     return routine;

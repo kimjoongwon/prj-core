@@ -7,5 +7,6 @@ export class CreateAssociationDto extends OmitType(AssociationDto, [
   'group',
   'user',
   'service',
-  'tenancy',
+  'timeline',
+  'content',
 ]) {}

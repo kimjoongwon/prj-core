@@ -1,11 +1,12 @@
 import { $Enums, Ability } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import { JsonValue } from '@prisma/client/runtime/library';
-import { EnumField, StringFieldOptional, UUIDField } from '../decorators';
+import { ClassField, EnumField, StringFieldOptional, UUIDField } from '../decorators';
+import { TenantDto } from './tenant.dto';
 
 export class AbilityDto extends AbstractDto implements Ability {
   @UUIDField()
-  tenancyId: string;
+  tenantId: string;
 
   @UUIDField()
   actionId: string;
@@ -24,4 +25,7 @@ export class AbilityDto extends AbstractDto implements Ability {
 
   @StringFieldOptional({ nullable: true })
   description: string | null;
+
+  @ClassField(() => TenantDto, { required: false })
+  tenant?: TenantDto;
 }

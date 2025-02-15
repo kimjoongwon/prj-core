@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.getUnique({ where: { email } });
+    const user = await this.usersService.getUnique({ where: { name: email } });
 
     const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 
@@ -72,24 +72,19 @@ export class AuthService {
     const role = await this.prisma.role.findUnique({ where: { name: 'USER' } });
     const { id: userId } = await this.usersService.create({
       data: {
-        email,
         name,
         phone,
         password,
-        tenancy: {
-          create: {
-            spaceId,
-          },
-        },
-        profiles: {
-          create: {
-            nickname,
-          },
-        },
         tenants: {
           create: {
             spaceId,
             roleId: role.id,
+          },
+        },
+        profiles: {
+          create: {
+            name,
+            nickname,
           },
         },
       },
@@ -100,14 +95,14 @@ export class AuthService {
 
   async login({ email, password }: LoginPayloadDto) {
     const user = await this.usersService.getUnique({
-      where: { email },
+      where: { name: email },
       include: {
         profiles: true,
         tenants: {
           include: {
-            role: true,
             space: true,
             user: true,
+            role: true,
           },
         },
       },

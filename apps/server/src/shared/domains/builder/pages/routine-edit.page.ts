@@ -23,15 +23,7 @@ export class RoutineEditPage {
       name: '편집',
       state: {
         form: {
-          inputs: {
-            name: '',
-            contentTitle: '',
-            contentDescription: '',
-            contentText: '',
-            contentType: 'Textarea',
-            taskIds: [],
-            tenancyId,
-          } as CreateRoutineDto,
+          inputs: {} as CreateRoutineDto,
         },
       },
       form: this.getRoutineForm(),
