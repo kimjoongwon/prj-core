@@ -9,15 +9,6 @@ export class CategoryNames extends EnumType<CategoryNames>() {
   static readonly DOCUMENT_CONTENT = new CategoryNames('DOCUMENT_CONTENT', '문서');
   static readonly IMAGE_CONTENT = new CategoryNames('IMAGE_CONTENT', '이미지');
 
-  static readonly ALL = [
-    CategoryNames.THUMBNAIL_IMAGE,
-    CategoryNames.THUMBNAIL_VIDEO,
-    CategoryNames.VIDEO_CONTENT,
-    CategoryNames.AUDIO_CONTENT,
-    CategoryNames.DOCUMENT_CONTENT,
-    CategoryNames.IMAGE_CONTENT,
-  ];
-
   private constructor(
     private readonly _code: string,
     private readonly _name: string,

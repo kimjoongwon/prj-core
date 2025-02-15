@@ -6,5 +6,5 @@ export class CreateGroupDto extends OmitType(GroupDto, [
   ...COMMON_ENTITY_FIELDS,
   'associations',
   'service',
-  'tenancy',
+  'tenant',
 ]) {}

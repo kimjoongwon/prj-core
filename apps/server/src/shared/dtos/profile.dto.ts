@@ -4,6 +4,9 @@ import { User } from '../entities/user.entity';
 import { AbstractDto } from './abstract.dto';
 
 export class ProfileDto extends AbstractDto implements Profile {
+  @StringField()
+  name: string;
+
   @UUIDField()
   depotId: string;
 

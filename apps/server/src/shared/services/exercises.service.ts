@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ExercisesRepository } from '../repositories';
-import { CreateExerciseDto, ExerciseQueryDto, UpdateExerciseDto } from '../dtos';
+import { CreateExerciseDto, CreateFileDto, ExerciseQueryDto, UpdateExerciseDto } from '../dtos';
 import { ContextProvider } from '../providers/context.provider';
 import { AwsService } from '../domains/aws/aws.service';
 
@@ -14,7 +14,7 @@ export class ExercisesService {
   async create(createExerciseDto: CreateExerciseDto, files: Express.Multer.File[]) {
     const { count, duration, description, label, name, text, title, type } = createExerciseDto;
 
-    const tenancyId = ContextProvider.getTenancyId();
+    const tenantId = ContextProvider.getTenantId();
     const authUser = ContextProvider.getAuthUser();
 
     const depotFiles = await Promise.all(
@@ -30,31 +30,36 @@ export class ExercisesService {
           url,
           mimeType: file.mimetype,
           size: file.size,
-          tenancyId,
-        };
+          tenantId,
+        } as CreateFileDto;
       }),
     );
 
     const exercise = await this.repository.create({
       data: {
-        name,
-        label,
         count,
         duration,
         task: {
           create: {
-            tenancyId,
+            label,
+            name,
             content: {
               create: {
                 type,
                 description,
                 title,
                 text,
-                authorId: authUser.id,
+                tenant: {
+                  connect: {
+                    id: tenantId,
+                  },
+                },
                 depot: {
                   create: {
                     files: {
-                      create: depotFiles,
+                      createMany: {
+                        data: depotFiles,
+                      },
                     },
                   },
                 },

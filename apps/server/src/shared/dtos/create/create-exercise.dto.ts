@@ -1,5 +1,5 @@
-import { OmitType } from '@nestjs/swagger';
-import { EnumField, NumberField, StringField, UUIDField } from '../../decorators/field.decorators';
+import { IntersectionType, OmitType } from '@nestjs/swagger';
+import { EnumField, NumberField, StringField } from '../../decorators/field.decorators';
 import { COMMON_ENTITY_FIELDS } from '../../constants/entity-common-fields';
 import { ExerciseDto } from '../exercise.dto';
 import { CreateTaskDto } from './create-task.dto';
@@ -19,7 +19,10 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   videoFileId: '',
 };
 
-export type CreateDto = CreateTaskDto & CreateContentDto;
+export class CreateDto extends OmitType(IntersectionType(CreateTaskDto, CreateContentDto), [
+  'depotId',
+  'tenantId',
+]) {}
 
 export class CreateExerciseDto
   extends OmitType(ExerciseDto, [...COMMON_ENTITY_FIELDS, 'taskId'])
@@ -83,7 +86,7 @@ export class CreateExerciseDto
   text: string;
 
   @StringField({
-    formType: 'ImageDepot',
+    formType: 'DepotUploader',
     label: '운동 이미지',
     sectionName: '콘텐츠 정보',
     placeholder: '운동 이미지를 입력해주세요',
@@ -92,7 +95,7 @@ export class CreateExerciseDto
   imageFileIds: string[];
 
   @StringField({
-    formType: 'VideoDepot',
+    formType: 'DepotUploader',
     label: '운동 동영상',
     sectionName: '콘텐츠 정보',
     placeholder: '운동 동영상을 업로드해주세요',

@@ -1,10 +1,9 @@
-import { Classification as ClassificationEntity } from '@prisma/client';
+import { Classification as ClassificationEntity, Content, Timeline } from '@prisma/client';
 import { Service } from './service.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Category } from './category.entity';
 import { User } from './user.entity';
 import { Space } from './space.entity';
-import { Tenancy } from './tenancy.entity';
 import { ClassificationDto } from '../dtos';
 import { UseDto } from '../decorators/use-dto.decorator';
 import { Role } from './role.entity';
@@ -14,20 +13,21 @@ export class Classification
   extends AbstractEntity<ClassificationDto>
   implements ClassificationEntity
 {
-  routineId: string | null;
   categoryId: string;
-  userId: string | null;
-  postId: string | null;
-  roleId: string | null;
-  spaceId: string | null;
+
+  userId: string;
+  contentId: string;
+  spaceId: string;
+  roleId: string;
+  timelineId: string;
 
   serviceId: string;
-  tenancyId: string;
 
   service: Service;
-  tenancy?: Tenancy;
   category?: Category;
   user?: User;
+  content?: Content;
   role?: Role;
   space?: Space;
+  timeline?: Timeline;
 }

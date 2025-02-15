@@ -23,18 +23,9 @@ export class TimelinesService {
     return this.repository.delete({ where: { id } });
   }
 
-  create({ sessionIds, ...createTimelineDto }: CreateTimelineDto) {
-    const isAll = sessionIds.find((id) => id === 'all');
-
-    if (isAll) {
-      throw new BadRequestException('전체 세션을 선택할 수 없습니다.');
-    }
-
+  create(createTimeline: CreateTimelineDto) {
     return this.repository.create({
-      data: {
-        ...createTimelineDto,
-        sessions: { connect: sessionIds?.map((id) => ({ id })) },
-      },
+      data: createTimeline,
     });
   }
 

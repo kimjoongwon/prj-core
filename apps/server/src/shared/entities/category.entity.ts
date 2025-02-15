@@ -1,10 +1,10 @@
 import { $Enums, Category as CategoryEntity } from '@prisma/client';
 import { Service } from './service.entity';
 import { AbstractEntity } from './abstract.entity';
-import { Tenancy } from './tenancy.entity';
 import { Classification } from './classification.entity';
 import { CategoryDto } from '../dtos';
 import { UseDto } from '../decorators/use-dto.decorator';
+import { Tenant } from './tenant.entity';
 
 @UseDto(CategoryDto)
 export class Category extends AbstractEntity<CategoryDto> implements CategoryEntity {
@@ -12,13 +12,13 @@ export class Category extends AbstractEntity<CategoryDto> implements CategoryEnt
   type: $Enums.CategoryTypes;
   parentId: string | null;
   serviceId: string;
-  tenancyId: string;
+  tenantId: string;
 
   parent?: Category;
   children?: Category[];
   service?: Service;
-  tenancy?: Tenancy;
   classification?: Classification;
+  tenant?: Tenant;
 
   toOption() {
     return {

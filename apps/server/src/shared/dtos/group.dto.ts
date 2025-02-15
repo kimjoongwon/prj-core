@@ -3,17 +3,20 @@ import { AbstractDto } from './abstract.dto';
 import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
 import { ServiceDto } from './service.dto';
 import { AssociationDto } from './association.dto';
-import { TenancyDto } from './tenancy.dto';
+import { TenantDto } from './tenant.dto';
 
 export class GroupDto extends AbstractDto implements Group {
   @StringField()
   name: string;
 
-  @UUIDField()
-  tenancyId: string;
+  @StringField()
+  label: string;
 
   @StringField()
   serviceId: string;
+
+  @UUIDField()
+  tenantId: string;
 
   @ClassField(() => ServiceDto, { required: false })
   service?: ServiceDto;
@@ -21,6 +24,6 @@ export class GroupDto extends AbstractDto implements Group {
   @ClassField(() => AssociationDto, { each: true, required: false })
   associations?: AssociationDto[];
 
-  @ClassField(() => TenancyDto, { required: false })
-  tenancy?: TenancyDto;
+  @ClassField(() => TenantDto, { required: false })
+  tenant?: TenantDto;
 }

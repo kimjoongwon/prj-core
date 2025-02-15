@@ -7,6 +7,5 @@ export class CreateCategoryDto extends OmitType(CategoryDto, [
   'children',
   'parent',
   'service',
-  'tenancy',
   'classifications',
 ]) {}

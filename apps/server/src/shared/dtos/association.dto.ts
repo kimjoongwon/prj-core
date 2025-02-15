@@ -1,13 +1,17 @@
 import { Association } from '@prisma/client';
 import { ClassField, UUIDField, UUIDFieldOptional } from '../decorators/field.decorators';
-import { AbstractDto, GroupDto, UserDto, ServiceDto, TenancyDto, RoutineDto } from '.';
+import { AbstractDto, GroupDto, UserDto, ServiceDto, TenancyDto, RoutineDto, TimelineDto } from '.';
+import { ContentDto } from './content.dto';
 
 export class AssociationDto extends AbstractDto implements Association {
-  @UUIDField()
-  tenancyId: string;
+  @UUIDFieldOptional({ nullable: true })
+  contentId: string | null;
 
   @UUIDFieldOptional({ nullable: true })
-  routineId: string;
+  timelineId: string | null;
+
+  @UUIDFieldOptional({ nullable: true })
+  roleId: string | null;
 
   @UUIDFieldOptional({ nullable: true })
   groupId: string | null;
@@ -24,18 +28,18 @@ export class AssociationDto extends AbstractDto implements Association {
   @UUIDField()
   serviceId: string;
 
-  @ClassField(() => TenancyDto, { required: false, swagger: false })
-  tenancy?: TenancyDto;
-
   @ClassField(() => GroupDto, { required: false, swagger: false })
   group?: GroupDto;
 
   @ClassField(() => UserDto, { required: false, swagger: false })
   user?: GroupDto;
 
+  @ClassField(() => TimelineDto, { required: false, swagger: false })
+  timeline?: TimelineDto;
+
+  @ClassField(() => ContentDto, { required: false, swagger: false })
+  content?: ContentDto;
+
   @ClassField(() => ServiceDto, { required: false, swagger: false })
   service?: ServiceDto;
-
-  @ClassField(() => RoutineDto, { required: false, swagger: false })
-  routine?: RoutineDto;
 }

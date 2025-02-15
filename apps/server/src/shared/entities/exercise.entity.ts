@@ -5,6 +5,8 @@ import { ExerciseDto } from '../dtos/exercise.dto';
 
 @UseDto(ExerciseDto)
 export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEntity {
+  name: string;
+  label: string;
   duration: number;
   count: number;
   taskId: string;

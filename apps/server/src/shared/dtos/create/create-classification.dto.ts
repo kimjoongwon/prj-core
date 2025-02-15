@@ -6,7 +6,8 @@ export class CreateClassificationDto extends OmitType(ClassificationDto, [
   ...COMMON_ENTITY_FIELDS,
   'category',
   'space',
-  'tenancy',
   'user',
-  'routine',
+  'timeline',
+  'content',
 ]) {}
+

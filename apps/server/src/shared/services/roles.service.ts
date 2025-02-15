@@ -36,10 +36,9 @@ export class RolesService {
     return this.repository.create({
       data: {
         name: createRoleDto.name,
-        tenancyId: createRoleDto.tenancyId,
+        tenantId: createRoleDto.tenantId,
         classification: {
           create: {
-            tenancyId: createRoleDto.tenancyId,
             serviceId: createRoleDto.serviceId,
             categoryId: createRoleDto.categoryId,
           },

@@ -5,47 +5,46 @@ model Category {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String
+  name      String        @unique
   type      CategoryTypes @default(ROOT)
   parentId  String?
   serviceId String
-  tenancyId String
+  tenantId  String
 
   service         Service          @relation(fields: [serviceId], references: [id])
   parent          Category?        @relation("CategoryToCategory", fields: [parentId], references: [id])
   children        Category[]       @relation("CategoryToCategory")
-  tenancy         Tenancy          @relation(fields: [tenancyId], references: [id])
   classifications Classification[]
+  tenant          Tenant           @relation(fields: [tenantId], references: [id])
 }
 
 model Classification {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
+  id         String  @id @default(uuid())
+  seq        Int     @unique @default(autoincrement())
   categoryId String
-  userId     String?   @unique
-  postId     String?   @unique
-  spaceId    String?   @unique
-  roleId     String?   @unique
-  routineId  String?   @unique
+  userId     String? @unique
+  contentId  String? @unique
+  spaceId    String? @unique
+  roleId     String? @unique
+  timelineId String? @unique
   serviceId  String
-  tenancyId  String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
 
   category Category @relation(fields: [categoryId], references: [id])
   service  Service  @relation(fields: [serviceId], references: [id])
-  tenancy  Tenancy  @relation(fields: [tenancyId], references: [id])
-  user     User?    @relation(fields: [userId], references: [id])
-  space    Space?   @relation(fields: [spaceId], references: [id])
-  role     Role?    @relation(fields: [roleId], references: [id])
-  routine  Routine? @relation(fields: [routineId], references: [id])
+
+  user     User?     @relation(fields: [userId], references: [id])
+  space    Space?    @relation(fields: [spaceId], references: [id])
+  role     Role?     @relation(fields: [roleId], references: [id])
+  timeline Timeline? @relation(fields: [timelineId], references: [id])
 
   @@unique([categoryId, userId])
-  @@unique([categoryId, postId])
   @@unique([categoryId, spaceId])
   @@unique([categoryId, roleId])
-  @@unique([categoryId, routineId])
+  @@unique([categoryId, timelineId])
 }
 
 model Group {
@@ -56,12 +55,13 @@ model Group {
   removedAt DateTime? @db.Timestamptz(6)
 
   name      String
+  label     String
   serviceId String
-  tenancyId String
+  tenantId  String
 
   service      Service       @relation(fields: [serviceId], references: [id])
   associations Association[]
-  tenancy      Tenancy       @relation(fields: [tenancyId], references: [id])
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
 }
 
 model Service {
@@ -71,13 +71,12 @@ model Service {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name  ServiceNames @unique
   label String
+  name  ServiceNames @unique
 
   groups          Group[]
   categories      Category[]
   classifications Classification[]
-  associations    Association[]
 }
 
 model Association {
@@ -87,18 +86,19 @@ model Association {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  groupId   String
-  userId    String?
-  spaceId   String?
-  routineId String?
-  serviceId String
-  tenancyId String
+  groupId    String
+  userId     String?
+  spaceId    String?
+  timelineId String?
+  roleId     String?
+  contentId  String?
 
-  group   Group   @relation(fields: [groupId], references: [id])
-  user    User?   @relation(fields: [userId], references: [id])
-  space   Space?  @relation(fields: [spaceId], references: [id])
-  service Service @relation(fields: [serviceId], references: [id])
-  tenancy Tenancy @relation(fields: [tenancyId], references: [id])
+  group    Group     @relation(fields: [groupId], references: [id])
+  user     User?     @relation(fields: [userId], references: [id])
+  space    Space?    @relation(fields: [spaceId], references: [id])
+  role     Role?     @relation(fields: [roleId], references: [id])
+  timeline Timeline? @relation(fields: [timelineId], references: [id])
+  content  Content?  @relation(fields: [contentId], references: [id])
 }
 
 model Profile {
@@ -108,11 +108,13 @@ model Profile {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  depotId  String?
-  nickname String
+  name     String
+  nickname String  @unique
   userId   String
+  depotId  String?
 
-  user User @relation(fields: [userId], references: [id])
+  user  User   @relation(fields: [userId], references: [id])
+  depot Depot? @relation(fields: [depotId], references: [id])
 }
 
 model User {
@@ -122,19 +124,14 @@ model User {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  email     String @unique
-  name      String @unique
-  phone     String @unique
-  password  String
-  tenancyId String
+  phone    String @unique
+  name     String @unique
+  password String
 
-  // posts          Post[]
   profiles       Profile[]
-  tenants        Tenant[]
   associations   Association[]
-  tenancy        Tenancy         @relation(fields: [tenancyId], references: [id])
   classification Classification?
-  Program        Program[]
+  tenants        Tenant[]
 }
 
 model Tenant {
@@ -148,9 +145,14 @@ model Tenant {
   roleId  String
   spaceId String
 
-  user  User  @relation(fields: [userId], references: [id])
-  space Space @relation(fields: [spaceId], references: [id])
-  role  Role  @relation(fields: [roleId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  space      Space      @relation(fields: [spaceId], references: [id])
+  role       Role       @relation(fields: [roleId], references: [id])
+  categories Category[]
+  groups     Group[]
+  timelines  Timeline[]
+  contents   Content[]
+  files      File[]
 }
 
 model Space {
@@ -160,12 +162,13 @@ model Space {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name String @unique
+  name  String @unique
+  label String
 
   classification Classification?
   associations   Association[]
-  tenancy        Tenancy?
   tenants        Tenant[]
+  tenancy        Tenancy?
 }
 
 model Tenancy {
@@ -177,42 +180,31 @@ model Tenancy {
 
   spaceId String @unique
 
-  space           Space            @relation(fields: [spaceId], references: [id])
-  groups          Group[]
-  categories      Category[]
-  classifications Classification[]
-  associations    Association[]
-  users           User[]
+  space Space @relation(fields: [spaceId], references: [id])
 }
 
-model SMS {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  sentAt    DateTime @db.Timestamptz(6)
-  tenancyId String
-  messageId String
-
-  status SMSStatus @default(PROGRESS)
-}
-
-// model SystemEmail {
+// model SMS {
 //   id        String    @id @default(uuid())
 //   seq       Int       @unique @default(autoincrement())
 //   createdAt DateTime  @default(now()) @db.Timestamptz(6)
 //   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
 //   removedAt DateTime? @db.Timestamptz(6)
 
-//   status     EmailStatus @default(PROGRESS)
+//   sentAt    DateTime @db.Timestamptz(6)
+//   messageId String
+
+//   status SMSStatus @default(PROGRESS)
+// }
+
+// model SystemEmail {
+//   id         String    @id @default(uuid())
+//   seq        Int       @unique @default(autoincrement())
+//   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+//   updatedAt  DateTime? @updatedAt @db.Timestamptz(6) //   removedAt DateTime? @db.Timestamptz(6)
 //   messageId  String
 //   templateId String
 //   tenancyId  String
-//   sentAt     DateTime    @db.Timestamptz(6)
-
-//   template Template @relation(fields: [templateId], references: [id])
+//   sentAt     DateTime  @db.Timestamptz(6)
 // }
 
 // model Message {
@@ -224,13 +216,8 @@ model SMS {
 
 //   toUserIds  String[]
 //   fromUserId String
-//   postId     String
-
-//   post         Post          @relation(fields: [postId], references: [id])
-//   systemEmails SystemEmail[]
+//   contentId  String
 // }
-
-// 나눔 //
 model Timeline {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -238,9 +225,14 @@ model Timeline {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String    @unique
-  tenancyId String
-  sessions  Session[]
+  name     String
+  label    String
+  tenantId String
+
+  sessions        Session[]
+  tenant          Tenant          @relation(fields: [tenantId], references: [id])
+  classifications Classification?
+  associations    Association[]
 }
 
 model Session {
@@ -251,15 +243,14 @@ model Session {
   removedAt DateTime? @db.Timestamptz(6)
 
   type               SessionTypes        @default(ONE_TIME)
-  name               String
-  timelineId         String?
   repeatCycleType    RepeatCycleTypes?
   startDateTime      DateTime?           @db.Timestamptz(6)
   endDateTime        DateTime?           @db.Timestamptz(6)
   recurringDayOfWeek RecurringDayOfWeek?
   recurringMonth     Int?
+  timelineId         String
 
-  timeline Timeline? @relation(fields: [timelineId], references: [id])
+  timeline Timeline @relation(fields: [timelineId], references: [id])
   program  Program?
 }
 
@@ -275,8 +266,7 @@ model Program {
   instructorId String
   capacity     Int
 
-  instructor User    @relation(fields: [instructorId], references: [id])
-  session    Session @relation(fields: [sessionId], references: [id])
+  session Session @relation(fields: [sessionId], references: [id])
 }
 
 model Routine {
@@ -287,11 +277,11 @@ model Routine {
   removedAt DateTime? @db.Timestamptz(6)
 
   name      String
+  label     String
   contentId String
-  tenancyId String
 
-  classification Classification?
-  content        Content         @relation(fields: [contentId], references: [id])
+  content    Content    @relation(fields: [contentId], references: [id])
+  activities Activity[]
 }
 
 model Activity {
@@ -303,21 +293,9 @@ model Activity {
 
   taskId    String
   routineId String
-}
 
-model Task {
-  id  String @id @default(uuid())
-  seq Int    @unique @default(autoincrement())
-
-  contentId String
-  tenancyId String
-
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  content   Content    @relation(fields: [contentId], references: [id])
-  exercises Exercise[]
+  routine Routine @relation(fields: [routineId], references: [id])
+  task    Task    @relation(fields: [taskId], references: [id])
 }
 
 model Exercise {
@@ -327,13 +305,28 @@ model Exercise {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name     String
-  label    String
   duration Int
   count    Int
-  taskId   String
+  taskId   String @unique
 
   task Task @relation(fields: [taskId], references: [id])
+}
+
+model Task {
+  id  String @id @default(uuid())
+  seq Int    @unique @default(autoincrement())
+
+  name      String
+  label     String
+  contentId String
+
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  content    Content    @relation(fields: [contentId], references: [id])
+  exercise   Exercise?
+  activities Activity[]
 }
 
 model Role {
@@ -343,11 +336,12 @@ model Role {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      Roles  @unique @default(USER)
-  tenancyId String
+  name     Roles  @unique @default(USER)
+  tenantId String
 
-  abilities      Ability[]
   classification Classification?
+  associations   Association[]
+  abilities      Ability[]
   tenants        Tenant[]
 }
 
@@ -360,7 +354,7 @@ model Action {
 
   name       AbilityActions @default(CREATE)
   conditions Json?
-  tenancyId  String
+  tenantId   String
 }
 
 model Subject {
@@ -370,8 +364,8 @@ model Subject {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String @unique
-  tenancyId String
+  name     String @unique
+  tenantId String
 }
 
 model Ability {
@@ -382,11 +376,11 @@ model Ability {
   removedAt DateTime? @db.Timestamptz(6)
 
   type        AbilityTypes
-  subjectId   String
   roleId      String
   description String?
   conditions  Json?
-  tenancyId   String
+  subjectId   String
+  tenantId    String
 
   role Role @relation(fields: [roleId], references: [id])
 }
@@ -449,7 +443,7 @@ model Post {
   removedAt DateTime? @db.Timestamptz(6)
 
   contentId String
-  tenancyId String
+  content   Content @relation(fields: [contentId], references: [id])
 }
 
 model Content {
@@ -459,15 +453,18 @@ model Content {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  title       String?
-  description String?
-  type        TextTypes @default(Editor)
-  text        String?   @db.VarChar(1000)
-  dopotId     String?
-  authorId    String
-  routines    Routine[]
-  tasks       Task[]
-  depot       Depot?    @relation(fields: [dopotId], references: [id])
+  title        String?
+  description  String?
+  type         TextTypes     @default(Editor)
+  text         String?       @db.VarChar(1000)
+  depotId      String?
+  tenantId     String
+  routines     Routine[]
+  tasks        Task[]
+  depot        Depot?        @relation(fields: [depotId], references: [id])
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  associations Association[]
+  posts        Post[]
 }
 
 model Depot {
@@ -478,21 +475,26 @@ model Depot {
   removedAt DateTime? @db.Timestamptz(6)
   files     File[]
   contents  Content[]
+  profiles  Profile[]
 }
 
 model File {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  name      String
-  depotId   String
-  size      Int
-  mimeType  String
-  url       String
-  tenancyId String
+  id       String @id @default(uuid())
+  seq      Int    @unique @default(autoincrement())
+  name     String
+  depotId  String
+  size     Int
+  mimeType String
+  url      String
+
+  tenantId String
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-  depot     Depot     @relation(fields: [depotId], references: [id])
+
+  depot  Depot  @relation(fields: [depotId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
 enum SMSStatus {
@@ -578,12 +580,10 @@ enum CategoryTypes {
 
 enum ServiceNames {
   USER
-  SPACE
-  POST
   ROLE
+  SPACE
+  CONTENT
   TIMELINE
-  ROUTINE
-  TASK
 }
 
 enum DepotTypes {

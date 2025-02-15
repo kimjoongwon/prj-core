@@ -18,8 +18,7 @@ import { ResponseEntity } from '../entities/response.entity';
 import { TimelinesService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('TIMELINE')
-@Controller()
+@ApiTags('TIMELINE') @Controller()
 export class TimelinesController {
   constructor(private readonly service: TimelinesService) {}
 

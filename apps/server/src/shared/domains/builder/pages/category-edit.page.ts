@@ -15,7 +15,7 @@ export class CategoryEditPage {
   async getMeta(categoryId: string | 'new', type: 'edit' | 'add') {
     const form = this.categoryForm.getMeta();
     const serviceId = ContextProvider.getServiceId();
-    const tenancyId = ContextProvider.getTenancyId();
+    const tenantId = ContextProvider.getTenantId();
 
     const page: PageBuilder = {
       type: 'Page',
@@ -24,10 +24,10 @@ export class CategoryEditPage {
         form: {
           inputs: {
             serviceId,
-            tenancyId,
             name: '',
             type: 'ROOT',
             parentId: null,
+            tenantId,
           } as CreateCategoryDto,
         },
       },
