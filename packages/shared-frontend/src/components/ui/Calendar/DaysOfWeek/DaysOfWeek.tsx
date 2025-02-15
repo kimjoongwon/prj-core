@@ -1,4 +1,4 @@
-import { Button } from '../../Button';
+import { Button } from '../../Button/Button';
 
 export const DaysOfWeek = () => {
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];

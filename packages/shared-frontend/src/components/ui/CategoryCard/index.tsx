@@ -2,7 +2,7 @@
 
 import { observer } from 'mobx-react-lite';
 import { CategoryDto } from '../../../model/categoryDto';
-import { Button } from '../Button';
+import { Button } from '../Button/Button';
 import { ButtonGroup } from "@heroui/react";
 
 interface CategoryCardProps {

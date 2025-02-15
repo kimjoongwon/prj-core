@@ -1,5 +1,5 @@
 import { FcNext, FcPrevious } from 'react-icons/fc';
-import { Button } from '../../Button';
+import { Button } from '../../Button/Button';
 import { HStack } from '../../HStack';
 import { useProps } from '../_hooks/useProps';
 import { observer } from 'mobx-react-lite';

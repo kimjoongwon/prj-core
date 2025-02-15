@@ -8,5 +8,6 @@ export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEn
   duration: number;
   count: number;
   taskId: string;
+  depotId: string;
   task: Task;
 }

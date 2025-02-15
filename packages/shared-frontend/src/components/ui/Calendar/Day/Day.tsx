@@ -1,5 +1,5 @@
 import { Spacer } from "@heroui/react";
-import { Button } from '../../Button';
+import { Button } from '../../Button/Button';
 
 export interface DayProps {
   day: number;
