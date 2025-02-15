@@ -9,20 +9,62 @@ import {
   HttpCode,
   Param,
   Query,
+  UploadedFiles,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { DepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos';
+import { DepotDto, UpdateDepotDto, DepotQueryDto, CreateDepotDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { DepotsService } from '../services/depots.service';
 import { ApiTags } from '@nestjs/swagger';
 import _ from 'lodash';
+import { ApiFile } from '../decorators/swagger.schema';
 
 @ApiTags('DEPOTS')
 @Controller()
 export class DepotsController {
   constructor(private readonly service: DepotsService) {}
+
+  @Post()
+  @Auth([])
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponseEntity(DepotDto, HttpStatus.CREATED)
+  @ApiFile(
+    [
+      {
+        name: 'thumbnails',
+        isArray: true,
+      },
+      {
+        name: 'vidoes',
+        isArray: true,
+      },
+      {
+        name: 'images',
+        isArray: true,
+      },
+    ],
+    {
+      isRequired: false,
+    },
+  )
+  async createDepot(
+    @Body() createDepotDto: CreateDepotDto,
+    @UploadedFiles()
+    {
+      thumbnails,
+      vidoes,
+      images,
+    }: {
+      thumbnails: Express.Multer.File[];
+      vidoes: Express.Multer.File[];
+      images: Express.Multer.File[];
+    },
+  ) {
+    const depot = await this.service.create(createDepotDto);
+    return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());
+  }
 
   @Get(':depotId')
   @Auth([])

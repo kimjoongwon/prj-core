@@ -37,18 +37,19 @@ export class ExercisesService {
 
     const exercise = await this.repository.create({
       data: {
+        name,
+        label,
         count,
         duration,
         task: {
           create: {
-            label,
-            name,
             tenancyId,
             content: {
               create: {
+                type,
                 description,
                 title,
-                type,
+                text,
                 authorId: authUser.id,
                 depot: {
                   create: {
