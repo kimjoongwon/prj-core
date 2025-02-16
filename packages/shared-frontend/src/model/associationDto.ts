@@ -11,9 +11,12 @@ export interface AssociationDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  tenancyId: string;
   /** @nullable */
-  routineId?: string | null;
+  contentId?: string | null;
+  /** @nullable */
+  timelineId?: string | null;
+  /** @nullable */
+  roleId?: string | null;
   /** @nullable */
   groupId?: string | null;
   /** @nullable */

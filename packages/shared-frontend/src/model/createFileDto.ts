@@ -5,10 +5,10 @@
  */
 
 export interface CreateFileDto {
+  tenantId: string;
   name: string;
   depotId: string;
   size: number;
   mimeType: string;
   url: string;
-  tenancyId: string;
 }

@@ -4,6 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AbilityActions } from './abilityActions';
+import type { TenantDto } from './tenantDto';
 
 export interface ActionDto {
   id: string;
@@ -12,7 +13,8 @@ export interface ActionDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  tenancyId: string;
+  tenantId: string;
   name: AbilityActions;
   conditions?: string;
+  tenant?: TenantDto;
 }

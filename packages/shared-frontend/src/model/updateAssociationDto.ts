@@ -5,9 +5,12 @@
  */
 
 export interface UpdateAssociationDto {
-  tenancyId?: string;
   /** @nullable */
-  routineId?: string | null;
+  contentId?: string | null;
+  /** @nullable */
+  timelineId?: string | null;
+  /** @nullable */
+  roleId?: string | null;
   /** @nullable */
   groupId?: string | null;
   /** @nullable */

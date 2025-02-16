@@ -1,39 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { ExercisesRepository } from '../repositories';
-import { CreateExerciseDto, CreateFileDto, ExerciseQueryDto, UpdateExerciseDto } from '../dtos';
+import { CreateExerciseDto, ExerciseQueryDto, UpdateExerciseDto } from '../dtos';
 import { ContextProvider } from '../providers/context.provider';
-import { AwsService } from '../domains/aws/aws.service';
+import { FilesService } from './files.service';
+import { ServiceNames } from '@prisma/client';
+import { CategoryNames } from '../enums/category-names.enum';
 
 @Injectable()
 export class ExercisesService {
   constructor(
     private readonly repository: ExercisesRepository,
-    private readonly awsService: AwsService,
+    private readonly filesService: FilesService,
   ) {}
 
-  async create(createExerciseDto: CreateExerciseDto, files: Express.Multer.File[]) {
+  async create(
+    createExerciseDto: CreateExerciseDto,
+    images: Express.Multer.File[],
+    videos: Express.Multer.File[],
+    thubmnails: Express.Multer.File[],
+  ) {
     const { count, duration, description, label, name, text, title, type } = createExerciseDto;
 
     const tenantId = ContextProvider.getTenantId();
-    const authUser = ContextProvider.getAuthUser();
 
-    const depotFiles = await Promise.all(
-      files?.map(async (file) => {
-        const url = await this.awsService.uploadToS3(
-          file.originalname,
-          file,
-          file.mimetype.split('/')[1],
-        );
-
-        return {
-          name: file.originalname,
-          url,
-          mimeType: file.mimetype,
-          size: file.size,
-          tenantId,
-        } as CreateFileDto;
-      }),
-    );
+    const thumbnailFiles = await Promise.all(thubmnails?.map(this.filesService.buildDepotFile));
+    const imageFiles = await Promise.all(images?.map(this.filesService.buildDepotFile));
+    const videosFiles = await Promise.all(videos?.map(this.filesService.buildDepotFile));
 
     const exercise = await this.repository.create({
       data: {
@@ -57,9 +49,45 @@ export class ExercisesService {
                 depot: {
                   create: {
                     files: {
-                      createMany: {
-                        data: depotFiles,
-                      },
+                      create: [...imageFiles, ...videosFiles]
+                        .map((file) => ({
+                          ...file,
+                          tenant: {
+                            connect: {
+                              id: tenantId,
+                            },
+                          },
+                          classification: {
+                            create: {
+                              category: {
+                                connect: {
+                                  name: file.mimeType.includes('image')
+                                    ? CategoryNames.IMAGE_CONTENT.name
+                                    : CategoryNames.VIDEO_CONTENT.name,
+                                },
+                              },
+                            },
+                          },
+                        }))
+                        .concat(
+                          thumbnailFiles.map((thumbnailFiles) => ({
+                            ...thumbnailFiles,
+                            tenant: {
+                              connect: {
+                                id: tenantId,
+                              },
+                            },
+                            classification: {
+                              create: {
+                                category: {
+                                  connect: {
+                                    name: CategoryNames.THUMBNAIL_IMAGE.name,
+                                  },
+                                },
+                              },
+                            },
+                          })),
+                        ),
                     },
                   },
                 },

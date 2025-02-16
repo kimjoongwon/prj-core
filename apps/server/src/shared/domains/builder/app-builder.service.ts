@@ -7,7 +7,7 @@ export class BuilderService {
   constructor(readonly prisma: PrismaService) {}
   async getRoute() {
     const services = await this.prisma.service.findMany();
-    const tenancyId = ContextProvider.getTenantId();
+    const tenantId = ContextProvider.getTenantId();
 
     const routes = [
       {
@@ -19,31 +19,31 @@ export class BuilderService {
             pathname: '/admin/main',
             children: [
               {
-                name: 'tenancies',
-                pathname: '/admin/main/tenancies',
+                name: 'tenants',
+                pathname: '/admin/main/tenants',
                 children: [
                   {
                     name: 'services',
-                    pathname: `/admin/main/tenancies/:tenancyId/services`,
+                    pathname: `/admin/main/tenants/:tenantId/services`,
                     children: services.map((service) => {
                       const serviceChildren = [
                         {
                           name: '카테고리',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/categories`,
+                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/categories`,
                           children: [
                             {
                               name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/categories/:categoryId/:type`,
+                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/categories/:categoryId/:type`,
                             },
                           ],
                         },
                         {
                           name: '그룹',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/groups`,
+                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/groups`,
                           children: [
                             {
                               name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/groups/:groupId/:type`,
+                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/groups/:groupId/:type`,
                             },
                           ],
                         },
@@ -52,49 +52,38 @@ export class BuilderService {
                       if (service.name === 'TIMELINE') {
                         serviceChildren.unshift({
                           name: '목록',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/timelines`,
+                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/timelines`,
                           children: [],
                         });
 
                         serviceChildren.push({
                           name: '세션',
-                          pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions`,
+                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/sessions`,
                           children: [
                             {
                               name: '편집',
-                              pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/sessions/:sessionId/:type`,
+                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/sessions/:sessionId/:type`,
                             },
                           ],
                         });
                       }
 
-                      // if (service.name === 'ROUTINE') {
-                      //   serviceChildren.unshift({
-                      //     name: '목록',
-                      //     pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines`,
-                      //     children: [
-                      //       {
-                      //         name: '편집',
-                      //         pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/routines/:routineId/:type`,
-                      //       },
-                      //     ],
-                      //   });
-
-                      //   serviceChildren.push({
-                      //     name: '운동',
-                      //     pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises`,
-                      //     children: [
-                      //       {
-                      //         name: '편집',
-                      //         pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}/exercises/:exerciseId/:type`,
-                      //       },
-                      //     ],
-                      //   });
-                      // }
+                      if (service.name === 'CONTENT') {
+                        serviceChildren.unshift({
+                          name: '운동',
+                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/exercises`,
+                          children: [
+                            {
+                              name: '편집',
+                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/exercises/:exerciseId/:type`,
+                            },
+                          ],
+                        });
+                      }
 
                       return {
                         name: service.label,
-                        pathname: `/admin/main/tenancies/${tenancyId}/services/${service.id}`,
+                        pathname: `/admin/main/tenants/${tenantId}/services/${service.id}`,
                         children: serviceChildren,
                       };
                     }),

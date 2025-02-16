@@ -3,7 +3,7 @@ import { ApiResponseEntity, Auth } from '../../../decorators';
 import { ResponseEntity } from '../../../entities';
 import { PrismaService } from 'nestjs-prisma';
 import { ContextProvider } from '../../../providers';
-import { TenanciesPage } from '../pages/tenancies.page';
+import { TenantsPage } from '../pages/tenants.page';
 import { CategoriesPage } from '../pages/categories.page';
 import { CategoryEditPage } from '../pages/category-edit.page';
 import { CategoryPage } from '../pages/category.page';
@@ -23,7 +23,7 @@ import { ExerciseEditPage } from '../pages/exercise-edit.page';
 @Controller()
 export class AdminMainRouteController {
   constructor(
-    readonly tenanciesPage: TenanciesPage,
+    readonly tenantsPage: TenantsPage,
     readonly categoriesPage: CategoriesPage,
     readonly categoryEditPage: CategoryEditPage,
     readonly categoryPage: CategoryPage,
@@ -43,10 +43,10 @@ export class AdminMainRouteController {
   ) {}
 
   @Auth()
-  @Get('tenancies')
+  @Get('tenants')
   @ApiResponseEntity(Object)
-  getAdminMainTenanciesPage() {
-    const route = this.tenanciesPage.getMeta();
+  getAdminMainTenantsPage() {
+    const route = this.tenantsPage.getMeta();
     return new ResponseEntity(HttpStatus.OK, 'Tenancies is OK', route);
   }
 

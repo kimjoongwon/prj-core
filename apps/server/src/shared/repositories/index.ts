@@ -14,3 +14,5 @@ export * from './programs.repository';
 export * from './routines.repository';
 export * from './files.repository';
 export * from './exercises.repository';
+export * from './depots.repository';
+export * from './tenants.repository';

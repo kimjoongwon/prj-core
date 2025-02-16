@@ -26,25 +26,27 @@ model Classification {
   contentId  String? @unique
   spaceId    String? @unique
   roleId     String? @unique
+  fileId     String? @unique
   timelineId String? @unique
-  serviceId  String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
   category Category @relation(fields: [categoryId], references: [id])
-  service  Service  @relation(fields: [serviceId], references: [id])
 
   user     User?     @relation(fields: [userId], references: [id])
   space    Space?    @relation(fields: [spaceId], references: [id])
   role     Role?     @relation(fields: [roleId], references: [id])
   timeline Timeline? @relation(fields: [timelineId], references: [id])
+  file     File?     @relation(fields: [fileId], references: [id])
 
   @@unique([categoryId, userId])
   @@unique([categoryId, spaceId])
   @@unique([categoryId, roleId])
   @@unique([categoryId, timelineId])
+  @@unique([categoryId, contentId])
+  @@unique([categoryId, fileId])
 }
 
 model Group {
@@ -74,9 +76,8 @@ model Service {
   label String
   name  ServiceNames @unique
 
-  groups          Group[]
-  categories      Category[]
-  classifications Classification[]
+  groups     Group[]
+  categories Category[]
 }
 
 model Association {
@@ -91,6 +92,7 @@ model Association {
   spaceId    String?
   timelineId String?
   roleId     String?
+  fileId     String?
   contentId  String?
 
   group    Group     @relation(fields: [groupId], references: [id])
@@ -99,6 +101,7 @@ model Association {
   role     Role?     @relation(fields: [roleId], references: [id])
   timeline Timeline? @relation(fields: [timelineId], references: [id])
   content  Content?  @relation(fields: [contentId], references: [id])
+  file     File?     @relation(fields: [fileId], references: [id])
 }
 
 model Profile {
@@ -493,8 +496,10 @@ model File {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  depot  Depot  @relation(fields: [depotId], references: [id])
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  depot          Depot           @relation(fields: [depotId], references: [id])
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  classification Classification?
+  associations   Association[]
 }
 
 enum SMSStatus {
@@ -584,6 +589,7 @@ enum ServiceNames {
   SPACE
   CONTENT
   TIMELINE
+  FILE
 }
 
 enum DepotTypes {

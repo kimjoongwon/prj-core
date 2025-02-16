@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { FileDtoTenant } from './fileDtoTenant';
 
 export interface FileDto {
   id: string;
@@ -11,10 +12,12 @@ export interface FileDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  tenantId: string;
   name: string;
   depotId: string;
   size: number;
   mimeType: string;
   url: string;
-  tenancyId: string;
+  /** @nullable */
+  tenant: FileDtoTenant;
 }

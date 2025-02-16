@@ -13,7 +13,7 @@ export class CategoriesPage {
 
   getMeta(): PageBuilder {
     const serviceId = ContextProvider.getServiceId();
-    const tenancyId = ContextProvider.getTenancyId();
+    const tenantId = ContextProvider.getTenantId();
     const categoryColumns = this.categoryColumns.getMeta();
     const actionColumns = this.actionColumns.getMeta();
     const columns = categoryColumns.concat(actionColumns);
@@ -27,7 +27,7 @@ export class CategoriesPage {
             name: 'useGetCategoriesByQuery',
             params: {
               serviceId,
-              tenancyId,
+              tenantId,
               type: 'ROOT',
             },
           },

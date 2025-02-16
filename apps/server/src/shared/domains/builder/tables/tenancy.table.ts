@@ -1,18 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { TableBuilder } from '@shared/types';
-import { TenancyColumns } from '../columns/tenancy.columns';
 
 @Injectable()
 export class TenancyTable {
-  constructor(private readonly tenancyColumns: TenancyColumns) {}
+  constructor() {}
 
   getMeta(): TableBuilder {
-    const columns = this.tenancyColumns.getMeta();
     const table: TableBuilder = {
       query: {
-        name: 'useGetSpacesByQuery',
+        name: 'useGetTenantsByQuery',
       },
-      columns,
+      columns: [
+        {
+          accessorKey: 'space.name',
+          header: {
+            name: '이름',
+          },
+        },
+        {
+          id: 'actions',
+          header: {
+            name: 'Actions',
+          },
+          cell: {
+            buttons: [
+              {
+                name: '선택',
+                navigator: {
+                  pathname: '/admin/main/tenants/:rowId/services',
+                  idName: 'tenantId',
+                },
+              },
+            ],
+          },
+        },
+      ],
     };
 
     return table;

@@ -4,7 +4,7 @@ import { AppConfig } from '../../configs';
 import { $Enums, Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { categroySeed } from './seeds/category.seed';
+import { fileCategroySeed } from './seeds/category.seed';
 
 @Injectable()
 export class InitService {
@@ -209,6 +209,7 @@ export class InitService {
         { name: $Enums.ServiceNames.ROLE, label: '역할' },
         { name: $Enums.ServiceNames.TIMELINE, label: '타임라인' },
         { name: $Enums.ServiceNames.CONTENT, label: '컨탠트' },
+        { name: $Enums.ServiceNames.FILE, label: '파일' },
       ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
         const service = await this.prisma.service.findUnique({ where: { name: seedService.name } });
         if (!service) {
@@ -242,22 +243,25 @@ export class InitService {
     return tenancy;
   }
 
-  // async createCategory(tenancyId: string) {
-  //   const services = await this.prisma.service.findMany();
-  //   // const fileService = services.find((service) => service.name === $Enums.ServiceNames);
-  //   this.logger.log(`[${this.LOG_PREFIX}] 카테고리 생성`);
-  //   categroySeed.forEach(async (category) => {
-  //     const existCategory = await this.prisma.category.findUnique({
-  //       where: { name: category.name },
-  //     });
+  async createCategory(tenantId: string) {
+    this.logger.log(`[${this.LOG_PREFIX}] 카테고리 생성`);
 
-  //     if (!existCategory) {
-  //       await this.prisma.category.create({
-  //         data: category,
-  //       });
-  //     }
-  //   });
-  // }
+    const services = await this.prisma.service.findMany();
+    const fileServiceId = services.find((service) => service.name === $Enums.ServiceNames.FILE).id;
+
+    fileCategroySeed.forEach(async (category) => {
+      console.log('category', category);
+      const existCategory = await this.prisma.category.findUnique({
+        where: { name: category.name },
+      });
+
+      if (!existCategory) {
+        await this.prisma.category.create({
+          data: { ...category, tenantId, serviceId: fileServiceId },
+        });
+      }
+    });
+  }
 
   async initApp() {
     await this.createServices();
@@ -265,6 +269,8 @@ export class InitService {
     const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
     const { adminRoleId } = await this.createDefaultRoles(tenancyId);
     const user = await this.createDefaultUser(adminRoleId, spaceId, tenancyId);
-    await this.createSubjects(user.tenants[0].id);
+    const tenantId = user.tenants[0].id;
+    await this.createSubjects(tenantId);
+    await this.createCategory(tenantId);
   }
 }

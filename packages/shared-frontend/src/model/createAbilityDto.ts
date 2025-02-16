@@ -6,7 +6,7 @@
 import type { AbilityTypes } from './abilityTypes';
 
 export interface CreateAbilityDto {
-  tenancyId: string;
+  tenantId: string;
   actionId: string;
   /** @nullable */
   conditions?: string | null;

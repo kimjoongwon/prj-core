@@ -3,7 +3,7 @@ import { TenancyTable } from '../tables/tenancy.table';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class TenanciesPage {
+export class TenantsPage {
   constructor(private readonly tenancyTable: TenancyTable) {}
   getMeta(): PageBuilder {
     const table = this.tenancyTable.getMeta();
@@ -11,7 +11,12 @@ export class TenanciesPage {
       type: 'Page',
       name: '공간',
       dataGrid: {
-        table,
+        table: {
+          query: {
+            name: 'useGetTenantsByQuery',
+          },
+          columns: table.columns,
+        },
       },
     };
 

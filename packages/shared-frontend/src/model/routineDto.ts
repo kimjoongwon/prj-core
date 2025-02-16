@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { ContentDto } from './contentDto';
 
 export interface RoutineDto {
   id: string;
@@ -11,7 +12,8 @@ export interface RoutineDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  label: string;
   name: string;
   contentId: string;
-  tenancyId: string;
+  content: ContentDto;
 }

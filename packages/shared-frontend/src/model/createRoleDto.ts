@@ -6,8 +6,8 @@
 import type { Roles } from './roles';
 
 export interface CreateRoleDto {
+  tenantId: string;
   name: Roles;
-  tenancyId: string;
   serviceId: string;
   categoryId: string;
 }

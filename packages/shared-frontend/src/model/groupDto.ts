@@ -5,7 +5,7 @@
  */
 import type { ServiceDto } from './serviceDto';
 import type { AssociationDto } from './associationDto';
-import type { TenancyDto } from './tenancyDto';
+import type { TenantDto } from './tenantDto';
 
 export interface GroupDto {
   id: string;
@@ -15,9 +15,10 @@ export interface GroupDto {
   /** @nullable */
   removedAt: string | null;
   name: string;
-  tenancyId: string;
+  label: string;
   serviceId: string;
+  tenantId: string;
   service?: ServiceDto;
   associations?: AssociationDto;
-  tenancy?: TenancyDto;
+  tenant?: TenantDto;
 }

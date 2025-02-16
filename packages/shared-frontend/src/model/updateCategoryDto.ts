@@ -6,7 +6,7 @@
 import type { CategoryTypes } from './categoryTypes';
 
 export interface UpdateCategoryDto {
-  tenancyId?: string;
+  tenantId?: string;
   name?: string;
   type?: CategoryTypes;
   /** @nullable */

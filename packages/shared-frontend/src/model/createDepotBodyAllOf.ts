@@ -5,5 +5,7 @@
  */
 
 export type CreateDepotBodyAllOf = {
-  files?: Blob[];
+  thumbnails?: Blob[];
+  vidoes?: Blob[];
+  images?: Blob[];
 };

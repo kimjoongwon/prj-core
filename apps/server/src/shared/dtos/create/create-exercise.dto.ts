@@ -15,8 +15,8 @@ export const defaultCreateExerciseDto: CreateExerciseDto = {
   text: '',
   duration: 0,
   count: 0,
-  imageFileIds: [],
-  videoFileId: '',
+  images: [],
+  videos: [],
 };
 
 export class CreateDto extends OmitType(IntersectionType(CreateTaskDto, CreateContentDto), [
@@ -92,7 +92,7 @@ export class CreateExerciseDto
     placeholder: '운동 이미지를 입력해주세요',
     isArray: true,
   })
-  imageFileIds: string[];
+  images: string[];
 
   @StringField({
     formType: 'DepotUploader',
@@ -100,5 +100,5 @@ export class CreateExerciseDto
     sectionName: '콘텐츠 정보',
     placeholder: '운동 동영상을 업로드해주세요',
   })
-  videoFileId: string;
+  videos: string[];
 }

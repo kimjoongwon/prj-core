@@ -2,13 +2,17 @@
 
 import { PageBuilder } from '@/builders/Page/PageBuilder';
 import { ModalLayout } from '@/components/layouts/ModalLayout';
-import { useGetAdminMainTenanciesPage } from '@shared/frontend';
+import { useGetAdminMainTenantsPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 
-const TenanciesPage = () => {
-  const { data: response } = useGetAdminMainTenanciesPage();
+const TenantsPage = () => {
+  const { data: response, isFetchedAfterMount } = useGetAdminMainTenantsPage();
 
   const page = response?.data as RouteBuilder;
+
+  if (!isFetchedAfterMount) {
+    return null;
+  }
 
   return (
     <ModalLayout>
@@ -17,4 +21,4 @@ const TenanciesPage = () => {
   );
 };
 
-export default TenanciesPage;
+export default TenantsPage;

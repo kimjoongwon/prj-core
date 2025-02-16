@@ -46,8 +46,12 @@ export class ExercisesController {
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
   @ApiFile(
     [
-      { name: 'thumbnails', isArray: true },
-      { name: 'exerciseVideos', isArray: true },
+      { name: 'images', isArray: true },
+      { name: 'videos', isArray: true },
+      {
+        name: 'thumbnail',
+        isArray: true,
+      },
     ],
     { isRequired: false },
   )
@@ -55,13 +59,16 @@ export class ExercisesController {
     @Body() createExerciseDto: CreateExerciseDto,
     @UploadedFiles()
     {
+      images,
+      videos,
       thumbnails,
-      exerciseVideos,
-    }: { thumbnails: Express.Multer.File[]; exerciseVideos: Express.Multer.File[] },
+    }: {
+      images: Express.Multer.File[];
+      videos: Express.Multer.File[];
+      thumbnails: Express.Multer.File[];
+    },
   ) {
-    console.log('thumbnails', thumbnails);
-    console.log('exerciseVideo', exerciseVideos);
-    const exercise = await this.service.create(createExerciseDto, thumbnails);
+    const exercise = await this.service.create(createExerciseDto, images, videos, thumbnails);
     return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
   }
 

@@ -35,6 +35,7 @@ import { AdminMainRouteEndpointModule } from './app/admin-main-endpoint.module';
 import { DepotsEndpointModule } from './depots/depots-endpoint.module';
 import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
 import { FilesEndpointModule } from './files/files-endpoint.module';
+import { TenantsEndpointModule } from './tenants/tenants-endpoint.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { FilesEndpointModule } from './files/files-endpoint.module';
     DepotsEndpointModule,
     ExercisesEndpointModule,
     FilesEndpointModule,
+    TenantsEndpointModule,
     AdminAuthRouteEndpointModule,
     AdminMainRouteEndpointModule,
     RouterModule.register([

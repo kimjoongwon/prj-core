@@ -5,6 +5,6 @@
  */
 
 export interface UpdateSubjectDto {
-  tenancyId?: string;
+  tenantId?: string;
   name?: string;
 }

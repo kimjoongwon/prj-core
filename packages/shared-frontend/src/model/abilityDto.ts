@@ -4,6 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AbilityTypes } from './abilityTypes';
+import type { TenantDto } from './tenantDto';
 
 export interface AbilityDto {
   id: string;
@@ -12,7 +13,7 @@ export interface AbilityDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  tenancyId: string;
+  tenantId: string;
   actionId: string;
   /** @nullable */
   conditions?: string | null;
@@ -21,4 +22,5 @@ export interface AbilityDto {
   roleId: string;
   /** @nullable */
   description?: string | null;
+  tenant?: TenantDto;
 }

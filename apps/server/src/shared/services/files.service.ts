@@ -10,6 +10,7 @@ export class FilesService {
     private readonly awsService: AwsService,
     private readonly repository: FilesRepository,
   ) {}
+
   getById(id: string) {
     return this.repository.findUnique({ where: { id } });
   }
@@ -30,7 +31,7 @@ export class FilesService {
     return url;
   }
   async buildDepotFile(file: Express.Multer.File) {
-    const tenancyId = ContextProvider.getTenancyId();
+    const tenantId = ContextProvider.getTenantId();
     const url = await this.upload(file);
 
     return {
@@ -38,7 +39,12 @@ export class FilesService {
       url,
       mimeType: file.mimetype,
       size: file.size,
-      tenancyId,
+      tenantId,
     };
+  }
+
+  async createImageFiles(images: Express.Multer.File[]) {
+    
+
   }
 }

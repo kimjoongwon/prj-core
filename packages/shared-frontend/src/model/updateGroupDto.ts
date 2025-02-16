@@ -6,6 +6,7 @@
 
 export interface UpdateGroupDto {
   name?: string;
-  tenancyId?: string;
+  label?: string;
   serviceId?: string;
+  tenantId?: string;
 }
