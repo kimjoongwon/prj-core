@@ -15,3 +15,4 @@ export * from './programs.controller';
 export * from './depots.controller';
 export * from './exercises.controller';
 export * from './files.controller';
+export * from './tenants.controller';

@@ -5,7 +5,7 @@
  */
 
 export interface CreateTimelineDto {
+  label: string;
   name: string;
-  tenancyId: string;
-  sessionIds: string[];
+  tenantId: string;
 }

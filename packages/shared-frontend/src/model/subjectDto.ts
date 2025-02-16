@@ -11,6 +11,6 @@ export interface SubjectDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  tenancyId: string;
+  tenantId: string;
   name: string;
 }

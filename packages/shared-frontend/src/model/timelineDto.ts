@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { TenantDto } from './tenantDto';
 
 export interface TimelineDto {
   id: string;
@@ -11,6 +12,8 @@ export interface TimelineDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  label: string;
   name: string;
-  tenancyId: string;
+  tenantId: string;
+  tenant: TenantDto;
 }

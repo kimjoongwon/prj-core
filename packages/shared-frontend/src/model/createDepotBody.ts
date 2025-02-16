@@ -3,7 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateDepotDto } from './createDepotDto';
-import type { CreateDepotBodyAllOf } from './createDepotBodyAllOf';
 
-export type CreateDepotBody = CreateDepotDto & CreateDepotBodyAllOf;
+export type CreateDepotBody = {
+  thumbnails?: Blob[];
+  vidoes?: Blob[];
+  images?: Blob[];
+};

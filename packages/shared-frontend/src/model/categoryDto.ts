@@ -5,7 +5,6 @@
  */
 import type { CategoryTypes } from './categoryTypes';
 import type { ServiceDto } from './serviceDto';
-import type { TenancyDto } from './tenancyDto';
 import type { ClassificationDto } from './classificationDto';
 
 export interface CategoryDto {
@@ -15,7 +14,7 @@ export interface CategoryDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  tenancyId: string;
+  tenantId: string;
   name: string;
   type: CategoryTypes;
   /** @nullable */
@@ -24,6 +23,5 @@ export interface CategoryDto {
   service?: ServiceDto;
   parent?: CategoryDto;
   children?: CategoryDto;
-  tenancy?: TenancyDto;
   classifications?: ClassificationDto;
 }

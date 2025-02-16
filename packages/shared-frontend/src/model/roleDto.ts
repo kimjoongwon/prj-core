@@ -13,7 +13,7 @@ export interface RoleDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  tenantId: string;
   name: Roles;
-  tenancyId: string;
   tenant?: TenantDto;
 }

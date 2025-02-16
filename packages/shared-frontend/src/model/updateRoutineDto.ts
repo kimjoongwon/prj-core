@@ -3,14 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TextTypes } from './textTypes';
 
 export interface UpdateRoutineDto {
+  label?: string;
   name?: string;
-  tenancyId?: string;
-  contentTitle?: string;
-  contentDescription?: string;
-  contentType?: TextTypes;
-  contentText?: string;
-  taskIds?: string[];
+  contentId?: string;
 }

@@ -19,7 +19,7 @@ import { SessionEditPage } from './session-edit.page';
 import { SessionsPage } from './sessions.page';
 import { SpaceEditPage } from './space-edit.page';
 import { SpacesPage } from './spaces.page';
-import { TenanciesPage } from './tenancies.page';
+import { TenantsPage } from './tenants.page';
 import { TimelineEditPage } from './timeline-edit.page';
 import { TimelinesPage } from './timelines.page';
 import { UsersPage } from './users.page';
@@ -48,7 +48,7 @@ const modules = [
   SessionsPage,
   SpaceEditPage,
   SpacesPage,
-  TenanciesPage,
+  TenantsPage,
   TimelineEditPage,
   TimelinesPage,
   UsersPage,

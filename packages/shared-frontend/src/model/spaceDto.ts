@@ -3,8 +3,6 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { ClassificationDto } from './classificationDto';
-import type { AssociationDto } from './associationDto';
 
 export interface SpaceDto {
   id: string;
@@ -13,7 +11,6 @@ export interface SpaceDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  label: string;
   name: string;
-  classification?: ClassificationDto;
-  associations?: AssociationDto;
 }

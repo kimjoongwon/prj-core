@@ -22,7 +22,7 @@ export class TenancyColumns {
               name: '선택',
               navigator: {
                 pathname: '/admin/main/tenancies/:rowId/services',
-                idName: 'tenancyId',
+                idName: 'tenantId',
               },
             },
           ],

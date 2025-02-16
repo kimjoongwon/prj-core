@@ -5,12 +5,7 @@
  */
 
 export interface UpdateTimelineDto {
-  id?: string;
-  seq?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  /** @nullable */
-  removedAt?: string | null;
+  label?: string;
   name?: string;
-  tenancyId?: string;
+  tenantId?: string;
 }

@@ -82,14 +82,6 @@ export class DepotsService {
     });
   }
 
-  getFirst(args: Prisma.DepotFindFirstArgs) {
-    return this.repository.findFirst(args);
-  }
-
-  updateMany(args: Prisma.DepotUpdateManyArgs) {
-    return this.repository.updateMany(args);
-  }
-
   deleteById(id: string) {
     return this.repository.delete({ where: { id } });
   }
@@ -110,20 +102,6 @@ export class DepotsService {
     return this.repository.update({
       where: { id: depotId },
       data: updateDepotDto,
-    });
-  }
-
-  removeManyByIds(ids: string[]) {
-    return this.repository.updateMany({
-      where: { id: { in: ids } },
-      data: { removedAt: new Date() },
-    });
-  }
-
-  remove(id: string) {
-    return this.repository.update({
-      where: { id },
-      data: { removedAt: new Date() },
     });
   }
 }

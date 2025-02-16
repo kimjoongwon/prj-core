@@ -5,6 +5,7 @@
  */
 
 export interface CreateSpaceDto {
+  label: string;
   name: string;
   categoryId: string;
   serviceId: string;

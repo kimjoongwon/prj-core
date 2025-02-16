@@ -5,13 +5,12 @@
  */
 
 export interface CreateClassificationDto {
-  tenancyId: string;
   /** @nullable */
-  routineId?: string | null;
+  contentId?: string | null;
+  /** @nullable */
+  timelineId?: string | null;
   /** @nullable */
   userId?: string | null;
-  /** @nullable */
-  postId?: string | null;
   /** @nullable */
   spaceId?: string | null;
   /** @nullable */

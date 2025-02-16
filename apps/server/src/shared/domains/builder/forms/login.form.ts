@@ -27,7 +27,7 @@ export class LoginForm {
           message: '로그인 성공',
         },
         navigator: {
-          pathname: '/admin/main/tenancies',
+          pathname: '/admin/main/tenants',
         },
       },
       sections: [

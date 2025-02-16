@@ -24,6 +24,7 @@ import {
   RoutinesRepository,
   SessionsRepository,
   SubjectsRepository,
+  TenantsRepository,
   TimelinesRepository,
   UsersRepository,
 } from '../repositories';
@@ -32,6 +33,7 @@ import { FilesService } from '../services/files.service';
 import { RolesRepository } from '../repositories/role.repository';
 import { AwsService } from '../domains/aws/aws.service';
 import { ExercisesService } from '../services/exercises.service';
+import { TenantsService } from '../services/tenants.service';
 const modules = [
   AbilitiesService,
   AbilitiesRepository,
@@ -64,6 +66,10 @@ const modules = [
   AwsService,
   ExercisesService,
   ExercisesRepository,
+  DepotsService,
+  DepotsRepository,
+  TenantsService,
+  TenantsRepository,
 ];
 @Global()
 @Module({
