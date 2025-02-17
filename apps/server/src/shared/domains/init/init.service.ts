@@ -178,7 +178,6 @@ export class InitService {
           classification: {
             create: {
               categoryId: category.id,
-              serviceId: userService.id,
             },
           },
         },

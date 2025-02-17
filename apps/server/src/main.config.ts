@@ -63,7 +63,6 @@ export const libModules = [
         }),
         async (params, next) => {
           const result = await next(params);
-
           return result;
         },
       ],
@@ -71,7 +70,7 @@ export const libModules = [
   }),
   LoggerModule.forRoot({
     pinoHttp: {
-      level: 'debug',
+      level: 'error',
       customProps: () => ({
         context: 'HTTP',
       }),

@@ -9,4 +9,5 @@ export class CreateAssociationDto extends OmitType(AssociationDto, [
   'service',
   'timeline',
   'content',
+  'file',
 ]) {}

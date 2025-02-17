@@ -9,6 +9,7 @@ import {
   HttpCode,
   Param,
   Query,
+  HttpException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
@@ -33,9 +34,16 @@ export class ClassificationsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ClassificationDto, HttpStatus.OK)
   async createClassification(@Body() createClassificationDto: CreateClassificationDto) {
+    try {
+      const obj = undefined;
+      obj.test;
+    } catch (error) {
+      throw new HttpException('error--', HttpStatus.BAD_REQUEST);
+    }
     const classification = await this.service.create({
       data: createClassificationDto,
     });
+
     return new ResponseEntity(HttpStatus.OK, '성공', classification.toDto());
   }
 

@@ -1,9 +1,12 @@
 import { Association } from '@prisma/client';
 import { ClassField, UUIDField, UUIDFieldOptional } from '../decorators/field.decorators';
-import { AbstractDto, GroupDto, UserDto, ServiceDto, TenancyDto, RoutineDto, TimelineDto } from '.';
+import { AbstractDto, GroupDto, UserDto, ServiceDto, TimelineDto, FileDto } from '.';
 import { ContentDto } from './content.dto';
 
 export class AssociationDto extends AbstractDto implements Association {
+  @UUIDFieldOptional({ nullable: true })
+  fileId: string | null;
+
   @UUIDFieldOptional({ nullable: true })
   contentId: string | null;
 
@@ -42,4 +45,7 @@ export class AssociationDto extends AbstractDto implements Association {
 
   @ClassField(() => ServiceDto, { required: false, swagger: false })
   service?: ServiceDto;
+
+  @ClassField(() => FileDto, { required: false, swagger: false })
+  file?: FileDto;
 }

@@ -18,7 +18,6 @@ export class SpacesService {
         ...createSpaceDto,
         classification: {
           create: {
-            serviceId,
             categoryId,
           },
         },

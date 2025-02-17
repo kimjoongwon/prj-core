@@ -74,15 +74,6 @@ export class DepotsController {
     return new ResponseEntity(HttpStatus.OK, '성공', depot.toDto());
   }
 
-  @Patch('removedAt')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async removeDepots(@Body() depotIds: string[]) {
-    const depots = await this.service.removeManyByIds(depotIds);
-    return new ResponseEntity(HttpStatus.OK, '성공', depots.count);
-  }
-
   @Patch(':depotId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
@@ -94,20 +85,10 @@ export class DepotsController {
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
   }
 
-  @Patch(':depotId/removedAt')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async removeDepot(@Param('depotId') depotId: string) {
-    const depot = await this.service.remove(depotId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
-  }
-
   @Delete(':depotId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async deleteDepot(@Param('depotId') depotId: string) {
+  @ApiResponseEntity(DepotDto, HttpStatus.OK) async deleteDepot(@Param('depotId') depotId: string) {
     const depot = await this.service.deleteById(depotId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
   }

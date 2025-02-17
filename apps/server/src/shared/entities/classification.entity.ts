@@ -1,4 +1,4 @@
-import { Classification as ClassificationEntity, Content, Timeline } from '@prisma/client';
+import { Classification as ClassificationEntity, Content, Timeline, File } from '@prisma/client';
 import { Service } from './service.entity';
 import { AbstractEntity } from './abstract.entity';
 import { Category } from './category.entity';
@@ -13,6 +13,7 @@ export class Classification
   extends AbstractEntity<ClassificationDto>
   implements ClassificationEntity
 {
+  fileId: string;
   categoryId: string;
 
   userId: string;
@@ -30,4 +31,5 @@ export class Classification
   role?: Role;
   space?: Space;
   timeline?: Timeline;
+  file?: File;
 }

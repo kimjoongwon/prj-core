@@ -10,4 +10,3 @@ export class CreateClassificationDto extends OmitType(ClassificationDto, [
   'timeline',
   'content',
 ]) {}
-
