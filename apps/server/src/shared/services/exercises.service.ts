@@ -3,7 +3,6 @@ import { ExercisesRepository } from '../repositories';
 import { CreateExerciseDto, ExerciseQueryDto, UpdateExerciseDto } from '../dtos';
 import { ContextProvider } from '../providers/context.provider';
 import { FilesService } from './files.service';
-import { ServiceNames } from '@prisma/client';
 import { CategoryNames } from '../enums/category-names.enum';
 
 @Injectable()

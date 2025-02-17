@@ -10,7 +10,6 @@ import {
   Param,
   Query,
   UploadedFiles,
-  UsePipes,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';

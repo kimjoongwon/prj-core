@@ -5,6 +5,8 @@ import { ExerciseDto } from '../exercise.dto';
 import { CreateTaskDto } from './create-task.dto';
 import { CreateContentDto } from './create-content.dto';
 import { $Enums } from '@prisma/client';
+import { Exclude, plainToInstance } from 'class-transformer';
+import { Exercise } from '../../entities/exercise.entity';
 
 export const defaultCreateExerciseDto: CreateExerciseDto = {
   name: '',
@@ -101,4 +103,8 @@ export class CreateExerciseDto
     placeholder: '운동 동영상을 업로드해주세요',
   })
   videos: string[];
+
+  toEntity() {
+    return plainToInstance(Exercise, this);
+  }
 }
