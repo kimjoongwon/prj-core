@@ -5,7 +5,7 @@ model Category {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String        @unique
+  name      String
   type      CategoryTypes @default(ROOT)
   parentId  String?
   serviceId String
@@ -221,6 +221,7 @@ model Tenancy {
 //   fromUserId String
 //   contentId  String
 // }
+
 model Timeline {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -456,10 +457,7 @@ model Content {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  title        String?
-  description  String?
   type         TextTypes     @default(Editor)
-  text         String?       @db.VarChar(1000)
   depotId      String?
   tenantId     String
   routines     Routine[]
@@ -468,6 +466,20 @@ model Content {
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   associations Association[]
   posts        Post[]
+}
+
+model Translation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  title        String?
+  description  String?
+  text         String?
+  languageCode languageCodes @default(en)
+  contentId    String
 }
 
 model Depot {
@@ -595,4 +607,10 @@ enum ServiceNames {
 enum DepotTypes {
   ROOT
   LEAF
+}
+
+enum languageCodes {
+  en
+  ko
+  zh
 }

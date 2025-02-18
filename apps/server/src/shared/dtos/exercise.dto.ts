@@ -11,14 +11,4 @@ export class ExerciseDto extends AbstractDto implements ExcerciesEntity {
 
   @NumberField({ default: 0 })
   count: number;
-
-  toRdo() {
-
-    return {
-      ...this,
-      taskId: this.taskId,
-      duration: this.duration,
-      count: this.count,
-    };
-  }
 }
