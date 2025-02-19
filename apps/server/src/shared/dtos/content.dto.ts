@@ -5,16 +5,16 @@ export class ContentDto extends AbstractDto implements ContentEntity {
   @UUIDField()
   depotId: string;
 
-  @StringFieldOptional({ nullable: true, label: '제목', placeholder: '제목을 입력해주세요' })
+  @StringFieldOptional({ nullable: true })
   title: string | null;
 
-  @StringFieldOptional({ nullable: true, label: '설명', placeholder: '설명을 입력해주세요' })
+  @StringFieldOptional({ nullable: true })
   description: string | null;
 
   @EnumField(() => $Enums.TextTypes, { nullable: true, default: $Enums.TextTypes.Textarea })
   type: $Enums.TextTypes;
 
-  @StringFieldOptional({ nullable: true, label: '내용', placeholder: '내용을 입력해주세요' })
+  @StringFieldOptional({ nullable: true })
   text: string;
 
   @UUIDField()

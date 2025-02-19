@@ -8,9 +8,8 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import { cloneDeep } from 'lodash-es';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { HStack, Text, VStack } from '@shared/frontend';
-import { v4 } from 'uuid';
-import { Skeleton } from '@heroui/react';
 import { ButtonBuilder } from '../ButtonBuilder';
+import { v4 } from 'uuid';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
@@ -75,7 +74,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                 className="border-1 p-4 rounded-xl space-y-4 flex flex-1 flex-col w-full"
               >
                 <Text variant="h5">{section.name}</Text>
-                <Suspense fallback={<Skeleton />}>
+                <Suspense fallback={<div>loading...</div>}>
                   {section.stacks?.map(stack => {
                     if (stack.type === 'VStack') {
                       return (

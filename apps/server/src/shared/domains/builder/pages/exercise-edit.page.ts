@@ -11,10 +11,12 @@ export class ExerciseEditPage {
 
   async getMeta(exerciseId: string | 'new', type: 'add' | 'edit'): Promise<PageBuilder> {
     const page = pageBuilder(CreateExerciseDto, defaultCreateExerciseDto);
-    const tenancyId = ContextProvider.getTenancyId();
+    const tenantId = ContextProvider.getTenantId();
     const serviceId = ContextProvider.getServiceId();
     page.form.button.mutation.name = 'createExercise';
     page.form.button.mutation.payloadPath = 'form.inputs';
+    page.state.form.inputs.tenantId = tenantId;
+    page.state.form.inputs.serviceId = serviceId;
 
     if (exerciseId !== 'new' && type === 'edit') {
       const exercise = await this.prisma.exercise.findUnique({
@@ -22,8 +24,6 @@ export class ExerciseEditPage {
           id: exerciseId,
         },
       });
-      page.state.form.inputs.tenancyId = tenancyId;
-      page.state.form.inputs.serviceId = serviceId;
       page.state.form.inputs = exercise;
       page.form.button.mutation.name = 'updateExercise';
       page.form.button.mutation.id = exerciseId;

@@ -35,7 +35,6 @@ export * from './Listbox/Listbox';
 export * from './Text';
 export * from './Placeholder';
 export * from './Message';
-export * from './NextUI';
 export * from './MultiInput';
 export * from './Copyright';
 export * from './AppBar/AppBar';
