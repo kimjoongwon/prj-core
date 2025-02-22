@@ -15,7 +15,7 @@ async function bootstrap() {
   app.set('query parser', 'extended');
   app.useGlobalFilters(
     new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
-    new HttpExceptionFilter(),
+    // new HttpExceptionFilter(),
   );
 
   app.useGlobalPipes(new CustomValidationPipe());

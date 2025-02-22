@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { Input, InputProps, Textarea } from '../../../ui';
+import { InputProps, Textarea } from '../../../ui';
 
 type ContentTextInputProps<T> = InputProps<T>;
 

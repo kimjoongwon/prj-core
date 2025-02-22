@@ -43,20 +43,8 @@ export class ExercisesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
-  async createExercise(
-    @Body() createExerciseDto: CreateExerciseDto,
-    @UploadedFiles()
-    {
-      images,
-      videos,
-      thumbnails,
-    }: {
-      images: Express.Multer.File[];
-      videos: Express.Multer.File[];
-      thumbnails: Express.Multer.File[];
-    },
-  ) {
-    const exercise = await this.service.create(createExerciseDto, images, videos, thumbnails);
+  async createExercise(@Body() createExerciseDto: CreateExerciseDto) {
+    const exercise = await this.service.create(createExerciseDto);
     return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
   }
 

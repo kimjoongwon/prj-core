@@ -3,12 +3,17 @@ import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repositories/depots.repository';
 import { CreateFileDto, DepotQueryDto, UpdateDepotDto } from '../dtos';
 import { AwsService } from '../domains/aws/aws.service';
+import { ContextProvider } from '../providers';
+import { PrismaService } from 'nestjs-prisma';
+import { CategoriesRepository } from '../repositories/categories.repository';
+import { CategoryNames } from '../enums/category-names.enum';
 
 @Injectable()
 export class DepotsService {
   constructor(
     private readonly repository: DepotsRepository,
     private readonly awsService: AwsService,
+    private readonly categoriesRepository: CategoriesRepository,
   ) {}
 
   getUnique(args: Prisma.DepotFindUniqueArgs) {
@@ -16,14 +21,41 @@ export class DepotsService {
   }
 
   getById(id: string) {
-    return this.repository.findUnique({ where: { id }, include: { files: true } });
+    return this.repository.findUnique({
+      where: { id },
+      include: {
+        files: {
+          include: {
+            classification: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async create(
-    thumbnails: Express.Multer.File[],
-    videos: Express.Multer.File[],
-    images: Express.Multer.File[],
+    thumbnails: Express.Multer.File[] = [],
+    videos: Express.Multer.File[] = [],
+    images: Express.Multer.File[] = [],
   ) {
+    const tenantId = ContextProvider.getTenantId();
+
+    const imageCategory = await this.categoriesRepository.findFirst({
+      where: {
+        name: CategoryNames.IMAGE_CONTENT.name,
+      },
+    });
+
+    const videoCategory = await this.categoriesRepository.findFirst({
+      where: {
+        name: CategoryNames.VIDEO_CONTENT.name,
+      },
+    });
+
     const thumbnailFiles = await Promise.all(
       thumbnails?.map(async (file) => {
         const url = await this.awsService.uploadToS3(
@@ -36,7 +68,15 @@ export class DepotsService {
           url,
           mimeType: file.mimetype,
           size: file.size,
-        } as CreateFileDto;
+          tenantId,
+          classification: {
+            create: {
+              category: {
+                connect: { id: imageCategory.id },
+              },
+            },
+          },
+        };
       }),
     );
 
@@ -52,7 +92,15 @@ export class DepotsService {
           url,
           mimeType: file.mimetype,
           size: file.size,
-        } as CreateFileDto;
+          tenantId,
+          classification: {
+            create: {
+              category: {
+                connect: { id: videoCategory.id },
+              },
+            },
+          },
+        };
       }),
     );
 
@@ -69,7 +117,15 @@ export class DepotsService {
           url,
           mimeType: file.mimetype,
           size: file.size,
-        } as CreateFileDto;
+          tenantId,
+          classification: {
+            create: {
+              category: {
+                connect: { id: imageCategory.id },
+              },
+            },
+          },
+        };
       }),
     );
 
@@ -98,10 +154,11 @@ export class DepotsService {
   }
 
   updateById(depotId: string, updateDepotDto: UpdateDepotDto) {
-    // 추가 로직 필요
     return this.repository.update({
       where: { id: depotId },
-      data: updateDepotDto,
+      data: {
+        ...updateDepotDto,
+      },
     });
   }
 }

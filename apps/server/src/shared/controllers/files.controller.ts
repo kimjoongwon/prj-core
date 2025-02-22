@@ -1,10 +1,22 @@
-import { Controller, Post, Body, HttpStatus, Get, HttpCode, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  UploadedFiles,
+  UploadedFile,
+} from '@nestjs/common';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { CreateFileDto, FileDto } from '../dtos';
 import { ResponseEntity } from '../entities/response.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { FilesService } from '../services/files.service';
 import _ from 'lodash';
+import { ApiFile } from '../decorators/swagger.schema';
 
 @ApiTags('FILES')
 @Controller()
@@ -27,5 +39,22 @@ export class FilesController {
   async createFile(@Body() createFileDto: CreateFileDto) {
     const file = await this.service.create(createFileDto);
     return new ResponseEntity(HttpStatus.CREATED, 'success', file.toDto());
+  }
+
+  @Patch(':fileId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(FileDto, HttpStatus.OK)
+  @ApiFile(
+    {
+      name: 'file',
+    },
+    {
+      isRequired: false,
+    },
+  )
+  async updateFile(@Param('fileId') fileId: string, @UploadedFile() file: Express.Multer.File) {
+    const fileEntity = await this.service.updateById(fileId, file);
+    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity.toDto());
   }
 }

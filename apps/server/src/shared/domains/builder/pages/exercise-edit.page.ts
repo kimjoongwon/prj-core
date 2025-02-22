@@ -6,7 +6,6 @@ import {
   CreateExerciseDto,
   createExerciseValidationObject,
 } from '../../../dtos';
-import { pageBuilder } from '../../../libs';
 import { ContextProvider } from '../../../providers';
 import { createTaskValidationObject, defaultCreateTaskDtoObject } from '../../../dtos/task.dto';
 import {
