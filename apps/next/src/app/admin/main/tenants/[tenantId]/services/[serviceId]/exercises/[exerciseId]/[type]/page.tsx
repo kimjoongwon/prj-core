@@ -1,8 +1,12 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainExerciseEditPage } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
+import { Form } from '@heroui/react';
+import {
+  ContentForm,
+  ExerciseForm,
+  useGetAdminMainExerciseEditPage,
+} from '@shared/frontend';
+import { PageBuilder, RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';
 
 const ExerciseEditPage = () => {
@@ -11,13 +15,17 @@ const ExerciseEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainExerciseEditPage(exerciseId, type);
-  const page = response?.data as RouteBuilder;
+  const page = response?.data as PageBuilder;
 
   if (!isFetchedAfterMount) {
     return null;
   }
 
-  return <PageBuilder pageBuilder={page} />;
+  return (
+    <Form>
+      <ExerciseForm state={page.state?.form.inputs} />
+    </Form>
+  );
 };
 
 export default ExerciseEditPage;

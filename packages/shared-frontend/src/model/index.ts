@@ -55,6 +55,7 @@ export * from './createSpace200AllOf';
 export * from './createSpaceDto';
 export * from './createSubject200AllOf';
 export * from './createSubjectDto';
+export * from './createTaskDto';
 export * from './createTenant200AllOf';
 export * from './createTenantDto';
 export * from './createTimeline200AllOf';

@@ -2,8 +2,8 @@
 
 import { BottomTab } from '@/components/ui/BottomTab/BottomTab';
 import { Header } from '@/components/ui/Header/Header';
-import { Card } from '@heroui/react';
-import { VStack, Spacer } from '@shared/frontend';
+import { Card, Spacer } from '@heroui/react';
+import { VStack } from '@shared/frontend';
 
 interface ServicesLayoutProps {
   children: React.ReactNode;

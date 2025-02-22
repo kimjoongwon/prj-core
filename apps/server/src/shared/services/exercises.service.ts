@@ -18,8 +18,16 @@ export class ExercisesService {
     videos: Express.Multer.File[],
     thubmnails: Express.Multer.File[],
   ) {
-    const { count, duration, description, label, name, text, title, type } = createExerciseDto;
-
+    const {
+      count,
+      duration,
+      task,
+      task: {
+        label,
+        name,
+        content: { type, description, title, text },
+      },
+    } = createExerciseDto;
     const tenantId = ContextProvider.getTenantId();
 
     const thumbnailFiles = await Promise.all(thubmnails?.map(this.filesService.buildDepotFile));
@@ -116,9 +124,27 @@ export class ExercisesService {
   }
 
   updateById(id: string, updateExerciseDto: UpdateExerciseDto) {
+    const { task, count, duration } = updateExerciseDto;
     return this.repository.update({
       where: { id },
-      data: updateExerciseDto,
+      data: {
+        count,
+        duration,
+        task: {
+          update: {
+            label: task.label,
+            name: task.name,
+            content: {
+              update: {
+                type: task.content.type,
+                description: task.content.description,
+                title: task.content.title,
+                text: task.content.text,
+              },
+            },
+          },
+        },
+      },
     });
   }
 
