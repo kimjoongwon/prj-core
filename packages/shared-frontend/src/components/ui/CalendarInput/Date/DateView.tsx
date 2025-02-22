@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import { Card, CardBody } from '../../NextUI';
 import { DateModel } from '../_types';
 import { Text } from '../../Text';
 import dayjs from 'dayjs';
+import { Card, CardBody } from '@heroui/react';
 
 interface DateViewProps {
   state: DateModel;

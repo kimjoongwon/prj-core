@@ -4,17 +4,16 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CreateContentDtoType } from './createContentDtoType';
-import type { CreateDepotDto } from './createDepotDto';
 
 export interface CreateContentDto {
-  authorId: string;
   /** @nullable */
-  title?: string | null;
+  depotId: string | null;
   /** @nullable */
-  description?: string | null;
+  title: string | null;
+  /** @nullable */
+  description: string | null;
   /** @nullable */
   type: CreateContentDtoType;
-  /** @nullable */
-  text?: string | null;
-  depot: CreateDepotDto;
+  text?: string;
+  tenantId: string;
 }

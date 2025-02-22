@@ -43,17 +43,6 @@ export class ExercisesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
-  @ApiFile(
-    [
-      { name: 'images', isArray: true },
-      { name: 'videos', isArray: true },
-      {
-        name: 'thumbnail',
-        isArray: true,
-      },
-    ],
-    { isRequired: false },
-  )
   async createExercise(
     @Body() createExerciseDto: CreateExerciseDto,
     @UploadedFiles()

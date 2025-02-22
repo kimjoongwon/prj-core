@@ -12,14 +12,14 @@ export interface ContentDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  depotId: string;
   /** @nullable */
-  title?: string | null;
+  depotId: string | null;
   /** @nullable */
-  description?: string | null;
+  title: string | null;
+  /** @nullable */
+  description: string | null;
   /** @nullable */
   type: ContentDtoType;
-  /** @nullable */
-  text?: string | null;
+  text?: string;
   tenantId: string;
 }

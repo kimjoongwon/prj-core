@@ -18,6 +18,21 @@ export interface ValidationBuilder {
   >;
 }
 
+export type ValidationRecord<T extends object> = Omit<
+  Record<keyof T, Validation>,
+  'id' | 'createdAt' | 'updatedAt' | 'removedAt' | 'seq'
+>;
+
+export interface Validation {
+  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
+  minLength?: { value: number; message: string };
+  maxLength?: { value: number; message: string };
+  min?: { value: number; message: string };
+  max?: { value: number; message: string };
+  pattern?: { value: string; message: string };
+  required?: { value: boolean; message: string };
+}
+
 export interface InputBuilder {
   visibleCondition?: {
     eq: {
@@ -33,8 +48,9 @@ export interface InputBuilder {
 
 export interface FormBuilder {
   name?: string;
+  validations?: any;
   isInValid?: boolean;
-  sections: SectionBuilder[];
+  sections?: SectionBuilder[];
   button?: ButtonBuilder;
 }
 
