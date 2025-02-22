@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Upload } from 'lucide-react';
 import {
   DndContext,
@@ -22,13 +22,15 @@ import { observer } from 'mobx-react-lite';
 import { SortableMedia } from './SortableMedia/SortableMedia';
 import { FileDto } from '../../../model';
 import { v4 } from 'uuid';
-
 export interface FileUploaderProps {
   label?: string;
   selectionMode: 'single' | 'multiple';
   maxFiles?: number;
   type: 'image' | 'video' | 'all';
-  onFilesChange?: (files: Partial<FileDto>[]) => void;
+  onFilesChange?: (
+    type: FileUploaderProps['type'],
+    fileDtos: Partial<FileDto>[],
+  ) => void;
   value: Partial<FileDto>[];
 }
 
@@ -41,13 +43,11 @@ export const FileUploader = observer(
     label,
     value,
   }: FileUploaderProps) => {
-    const [files, setFiles] = useState<FileUploaderProps['value']>(value);
+    const [files, setFiles] = useState<FileUploaderProps['value']>([]);
 
     useEffect(() => {
-      if (onFilesChange) {
-        onFilesChange(files);
-      }
-    }, [files]);
+      setFiles(value);
+    }, [value]);
 
     const sensors = useSensors(
       useSensor(PointerSensor, {
@@ -84,8 +84,10 @@ export const FileUploader = observer(
 
         if (selectionMode === 'single') {
           setFiles([fileDtos[0]]);
+          onFilesChange(type, fileDtos);
         } else {
           setFiles(prevFiles => [...prevFiles, ...fileDtos].slice(0, maxFiles));
+          onFilesChange(type, fileDtos);
         }
       }
       e.target.value = '';

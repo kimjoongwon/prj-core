@@ -35,7 +35,7 @@ export class ActionColumns {
               color: 'warning',
               name: '수정',
               navigator: {
-                pathname: `categories/:rowId/edit`,
+                pathname: `exercises/:rowId/edit`,
               },
             },
             {

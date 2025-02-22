@@ -12,7 +12,12 @@ export class FilesService {
   ) {}
 
   getById(id: string) {
-    return this.repository.findUnique({ where: { id } });
+    return this.repository.findUnique({
+      where: { id },
+      include: {
+        classification: true,
+      },
+    });
   }
 
   create(createFileDto: CreateFileDto) {
@@ -43,8 +48,13 @@ export class FilesService {
     };
   }
 
-  async createImageFiles(images: Express.Multer.File[]) {
-    
+  async createImageFiles(images: Express.Multer.File[]) {}
 
+  async updateById(fileId: string, file: Express.Multer.File) {
+    const fileDto = await this.buildDepotFile(file);
+    return this.repository.update({
+      where: { id: fileId },
+      data: fileDto,
+    });
   }
 }

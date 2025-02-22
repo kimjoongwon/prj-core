@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { DepotDto, UpdateDepotDto, DepotQueryDto, CreateDepotDto } from '../dtos';
+import { DepotDto, UpdateDepotDto, DepotQueryDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { DepotsService } from '../services/depots.service';
@@ -37,7 +37,7 @@ export class DepotsController {
         isArray: true,
       },
       {
-        name: 'vidoes',
+        name: 'videos',
         isArray: true,
       },
       {
@@ -53,15 +53,15 @@ export class DepotsController {
     @UploadedFiles()
     {
       thumbnails,
-      vidoes,
+      videos,
       images,
     }: {
       thumbnails: Express.Multer.File[];
-      vidoes: Express.Multer.File[];
+      videos: Express.Multer.File[];
       images: Express.Multer.File[];
     },
   ) {
-    const depot = await this.service.create(thumbnails, vidoes, images);
+    const depot = await this.service.create(thumbnails, videos, images);
     return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());
   }
 
@@ -78,17 +78,16 @@ export class DepotsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async updateDepot(@Param('depotId') depotId: string, @Body() updateDepotDto: UpdateDepotDto) {
+  async updateDepot(@Param('depotId') depotId: string, updateDepotDto: UpdateDepotDto) {
     const depot = await this.service.updateById(depotId, updateDepotDto);
-
-    // 추가 로직 필요
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
   }
 
   @Delete(':depotId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(DepotDto, HttpStatus.OK) async deleteDepot(@Param('depotId') depotId: string) {
+  @ApiResponseEntity(DepotDto, HttpStatus.OK)
+  async deleteDepot(@Param('depotId') depotId: string) {
     const depot = await this.service.deleteById(depotId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
   }

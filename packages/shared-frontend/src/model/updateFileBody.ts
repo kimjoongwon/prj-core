@@ -4,8 +4,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type CreateDepotBody = {
-  thumbnails?: Blob[];
-  videos?: Blob[];
-  images?: Blob[];
+export type UpdateFileBody = {
+  file?: Blob;
 };
