@@ -3,7 +3,7 @@ import { Input, InputProps } from '../Input/Input';
 type State = { email: string };
 type EmailProps = InputProps<State>;
 
-export const EmailInput = observer(({ state, path = 'email' }: EmailProps) => {
+export const EmailInput = observer(({ state, path }: EmailProps) => {
   return (
     <Input
       type="email"
