@@ -25,6 +25,9 @@ export class DepotsService {
       where: { id },
       include: {
         files: {
+          where: {
+            removedAt: null,
+          },
           include: {
             classification: {
               include: {
@@ -153,11 +156,108 @@ export class DepotsService {
     };
   }
 
-  updateById(depotId: string, updateDepotDto: UpdateDepotDto) {
+  async updateById(
+    depotId: string,
+    thumbnails: Express.Multer.File[] = [],
+    videos: Express.Multer.File[] = [],
+    images: Express.Multer.File[] = [],
+  ) {
+    const tenantId = ContextProvider.getTenantId();
+
+    const imageCategory = await this.categoriesRepository.findFirst({
+      where: {
+        name: CategoryNames.IMAGE_CONTENT.name,
+      },
+    });
+
+    const videoCategory = await this.categoriesRepository.findFirst({
+      where: {
+        name: CategoryNames.VIDEO_CONTENT.name,
+      },
+    });
+
+    const thumbnailFiles =
+      (await Promise.all(
+        thumbnails?.map(async (file) => {
+          const url = await this.awsService.uploadToS3(
+            file.originalname,
+            file,
+            file.mimetype.split('/')[1],
+          );
+          return {
+            name: file.originalname,
+            url,
+            mimeType: file.mimetype,
+            size: file.size,
+            tenantId,
+            classification: {
+              create: {
+                category: {
+                  connect: { id: imageCategory.id },
+                },
+              },
+            },
+          };
+        }),
+      )) || [];
+
+    const videoFiles =
+      (await Promise.all(
+        videos.map(async (file) => {
+          const url = await this.awsService.uploadToS3(
+            file.originalname,
+            file,
+            file.mimetype.split('/')[1],
+          );
+          return {
+            name: file.originalname,
+            url,
+            mimeType: file.mimetype,
+            size: file.size,
+            tenantId,
+            classification: {
+              create: {
+                category: {
+                  connect: { id: videoCategory.id },
+                },
+              },
+            },
+          };
+        }),
+      )) || [];
+
+    const imageFiles =
+      (await Promise.all(
+        images.map(async (file) => {
+          const url = await this.awsService.uploadToS3(
+            file.originalname,
+            file,
+            file.mimetype.split('/')[1],
+          );
+
+          return {
+            name: file.originalname,
+            url,
+            mimeType: file.mimetype,
+            size: file.size,
+            tenantId,
+            classification: {
+              create: {
+                category: {
+                  connect: { id: imageCategory.id },
+                },
+              },
+            },
+          };
+        }),
+      )) || [];
+
     return this.repository.update({
       where: { id: depotId },
       data: {
-        ...updateDepotDto,
+        files: {
+          create: [...imageFiles, ...thumbnailFiles, ...videoFiles],
+        },
       },
     });
   }

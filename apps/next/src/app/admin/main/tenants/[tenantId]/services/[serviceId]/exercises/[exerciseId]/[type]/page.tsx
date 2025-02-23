@@ -5,13 +5,11 @@ import {
   Button,
   createExercise,
   ExerciseForm,
-  getCreateExerciseMutationOptions,
-  getUpdateExerciseMutationOptions,
   HStack,
+  updateExercise,
   useGetAdminMainExerciseEditPage,
 } from '@shared/frontend';
 import { PageBuilder } from '@shared/types';
-import { useMutation } from '@tanstack/react-query';
 import { toJS } from 'mobx';
 import { useParams } from 'next/navigation';
 
@@ -22,8 +20,6 @@ const ExerciseEditPage = () => {
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainExerciseEditPage(exerciseId, type);
   const page = response?.data as PageBuilder;
-
-  // const { m } = useMutation(getCreateExerciseMutationOptions());
 
   if (!isFetchedAfterMount) {
     return null;
@@ -36,8 +32,11 @@ const ExerciseEditPage = () => {
         <Button
           color="primary"
           onPress={() => {
-            console.log(toJS(page.state?.form.inputs));
-            createExercise(toJS(page.state?.form.inputs));
+            if (exerciseId === 'new') {
+              createExercise(toJS(page.state?.form.inputs));
+            } else {
+              updateExercise(exerciseId, toJS(page.state?.form.inputs));
+            }
           }}
         >
           저장

@@ -22,6 +22,7 @@ import { observer } from 'mobx-react-lite';
 import { SortableMedia } from './SortableMedia/SortableMedia';
 import { FileDto } from '../../../model';
 import { v4 } from 'uuid';
+
 export interface FileUploaderProps {
   label?: string;
   selectionMode: 'single' | 'multiple';
@@ -31,6 +32,7 @@ export interface FileUploaderProps {
     type: FileUploaderProps['type'],
     fileDtos: Partial<FileDto>[],
   ) => void;
+  onFileRemove?: (fileDto: Partial<FileDto>) => void;
   value: Partial<FileDto>[];
 }
 
@@ -40,6 +42,7 @@ export const FileUploader = observer(
     maxFiles = 9,
     type = 'image',
     onFilesChange,
+    onFileRemove,
     label,
     value,
   }: FileUploaderProps) => {
@@ -79,7 +82,7 @@ export const FileUploader = observer(
           id: v4(),
           name: file.name,
           url: URL.createObjectURL(file),
-          mimeType: file.type.startsWith('image/') ? 'image' : 'video',
+          mimeType: file.type,
         }));
 
         if (selectionMode === 'single') {
@@ -94,9 +97,14 @@ export const FileUploader = observer(
     };
 
     const removeFile = (id: string) => {
-      setFiles(files.filter(file => file.id !== id));
+      const fileToRemove = files.find(file => file.id === id);
+      if (fileToRemove) {
+        setFiles(files.filter(file => file.id !== id));
+        if (onFileRemove) {
+          onFileRemove(fileToRemove);
+        }
+      }
     };
-    console.log('files', files);
 
     return (
       <Card className="p-6" style={{ width: '400px' }}>

@@ -1,7 +1,13 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { FileUploader, FileUploaderProps } from '../FileUploader/FileUploader';
 import { get, set } from 'lodash-es';
-import { createDepot, getDepotById, updateFile } from '../../../apis';
+import {
+  createDepot,
+  getDepotById,
+  removeFileById,
+  updateDepotById,
+  updateFileById,
+} from '../../../apis';
 import { useEffect } from 'react';
 import { DepotService } from '../../../store';
 import { reaction, toJS } from 'mobx';
@@ -58,7 +64,7 @@ export const DepotUploader = observer(
             );
 
             localState.videos = depot.files.filter(
-              file => file.classification?.category.name === '동영상',
+              file => file.classification?.category.name === '영상',
             );
           }
         }
@@ -76,16 +82,28 @@ export const DepotUploader = observer(
       }
       // depot이 있느냐 없느냐
       if (localState.depotId) {
-        await Promise.all(
+        const files = await Promise.all(
           fileDtos.map(async fileDto => {
             const file = await DepotService.urlToFile(
               fileDto.url,
               fileDto.name,
               fileDto.mimeType,
             );
-            await updateFile(fileDto.id, { file });
+            return file;
           }),
         );
+
+        if (type === 'image') {
+          await updateDepotById(localState.depotId, {
+            images: files,
+          });
+        }
+
+        if (type === 'video') {
+          await updateDepotById(localState.depotId, {
+            videos: files,
+          });
+        }
 
         const res = await getDepotById(localState.depotId);
         localState.depotId = res.data.id;
@@ -134,6 +152,10 @@ export const DepotUploader = observer(
           label="이미지"
           value={toJS(localState.images)}
           onFilesChange={handleFilesChange}
+          onFileRemove={async (fileDto: FileDto) => {
+            await removeFileById(fileDto.id);
+            console.log('removed fileDto', fileDto);
+          }}
         />
         <FileUploader
           {...rest}
@@ -141,6 +163,10 @@ export const DepotUploader = observer(
           label="동영상"
           value={toJS(localState.videos)}
           onFilesChange={handleFilesChange}
+          onFileRemove={async (fileDto: FileDto) => {
+            await removeFileById(fileDto.id);
+            console.log('removed fileDto', fileDto);
+          }}
         />
       </div>
     );

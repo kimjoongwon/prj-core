@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   UploadedFiles,
-  UploadedFile,
 } from '@nestjs/common';
 import { Auth, ApiResponseEntity } from '../decorators';
 import { CreateFileDto, FileDto } from '../dtos';
@@ -41,20 +40,32 @@ export class FilesController {
     return new ResponseEntity(HttpStatus.CREATED, 'success', file.toDto());
   }
 
+  @Patch(':fileId/removedAt')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(FileDto, HttpStatus.OK)
+  async removeFileById(@Param('fileId') fileId: string) {
+    const fileEntity = await this.service.removeById(fileId);
+    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity.toDto());
+  }
+
   @Patch(':fileId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileDto, HttpStatus.OK)
   @ApiFile(
     {
-      name: 'file',
+      name: 'files',
     },
     {
       isRequired: false,
     },
   )
-  async updateFile(@Param('fileId') fileId: string, @UploadedFile() file: Express.Multer.File) {
-    const fileEntity = await this.service.updateById(fileId, file);
+  async updateFileById(
+    @Param('fileId') fileId: string,
+    @UploadedFiles() { files }: { files: Express.Multer.File[] },
+  ) {
+    const fileEntity = await this.service.updateById(fileId, files?.[0]);
     return new ResponseEntity(HttpStatus.OK, 'success', fileEntity.toDto());
   }
 }
