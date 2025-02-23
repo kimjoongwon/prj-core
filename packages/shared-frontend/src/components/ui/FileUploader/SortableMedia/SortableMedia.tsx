@@ -28,7 +28,7 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
   };
 
   const url = media.url;
-
+  console.log('media', media);
   return (
     <>
       <div

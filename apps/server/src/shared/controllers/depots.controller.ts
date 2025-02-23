@@ -78,8 +78,39 @@ export class DepotsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(DepotDto, HttpStatus.OK)
-  async updateDepot(@Param('depotId') depotId: string, updateDepotDto: UpdateDepotDto) {
-    const depot = await this.service.updateById(depotId, updateDepotDto);
+  @ApiFile(
+    [
+      {
+        name: 'thumbnails',
+        isArray: true,
+      },
+      {
+        name: 'videos',
+        isArray: true,
+      },
+      {
+        name: 'images',
+        isArray: true,
+      },
+    ],
+    {
+      isRequired: false,
+    },
+  )
+  async updateDepotById(
+    @Param('depotId') depotId: string,
+    @UploadedFiles()
+    {
+      thumbnails,
+      videos,
+      images,
+    }: {
+      thumbnails: Express.Multer.File[];
+      videos: Express.Multer.File[];
+      images: Express.Multer.File[];
+    },
+  ) {
+    const depot = await this.service.updateById(depotId, thumbnails, videos, images);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(DepotDto, depot));
   }
 

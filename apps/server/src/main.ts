@@ -6,6 +6,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { CustomValidationPipe } from './shared/pipes/custom-validation.pipe';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
@@ -13,13 +14,13 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
   app.set('query parser', 'extended');
-  app.useGlobalFilters(
-    new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
-    // new HttpExceptionFilter(),
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
   );
-
-  app.useGlobalPipes(new CustomValidationPipe());
-  // app.useGlobalInterceptors();
 
   const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();
 

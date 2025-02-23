@@ -57,4 +57,11 @@ export class FilesService {
       data: fileDto,
     });
   }
+
+  removeById(id: string) {
+    return this.repository.update({
+      where: { id },
+      data: { removedAt: new Date() },
+    });
+  }
 }
