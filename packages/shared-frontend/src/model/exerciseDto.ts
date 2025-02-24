@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { CreateTaskDto } from './createTaskDto';
 
 export interface ExerciseDto {
   id: string;
@@ -14,4 +15,5 @@ export interface ExerciseDto {
   taskId: string;
   duration: number;
   count: number;
+  task?: CreateTaskDto;
 }

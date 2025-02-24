@@ -6,6 +6,6 @@
 
 export type CreateDepotBody = {
   thumbnails?: Blob[];
-  vidoes?: Blob[];
+  videos?: Blob[];
   images?: Blob[];
 };

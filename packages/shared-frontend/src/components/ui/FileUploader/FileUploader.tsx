@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Upload } from 'lucide-react';
 import {
   DndContext,
@@ -28,7 +28,11 @@ export interface FileUploaderProps {
   selectionMode: 'single' | 'multiple';
   maxFiles?: number;
   type: 'image' | 'video' | 'all';
-  onFilesChange?: (files: Partial<FileDto>[]) => void;
+  onFilesChange?: (
+    type: FileUploaderProps['type'],
+    fileDtos: Partial<FileDto>[],
+  ) => void;
+  onFileRemove?: (fileDto: Partial<FileDto>) => void;
   value: Partial<FileDto>[];
 }
 
@@ -38,16 +42,15 @@ export const FileUploader = observer(
     maxFiles = 9,
     type = 'image',
     onFilesChange,
+    onFileRemove,
     label,
     value,
   }: FileUploaderProps) => {
-    const [files, setFiles] = useState<FileUploaderProps['value']>(value);
+    const [files, setFiles] = useState<FileUploaderProps['value']>([]);
 
     useEffect(() => {
-      if (onFilesChange) {
-        onFilesChange(files);
-      }
-    }, [files]);
+      setFiles(value);
+    }, [value]);
 
     const sensors = useSensors(
       useSensor(PointerSensor, {
@@ -79,22 +82,29 @@ export const FileUploader = observer(
           id: v4(),
           name: file.name,
           url: URL.createObjectURL(file),
-          mimeType: file.type.startsWith('image/') ? 'image' : 'video',
+          mimeType: file.type,
         }));
 
         if (selectionMode === 'single') {
           setFiles([fileDtos[0]]);
+          onFilesChange(type, fileDtos);
         } else {
           setFiles(prevFiles => [...prevFiles, ...fileDtos].slice(0, maxFiles));
+          onFilesChange(type, fileDtos);
         }
       }
       e.target.value = '';
     };
 
     const removeFile = (id: string) => {
-      setFiles(files.filter(file => file.id !== id));
+      const fileToRemove = files.find(file => file.id === id);
+      if (fileToRemove) {
+        setFiles(files.filter(file => file.id !== id));
+        if (onFileRemove) {
+          onFileRemove(fileToRemove);
+        }
+      }
     };
-    console.log('files', files);
 
     return (
       <Card className="p-6" style={{ width: '400px' }}>

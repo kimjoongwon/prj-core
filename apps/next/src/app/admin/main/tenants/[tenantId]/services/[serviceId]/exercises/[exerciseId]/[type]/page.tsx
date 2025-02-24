@@ -1,8 +1,16 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainExerciseEditPage } from '@shared/frontend';
-import { RouteBuilder } from '@shared/types';
+import { Form } from '@heroui/react';
+import {
+  Button,
+  createExercise,
+  ExerciseForm,
+  HStack,
+  updateExercise,
+  useGetAdminMainExerciseEditPage,
+} from '@shared/frontend';
+import { PageBuilder } from '@shared/types';
+import { toJS } from 'mobx';
 import { useParams } from 'next/navigation';
 
 const ExerciseEditPage = () => {
@@ -11,13 +19,32 @@ const ExerciseEditPage = () => {
   const type = params.type as 'edit' | 'add';
   const { data: response, isFetchedAfterMount } =
     useGetAdminMainExerciseEditPage(exerciseId, type);
-  const page = response?.data as RouteBuilder;
+  const page = response?.data as PageBuilder;
 
   if (!isFetchedAfterMount) {
     return null;
   }
 
-  return <PageBuilder pageBuilder={page} />;
+  return (
+    <Form className="flex flex-col w-full">
+      <HStack className="flex-grow w-full justify-between">
+        <Button>목록</Button>
+        <Button
+          color="primary"
+          onPress={() => {
+            if (exerciseId === 'new') {
+              createExercise(toJS(page.state?.form.inputs));
+            } else {
+              updateExercise(exerciseId, toJS(page.state?.form.inputs));
+            }
+          }}
+        >
+          저장
+        </Button>
+      </HStack>
+      <ExerciseForm state={page.state?.form.inputs} />
+    </Form>
+  );
 };
 
 export default ExerciseEditPage;

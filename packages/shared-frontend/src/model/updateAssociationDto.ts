@@ -6,6 +6,8 @@
 
 export interface UpdateAssociationDto {
   /** @nullable */
+  fileId?: string | null;
+  /** @nullable */
   contentId?: string | null;
   /** @nullable */
   timelineId?: string | null;

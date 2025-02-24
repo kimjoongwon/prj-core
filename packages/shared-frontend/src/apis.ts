@@ -41,7 +41,7 @@ import type {
   CreateDepot201AllOf,
   CreateDepotBody,
   CreateExercise200AllOf,
-  CreateExerciseBody,
+  CreateExerciseDto,
   CreateFile201AllOf,
   CreateFileDto,
   CreateGroupDto,
@@ -161,9 +161,8 @@ import type {
   RemoveAssociations200AllOf,
   RemoveClassification200AllOf,
   RemoveClassifications200AllOf,
-  RemoveDepot200AllOf,
-  RemoveDepots200AllOf,
   RemoveExercise200AllOf,
+  RemoveFileById200AllOf,
   RemoveGroups200AllOf,
   RemoveProgram200AllOf,
   RemovePrograms200AllOf,
@@ -193,10 +192,12 @@ import type {
   UpdateCategoryDto,
   UpdateClassification200AllOf,
   UpdateClassificationDto,
-  UpdateDepot200AllOf,
-  UpdateDepotDto,
+  UpdateDepotById200AllOf,
+  UpdateDepotByIdBody,
   UpdateExercise200AllOf,
   UpdateExerciseDto,
+  UpdateFileById200AllOf,
+  UpdateFileByIdBody,
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdateProgram200AllOf,
@@ -9578,8 +9579,8 @@ export const createDepot = (
 if(createDepotBody?.thumbnails !== undefined) {
  createDepotBody?.thumbnails.forEach(value => formData.append('thumbnails', value));
  }
-if(createDepotBody?.vidoes !== undefined) {
- createDepotBody?.vidoes.forEach(value => formData.append('vidoes', value));
+if(createDepotBody?.videos !== undefined) {
+ createDepotBody?.videos.forEach(value => formData.append('videos', value));
  }
 if(createDepotBody?.images !== undefined) {
  createDepotBody?.images.forEach(value => formData.append('images', value));
@@ -10006,26 +10007,36 @@ export function useGetDepotByIdSuspenseInfinite<TData = InfiniteData<Awaited<Ret
 
 
 
-export const updateDepot = (
+export const updateDepotById = (
     depotId: string,
-    updateDepotDto: BodyType<UpdateDepotDto>,
+    updateDepotByIdBody?: BodyType<UpdateDepotByIdBody>,
  options?: SecondParameter<typeof customInstance>,) => {
       
-      
-      return customInstance<UpdateDepot200AllOf>(
+      const formData = new FormData();
+if(updateDepotByIdBody?.thumbnails !== undefined) {
+ updateDepotByIdBody?.thumbnails.forEach(value => formData.append('thumbnails', value));
+ }
+if(updateDepotByIdBody?.videos !== undefined) {
+ updateDepotByIdBody?.videos.forEach(value => formData.append('videos', value));
+ }
+if(updateDepotByIdBody?.images !== undefined) {
+ updateDepotByIdBody?.images.forEach(value => formData.append('images', value));
+ }
+
+      return customInstance<UpdateDepotById200AllOf>(
       {url: `/api/v1/depots/${depotId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateDepotDto
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
     },
       options);
     }
   
 
 
-export const getUpdateDepotMutationOptions = <TData = Awaited<ReturnType<typeof updateDepot>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const getUpdateDepotByIdMutationOptions = <TData = Awaited<ReturnType<typeof updateDepotById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotByIdBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
-const mutationKey = ['updateDepot'];
+const mutationKey = ['updateDepotById'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -10035,31 +10046,31 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDepot>>, {depotId: string;data: BodyType<UpdateDepotDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDepotById>>, {depotId: string;data: BodyType<UpdateDepotByIdBody>}> = (props) => {
           const {depotId,data} = props ?? {};
 
-          return  updateDepot(depotId,data,requestOptions)
+          return  updateDepotById(depotId,data,requestOptions)
         }
 
         
 
 
-  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotDto>}, TContext>}
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotByIdBody>}, TContext>}
 
-    export type UpdateDepotMutationResult = NonNullable<Awaited<ReturnType<typeof updateDepot>>>
-    export type UpdateDepotMutationBody = BodyType<UpdateDepotDto>
-    export type UpdateDepotMutationError = ErrorType<void>
+    export type UpdateDepotByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateDepotById>>>
+    export type UpdateDepotByIdMutationBody = BodyType<UpdateDepotByIdBody>
+    export type UpdateDepotByIdMutationError = ErrorType<void>
 
-    export const useUpdateDepot = <TData = Awaited<ReturnType<typeof updateDepot>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useUpdateDepotById = <TData = Awaited<ReturnType<typeof updateDepotById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string;data: BodyType<UpdateDepotByIdBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
         TData,
         TError,
-        {depotId: string;data: BodyType<UpdateDepotDto>},
+        {depotId: string;data: BodyType<UpdateDepotByIdBody>},
         TContext
       > => {
 
-      const mutationOptions = getUpdateDepotMutationOptions(options);
+      const mutationOptions = getUpdateDepotByIdMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -10115,118 +10126,6 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getDeleteDepotMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeDepots = (
-    removeDepotsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveDepots200AllOf>(
-      {url: `/api/v1/depots/removedAt`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: removeDepotsBody
-    },
-      options);
-    }
-  
-
-
-export const getRemoveDepotsMutationOptions = <TData = Awaited<ReturnType<typeof removeDepots>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-) => {
-const mutationKey = ['removeDepots'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeDepots>>, {data: BodyType<string[]>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  removeDepots(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<string[]>}, TContext>}
-
-    export type RemoveDepotsMutationResult = NonNullable<Awaited<ReturnType<typeof removeDepots>>>
-    export type RemoveDepotsMutationBody = BodyType<string[]>
-    export type RemoveDepotsMutationError = ErrorType<void>
-
-    export const useRemoveDepots = <TData = Awaited<ReturnType<typeof removeDepots>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        TData,
-        TError,
-        {data: BodyType<string[]>},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveDepotsMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
-export const removeDepot = (
-    depotId: string,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveDepot200AllOf>(
-      {url: `/api/v1/depots/${depotId}/removedAt`, method: 'PATCH'
-    },
-      options);
-    }
-  
-
-
-export const getRemoveDepotMutationOptions = <TData = Awaited<ReturnType<typeof removeDepot>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-) => {
-const mutationKey = ['removeDepot'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeDepot>>, {depotId: string}> = (props) => {
-          const {depotId} = props ?? {};
-
-          return  removeDepot(depotId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{depotId: string}, TContext>}
-
-    export type RemoveDepotMutationResult = NonNullable<Awaited<ReturnType<typeof removeDepot>>>
-    
-    export type RemoveDepotMutationError = ErrorType<void>
-
-    export const useRemoveDepot = <TData = Awaited<ReturnType<typeof removeDepot>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{depotId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationResult<
-        TData,
-        TError,
-        {depotId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getRemoveDepotMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
@@ -10417,53 +10316,15 @@ export function useGetExercisesByQuerySuspenseInfinite<TData = InfiniteData<Awai
 
 
 export const createExercise = (
-    createExerciseBody?: BodyType<CreateExerciseBody>,
+    createExerciseDto: BodyType<CreateExerciseDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
-      const formData = new FormData();
-if(createExerciseBody?.duration !== undefined) {
- formData.append('duration', createExerciseBody.duration.toString())
- }
-if(createExerciseBody?.count !== undefined) {
- formData.append('count', createExerciseBody.count.toString())
- }
-if(createExerciseBody?.name !== undefined) {
- formData.append('name', createExerciseBody.name)
- }
-if(createExerciseBody?.label !== undefined) {
- formData.append('label', createExerciseBody.label)
- }
-if(createExerciseBody?.title !== undefined) {
- formData.append('title', createExerciseBody.title)
- }
-if(createExerciseBody?.type !== undefined) {
- formData.append('type', createExerciseBody.type)
- }
-if(createExerciseBody?.description !== undefined) {
- formData.append('description', createExerciseBody.description)
- }
-if(createExerciseBody?.text !== undefined) {
- formData.append('text', createExerciseBody.text)
- }
-if(createExerciseBody?.images !== undefined) {
- formData.append('images', createExerciseBody.images)
- }
-if(createExerciseBody?.videos !== undefined) {
- formData.append('videos', createExerciseBody.videos)
- }
-
-if(createExerciseBody?.thumbnails !== undefined) {
- createExerciseBody?.thumbnails.forEach(value => formData.append('thumbnails', value));
- }
-if(createExerciseBody?.exerciseVideos !== undefined) {
- createExerciseBody?.exerciseVideos.forEach(value => formData.append('exerciseVideos', value));
- }
-
+      
       return customInstance<CreateExercise200AllOf>(
       {url: `/api/v1/exercises`, method: 'POST',
-      headers: {'Content-Type': 'multipart/form-data', },
-       data: formData, signal
+      headers: {'Content-Type': 'application/json', },
+      data: createExerciseDto, signal
     },
       options);
     }
@@ -10471,7 +10332,7 @@ if(createExerciseBody?.exerciseVideos !== undefined) {
 
 
 export const getCreateExerciseMutationOptions = <TData = Awaited<ReturnType<typeof createExercise>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
 const mutationKey = ['createExercise'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -10483,7 +10344,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExercise>>, {data: BodyType<CreateExerciseBody>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createExercise>>, {data: BodyType<CreateExerciseDto>}> = (props) => {
           const {data} = props ?? {};
 
           return  createExercise(data,requestOptions)
@@ -10492,18 +10353,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
         
 
 
-  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>}
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseDto>}, TContext>}
 
     export type CreateExerciseMutationResult = NonNullable<Awaited<ReturnType<typeof createExercise>>>
-    export type CreateExerciseMutationBody = BodyType<CreateExerciseBody>
+    export type CreateExerciseMutationBody = BodyType<CreateExerciseDto>
     export type CreateExerciseMutationError = ErrorType<void>
 
     export const useCreateExercise = <TData = Awaited<ReturnType<typeof createExercise>>, TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: BodyType<CreateExerciseDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
         TData,
         TError,
-        {data: BodyType<CreateExerciseBody>},
+        {data: BodyType<CreateExerciseDto>},
         TContext
       > => {
 
@@ -11048,6 +10909,68 @@ export function useGetFileByIdSuspenseInfinite<TData = InfiniteData<Awaited<Retu
 
 
 
+export const updateFileById = (
+    fileId: string,
+    updateFileByIdBody?: BodyType<UpdateFileByIdBody>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      const formData = new FormData();
+if(updateFileByIdBody?.files !== undefined) {
+ formData.append('files', updateFileByIdBody.files)
+ }
+
+      return customInstance<UpdateFileById200AllOf>(
+      {url: `/api/v1/file/${fileId}`, method: 'PATCH',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      options);
+    }
+  
+
+
+export const getUpdateFileByIdMutationOptions = <TData = Awaited<ReturnType<typeof updateFileById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{fileId: string;data: BodyType<UpdateFileByIdBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['updateFileById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFileById>>, {fileId: string;data: BodyType<UpdateFileByIdBody>}> = (props) => {
+          const {fileId,data} = props ?? {};
+
+          return  updateFileById(fileId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{fileId: string;data: BodyType<UpdateFileByIdBody>}, TContext>}
+
+    export type UpdateFileByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateFileById>>>
+    export type UpdateFileByIdMutationBody = BodyType<UpdateFileByIdBody>
+    export type UpdateFileByIdMutationError = ErrorType<void>
+
+    export const useUpdateFileById = <TData = Awaited<ReturnType<typeof updateFileById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{fileId: string;data: BodyType<UpdateFileByIdBody>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {fileId: string;data: BodyType<UpdateFileByIdBody>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateFileByIdMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const createFile = (
     createFileDto: BodyType<CreateFileDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
@@ -11102,6 +11025,61 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getCreateFileMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const removeFileById = (
+    fileId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<RemoveFileById200AllOf>(
+      {url: `/api/v1/file/${fileId}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveFileByIdMutationOptions = <TData = Awaited<ReturnType<typeof removeFileById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{fileId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+) => {
+const mutationKey = ['removeFileById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeFileById>>, {fileId: string}> = (props) => {
+          const {fileId} = props ?? {};
+
+          return  removeFileById(fileId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions } as UseMutationOptions<TData, TError,{fileId: string}, TContext>}
+
+    export type RemoveFileByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeFileById>>>
+    
+    export type RemoveFileByIdMutationError = ErrorType<void>
+
+    export const useRemoveFileById = <TData = Awaited<ReturnType<typeof removeFileById>>, TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{fileId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        TData,
+        TError,
+        {fileId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveFileByIdMutationOptions(options);
 
       return useMutation(mutationOptions);
     }
