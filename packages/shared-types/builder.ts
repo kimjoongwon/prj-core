@@ -1,18 +1,6 @@
 import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
-export type Validation = {
-  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
-  conditions: {
-    required?: { value: boolean; message: string };
-    minLength?: { value: number; message: string };
-    maxLength?: { value: number; message: string };
-    min?: { value: number; message: string };
-    max?: { value: number; message: string };
-    patterns?: { value: string; message: string }[];
-  };
-};
-
 export type Validations = Record<string, Validation>;
 
 export interface CustomPageBuilder {
