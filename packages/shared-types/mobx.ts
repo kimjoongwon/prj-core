@@ -46,7 +46,7 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
   ? { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T]
   : '';
 
-export interface MobxProps<T> {
+export interface MobxProps<T = any> {
   path: Paths<T, 4>;
   state: T;
 }

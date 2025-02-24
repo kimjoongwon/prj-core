@@ -1,27 +1,21 @@
 import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
-export type Validations = Record<string, Validation>;
-
-export interface CustomPageBuilder {
-  state: PageState;
-  validations?: Validations;
-}
+export type Validations = Record<string, any>;
+export type Validation = {
+  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
+  required?: { value: boolean; message: string };
+  minLength?: { value: number; message: string };
+  maxLength?: { value: number; message: string };
+  min?: { value: number; message: string };
+  max?: { value: number; message: string };
+  patterns?: { value: string; message: string }[];
+};
 
 export type ValidationRecord<T extends object> = Omit<
   Record<keyof T, Validation>,
   'id' | 'createdAt' | 'updatedAt' | 'removedAt' | 'seq'
 >;
-
-export interface Validation {
-  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
-  minLength?: { value: number; message: string };
-  maxLength?: { value: number; message: string };
-  min?: { value: number; message: string };
-  max?: { value: number; message: string };
-  pattern?: { value: string; message: string };
-  required?: { value: boolean; message: string };
-}
 
 export interface InputBuilder {
   visibleCondition?: {
@@ -38,7 +32,7 @@ export interface InputBuilder {
 
 export interface FormBuilder {
   name?: string;
-  validations?: any;
+  validations?: Validations;
   isInValid?: boolean;
   sections?: SectionBuilder[];
   button?: ButtonBuilder;
@@ -130,8 +124,11 @@ export interface CellMutation {
 
 export type Key = string | number;
 
-export interface PageState {
-  form?: any;
+export interface PageState<CDO> {
+  form?: {
+    inputs: CDO;
+    errorMessages?: string[];
+  };
   dataGrid?: {
     selectedRowIds?: Key[] | 'all';
     selectedRowId?: Key;
@@ -150,10 +147,10 @@ export interface DataGridBuilder {
   table: TableBuilder;
 }
 
-export interface PageBuilder {
+export interface PageBuilder<CDO = any> {
   type?: 'Outlet' | 'Page';
   name?: string;
-  state?: PageState;
+  state?: PageState<CDO>;
   query?: Query;
   form?: FormBuilder;
   dataGrid?: DataGridBuilder;

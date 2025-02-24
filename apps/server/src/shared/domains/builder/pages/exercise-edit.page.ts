@@ -29,10 +29,10 @@ export class ExerciseEditPage {
     };
 
     const tenantId = ContextProvider.getTenantId();
-    const page: PageBuilder = {
+    const page: PageBuilder<CreateExerciseDto> = {
       state: {
         form: {
-          inputs: createExerciseDto as CreateExerciseDto,
+          inputs: createExerciseDto,
         },
       },
       form: {

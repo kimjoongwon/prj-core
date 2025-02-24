@@ -56,7 +56,7 @@ export class AuthEndpoint {
     res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
     res.cookie('tenantId', req.user.tenants[0].id, { httpOnly: true });
-    console.log('-----------?');
+
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,

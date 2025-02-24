@@ -18,7 +18,6 @@ import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { ExercisesService } from '../services/exercises.service';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiFile } from '../decorators/swagger.schema';
 
 @ApiTags('EXERCISES')
 @Controller()

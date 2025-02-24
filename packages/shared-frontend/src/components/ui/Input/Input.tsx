@@ -1,15 +1,20 @@
 'use client';
 
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useEffect } from 'react';
 import { MobxProps } from '../types';
 import { InputProps as NextUIInputProps } from '@heroui/react';
 import { useMobxHookForm } from '../../../hooks';
-import { action } from 'mobx';
+import { action, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { InputView } from './InputView';
+import { InputValidation } from '../InputValidation/InputValidation';
+import { Validation } from '@shared/types';
 
-export type InputProps<T> = MobxProps<T> & NextUIInputProps;
+export type InputProps<T> = MobxProps<T> &
+  NextUIInputProps & {
+    validation?: Validation;
+  };
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
   const {
@@ -19,6 +24,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
     errorMessage = ' ',
     type,
     size = 'sm',
+    validation,
     ...rest
   } = props;
 
