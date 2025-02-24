@@ -8,3 +8,10 @@ export interface Route {
   onClick?: () => void;
   children?: Route[];
 }
+
+export type CommonEntities =
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'removedAt'
+  | 'seq';

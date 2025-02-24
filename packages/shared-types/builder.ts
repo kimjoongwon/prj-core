@@ -1,21 +1,23 @@
 import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
-export interface ValidationBuilder {
+export type Validation = {
   timings?: ('onBlur' | 'onChange' | 'onFocus')[];
-  type?: string | number | boolean;
-  minLength?: number;
-  maxLength?: number;
-  min?: number;
-  max?: number;
-  pattern?: string;
-  required?: boolean;
-  errorMessages?: Partial<
-    Record<
-      'minLength' | 'maxLength' | 'min' | 'max' | 'pattern' | 'required',
-      string
-    >
-  >;
+  conditions: {
+    required?: { value: boolean; message: string };
+    minLength?: { value: number; message: string };
+    maxLength?: { value: number; message: string };
+    min?: { value: number; message: string };
+    max?: { value: number; message: string };
+    patterns?: { value: string; message: string }[];
+  };
+};
+
+export type Validations = Record<string, Validation>;
+
+export interface CustomPageBuilder {
+  state: PageState;
+  validations?: Validations;
 }
 
 export interface InputBuilder {
@@ -28,12 +30,11 @@ export interface InputBuilder {
   type?: string;
   props?: any;
   path?: string;
-  validation?: ValidationBuilder;
+  validation?: Validation;
 }
 
 export interface FormBuilder {
   name?: string;
-  isInValid?: boolean;
   sections: SectionBuilder[];
   button?: ButtonBuilder;
 }
