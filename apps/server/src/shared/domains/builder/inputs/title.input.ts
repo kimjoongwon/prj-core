@@ -12,12 +12,11 @@ export class TitleInput {
         placeholder: '제목을 입력해주세요.',
       },
       validation: {
-        type: 'string',
         timings: ['onChange'],
-        errorMessages: {
-          required: '제목을 입력해주세요.',
+        required: {
+          value: true,
+          message: '제목을 입력해주세요.',
         },
-        required: true,
       },
     };
 

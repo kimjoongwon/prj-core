@@ -17,12 +17,11 @@ export class TextInput {
         placeholder: `${this.getLabel()}을 입력해주세요.`,
       },
       validation: {
-        type: 'string',
         timings: ['onChange'],
-        errorMessages: {
-          required: `${this.getLabel()}을 입력해주세요.`,
+        required: {
+          value: true,
+          message: `${this.getLabel()}을 입력해주세요.`,
         },
-        required: true,
       },
     };
 

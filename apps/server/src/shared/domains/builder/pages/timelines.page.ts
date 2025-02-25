@@ -7,7 +7,7 @@ export class TimelinesPage {
       name: '목록',
       state: {
         form: {
-          data: {
+          inputs: {
             categoryId: '',
             tenantId: '',
             timelineName: '',

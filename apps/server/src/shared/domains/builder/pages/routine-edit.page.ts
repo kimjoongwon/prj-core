@@ -30,7 +30,7 @@ export class RoutineEditPage {
     };
 
     if (routineId !== 'new' && type === 'edit') {
-      page.state.form = routine;
+      page.state.form.inputs = routine;
       page.form.button.mutation = {
         name: 'updateRoutine',
         id: routineId,

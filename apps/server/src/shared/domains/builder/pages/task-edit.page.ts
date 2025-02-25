@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
 import { NameInput } from '../inputs/name.input';
-import { CreateTaskDto } from '../../../dtos';
 import { LabelInput } from '../inputs/label.input';
 import { TitleInput } from '../inputs/title.input';
 import { DescriptionInput } from '../inputs/description.input';
@@ -30,7 +29,7 @@ export class TaskEditPage {
     const page: PageBuilder = {
       state: {
         form: {
-          data: {},
+          inputs: {},
         },
         dataGrid: {
           selectedRowIds: [],

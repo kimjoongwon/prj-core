@@ -13,12 +13,11 @@ export class PasswordInput {
         placeholder: '비밀번호를 입력해주세요.',
       },
       validation: {
-        type: 'string',
         timings: ['onBlur'],
-        errorMessages: {
-          required: '비밀번호를 입력해주세요.',
+        required: {
+          value: true,
+          message: '비밀번호을 입력해주세요.',
         },
-        required: true,
       },
     };
 

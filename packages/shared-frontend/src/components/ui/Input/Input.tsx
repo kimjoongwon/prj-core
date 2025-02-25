@@ -1,14 +1,13 @@
 'use client';
 
-import { ChangeEventHandler, useEffect } from 'react';
+import { ChangeEventHandler } from 'react';
 import { MobxProps } from '../types';
 import { InputProps as NextUIInputProps } from '@heroui/react';
 import { useMobxHookForm } from '../../../hooks';
-import { action, reaction } from 'mobx';
+import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { InputView } from './InputView';
-import { InputValidation } from '../InputValidation/InputValidation';
 import { Validation } from '@shared/types';
 
 export type InputProps<T> = MobxProps<T> &
@@ -21,6 +20,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
     path = '',
     state = {},
     onChange,
+    onBlur,
     errorMessage = ' ',
     type,
     size = 'sm',
@@ -43,15 +43,17 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
     },
   );
 
+  const handleOnBlur: NextUIInputProps['onBlur'] = e => {
+    onBlur && onBlur(e.target.value as any);
+  };
+
   return (
     <InputView
       {...rest}
       type={type}
       size={size}
       onChange={handleChange}
-      // onBlur={e => {
-      //   rest?.onBlur?.(e.target.value);
-      // }}
+      onBlur={handleOnBlur}
       errorMessage={errorMessage}
       value={String(localState.value)}
     />

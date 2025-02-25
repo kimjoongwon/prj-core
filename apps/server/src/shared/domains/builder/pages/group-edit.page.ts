@@ -12,7 +12,7 @@ export class GroupEditPage {
       type: 'Page',
       state: {
         form: {
-          data: {},
+          inputs: {},
         },
       },
       form: {

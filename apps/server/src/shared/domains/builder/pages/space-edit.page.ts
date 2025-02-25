@@ -12,7 +12,7 @@ export class SpaceEditPage {
       name: '새편집',
       state: {
         form: {
-          data: {},
+          inputs: {},
         },
       },
       form: {

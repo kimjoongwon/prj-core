@@ -19,7 +19,7 @@ export class CategoryPage {
       },
       state: {
         form: {
-          data: category,
+          inputs: category,
         },
       },
       name: '카테고리',

@@ -8,7 +8,7 @@ export class CategoryAddPage {
       name: '추가',
       state: {
         form: {
-          data: {
+          inputs: {
             name: '',
             type: 'LEAF',
             parentId: null,

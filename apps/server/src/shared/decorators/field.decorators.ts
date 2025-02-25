@@ -39,7 +39,7 @@ import {
   IsUndefinable,
 } from './validator.decorators';
 import { Constructor } from '../constants/types';
-import { InputBuilder, ValidationBuilder } from '@shared/types';
+import { InputBuilder } from '@shared/types';
 import { inputModules } from '../domains';
 
 interface IFieldOptions extends Omit<InputProps, 'type'> {
@@ -90,27 +90,6 @@ export function NumberField(
   options: Omit<ApiPropertyOptions, 'type'> & INumberFieldOptions = {},
 ): PropertyDecorator {
   const decorators = [Type(() => Number)];
-  decorators.push(Default(options.default));
-  decorators.push(
-    Input({
-      type: options.formType || 'Input',
-      props: {
-        type: 'number',
-        label: options.label,
-        placeholder: options.placeholder,
-      } as InputProps,
-      validation: {
-        type: 'number',
-        min: options.min,
-        max: options.max,
-        required: options.required || true,
-        errorMessages: {
-          min: options.min ? `최소값은 ${options.min}입니다.` : undefined,
-          max: options.max ? `최대값은 ${options.max}입니다.` : undefined,
-        },
-      },
-    }),
-  );
 
   decorators.push(SectionName(options.sectionName));
 
@@ -155,11 +134,11 @@ export function NumberFieldOptional(
   return applyDecorators(IsUndefinable(), NumberField({ required: false, ...options }));
 }
 
-export function Validation(validation: ValidationBuilder) {
-  return (target: any, propertyKey: string) => {
-    Reflect.defineMetadata(ValidationKey, validation, target, propertyKey);
-  };
-}
+// export function Validation(validation: ValidationBuilder) {
+//   return (target: any, propertyKey: string) => {
+//     Reflect.defineMetadata(ValidationKey, validation, target, propertyKey);
+//   };
+// }
 
 export function FormType(type: keyof typeof inputModules) {
   return (target: any, propertyKey: string) => {
@@ -180,33 +159,33 @@ export function StringField(
 ): PropertyDecorator {
   const decorators = [Type(() => String), IsString({ each: options.each })];
 
-  decorators.push(Default(options.default));
+  // decorators.push(Default(options.default));
 
-  decorators.push(
-    Input({
-      type: options.formType || 'Input',
-      props: {
-        label: options.label,
-        placeholder: options.placeholder,
-      } as InputProps,
-      path: '',
-      validation: {
-        type: 'string',
-        minLength: options.minLength || 1,
-        maxLength: options.maxLength,
-        required: options.required || true,
-        pattern: options.pattern,
-        errorMessages: {
-          pattern: options.pattern ? `형식이 올바르지 않습니다.` : undefined,
-          minLength: `최소 ${options.minLength || 1}자 이상 입력해주세요.`,
-          maxLength: options.maxLength
-            ? `최대 ${options.maxLength}자까지 입력 가능합니다.`
-            : undefined,
-          required: options.required ? `필수 입력 항목입니다.` : undefined,
-        },
-      },
-    }),
-  );
+  // decorators.push(
+  //   Input({
+  //     type: options.formType || 'Input',
+  //     props: {
+  //       label: options.label,
+  //       placeholder: options.placeholder,
+  //     } as InputProps,
+  //     path: '',
+  //     validation: {
+  //       type: 'string',
+  //       minLength: options.minLength || 1,
+  //       maxLength: options.maxLength,
+  //       required: options.required || true,
+  //       pattern: options.pattern,
+  //       errorMessages: {
+  //         pattern: options.pattern ? `형식이 올바르지 않습니다.` : undefined,
+  //         minLength: `최소 ${options.minLength || 1}자 이상 입력해주세요.`,
+  //         maxLength: options.maxLength
+  //           ? `최대 ${options.maxLength}자까지 입력 가능합니다.`
+  //           : undefined,
+  //         required: options.required ? `필수 입력 항목입니다.` : undefined,
+  //       },
+  //     },
+  //   }),
+  // );
 
   decorators.push(SectionName(options.sectionName));
 

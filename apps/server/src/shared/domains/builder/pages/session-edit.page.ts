@@ -37,7 +37,7 @@ export class SessionEditPage {
     const page: PageBuilder = {
       state: {
         form: {
-          data: {},
+          inputs: {},
         },
       },
       name: '새편집',

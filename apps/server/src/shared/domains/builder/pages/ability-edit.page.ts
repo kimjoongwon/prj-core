@@ -60,7 +60,7 @@ export class AbilityEditPage {
       name: '새편집',
       state: {
         form: {
-          data: {},
+          inputs: {},
         },
       },
       form: {

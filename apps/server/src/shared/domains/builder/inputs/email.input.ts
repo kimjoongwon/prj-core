@@ -13,12 +13,11 @@ export class EmailInput {
         placeholder: '이메일을 입력해주세요.',
       },
       validation: {
-        type: 'string',
         timings: ['onChange'],
-        errorMessages: {
-          required: '이메일을 입력해주세요.',
+        required: {
+          value: true,
+          message: '이메일을 입력해주세요.',
         },
-        required: true,
       },
     };
   }
