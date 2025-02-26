@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import { get, isUndefined, set } from 'lodash-es';
 import { MobxProps } from '../types';
 import { KeyboardEventHandler } from 'react';
-import { FaSearch } from 'react-icons/fa';
 import { Input } from '../Input/Input';
 
 interface SearchProps<T> extends MobxProps<T> {
@@ -33,7 +32,7 @@ export const Search = observer(<T extends object>(props: SearchProps<T>) => {
       state={state}
       path={path}
       isClearable
-      startContent={<FaSearch />}
+      startContent={<div>SearchIcon</div>}
       className="w-full sm:max-w-[44%]"
       placeholder="Search by name..."
       onClear={() => onClear()}

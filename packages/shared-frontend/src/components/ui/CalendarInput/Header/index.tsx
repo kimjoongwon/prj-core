@@ -1,4 +1,3 @@
-import { FcNext, FcPrevious } from 'react-icons/fc';
 import { Button } from '../../Button/Button';
 import { HStack } from '../../HStack';
 import { useProps } from '../_hooks/useProps';
@@ -19,7 +18,7 @@ export const Header = observer((props: HeaderProps) => {
           variant="light"
           // @ts-ignore
           onPress={state.calendarInput.header.decreaseMonth}
-          startContent={<FcPrevious />}
+          startContent={<div>prev</div>}
         />
         <div className="flex space-x-2">
           <Year state={state} />
@@ -30,7 +29,7 @@ export const Header = observer((props: HeaderProps) => {
           variant="light"
           // @ts-ignore
           onPress={state.calendarInput.header.increaseMonth}
-          endContent={<FcNext />}
+          endContent={<div>next</div>}
         />
       </HStack>
     </div>

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AXIOS_INSTANCE } from '../../libs/customAxios';
@@ -65,10 +65,11 @@ AXIOS_INSTANCE.interceptors.request.use(
 export const ReactQueryProvider = (props: InitContainerProps) => {
   const { children } = props;
   const queryClient = getQueryClient();
+
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools buttonPosition="bottom-left" />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 };

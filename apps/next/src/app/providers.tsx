@@ -1,11 +1,11 @@
 'use client';
 
-import { HeroUIProvider } from '@heroui/react';
-import { useGetAppBuilder } from '@shared/frontend';
-import { Navigation, Store, StoreProvider } from '@shared/stores';
-import { RouteBuilder } from '@shared/types';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
+import { ReactQueryProvider } from '@shared/frontend';
+import { Store } from '@shared/stores';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { ServiceProvider } from '../services/provider';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -14,26 +14,17 @@ interface ProvidersProps {
 let store: Store;
 export const Providers = observer((props: ProvidersProps) => {
   const { children } = props;
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  const { data: response } = useGetAppBuilder();
-  const routes = (response as { data: RouteBuilder })?.data as RouteBuilder[];
-
-  useEffect(() => {
-    if (routes) {
-      const navigation = new Navigation(routes);
-      store = new Store(navigation);
-      setIsInitialized(true);
-    }
-  }, [routes]);
-
-  if (!isInitialized) {
-    return null;
-  }
 
   return (
-    <HeroUIProvider>
-      <StoreProvider value={store}>{children}</StoreProvider>
-    </HeroUIProvider>
+    <ReactQueryProvider>
+      <HeroUIProvider>
+        <NuqsAdapter>
+          <ServiceProvider>
+            {children}
+            <ToastProvider />
+          </ServiceProvider>
+        </NuqsAdapter>
+      </HeroUIProvider>
+    </ReactQueryProvider>
   );
 });

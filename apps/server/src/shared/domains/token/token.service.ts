@@ -1,10 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError, JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '../../configs/config.type';
-import { match } from 'ts-pattern';
-import { goTryRawSync } from '@shared';
 
 export const Token = {
   ACCESS: 'accessToken',
@@ -51,17 +49,21 @@ export class TokenService {
 
   validateToken(token: string) {
     const { secret } = this.configService.get<AuthConfig>('auth');
+    try {
+      return this.jwtService.verify(token, { secret });
+    } catch (error) {
+      if (error instanceof JsonWebTokenError) {
+        throw new BadRequestException('토큰 오동작');
+      }
+      if (error instanceof TokenExpiredError) {
+        throw new BadRequestException('토튼 만료 에러');
+      }
 
-    const [err, payload] = goTryRawSync<JsonWebTokenError, { userId: string }>(() =>
-      this.jwtService.verify(token, { secret }),
-    );
+      if (error instanceof NotBeforeError) {
+        throw new BadRequestException('토큰 미사용');
+      }
 
-    match(err?.name)
-      .with('TokenExpiredError', () => new BadRequestException('토튼 만료 에러'))
-      .with('JsonWebTokenError', () => new BadRequestException('토큰 오동작'))
-      .with('NotBeforeError', () => new BadRequestException('토큰 미사용'))
-      .otherwise(() => new InternalServerErrorException(`알 수 없는 에러: ${err?.message}`));
-
-    return payload;
+      throw new InternalServerErrorException(`알 수 없는 에러: ${error?.message}`);
+    }
   }
 }

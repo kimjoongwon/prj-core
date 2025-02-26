@@ -13,11 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "lodash-es": "4.17.21",
-    "mobx": "^6.13.5",
-    "mobx-react-lite": "^4.0.7",
+    "mobx": "^6.13.6",
+    "mobx-react-lite": "^4.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.28.0",
+    "react-router-dom": "^7.2.0",
     "to-path-tree": "^1.2.3"
   },
   "devDependencies": {

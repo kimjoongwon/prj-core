@@ -3,7 +3,6 @@
 import { Card, CardHeader, Divider, CardBody, Button } from '@heroui/react';
 import { List } from '@shared/frontend';
 import { useStore } from '@shared/stores';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { v4 } from 'uuid';
@@ -24,7 +23,7 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
           <List
             className="flex flex-row md:flex-col"
             data={store.navigation.serviceRoute?.children || []}
-            renderItem={route => {
+            renderItem={(route: any) => {
               return (
                 <Button
                   variant="light"

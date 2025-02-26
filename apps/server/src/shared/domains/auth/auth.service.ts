@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
 import { ResponseEntity } from '../../entities';
-import { goTryRawSync } from '../../libs';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 import { UsersService } from '../../services/users.service';
@@ -28,19 +27,12 @@ export class AuthService {
   ) {}
 
   async getCurrentUser(accessToken: string) {
-    const [err, { userId }] = goTryRawSync<Error, { userId: string }>(() =>
-      this.jwtService.verify<{ userId: string }>(accessToken),
-    );
-    if (err) throw new BadRequestException('Invalid token');
-
+    const { userId } = this.jwtService.verify<{ userId: string }>(accessToken);
     return this.usersService.getUnique({ where: { id: userId } });
   }
 
   async getNewToken(refreshToken: string) {
-    const [err, { userId }] = goTryRawSync<Error, { userId: string }>(() =>
-      this.jwtService.verify<{ userId: string }>(refreshToken),
-    );
-    if (err) throw new BadRequestException('Invalid token');
+    const { userId } = this.jwtService.verify<{ userId: string }>(refreshToken);
 
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
       this.tokenService.generateTokens({

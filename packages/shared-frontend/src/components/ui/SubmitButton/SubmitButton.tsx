@@ -4,7 +4,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { MobxProps, Validations } from '@shared/types';
 import { useEffect } from 'react';
 import { get } from 'lodash-es';
-import { reaction, toJS } from 'mobx';
+import { reaction } from 'mobx';
 
 export type SubmitButtonProps<T> = ButtonProps &
   MobxProps<T> & {
@@ -79,13 +79,11 @@ export const SubmitButton = observer(
       return disposer;
     }, []);
 
-    console.log(toJS(localState.errorMessages));
-
     return (
       <Button
         {...rest}
-        color="primary"
         type="submit"
+        color="primary"
         isDisabled={localState.errorMessages.length > 0}
       >
         {children}

@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import { ReactQueryProvider } from '@shared/frontend';
 import { Providers } from './providers';
 import './globals.css';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export const metadata: Metadata = {
   title: '시퀸스',
@@ -20,11 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NuqsAdapter>
-          <ReactQueryProvider>
-            <Providers>{children}</Providers>
-          </ReactQueryProvider>
-        </NuqsAdapter>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
