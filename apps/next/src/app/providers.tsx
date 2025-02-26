@@ -2,7 +2,7 @@
 
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import { ReactQueryProvider } from '@shared/frontend';
-import { Store } from '@shared/stores';
+import { Store } from '../../../../packages/shared-services';
 import { observer } from 'mobx-react-lite';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ServiceProvider } from '../services/provider';

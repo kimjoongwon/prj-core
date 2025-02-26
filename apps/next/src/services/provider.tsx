@@ -1,7 +1,7 @@
 'use client';
 
 import { useGetAppBuilder } from '@shared/frontend';
-import { Navigation, Store } from '@shared/stores';
+import { Navigation, Store } from '../../../../packages/shared-services';
 import { RouteBuilder } from '@shared/types';
 import React, { useEffect, useState } from 'react';
 import { createContext } from 'react';
