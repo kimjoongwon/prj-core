@@ -17,7 +17,7 @@ import { RoutinesPage } from '../pages/routines.page';
 import { RoutineEditPage } from '../pages/routine-edit.page';
 import { TasksPage } from '../pages/tasks.page';
 import { TaskEditPage } from '../pages/task-edit.page';
-import { ExercisesPage } from '../pages/exercise.page';
+import { ExercisesPage } from '../pages/exercises.page';
 import { ExerciseEditPage } from '../pages/exercise-edit.page';
 
 @Controller()

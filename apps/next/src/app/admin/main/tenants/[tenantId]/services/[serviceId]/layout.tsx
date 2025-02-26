@@ -1,8 +1,8 @@
 'use client';
 
+import { useStore } from '@/services/provider';
 import { Card, CardHeader, Divider, CardBody, Button } from '@heroui/react';
 import { List } from '@shared/frontend';
-import { useStore } from '@shared/stores';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { v4 } from 'uuid';
