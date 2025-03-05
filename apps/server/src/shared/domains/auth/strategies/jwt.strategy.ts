@@ -18,6 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         (req: Request) => {
           return req.cookies?.accessToken;
         },
+        (req: Request) => {
+          return req.headers?.authorization?.split(' ')[1];
+        },
       ]),
       ignoreExpiration: false,
       secretOrKey: authConfig?.secret,
