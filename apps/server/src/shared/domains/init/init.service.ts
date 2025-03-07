@@ -70,7 +70,7 @@ export class InitService {
 
     const appName = appConfig.name;
 
-    const defaultSpace = await this.prisma.space.findUnique({
+    const defaultSpace = await this.prisma.space.findFirst({
       where: { name: appName },
     });
 

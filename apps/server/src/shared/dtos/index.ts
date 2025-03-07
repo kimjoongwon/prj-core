@@ -23,3 +23,4 @@ export * from './program.dto';
 export * from './file.dto';
 export * from './depot.dto';
 export * from './exercise.dto';
+export * from './gym.dto';

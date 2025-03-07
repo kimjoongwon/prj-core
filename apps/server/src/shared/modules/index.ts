@@ -5,6 +5,7 @@ import {
   CategoriesService,
   ClassificationsService,
   DepotsService,
+  GymsService,
   ProgramsService,
   RolesService,
   RoutinesService,
@@ -34,6 +35,7 @@ import { RolesRepository } from '../repositories/role.repository';
 import { AwsService } from '../domains/aws/aws.service';
 import { ExercisesService } from '../services/exercises.service';
 import { TenantsService } from '../services/tenants.service';
+import { GymsRepository } from '../repositories/Gyms.repository';
 const modules = [
   AbilitiesService,
   AbilitiesRepository,
@@ -70,6 +72,8 @@ const modules = [
   DepotsRepository,
   TenantsService,
   TenantsRepository,
+  GymsService,
+  GymsRepository,
 ];
 @Global()
 @Module({
