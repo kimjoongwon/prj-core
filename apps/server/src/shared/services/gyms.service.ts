@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { GymsRepository } from '../repositories/Gyms.repository';
-import { CreateGymDto, GymQueryDto } from '../dtos';
+import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
 
 @Injectable()
 export class GymsService {
@@ -24,15 +23,16 @@ export class GymsService {
     });
   }
 
-  deleteById(id: string) {
-    return this.repository.delete({
-      where: { id },
-    });
-  }
-
   create(createGymDto: CreateGymDto) {
     return this.repository.create({
       data: createGymDto,
+    });
+  }
+
+  updateById(id: string, updateGymDto: UpdateGymDto) {
+    return this.repository.update({
+      where: { id },
+      data: updateGymDto,
     });
   }
 
@@ -47,7 +47,13 @@ export class GymsService {
     };
   }
 
-  remove(id: string) {
+  deleteById(id: string) {
+    return this.repository.delete({
+      where: { id },
+    });
+  }
+
+  removeById(id: string) {
     return this.repository.update({
       where: { id },
       data: { removedAt: new Date() },

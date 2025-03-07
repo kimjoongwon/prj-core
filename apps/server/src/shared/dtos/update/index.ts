@@ -18,3 +18,4 @@ export * from './update-content.dto';
 export * from './update-depot.dto';
 export * from './update-task.dto';
 export * from './update-exercise.dto';
+export * from './update-gym.dto';
