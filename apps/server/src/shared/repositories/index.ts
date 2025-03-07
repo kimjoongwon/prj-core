@@ -16,3 +16,4 @@ export * from './files.repository';
 export * from './exercises.repository';
 export * from './depots.repository';
 export * from './tenants.repository';
+export * from './gyms.repository';

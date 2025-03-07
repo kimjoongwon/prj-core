@@ -158,6 +158,24 @@ model Tenant {
   files      File[]
 }
 
+model Gym {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  address        String
+  phone          String
+  email          String
+  businessNumber String  @unique
+  depotId        String?
+  spaceId        String
+
+  depot Depot? @relation(fields: [depotId], references: [id])
+  space Space  @relation(fields: [spaceId], references: [id])
+}
+
 model Space {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -165,13 +183,14 @@ model Space {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name  String @unique
+  name  String
   label String
 
   classification Classification?
   associations   Association[]
   tenants        Tenant[]
   tenancy        Tenancy?
+  gyms           Gym[]
 }
 
 model Tenancy {
@@ -479,6 +498,7 @@ model Depot {
   files     File[]
   contents  Content[]
   profiles  Profile[]
+  gyms      Gym[]
 }
 
 model File {
