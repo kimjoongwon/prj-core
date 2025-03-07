@@ -55,8 +55,8 @@ export class GymsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(GymDto, HttpStatus.OK)
-  async removeGym(@Param('gymId') gymId: string) {
-    const gym = await this.service.remove(gymId);
+  async removeGymById(@Param('gymId') gymId: string) {
+    const gym = await this.service.removeById(gymId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
   }
 

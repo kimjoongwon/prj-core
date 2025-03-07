@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { UseEntity } from '../decorators/use-dto.decorator';
 import { BaseRepository } from '../common/base.repository';
-import { Gym } from '../entities/gym.entity';
+import { Gym } from '../entities';
 
 @Injectable()
 @UseEntity(Gym)
@@ -20,7 +20,7 @@ export class GymsRepository extends BaseRepository<
   Prisma.GymFindFirstArgs,
   Prisma.GymFindUniqueArgs,
   Prisma.GymGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.GymCreateManyArgs,
   Gym
 > {
   constructor(prisma: PrismaService) {
