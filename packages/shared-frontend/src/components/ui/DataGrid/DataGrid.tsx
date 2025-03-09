@@ -31,7 +31,7 @@ export type DataGridState<T> = {
 };
 
 export type DataGridProps<T> = TableProps &
-  MobxProps<T> & {
+  Partial<MobxProps<T>> & {
     data: T[];
     columns: ColumnDef<T, any>[];
     emptyContent?: string;

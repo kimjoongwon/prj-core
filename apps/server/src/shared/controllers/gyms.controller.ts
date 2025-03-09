@@ -33,6 +33,20 @@ export class GymsController {
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
   }
 
+  @Get()
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })
+  async getGymsByQuery(@Query() query: GymQueryDto) {
+    const { count, gyms } = await this.service.getManyByQuery(query);
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'success',
+      gyms.map((gym) => gym.toDto()),
+      new PageMetaDto(query.skip, query.take, count),
+    );
+  }
+
   @Get(':gymId')
   @Auth([])
   @HttpCode(HttpStatus.OK)
@@ -67,19 +81,5 @@ export class GymsController {
   async deleteGym(@Param('gymId') gymId: string) {
     const gym = await this.service.deleteById(gymId);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
-  }
-
-  @Get()
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })
-  async getGymsByQuery(@Query() query: GymQueryDto) {
-    const { count, gyms } = await this.service.getManyByQuery(query);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'success',
-      gyms.map((gym) => gym.toDto()),
-      new PageMetaDto(query.skip, query.take, count),
-    );
   }
 }

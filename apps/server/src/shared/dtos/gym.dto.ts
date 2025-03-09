@@ -1,8 +1,12 @@
 import { Gym as GymEntity } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
-import { StringField, UUIDField } from '../decorators';
+import { ClassField, StringField, UUIDField } from '../decorators';
+import { DepotDto } from './depot.dto';
+import { SpaceDto } from './space.dto';
 
 export class GymDto extends AbstractDto implements GymEntity {
+  @UUIDField()
+  spaceId: string;
   @StringField()
   address: string;
   @StringField()
@@ -13,4 +17,8 @@ export class GymDto extends AbstractDto implements GymEntity {
   businessNumber: string;
   @UUIDField()
   depotId: string;
+  @ClassField(() => DepotDto, { required: true })
+  depot?: DepotDto;
+  @ClassField(() => SpaceDto, { required: true })
+  space?: SpaceDto;
 }

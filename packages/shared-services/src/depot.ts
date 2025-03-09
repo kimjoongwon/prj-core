@@ -1,4 +1,4 @@
-export class DepotStore {
+export class DepotService {
   static async urlToFile(
     url: string,
     filename: string,

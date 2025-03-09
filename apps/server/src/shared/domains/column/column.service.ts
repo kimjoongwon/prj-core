@@ -3,8 +3,6 @@ import { ColumnBuilder } from '@shared/types';
 
 @Injectable()
 export class ColumnService {
-  constructor() {}
-
   getCommonColumns(): ColumnBuilder[] {
     const columns: ColumnBuilder[] = [
       {

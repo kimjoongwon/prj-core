@@ -1,3 +1,3 @@
-export * from './store';
-export * from './navigation';
-export * from './depotStore';
+export * from './src/store';
+export * from './src/navigation';
+export * from './src/depot';
