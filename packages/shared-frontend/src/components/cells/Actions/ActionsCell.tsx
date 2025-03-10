@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Button, ButtonGroup } from '@heroui/react';
 import { CellContext } from '@tanstack/react-table';
