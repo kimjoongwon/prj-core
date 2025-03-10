@@ -1,16 +1,18 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 type NavigateFunction = (pathnameWithSearchParams: string) => void;
 
-export class Navigation {
-  routeBuilders: RouteBuilder[] = [];
+export class NavigationService {
   routes: Route[] = [];
   navigateFunction?: NavigateFunction;
 
-  constructor(routeBuilders: RouteBuilder[]) {
-    this.routeBuilders = routeBuilders;
+  constructor(
+    readonly routeBuilders: RouteBuilder[],
+    readonly router: AppRouterInstance,
+  ) {
     this.getRoutes();
     this.activateRoute(window.location.pathname);
     makeAutoObservable(this);
@@ -22,7 +24,7 @@ export class Navigation {
 
   push(
     pathname: string,
-    pathParams: object,
+    pathParams?: object,
     searchParams?: Record<string, string>,
   ) {
     let urlSearchParams;
@@ -34,8 +36,7 @@ export class Navigation {
       pathParams,
       urlSearchParams,
     );
-
-    window.history.pushState({}, '', pathnameWithSearchParams);
+    this.router.push(pathnameWithSearchParams);
   }
 
   private findRouteByPath(pathname: string): Route | undefined {

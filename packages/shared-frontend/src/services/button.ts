@@ -1,16 +1,18 @@
 import { ButtonProps } from '@heroui/react';
+import { NavigationService } from './navigation';
 
 export class ButtonService {
-  getAdminButtons(): ButtonProps[] {
+  constructor(readonly navigationService: NavigationService) {}
+  getLeftButtons(domain: string): ButtonProps[] {
     return [
       {
         children: '생성',
-        color: 'primary',
-        onPress: () => {},
+        onPress: () => {
+          this.navigationService.push(`./${domain}/new/edit`);
+        },
       },
       {
         children: '수정',
-        color: 'primary',
         onPress: () => {},
       },
     ];
