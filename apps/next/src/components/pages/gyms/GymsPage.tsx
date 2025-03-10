@@ -46,16 +46,20 @@ export const GymsPage = () => {
         <Text variant="h2">GYM 관리</Text>
       </CardHeader>
       <CardBody className="space-y-4">
-        <HStack className="justify-start space-x-2">
-          {gymsPage.dataGrid.buttons.map(button => {
-            return <Button key={v4()} {...button} />;
-          })}
-        </HStack>
-        <DataGrid
-          columns={gymsPage.dataGrid?.columns}
-          data={gymsPage.dataGrid?.data || []}
-        />
-        <Pagination totalCount={100} />
+        <Card className="p-4">
+          <CardBody className="space-y-4">
+            <HStack className="justify-start space-x-2">
+              {gymsPage.dataGrid.buttons.map(button => {
+                return <Button key={v4()} {...button} />;
+              })}
+            </HStack>
+            <DataGrid
+              columns={gymsPage.dataGrid?.columns}
+              data={gymsPage.dataGrid?.data || []}
+            />
+            <Pagination totalCount={100} />
+          </CardBody>
+        </Card>
       </CardBody>
     </Card>
   );
