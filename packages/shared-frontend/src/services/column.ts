@@ -13,16 +13,16 @@ export class ColumnService {
     },
   ];
 
-  _actionColumn = columnHelper.display({
-    id: 'action',
+  actionColumn = {
+    id: 'actions',
+    header: 'Actions',
     cell: ActionsCell,
-  });
-
+  };
   getCommonColumns() {
     return this.commonColumns;
   }
 
   getActionColumns() {
-    return this._actionColumn;
+    return this.actionColumn;
   }
 }

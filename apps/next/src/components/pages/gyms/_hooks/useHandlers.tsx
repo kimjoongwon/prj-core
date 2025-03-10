@@ -1,3 +1,9 @@
 export const useHandlers = () => {
-  return {};
+  const buttons = [
+    {
+      label: 'GYM 생성',
+    },
+  ];
+
+  return buttons;
 };

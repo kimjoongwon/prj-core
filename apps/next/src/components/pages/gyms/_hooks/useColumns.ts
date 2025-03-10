@@ -17,8 +17,8 @@ export const useColumns = () => {
     columnHelper.accessor('phone', {
       header: '전화번호',
     }),
-    // actionsColumn,
     ...commonColumns,
+    actionsColumn,
   ];
 
   return columns;
