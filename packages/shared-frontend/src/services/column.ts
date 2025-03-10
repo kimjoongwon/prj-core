@@ -5,7 +5,7 @@ import { ActionsCell } from '../components/cells/Actions/ActionsCell';
 const columnHelper = createColumnHelper();
 
 export class ColumnService {
-  private static commonColumns = [
+  commonColumns = [
     {
       header: '생성일',
       accessorKey: 'createdAt',
@@ -13,16 +13,16 @@ export class ColumnService {
     },
   ];
 
-  private static _actionColumn = columnHelper.display({
+  _actionColumn = columnHelper.display({
     id: 'action',
     cell: ActionsCell,
   });
 
-  static getCommonColumns() {
+  getCommonColumns() {
     return this.commonColumns;
   }
 
-  static getActionColumns() {
+  getActionColumns() {
     return this._actionColumn;
   }
 }
