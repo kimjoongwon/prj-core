@@ -1,4 +1,4 @@
-export * from './Pagination';
+export * from './Pagination/Pagination';
 export * from './Input/Input';
 export * from './Navbar';
 export * from './Checkbox';

@@ -3,7 +3,7 @@
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import { QueryProvider } from '@shared/frontend';
 import { AppProvider } from '@shared/frontend';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { NuqsAdapter } from 'nuqs/adapters/next';
 
 interface ProvidersProps {
   children: React.ReactNode;

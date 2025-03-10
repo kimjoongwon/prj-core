@@ -11,7 +11,7 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
-let app: App;
+export let app: App;
 
 export const AppProvider = (props: StoreProviderProps) => {
   const { children } = props;

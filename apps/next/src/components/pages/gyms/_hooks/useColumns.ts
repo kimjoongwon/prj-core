@@ -1,11 +1,11 @@
-import { ColumnService } from '@/services/columnService';
-import { GymDto } from '@shared/frontend';
+import { GymDto, useApp } from '@shared/frontend';
 import { createColumnHelper } from '@tanstack/react-table';
 
 export const useColumns = () => {
+  const app = useApp();
   const columnHelper = createColumnHelper<GymDto>();
-  const actionsColumn = ColumnService.getActionColumns();
-  const commonColumns = ColumnService.getCommonColumns();
+  const actionsColumn = app.columnService.getActionColumns();
+  const commonColumns = app.columnService.getCommonColumns();
 
   const columns = [
     columnHelper.accessor('space.name', {

@@ -8,6 +8,11 @@ export class ButtonService {
         color: 'primary',
         onPress: () => {},
       },
+      {
+        children: '수정',
+        color: 'primary',
+        onPress: () => {},
+      },
     ];
   }
 }
