@@ -1,9 +1,10 @@
-import { Link } from '@heroui/react';
-import { LinkCellProps } from '@shared/frontend';
+import { Link, LinkProps } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
-interface LinkCellViewProps extends LinkCellProps {}
+interface LinkCellViewProps extends LinkProps {
+  value: string;
+}
 
 export const LinkCell = observer((props: LinkCellViewProps) => {
   const { value, href } = props;

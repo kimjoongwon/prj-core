@@ -1,14 +1,15 @@
+'use client';
+
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import { QueryProvider } from '@shared/frontend';
 import { AppProvider } from '@shared/frontend';
-import { observer } from 'mobx-react-lite';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 interface ProvidersProps {
   children: React.ReactNode;
 }
 
-export const Providers = observer((props: ProvidersProps) => {
+export const Providers = (props: ProvidersProps) => {
   const { children } = props;
 
   return (
@@ -23,4 +24,4 @@ export const Providers = observer((props: ProvidersProps) => {
       </HeroUIProvider>
     </QueryProvider>
   );
-});
+};

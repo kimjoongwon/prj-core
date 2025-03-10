@@ -3,18 +3,18 @@
 import {
   Button as BaseButton,
   APIManager,
-  ButtonViewProps,
   getQueryClient,
 } from '@shared/frontend';
 import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
+import { ButtonProps as HeroUIButtonProps } from '@heroui/react';
 import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
-import { cloneDeep, get, isEmpty } from 'lodash-es';
+import { cloneDeep, isEmpty } from 'lodash-es';
 import { usePageState } from '../Page/PageBuilder';
 import { useParams, useRouter } from 'next/navigation';
 
-interface ButtonProps extends ButtonViewProps {
+interface ButtonProps extends HeroUIButtonProps {
   row?: unknown & { id: string };
   buttonBuilder: ButtonBuilderProps;
   icon?: React.ReactNode;
