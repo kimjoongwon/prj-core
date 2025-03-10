@@ -1,5 +1,6 @@
-import { ActionsCell, DateCell } from '@shared/frontend';
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
+import { DateCell } from '../components/cells/Date/DateCell';
+import { ActionsCell } from '../components/cells/Actions/ActionsCell';
 
 const columnHelper = createColumnHelper();
 
@@ -10,10 +11,6 @@ export class ColumnService {
       accessorKey: 'createdAt',
       cell: DateCell,
     },
-    // columnHelper.accessor('createdAt', {
-    //   header: '생성일',
-    //   cell: DateCell,
-    // }),
   ];
 
   private static _actionColumn = columnHelper.display({

@@ -15,7 +15,6 @@
     "@heroui/react": "2.7.2",
     "@internationalized/date": "latest",
     "@shared/frontend": "workspace:*",
-    "@shared/services": "workspace:*",
     "@shared/types": "workspace:*",
     "@shared/utils": "workspace:*",
     "@tanstack/react-query": "5.66.9",

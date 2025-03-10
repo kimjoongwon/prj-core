@@ -1,6 +1,10 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  isServer,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AXIOS_INSTANCE } from '../../libs/customAxios';
 
@@ -14,26 +18,19 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // refetchOnWindowFocus: false,
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
+        staleTime: 60 * 1000,
       },
     },
   });
 }
 
-export function getQueryClient() {
-  // if (typeof window === 'undefined') {
-  //   // Server: always make a new query client
-  //   return makeQueryClient();
-  // } else {
-  // Browser: make a new query client if we don't already have one
-  // This is very important so we don't re-make a new client if React
-  // supsends during the initial render. This may not be needed if we
-  // have a suspense boundary BELOW the creation of the query client
-  if (!browserQueryClient) browserQueryClient = makeQueryClient();
-  return browserQueryClient;
-  // }
+function getQueryClient() {
+  if (isServer) {
+    return makeQueryClient();
+  } else {
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
 }
 
 AXIOS_INSTANCE.interceptors.response.use(
@@ -43,8 +40,6 @@ AXIOS_INSTANCE.interceptors.response.use(
   function (error) {
     if (!window.location.pathname.includes('/auth')) {
       if (error.response?.status === 401) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         window.location.href = '/admin/auth/login';
         return undefined;
       }
@@ -62,7 +57,7 @@ AXIOS_INSTANCE.interceptors.request.use(
   },
 );
 
-export const ReactQueryProvider = (props: InitContainerProps) => {
+export const QueryProvider = (props: InitContainerProps) => {
   const { children } = props;
   const queryClient = getQueryClient();
 
