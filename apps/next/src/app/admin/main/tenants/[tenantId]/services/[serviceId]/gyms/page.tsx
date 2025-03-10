@@ -1,19 +1,18 @@
 'use client';
 
-import { Button, DataGrid, useGetGymsByQuery, VStack } from '@shared/frontend';
+import { DataGrid, useGetGymsByQuery, VStack } from '@shared/frontend';
 import { createContext, useContext } from 'react';
 import { useColumns } from './_hooks/useColumns';
-import { ButtonService } from '@/services/buttonService';
 
 const GymsPage = () => {
   const { data: getGymsByQueryResponse } = useGetGymsByQuery();
-  const { columns, adminButtons } = useGymsPage();
+  const { columns } = useGymsPage();
 
   return (
     <VStack className="w-full space-y-2">
-      {adminButtons.map((button, index) => (
+      {/* {adminButtons.map((button, index) => (
         <Button key={index} {...button} />
-      ))}
+      ))} */}
       <DataGrid columns={columns} data={getGymsByQueryResponse?.data || []} />
     </VStack>
   );
@@ -23,7 +22,6 @@ export default GymsPage;
 
 type GymsPageContextValue = {
   columns: ReturnType<typeof useColumns>;
-  adminButtons: ReturnType<typeof ButtonService.getAdminButtons>;
 };
 type GymsPageProviderProps = {
   children: React.ReactNode;
@@ -37,13 +35,11 @@ const GymsPageContext = createContext<GymsPageContextValue>({
 export const GymsPageProvider = (props: GymsPageProviderProps) => {
   const { children } = props;
   const columns = useColumns();
-  const adminButtons = ButtonService.getAdminButtons();
 
   return (
     <GymsPageContext.Provider
       value={{
         columns,
-        adminButtons,
       }}
     >
       {children}

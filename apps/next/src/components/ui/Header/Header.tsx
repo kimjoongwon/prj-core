@@ -1,7 +1,7 @@
 'use client';
 
-import { useStore } from '@/services/provider';
 import { HStack, Button, AppBar } from '@shared/frontend';
+import { useApp } from '@shared/frontend';
 import { useSetCookie } from 'cookies-next';
 import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 
 export const Header = observer(() => {
   const router = useRouter();
-  const store = useStore();
+  const app = useApp();
   const pathname = usePathname();
   const setCookie = useSetCookie();
   const { serviceId = '' } = useParams();
@@ -23,7 +23,7 @@ export const Header = observer(() => {
     <AppBar
       content={
         <HStack className="justify-center">
-          {store.navigation.servicesRoute?.children?.map(route => {
+          {app.navigationService.servicesRoute?.children?.map(route => {
             return (
               <Button
                 key={route.pathname}
@@ -33,7 +33,7 @@ export const Header = observer(() => {
                 }
                 onPress={action(() => {
                   router.push(route.pathname + '/categories');
-                  store.navigation.activateRoute(
+                  app.navigationService.activateRoute(
                     route.pathname + '/categories',
                   );
                 })}

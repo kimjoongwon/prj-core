@@ -1,2 +1,2 @@
-// export { AppProvider, useApp, galaxy } from './App';
-export { ReactQueryProvider, getQueryClient } from './ReactQuery';
+export * from './App/AppProvider';
+export * from './Query/QueryProvider';
