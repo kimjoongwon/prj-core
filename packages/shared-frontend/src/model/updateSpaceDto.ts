@@ -7,6 +7,4 @@
 export interface UpdateSpaceDto {
   label?: string;
   name?: string;
-  categoryId?: string;
-  serviceId?: string;
 }

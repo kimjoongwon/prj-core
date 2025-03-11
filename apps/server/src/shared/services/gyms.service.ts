@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GymsRepository } from '../repositories/Gyms.repository';
 import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
+import { Gym } from '../entities';
 
 @Injectable()
 export class GymsService {
@@ -12,20 +13,36 @@ export class GymsService {
     });
   }
 
-  removeManyByIds(GymIds: string[]) {
+  removeManyByIds(gymIds: string[]) {
     return this.repository.updateMany({
       where: {
         id: {
-          in: GymIds,
+          in: gymIds,
         },
       },
       data: { removedAt: new Date() },
     });
   }
 
-  create(createGymDto: CreateGymDto) {
+  create({ categoryId, space, ...data }: CreateGymDto) {
     return this.repository.create({
-      data: createGymDto,
+      data: {
+        address: data.address,
+        phone: data.phone,
+        businessNumber: data.businessNumber,
+        email: data.email,
+        depot: {
+          connect: {
+            id: data.depotId,
+          },
+        },
+        space: {
+          create: {
+            label: space.label,
+            name: space.name,
+          },
+        },
+      },
     });
   }
 

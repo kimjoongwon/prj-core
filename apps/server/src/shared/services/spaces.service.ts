@@ -5,22 +5,15 @@ import { SpacesRepository } from '../repositories/spaces.repository';
 import { UpdateSpaceDto } from '../dtos/update/update-space.dto';
 import { SpaceQueryDto } from '../dtos/query/space-query.dto';
 import { CreateSpaceDto } from '../dtos';
-import { ContextProvider } from '../providers';
 
 @Injectable()
 export class SpacesService {
   constructor(private readonly repository: SpacesRepository) {}
 
-  async create({ categoryId, serviceId, ...createSpaceDto }: CreateSpaceDto) {
-    const tenantId = ContextProvider.getTenantId();
+  async create(createSpaceDto: CreateSpaceDto) {
     const space = await this.repository.create({
       data: {
         ...createSpaceDto,
-        classification: {
-          create: {
-            categoryId,
-          },
-        },
       },
     });
 
