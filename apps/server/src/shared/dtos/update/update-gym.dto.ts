@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { CreateGymDto } from '../create';
 
-export class UpdateGymDto extends PartialType(CreateGymDto) {}
+export class UpdateGymDto extends PartialType(OmitType(CreateGymDto, ['space'])) {}

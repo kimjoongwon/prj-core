@@ -16,7 +16,7 @@ export class GroupsPage {
             params: {
               serviceId,
               skip: 0,
-              take: 2,
+              take: 10,
             },
             mapper: {
               serviceId: 'serviceId',

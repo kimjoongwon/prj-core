@@ -4,7 +4,8 @@ import { AppConfig } from '../../configs';
 import { $Enums, Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
-import { fileCategroySeed } from './seeds/category.seed';
+import { fileCategroySeed } from './seeds/depot-category.seed';
+import { spaceGroupSeed } from './seeds/space-group.seed';
 
 @Injectable()
 export class InitService {
@@ -242,6 +243,27 @@ export class InitService {
     return tenancy;
   }
 
+  async createGroup(tenantId: string) {
+    this.logger.log(`[${this.LOG_PREFIX}] 공간그룹 생성`);
+
+    const services = await this.prisma.service.findMany();
+    const spaceServiceId = services.find(
+      (service) => service.name === $Enums.ServiceNames.SPACE,
+    ).id;
+
+    spaceGroupSeed.forEach(async (group) => {
+      const existGroup = await this.prisma.group.findFirst({
+        where: { name: group.name },
+      });
+
+      if (!existGroup) {
+        await this.prisma.group.create({
+          data: { ...group, tenantId, serviceId: spaceServiceId },
+        });
+      }
+    });
+  }
+
   async createCategory(tenantId: string) {
     this.logger.log(`[${this.LOG_PREFIX}] 카테고리 생성`);
 
@@ -249,7 +271,6 @@ export class InitService {
     const fileServiceId = services.find((service) => service.name === $Enums.ServiceNames.FILE).id;
 
     fileCategroySeed.forEach(async (category) => {
-      console.log('category', category);
       const existCategory = await this.prisma.category.findUnique({
         where: { name: category.name },
       });
@@ -271,5 +292,6 @@ export class InitService {
     const tenantId = user.tenants[0].id;
     await this.createSubjects(tenantId);
     await this.createCategory(tenantId);
+    await this.createGroup(tenantId);
   }
 }

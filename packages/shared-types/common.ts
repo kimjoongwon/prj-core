@@ -15,3 +15,9 @@ export type CommonEntities =
   | 'updatedAt'
   | 'removedAt'
   | 'seq';
+
+export type State<T> = {
+  form: {
+    inputs: T;
+  };
+};
