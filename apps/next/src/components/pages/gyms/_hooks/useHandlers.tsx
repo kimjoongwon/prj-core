@@ -1,9 +1,9 @@
 export const useHandlers = () => {
-  const buttons = [
-    {
-      label: 'GYM 생성',
-    },
-  ];
+  const onPressSave = () => {};
+  const onPressList = () => {};
 
-  return buttons;
+  return {
+    onPressSave,
+    onPressList,
+  };
 };

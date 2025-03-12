@@ -15,20 +15,11 @@ import { DepotService } from '../../../services/depot';
 
 interface DepotProps<T>
   extends MobxProps<T>,
-    Omit<FileUploaderProps, 'onFilesChange' | 'value' | 'type'> {}
-
-enum CategoryNames {
-  THUMBNAIL_IMAGE = 'THUMBNAIL_IMAGE',
-  THUMBNAIL_VIDEO = 'THUMBNAIL_VIDEO',
-  VIDEO_CONTENT = 'VIDEO_CONTENT',
-  AUDIO_CONTENT = 'AUDIO_CONTENT',
-  DOCUMENT_CONTENT = 'DOCUMENT_CONTENT',
-  IMAGE_CONTENT = 'IMAGE_CONTENT',
-}
+    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
 
 export const DepotUploader = observer(
   <T extends object>(props: DepotProps<T>) => {
-    const { state, path, ...rest } = props;
+    const { state, path, type, ...rest } = props;
 
     const localState: {
       depotId: string;
@@ -145,28 +136,32 @@ export const DepotUploader = observer(
 
     return (
       <div className="flex space-x-2">
-        <FileUploader
-          {...rest}
-          type="image"
-          label="이미지"
-          value={toJS(localState.images)}
-          onFilesChange={handleFilesChange}
-          onFileRemove={async (fileDto: FileDto) => {
-            await removeFileById(fileDto.id);
-            console.log('removed fileDto', fileDto);
-          }}
-        />
-        <FileUploader
-          {...rest}
-          type="video"
-          label="동영상"
-          value={toJS(localState.videos)}
-          onFilesChange={handleFilesChange}
-          onFileRemove={async (fileDto: FileDto) => {
-            await removeFileById(fileDto.id);
-            console.log('removed fileDto', fileDto);
-          }}
-        />
+        {type === 'image' && (
+          <FileUploader
+            {...rest}
+            type="image"
+            label="이미지"
+            value={toJS(localState.images)}
+            onFilesChange={handleFilesChange}
+            onFileRemove={async (fileDto: FileDto) => {
+              await removeFileById(fileDto.id);
+              console.log('removed fileDto', fileDto);
+            }}
+          />
+        )}
+        {type === 'video' && (
+          <FileUploader
+            {...rest}
+            type="video"
+            label="동영상"
+            value={toJS(localState.videos)}
+            onFilesChange={handleFilesChange}
+            onFileRemove={async (fileDto: FileDto) => {
+              await removeFileById(fileDto.id);
+              console.log('removed fileDto', fileDto);
+            }}
+          />
+        )}
       </div>
     );
   },

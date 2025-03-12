@@ -1,2 +1,1 @@
-export * from './gyms/GymsPage';
-export * from './gyms/edit/GymEditPage';
+export * from './Gyms/GymsPage';

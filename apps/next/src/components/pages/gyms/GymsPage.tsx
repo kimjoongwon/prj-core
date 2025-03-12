@@ -10,16 +10,9 @@ import {
   HStack,
 } from '@shared/frontend';
 import { createContext, useContext } from 'react';
-import { useColumns } from './_hooks/useColumns';
 import { parseAsInteger, useQueryStates } from 'nuqs';
-import {
-  Button,
-  ButtonProps,
-  ButtonGroup,
-  Card,
-  CardHeader,
-  CardBody,
-} from '@heroui/react';
+import { useColumns } from './_hooks/useColumns';
+import { Button, ButtonProps, Card, CardHeader, CardBody } from '@heroui/react';
 import { v4 } from 'uuid';
 
 type GymsPageContextValue = {

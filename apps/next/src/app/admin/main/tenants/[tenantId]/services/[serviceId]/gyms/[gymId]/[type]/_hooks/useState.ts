@@ -12,6 +12,7 @@ export const createGymDto: CreateGymDto = {
     name: '',
     label: '',
   },
+  categoryId: ''
 };
 
 export const useState = () => {

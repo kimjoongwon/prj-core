@@ -11,5 +11,6 @@ export interface CreateGymDto {
   email: string;
   businessNumber: string;
   depotId: string;
+  categoryId: string;
   space: CreateSpaceDto;
 }

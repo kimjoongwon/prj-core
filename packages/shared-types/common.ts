@@ -21,3 +21,7 @@ export type State<T> = {
     inputs: T;
   };
 };
+
+export type PageTypeParams = {
+  type: 'add' | 'edit' | 'read';
+};
