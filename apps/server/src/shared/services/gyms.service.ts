@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GymsRepository } from '../repositories/Gyms.repository';
 import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
-import { Gym } from '../entities';
 
 @Injectable()
 export class GymsService {
@@ -46,10 +45,18 @@ export class GymsService {
     });
   }
 
-  updateById(id: string, updateGymDto: UpdateGymDto) {
+  updateById(id: string, { space, depotId, ...updateGymDto }: UpdateGymDto) {
     return this.repository.update({
       where: { id },
-      data: updateGymDto,
+      data: {
+        ...updateGymDto,
+        space: {
+          update: {
+            label: space.label,
+            name: space.name,
+          },
+        },
+      },
     });
   }
 

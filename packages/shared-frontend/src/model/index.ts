@@ -292,6 +292,7 @@ export * from './updateFileById200AllOf';
 export * from './updateFileByIdBody';
 export * from './updateGroup200AllOf';
 export * from './updateGroupDto';
+export * from './updateGym200AllOf';
 export * from './updateProgram200AllOf';
 export * from './updateProgramDto';
 export * from './updateRole200AllOf';

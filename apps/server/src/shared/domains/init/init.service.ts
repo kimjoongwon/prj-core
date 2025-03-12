@@ -63,37 +63,51 @@ export class InitService {
     };
   }
 
-  async createDefaultSpace() {
+  async createDefaultGym() {
     this.logger.log(`[${this.LOG_PREFIX}] 기본 공간 생성`);
-    let spaceId = null;
+    let gym = null;
 
     const appConfig = this.configService.get<AppConfig>('app');
 
     const appName = appConfig.name;
 
-    const defaultSpace = await this.prisma.space.findFirst({
-      where: { name: appName },
+    const defaultGym = await this.prisma.gym.findFirst({
+      where: { space: { name: appName } },
+      include: {
+        space: true,
+      },
     });
 
-    if (defaultSpace) {
-      spaceId = defaultSpace.id;
+    if (defaultGym) {
+      gym = defaultGym;
 
-      this.logger.log(`[${this.LOG_PREFIX}] 기본 공간이 이미 존재합니다.`);
+      this.logger.log(`[${this.LOG_PREFIX}] 기본 GYM이 이미 존재합니다.`);
     } else {
-      const space = await this.prisma.space.create({
+      const _gym = await this.prisma.gym.create({
         data: {
-          name: appName,
-          label: '기본 공간',
+          address: '서울시 강남구',
+          phone: '01073162347',
+          businessNumber: '1234567890',
+          email: 'galaxy@gmail.com',
+          space: {
+            create: {
+              name: appName,
+              label: appName,
+            },
+          },
+        },
+        include: {
+          space: true,
         },
       });
 
-      spaceId = space.id;
+      gym = _gym;
 
-      this.logger.log(`[${this.LOG_PREFIX}] 기본 공간 생성`);
+      this.logger.log(`[${this.LOG_PREFIX}] 기본 GYM 생성`);
     }
 
     return {
-      spaceId,
+      spaceId: gym.spaceId,
     };
   }
 
@@ -285,7 +299,7 @@ export class InitService {
 
   async initApp() {
     await this.createServices();
-    const { spaceId } = await this.createDefaultSpace();
+    const { spaceId } = await this.createDefaultGym();
     const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
     const { adminRoleId } = await this.createDefaultRoles(tenancyId);
     const user = await this.createDefaultUser(adminRoleId, spaceId, tenancyId);

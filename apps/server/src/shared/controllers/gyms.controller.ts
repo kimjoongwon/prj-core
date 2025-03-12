@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { GymDto, CreateGymDto, GymQueryDto } from '../dtos';
+import { GymDto, CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { GymsService } from '../services/gyms.service';
@@ -54,6 +54,15 @@ export class GymsController {
   async getGym(@Param('gymId') gymId: string) {
     const gym = await this.service.getById(gymId);
     return new ResponseEntity(HttpStatus.OK, '성공', gym.toDto());
+  }
+
+  @Patch(':gymId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(GymDto, HttpStatus.OK)
+  async updateGym(@Param('gymId') gymId: string, @Body() updateGymDto: UpdateGymDto) {
+    const gym = await this.service.updateById(gymId, updateGymDto);
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
   }
 
   @Patch('removedAt')

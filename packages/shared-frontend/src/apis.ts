@@ -208,6 +208,7 @@ import type {
   UpdateFileByIdBody,
   UpdateGroup200AllOf,
   UpdateGroupDto,
+  UpdateGym200AllOf,
   UpdateProgram200AllOf,
   UpdateProgramDto,
   UpdateRole200AllOf,
@@ -663,6 +664,65 @@ export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
 
 
+export const updateGym = (
+    gymId: string,
+    createGymDto: BodyType<CreateGymDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateGym200AllOf>(
+      {url: `/api/v1/gyms/${gymId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: createGymDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateGymMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext> => {
+    
+const mutationKey = ['updateGym'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGym>>, {gymId: string;data: BodyType<CreateGymDto>}> = (props) => {
+          const {gymId,data} = props ?? {};
+
+          return  updateGym(gymId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateGymMutationResult = NonNullable<Awaited<ReturnType<typeof updateGym>>>
+    export type UpdateGymMutationBody = BodyType<CreateGymDto>
+    export type UpdateGymMutationError = ErrorType<void>
+
+    export const useUpdateGym = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationResult<
+        Awaited<ReturnType<typeof updateGym>>,
+        TError,
+        {gymId: string;data: BodyType<CreateGymDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateGymMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const deleteGym = (
     gymId: string,
  options?: SecondParameter<typeof customInstance>,) => {
