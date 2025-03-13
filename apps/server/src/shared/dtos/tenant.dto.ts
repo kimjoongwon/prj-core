@@ -1,7 +1,7 @@
 import { Tenant } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import { UserDto, SpaceDto } from '.';
-import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
+import { BooleanField, ClassField, StringField, UUIDField } from '../decorators/field.decorators';
 
 export class TenantDto extends AbstractDto implements Tenant {
   @UUIDField()
@@ -12,6 +12,9 @@ export class TenantDto extends AbstractDto implements Tenant {
 
   @StringField()
   spaceId: string;
+
+  @BooleanField()
+  default: boolean;
 
   @ClassField(() => UserDto, { required: false })
   user?: UserDto;

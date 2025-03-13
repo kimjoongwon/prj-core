@@ -17,8 +17,10 @@ export class GymDto extends AbstractDto implements GymEntity {
   businessNumber: string;
   @UUIDField()
   depotId: string;
-  @ClassField(() => DepotDto, { required: true })
+
+  @ClassField(() => DepotDto, { required: false })
   depot?: DepotDto;
-  @ClassField(() => SpaceDto, { required: true })
+
+  @ClassField(() => SpaceDto, { required: false })
   space?: SpaceDto;
 }

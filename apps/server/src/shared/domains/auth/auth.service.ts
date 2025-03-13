@@ -69,6 +69,7 @@ export class AuthService {
         password,
         tenants: {
           create: {
+            default: true,
             spaceId,
             roleId: role.id,
           },

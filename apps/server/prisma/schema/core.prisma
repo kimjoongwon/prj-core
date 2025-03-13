@@ -147,6 +147,7 @@ model Tenant {
   userId  String
   roleId  String
   spaceId String
+  default Boolean
 
   user       User       @relation(fields: [userId], references: [id])
   space      Space      @relation(fields: [spaceId], references: [id])
