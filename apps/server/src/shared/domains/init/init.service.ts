@@ -138,6 +138,7 @@ export class InitService {
           phone: '01073162347',
           tenants: {
             create: {
+              default: true,
               spaceId,
               roleId,
             },
