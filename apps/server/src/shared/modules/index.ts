@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import {
   AbilitiesService,
   ActionsService,
+  AssignmentsService,
   CategoriesService,
   ClassificationsService,
   DepotsService,
@@ -17,6 +18,7 @@ import {
 import {
   AbilitiesRepository,
   ActionsRepository,
+  AssignmentsRepository,
   CategoriesRepository,
   ClassificationsRepository,
   ExercisesRepository,
@@ -28,6 +30,7 @@ import {
   TenantsRepository,
   TimelinesRepository,
   UsersRepository,
+  GymsRepository,
 } from '../repositories';
 import { DepotsRepository } from '../repositories/depots.repository';
 import { FilesService } from '../services/files.service';
@@ -35,7 +38,6 @@ import { RolesRepository } from '../repositories/role.repository';
 import { AwsService } from '../domains/aws/aws.service';
 import { ExercisesService } from '../services/exercises.service';
 import { TenantsService } from '../services/tenants.service';
-import { GymsRepository } from '../repositories/Gyms.repository';
 const modules = [
   AbilitiesService,
   AbilitiesRepository,
@@ -74,6 +76,8 @@ const modules = [
   TenantsRepository,
   GymsService,
   GymsRepository,
+  AssignmentsService,
+  AssignmentsRepository,
 ];
 @Global()
 @Module({

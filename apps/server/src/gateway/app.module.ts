@@ -41,6 +41,7 @@ import { GymsEndpointModule } from './gyms/gyms-endpoint.module';
 @Module({
   imports: [
     ...libModules,
+    GlobalModule,
     GymsEndpointModule,
     ColumnsModule,
     InputsModule,
@@ -50,7 +51,6 @@ import { GymsEndpointModule } from './gyms/gyms-endpoint.module';
     TablesModule,
     CaslModule,
     InitModule,
-    GlobalModule,
     ClassificationsEndpointModule,
     AssociationsEndpointModule,
     BuilderEndpointModule,

@@ -190,7 +190,7 @@ model Space {
   classification Classification?
   associations   Association[]
   gym            Gym?
-  Tenant         Tenant[]
+  tenants        Tenant[]
 }
 
 model Timeline {

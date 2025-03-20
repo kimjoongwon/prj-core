@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GymsRepository } from '../repositories/Gyms.repository';
+import { GymsRepository } from '../repositories';
 import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
 import { Prisma } from '@prisma/client';
 
@@ -59,6 +59,24 @@ export class GymsService {
         },
       },
     });
+  }
+
+  async getManyByTenantId(tenantId: string) {
+    const gyms = await this.repository.findMany({
+      where: {
+        space: {
+          Tenant: {
+            some: {
+              id: tenantId,
+            },
+          },
+        },
+      },
+      include: {
+        space: true,
+      },
+    });
+    return gyms;
   }
 
   async getManyByQuery(query: GymQueryDto) {
