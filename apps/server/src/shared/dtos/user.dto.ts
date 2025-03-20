@@ -11,7 +11,6 @@ import { Exclude } from 'class-transformer';
 import { AbstractDto } from './abstract.dto';
 import { ProfileDto } from './profile.dto';
 import { TenantDto } from './tenant.dto';
-import { TenancyDto } from './tenancy.dto';
 import { AssociationDto } from './association.dto';
 import { ClassificationDto } from './classification.dto';
 import { Profile, Tenant } from '../entities';
@@ -47,7 +46,4 @@ export class UserDto extends AbstractDto implements User {
 
   @ClassField(() => ClassificationDto, { required: false, swagger: false })
   classification?: ClassificationDto;
-
-  @ClassField(() => TenancyDto, { required: false, swagger: false })
-  tenancy?: TenancyDto;
 }

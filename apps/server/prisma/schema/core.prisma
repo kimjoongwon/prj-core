@@ -145,18 +145,18 @@ model Tenant {
   removedAt DateTime? @db.Timestamptz(6)
 
   userId  String
-  roleId  String
   spaceId String
-  default Boolean
+  main    Boolean
 
-  user       User       @relation(fields: [userId], references: [id])
-  space      Space      @relation(fields: [spaceId], references: [id])
-  role       Role       @relation(fields: [roleId], references: [id])
-  categories Category[]
-  groups     Group[]
-  timelines  Timeline[]
-  contents   Content[]
-  files      File[]
+  user        User         @relation(fields: [userId], references: [id])
+  space       Space        @relation(fields: [spaceId], references: [id])
+  categories  Category[]
+  groups      Group[]
+  timelines   Timeline[]
+  contents    Content[]
+  files       File[]
+  roles       Role[]
+  assignments Assignment[]
 }
 
 model Gym {
@@ -171,7 +171,7 @@ model Gym {
   email          String
   businessNumber String  @unique
   depotId        String?
-  spaceId        String
+  spaceId        String  @unique
 
   depot Depot? @relation(fields: [depotId], references: [id])
   space Space  @relation(fields: [spaceId], references: [id])
@@ -189,58 +189,10 @@ model Space {
 
   classification Classification?
   associations   Association[]
-  tenants        Tenant[]
-  tenancy        Tenancy?
-  gyms           Gym[]
+  gym            Gym?
+  Tenant         Tenant[]
 }
 
-model Tenancy {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  spaceId String @unique
-
-  space Space @relation(fields: [spaceId], references: [id])
-}
-
-// model SMS {
-//   id        String    @id @default(uuid())
-//   seq       Int       @unique @default(autoincrement())
-//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime? @db.Timestamptz(6)
-
-//   sentAt    DateTime @db.Timestamptz(6)
-//   messageId String
-
-//   status SMSStatus @default(PROGRESS)
-// }
-
-// model SystemEmail {
-//   id         String    @id @default(uuid())
-//   seq        Int       @unique @default(autoincrement())
-//   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
-//   updatedAt  DateTime? @updatedAt @db.Timestamptz(6) //   removedAt DateTime? @db.Timestamptz(6)
-//   messageId  String
-//   templateId String
-//   tenancyId  String
-//   sentAt     DateTime  @db.Timestamptz(6)
-// }
-
-// model Message {
-//   id        String    @id @default(uuid())
-//   seq       Int       @unique @default(autoincrement())
-//   createdAt DateTime  @default(now()) @db.Timestamptz(6)
-//   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-//   removedAt DateTime? @db.Timestamptz(6)
-
-//   toUserIds  String[]
-//   fromUserId String
-//   contentId  String
-// }
 model Timeline {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -359,13 +311,28 @@ model Role {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name     Roles  @unique @default(USER)
+  name     Roles  @default(USER)
   tenantId String
 
   classification Classification?
   associations   Association[]
   abilities      Ability[]
-  tenants        Tenant[]
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  assignments    Assignment[]
+}
+
+model Assignment {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  roleId   String
+  tenantId String
+
+  role   Role   @relation(fields: [roleId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 }
 
 model Action {

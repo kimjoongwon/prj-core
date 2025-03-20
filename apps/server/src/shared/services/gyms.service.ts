@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GymsRepository } from '../repositories/Gyms.repository';
 import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class GymsService {
@@ -61,9 +62,9 @@ export class GymsService {
   }
 
   async getManyByQuery(query: GymQueryDto) {
-    const args = query.toArgs();
+    const args = query.toArgs() as Prisma.GymFindManyArgs;
     const countArgs = query.toCountArgs();
-    const gyms = await this.repository.findMany(args);
+    const gyms = await this.repository.findMany({ ...args, include: { space: true } });
     const count = await this.repository.count(countArgs);
     return {
       gyms,

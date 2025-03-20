@@ -23,7 +23,9 @@ export class AuthEndpoint {
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
-    res.cookie('tenancyId', user.tenancyId, {
+    const tenant = user.tenants.find((tenant) => tenant.main);
+
+    res.cookie('tenantId', tenant.id, {
       httpOnly: true,
     });
     res.cookie('refreshToken', refreshToken, {
@@ -32,8 +34,6 @@ export class AuthEndpoint {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
     });
-
-    res.cookie('tenantId', user.tenants[0].id, { httpOnly: true });
 
     return new ResponseEntity(
       HttpStatus.OK,
