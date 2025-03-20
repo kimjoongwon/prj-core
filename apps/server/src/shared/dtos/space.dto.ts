@@ -1,5 +1,5 @@
 import { Space } from '@prisma/client';
-import { ClassField, StringField } from '../decorators/field.decorators';
+import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
 import { Association } from '../entities/association.entity';
 import { AbstractDto } from './abstract.dto';
 import { AssociationDto } from './association.dto';
@@ -13,12 +13,15 @@ export class SpaceDto extends AbstractDto implements Space {
   @StringField()
   name: string;
 
+  @UUIDField()
+  tenantId: string;
+
   @ClassField(() => ClassificationDto, { required: false, swagger: false })
   classification?: ClassificationDto;
 
   @ClassField(() => AssociationDto, { required: false, each: true, swagger: false })
   associations?: Association[];
 
-  @ClassField(() => TenantDto, { each: true, required: false, swagger: false })
-  tenants?: TenantDto[];
+  @ClassField(() => TenantDto, { required: false, swagger: false })
+  tenant?: TenantDto;
 }

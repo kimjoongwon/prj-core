@@ -21,7 +21,7 @@ export class InitService {
     let adminRoleId = null;
     this.logger.log(`[${this.LOG_PREFIX}] 앱시작 ROLE 생성`);
 
-    const superAdminRole = await this.prisma.role.findUnique({
+    const superAdminRole = await this.prisma.role.findFirst({
       where: { name: 'SUPER_ADMIN' },
     });
 
@@ -43,7 +43,7 @@ export class InitService {
 
     this.logger.log(`[${this.LOG_PREFIX}] USER ROLE 생성`);
 
-    const userRole = await this.prisma.role.findUnique({ where: { name: 'USER' } });
+    const userRole = await this.prisma.role.findFirst({ where: { name: 'USER' } });
 
     if (!userRole) {
       this.logger.log(`[${this.LOG_PREFIX}] USER 생성`);
@@ -111,7 +111,7 @@ export class InitService {
     };
   }
 
-  async createDefaultUser(roleId, spaceId, tenancyId) {
+  async createDefaultUser() {
     const appConfig = this.configService.get<AppConfig>('app');
     const hashedPassword = await this.passwordService.hashPassword('rkdmf12!@');
 
@@ -136,13 +136,6 @@ export class InitService {
           name: appConfig.adminEmail,
           password: hashedPassword,
           phone: '01073162347',
-          tenants: {
-            create: {
-              default: true,
-              spaceId,
-              roleId,
-            },
-          },
           profiles: {
             create: {
               name: appConfig.name,
@@ -240,23 +233,23 @@ export class InitService {
     this.logger.log(`[${this.LOG_PREFIX}] 페이지 생성`);
   }
 
-  async createDefaultTenancy(spaceId: string) {
-    this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
-    const tenancy = await this.prisma.tenancy.findUnique({
-      where: { spaceId },
-    });
+  // async createDefaultTenancy(spaceId: string) {
+  //   this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
+  //   const tenancy = await this.prisma.tenant.findUnique({
+  //     where: { spaceId },
+  //   });
 
-    if (!tenancy) {
-      this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
-      return this.prisma.tenancy.create({
-        data: {
-          spaceId,
-        },
-      });
-    }
+  //   if (!tenancy) {
+  //     this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
+  //     return this.prisma.tenancy.create({
+  //       data: {
+  //         spaceId,
+  //       },
+  //     });
+  //   }
 
-    return tenancy;
-  }
+  //   return tenancy;
+  // }
 
   async createGroup(tenantId: string) {
     this.logger.log(`[${this.LOG_PREFIX}] 공간그룹 생성`);
@@ -298,13 +291,23 @@ export class InitService {
     });
   }
 
+  createDefaultTenant(spaceId: string, userId: string) {
+    return this.prisma.tenant.create({
+      data: {
+        spaceId,
+        userId,
+        main: true,
+      },
+    });
+  }
+
   async initApp() {
     await this.createServices();
     const { spaceId } = await this.createDefaultGym();
-    const { id: tenancyId } = await this.createDefaultTenancy(spaceId);
-    const { adminRoleId } = await this.createDefaultRoles(tenancyId);
-    const user = await this.createDefaultUser(adminRoleId, spaceId, tenancyId);
-    const tenantId = user.tenants[0].id;
+    const user = await this.createDefaultUser();
+    const tenant = await this.createDefaultTenant(spaceId, user.id);
+    const tenantId = tenant.id;
+    await this.createDefaultRoles(tenantId);
     await this.createSubjects(tenantId);
     await this.createCategory(tenantId);
     await this.createGroup(tenantId);

@@ -61,7 +61,6 @@ export class AuthService {
 
   async signUp(signUpPayloadDto: SignUpPayloadDto) {
     const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
-    const role = await this.prisma.role.findUnique({ where: { name: 'USER' } });
     const { id: userId } = await this.usersService.create({
       data: {
         name,
@@ -69,9 +68,8 @@ export class AuthService {
         password,
         tenants: {
           create: {
-            default: true,
+            main: true,
             spaceId,
-            roleId: role.id,
           },
         },
         profiles: {
@@ -95,7 +93,6 @@ export class AuthService {
           include: {
             space: true,
             user: true,
-            role: true,
           },
         },
       },

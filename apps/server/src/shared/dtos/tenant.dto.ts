@@ -4,6 +4,9 @@ import { UserDto, SpaceDto } from '.';
 import { BooleanField, ClassField, StringField, UUIDField } from '../decorators/field.decorators';
 
 export class TenantDto extends AbstractDto implements Tenant {
+  @BooleanField()
+  main: boolean;
+
   @UUIDField()
   roleId: string;
 
@@ -12,9 +15,6 @@ export class TenantDto extends AbstractDto implements Tenant {
 
   @StringField()
   spaceId: string;
-
-  @BooleanField()
-  default: boolean;
 
   @ClassField(() => UserDto, { required: false })
   user?: UserDto;

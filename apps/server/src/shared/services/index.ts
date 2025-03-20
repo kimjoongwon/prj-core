@@ -14,3 +14,4 @@ export * from './routines.service';
 export * from './programs.service';
 export * from './depots.service';
 export * from './gyms.service';
+export * from './assignments.service';

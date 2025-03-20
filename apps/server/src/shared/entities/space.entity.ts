@@ -10,7 +10,8 @@ import { SpaceDto } from '../dtos';
 export class Space extends AbstractEntity<SpaceDto> implements SpaceEntity {
   label: string;
   name: string;
+  tenantId: string;
   classification?: Classification;
   associations?: Association[];
-  tenants?: Tenant[];
+  tenant?: Tenant;
 }
