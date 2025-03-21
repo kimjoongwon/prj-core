@@ -1,4 +1,4 @@
-import { ClassField, StringField, TenantDto, UserDto } from '@shared';
+import { ClassField, StringField, TenantDto, UserDto, UUIDField } from '@shared';
 
 export class TokenDto {
   @StringField()
@@ -9,4 +9,7 @@ export class TokenDto {
 
   @ClassField(() => UserDto)
   user: UserDto;
+
+  @UUIDField()
+  mainTenantId: string;
 }

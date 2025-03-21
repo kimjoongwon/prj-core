@@ -65,7 +65,7 @@ export class GymsService {
     const gyms = await this.repository.findMany({
       where: {
         space: {
-          Tenant: {
+          tenants: {
             some: {
               id: tenantId,
             },
@@ -73,9 +73,14 @@ export class GymsService {
         },
       },
       include: {
-        space: true,
+        space: {
+          include: {
+            tenants: true,
+          },
+        },
       },
     });
+
     return gyms;
   }
 

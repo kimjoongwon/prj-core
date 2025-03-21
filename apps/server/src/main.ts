@@ -12,7 +12,7 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-  app.set('query parser', 'extended');
+  // app.set('query parser', 'extended');
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
@@ -20,7 +20,6 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-
   const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();
 
   const options: SwaggerDocumentOptions = {

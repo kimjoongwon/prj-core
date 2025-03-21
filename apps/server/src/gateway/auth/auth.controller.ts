@@ -1,5 +1,5 @@
 import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiResponseEntity,
   Auth,
@@ -16,13 +16,14 @@ import { Response, Request } from 'express';
 
 @ApiTags('AUTH')
 @Controller()
-export class AuthEndpoint {
+export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+
     const tenant = user.tenants.find((tenant) => tenant.main);
 
     res.cookie('tenantId', tenant.id, {
@@ -49,17 +50,25 @@ export class AuthEndpoint {
   @Auth([])
   @ApiResponse({ status: HttpStatus.OK, type: TokenDto })
   @Get('new-token')
-  async getNewToken(@Req() req: Request & { user: UserDto }, @Res({ passthrough: true }) res) {
+  async getNewToken(
+    @Req() req: Request & { user: UserDto },
+    @Res({ passthrough: true }) res,
+  ): Promise<TokenDto> {
     const refreshToken = req.cookies['refreshToken'];
     const { newAccessToken, newRefreshToken } = await this.authService.getNewToken(refreshToken);
 
+    const user = req.user;
+
+    const tenant = user.tenants.find((tenant) => tenant.main);
+
     res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
-    res.cookie('tenantId', req.user.tenants[0].id, { httpOnly: true });
+    res.cookie('mainTenantId', tenant.id);
 
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
+      mainTenantId: tenant.id,
       user: req.user,
     };
   }

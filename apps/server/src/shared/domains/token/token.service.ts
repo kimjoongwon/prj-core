@@ -35,7 +35,6 @@ export class TokenService {
   generateRefreshToken(payload: { userId: string }) {
     const authConfig = this.configService.get<AuthConfig>('auth');
     return this.jwtService.sign(payload, {
-      secret: authConfig?.secret,
       expiresIn: authConfig?.refresh,
     });
   }
@@ -48,9 +47,8 @@ export class TokenService {
   }
 
   validateToken(token: string) {
-    const { secret } = this.configService.get<AuthConfig>('auth');
     try {
-      return this.jwtService.verify(token, { secret });
+      return this.jwtService.verify(token);
     } catch (error) {
       if (error instanceof JsonWebTokenError) {
         throw new BadRequestException('토큰 오동작');

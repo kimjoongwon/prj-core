@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'nestjs-prisma';
 import { PasswordService } from '../password/password.service';
 import { ResponseEntity } from '../../entities';
 import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
@@ -23,7 +22,6 @@ export class AuthService {
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
-    private prisma: PrismaService,
   ) {}
 
   async getCurrentUser(accessToken: string) {
