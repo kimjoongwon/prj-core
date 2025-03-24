@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { JsonWebTokenError, JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
+import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from '../../configs/config.type';
@@ -50,9 +50,6 @@ export class TokenService {
     try {
       return this.jwtService.verify(token);
     } catch (error) {
-      if (error instanceof JsonWebTokenError) {
-        throw new BadRequestException('토큰 오동작');
-      }
       if (error instanceof TokenExpiredError) {
         throw new BadRequestException('토튼 만료 에러');
       }
@@ -62,6 +59,15 @@ export class TokenService {
       }
 
       throw new InternalServerErrorException(`알 수 없는 에러: ${error?.message}`);
+    }
+  }
+
+  verifyToken(token: string) {
+    try {
+      this.validateToken(token);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 }

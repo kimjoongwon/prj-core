@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Global, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthConfig, UsersService } from '@shared';
+import { AuthConfig, ContextProvider, UsersService } from '@shared';
 import { Request } from 'express';
 
 @Global()
@@ -13,25 +13,30 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     readonly usersService: UsersService,
   ) {
     const authConfig = config.get<AuthConfig>('auth');
+
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
-          return req.cookies?.accessToken;
+          const token = req.cookies?.accessToken;
+          ContextProvider.setToken(token);
+          return token;
         },
         (req: Request) => {
-          return req.headers?.authorization?.split(' ')[1];
+          const token = req.headers?.authorization?.split(' ')[1];
+          ContextProvider.setToken(token);
+          return token;
         },
       ]),
-      ignoreExpiration: false,
       secretOrKey: authConfig?.secret,
     });
   }
 
-  async validate({ userId }: { userId: string; iat: number; exp: number }) {
+  async validate(payload: { userId: string; iat: number; exp: number }) {
     const user = await this.usersService.getUnique({
-      where: { id: userId },
+      where: { id: payload.userId },
       include: { tenants: true },
     });
+
     return { user };
   }
 }

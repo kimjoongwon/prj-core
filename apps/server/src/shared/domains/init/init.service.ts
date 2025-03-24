@@ -148,52 +148,67 @@ export class InitService {
         },
       });
 
-      const userService = await this.prisma.service.findUnique({
-        where: {
-          name: 'USER',
-        },
-      });
-
-      const category = await this.prisma.category.create({
-        data: {
-          name: '공통',
-          type: 'ROOT',
-          tenantId: user.tenants[0].id,
-          serviceId: userService.id,
-        },
-      });
-
-      const group = await this.prisma.group.create({
-        data: {
-          label: '공통',
-          name: '공통',
-          tenantId: user.tenants[0].id,
-          serviceId: userService.id,
-        },
-      });
-
-      await this.prisma.association.create({
-        data: {
-          groupId: group.id,
-          userId: user.id,
-        },
-      });
-
-      await this.prisma.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          classification: {
-            create: {
-              categoryId: category.id,
-            },
-          },
-        },
-      });
-
       return user;
     }
+  }
+
+  async createUserCommonGroupAndCategory(tenantId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        name: this.configService.get<AppConfig>('app').adminEmail,
+      },
+      include: {
+        tenants: {
+          include: {
+            space: true,
+          },
+        },
+      },
+    });
+
+    const userService = await this.prisma.service.findUnique({
+      where: {
+        name: 'USER',
+      },
+    });
+
+    const category = await this.prisma.category.create({
+      data: {
+        name: '공통',
+        type: 'ROOT',
+        tenantId,
+        serviceId: userService.id,
+      },
+    });
+
+    const group = await this.prisma.group.create({
+      data: {
+        label: '공통',
+        name: '공통',
+        tenantId,
+        serviceId: userService.id,
+      },
+    });
+
+    await this.prisma.association.create({
+      data: {
+        groupId: group.id,
+        userId: user.id,
+      },
+    });
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        classification: {
+          create: {
+            categoryId: category.id,
+          },
+        },
+      },
+    });
   }
 
   async createSubjects(tenantId: string) {
@@ -232,24 +247,6 @@ export class InitService {
   initPage() {
     this.logger.log(`[${this.LOG_PREFIX}] 페이지 생성`);
   }
-
-  // async createDefaultTenancy(spaceId: string) {
-  //   this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
-  //   const tenancy = await this.prisma.tenant.findUnique({
-  //     where: { spaceId },
-  //   });
-
-  //   if (!tenancy) {
-  //     this.logger.log(`[${this.LOG_PREFIX}] 기본 Tenancy 생성`);
-  //     return this.prisma.tenancy.create({
-  //       data: {
-  //         spaceId,
-  //       },
-  //     });
-  //   }
-
-  //   return tenancy;
-  // }
 
   async createGroup(tenantId: string) {
     this.logger.log(`[${this.LOG_PREFIX}] 공간그룹 생성`);

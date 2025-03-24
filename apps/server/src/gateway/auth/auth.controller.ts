@@ -1,14 +1,16 @@
 import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   ApiResponseEntity,
   Auth,
   AuthService,
+  ContextProvider,
   LoginPayloadDto,
   Public,
   ResponseEntity,
   SignUpPayloadDto,
   TokenDto,
+  TokenService,
   UserDto,
 } from '@shared';
 import { plainToInstance } from 'class-transformer';
@@ -17,7 +19,10 @@ import { Response, Request } from 'express';
 @ApiTags('AUTH')
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
   @Post('token')
@@ -83,5 +88,15 @@ export class AuthController {
       '회원가입 성공',
       await this.authService.signUp(signUpDto),
     );
+  }
+
+  @Auth([], { public: false })
+  @HttpCode(HttpStatus.OK)
+  @Get('verify-token')
+  @ApiResponseEntity(Boolean, HttpStatus.OK)
+  async verifyToken() {
+    const token = ContextProvider.getToken();
+    const isValid = this.tokenService.verifyToken(token);
+    return new ResponseEntity(HttpStatus.OK, '토큰 유효성 검증 완료', isValid);
   }
 }
