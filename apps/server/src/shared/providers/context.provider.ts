@@ -75,4 +75,11 @@ export class ContextProvider {
   static getTenant(): UserDto | undefined {
     return ContextProvider.get<UserDto>(ContextProvider.tenantKey);
   }
+
+  static setToken(token: string): void {
+    ContextProvider.set('token', token);
+  }
+  static getToken(): string {
+    return ContextProvider.get('token');
+  }
 }

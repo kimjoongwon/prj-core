@@ -97,6 +97,7 @@ export class AuthService {
     });
 
     this.logger.log(`User: ${JSON.stringify(user)}`);
+
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {
