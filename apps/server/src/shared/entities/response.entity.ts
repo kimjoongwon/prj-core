@@ -12,11 +12,11 @@ export class ResponseEntity<T> {
   @ApiProperty()
   message: string;
 
-  @ApiProperty({ nullable: true })
-  data: T | null = null;
+  @ApiProperty({ nullable: true, required: false })
+  data?: T | null = null;
 
-  @ClassField(() => PageMetaDto)
-  readonly meta: PageMetaDto;
+  @ClassField(() => PageMetaDto, { nullable: true, required: false })
+  readonly meta?: PageMetaDto;
 
   constructor(httpStatus: HttpStatus, message: string, data?: T, meta?: PageMetaDto) {
     this.httpStatus = httpStatus;
