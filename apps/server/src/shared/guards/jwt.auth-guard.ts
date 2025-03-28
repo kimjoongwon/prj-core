@@ -21,7 +21,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err, req) {
     if (err || !req.user) {
-      throw err || new UnauthorizedException();
+      throw (
+        err ||
+        new UnauthorizedException({
+          name: '김중원',
+          message: '인증되지 않은 사용자입니다.',
+        })
+      );
     }
     return req.user;
   }

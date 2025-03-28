@@ -29,8 +29,12 @@ export class ResponseEntity<T> {
     return new ResponseEntity(HttpStatus.OK, message || '성공');
   }
 
-  static WITH_ERROR<T>(httpStatus: HttpStatus, message: string): ResponseEntity<T> {
-    return new ResponseEntity(httpStatus, message || '실패', null);
+  static WITH_ERROR<T>(
+    httpStatus: HttpStatus,
+    message: string,
+    data?: T | null,
+  ): ResponseEntity<T> {
+    return new ResponseEntity(httpStatus, message || '실패', data);
   }
 
   static WITH_ROUTE<T>(data: T): ResponseEntity<T> {

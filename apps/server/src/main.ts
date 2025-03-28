@@ -1,7 +1,7 @@
 import { AppModule } from './gateway/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { PrismaClientExceptionFilter } from '@shared';
+import { AllExceptionsFilter, PrismaClientExceptionFilter } from '@shared';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
@@ -12,8 +12,11 @@ async function bootstrap() {
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-  // app.set('query parser', 'extended');
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter));
+  app.set('query parser', 'extended');
+  app.useGlobalFilters(
+    new AllExceptionsFilter(httpAdapterHost.httpAdapter),
+    new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
