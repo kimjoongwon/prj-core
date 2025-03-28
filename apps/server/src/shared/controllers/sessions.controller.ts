@@ -95,7 +95,6 @@ export class SessionsController {
   @ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
   async getSessionsByQuery(@Query() query: SessionQueryDto) {
     const { count, sessions } = await this.service.getManyByQuery(query);
-    console.log('sessions');
     return new ResponseEntity(
       HttpStatus.OK,
       'success',

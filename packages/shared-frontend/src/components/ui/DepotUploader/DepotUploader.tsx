@@ -47,7 +47,6 @@ export const DepotUploader = observer(
       const setInitialValue = async () => {
         if (localState.depotId) {
           const { data: depot } = await getDepotById(localState.depotId);
-          console.log('depot', toJS(depot));
           if (depot?.files) {
             localState.images = depot.files.filter(
               file => file.classification?.category.name === '이미지',
@@ -145,7 +144,6 @@ export const DepotUploader = observer(
             onFilesChange={handleFilesChange}
             onFileRemove={async (fileDto: FileDto) => {
               await removeFileById(fileDto.id);
-              console.log('removed fileDto', fileDto);
             }}
           />
         )}
@@ -158,7 +156,6 @@ export const DepotUploader = observer(
             onFilesChange={handleFilesChange}
             onFileRemove={async (fileDto: FileDto) => {
               await removeFileById(fileDto.id);
-              console.log('removed fileDto', fileDto);
             }}
           />
         )}

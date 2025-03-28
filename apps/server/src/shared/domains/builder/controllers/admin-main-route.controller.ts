@@ -128,7 +128,6 @@ export class AdminMainRouteController {
     @Param('type') type: 'edit' | 'add',
   ) {
     const route = await this.timelineEditPage.getMeta(timelineId, type);
-    console.log('route', route);
     return new ResponseEntity(HttpStatus.OK, 'OK', route);
   }
 
@@ -148,7 +147,6 @@ export class AdminMainRouteController {
     @Param('type') type: 'edit' | 'add',
   ) {
     const route = await this.sessinoEditPage.getMeta(sessionId, type);
-    console.log('route', route);
     return new ResponseEntity(HttpStatus.OK, 'Sessions Edit is OK', route);
   }
 
@@ -187,7 +185,6 @@ export class AdminMainRouteController {
     @Param('type') type: 'edit' | 'add',
   ) {
     const route = await this.taskEditPage.getMeta(taskId, type);
-    console.log('route', route);
     return ResponseEntity.WITH_ROUTE(route);
   }
 

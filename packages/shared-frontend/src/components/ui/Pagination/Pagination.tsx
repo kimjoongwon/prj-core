@@ -21,7 +21,6 @@ export const Pagination = observer((props: PaginationProps) => {
 
   const onChangePage = async (page: number) => {
     const skip = (page - 1) * take;
-    console.log('skip', skip);
     setQueryStates(
       {
         skip,
