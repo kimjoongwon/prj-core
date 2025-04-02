@@ -72,6 +72,14 @@ export class ContextProvider {
     return ContextProvider.get<UserDto>(ContextProvider.authUserKey);
   }
 
+  static setAuthUserId(userId: string): void {
+    ContextProvider.set('userId', userId);
+  }
+
+  static getAuthUserId(): string {
+    return ContextProvider.get('userId');
+  }
+
   static getTenant(): UserDto | undefined {
     return ContextProvider.get<UserDto>(ContextProvider.tenantKey);
   }

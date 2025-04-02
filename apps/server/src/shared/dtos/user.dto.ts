@@ -4,7 +4,6 @@ import {
   PasswordField,
   StringField,
   UUIDField,
-  UUIDFieldOptional,
 } from '../decorators/field.decorators';
 import { User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
@@ -13,12 +12,9 @@ import { ProfileDto } from './profile.dto';
 import { TenantDto } from './tenant.dto';
 import { AssociationDto } from './association.dto';
 import { ClassificationDto } from './classification.dto';
-import { Profile, Tenant } from '../entities';
+import { ResponseExcludedField } from '../constants';
 
 export class UserDto extends AbstractDto implements User {
-  @UUIDField()
-  tenancyId: string;
-
   @UUIDField()
   spaceId: string;
 
@@ -32,13 +28,13 @@ export class UserDto extends AbstractDto implements User {
   phone: string;
 
   @Exclude()
-  @PasswordField()
+  @PasswordField({ description: ResponseExcludedField })
   password: string;
 
-  @ClassField(() => Profile, { each: true, required: false, swagger: false })
+  @ClassField(() => ProfileDto, { each: true, required: false, swagger: false })
   profiles?: ProfileDto[];
 
-  @ClassField(() => Tenant, { each: true, required: false, swagger: false })
+  @ClassField(() => TenantDto, { each: true, required: false, swagger: false })
   tenants?: TenantDto[];
 
   @ClassField(() => AssociationDto, { each: true, required: false, swagger: false })

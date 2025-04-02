@@ -209,6 +209,7 @@ import type {
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdateGym200AllOf,
+  UpdateGymDto,
   UpdateProgram200AllOf,
   UpdateProgramDto,
   UpdateRole200AllOf,
@@ -226,7 +227,8 @@ import type {
   UpdateTimeline200AllOf,
   UpdateTimelineDto,
   UpdateUser200AllOf,
-  UpdateUserDto
+  UpdateUserDto,
+  VerifyToken200AllOf
 } from './model'
 import { customInstance } from './libs/customAxios';
 import type { ErrorType, BodyType } from './libs/customAxios';
@@ -666,14 +668,14 @@ export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
 export const updateGym = (
     gymId: string,
-    createGymDto: BodyType<CreateGymDto>,
+    updateGymDto: BodyType<UpdateGymDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
       return customInstance<UpdateGym200AllOf>(
       {url: `/api/v1/gyms/${gymId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: createGymDto
+      data: updateGymDto
     },
       options);
     }
@@ -681,8 +683,8 @@ export const updateGym = (
 
 
 export const getUpdateGymMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext> => {
     
 const mutationKey = ['updateGym'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -694,7 +696,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGym>>, {gymId: string;data: BodyType<CreateGymDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGym>>, {gymId: string;data: BodyType<UpdateGymDto>}> = (props) => {
           const {gymId,data} = props ?? {};
 
           return  updateGym(gymId,data,requestOptions)
@@ -706,15 +708,15 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateGymMutationResult = NonNullable<Awaited<ReturnType<typeof updateGym>>>
-    export type UpdateGymMutationBody = BodyType<CreateGymDto>
+    export type UpdateGymMutationBody = BodyType<UpdateGymDto>
     export type UpdateGymMutationError = ErrorType<void>
 
     export const useUpdateGym = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationResult<
         Awaited<ReturnType<typeof updateGym>>,
         TError,
-        {gymId: string;data: BodyType<CreateGymDto>},
+        {gymId: string;data: BodyType<UpdateGymDto>},
         TContext
       > => {
 
@@ -5091,6 +5093,190 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions);
     }
     
+export const verifyToken = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<VerifyToken200AllOf>(
+      {url: `/api/v1/auth/verify-token`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getVerifyTokenQueryKey = () => {
+    return [`/api/v1/auth/verify-token`] as const;
+    }
+
+    
+export const getVerifyTokenQueryOptions = <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyTokenQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
+export type VerifyTokenQueryError = ErrorType<void>
+
+
+export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof verifyToken>>,
+          TError,
+          Awaited<ReturnType<typeof verifyToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof verifyToken>>,
+          TError,
+          Awaited<ReturnType<typeof verifyToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getVerifyTokenQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getVerifyTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
+export type VerifyTokenSuspenseQueryError = ErrorType<void>
+
+
+export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getVerifyTokenSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getVerifyTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type VerifyTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
+export type VerifyTokenSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 export const createRole = (
     createRoleDto: BodyType<CreateRoleDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal

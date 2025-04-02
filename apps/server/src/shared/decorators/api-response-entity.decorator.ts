@@ -14,7 +14,7 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
       example: httpStatus,
     },
     message: { type: 'string', nullable: false },
-    data: { $ref: getSchemaPath(dataDto) },
+    data: { $ref: getSchemaPath(dataDto), nullable: true },
   };
 
   const allOf = options?.isArray

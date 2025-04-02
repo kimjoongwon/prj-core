@@ -288,7 +288,19 @@ export class InitService {
     });
   }
 
-  createDefaultTenant(spaceId: string, userId: string) {
+  async createDefaultTenant(spaceId: string, userId: string) {
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        userId,
+        spaceId,
+      },
+    });
+
+    if (tenant) {
+      this.logger.log(`[${this.LOG_PREFIX}] 테넌트가 이미 존재합니다.`);
+      return tenant;
+    }
+
     return this.prisma.tenant.create({
       data: {
         spaceId,

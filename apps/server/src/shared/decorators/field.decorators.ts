@@ -51,7 +51,6 @@ interface IFieldOptions extends Omit<InputProps, 'type'> {
   formType?: string;
   sectionName?: string;
 }
-
 interface INumberFieldOptions extends IFieldOptions {
   min?: number;
   max?: number;
@@ -463,7 +462,7 @@ export function ClassField<TClass extends Constructor>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const classValue = getClass();
 
-  const decorators = [Type(() => classValue), ValidateNested({ each: options.each })];
+  const decorators = [Type(getClass), ValidateNested({ each: options.each })];
 
   if (options.required !== false) {
     decorators.push(IsDefined());
