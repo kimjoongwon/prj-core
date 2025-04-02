@@ -12,8 +12,8 @@ export class ResponseEntity<T> {
   @ApiProperty()
   message: string;
 
-  @ApiProperty({ nullable: true, required: false })
-  data?: T | null = null;
+  @ApiProperty({ required: false })
+  data?: T;
 
   @ClassField(() => PageMetaDto, { nullable: true, required: false })
   readonly meta?: PageMetaDto;

@@ -1,8 +1,5 @@
-import { User as UserEntity } from '@prisma/client';
+import { Association, Profile, Tenant, User as UserEntity } from '@prisma/client';
 import { AbstractEntity } from './abstract.entity';
-import { Profile } from './profile.entity';
-import { Association } from './association.entity';
-import { Tenant } from './tenant.entity';
 import { UseDto } from '../decorators/use-dto.decorator';
 import { UserDto } from '../dtos';
 

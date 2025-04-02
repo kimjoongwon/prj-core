@@ -25,6 +25,7 @@ export class AuthUserInterceptor implements NestInterceptor {
     if (request?.user?.id && request?.user?.tenants) {
       const user = <UserDto>request.user;
       ContextProvider.setAuthUser(user);
+      ContextProvider.setAuthUserId(user.id);
     }
 
     return next.handle();

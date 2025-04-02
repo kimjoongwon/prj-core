@@ -5,12 +5,13 @@
  */
 import type { ResponseEntityHttpStatus } from './responseEntityHttpStatus';
 import type { ResponseEntityData } from './responseEntityData';
-import type { PageMetaDto } from './pageMetaDto';
+import type { ResponseEntityMeta } from './responseEntityMeta';
 
 export interface ResponseEntity {
   httpStatus: ResponseEntityHttpStatus;
   message: string;
   /** @nullable */
-  data: ResponseEntityData;
-  meta: PageMetaDto;
+  data?: ResponseEntityData;
+  /** @nullable */
+  meta?: ResponseEntityMeta;
 }

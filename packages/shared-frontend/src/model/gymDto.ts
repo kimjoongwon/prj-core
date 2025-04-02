@@ -19,6 +19,6 @@ export interface GymDto {
   email: string;
   businessNumber: string;
   depotId: string;
-  depot: DepotDto;
-  space: SpaceDto;
+  depot?: DepotDto;
+  space?: SpaceDto;
 }

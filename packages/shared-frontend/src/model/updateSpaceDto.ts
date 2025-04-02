@@ -7,4 +7,5 @@
 export interface UpdateSpaceDto {
   label?: string;
   name?: string;
+  tenantId?: string;
 }

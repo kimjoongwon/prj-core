@@ -2,10 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { GymsRepository } from '../repositories';
 import { CreateGymDto, GymQueryDto, UpdateGymDto } from '../dtos';
 import { Prisma } from '@prisma/client';
+import { ContextProvider } from '../providers';
 
 @Injectable()
 export class GymsService {
   constructor(private readonly repository: GymsRepository) {}
+
+  getMyGyms() {
+    const userId = ContextProvider.getAuthUserId();
+    return this.repository.findMany({
+      where: {
+        space: {
+          tenants: {
+            some: {
+              userId,
+            },
+          },
+        },
+        removedAt: null,
+      },
+    });
+  }
 
   getById(id: string) {
     return this.repository.findUnique({

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto } from '../dtos';
+import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto, GymDto } from '../dtos';
 import { ResponseEntity } from '../entities/response.entity';
 import { UsersService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
@@ -21,6 +21,15 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller()
 export class UsersController {
   constructor(private readonly service: UsersService) {}
+
+  @Get('me/gyms')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })
+  async getMyGyms() {
+    const gyms = await this.service.getMyGyms();
+    return new ResponseEntity(HttpStatus.OK, 'success', gyms);
+  }
 
   @Post()
   @Auth([])
