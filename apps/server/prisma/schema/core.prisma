@@ -244,6 +244,20 @@ model Program {
   session Session @relation(fields: [sessionId], references: [id])
 }
 
+model Activity {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+
+  routineId String
+  taskId    String
+
+  name  String
+  label String
+}
+
 model Routine {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
@@ -255,22 +269,7 @@ model Routine {
   label     String
   contentId String
 
-  content    Content    @relation(fields: [contentId], references: [id])
-  activities Activity[]
-}
-
-model Activity {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  taskId    String
-  routineId String
-
-  routine Routine @relation(fields: [routineId], references: [id])
-  task    Task    @relation(fields: [taskId], references: [id])
+  content Content @relation(fields: [contentId], references: [id])
 }
 
 model Exercise {
@@ -299,9 +298,8 @@ model Task {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  content    Content    @relation(fields: [contentId], references: [id])
-  exercise   Exercise?
-  activities Activity[]
+  content  Content   @relation(fields: [contentId], references: [id])
+  exercise Exercise?
 }
 
 model Role {
