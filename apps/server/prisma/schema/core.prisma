@@ -166,12 +166,14 @@ model Gym {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  address        String
-  phone          String
-  email          String
-  businessNumber String  @unique
-  depotId        String?
-  spaceId        String  @unique
+  name       String
+  label      String
+  address    String
+  phone      String
+  email      String
+  businessNo String  @unique
+  depotId    String?
+  spaceId    String  @unique
 
   depot Depot? @relation(fields: [depotId], references: [id])
   space Space  @relation(fields: [spaceId], references: [id])
@@ -183,9 +185,6 @@ model Space {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-
-  name  String
-  label String
 
   classification Classification?
   associations   Association[]
@@ -199,10 +198,7 @@ model Timeline {
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-
-  name     String
-  label    String
-  tenantId String
+  tenantId  String
 
   sessions        Session[]
   tenant          Tenant          @relation(fields: [tenantId], references: [id])
@@ -211,12 +207,13 @@ model Timeline {
 }
 
 model Session {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
+  id                 String              @id @default(uuid())
+  seq                Int                 @unique @default(autoincrement())
+  createdAt          DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime?           @updatedAt @db.Timestamptz(6)
+  removedAt          DateTime?           @db.Timestamptz(6)
+  name               String
+  label              String
   type               SessionTypes        @default(ONE_TIME)
   repeatCycleType    RepeatCycleTypes?
   startDateTime      DateTime?           @db.Timestamptz(6)
@@ -236,12 +233,13 @@ model Program {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  routineId    String
+  routineId    String @unique
   sessionId    String @unique
   instructorId String
   capacity     Int
 
   session Session @relation(fields: [sessionId], references: [id])
+  routine Routine @relation(fields: [routineId], references: [id])
 }
 
 model Activity {
@@ -251,11 +249,11 @@ model Activity {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  routineId String
-  taskId    String
+  routineId  String
+  exerciseId String
 
-  name  String
-  label String
+  routine   Routine  @relation(fields: [routineId], references: [id])
+  excercise Exercise @relation(fields: [exerciseId], references: [id])
 }
 
 model Routine {
@@ -265,11 +263,11 @@ model Routine {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name      String
-  label     String
-  contentId String
+  name  String
+  label String
 
-  content Content @relation(fields: [contentId], references: [id])
+  program    Program?
+  activities Activity[]
 }
 
 model Exercise {
@@ -279,26 +277,27 @@ model Exercise {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
+  name     String
+  label    String
   duration Int
   count    Int
-  taskId   String @unique
 
-  task Task @relation(fields: [taskId], references: [id])
+  taskId String @unique
+
+  task       Task       @relation(fields: [taskId], references: [id])
+  activities Activity[]
 }
 
 model Task {
   id  String @id @default(uuid())
   seq Int    @unique @default(autoincrement())
 
-  name      String
-  label     String
-  contentId String
-
   createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  content  Content   @relation(fields: [contentId], references: [id])
+  teanantId String
+
   exercise Exercise?
 }
 
@@ -447,8 +446,6 @@ model Content {
   text         String?       @db.VarChar(1000)
   depotId      String?
   tenantId     String
-  routines     Routine[]
-  tasks        Task[]
   depot        Depot?        @relation(fields: [depotId], references: [id])
   tenant       Tenant        @relation(fields: [tenantId], references: [id])
   associations Association[]
