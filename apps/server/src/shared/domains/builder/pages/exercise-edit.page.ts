@@ -1,13 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
 import { PrismaService } from 'nestjs-prisma';
-import {
-  createDefaultExerciseObject,
-  CreateExerciseDto,
-  createExerciseValidationObject,
-} from '../../../dtos';
+import { CreateExerciseDto } from '../../../dtos';
 import { ContextProvider } from '../../../providers';
-import { createTaskValidationObject, defaultCreateTaskDtoObject } from '../../../dtos/task.dto';
 import {
   createContentDtoValidationObject,
   defaultCreateContentDto,
@@ -19,13 +14,13 @@ export class ExerciseEditPage {
 
   async getMeta(exerciseId: string | 'new', type: 'add' | 'edit'): Promise<PageBuilder> {
     const createExerciseDto: CreateExerciseDto = {
-      ...createDefaultExerciseObject,
-      task: {
-        ...defaultCreateTaskDtoObject,
-        content: {
-          ...defaultCreateContentDto,
-        },
-      },
+      tenantId: '',
+      name: '',
+      description: '',
+      imageDepotId: '',
+      videoDepotId: '',
+      duration: 0,
+      count: 0,
     };
 
     const tenantId = ContextProvider.getTenantId();
@@ -36,34 +31,18 @@ export class ExerciseEditPage {
         },
       },
       form: {
-        validations: {
-          ...createExerciseValidationObject,
-          task: {
-            ...createTaskValidationObject,
-            content: {
-              ...createContentDtoValidationObject,
-            },
-          },
-        },
+        validations: {},
       },
     };
 
-    page.state.form.inputs.task.content.tenantId = tenantId;
+    page.state.form.inputs.tenantId = tenantId;
 
     if (exerciseId !== 'new' && type === 'edit') {
       const exercise = await this.prisma.exercise.findUnique({
         where: {
           id: exerciseId,
         },
-        include: {
-          task: {
-            include: {
-              content: true,
-            },
-          },
-        },
       });
-      page.state.form.inputs = exercise;
     }
 
     return page;

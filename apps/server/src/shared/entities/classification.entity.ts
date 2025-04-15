@@ -13,15 +13,13 @@ export class Classification
   extends AbstractEntity<ClassificationDto>
   implements ClassificationEntity
 {
+  taskId: string;
   fileId: string;
   categoryId: string;
-
   userId: string;
-  contentId: string;
   spaceId: string;
   roleId: string;
   timelineId: string;
-
   serviceId: string;
 
   service: Service;
