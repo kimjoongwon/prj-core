@@ -1,42 +1,28 @@
 import { Task as TaskEntity } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
-import { StringField, UUIDField } from '../decorators';
-import { CreateTaskDto } from './create';
-import { ValidationRecord } from '@shared/types';
+import { UUIDField } from '../decorators';
 
-export const createTaskValidationObject: Omit<ValidationRecord<CreateTaskDto>, 'content'> = {
-  name: {
-    required: {
-      value: true,
-      message: '이름은 필수입니다.',
-    },
-  },
-  label: {
-    required: {
-      value: true,
-      message: '라벨은 필수입니다.',
-    },
-  },
-};
+// export const createTaskValidationObject: Omit<ValidationRecord<CreateTaskDto>, 'content'> = {
+//   name: {
+//     required: {
+//       value: true,
+//       message: '이름은 필수입니다.',
+//     },
+//   },
+//   label: {
+//     required: {
+//       value: true,
+//       message: '라벨은 필수입니다.',
+//     },
+//   },
+// };
 
-export const defaultCreateTaskDtoObject: Omit<CreateTaskDto, 'content'> = {
-  name: '',
-  label: '',
-};
+// export const defaultCreateTaskDtoObject: Omit<CreateTaskDto, 'content'> = {
+//   name: '',
+//   label: '',
+// };
 
 export class TaskDto extends AbstractDto implements TaskEntity {
-  @StringField({
-    default: defaultCreateTaskDtoObject.name,
-    errorMessage: createTaskValidationObject.name.required.message,
-  })
-  name: string;
-
-  @StringField({
-    default: defaultCreateTaskDtoObject.label,
-    errorMessage: createTaskValidationObject.label.required.message,
-  })
-  label: string;
-
   @UUIDField()
-  contentId: string;
+  tenantId: string;
 }

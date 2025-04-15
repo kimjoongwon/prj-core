@@ -72,7 +72,9 @@ export class InitService {
     const appName = appConfig.name;
 
     const defaultGym = await this.prisma.gym.findFirst({
-      where: { space: { name: appName } },
+      where: {
+        name: appName,
+      },
       include: {
         space: true,
       },
@@ -87,13 +89,12 @@ export class InitService {
         data: {
           address: '서울시 강남구',
           phone: '01073162347',
-          businessNumber: '1234567890',
+          businessNo: '1234567890',
           email: 'galaxy@gmail.com',
+          name: appName,
+          label: appName,
           space: {
-            create: {
-              name: appName,
-              label: appName,
-            },
+            create: {},
           },
         },
         include: {

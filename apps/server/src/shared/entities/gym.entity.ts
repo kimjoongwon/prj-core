@@ -6,6 +6,9 @@ import { DepotDto, SpaceDto } from '../dtos';
 
 @UseDto(GymDto)
 export class Gym extends AbstractEntity<GymDto> implements GymEntity {
+  name: string;
+  label: string;
+  businessNo: string;
   spaceId: string;
   address: string;
   phone: string;

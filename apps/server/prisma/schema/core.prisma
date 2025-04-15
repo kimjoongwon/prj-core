@@ -23,10 +23,10 @@ model Classification {
   seq        Int     @unique @default(autoincrement())
   categoryId String
   userId     String? @unique
-  contentId  String? @unique
   spaceId    String? @unique
   roleId     String? @unique
   fileId     String? @unique
+  taskId     String? @unique
   timelineId String? @unique
 
   createdAt DateTime  @default(now())
@@ -40,13 +40,14 @@ model Classification {
   role     Role?     @relation(fields: [roleId], references: [id])
   timeline Timeline? @relation(fields: [timelineId], references: [id])
   file     File?     @relation(fields: [fileId], references: [id])
+  task     Task?     @relation(fields: [taskId], references: [id])
 
   @@unique([categoryId, userId])
   @@unique([categoryId, spaceId])
   @@unique([categoryId, roleId])
   @@unique([categoryId, timelineId])
-  @@unique([categoryId, contentId])
   @@unique([categoryId, fileId])
+  @@unique([categoryId, taskId])
 }
 
 model Group {
@@ -93,6 +94,7 @@ model Association {
   timelineId String?
   roleId     String?
   fileId     String?
+  taskId     String?
   contentId  String?
 
   group    Group     @relation(fields: [groupId], references: [id])
@@ -102,6 +104,7 @@ model Association {
   timeline Timeline? @relation(fields: [timelineId], references: [id])
   content  Content?  @relation(fields: [contentId], references: [id])
   file     File?     @relation(fields: [fileId], references: [id])
+  task     Task?     @relation(fields: [taskId], references: [id])
 }
 
 model Profile {
@@ -167,7 +170,7 @@ model Gym {
   removedAt DateTime? @db.Timestamptz(6)
 
   name       String
-  label      String
+  label      String?
   address    String
   phone      String
   email      String
@@ -277,11 +280,12 @@ model Exercise {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name        String
-  description String?
-  depotId     String?
-  duration    Int
-  count       Int
+  name         String
+  description  String?
+  imageDepotId String?
+  videoDepotId String?
+  duration     Int
+  count        Int
 
   taskId String @unique
 
@@ -297,9 +301,11 @@ model Task {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  teanantId String
+  tenantId String
 
-  exercise Exercise?
+  exercise       Exercise?
+  classification Classification?
+  associations   Association[]
 }
 
 model Role {

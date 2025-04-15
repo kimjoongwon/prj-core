@@ -5,6 +5,9 @@ import { ContentDto } from './content.dto';
 
 export class ClassificationDto extends AbstractDto implements Classification {
   @UUIDFieldOptional({ nullable: true, default: null })
+  taskId: string;
+
+  @UUIDFieldOptional({ nullable: true, default: null })
   fileId: string | null;
 
   @UUIDFieldOptional({ nullable: true, default: null })
@@ -42,4 +45,7 @@ export class ClassificationDto extends AbstractDto implements Classification {
 
   @ClassField(() => ContentDto, { required: false })
   content?: ContentDto[];
+
+  @ClassField(() => ClassificationDto, { required: false })
+  task?: ClassificationDto[];
 }

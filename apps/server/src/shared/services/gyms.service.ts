@@ -41,24 +41,22 @@ export class GymsService {
     });
   }
 
-  create({ categoryId, space, ...data }: CreateGymDto) {
+  create({ categoryId, ...data }: CreateGymDto) {
+    const tenantId = ContextProvider.getTenantId();
     return this.repository.create({
       data: {
+        name: data.name,
+        label: data.label,
         address: data.address,
         phone: data.phone,
-        businessNumber: data.businessNumber,
+        businessNo: data.businessNo,
         email: data.email,
         depot: {
           connect: {
             id: data.depotId,
           },
         },
-        space: {
-          create: {
-            label: space.label,
-            name: space.name,
-          },
-        },
+        space: {},
       },
     });
   }
@@ -68,12 +66,6 @@ export class GymsService {
       where: { id },
       data: {
         ...updateGymDto,
-        space: {
-          update: {
-            label: space.label,
-            name: space.name,
-          },
-        },
       },
     });
   }

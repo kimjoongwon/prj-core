@@ -26,12 +26,4 @@ export class TimelinesRepository extends BaseRepository<
   constructor(prisma: PrismaService) {
     super(prisma, 'Timeline');
   }
-
-  test() {
-    this.findMany({
-      where: {
-        name: null,
-      },
-    });
-  }
 }

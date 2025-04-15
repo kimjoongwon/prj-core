@@ -6,8 +6,6 @@ import { Tenant } from './tenant.entity';
 
 @UseDto(TimelineDto)
 export class Timeline extends AbstractEntity<TimelineDto> implements TimelineEntity {
-  name: string;
-  label: string;
   tenantId: string;
   tenant?: Tenant;
 }

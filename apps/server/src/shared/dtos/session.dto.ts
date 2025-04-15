@@ -16,6 +16,9 @@ export class SessionDto extends AbstractDto implements Session {
   @StringField()
   name: string;
 
+  @StringField()
+  label: string;
+
   @EnumField(() => $Enums.SessionTypes)
   @Transform(({ value }) => SessionTypes.findName(value))
   type: $Enums.SessionTypes;
