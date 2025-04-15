@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { ContextProvider } from '../../providers';
+import { ServiceNames } from '@prisma/client';
 
 @Injectable()
 export class BuilderService {
@@ -25,68 +26,7 @@ export class BuilderService {
                   {
                     name: 'services',
                     pathname: `/admin/main/tenants/:tenantId/services`,
-                    children: services.map((service) => {
-                      const serviceChildren = [
-                        {
-                          name: '카테고리',
-                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/categories`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/categories/:categoryId/:type`,
-                            },
-                          ],
-                        },
-                        {
-                          name: '그룹',
-                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/groups`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/groups/:groupId/:type`,
-                            },
-                          ],
-                        },
-                      ];
-
-                      if (service.name === 'TIMELINE') {
-                        serviceChildren.unshift({
-                          name: '목록',
-                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/timelines`,
-                          children: [],
-                        });
-
-                        serviceChildren.push({
-                          name: '세션',
-                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/sessions`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/sessions/:sessionId/:type`,
-                            },
-                          ],
-                        });
-                      }
-
-                      if (service.name === 'CONTENT') {
-                        serviceChildren.unshift({
-                          name: '운동',
-                          pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/exercises`,
-                          children: [
-                            {
-                              name: '편집',
-                              pathname: `/admin/main/tenants/${tenantId}/services/${service.id}/exercises/:exerciseId/:type`,
-                            },
-                          ],
-                        });
-                      }
-
-                      return {
-                        name: service.label,
-                        pathname: `/admin/main/tenants/${tenantId}/services/${service.id}`,
-                        children: serviceChildren,
-                      };
-                    }),
+                    children: [this.getSpaceServiceRoute()],
                   },
                 ],
               },
@@ -117,5 +57,82 @@ export class BuilderService {
     ];
 
     return routes;
+  }
+
+  getSpaceServiceRoute() {
+    const tenantId = ContextProvider.getTenantId();
+
+    const children = [
+      {
+        name: 'GYMS',
+        pathname: `/admin/main/tenants/${tenantId}/services/space/gyms`,
+        children: [
+          {
+            name: '편집',
+            pathname: `/admin/main/tenants/${tenantId}/services/space/spaces/:spaceId/:type`,
+          },
+        ],
+      },
+    ].concat(this.getCommonRoutes('space'));
+
+    return {
+      name: '공간',
+      pathname: `/admin/main/tenants/${tenantId}/services/space`,
+      children,
+    };
+  }
+
+  getCategoryRoute(serviceName: ServiceNames) {
+    const tenantId = ContextProvider.getTenantId();
+    return {
+      name: '카테고리',
+      pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories`,
+      children: [
+        {
+          name: '편집',
+          pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories/:categoryId/:type`,
+        },
+      ],
+    };
+  }
+
+  getGroupRoute(serviceName: ServiceNames) {
+    const tenantId = ContextProvider.getTenantId();
+    return {
+      name: '그룹',
+      pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups`,
+      children: [
+        {
+          name: '편집',
+          pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups/:groupId/:type`,
+        },
+      ],
+    };
+  }
+
+  getCommonRoutes(serviceName: ServiceNames) {
+    const tenantId = ContextProvider.getTenantId();
+    return [
+      {
+        name: '카테고리',
+        pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories`,
+        children: [
+          {
+            name: '편집',
+            pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories/:categoryId/:type`,
+          },
+        ],
+      },
+      {
+        name: '그룹',
+        pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups`,
+        children: [
+          {
+            name: '편집',
+            pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups/:groupId/:type`,
+          },
+        ],
+      },
+    ];
   }
 }

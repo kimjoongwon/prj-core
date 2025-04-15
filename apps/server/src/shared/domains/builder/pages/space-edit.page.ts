@@ -7,7 +7,7 @@ export class SpaceEditPage {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   async getRoute(): Promise<PageBuilder> {
-    const options = await this.categoriesService.getLastLeafCategoryOptionsBy('SPACE');
+    const options = await this.categoriesService.getLastLeafCategoryOptionsBy('space');
     return {
       name: '새편집',
       state: {

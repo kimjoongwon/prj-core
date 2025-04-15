@@ -13,11 +13,11 @@ export const Header = observer(() => {
   const app = useApp();
   const pathname = usePathname();
   const setCookie = useSetCookie();
-  const { serviceId = '' } = useParams();
+  const { serviceName = '' } = useParams();
 
   useEffect(() => {
-    setCookie('serviceId', serviceId);
-  }, [serviceId]);
+    setCookie('serviceName', serviceName);
+  }, [serviceName]);
 
   return (
     <AppBar

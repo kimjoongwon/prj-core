@@ -17,7 +17,7 @@ export const Logo = (props: LogoProps) => {
 
   return (
     <HStack className="items-center">
-      <Image src="/logo.png" alt="logo" width={50} height={50} />
+      {/* <Image src="/logo.png" alt="logo" width={50} height={50} /> */}
       <Button
         variant="light"
         className={cn(className, 'font-bold text-2xl p-0')}

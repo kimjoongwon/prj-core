@@ -574,12 +574,12 @@ enum CategoryTypes {
 }
 
 enum ServiceNames {
-  USER
-  ROLE
-  SPACE
-  CONTENT
-  TIMELINE
-  FILE
+  user
+  role
+  space
+  timeline
+  file
+  task
 }
 
 enum DepotTypes {

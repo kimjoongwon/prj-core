@@ -8,7 +8,7 @@ export class RoleEditPage {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   async getMeta(): Promise<PageBuilder> {
-    const options = await this.categoriesService.getLastLeafCategoryOptionsBy('ROLE');
+    const options = await this.categoriesService.getLastLeafCategoryOptionsBy('role');
     const roleOptions = Object.keys($Enums.Roles).map((role) => ({
       key: role,
       text: role,

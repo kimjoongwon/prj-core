@@ -169,7 +169,7 @@ export class InitService {
 
     const userService = await this.prisma.service.findUnique({
       where: {
-        name: 'USER',
+        name: 'user',
       },
     });
 
@@ -228,12 +228,12 @@ export class InitService {
   async createServices() {
     return await Promise.all(
       [
-        { name: $Enums.ServiceNames.USER, label: '이용자' },
-        { name: $Enums.ServiceNames.SPACE, label: '공간' },
-        { name: $Enums.ServiceNames.ROLE, label: '역할' },
-        { name: $Enums.ServiceNames.TIMELINE, label: '타임라인' },
-        { name: $Enums.ServiceNames.CONTENT, label: '컨탠츠' },
-        { name: $Enums.ServiceNames.FILE, label: '파일' },
+        { name: $Enums.ServiceNames.user, label: '이용자' },
+        { name: $Enums.ServiceNames.space, label: '공간' },
+        { name: $Enums.ServiceNames.role, label: '역할' },
+        { name: $Enums.ServiceNames.timeline, label: '타임라인' },
+        { name: $Enums.ServiceNames.file, label: '파일' },
+        { name: $Enums.ServiceNames.task, label: '타스크' },
       ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
         const service = await this.prisma.service.findUnique({ where: { name: seedService.name } });
         if (!service) {
@@ -254,7 +254,7 @@ export class InitService {
 
     const services = await this.prisma.service.findMany();
     const spaceServiceId = services.find(
-      (service) => service.name === $Enums.ServiceNames.SPACE,
+      (service) => service.name === $Enums.ServiceNames.space,
     ).id;
 
     spaceGroupSeed.forEach(async (group) => {
@@ -274,7 +274,7 @@ export class InitService {
     this.logger.log(`[${this.LOG_PREFIX}] 카테고리 생성`);
 
     const services = await this.prisma.service.findMany();
-    const fileServiceId = services.find((service) => service.name === $Enums.ServiceNames.FILE).id;
+    const fileServiceId = services.find((service) => service.name === $Enums.ServiceNames.file).id;
 
     fileCategroySeed.forEach(async (category) => {
       const existCategory = await this.prisma.category.findUnique({

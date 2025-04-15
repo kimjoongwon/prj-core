@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start:dev": "next dev --turbopack --port 3004",
-    "build": "NODE_OPTIONS='--max_old_space_size=8096' next build",
+    "build": "NODE_OPTIONS='--max_old_space_size=8096' next build --turbopack",
     "start:prod": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next && rm -rf node_modules",
@@ -27,7 +27,7 @@
     "lucide-react": "^0.476.0",
     "mobx": "^6.13.6",
     "mobx-react-lite": "^4.1.0",
-    "next": "15.1.7",
+    "next": "15.3.0",
     "nuqs": "^2.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

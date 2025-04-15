@@ -60,6 +60,7 @@ export class NavigationService {
     const servicesRoute = this.findRouteByPath(
       '/admin/main/tenants/:tenantId/services',
     );
+    console.log('servicesRoute', servicesRoute);
     return servicesRoute;
   }
 
