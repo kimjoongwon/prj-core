@@ -38,6 +38,12 @@ import { RolesRepository } from '../repositories/role.repository';
 import { AwsService } from '../domains/aws/aws.service';
 import { ExercisesService } from '../services/exercises.service';
 import { TenantsService } from '../services/tenants.service';
+import { ColumnBuilderService } from '../domains/builder/column/column-builder.service';
+import { DataGridBuilderService } from '../domains/builder/data-grid/data-grid-builder.service';
+import { FormBuilderService } from '../domains/builder/form/form-builder.service';
+import { InputBuilderService } from '../domains/builder/Input/Input-builder.service';
+import { ButtonBuilderService } from '../domains/builder/button/button-builder.service';
+
 const modules = [
   AbilitiesService,
   AbilitiesRepository,
@@ -78,6 +84,11 @@ const modules = [
   GymsRepository,
   AssignmentsService,
   AssignmentsRepository,
+  InputBuilderService,
+  ColumnBuilderService,
+  DataGridBuilderService,
+  FormBuilderService,
+  ButtonBuilderService,
 ];
 @Global()
 @Module({

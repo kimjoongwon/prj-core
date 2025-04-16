@@ -15,7 +15,8 @@ export interface GroupDto {
   /** @nullable */
   removedAt: string | null;
   name: string;
-  label: string;
+  /** @nullable */
+  label: string | null;
   serviceId: string;
   tenantId: string;
   service?: ServiceDto;

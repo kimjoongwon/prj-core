@@ -10,5 +10,6 @@ export type GetSpace200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: SpaceDto;
 };

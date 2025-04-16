@@ -13,11 +13,15 @@ export class GroupsService {
   }
 
   async getManyByQuery(query: GroupQueryDto) {
-    const args = query.toArgs<Prisma.GroupFindManyArgs>();
+    const args = query.toArgs<Prisma.GroupFindManyArgs>({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
     const countArgs = query.toCountArgs<Prisma.GroupCountArgs>();
     const groups = await this.repository.findMany(args);
     const totalCount = await this.repository.count(countArgs);
-
+    console.log('args', args);
     return {
       totalCount,
       groups,

@@ -10,5 +10,6 @@ export type RemoveAssociation200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: AssociationDto;
 };

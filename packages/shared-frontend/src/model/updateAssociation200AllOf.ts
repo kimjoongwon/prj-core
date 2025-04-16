@@ -10,5 +10,6 @@ export type UpdateAssociation200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: AssociationDto;
 };

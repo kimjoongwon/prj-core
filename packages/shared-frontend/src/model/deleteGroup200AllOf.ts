@@ -10,5 +10,6 @@ export type DeleteGroup200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: Number;
 };

@@ -10,5 +10,6 @@ export type RemoveSubject200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: SubjectDto;
 };

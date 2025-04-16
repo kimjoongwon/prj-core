@@ -10,5 +10,6 @@ export type GetToken200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: TokenDto;
 };

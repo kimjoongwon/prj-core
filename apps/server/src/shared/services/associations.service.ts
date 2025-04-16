@@ -36,7 +36,7 @@ export class AssociationsService {
       group: true,
       space: true,
     };
-    const args = query.toArgs(include);
+    const args = query.toArgs({ include });
     const countArgs = query.toCountArgs();
     const associations = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);

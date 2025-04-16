@@ -3,12 +3,13 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { Primitive } from './primitive';
+import type { Boolean } from './boolean';
 
 export type VerifyToken200AllOf = {
   /** */
   httpStatus?: number;
   /** */
   message?: string;
-  data?: Primitive;
+  /** @nullable */
+  data?: Boolean;
 };

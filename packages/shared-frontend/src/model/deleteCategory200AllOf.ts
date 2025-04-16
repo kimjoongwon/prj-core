@@ -10,5 +10,6 @@ export type DeleteCategory200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: CategoryDto;
 };

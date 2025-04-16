@@ -1,6 +1,11 @@
 import { Group } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
-import { ClassField, StringField, UUIDField } from '../decorators/field.decorators';
+import {
+  ClassField,
+  StringField,
+  StringFieldOptional,
+  UUIDField,
+} from '../decorators/field.decorators';
 import { ServiceDto } from './service.dto';
 import { AssociationDto } from './association.dto';
 import { TenantDto } from './tenant.dto';
@@ -9,8 +14,8 @@ export class GroupDto extends AbstractDto implements Group {
   @StringField()
   name: string;
 
-  @StringField()
-  label: string;
+  @StringFieldOptional({ nullable: true })
+  label: string | null;
 
   @StringField()
   serviceId: string;

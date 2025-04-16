@@ -10,5 +10,6 @@ export type DeleteAbility200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: AbilityDto;
 };

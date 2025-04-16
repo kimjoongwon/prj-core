@@ -10,5 +10,6 @@ export type CreateAssociation200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: AssociationDto;
 };

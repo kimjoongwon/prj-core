@@ -10,5 +10,6 @@ export type CreateClassification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ClassificationDto;
 };

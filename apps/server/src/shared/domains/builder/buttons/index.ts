@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
-import { NewEditButton } from './new-edit.button';
+import { CellButtonService } from './cell-button.service';
 
 @Global()
 @Module({
-  providers: [NewEditButton],
-  exports: [NewEditButton],
+  providers: [CellButtonService],
+  exports: [CellButtonService],
 })
-export class ButtonsModule {}
+export class CellButtonsModule {}

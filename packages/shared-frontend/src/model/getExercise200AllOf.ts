@@ -10,5 +10,6 @@ export type GetExercise200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ExerciseDto;
 };

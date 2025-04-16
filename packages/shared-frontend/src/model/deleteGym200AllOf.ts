@@ -10,5 +10,6 @@ export type DeleteGym200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: GymDto;
 };

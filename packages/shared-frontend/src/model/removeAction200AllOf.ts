@@ -10,5 +10,6 @@ export type RemoveAction200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ActionDto;
 };

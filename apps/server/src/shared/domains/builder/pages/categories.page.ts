@@ -1,49 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
-import { CategoryColumns } from '../columns/category.columns';
-import { ActionColumns } from '../columns/action.columns';
 import { ContextProvider } from '../../../providers/context.provider';
+import { ColumnBuilderService } from '../column/column-builder.service';
+import { FormBuilderService } from '../form/form-builder.service';
+import { DataGridBuilderService } from '../data-grid/data-grid-builder.service';
 
 @Injectable()
 export class CategoriesPage {
   constructor(
-    private readonly categoryColumns: CategoryColumns,
-    private readonly actionColumns: ActionColumns,
+    private columnBuilderService: ColumnBuilderService,
+    private dataGridBuilderService: DataGridBuilderService,
   ) {}
 
-  getMeta(): PageBuilder {
+  build(): PageBuilder {
     const serviceId = ContextProvider.getServiceId();
     const tenantId = ContextProvider.getTenantId();
-    const categoryColumns = this.categoryColumns.getMeta();
-    const actionColumns = this.actionColumns.getMeta();
-    const columns = categoryColumns.concat(actionColumns);
 
-    const page: PageBuilder = {
-      name: '목록',
-      type: 'Page',
-      dataGrid: {
-        table: {
-          query: {
-            name: 'useGetCategoriesByQuery',
-            params: {
-              serviceId,
-              tenantId,
-              type: 'ROOT',
-            },
-          },
-          columns,
-        },
-        buttons: [
-          {
-            name: '생성',
-            navigator: {
-              pathname: 'categories/new/edit',
-            },
-          },
-        ],
+    const columns = this.columnBuilderService.build(
+      'category',
+      ['name', 'label'],
+      ['edit', 'detail', 'remove'],
+    );
+
+    const dataGrid = this.dataGridBuilderService.build({
+      queryName: 'useGetCategoriesByQuery',
+      columns,
+      params: {
+        serviceId,
+        tenantId,
+        skip: 0,
+        take: 10,
       },
-    };
+    });
 
-    return page;
+    return {
+      name: '리스트',
+      dataGrid,
+    };
   }
 }

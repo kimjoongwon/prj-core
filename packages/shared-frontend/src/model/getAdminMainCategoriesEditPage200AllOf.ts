@@ -10,5 +10,6 @@ export type GetAdminMainCategoriesEditPage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: Object;
 };

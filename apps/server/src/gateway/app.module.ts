@@ -8,7 +8,7 @@ import {
   PagesModule,
   GlobalModule,
   ColumnsModule,
-  ButtonsModule,
+  CellButtonsModule,
   TablesModule,
 } from '@shared';
 import { libModules } from '../main.config';
@@ -47,7 +47,7 @@ import { GymsEndpointModule } from './gyms/gyms-endpoint.module';
     InputsModule,
     FormsModule,
     PagesModule,
-    ButtonsModule,
+    CellButtonsModule,
     TablesModule,
     CaslModule,
     InitModule,

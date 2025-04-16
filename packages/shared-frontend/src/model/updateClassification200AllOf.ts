@@ -10,5 +10,6 @@ export type UpdateClassification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ClassificationDto;
 };

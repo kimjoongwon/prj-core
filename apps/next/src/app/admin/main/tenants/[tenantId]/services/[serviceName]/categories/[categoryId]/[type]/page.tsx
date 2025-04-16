@@ -1,6 +1,6 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
+import { PageBuilder } from '@/components';
 import { useGetAdminMainCategoriesEditPage } from '@shared/frontend';
 import { RouteBuilder } from '@shared/types';
 import { useParams } from 'next/navigation';

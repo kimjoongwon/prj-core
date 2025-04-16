@@ -10,5 +10,6 @@ export type CreateDepot201AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: DepotDto;
 };

@@ -10,5 +10,6 @@ export type UpdateFileById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: FileDto;
 };

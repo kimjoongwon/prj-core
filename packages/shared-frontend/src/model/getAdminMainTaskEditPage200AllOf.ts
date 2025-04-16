@@ -10,5 +10,6 @@ export type GetAdminMainTaskEditPage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: Object;
 };

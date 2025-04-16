@@ -1,6 +1,6 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
+import { PageBuilder } from '@/components';
 import { useGetAdminMainExercisesPage } from '@shared/frontend';
 
 const ExercisesPage = () => {

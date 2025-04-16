@@ -10,5 +10,6 @@ export type UpdateRole200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: RoleDto;
 };

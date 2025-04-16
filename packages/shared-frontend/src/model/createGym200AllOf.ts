@@ -10,5 +10,6 @@ export type CreateGym200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: GymDto;
 };

@@ -10,5 +10,6 @@ export type RemoveRole200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: RoleDto;
 };

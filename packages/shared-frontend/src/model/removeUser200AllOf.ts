@@ -10,5 +10,6 @@ export type RemoveUser200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: UserDto;
 };

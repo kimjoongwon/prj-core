@@ -5,7 +5,5 @@
  */
 
 export interface CreateTimelineDto {
-  label: string;
-  name: string;
   tenantId: string;
 }

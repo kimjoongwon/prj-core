@@ -6,10 +6,16 @@ import { ServiceNames } from '@prisma/client';
 @Injectable()
 export class BuilderService {
   constructor(readonly prisma: PrismaService) {}
-  async getRoute() {
-    const services = await this.prisma.service.findMany();
-    const tenantId = ContextProvider.getTenantId();
 
+  async build() {
+    const services = await this.prisma.service.findMany({});
+    return {
+      routes: this.getRoute(),
+      services,
+    };
+  }
+
+  getRoute() {
     const routes = [
       {
         name: 'admin',

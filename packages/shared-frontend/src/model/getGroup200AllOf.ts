@@ -10,5 +10,6 @@ export type GetGroup200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: GroupDto;
 };

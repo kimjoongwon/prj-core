@@ -10,5 +10,6 @@ export type RemoveFileById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: FileDto;
 };

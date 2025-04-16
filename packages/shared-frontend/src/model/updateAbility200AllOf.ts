@@ -10,5 +10,6 @@ export type UpdateAbility200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: AbilityDto;
 };

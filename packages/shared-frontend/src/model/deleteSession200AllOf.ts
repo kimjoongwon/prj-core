@@ -10,5 +10,6 @@ export type DeleteSession200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: SessionDto;
 };

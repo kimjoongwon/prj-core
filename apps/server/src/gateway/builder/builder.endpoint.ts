@@ -9,7 +9,7 @@ export class BuilderEndpoint {
   @Get()
   @Auth([], { public: true })
   async getAppBuilder() {
-    const pages = await this.builderService.getRoute();
-    return new ResponseEntity(200, '성공', pages);
+    const app = await this.builderService.build();
+    return new ResponseEntity(200, '성공', app);
   }
 }

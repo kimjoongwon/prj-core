@@ -6,7 +6,6 @@
 import type { CreateContentDto } from './createContentDto';
 
 export interface CreateTaskDto {
-  name: string;
-  label: string;
+  tenantId: string;
   content: CreateContentDto;
 }

@@ -58,7 +58,7 @@ model Group {
   removedAt DateTime? @db.Timestamptz(6)
 
   name      String
-  label     String
+  label     String?
   serviceId String
   tenantId  String
 

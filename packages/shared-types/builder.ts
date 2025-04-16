@@ -45,15 +45,21 @@ export interface ButtonBuilder {
   mutation?: Mutation;
   navigator?: Navigator;
   alert?: Alert;
+  toast?: {
+    title: string;
+    description: string;
+  };
 }
+
 export interface CellButtonBuilder {
   icon?: string;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   name: string;
-  mutation?: CellMutation;
+  mutation?: Mutation;
   navigator?: Navigator;
   alert?: Alert;
 }
+
 export interface Alert {
   message: string;
 }
@@ -114,12 +120,8 @@ export interface Mutation {
   name: string;
   invalidationKey?: string;
   id?: string;
-  payloadPath: string;
-}
-
-export interface CellMutation {
-  name: string;
-  idName?: string;
+  params?: any;
+  payloadPath?: string;
 }
 
 export type Key = string | number;

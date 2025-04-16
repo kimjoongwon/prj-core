@@ -1,13 +1,9 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainGroupsPage } from '@shared/frontend';
+import { GroupsPage } from '@/components';
 
-const GroupsPage = () => {
-  const { data: response } = useGetAdminMainGroupsPage();
-  const page = response?.data as any;
-
-  return <PageBuilder pageBuilder={page} />;
+const Page = () => {
+  return <GroupsPage />;
 };
 
-export default GroupsPage;
+export default Page;

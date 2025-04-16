@@ -13,6 +13,9 @@ export interface GymDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  name: string;
+  label?: string;
+  businessNo: string;
   spaceId: string;
   address: string;
   phone: string;

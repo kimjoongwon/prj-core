@@ -5,11 +5,13 @@
  */
 
 export interface CreateUserDto {
-  tenancyId: string;
   spaceId: string;
   email: string;
   name: string;
   phone: string;
-  /** @minLength 6 */
+  /**
+   * 응답 제외 필드
+   * @minLength 6
+   */
   password: string;
 }

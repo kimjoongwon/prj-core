@@ -9,10 +9,10 @@ export type ServiceNames = typeof ServiceNames[keyof typeof ServiceNames];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ServiceNames = {
-  USER: 'USER',
-  ROLE: 'ROLE',
-  SPACE: 'SPACE',
-  CONTENT: 'CONTENT',
-  TIMELINE: 'TIMELINE',
-  FILE: 'FILE',
+  user: 'user',
+  role: 'role',
+  space: 'space',
+  timeline: 'timeline',
+  file: 'file',
+  task: 'task',
 } as const;

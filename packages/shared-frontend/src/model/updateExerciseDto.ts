@@ -3,10 +3,13 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateTaskDto } from './createTaskDto';
 
 export interface UpdateExerciseDto {
+  name?: string;
+  description?: string;
+  imageDepotId?: string;
+  videoDepotId?: string;
   duration?: number;
   count?: number;
-  task?: CreateTaskDto;
+  tenantId?: string;
 }

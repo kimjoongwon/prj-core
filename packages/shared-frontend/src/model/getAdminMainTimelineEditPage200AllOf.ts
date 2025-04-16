@@ -10,5 +10,6 @@ export type GetAdminMainTimelineEditPage200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: Object;
 };

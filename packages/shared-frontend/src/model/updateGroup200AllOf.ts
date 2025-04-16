@@ -10,5 +10,6 @@ export type UpdateGroup200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: GroupDto;
 };

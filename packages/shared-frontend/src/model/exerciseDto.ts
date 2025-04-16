@@ -12,6 +12,10 @@ export interface ExerciseDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  name: string;
+  description: string;
+  imageDepotId?: string;
+  videoDepotId?: string;
   taskId: string;
   duration: number;
   count: number;

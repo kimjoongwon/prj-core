@@ -10,5 +10,6 @@ export type GetProgram200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ProgramDto;
 };

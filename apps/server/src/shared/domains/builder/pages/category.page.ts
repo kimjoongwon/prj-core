@@ -1,52 +1,102 @@
-import { Injectable } from '@nestjs/common';
-import { PageBuilder, RouteBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/types';
 import { PrismaService } from 'nestjs-prisma';
+import { Injectable } from '@nestjs/common';
+import { CreateCategoryDto } from '../../../dtos';
+import { ContextProvider } from '../../../providers';
+import { FormBuilderService } from '../form/form-builder.service';
+import { InputBuilderService } from '../Input/Input-builder.service';
 
 @Injectable()
 export class CategoryPage {
-  constructor(readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly formBuilderService: FormBuilderService,
+    private readonly inputBuilderService: InputBuilderService,
+  ) {}
 
-  async getMeta(categoryId: string) {
-    const category = await this.prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-    });
-    const page: PageBuilder = {
-      query: {
-        name: 'useGetCategoryById',
-        idMapper: 'categoryId',
-      },
-      state: {
-        form: {
-          inputs: category,
+  private getDefaultCDO(): CreateCategoryDto {
+    return {
+      name: '',
+      parentId: undefined,
+      serviceId: ContextProvider.getServiceId(),
+      tenantId: ContextProvider.getTenantId(),
+      type: 'LEAF',
+    };
+  }
+
+  async build(categoryId: string | 'new', type: 'edit' | 'add' | 'detail') {
+    const isUpdate = type === 'edit' || type === 'detail';
+    const isAdd = type === 'add';
+    const isDetail = type === 'detail';
+
+    const inputs = this.inputBuilderService.build(['name']);
+    const form = this.formBuilderService.build({
+      button: {
+        name: isUpdate ? '수정' : '생성',
+        mutation: {
+          invalidationKey: '/api/v1/categories',
+          name: isUpdate ? 'updateCategory' : 'createCategory',
+          params: {
+            serviceId: ContextProvider.getServiceId(),
+            tenantId: ContextProvider.getTenantId(),
+          },
+        },
+        toast: {
+          title: '성공',
+          description: isUpdate ? '카테고리가 수정되었습니다.' : '카테고리가 생성되었습니다.',
         },
       },
+      sections: [
+        {
+          name: '기본 정보',
+          stacks: [
+            {
+              type: 'VStack',
+              inputs,
+            },
+          ],
+        },
+      ],
+    });
+
+    const page: PageBuilder = {
       name: '카테고리',
-      form: {
-        sections: [
-          {
-            name: '기본정보',
-            stacks: [
-              {
-                type: 'VStack',
-                inputs: [
-                  {
-                    type: 'Input',
-                    path: 'form.inputs.name',
-                    props: {
-                      label: '카테고리 이름',
-                      placeholder: '카테고리 이름을 입력해주세요.',
-                      readOnly: true,
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+      state: {
+        form: {
+          inputs: this.getDefaultCDO(),
+        },
       },
+      form,
     };
+
+    if (isUpdate) {
+      const category = await this.prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+      });
+
+      page.state.form.inputs = category;
+      page.form.button.mutation.name = 'updateCategory';
+      page.form.button.mutation.id = categoryId;
+    }
+
+    if (isAdd) {
+      page.state.form.inputs.type = 'LEAF';
+      page.state.form.inputs.parentId = categoryId;
+      page.form.button.mutation.name = 'createCategory';
+      page.form.button.mutation.payloadPath = 'form.inputs';
+    }
+
+    if (isDetail) {
+      page.state.form.inputs = await this.prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+      });
+      page.form.button = undefined;
+    }
+
     return page;
   }
 }

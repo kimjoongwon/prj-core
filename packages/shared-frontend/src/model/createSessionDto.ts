@@ -9,6 +9,7 @@ import type { SessionTypes } from './sessionTypes';
 
 export interface CreateSessionDto {
   name: string;
+  label: string;
   startDateTime?: string;
   endDateTime?: string;
   /** @nullable */

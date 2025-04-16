@@ -10,7 +10,6 @@ import type { ResponseEntityMeta } from './responseEntityMeta';
 export interface ResponseEntity {
   httpStatus: ResponseEntityHttpStatus;
   message: string;
-  /** @nullable */
   data?: ResponseEntityData;
   /** @nullable */
   meta?: ResponseEntityMeta;

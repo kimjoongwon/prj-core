@@ -10,5 +10,6 @@ export type UpdateCategory200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: CategoryDto;
 };

@@ -1,13 +1,9 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { useGetAdminMainCategoriesPage } from '@shared/frontend';
+import { CategoriesPage } from '@/components';
 
-const CategoriesPage = () => {
-  const { data: response } = useGetAdminMainCategoriesPage();
-  const page = response?.data;
-
-  return <PageBuilder pageBuilder={page} />;
+const Page = () => {
+  return <CategoriesPage />;
 };
 
-export default CategoriesPage;
+export default Page;

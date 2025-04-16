@@ -10,5 +10,6 @@ export type RemovePrograms200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ProgramDto;
 };

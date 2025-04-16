@@ -10,5 +10,6 @@ export type CreateAction200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ActionDto;
 };

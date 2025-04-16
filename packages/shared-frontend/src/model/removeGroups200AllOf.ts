@@ -10,5 +10,6 @@ export type RemoveGroups200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: Number;
 };

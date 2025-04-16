@@ -8,11 +8,11 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     super.catch(
       new HttpException(
         ResponseEntity.WITH_ERROR<object | string>(
-          exception.getStatus(),
+          exception?.getStatus?.(),
           exception.message,
-          typeof exception.getResponse() === 'object' ? exception.getResponse() : null,
+          typeof exception?.getResponse?.() === 'object' ? exception.getResponse() : null,
         ),
-        exception.getStatus(),
+        exception?.getStatus?.(),
       ),
       host,
     );

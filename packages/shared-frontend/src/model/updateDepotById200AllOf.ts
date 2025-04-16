@@ -10,5 +10,6 @@ export type UpdateDepotById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: DepotDto;
 };

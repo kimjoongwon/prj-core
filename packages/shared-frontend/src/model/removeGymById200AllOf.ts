@@ -10,5 +10,6 @@ export type RemoveGymById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: GymDto;
 };

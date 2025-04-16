@@ -10,5 +10,6 @@ export type CreateUser200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: UserDto;
 };

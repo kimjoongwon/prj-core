@@ -17,6 +17,8 @@ export interface ClassificationDto {
   /** @nullable */
   removedAt: string | null;
   /** @nullable */
+  taskId?: string | null;
+  /** @nullable */
   fileId?: string | null;
   /** @nullable */
   contentId?: string | null;
@@ -35,4 +37,5 @@ export interface ClassificationDto {
   space?: SpaceDto;
   timeline?: TimelineDto;
   content?: ContentDto;
+  task?: ClassificationDto;
 }

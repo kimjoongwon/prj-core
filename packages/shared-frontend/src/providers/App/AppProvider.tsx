@@ -4,7 +4,7 @@ import React, { useEffect, useState, createContext } from 'react';
 import { RouteBuilder } from '@shared/types';
 import { App } from '../../services/app';
 import { useGetAppBuilder } from '../../apis';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   ButtonService,
   ColumnService,
@@ -24,9 +24,29 @@ export const AppProvider = (props: StoreProviderProps) => {
   const { children } = props;
   const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
+  const params = useParams<{ serviceName: string }>();
 
   const { data: response } = useGetAppBuilder();
-  const routes = (response as { data: RouteBuilder })?.data as RouteBuilder[];
+  // @ts-ignore
+  const routes: RouteBuilder[] = response?.data.routes;
+  // @ts-ignore
+  const services = response?.data?.services || [];
+
+  useEffect(() => {
+    console.log('params', params);
+    if (params && services) {
+      console.log('servcies', services);
+      const serviceId = services?.find(
+        (service: { name: string }) => service.name === params?.serviceName,
+      )?.id;
+
+      console.log('serviceId', serviceId);
+      localStorage.setItem('serviceName', params?.serviceName);
+      localStorage.setItem('serviceId', serviceId);
+      document.cookie = `serviceName=${params?.serviceName}; path=/`;
+      document.cookie = `serviceId=${serviceId}; path=/`;
+    }
+  }, [params, services]);
 
   useEffect(() => {
     if (routes) {

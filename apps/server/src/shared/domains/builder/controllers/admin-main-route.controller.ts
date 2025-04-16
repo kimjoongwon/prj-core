@@ -5,10 +5,8 @@ import { PrismaService } from 'nestjs-prisma';
 import { ContextProvider } from '../../../providers';
 import { TenantsPage } from '../pages/tenants.page';
 import { CategoriesPage } from '../pages/categories.page';
-import { CategoryEditPage } from '../pages/category-edit.page';
-import { CategoryPage } from '../pages/category.page';
 import { GroupsPage } from '../pages/groups.page';
-import { GroupEditPage } from '../pages/group-edit.page';
+import { GroupPage } from '../pages/group.page';
 import { TimelinesPage } from '../pages/timelines.page';
 import { TimelineEditPage } from '../pages/timeline-edit.page';
 import { SessionsPage } from '../pages/sessions.page';
@@ -19,16 +17,16 @@ import { TasksPage } from '../pages/tasks.page';
 import { TaskEditPage } from '../pages/task-edit.page';
 import { ExercisesPage } from '../pages/exercises.page';
 import { ExerciseEditPage } from '../pages/exercise-edit.page';
+import { CategoryPage } from '../pages/category.page';
 
 @Controller()
 export class AdminMainRouteController {
   constructor(
     readonly tenantsPage: TenantsPage,
     readonly categoriesPage: CategoriesPage,
-    readonly categoryEditPage: CategoryEditPage,
     readonly categoryPage: CategoryPage,
     readonly groupsPage: GroupsPage,
-    readonly groupEditPage: GroupEditPage,
+    readonly groupPage: GroupPage,
     readonly timelinesPage: TimelinesPage,
     readonly timelineEditPage: TimelineEditPage,
     readonly sessionsPage: SessionsPage,
@@ -54,15 +52,7 @@ export class AdminMainRouteController {
   @ApiResponseEntity(Object)
   @Get('categories')
   getAdminMainCategoriesPage() {
-    const route = this.categoriesPage.getMeta();
-    return new ResponseEntity(HttpStatus.OK, 'Categories is OK', route);
-  }
-
-  @Auth()
-  @Get('categories/:categoryId')
-  @ApiResponseEntity(Object)
-  async getAdminMainCategoryPage(@Param('categoryId') categoryId: string) {
-    const route = await this.categoryPage.getMeta(categoryId);
+    const route = this.categoriesPage.build();
     return new ResponseEntity(HttpStatus.OK, 'Categories is OK', route);
   }
 
@@ -71,9 +61,9 @@ export class AdminMainRouteController {
   @ApiResponseEntity(Object)
   async getAdminMainCategoriesEditPage(
     @Param('categoryId') categoryId: string,
-    @Param('type') type: 'edit' | 'add',
+    @Param('type') type: 'edit' | 'add' | 'detail',
   ) {
-    const route = await this.categoryEditPage.getMeta(categoryId, type);
+    const route = await this.categoryPage.build(categoryId, type);
     return new ResponseEntity(HttpStatus.OK, 'Categories Edit is OK', route);
   }
 
@@ -106,9 +96,10 @@ export class AdminMainRouteController {
   @ApiResponseEntity(Object, HttpStatus.OK)
   async getAdminMainGroupEditPage(
     @Param('groupId') groupId: string,
-    @Param('type') type: 'edit' | 'add',
+    @Param('type') type: 'edit' | 'add' | 'detail',
   ) {
-    const route = await this.groupEditPage.getMeta(groupId, type);
+    ContextProvider.setPageContext(type);
+    const route = await this.groupPage.build(groupId, type);
     return new ResponseEntity(HttpStatus.OK, 'Groups Edit is OK', route);
   }
 

@@ -90,4 +90,18 @@ export class ContextProvider {
   static getToken(): string {
     return ContextProvider.get('token');
   }
+
+  static setServiceName(serviceName: string): void {
+    ContextProvider.set('serviceName', serviceName);
+  }
+  static getServiceName(): string {
+    return ContextProvider.get('serviceName');
+  }
+
+  static setPageContext(pageContext: 'detail' | 'edit' | 'new' | 'add'): void {
+    ContextProvider.set('pageContext', pageContext);
+  }
+  static getPageContext(): 'detail' | 'edit' | 'new' | 'add' {
+    return ContextProvider.get('pageContext');
+  }
 }

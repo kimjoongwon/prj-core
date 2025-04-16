@@ -10,5 +10,6 @@ export type CreateSpace200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: SpaceDto;
 };

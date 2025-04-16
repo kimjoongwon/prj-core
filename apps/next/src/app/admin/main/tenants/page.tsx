@@ -1,9 +1,8 @@
 'use client';
 
-import { PageBuilder } from '@/builders/Page/PageBuilder';
-import { ModalLayout } from '@/components/layouts/ModalLayout';
-import { useGetAdminMainTenantsPage } from '@shared/frontend';
+import { PageBuilder, ModalLayout } from '@/components';
 import { RouteBuilder } from '@shared/types';
+import { useGetAdminMainTenantsPage } from '@shared/frontend';
 
 const TenantsPage = () => {
   const { data: response, isFetchedAfterMount } = useGetAdminMainTenantsPage();

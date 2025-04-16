@@ -6,6 +6,9 @@
 import type { CreateSpaceDto } from './createSpaceDto';
 
 export interface CreateGymDto {
+  name: string;
+  label?: string;
+  businessNo: string;
   address: string;
   phone: string;
   email: string;

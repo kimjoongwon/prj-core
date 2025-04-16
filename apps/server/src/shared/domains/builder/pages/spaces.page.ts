@@ -39,7 +39,6 @@ export class SpacesPage {
                     name: '삭제',
                     mutation: {
                       name: 'deleteSpace',
-                      idName: 'spaceId',
                     },
                   },
                 ],

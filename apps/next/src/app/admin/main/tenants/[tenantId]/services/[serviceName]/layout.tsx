@@ -16,7 +16,9 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
     <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">
       <Card className="rounded-xl w-full md:w-[200px]">
         <CardHeader>
-          <div>{app.navigationService.serviceRoute?.name} </div>
+          <div className="font-bold text-xl">
+            {app.navigationService.serviceRoute?.name}
+          </div>
         </CardHeader>
         <Divider />
         <CardBody>

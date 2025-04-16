@@ -10,5 +10,6 @@ export type GetTenantById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: TenantDto;
 };

@@ -10,5 +10,6 @@ export type UpdateExercise200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ExerciseDto;
 };

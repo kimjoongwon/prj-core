@@ -10,5 +10,6 @@ export type DeleteTenant200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: TenantDto;
 };

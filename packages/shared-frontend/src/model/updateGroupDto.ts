@@ -6,7 +6,8 @@
 
 export interface UpdateGroupDto {
   name?: string;
-  label?: string;
+  /** @nullable */
+  label?: string | null;
   serviceId?: string;
   tenantId?: string;
 }

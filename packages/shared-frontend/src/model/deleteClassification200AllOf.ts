@@ -10,5 +10,6 @@ export type DeleteClassification200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: ClassificationDto;
 };

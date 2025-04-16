@@ -10,5 +10,6 @@ export type UpdateRoutine200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: RoutineDto;
 };

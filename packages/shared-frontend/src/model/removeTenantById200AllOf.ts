@@ -10,5 +10,6 @@ export type RemoveTenantById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: TenantDto;
 };

@@ -10,5 +10,6 @@ export type RemoveRoutines200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: RoutineDto;
 };

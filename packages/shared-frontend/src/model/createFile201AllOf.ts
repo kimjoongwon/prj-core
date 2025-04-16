@@ -10,5 +10,6 @@ export type CreateFile201AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: FileDto;
 };

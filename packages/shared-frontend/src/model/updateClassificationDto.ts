@@ -6,6 +6,8 @@
 
 export interface UpdateClassificationDto {
   /** @nullable */
+  taskId?: string | null;
+  /** @nullable */
   fileId?: string | null;
   /** @nullable */
   contentId?: string | null;

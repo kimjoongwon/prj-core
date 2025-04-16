@@ -1,6 +1,7 @@
 import { NumberFieldOptional } from '../../decorators';
 import { PaginationUtil } from '../../libs/PaginationUtil';
 import { PageMetaDto } from './page-meta.dto';
+import { defaultsDeep, orderBy } from 'lodash';
 
 export class QueryDto {
   @NumberFieldOptional({
@@ -18,11 +19,18 @@ export class QueryDto {
   })
   readonly take?: number = undefined;
 
-  toArgs<T>(include?: any) {
+  toArgs<T>(rawArgs?: T) {
     const args = PaginationUtil.toArgs(this);
+    const newArgs = defaultsDeep(args, {
+      ...rawArgs,
+      orderBy: {
+        createdAt: 'desc',
+        // @ts-ignore
+        ...rawArgs?.orderBy,
+      },
+    });
     return {
-      ...args,
-      include,
+      ...newArgs,
     } as T;
   }
 

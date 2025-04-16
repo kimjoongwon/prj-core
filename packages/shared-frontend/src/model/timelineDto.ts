@@ -12,8 +12,6 @@ export interface TimelineDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  label: string;
-  name: string;
   tenantId: string;
   tenant: TenantDto;
 }

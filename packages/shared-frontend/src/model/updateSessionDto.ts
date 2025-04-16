@@ -15,6 +15,7 @@ export interface UpdateSessionDto {
   /** @nullable */
   removedAt?: string | null;
   name?: string;
+  label?: string;
   type?: SessionTypes;
   startDateTime?: string;
   endDateTime?: string;

@@ -10,5 +10,6 @@ export type GetCategoryById200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: CategoryDto;
 };

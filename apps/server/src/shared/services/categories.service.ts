@@ -55,11 +55,13 @@ export class CategoriesService {
 
   async getManyByQuery(query: CategoryQueryDto) {
     const args = query.toArgs<Prisma.CategoryFindManyArgs>({
-      children: {
-        include: {
-          children: {
-            include: {
-              children: true,
+      include: {
+        children: {
+          include: {
+            children: {
+              include: {
+                children: true,
+              },
             },
           },
         },

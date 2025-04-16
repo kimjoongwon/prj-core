@@ -10,5 +10,6 @@ export type GetTimeline200AllOf = {
   httpStatus?: number;
   /** */
   message?: string;
+  /** @nullable */
   data?: TimelineDto;
 };
