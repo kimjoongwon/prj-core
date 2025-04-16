@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
 import { ContextProvider } from '../../../providers/context.provider';
 import { ColumnBuilderService } from '../column/column-builder.service';
-import { FormBuilderService } from '../form/form-builder.service';
 import { DataGridBuilderService } from '../data-grid/data-grid-builder.service';
 
 @Injectable()
@@ -18,14 +17,15 @@ export class CategoriesPage {
 
     const columns = this.columnBuilderService.build(
       'category',
-      ['name', 'label'],
-      ['edit', 'detail', 'remove'],
+      ['name'],
+      ['edit', 'detail', 'remove', 'add'],
     );
 
     const dataGrid = this.dataGridBuilderService.build({
       queryName: 'useGetCategoriesByQuery',
       columns,
       params: {
+        type: 'ROOT',
         serviceId,
         tenantId,
         skip: 0,

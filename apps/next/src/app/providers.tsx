@@ -18,7 +18,7 @@ export const Providers = (props: ProvidersProps) => {
         <NuqsAdapter>
           <AppProvider>{children}</AppProvider>
         </NuqsAdapter>
-        <ToastProvider />
+        {/* <ToastProvider /> */}
       </HeroUIProvider>
     </QueryProvider>
   );

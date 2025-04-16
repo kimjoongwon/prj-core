@@ -63,6 +63,7 @@ export class AdminMainRouteController {
     @Param('categoryId') categoryId: string,
     @Param('type') type: 'edit' | 'add' | 'detail',
   ) {
+    ContextProvider.setPageContext(type);
     const route = await this.categoryPage.build(categoryId, type);
     return new ResponseEntity(HttpStatus.OK, 'Categories Edit is OK', route);
   }

@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ButtonBuilder, ColumnBuilder } from '@shared/types';
 import { upperFirst } from 'lodash';
+import Pluaralize from 'pluralize';
 
-type CellButton = 'edit' | 'detail' | 'remove';
+type CellButton = 'edit' | 'detail' | 'remove' | 'add';
 type CellColumn = 'name' | 'label';
 
 @Injectable()
 export class ColumnBuilderService {
   private cellButtons: CellButton[] = [];
   private cellColumns: CellColumn[] = [];
-  resourceName: string;
+  private resourceName: string;
 
   public build(
     resourceName: string,
@@ -47,6 +48,9 @@ export class ColumnBuilderService {
     return {
       accessorKey: 'name',
       header: { name: '이름' },
+      cell: {
+        expandable: true,
+      },
     };
   }
   private createLabelColumn(): ColumnBuilder {
@@ -66,6 +70,7 @@ export class ColumnBuilderService {
       edit: this.getEditButton.bind(this),
       detail: this.getDetailButton.bind(this),
       remove: this.getRemoveButton.bind(this),
+      add: this.getAddButton.bind(this),
     };
 
     return buttonCreators[buttonType]?.();
@@ -99,7 +104,18 @@ export class ColumnBuilderService {
       name: '삭제',
       mutation: {
         name: `delete${upperFirst(this.resourceName)}`,
-        invalidationKey: `/api/v1/${this.resourceName}s`,
+        invalidationKey: `/api/v1/${Pluaralize(this.resourceName || '')}`,
+      },
+    };
+  }
+
+  private getAddButton(): ButtonBuilder {
+    return {
+      color: 'primary',
+      name: '추가',
+      navigator: {
+        type: 'push',
+        pathname: ':rowId/add',
       },
     };
   }

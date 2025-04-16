@@ -14,7 +14,7 @@ export class CategoryDto extends AbstractDto implements Category {
   @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.LEAF })
   type: $Enums.CategoryTypes;
 
-  @StringField({ nullable: true, default: null })
+  @UUIDField({ nullable: true, default: null })
   parentId: string | null;
 
   @StringField()

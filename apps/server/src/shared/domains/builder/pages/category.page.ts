@@ -25,9 +25,9 @@ export class CategoryPage {
   }
 
   async build(categoryId: string | 'new', type: 'edit' | 'add' | 'detail') {
-    const isUpdate = type === 'edit' || type === 'detail';
     const isAdd = type === 'add';
     const isDetail = type === 'detail';
+    const isUpdate = categoryId !== 'new' && type === 'edit';
 
     const inputs = this.inputBuilderService.build(['name']);
     const form = this.formBuilderService.build({
@@ -37,9 +37,14 @@ export class CategoryPage {
           invalidationKey: '/api/v1/categories',
           name: isUpdate ? 'updateCategory' : 'createCategory',
           params: {
+            type: 'ROOT',
+            parentId: undefined,
             serviceId: ContextProvider.getServiceId(),
             tenantId: ContextProvider.getTenantId(),
           },
+        },
+        navigator: {
+          type: 'back',
         },
         toast: {
           title: '성공',
