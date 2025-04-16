@@ -111,7 +111,7 @@ export class ColumnBuilderService {
 
   private getAddButton(): ButtonBuilder {
     return {
-      color: 'primary',
+      color: 'success',
       name: '추가',
       navigator: {
         type: 'push',

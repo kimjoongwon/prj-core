@@ -70,7 +70,7 @@ export class BuilderService {
 
     const children = [
       {
-        name: 'GYMS',
+        name: '그라운드',
         pathname: `/admin/main/tenants/${tenantId}/services/space/gyms`,
         children: [
           {
