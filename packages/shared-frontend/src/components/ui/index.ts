@@ -22,7 +22,7 @@ export * from './Layout';
 export * from './DataGrid/DataGrid';
 export * from './Textarea';
 export * from './CalendarInput';
-export * from './AutoComplete';
+export * from './AutoComplete/AutoComplete';
 export * from './Skeleton';
 export * from './Button/Button';
 export * from './User';

@@ -1,30 +1,28 @@
 'use client';
 
 import { Card, CardHeader, Divider, CardBody, Button } from '@heroui/react';
-import { List } from '@shared/frontend';
-import { useApp } from '@shared/frontend';
+import { ILLIT, List } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { v4 } from 'uuid';
 
 const ServiceLayout = observer((props: { children: React.ReactNode }) => {
   const { children } = props;
-  const app = useApp();
   const router = useRouter();
 
   return (
-    <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">
-      <Card className="rounded-xl w-full md:w-[200px]">
+    <div className="flex flex-row h-full flex-1 px-4 border-2 space-x-2">
+      <Card className="rounded-xl w-[200px]">
         <CardHeader>
           <div className="font-bold text-xl">
-            {app.navigationService.serviceRoute?.name}
+            {ILLIT.navigation.serviceRoute?.name}
           </div>
         </CardHeader>
         <Divider />
         <CardBody>
           <List
-            className="flex flex-row md:flex-col"
-            data={app.navigationService.serviceRoute?.children || []}
+            className="flex flex-col"
+            data={ILLIT.navigation.serviceRoute?.children || []}
             renderItem={(route: any) => {
               return (
                 <Button
@@ -33,7 +31,7 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
                   color={route.active ? 'primary' : 'default'}
                   onPress={() => {
                     router.push(route.pathname);
-                    app.navigationService.activateRoute(route.pathname);
+                    ILLIT.navigation.activateRoute(route.pathname);
                   }}
                 >
                   {route.name}
@@ -43,7 +41,7 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
           />
         </CardBody>
       </Card>
-      {children}
+      <Card className="flex flex-col flex-1 p-4 space-y-2">{children}</Card>
     </div>
   );
 });

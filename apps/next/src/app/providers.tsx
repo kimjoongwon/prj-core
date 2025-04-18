@@ -1,5 +1,6 @@
 'use client';
 
+import { ModalMount } from '@/components';
 import { HeroUIProvider } from '@heroui/react';
 import { QueryProvider } from '@shared/frontend';
 import { AppProvider } from '@shared/frontend';
@@ -16,7 +17,10 @@ export const Providers = (props: ProvidersProps) => {
     <QueryProvider>
       <HeroUIProvider>
         <NuqsAdapter>
-          <AppProvider>{children}</AppProvider>
+          <AppProvider>
+            {children}
+            <ModalMount />
+          </AppProvider>
         </NuqsAdapter>
         {/* <ToastProvider /> */}
       </HeroUIProvider>

@@ -2,23 +2,24 @@
 
 import React, { useEffect, useState, createContext } from 'react';
 import { RouteBuilder } from '@shared/types';
-import { App } from '../../services/app';
 import { useGetAppBuilder } from '../../apis';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ButtonService,
   ColumnService,
   DepotService,
+  Illit,
+  ModalService,
   NavigationService,
 } from '../../services';
 
-const StoreContext = createContext<App | null>(null);
+const StoreContext = createContext<Illit | null>(null);
 
 interface StoreProviderProps {
   children: React.ReactNode;
 }
 
-export let app: App;
+export let ILLIT: Illit;
 
 export const AppProvider = (props: StoreProviderProps) => {
   const { children } = props;
@@ -33,14 +34,11 @@ export const AppProvider = (props: StoreProviderProps) => {
   const services = response?.data?.services || [];
 
   useEffect(() => {
-    console.log('params', params);
     if (params && services) {
-      console.log('servcies', services);
       const serviceId = services?.find(
         (service: { name: string }) => service.name === params?.serviceName,
       )?.id;
 
-      console.log('serviceId', serviceId);
       localStorage.setItem('serviceName', params?.serviceName);
       localStorage.setItem('serviceId', serviceId);
       document.cookie = `serviceName=${params?.serviceName}; path=/`;
@@ -51,16 +49,10 @@ export const AppProvider = (props: StoreProviderProps) => {
   useEffect(() => {
     if (routes) {
       const navigationService = new NavigationService(routes, router);
-      const buttonService = new ButtonService(navigationService);
-      const columnService = new ColumnService();
       const depotService = new DepotService();
+      const modalService = new ModalService();
 
-      app = new App(
-        navigationService,
-        buttonService,
-        columnService,
-        depotService,
-      );
+      ILLIT = new Illit(navigationService, depotService, modalService);
 
       setIsInitialized(true);
     }
@@ -70,7 +62,9 @@ export const AppProvider = (props: StoreProviderProps) => {
     return null;
   }
 
-  return <StoreContext.Provider value={app}>{children}</StoreContext.Provider>;
+  return (
+    <StoreContext.Provider value={ILLIT}>{children}</StoreContext.Provider>
+  );
 };
 
 export const useApp = () => {

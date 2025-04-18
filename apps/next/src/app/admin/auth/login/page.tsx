@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {
   EmailInput,
   getToken,
+  ILLIT,
   LoginPayloadDto,
   PasswordInput,
   SubmitButton,
@@ -12,14 +13,15 @@ import {
 } from '@shared/frontend';
 import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
 import { PageBuilder } from '@shared/types';
-import { useRouter } from 'next/navigation';
 import { observable } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
-export default function LoginPage() {
-  const { data: response, isFetchedAfterMount } = useGetAdminAuthLoginRoute();
-  const router = useRouter();
+export const LoginPage = observer(() => {
+  const { data: getAdminAuthLoginRouteResponse, isFetchedAfterMount } =
+    useGetAdminAuthLoginRoute();
 
-  const page = response?.data as PageBuilder<LoginPayloadDto>;
+  const page =
+    getAdminAuthLoginRouteResponse?.data as PageBuilder<LoginPayloadDto>;
 
   const state = observable(page?.state!);
 
@@ -28,18 +30,21 @@ export default function LoginPage() {
   }
 
   const onPressLogin = async () => {
+    'use client';
     try {
       getToken(state.form?.inputs!);
+      ILLIT.modal.build({
+        header: '소속 그라운드 선택',
+        type: 'MyGymSelect',
+      });
     } catch (error) {
-      console.error(error);
+      alert('로그인에 실패했습니다. 다시 시도해주세요.');
     }
-
-    router.push('/admin/main/tenants');
   };
 
   return (
-    <div className="flex flex-1 flex-col w-full justify-center px-20">
-      <Card>
+    <div className="">
+      <Card className="w-96 mx-auto mt-20">
         <CardHeader>
           <Text className="text-2xl font-bold text-center">로그인</Text>
         </CardHeader>
@@ -83,4 +88,6 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-}
+});
+
+export default LoginPage;

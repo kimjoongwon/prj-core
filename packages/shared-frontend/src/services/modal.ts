@@ -1,37 +1,28 @@
+'use client';
+
+import { ButtonProps } from '@heroui/react';
 import { makeAutoObservable } from 'mobx';
 import { ReactNode } from 'react';
-import { App } from './app';
 
-export class Modal {
-  app: App;
+export class ModalService {
   open = false;
-  header?: string | ReactNode = undefined;
-  body?: string | ReactNode = undefined;
-  footer?: string | ReactNode = undefined;
-  constructor(app: App) {
-    this.app = app;
-    makeAutoObservable(this, {}, { autoBind: true });
+  type: 'MyGymSelect';
+  header?: string;
+  // actions: ButtonProps[] = [];
+
+  constructor() {
+    makeAutoObservable(this);
   }
 
   destory() {
     this.open = false;
     this.header = undefined;
-    this.body = undefined;
-    this.footer = undefined;
+    this.type = undefined;
   }
 
-  build({
-    header,
-    body,
-    footer,
-  }: {
-    header?: string | ReactNode;
-    body?: string | ReactNode;
-    footer?: string | ReactNode;
-  }) {
+  build({ type, header }: Omit<ModalService, 'open' | 'destory' | 'build'>) {
     this.open = true;
+    this.type = type;
     this.header = header;
-    this.body = body;
-    this.footer = footer;
   }
 }

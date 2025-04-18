@@ -2,9 +2,19 @@ import React from 'react';
 import { HStack } from '../HStack';
 import { Text } from '../Text';
 import { VStack } from '../VStack';
-import { RecurringDayOfTheWeek } from '../../../model/recurringDayOfTheWeek';
+// import { RecurringDayOfTheWeek } from '../../../model/recurringDayOfTheWeek';
 import { Chip } from '@heroui/chip';
 import { observer } from 'mobx-react-lite';
+
+enum RecurringDayOfTheWeek {
+  MONDAY = 'MONDAY',
+  TUESDAY = 'TUESDAY',
+  WEDNESDAY = 'WEDNESDAY',
+  THURSDAY = 'THURSDAY',
+  FRIDAY = 'FRIDAY',
+  SATURDAY = 'SATURDAY',
+  SUNDAY = 'SUNDAY',
+}
 
 export interface WeekInputViewProps {
   onChange: (value: RecurringDayOfTheWeek) => void;

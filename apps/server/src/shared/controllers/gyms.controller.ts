@@ -23,14 +23,17 @@ import { ApiTags } from '@nestjs/swagger';
 export class GymsController {
   constructor(private readonly service: GymsService) {}
 
-  @Post()
+  @Get('/myGyms/test')
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(GymDto, HttpStatus.OK)
-  async createGym(@Body() createGymDto: CreateGymDto) {
-    const gym = await this.service.create(createGymDto);
-
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
+  @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })
+  async getGymsByMyself() {
+    const myGyms = await this.service.getMyGyms();
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      myGyms.map((gym) => gym.toDto()),
+    );
   }
 
   @Get()
@@ -42,9 +45,19 @@ export class GymsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      gyms.map((gym) => gym.toDto()),
+      gyms.map((gym) => gym?.toDto()),
       new PageMetaDto(query.skip, query.take, count),
     );
+  }
+
+  @Post()
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(GymDto, HttpStatus.OK)
+  async createGym(@Body() createGymDto: CreateGymDto) {
+    const gym = await this.service.create(createGymDto);
+
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GymDto, gym));
   }
 
   @Get(':gymId')

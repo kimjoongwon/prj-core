@@ -22,7 +22,7 @@ export const Logo = (props: LogoProps) => {
         variant="light"
         className={cn(className, 'font-bold text-2xl p-0')}
       >
-        시퀸스
+        플레이트
       </Button>
     </HStack>
   );

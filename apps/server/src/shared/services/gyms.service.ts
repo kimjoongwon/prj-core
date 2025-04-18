@@ -8,20 +8,10 @@ import { ContextProvider } from '../providers';
 export class GymsService {
   constructor(private readonly repository: GymsRepository) {}
 
-  getMyGyms() {
+  async getMyGyms() {
     const userId = ContextProvider.getAuthUserId();
-    return this.repository.findMany({
-      where: {
-        space: {
-          tenants: {
-            some: {
-              userId,
-            },
-          },
-        },
-        removedAt: null,
-      },
-    });
+    const gyms = await this.repository.findMyGyms(userId);
+    return gyms;
   }
 
   getById(id: string) {

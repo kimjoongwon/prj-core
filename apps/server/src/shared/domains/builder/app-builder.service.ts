@@ -82,7 +82,7 @@ export class BuilderService {
     ].concat(this.getCommonRoutes('space'));
 
     return {
-      name: '공간',
+      name: '공간 서비스',
       pathname: `/admin/main/tenants/${tenantId}/services/space`,
       children,
     };

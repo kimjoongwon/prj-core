@@ -13,10 +13,12 @@ import { reaction } from 'mobx';
 
 export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &
   MobxProps<T> & {
-    options: {
-      text: string;
-      value: any;
-    }[];
+    options:
+      | {
+          text: string;
+          value: any;
+        }[]
+      | undefined;
   };
 
 export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {

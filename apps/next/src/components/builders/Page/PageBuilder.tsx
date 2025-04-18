@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, Suspense } from 'react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { InputBuilder } from '../InputBuilder';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';

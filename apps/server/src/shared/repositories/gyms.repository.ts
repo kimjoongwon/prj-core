@@ -26,4 +26,22 @@ export class GymsRepository extends BaseRepository<
   constructor(prisma: PrismaService) {
     super(prisma, 'Gym');
   }
+
+  findMyGyms(userId: string) {
+    return this.findMany({
+      where: {
+        space: {
+          tenants: {
+            some: {
+              userId,
+            },
+          },
+        },
+        removedAt: null,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }

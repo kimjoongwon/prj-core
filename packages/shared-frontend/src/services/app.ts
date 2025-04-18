@@ -1,18 +1,16 @@
 import { NavigationService } from './navigation';
-import { ButtonService } from './button';
-import { ColumnService } from './column';
 import { makeAutoObservable } from 'mobx';
 import { DepotService } from './depot';
+import { ModalService } from './modal';
 
-export class App {
-  name: string = '앱네임';
+export class Illit {
+  name: string = 'PROTOTYPE';
   isInitialized = false;
 
   constructor(
-    readonly navigationService: NavigationService,
-    readonly buttonService: ButtonService,
-    readonly columnService: ColumnService,
-    readonly depotService: DepotService,
+    readonly navigation: NavigationService,
+    readonly depot: DepotService,
+    readonly modal: ModalService,
   ) {
     this.isInitialized = true;
     makeAutoObservable(this);

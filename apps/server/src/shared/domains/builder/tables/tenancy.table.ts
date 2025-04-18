@@ -27,7 +27,7 @@ export class TenancyTable {
               {
                 name: '선택',
                 navigator: {
-                  pathname: '/admin/main/tenants/:rowId/services',
+                  pathname: ':rowId/services',
                   idName: 'tenantId',
                 },
               },

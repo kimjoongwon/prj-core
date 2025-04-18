@@ -1,13 +1,9 @@
 'use client';
 
-import { GymsPage, GymsPageProvider } from '@/components';
+import { GymsPage } from '@/components';
 
 const Gyms = () => {
-  return (
-    <GymsPageProvider>
-      <GymsPage />
-    </GymsPageProvider>
-  );
+  return <GymsPage />;
 };
 
 export default Gyms;
