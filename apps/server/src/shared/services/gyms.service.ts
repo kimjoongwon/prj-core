@@ -31,7 +31,7 @@ export class GymsService {
     });
   }
 
-  create({ categoryId, ...data }: CreateGymDto) {
+  create({ ...data }: CreateGymDto) {
     const tenantId = ContextProvider.getTenantId();
     return this.repository.create({
       data: {
@@ -51,7 +51,7 @@ export class GymsService {
     });
   }
 
-  updateById(id: string, { space, depotId, ...updateGymDto }: UpdateGymDto) {
+  updateById(id: string, { depotId, ...updateGymDto }: UpdateGymDto) {
     return this.repository.update({
       where: { id },
       data: {

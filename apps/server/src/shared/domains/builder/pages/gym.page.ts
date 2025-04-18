@@ -11,7 +11,6 @@ import { GymsRepository } from '../../../repositories';
 @Injectable()
 export class GymPage {
   constructor(
-    private readonly prisma: PrismaService,
     private readonly formBuilderService: FormBuilderService,
     private readonly inputBuilderService: InputBuilderService,
     private readonly buttonBuilderService: ButtonBuilderService,
@@ -20,9 +19,6 @@ export class GymPage {
 
   private getDefaultCDO(): CreateGymDto {
     return {
-      name: '',
-      categoryId: '',
-      space: new CreateSpaceDto(),
       name: '',
       label: '',
       businessNo: '',
@@ -103,8 +99,6 @@ export class GymPage {
         }
       }
     }
-
-    console.log('page', page);
 
     return page;
   }
