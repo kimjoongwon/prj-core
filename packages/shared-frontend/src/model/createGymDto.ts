@@ -11,6 +11,5 @@ export interface CreateGymDto {
   address: string;
   phone: string;
   email: string;
-  businessNumber: string;
   depotId: string;
 }

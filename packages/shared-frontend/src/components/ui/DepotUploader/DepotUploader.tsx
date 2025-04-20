@@ -10,7 +10,7 @@ import {
 import { useEffect } from 'react';
 import { reaction, toJS } from 'mobx';
 import { MobxProps } from '@shared/types';
-import { FileDto } from '../../../model';
+import { DepotDto, FileDto } from '../../../model';
 import { DepotService } from '../../../services/depot';
 
 interface DepotProps<T>
@@ -19,17 +19,15 @@ interface DepotProps<T>
 
 export const DepotUploader = observer(
   <T extends object>(props: DepotProps<T>) => {
-    const { state, path, type, ...rest } = props;
+    const { state, path, ...rest } = props;
 
     const localState: {
       depotId: string;
-      images: FileDto[];
-      videos: FileDto[];
+      depot: DepotDto;
     } = useLocalObservable(() => {
       return {
         depotId: get(state, path) as string,
-        images: [],
-        videos: [],
+        depot: {} as DepotDto,
       };
     });
 
@@ -47,15 +45,7 @@ export const DepotUploader = observer(
       const setInitialValue = async () => {
         if (localState.depotId) {
           const { data: depot } = await getDepotById(localState.depotId);
-          if (depot?.files) {
-            localState.images = depot.files.filter(
-              file => file.classification?.category.name === '이미지',
-            );
-
-            localState.videos = depot.files.filter(
-              file => file.classification?.category.name === '영상',
-            );
-          }
+          localState.depot = depot;
         }
       };
 
@@ -82,51 +72,27 @@ export const DepotUploader = observer(
           }),
         );
 
-        if (type === 'image') {
-          await updateDepotById(localState.depotId, {
-            images: files,
-          });
-        }
-
-        if (type === 'video') {
-          await updateDepotById(localState.depotId, {
-            videos: files,
-          });
-        }
+        await updateDepotById(localState.depotId, {
+          videos: files,
+        });
 
         const res = await getDepotById(localState.depotId);
         localState.depotId = res.data.id;
       } else {
-        let images = [];
-        let videos = [];
-
-        if (type === 'image') {
-          images = await Promise.all(
-            fileDtos.map(fileDto =>
-              DepotService.urlToFile(
-                fileDto.url,
-                fileDto.name,
-                fileDto.mimeType,
-              ),
-            ),
-          );
-        }
-
-        if (type === 'video') {
-          videos = await Promise.all(
-            fileDtos.map(fileDto =>
-              DepotService.urlToFile(
-                fileDto.url,
-                fileDto.name,
-                fileDto.mimeType,
-              ),
-            ),
-          );
-        }
+        const files = await Promise.all(
+          fileDtos.map(async fileDto => {
+            const file = await DepotService.urlToFile(
+              fileDto.url,
+              fileDto.name,
+              fileDto.mimeType,
+            );
+            return file;
+          }
+          )
+        );
 
         const res = await createDepot({
-          images,
-          videos,
+          files
         });
 
         localState.depotId = res.data.id;
@@ -134,32 +100,14 @@ export const DepotUploader = observer(
     };
 
     return (
-      <div className="flex space-x-2">
-        {type === 'image' && (
-          <FileUploader
-            {...rest}
-            type="image"
-            label="이미지"
-            value={toJS(localState.images)}
-            onFilesChange={handleFilesChange}
-            onFileRemove={async (fileDto: FileDto) => {
-              await removeFileById(fileDto.id);
-            }}
-          />
-        )}
-        {type === 'video' && (
-          <FileUploader
-            {...rest}
-            type="video"
-            label="동영상"
-            value={toJS(localState.videos)}
-            onFilesChange={handleFilesChange}
-            onFileRemove={async (fileDto: FileDto) => {
-              await removeFileById(fileDto.id);
-            }}
-          />
-        )}
-      </div>
-    );
-  },
+      <FileUploader
+        {...rest}
+        value={toJS(localState.depot.files)}
+        onFilesChange={handleFilesChange}
+        onFileRemove={async (fileDto: FileDto) => {
+          await removeFileById(fileDto.id);
+        }}
+      />
+    )
+  }
 );

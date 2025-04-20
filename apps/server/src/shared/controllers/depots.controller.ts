@@ -24,7 +24,7 @@ import { ApiFile } from '../decorators/swagger.schema';
 @ApiTags('DEPOTS')
 @Controller()
 export class DepotsController {
-  constructor(private readonly service: DepotsService) {}
+  constructor(private readonly service: DepotsService) { }
 
   @Post()
   @Auth([])
@@ -33,15 +33,7 @@ export class DepotsController {
   @ApiFile(
     [
       {
-        name: 'thumbnails',
-        isArray: true,
-      },
-      {
-        name: 'videos',
-        isArray: true,
-      },
-      {
-        name: 'images',
+        name: 'files',
         isArray: true,
       },
     ],
@@ -52,16 +44,13 @@ export class DepotsController {
   async createDepot(
     @UploadedFiles()
     {
-      thumbnails,
-      videos,
-      images,
+      files,
+
     }: {
-      thumbnails: Express.Multer.File[];
-      videos: Express.Multer.File[];
-      images: Express.Multer.File[];
+      files: Express.Multer.File[];
     },
   ) {
-    const depot = await this.service.create(thumbnails, videos, images);
+    const depot = await this.service.create(files);
     return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());
   }
 

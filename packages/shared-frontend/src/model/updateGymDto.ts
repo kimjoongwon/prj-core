@@ -11,6 +11,5 @@ export interface UpdateGymDto {
   address?: string;
   phone?: string;
   email?: string;
-  businessNumber?: string;
   depotId?: string;
 }

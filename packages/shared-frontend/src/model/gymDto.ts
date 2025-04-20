@@ -20,7 +20,6 @@ export interface GymDto {
   address: string;
   phone: string;
   email: string;
-  businessNumber: string;
   depotId: string;
   depot?: DepotDto;
   space?: SpaceDto;

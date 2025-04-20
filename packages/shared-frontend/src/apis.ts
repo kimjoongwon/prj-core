@@ -249,14 +249,14 @@ export const getGymsByMyself = (
       
       
       return customInstance<GetGymsByMyself200AllOf>(
-      {url: `/api/v1/gyms/myGyms/test`, method: 'GET', signal
+      {url: `/api/v1/gyms/my`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetGymsByMyselfQueryKey = () => {
-    return [`/api/v1/gyms/myGyms/test`] as const;
+    return [`/api/v1/gyms/my`] as const;
     }
 
     
@@ -10867,14 +10867,8 @@ export const createDepot = (
 ) => {
       
       const formData = new FormData();
-if(createDepotBody?.thumbnails !== undefined) {
- createDepotBody?.thumbnails.forEach(value => formData.append('thumbnails', value));
- }
-if(createDepotBody?.videos !== undefined) {
- createDepotBody?.videos.forEach(value => formData.append('videos', value));
- }
-if(createDepotBody?.images !== undefined) {
- createDepotBody?.images.forEach(value => formData.append('images', value));
+if(createDepotBody?.files !== undefined) {
+ createDepotBody?.files.forEach(value => formData.append('files', value));
  }
 
       return customInstance<CreateDepot201AllOf>(
