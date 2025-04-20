@@ -12,7 +12,7 @@ export class CategoryPage {
     private readonly prisma: PrismaService,
     private readonly formBuilderService: FormBuilderService,
     private readonly inputBuilderService: InputBuilderService,
-  ) {}
+  ) { }
 
   private getDefaultCDO(): CreateCategoryDto {
     return {
@@ -20,7 +20,7 @@ export class CategoryPage {
       parentId: undefined,
       serviceId: ContextProvider.getServiceId(),
       tenantId: ContextProvider.getTenantId(),
-      type: 'LEAF',
+      type: 'ROOT',
     };
   }
 

@@ -98,6 +98,7 @@ import type {
   GetAdminMainExercisesPage200AllOf,
   GetAdminMainGroupEditPage200AllOf,
   GetAdminMainGroupsPage200AllOf,
+  GetAdminMainGymPage200AllOf,
   GetAdminMainGymsPage200AllOf,
   GetAdminMainRoutineEditPage200AllOf,
   GetAdminMainRoutinesPage200AllOf,
@@ -16403,6 +16404,207 @@ export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awa
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetAdminMainGymsPageSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getAdminMainGymPage = (
+    gymId: string,
+    type: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetAdminMainGymPage200AllOf>(
+      {url: `/api/v1/admin/main/gyms/${gymId}/${type}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetAdminMainGymPageQueryKey = (gymId: string,
+    type: string,) => {
+    return [`/api/v1/admin/main/gyms/${gymId}/${type}`] as const;
+    }
+
+    
+export const getGetAdminMainGymPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(gymId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(gymId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminMainGymPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
+export type GetAdminMainGymPageQueryError = ErrorType<void>
+
+
+export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainGymPage>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminMainGymPage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminMainGymPage>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminMainGymPage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdminMainGymPageQueryOptions(gymId,type,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainGymPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminMainGymPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
+export type GetAdminMainGymPageSuspenseQueryError = ErrorType<void>
+
+
+export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdminMainGymPageSuspenseQueryOptions(gymId,type,options)
+
+  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetAdminMainGymPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminMainGymPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
+export type GetAdminMainGymPageSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
+ gymId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdminMainGymPageSuspenseInfiniteQueryOptions(gymId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

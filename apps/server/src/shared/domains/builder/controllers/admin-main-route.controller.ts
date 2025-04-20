@@ -19,6 +19,7 @@ import { ExercisesPage } from '../pages/exercises.page';
 import { ExerciseEditPage } from '../pages/exercise-edit.page';
 import { CategoryPage } from '../pages/category.page';
 import { GymsPage } from '../pages/gyms.page';
+import { GymPage } from '../pages/gym.page';
 
 @Controller()
 export class AdminMainRouteController {
@@ -39,8 +40,9 @@ export class AdminMainRouteController {
     readonly exercisesPage: ExercisesPage,
     readonly exerciseEditPage: ExerciseEditPage,
     readonly gymsPage: GymsPage,
+    readonly gym: GymPage,
     readonly prisma: PrismaService,
-  ) {}
+  ) { }
 
   @Auth()
   @Get('tenants')
@@ -207,5 +209,17 @@ export class AdminMainRouteController {
   async getAdminMainGymsPage() {
     const route = await this.gymsPage.build();
     return new ResponseEntity(HttpStatus.OK, 'Gyms is OK', route);
+  }
+
+  @Auth()
+  @Get('gyms/:gymId/:type')
+  @ApiResponseEntity(Object, HttpStatus.OK)
+  async getAdminMainGymPage(
+    @Param('gymId') gymId: string,
+    @Param('type') type: 'edit' | 'add' | 'detail',
+  ) {
+    ContextProvider.setPageContext(type);
+    const route = await this.gym.build(gymId, type);
+    return new ResponseEntity(HttpStatus.OK, 'Gyms Edit is OK', route);
   }
 }

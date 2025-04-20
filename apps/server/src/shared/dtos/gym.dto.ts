@@ -26,9 +26,6 @@ export class GymDto extends AbstractDto implements GymEntity {
   @StringField()
   email: string;
 
-  @StringField()
-  businessNumber: string;
-
   @UUIDField()
   depotId: string;
 

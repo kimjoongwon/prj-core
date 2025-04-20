@@ -1,1 +1,14 @@
+model Ground {
+    id        String    @id @default(uuid())
+    seq       Int       @unique @default(autoincrement())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
 
+    imageDepotId String?
+
+    workspaceId String
+
+    workspace  Workspace @relation(fields: [workspaceId], references: [id])
+    imageDepot Depot?    @relation(fields: [imageDepotId], references: [id])
+}

@@ -162,24 +162,25 @@ model Tenant {
   assignments Assignment[]
 }
 
-model Gym {
+model Workspace {
   id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  name       String
-  label      String?
-  address    String
-  phone      String
-  email      String
-  businessNo String  @unique
-  depotId    String?
-  spaceId    String  @unique
+  name             String
+  label            String?
+  address          String
+  phone            String
+  email            String
+  businessNo       String  @unique
+  logoImageDepotId String?
 
-  depot Depot? @relation(fields: [depotId], references: [id])
-  space Space  @relation(fields: [spaceId], references: [id])
+  spaceId   String
+  space     Space    @relation(fields: [spaceId], references: [id])
+  logoDepot Depot?   @relation(fields: [logoImageDepotId], references: [id])
+  ground    Ground[]
 }
 
 model Space {
@@ -191,8 +192,8 @@ model Space {
 
   classification Classification?
   associations   Association[]
-  gym            Gym?
   tenants        Tenant[]
+  workspaces     Workspace[]
 }
 
 model Timeline {
@@ -252,11 +253,11 @@ model Activity {
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
 
-  routineId  String
-  exerciseId String
+  routineId String
+  taskId    String
 
-  routine   Routine  @relation(fields: [routineId], references: [id])
-  excercise Exercise @relation(fields: [exerciseId], references: [id])
+  routine Routine @relation(fields: [routineId], references: [id])
+  task    Task    @relation(fields: [taskId], references: [id])
 }
 
 model Routine {
@@ -288,9 +289,7 @@ model Exercise {
   count        Int
 
   taskId String @unique
-
-  task       Task       @relation(fields: [taskId], references: [id])
-  activities Activity[]
+  task   Task   @relation(fields: [taskId], references: [id])
 }
 
 model Task {
@@ -303,9 +302,10 @@ model Task {
 
   tenantId String
 
-  exercise       Exercise?
   classification Classification?
   associations   Association[]
+  activities     Activity[]
+  exercise       Exercise?
 }
 
 model Role {
@@ -460,15 +460,16 @@ model Content {
 }
 
 model Depot {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  files     File[]
-  contents  Content[]
-  profiles  Profile[]
-  gyms      Gym[]
+  id         String      @id @default(uuid())
+  seq        Int         @unique @default(autoincrement())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime?   @db.Timestamptz(6)
+  files      File[]
+  contents   Content[]
+  profiles   Profile[]
+  workspaces Workspace[]
+  grounds    Ground[]
 }
 
 model File {
