@@ -14,7 +14,7 @@ export class DepotsService {
     private readonly repository: DepotsRepository,
     private readonly awsService: AwsService,
     private readonly categoriesRepository: CategoriesRepository,
-  ) {}
+  ) { }
 
   getUnique(args: Prisma.DepotFindUniqueArgs) {
     return this.repository.findUnique(args);
@@ -41,26 +41,12 @@ export class DepotsService {
   }
 
   async create(
-    thumbnails: Express.Multer.File[] = [],
-    videos: Express.Multer.File[] = [],
-    images: Express.Multer.File[] = [],
+    files: Express.Multer.File[] = [],
   ) {
     const tenantId = ContextProvider.getTenantId();
 
-    const imageCategory = await this.categoriesRepository.findFirst({
-      where: {
-        name: CategoryNames.IMAGE_CONTENT.name,
-      },
-    });
-
-    const videoCategory = await this.categoriesRepository.findFirst({
-      where: {
-        name: CategoryNames.VIDEO_CONTENT.name,
-      },
-    });
-
-    const thumbnailFiles = await Promise.all(
-      thumbnails?.map(async (file) => {
+    const fileDtos = await Promise.all(
+      files?.map(async (file) => {
         const url = await this.awsService.uploadToS3(
           file.originalname,
           file,
@@ -72,62 +58,7 @@ export class DepotsService {
           mimeType: file.mimetype,
           size: file.size,
           tenantId,
-          classification: {
-            create: {
-              category: {
-                connect: { id: imageCategory.id },
-              },
-            },
-          },
-        };
-      }),
-    );
 
-    const videoFiles = await Promise.all(
-      videos.map(async (file) => {
-        const url = await this.awsService.uploadToS3(
-          file.originalname,
-          file,
-          file.mimetype.split('/')[1],
-        );
-        return {
-          name: file.originalname,
-          url,
-          mimeType: file.mimetype,
-          size: file.size,
-          tenantId,
-          classification: {
-            create: {
-              category: {
-                connect: { id: videoCategory.id },
-              },
-            },
-          },
-        };
-      }),
-    );
-
-    const imageFiles = await Promise.all(
-      images.map(async (file) => {
-        const url = await this.awsService.uploadToS3(
-          file.originalname,
-          file,
-          file.mimetype.split('/')[1],
-        );
-
-        return {
-          name: file.originalname,
-          url,
-          mimeType: file.mimetype,
-          size: file.size,
-          tenantId,
-          classification: {
-            create: {
-              category: {
-                connect: { id: imageCategory.id },
-              },
-            },
-          },
         };
       }),
     );
@@ -135,7 +66,7 @@ export class DepotsService {
     return this.repository.create({
       data: {
         files: {
-          create: [...imageFiles, ...thumbnailFiles, ...videoFiles],
+          create: fileDtos,
         },
       },
     });
