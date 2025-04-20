@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../../providers';
-import { isDisabled } from 'effect/RuntimeFlagsPatch';
 
-type FieldTypes = 'name' | 'label';
+type FieldTypes = 'name' | 'label' | 'businessNo' | 'address' | 'phone' | 'email';
+
 @Injectable()
 export class InputBuilderService {
   label: string;
@@ -12,41 +12,57 @@ export class InputBuilderService {
   }
 
   build(fieldTypes: FieldTypes[]) {
-    const inputs = [];
-    if (fieldTypes.includes('name')) {
-      inputs.push(this.getNameInput());
-    }
-    if (fieldTypes.includes('label')) {
-      inputs.push(this.getLabelInput());
-    }
-    return inputs;
+    const inputs = fieldTypes.map((fieldType) => this.getInputByFieldType(fieldType));
+    return inputs.filter((input) => input !== null);
   }
 
-  getNameInput() {
-    const pageContext = ContextProvider.getPageContext();
-
-    return {
-      type: 'Input',
-      path: 'form.inputs.name',
-      props: {
-        isDisabled: pageContext === 'detail' ? true : false,
-        fullWidth: true,
-        label: '이름',
-        placeholder: '이름을 입력해주세요.',
-      },
+  private getInputByFieldType(fieldType: FieldTypes) {
+    const inputHandlers: Record<FieldTypes, () => any> = {
+      name: this.getNameInput.bind(this),
+      label: this.getLabelInput.bind(this),
+      businessNo: this.getBusinessNoInput.bind(this),
+      address: this.getAddressInput.bind(this),
+      phone: this.getPhoneInput.bind(this),
+      email: this.getEmailInput.bind(this),
     };
+
+    return inputHandlers[fieldType] ? inputHandlers[fieldType]() : null;
   }
 
-  getLabelInput() {
+  private getNameInput() {
+    return this.createInput('form.inputs.name', '이름', '이름을 입력해주세요.');
+  }
+
+  private getLabelInput() {
+    return this.createInput('form.inputs.label', '라벨', '라벨을 입력해주세요.');
+  }
+
+  private getBusinessNoInput() {
+    return this.createInput('form.inputs.businessNo', '사업자 번호', '사업자 번호를 입력해주세요.');
+  }
+
+  private getAddressInput() {
+    return this.createInput('form.inputs.address', '주소', '주소를 입력해주세요.');
+  }
+
+  private getPhoneInput() {
+    return this.createInput('form.inputs.phone', '전화번호', '전화번호를 입력해주세요.');
+  }
+
+  private getEmailInput() {
+    return this.createInput('form.inputs.email', '이메일', '이메일을 입력해주세요.');
+  }
+
+  private createInput(path: string, label: string, placeholder: string) {
     const pageContext = ContextProvider.getPageContext();
     return {
       type: 'Input',
-      path: 'form.inputs.label',
+      path,
       props: {
-        isDisabled: pageContext === 'detail' ? true : false,
+        isDisabled: pageContext === 'detail',
         fullWidth: true,
-        label: '라벨',
-        placeholder: '라벨을 입력해주세요.',
+        label,
+        placeholder,
       },
     };
   }

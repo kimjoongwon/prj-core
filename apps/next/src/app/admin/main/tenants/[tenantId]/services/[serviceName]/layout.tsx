@@ -11,7 +11,7 @@ const ServiceLayout = observer((props: { children: React.ReactNode }) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-row h-full flex-1 px-4 border-2 space-x-2">
+    <div className="flex flex-row h-full flex-1 border-2 space-x-2">
       <Card className="rounded-xl w-[200px]">
         <CardHeader>
           <div className="font-bold text-xl">

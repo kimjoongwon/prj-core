@@ -96,6 +96,8 @@ export * from './getAdminMainExercisesPage200AllOf';
 export * from './getAdminMainGroupEditPage200AllOf';
 export * from './getAdminMainGroupsPage200AllOf';
 export * from './getAdminMainGroupsPage200AllOfMeta';
+export * from './getAdminMainGymEditPage200AllOf';
+export * from './getAdminMainGymPage200AllOf';
 export * from './getAdminMainGymsPage200AllOf';
 export * from './getAdminMainRoutineEditPage200AllOf';
 export * from './getAdminMainRoutinesPage200AllOf';

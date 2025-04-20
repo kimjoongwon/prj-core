@@ -15,7 +15,7 @@ import { DepotService } from '../../../services/depot';
 
 interface DepotProps<T>
   extends MobxProps<T>,
-    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
+  Omit<FileUploaderProps, 'onFilesChange' | 'value'> { }
 
 export const DepotUploader = observer(
   <T extends object>(props: DepotProps<T>) => {

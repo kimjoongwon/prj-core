@@ -21,9 +21,9 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('GYMS')
 @Controller()
 export class GymsController {
-  constructor(private readonly service: GymsService) {}
+  constructor(private readonly service: GymsService) { }
 
-  @Get('/myGyms/test')
+  @Get('/my')
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })

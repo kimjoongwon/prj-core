@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder, SectionBuilder } from '@shared/types';
-import { PrismaService } from 'nestjs-prisma';
 import { FormBuilderService } from '../form/form-builder.service';
 import { InputBuilderService } from '../Input/Input-builder.service';
 import { CreateGymDto } from '../../../dtos';
@@ -15,7 +14,7 @@ export class GymPage {
     private readonly inputBuilderService: InputBuilderService,
     private readonly buttonBuilderService: ButtonBuilderService,
     private readonly gymsRepository: GymsRepository,
-  ) {}
+  ) { }
 
   private getDefaultCDO(): CreateGymDto {
     return {
@@ -25,7 +24,6 @@ export class GymPage {
       address: '',
       phone: '',
       email: '',
-      businessNumber: '',
       depotId: '',
     };
   }
@@ -71,7 +69,7 @@ export class GymPage {
     const isUpdate = gymId !== 'new' && type === 'edit';
     const isDetail = type === 'detail';
 
-    const inputs = this.inputBuilderService.build(['name']);
+    const inputs = this.inputBuilderService.build(['name', 'label', 'phone', 'email', 'address', 'businessNo']);
     const sections = this.buildSections(inputs);
     const form = this.buildForm(sections, isUpdate);
 

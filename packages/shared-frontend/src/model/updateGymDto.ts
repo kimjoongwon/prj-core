@@ -3,7 +3,6 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateSpaceDto } from './createSpaceDto';
 
 export interface UpdateGymDto {
   name?: string;
@@ -14,6 +13,4 @@ export interface UpdateGymDto {
   email?: string;
   businessNumber?: string;
   depotId?: string;
-  categoryId?: string;
-  space?: CreateSpaceDto;
 }
