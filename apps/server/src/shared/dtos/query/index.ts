@@ -18,5 +18,6 @@ export * from './program-query.dto';
 export * from './depot-query.dto';
 export * from './task-query.dto';
 export * from './exercise-query.dto';
-export * from './gym-query.dto';
 export * from './assignment-query.dto';
+export * from './ground-query.dto';
+export * from './workspace-query.dto';

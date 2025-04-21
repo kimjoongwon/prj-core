@@ -1,30 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users.repository';
-import { GymsRepository } from '../repositories/gyms.repository';
 import { Prisma } from '@prisma/client';
 import { ContextProvider } from '../providers';
+import { GroundsRepository } from '../repositories';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
-    private readonly gymsRepository: GymsRepository,
+    private readonly groundsRepository: GroundsRepository,
   ) {}
 
-  getMyGyms() {
-    return this.gymsRepository.findMany({
+  getGroundsByUserId(userId: string) {
+    return this.groundsRepository.findMany({
       where: {
-        space: {
-          tenants: {
-            some: {
-              userId: ContextProvider.getAuthUserId(),
+        workspace: {
+          space: {
+            tenants: {
+              some: {
+                userId,
+              },
             },
           },
         },
         removedAt: null,
       },
       include: {
-        space: true,
+        workspace: {
+          include: {
+            space: true,
+          },
+        },
       },
     });
   }

@@ -8,9 +8,9 @@ import {
   ModalFooter,
   Modal as NextUIModal,
 } from '@heroui/react';
-import { Button, ILLIT, useGetMyGyms } from '@shared/frontend';
-import { MyGymSelect } from '@/components/pages';
+import { Button, ILLIT, useGetGroundsByUserId } from '@shared/frontend';
 import { useRouter } from 'next/navigation';
+import { MyGroundSelect } from '@/components/pages';
 
 export const ModalMount = observer(() => {
   const { modal } = ILLIT;
@@ -23,36 +23,43 @@ export const ModalMount = observer(() => {
     >
       <ModalContent>
         <ModalHeader>{modal.header}</ModalHeader>
-        {modal.type === 'MyGymSelect' && <GymSelectModalBody />}
+        {modal.type === 'MyGroundSelect' && <GroundSelectModalBody />}
       </ModalContent>
     </NextUIModal>
   );
 });
 
-const GymSelectModalBody = observer(() => {
+const GroundSelectModalBody = observer(() => {
   const router = useRouter();
-  const { data: getMyGymsResponse } = useGetMyGyms();
-  const myGyms = getMyGymsResponse?.data || [];
+  const userId = localStorage.getItem('userId') || '';
+  const { data: getMyGroundsResponse } = useGetGroundsByUserId(userId);
+  const myGrounds = getMyGroundsResponse?.data || [];
 
   const localState = useLocalObservable(() => ({
-    selectedGymId: '',
+    selectedGroundId: '',
   }));
 
   const onPressSelect = () => {
-    const selectedGym = myGyms.find(gym => gym.id === localState.selectedGymId);
-    console.log('selectedGym', selectedGym);
-    if (selectedGym) {
-      localStorage.setItem('gym', JSON.stringify(selectedGym));
-      localStorage.setItem('gymId', selectedGym.id);
+    const selectedGround = myGrounds.find(
+      ground => ground.id === localState.selectedGroundId,
+    );
+    console.log('selectedGround', selectedGround);
+    if (selectedGround) {
+      localStorage.setItem('ground', JSON.stringify(selectedGround));
+      localStorage.setItem('groundId', selectedGround.id);
     }
-    router.push(`/admin/main/tenants/${selectedGym?.id}/services`);
+    router.push(`/admin/main/tenants/${selectedGround?.id}/services`);
     ILLIT.modal.destory();
   };
 
   return (
     <>
       <ModalBody>
-        <MyGymSelect state={localState} path="selectedGymId" gyms={myGyms} />
+        <MyGroundSelect
+          state={localState}
+          path="selectedGroundId"
+          grounds={myGrounds}
+        />
       </ModalBody>
       <ModalFooter>
         <Button onPress={onPressSelect}>선택</Button>

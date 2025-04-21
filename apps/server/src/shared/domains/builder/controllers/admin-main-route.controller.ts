@@ -18,8 +18,8 @@ import { TaskEditPage } from '../pages/task-edit.page';
 import { ExercisesPage } from '../pages/exercises.page';
 import { ExerciseEditPage } from '../pages/exercise-edit.page';
 import { CategoryPage } from '../pages/category.page';
-import { GymsPage } from '../pages/gyms.page';
-import { GymPage } from '../pages/gym.page';
+import { GroundsPage } from '../pages/grounds.page';
+import { GroundPage } from '../pages/ground.page';
 
 @Controller()
 export class AdminMainRouteController {
@@ -39,10 +39,10 @@ export class AdminMainRouteController {
     readonly taskEditPage: TaskEditPage,
     readonly exercisesPage: ExercisesPage,
     readonly exerciseEditPage: ExerciseEditPage,
-    readonly gymsPage: GymsPage,
-    readonly gym: GymPage,
+    readonly groundsPage: GroundsPage,
+    readonly groundPage: GroundPage,
     readonly prisma: PrismaService,
-  ) { }
+  ) {}
 
   @Auth()
   @Get('tenants')
@@ -204,22 +204,22 @@ export class AdminMainRouteController {
   }
 
   @Auth()
-  @Get('gyms')
+  @Get('grounds')
   @ApiResponseEntity(Object, HttpStatus.OK)
-  async getAdminMainGymsPage() {
-    const route = await this.gymsPage.build();
-    return new ResponseEntity(HttpStatus.OK, 'Gyms is OK', route);
+  async getAdminMainGroundsPage() {
+    const route = await this.groundsPage.build();
+    return new ResponseEntity(HttpStatus.OK, 'Grounds is OK', route);
   }
 
   @Auth()
-  @Get('gyms/:gymId/:type')
+  @Get('grounds/:groundId/:type')
   @ApiResponseEntity(Object, HttpStatus.OK)
-  async getAdminMainGymPage(
-    @Param('gymId') gymId: string,
+  async getAdminMainGroundPage(
+    @Param('groundId') groundId: string,
     @Param('type') type: 'edit' | 'add' | 'detail',
   ) {
     ContextProvider.setPageContext(type);
-    const route = await this.gym.build(gymId, type);
-    return new ResponseEntity(HttpStatus.OK, 'Gyms Edit is OK', route);
+    const route = await this.groundPage.build(groundId, type);
+    return new ResponseEntity(HttpStatus.OK, 'Grounds Edit is OK', route);
   }
 }

@@ -71,11 +71,11 @@ export class BuilderService {
     const children = [
       {
         name: '그라운드',
-        pathname: `/admin/main/tenants/${tenantId}/services/space/gyms`,
+        pathname: `/admin/main/tenants/${tenantId}/services/space/grounds`,
         children: [
           {
             name: '편집',
-            pathname: `/admin/main/tenants/${tenantId}/services/space/spaces/:spaceId/:type`,
+            pathname: `/admin/main/tenants/${tenantId}/services/space/grounds/:groundId/:type`,
           },
         ],
       },

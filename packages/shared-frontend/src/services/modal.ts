@@ -1,12 +1,10 @@
 'use client';
 
-import { ButtonProps } from '@heroui/react';
 import { makeAutoObservable } from 'mobx';
-import { ReactNode } from 'react';
 
 export class ModalService {
   open = false;
-  type: 'MyGymSelect';
+  type: 'MyGroundSelect';
   header?: string;
   // actions: ButtonProps[] = [];
 

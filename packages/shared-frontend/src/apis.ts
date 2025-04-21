@@ -46,9 +46,9 @@ import type {
   CreateExerciseDto,
   CreateFile201AllOf,
   CreateFileDto,
+  CreateGround200AllOf,
+  CreateGroundDto,
   CreateGroupDto,
-  CreateGym200AllOf,
-  CreateGymDto,
   CreateProgram200AllOf,
   CreateProgramDto,
   CreateRole200AllOf,
@@ -74,8 +74,8 @@ import type {
   DeleteClassification200AllOf,
   DeleteDepot200AllOf,
   DeleteExercise200AllOf,
+  DeleteGround200AllOf,
   DeleteGroup200AllOf,
-  DeleteGym200AllOf,
   DeleteProgram200AllOf,
   DeleteRole200AllOf,
   DeleteRoutine200AllOf,
@@ -96,10 +96,10 @@ import type {
   GetAdminMainCategoriesPage200AllOf,
   GetAdminMainExerciseEditPage200AllOf,
   GetAdminMainExercisesPage200AllOf,
+  GetAdminMainGroundPage200AllOf,
+  GetAdminMainGroundsPage200AllOf,
   GetAdminMainGroupEditPage200AllOf,
   GetAdminMainGroupsPage200AllOf,
-  GetAdminMainGymPage200AllOf,
-  GetAdminMainGymsPage200AllOf,
   GetAdminMainRoutineEditPage200AllOf,
   GetAdminMainRoutinesPage200AllOf,
   GetAdminMainServicesPage200AllOf,
@@ -126,14 +126,13 @@ import type {
   GetExercisesByQuery200AllOf,
   GetExercisesByQueryParams,
   GetFileById200AllOf,
+  GetGround200AllOf,
+  GetGroundsByQuery200AllOf,
+  GetGroundsByQueryParams,
+  GetGroundsByUserId200AllOf,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
-  GetGym200AllOf,
-  GetGymsByMyself200AllOf,
-  GetGymsByQuery200AllOf,
-  GetGymsByQueryParams,
-  GetMyGyms200AllOf,
   GetProgram200AllOf,
   GetProgramsByQuery200AllOf,
   GetProgramsByQueryParams,
@@ -174,9 +173,9 @@ import type {
   RemoveClassifications200AllOf,
   RemoveExercise200AllOf,
   RemoveFileById200AllOf,
+  RemoveGroundById200AllOf,
+  RemoveGrounds200AllOf,
   RemoveGroups200AllOf,
-  RemoveGymById200AllOf,
-  RemoveGyms200AllOf,
   RemoveProgram200AllOf,
   RemovePrograms200AllOf,
   RemoveRole200AllOf,
@@ -213,8 +212,6 @@ import type {
   UpdateFileByIdBody,
   UpdateGroup200AllOf,
   UpdateGroupDto,
-  UpdateGym200AllOf,
-  UpdateGymDto,
   UpdateProgram200AllOf,
   UpdateProgramDto,
   UpdateRole200AllOf,
@@ -242,262 +239,137 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export const getGymsByMyself = (
-    
+export const createGround = (
+    createGroundDto: BodyType<CreateGroundDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetGymsByMyself200AllOf>(
-      {url: `/api/v1/gyms/my`, method: 'GET', signal
+      return customInstance<CreateGround200AllOf>(
+      {url: `/api/v1/grounds`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createGroundDto, signal
     },
       options);
     }
   
 
-export const getGetGymsByMyselfQueryKey = () => {
-    return [`/api/v1/gyms/my`] as const;
-    }
 
+export const getCreateGroundMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext> => {
     
-export const getGetGymsByMyselfQueryOptions = <TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByMyselfQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByMyself>>> = ({ signal }) => getGymsByMyself(requestOptions, signal);
+const mutationKey = ['createGround'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
-      
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGround>>, {data: BodyType<CreateGroundDto>}> = (props) => {
+          const {data} = props ?? {};
 
-export type GetGymsByMyselfQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByMyself>>>
-export type GetGymsByMyselfQueryError = ErrorType<void>
+          return  createGround(data,requestOptions)
+        }
 
-
-export function useGetGymsByMyself<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGymsByMyself>>,
-          TError,
-          Awaited<ReturnType<typeof getGymsByMyself>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyself<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGymsByMyself>>,
-          TError,
-          Awaited<ReturnType<typeof getGymsByMyself>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyself<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGymsByMyself<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGymsByMyselfQueryOptions(options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
+        
 
 
+  return  { mutationFn, ...mutationOptions }}
 
-export const getGetGymsByMyselfSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
+    export type CreateGroundMutationResult = NonNullable<Awaited<ReturnType<typeof createGround>>>
+    export type CreateGroundMutationBody = BodyType<CreateGroundDto>
+    export type CreateGroundMutationError = ErrorType<void>
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+    export const useCreateGround = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createGround>>,
+        TError,
+        {data: BodyType<CreateGroundDto>},
+        TContext
+      > => {
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByMyselfQueryKey();
+      const mutationOptions = getCreateGroundMutationOptions(options);
 
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByMyself>>> = ({ signal }) => getGymsByMyself(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetGymsByMyselfSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByMyself>>>
-export type GetGymsByMyselfSuspenseQueryError = ErrorType<void>
-
-
-export function useGetGymsByMyselfSuspense<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyselfSuspense<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyselfSuspense<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGymsByMyselfSuspense<TData = Awaited<ReturnType<typeof getGymsByMyself>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGymsByMyselfSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getGetGymsByMyselfSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGymsByMyself>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByMyselfQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByMyself>>> = ({ signal }) => getGymsByMyself(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetGymsByMyselfSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByMyself>>>
-export type GetGymsByMyselfSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetGymsByMyselfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByMyself>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyselfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByMyself>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByMyselfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByMyself>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetGymsByMyselfSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByMyself>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByMyself>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetGymsByMyselfSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGymsByQuery = (
-    params?: GetGymsByQueryParams,
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+export const getGroundsByQuery = (
+    params?: GetGroundsByQueryParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetGymsByQuery200AllOf>(
-      {url: `/api/v1/gyms`, method: 'GET',
+      return customInstance<GetGroundsByQuery200AllOf>(
+      {url: `/api/v1/grounds`, method: 'GET',
         params, signal
     },
       options);
     }
   
 
-export const getGetGymsByQueryQueryKey = (params?: GetGymsByQueryParams,) => {
-    return [`/api/v1/gyms`, ...(params ? [params]: [])] as const;
+export const getGetGroundsByQueryQueryKey = (params?: GetGroundsByQueryParams,) => {
+    return [`/api/v1/grounds`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetGymsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(params?: GetGymsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByQueryQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByQuery>>> = ({ signal }) => getGymsByQuery(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByQuery>>>
-export type GetGymsByQueryQueryError = ErrorType<void>
+export type GetGroundsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByQuery>>>
+export type GetGroundsByQueryQueryError = ErrorType<void>
 
 
-export function useGetGymsByQuery<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetGymsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>> & Pick<
+export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGymsByQuery>>,
+          Awaited<ReturnType<typeof getGroundsByQuery>>,
           TError,
-          Awaited<ReturnType<typeof getGymsByQuery>>
+          Awaited<ReturnType<typeof getGroundsByQuery>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuery<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>> & Pick<
+export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGymsByQuery>>,
+          Awaited<ReturnType<typeof getGroundsByQuery>>,
           TError,
-          Awaited<ReturnType<typeof getGymsByQuery>>
+          Awaited<ReturnType<typeof getGroundsByQuery>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuery<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGymsByQuery<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymsByQueryQueryOptions(params,options)
+  const queryOptions = getGetGroundsByQueryQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -508,47 +380,47 @@ export function useGetGymsByQuery<TData = Awaited<ReturnType<typeof getGymsByQue
 
 
 
-export const getGetGymsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByQueryQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByQuery>>> = ({ signal }) => getGymsByQuery(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByQuery>>>
-export type GetGymsByQuerySuspenseQueryError = ErrorType<void>
+export type GetGroundsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByQuery>>>
+export type GetGroundsByQuerySuspenseQueryError = ErrorType<void>
 
 
-export function useGetGymsByQuerySuspense<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params: undefined |  GetGymsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuerySuspense<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuerySuspense<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGymsByQuerySuspense<TData = Awaited<ReturnType<typeof getGymsByQuery>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymsByQuerySuspenseQueryOptions(params,options)
+  const queryOptions = getGetGroundsByQuerySuspenseQueryOptions(params,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -559,47 +431,47 @@ export function useGetGymsByQuerySuspense<TData = Awaited<ReturnType<typeof getG
 
 
 
-export const getGetGymsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGymsByQuery>>>, TError = ErrorType<void>>(params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymsByQueryQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGymsByQuery>>> = ({ signal }) => getGymsByQuery(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGymsByQuery>>>
-export type GetGymsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+export type GetGroundsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByQuery>>>
+export type GetGroundsByQuerySuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetGymsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByQuery>>>, TError = ErrorType<void>>(
- params: undefined |  GetGymsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByQuery>>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByQuery>>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGymsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGymsByQuery>>>, TError = ErrorType<void>>(
- params?: GetGymsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGymsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymsByQuerySuspenseInfiniteQueryOptions(params,options)
+  const queryOptions = getGetGroundsByQuerySuspenseInfiniteQueryOptions(params,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -611,136 +483,77 @@ export function useGetGymsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<R
 
 
 
-export const createGym = (
-    createGymDto: BodyType<CreateGymDto>,
+export const getGround = (
+    groundId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<CreateGym200AllOf>(
-      {url: `/api/v1/gyms`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createGymDto, signal
+      return customInstance<GetGround200AllOf>(
+      {url: `/api/v1/grounds/${groundId}`, method: 'GET', signal
     },
       options);
     }
   
 
-
-export const getCreateGymMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGym>>, TError,{data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createGym>>, TError,{data: BodyType<CreateGymDto>}, TContext> => {
-    
-const mutationKey = ['createGym'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGym>>, {data: BodyType<CreateGymDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createGym(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateGymMutationResult = NonNullable<Awaited<ReturnType<typeof createGym>>>
-    export type CreateGymMutationBody = BodyType<CreateGymDto>
-    export type CreateGymMutationError = ErrorType<void>
-
-    export const useCreateGym = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGym>>, TError,{data: BodyType<CreateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createGym>>,
-        TError,
-        {data: BodyType<CreateGymDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateGymMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
-export const getGym = (
-    gymId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetGym200AllOf>(
-      {url: `/api/v1/gyms/${gymId}`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-export const getGetGymQueryKey = (gymId: string,) => {
-    return [`/api/v1/gyms/${gymId}`] as const;
+export const getGetGroundQueryKey = (groundId: string,) => {
+    return [`/api/v1/grounds/${groundId}`] as const;
     }
 
     
-export const getGetGymQueryOptions = <TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(gymId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundQueryOptions = <TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(groundId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymQueryKey(gymId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundQueryKey(groundId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGym>>> = ({ signal }) => getGym(gymId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGround>>> = ({ signal }) => getGround(groundId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(gymId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(groundId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymQueryResult = NonNullable<Awaited<ReturnType<typeof getGym>>>
-export type GetGymQueryError = ErrorType<void>
+export type GetGroundQueryResult = NonNullable<Awaited<ReturnType<typeof getGround>>>
+export type GetGroundQueryError = ErrorType<void>
 
 
-export function useGetGym<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>> & Pick<
+export function useGetGround<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGym>>,
+          Awaited<ReturnType<typeof getGround>>,
           TError,
-          Awaited<ReturnType<typeof getGym>>
+          Awaited<ReturnType<typeof getGround>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGym<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>> & Pick<
+export function useGetGround<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGym>>,
+          Awaited<ReturnType<typeof getGround>>,
           TError,
-          Awaited<ReturnType<typeof getGym>>
+          Awaited<ReturnType<typeof getGround>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGym<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGround<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGym<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGround<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymQueryOptions(gymId,options)
+  const queryOptions = getGetGroundQueryOptions(groundId,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -751,47 +564,47 @@ export function useGetGym<TData = Awaited<ReturnType<typeof getGym>>, TError = E
 
 
 
-export const getGetGymSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(gymId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(groundId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymQueryKey(gymId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundQueryKey(groundId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGym>>> = ({ signal }) => getGym(gymId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGround>>> = ({ signal }) => getGround(groundId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGym>>>
-export type GetGymSuspenseQueryError = ErrorType<void>
+export type GetGroundSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGround>>>
+export type GetGroundSuspenseQueryError = ErrorType<void>
 
 
-export function useGetGymSuspense<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspense<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymSuspense<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspense<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymSuspense<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspense<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGymSuspense<TData = Awaited<ReturnType<typeof getGym>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspense<TData = Awaited<ReturnType<typeof getGround>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymSuspenseQueryOptions(gymId,options)
+  const queryOptions = getGetGroundSuspenseQueryOptions(groundId,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -802,47 +615,47 @@ export function useGetGymSuspense<TData = Awaited<ReturnType<typeof getGym>>, TE
 
 
 
-export const getGetGymSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGym>>>, TError = ErrorType<void>>(gymId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGround>>>, TError = ErrorType<void>>(groundId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGymQueryKey(gymId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundQueryKey(groundId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGym>>> = ({ signal }) => getGym(gymId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGround>>> = ({ signal }) => getGround(groundId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGymSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGym>>>
-export type GetGymSuspenseInfiniteQueryError = ErrorType<void>
+export type GetGroundSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGround>>>
+export type GetGroundSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGym>>>, TError = ErrorType<void>>(
- gymId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGround>>>, TError = ErrorType<void>>(
+ groundId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGym>>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGround>>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGym>>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGround>>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGym>>>, TError = ErrorType<void>>(
- gymId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGym>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGround>>>, TError = ErrorType<void>>(
+ groundId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGround>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGymSuspenseInfiniteQueryOptions(gymId,options)
+  const queryOptions = getGetGroundSuspenseInfiniteQueryOptions(groundId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -854,27 +667,24 @@ export function useGetGymSuspenseInfinite<TData = InfiniteData<Awaited<ReturnTyp
 
 
 
-export const updateGym = (
-    gymId: string,
-    updateGymDto: BodyType<UpdateGymDto>,
+export const deleteGround = (
+    groundId: string,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<UpdateGym200AllOf>(
-      {url: `/api/v1/gyms/${gymId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateGymDto
+      return customInstance<DeleteGround200AllOf>(
+      {url: `/api/v1/grounds/${groundId}`, method: 'DELETE'
     },
       options);
     }
   
 
 
-export const getUpdateGymMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext> => {
+export const getDeleteGroundMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGround>>, TError,{groundId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteGround>>, TError,{groundId: string}, TContext> => {
     
-const mutationKey = ['updateGym'];
+const mutationKey = ['deleteGround'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -884,10 +694,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGym>>, {gymId: string;data: BodyType<UpdateGymDto>}> = (props) => {
-          const {gymId,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGround>>, {groundId: string}> = (props) => {
+          const {groundId} = props ?? {};
 
-          return  updateGym(gymId,data,requestOptions)
+          return  deleteGround(groundId,requestOptions)
         }
 
         
@@ -895,100 +705,44 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateGymMutationResult = NonNullable<Awaited<ReturnType<typeof updateGym>>>
-    export type UpdateGymMutationBody = BodyType<UpdateGymDto>
-    export type UpdateGymMutationError = ErrorType<void>
+    export type DeleteGroundMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGround>>>
+    
+    export type DeleteGroundMutationError = ErrorType<void>
 
-    export const useUpdateGym = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGym>>, TError,{gymId: string;data: BodyType<UpdateGymDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useDeleteGround = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGround>>, TError,{groundId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateGym>>,
+        Awaited<ReturnType<typeof deleteGround>>,
         TError,
-        {gymId: string;data: BodyType<UpdateGymDto>},
+        {groundId: string},
         TContext
       > => {
 
-      const mutationOptions = getUpdateGymMutationOptions(options);
+      const mutationOptions = getDeleteGroundMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
     
-export const deleteGym = (
-    gymId: string,
+export const removeGrounds = (
+    removeGroundsBody: BodyType<string[]>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<DeleteGym200AllOf>(
-      {url: `/api/v1/gyms/${gymId}`, method: 'DELETE'
-    },
-      options);
-    }
-  
-
-
-export const getDeleteGymMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGym>>, TError,{gymId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteGym>>, TError,{gymId: string}, TContext> => {
-    
-const mutationKey = ['deleteGym'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteGym>>, {gymId: string}> = (props) => {
-          const {gymId} = props ?? {};
-
-          return  deleteGym(gymId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteGymMutationResult = NonNullable<Awaited<ReturnType<typeof deleteGym>>>
-    
-    export type DeleteGymMutationError = ErrorType<void>
-
-    export const useDeleteGym = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGym>>, TError,{gymId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteGym>>,
-        TError,
-        {gymId: string},
-        TContext
-      > => {
-
-      const mutationOptions = getDeleteGymMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
-export const removeGyms = (
-    removeGymsBody: BodyType<string[]>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<RemoveGyms200AllOf>(
-      {url: `/api/v1/gyms/removedAt`, method: 'PATCH',
+      return customInstance<RemoveGrounds200AllOf>(
+      {url: `/api/v1/grounds/removedAt`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: removeGymsBody
+      data: removeGroundsBody
     },
       options);
     }
   
 
 
-export const getRemoveGymsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGyms>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeGyms>>, TError,{data: BodyType<string[]>}, TContext> => {
+export const getRemoveGroundsMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGrounds>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeGrounds>>, TError,{data: BodyType<string[]>}, TContext> => {
     
-const mutationKey = ['removeGyms'];
+const mutationKey = ['removeGrounds'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -998,10 +752,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGyms>>, {data: BodyType<string[]>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGrounds>>, {data: BodyType<string[]>}> = (props) => {
           const {data} = props ?? {};
 
-          return  removeGyms(data,requestOptions)
+          return  removeGrounds(data,requestOptions)
         }
 
         
@@ -1009,42 +763,42 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type RemoveGymsMutationResult = NonNullable<Awaited<ReturnType<typeof removeGyms>>>
-    export type RemoveGymsMutationBody = BodyType<string[]>
-    export type RemoveGymsMutationError = ErrorType<void>
+    export type RemoveGroundsMutationResult = NonNullable<Awaited<ReturnType<typeof removeGrounds>>>
+    export type RemoveGroundsMutationBody = BodyType<string[]>
+    export type RemoveGroundsMutationError = ErrorType<void>
 
-    export const useRemoveGyms = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGyms>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useRemoveGrounds = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGrounds>>, TError,{data: BodyType<string[]>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof removeGyms>>,
+        Awaited<ReturnType<typeof removeGrounds>>,
         TError,
         {data: BodyType<string[]>},
         TContext
       > => {
 
-      const mutationOptions = getRemoveGymsMutationOptions(options);
+      const mutationOptions = getRemoveGroundsMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
     
-export const removeGymById = (
-    gymId: string,
+export const removeGroundById = (
+    groundId: string,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<RemoveGymById200AllOf>(
-      {url: `/api/v1/gyms/${gymId}/removedAt`, method: 'PATCH'
+      return customInstance<RemoveGroundById200AllOf>(
+      {url: `/api/v1/grounds/${groundId}/removedAt`, method: 'PATCH'
     },
       options);
     }
   
 
 
-export const getRemoveGymByIdMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGymById>>, TError,{gymId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof removeGymById>>, TError,{gymId: string}, TContext> => {
+export const getRemoveGroundByIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroundById>>, TError,{groundId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeGroundById>>, TError,{groundId: string}, TContext> => {
     
-const mutationKey = ['removeGymById'];
+const mutationKey = ['removeGroundById'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -1054,10 +808,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGymById>>, {gymId: string}> = (props) => {
-          const {gymId} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeGroundById>>, {groundId: string}> = (props) => {
+          const {groundId} = props ?? {};
 
-          return  removeGymById(gymId,requestOptions)
+          return  removeGroundById(groundId,requestOptions)
         }
 
         
@@ -1065,20 +819,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type RemoveGymByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeGymById>>>
+    export type RemoveGroundByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeGroundById>>>
     
-    export type RemoveGymByIdMutationError = ErrorType<void>
+    export type RemoveGroundByIdMutationError = ErrorType<void>
 
-    export const useRemoveGymById = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGymById>>, TError,{gymId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useRemoveGroundById = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroundById>>, TError,{groundId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof removeGymById>>,
+        Awaited<ReturnType<typeof removeGroundById>>,
         TError,
-        {gymId: string},
+        {groundId: string},
         TContext
       > => {
 
-      const mutationOptions = getRemoveGymByIdMutationOptions(options);
+      const mutationOptions = getRemoveGroundByIdMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -4322,77 +4076,77 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     
-export const getMyGyms = (
-    
+export const getGroundsByUserId = (
+    userId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetMyGyms200AllOf>(
-      {url: `/api/v1/users/me/gyms`, method: 'GET', signal
+      return customInstance<GetGroundsByUserId200AllOf>(
+      {url: `/api/v1/users/${userId}/grounds`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetMyGymsQueryKey = () => {
-    return [`/api/v1/users/me/gyms`] as const;
+export const getGetGroundsByUserIdQueryKey = (userId: string,) => {
+    return [`/api/v1/users/${userId}/grounds`] as const;
     }
 
     
-export const getGetMyGymsQueryOptions = <TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByUserIdQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyGymsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByUserIdQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGyms>>> = ({ signal }) => getMyGyms(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByUserId>>> = ({ signal }) => getGroundsByUserId(userId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetMyGymsQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGyms>>>
-export type GetMyGymsQueryError = ErrorType<void>
+export type GetGroundsByUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByUserId>>>
+export type GetGroundsByUserIdQueryError = ErrorType<void>
 
 
-export function useGetMyGyms<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>> & Pick<
+export function useGetGroundsByUserId<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyGyms>>,
+          Awaited<ReturnType<typeof getGroundsByUserId>>,
           TError,
-          Awaited<ReturnType<typeof getMyGyms>>
+          Awaited<ReturnType<typeof getGroundsByUserId>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGyms<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>> & Pick<
+export function useGetGroundsByUserId<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyGyms>>,
+          Awaited<ReturnType<typeof getGroundsByUserId>>,
           TError,
-          Awaited<ReturnType<typeof getMyGyms>>
+          Awaited<ReturnType<typeof getGroundsByUserId>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGyms<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserId<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetMyGyms<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserId<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetMyGymsQueryOptions(options)
+  const queryOptions = getGetGroundsByUserIdQueryOptions(userId,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -4403,47 +4157,47 @@ export function useGetMyGyms<TData = Awaited<ReturnType<typeof getMyGyms>>, TErr
 
 
 
-export const getGetMyGymsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByUserIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyGymsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByUserIdQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGyms>>> = ({ signal }) => getMyGyms(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByUserId>>> = ({ signal }) => getGroundsByUserId(userId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetMyGymsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGyms>>>
-export type GetMyGymsSuspenseQueryError = ErrorType<void>
+export type GetGroundsByUserIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByUserId>>>
+export type GetGroundsByUserIdSuspenseQueryError = ErrorType<void>
 
 
-export function useGetMyGymsSuspense<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspense<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGymsSuspense<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspense<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGymsSuspense<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspense<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetMyGymsSuspense<TData = Awaited<ReturnType<typeof getMyGyms>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspense<TData = Awaited<ReturnType<typeof getGroundsByUserId>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetMyGymsSuspenseQueryOptions(options)
+  const queryOptions = getGetGroundsByUserIdSuspenseQueryOptions(userId,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -4454,47 +4208,47 @@ export function useGetMyGymsSuspense<TData = Awaited<ReturnType<typeof getMyGyms
 
 
 
-export const getGetMyGymsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMyGyms>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByUserIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByUserId>>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyGymsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByUserIdQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyGyms>>> = ({ signal }) => getMyGyms(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByUserId>>> = ({ signal }) => getGroundsByUserId(userId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetMyGymsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMyGyms>>>
-export type GetMyGymsSuspenseInfiniteQueryError = ErrorType<void>
+export type GetGroundsByUserIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroundsByUserId>>>
+export type GetGroundsByUserIdSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetMyGymsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGyms>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByUserId>>>, TError = ErrorType<void>>(
+ userId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGymsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGyms>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByUserId>>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyGymsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGyms>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByUserId>>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetMyGymsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyGyms>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyGyms>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroundsByUserIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByUserId>>>, TError = ErrorType<void>>(
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByUserId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetMyGymsSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetGroundsByUserIdSuspenseInfiniteQueryOptions(userId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16225,77 +15979,77 @@ export function useGetAdminMainExerciseEditPageSuspenseInfinite<TData = Infinite
 
 
 
-export const getAdminMainGymsPage = (
+export const getAdminMainGroundsPage = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainGymsPage200AllOf>(
-      {url: `/api/v1/admin/main/gyms`, method: 'GET', signal
+      return customInstance<GetAdminMainGroundsPage200AllOf>(
+      {url: `/api/v1/admin/main/grounds`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainGymsPageQueryKey = () => {
-    return [`/api/v1/admin/main/gyms`] as const;
+export const getGetAdminMainGroundsPageQueryKey = () => {
+    return [`/api/v1/admin/main/grounds`] as const;
     }
 
     
-export const getGetAdminMainGymsPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundsPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymsPageQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymsPage>>> = ({ signal }) => getAdminMainGymsPage(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundsPage>>> = ({ signal }) => getAdminMainGroundsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymsPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymsPage>>>
-export type GetAdminMainGymsPageQueryError = ErrorType<void>
+export type GetAdminMainGroundsPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>
+export type GetAdminMainGroundsPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymsPage<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>> & Pick<
+export function useGetAdminMainGroundsPage<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGymsPage>>,
+          Awaited<ReturnType<typeof getAdminMainGroundsPage>>,
           TError,
-          Awaited<ReturnType<typeof getAdminMainGymsPage>>
+          Awaited<ReturnType<typeof getAdminMainGroundsPage>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPage<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>> & Pick<
+export function useGetAdminMainGroundsPage<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGymsPage>>,
+          Awaited<ReturnType<typeof getAdminMainGroundsPage>>,
           TError,
-          Awaited<ReturnType<typeof getAdminMainGymsPage>>
+          Awaited<ReturnType<typeof getAdminMainGroundsPage>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPage<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPage<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymsPage<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPage<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymsPageQueryOptions(options)
+  const queryOptions = getGetAdminMainGroundsPageQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16306,47 +16060,47 @@ export function useGetAdminMainGymsPage<TData = Awaited<ReturnType<typeof getAdm
 
 
 
-export const getGetAdminMainGymsPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundsPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymsPageQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymsPage>>> = ({ signal }) => getAdminMainGymsPage(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundsPage>>> = ({ signal }) => getAdminMainGroundsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymsPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymsPage>>>
-export type GetAdminMainGymsPageSuspenseQueryError = ErrorType<void>
+export type GetAdminMainGroundsPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>
+export type GetAdminMainGroundsPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymsPageSuspenseQueryOptions(options)
+  const queryOptions = getGetAdminMainGroundsPageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16357,47 +16111,47 @@ export function useGetAdminMainGymsPageSuspense<TData = Awaited<ReturnType<typeo
 
 
 
-export const getGetAdminMainGymsPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymsPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundsPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymsPageQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundsPageQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymsPage>>> = ({ signal }) => getAdminMainGymsPage(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundsPage>>> = ({ signal }) => getAdminMainGroundsPage(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymsPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymsPage>>>
-export type GetAdminMainGymsPageSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainGroundsPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>
+export type GetAdminMainGroundsPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymsPage>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymsPage>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymsPage>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymsPage>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundsPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundsPage>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundsPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymsPageSuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetAdminMainGroundsPageSuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16409,84 +16163,84 @@ export function useGetAdminMainGymsPageSuspenseInfinite<TData = InfiniteData<Awa
 
 
 
-export const getAdminMainGymPage = (
-    gymId: string,
+export const getAdminMainGroundPage = (
+    groundId: string,
     type: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetAdminMainGymPage200AllOf>(
-      {url: `/api/v1/admin/main/gyms/${gymId}/${type}`, method: 'GET', signal
+      return customInstance<GetAdminMainGroundPage200AllOf>(
+      {url: `/api/v1/admin/main/grounds/${groundId}/${type}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetAdminMainGymPageQueryKey = (gymId: string,
+export const getGetAdminMainGroundPageQueryKey = (groundId: string,
     type: string,) => {
-    return [`/api/v1/admin/main/gyms/${gymId}/${type}`] as const;
+    return [`/api/v1/admin/main/grounds/${groundId}/${type}`] as const;
     }
 
     
-export const getGetAdminMainGymPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(gymId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundPageQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(groundId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundPageQueryKey(groundId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundPage>>> = ({ signal }) => getAdminMainGroundPage(groundId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(gymId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(groundId && type), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
-export type GetAdminMainGymPageQueryError = ErrorType<void>
+export type GetAdminMainGroundPageQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundPage>>>
+export type GetAdminMainGroundPageQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>> & Pick<
+export function useGetAdminMainGroundPage<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGymPage>>,
+          Awaited<ReturnType<typeof getAdminMainGroundPage>>,
           TError,
-          Awaited<ReturnType<typeof getAdminMainGymPage>>
+          Awaited<ReturnType<typeof getAdminMainGroundPage>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>> & Pick<
+export function useGetAdminMainGroundPage<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminMainGymPage>>,
+          Awaited<ReturnType<typeof getAdminMainGroundPage>>,
           TError,
-          Awaited<ReturnType<typeof getAdminMainGymPage>>
+          Awaited<ReturnType<typeof getAdminMainGroundPage>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPage<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPage<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymPageQueryOptions(gymId,type,options)
+  const queryOptions = getGetAdminMainGroundPageQueryOptions(groundId,type,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16497,52 +16251,52 @@ export function useGetAdminMainGymPage<TData = Awaited<ReturnType<typeof getAdmi
 
 
 
-export const getGetAdminMainGymPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundPageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundPageQueryKey(groundId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundPage>>> = ({ signal }) => getAdminMainGroundPage(groundId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
-export type GetAdminMainGymPageSuspenseQueryError = ErrorType<void>
+export type GetAdminMainGroundPageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundPage>>>
+export type GetAdminMainGroundPageSuspenseQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGymPage>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspense<TData = Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymPageSuspenseQueryOptions(gymId,type,options)
+  const queryOptions = getGetAdminMainGroundPageSuspenseQueryOptions(groundId,type,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -16553,52 +16307,52 @@ export function useGetAdminMainGymPageSuspense<TData = Awaited<ReturnType<typeof
 
 
 
-export const getGetAdminMainGymPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetAdminMainGroundPageSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundPage>>>, TError = ErrorType<void>>(groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGymPageQueryKey(gymId,type);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMainGroundPageQueryKey(groundId,type);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGymPage>>> = ({ signal }) => getAdminMainGymPage(gymId,type, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMainGroundPage>>> = ({ signal }) => getAdminMainGroundPage(groundId,type, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetAdminMainGymPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGymPage>>>
-export type GetAdminMainGymPageSuspenseInfiniteQueryError = ErrorType<void>
+export type GetAdminMainGroundPageSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMainGroundPage>>>
+export type GetAdminMainGroundPageSuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundPage>>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundPage>>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundPage>>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetAdminMainGymPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGymPage>>>, TError = ErrorType<void>>(
- gymId: string,
-    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGymPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetAdminMainGroundPageSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAdminMainGroundPage>>>, TError = ErrorType<void>>(
+ groundId: string,
+    type: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAdminMainGroundPage>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAdminMainGymPageSuspenseInfiniteQueryOptions(gymId,type,options)
+  const queryOptions = getGetAdminMainGroundPageSuspenseInfiniteQueryOptions(groundId,type,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

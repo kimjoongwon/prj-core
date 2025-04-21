@@ -16,5 +16,6 @@ export * from './files.repository';
 export * from './exercises.repository';
 export * from './depots.repository';
 export * from './tenants.repository';
-export * from './gyms.repository';
 export * from './assignments.repository';
+export * from './grounds.repository';
+export * from './workspaces.repository';

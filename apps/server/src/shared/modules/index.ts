@@ -6,7 +6,7 @@ import {
   CategoriesService,
   ClassificationsService,
   DepotsService,
-  GymsService,
+  GroundsService,
   ProgramsService,
   RolesService,
   RoutinesService,
@@ -23,6 +23,7 @@ import {
   ClassificationsRepository,
   ExercisesRepository,
   FilesRepository,
+  GroundsRepository,
   ProgramsRepository,
   RoutinesRepository,
   SessionsRepository,
@@ -30,7 +31,6 @@ import {
   TenantsRepository,
   TimelinesRepository,
   UsersRepository,
-  GymsRepository,
 } from '../repositories';
 import { DepotsRepository } from '../repositories/depots.repository';
 import { FilesService } from '../services/files.service';
@@ -80,8 +80,6 @@ const modules = [
   DepotsRepository,
   TenantsService,
   TenantsRepository,
-  GymsService,
-  GymsRepository,
   AssignmentsService,
   AssignmentsRepository,
   InputBuilderService,
@@ -89,6 +87,8 @@ const modules = [
   DataGridBuilderService,
   FormBuilderService,
   ButtonBuilderService,
+  GroundsService,
+  GroundsRepository,
 ];
 @Global()
 @Module({

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto, GymDto } from '../dtos';
+import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto, GroundDto } from '../dtos';
 import { ResponseEntity } from '../entities/response.entity';
 import { UsersService } from '../services';
 import { ApiTags } from '@nestjs/swagger';
@@ -22,13 +22,18 @@ import { ApiTags } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly service: UsersService) {}
 
-  @Get('me/gyms')
+  @Get(':userId/grounds')
   @Auth([])
   @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(GymDto, HttpStatus.OK, { isArray: true })
-  async getMyGyms() {
-    const gyms = await this.service.getMyGyms();
-    return new ResponseEntity(HttpStatus.OK, 'success', gyms);
+  @ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
+  async getGroundsByUserId(@Param('userId') userId: string) {
+    const grounds = await this.service.getGroundsByUserId(userId);
+
+    return new ResponseEntity(
+      HttpStatus.OK,
+      'success',
+      grounds.map((ground) => ground.toDto()),
+    );
   }
 
   @Post()

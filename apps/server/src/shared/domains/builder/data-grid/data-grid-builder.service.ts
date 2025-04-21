@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder } from '@shared/types';
+import { ColumnBuilder, DataGridBuilder } from '@shared/types';
 
 @Injectable()
 export class DataGridBuilderService {
@@ -11,7 +11,7 @@ export class DataGridBuilderService {
     columns?: ColumnBuilder[];
     params?: Record<string, any>;
     queryName?: string;
-  }) {
+  }): DataGridBuilder {
     return {
       table: {
         query: {
