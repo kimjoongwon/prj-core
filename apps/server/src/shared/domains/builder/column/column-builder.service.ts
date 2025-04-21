@@ -3,44 +3,44 @@ import { ButtonBuilder, ColumnBuilder } from '@shared/types';
 import { upperFirst } from 'lodash';
 import Pluaralize from 'pluralize';
 
-type CellButton = 'edit' | 'detail' | 'remove' | 'add';
-type CellColumn = 'name' | 'label';
+export type CellActionName = 'edit' | 'detail' | 'remove' | 'add';
+export type ColumnName = 'name' | 'label';
 
 @Injectable()
 export class ColumnBuilderService {
-  private cellButtons: CellButton[] = [];
-  private cellColumns: CellColumn[] = [];
+  private cellActionNames: CellActionName[] = [];
+  private columnName: ColumnName[] = [];
   private resourceName: string;
 
   public build(
     resourceName: string,
-    cellColumns: CellColumn[] = this.cellColumns,
-    cellButtons: CellButton[] = this.cellButtons,
+    columnName: ColumnName[] = this.columnName,
+    cellActionNames: CellActionName[] = this.cellActionNames,
   ): ColumnBuilder[] {
     this.resourceName = resourceName;
 
     const columns: ColumnBuilder[] = [];
 
-    if (cellColumns.includes('name')) {
+    if (columnName.includes('name')) {
       columns.push(this.createNameColumn());
     }
 
-    if (cellColumns.includes('label')) {
+    if (columnName.includes('label')) {
       columns.push(this.createLabelColumn());
     }
 
-    if (cellButtons.length > 0) {
-      columns.push(this.createActionColumn(cellButtons));
+    if (cellActionNames.length > 0) {
+      columns.push(this.createActionColumn(cellActionNames));
     }
 
     return columns;
   }
 
-  private createActionColumn(cellButtons: CellButton[]): ColumnBuilder {
+  private createActionColumn(cellActionNames: CellActionName[]): ColumnBuilder {
     return {
       id: 'action',
       header: { name: '액션' },
-      cell: { buttons: this.getCellButtons(cellButtons) },
+      cell: { buttons: this.getCellActionNames(cellActionNames) },
     };
   }
 
@@ -59,14 +59,14 @@ export class ColumnBuilderService {
       header: { name: '라벨' },
     };
   }
-  private getCellButtons(cellButtons: CellButton[]): ButtonBuilder[] {
-    return cellButtons
+  private getCellActionNames(cellActionNames: CellActionName[]): ButtonBuilder[] {
+    return cellActionNames
       .map((buttonType) => this.createButton(buttonType))
       .filter(Boolean) as ButtonBuilder[];
   }
 
-  private createButton(buttonType: CellButton): ButtonBuilder | null {
-    const buttonCreators: Record<CellButton, () => ButtonBuilder> = {
+  private createButton(buttonType: CellActionName): ButtonBuilder | null {
+    const buttonCreators: Record<CellActionName, () => ButtonBuilder> = {
       edit: this.getEditButton.bind(this),
       detail: this.getDetailButton.bind(this),
       remove: this.getRemoveButton.bind(this),

@@ -13,5 +13,6 @@ export * from './timelines.service';
 export * from './routines.service';
 export * from './programs.service';
 export * from './depots.service';
-export * from './gyms.service';
 export * from './assignments.service';
+export * from './grounds.service';
+export * from './workspaces.service';

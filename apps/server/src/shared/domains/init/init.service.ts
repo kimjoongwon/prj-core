@@ -63,52 +63,62 @@ export class InitService {
     };
   }
 
-  async createDefaultGym() {
+  async createDefaultGround() {
     this.logger.log(`[${this.LOG_PREFIX}] 기본 공간 생성`);
-    let gym = null;
+    let ground = null;
 
     const appConfig = this.configService.get<AppConfig>('app');
 
     const appName = appConfig.name;
 
-    const defaultGym = await this.prisma.gym.findFirst({
+    const defaultGround = await this.prisma.ground.findFirst({
       where: {
-        name: appName,
+        workspace: {
+          name: appName,
+        },
       },
       include: {
-        space: true,
+        workspace: {
+          include: {
+            space: true,
+          },
+        },
       },
     });
 
-    if (defaultGym) {
-      gym = defaultGym;
+    if (defaultGround) {
+      ground = defaultGround;
 
       this.logger.log(`[${this.LOG_PREFIX}] 기본 GYM이 이미 존재합니다.`);
     } else {
-      const _gym = await this.prisma.gym.create({
+      const _space = await this.prisma.space.findFirst({});
+      const _ground = await this.prisma.ground.create({
         data: {
-          address: '서울시 강남구',
-          phone: '01073162347',
-          businessNo: '1234567890',
-          email: 'galaxy@gmail.com',
-          name: appName,
-          label: appName,
-          space: {
-            create: {},
+          workspace: {
+            create: {
+              address: '서울시 강남구',
+              businessNo: '1234567890',
+              name: appName,
+              label: appName,
+              phone: '01073162347',
+              email: 'galaxy@gmail.com',
+              space: {
+                connect: {
+                  id: _space.id,
+                },
+              },
+            },
           },
-        },
-        include: {
-          space: true,
         },
       });
 
-      gym = _gym;
+      ground = _ground;
 
       this.logger.log(`[${this.LOG_PREFIX}] 기본 GYM 생성`);
     }
 
     return {
-      spaceId: gym.spaceId,
+      spaceId: ground.spaceId,
     };
   }
 
@@ -313,7 +323,7 @@ export class InitService {
 
   async initApp() {
     await this.createServices();
-    const { spaceId } = await this.createDefaultGym();
+    const { spaceId } = await this.createDefaultGround();
     const user = await this.createDefaultUser();
     const tenant = await this.createDefaultTenant(spaceId, user.id);
     const tenantId = tenant.id;

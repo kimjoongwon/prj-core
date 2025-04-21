@@ -32,10 +32,12 @@ export const LoginPage = observer(() => {
   const onPressLogin = async () => {
     'use client';
     try {
-      getToken(state.form?.inputs!);
+      const response = await getToken(state.form?.inputs!);
+      const user = response.data?.user;
+      localStorage.setItem('userId', user?.id || '');
       ILLIT.modal.build({
         header: '소속 그라운드 선택',
-        type: 'MyGymSelect',
+        type: 'MyGroundSelect',
       });
     } catch (error) {
       alert('로그인에 실패했습니다. 다시 시도해주세요.');

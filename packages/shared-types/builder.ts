@@ -210,3 +210,9 @@ export interface StackBuilder {
   type: 'VStack' | 'HStack';
   inputs: InputBuilder[];
 }
+
+export interface DepotUploaderOptions {
+  path: string;
+  label?: string;
+  type: 'file' | 'image';
+}

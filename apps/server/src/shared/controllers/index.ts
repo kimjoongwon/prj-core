@@ -16,5 +16,6 @@ export * from './depots.controller';
 export * from './exercises.controller';
 export * from './files.controller';
 export * from './tenants.controller';
-export * from './gyms.controller';
 export * from './assignments.controller';
+export * from './grounds.controller';
+export * from './workspaces.controller';

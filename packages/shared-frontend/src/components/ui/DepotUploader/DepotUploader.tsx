@@ -15,7 +15,7 @@ import { DepotService } from '../../../services/depot';
 
 interface DepotProps<T>
   extends MobxProps<T>,
-  Omit<FileUploaderProps, 'onFilesChange' | 'value'> { }
+    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
 
 export const DepotUploader = observer(
   <T extends object>(props: DepotProps<T>) => {
@@ -87,12 +87,11 @@ export const DepotUploader = observer(
               fileDto.mimeType,
             );
             return file;
-          }
-          )
+          }),
         );
 
         const res = await createDepot({
-          files
+          files,
         });
 
         localState.depotId = res.data.id;
@@ -108,6 +107,6 @@ export const DepotUploader = observer(
           await removeFileById(fileDto.id);
         }}
       />
-    )
-  }
+    );
+  },
 );

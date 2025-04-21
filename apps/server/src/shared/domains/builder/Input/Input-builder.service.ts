@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../../providers';
+import { DepotUploaderOptions } from '@shared/types';
 
 type FieldTypes = 'name' | 'label' | 'businessNo' | 'address' | 'phone' | 'email';
 
@@ -27,6 +28,17 @@ export class InputBuilderService {
     };
 
     return inputHandlers[fieldType] ? inputHandlers[fieldType]() : null;
+  }
+
+  getDepotUploaderInput(options: DepotUploaderOptions) {
+    return {
+      type: 'DepotUploader',
+      path: options.path,
+      props: {
+        type: options.type,
+        label: options?.label,
+      },
+    };
   }
 
   private getNameInput() {

@@ -24,8 +24,8 @@ import { ExercisesPage } from './exercises.page';
 import { ExerciseEditPage } from './exercise-edit.page';
 import { GroupPage } from './group.page';
 import { CategoryPage } from './category.page';
-import { GymsPage } from './gyms.page';
-import { GymPage } from './gym.page';
+import { GroundsPage } from './grounds.page';
+import { GroundPage } from './ground.page';
 const modules = [
   AbilitiesPage,
   AbilityEditPage,
@@ -52,12 +52,12 @@ const modules = [
   TaskEditPage,
   ExercisesPage,
   ExerciseEditPage,
-  GymsPage,
-  GymPage,
+  GroundsPage,
+  GroundPage,
 ];
 @Global()
 @Module({
   providers: modules,
   exports: modules,
 })
-export class PagesModule { }
+export class PagesModule {}

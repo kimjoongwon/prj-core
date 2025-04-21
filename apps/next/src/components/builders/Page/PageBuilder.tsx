@@ -73,7 +73,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                       );
                     }
                     return (
-                      <HStack key={v4()} className="space-y-2">
+                      <HStack key={v4()} className="justify-evenly">
                         {stack.inputs?.map(input => {
                           return (
                             <InputBuilder key={v4()} inputBuilder={input} />

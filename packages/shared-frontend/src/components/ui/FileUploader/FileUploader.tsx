@@ -49,7 +49,7 @@ export const FileUploader = observer(
     const [files, setFiles] = useState<FileUploaderProps['value']>([]);
 
     useEffect(() => {
-      setFiles(value);
+      setFiles(value || []);
     }, [value]);
 
     const sensors = useSensors(
@@ -126,7 +126,7 @@ export const FileUploader = observer(
               onDragEnd={handleDragEnd}
             >
               <SortableContext
-                items={files.map(file => file.id)}
+                items={files?.map(file => file.id)}
                 strategy={rectSortingStrategy}
               >
                 <div
@@ -136,7 +136,7 @@ export const FileUploader = observer(
                       : 'grid grid-cols-3 gap-2 justify-center items-center'
                   }
                 >
-                  {files.map(file => (
+                  {files?.map(file => (
                     <SortableMedia
                       key={file.id}
                       media={file}

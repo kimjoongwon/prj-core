@@ -36,13 +36,13 @@ import { DepotsEndpointModule } from './depots/depots-endpoint.module';
 import { ExercisesEndpointModule } from './exercise/exercises-endpoint.module';
 import { FilesEndpointModule } from './files/files-endpoint.module';
 import { TenantsEndpointModule } from './tenants/tenants-endpoint.module';
-import { GymsEndpointModule } from './gyms/gyms-endpoint.module';
+import { GroundsEndpointModule } from './grounds/ground-endpoint.module';
 
 @Module({
   imports: [
     ...libModules,
     GlobalModule,
-    GymsEndpointModule,
+    GroundsEndpointModule,
     ColumnsModule,
     InputsModule,
     FormsModule,
@@ -165,8 +165,8 @@ import { GymsEndpointModule } from './gyms/gyms-endpoint.module';
                 module: FilesEndpointModule,
               },
               {
-                path: 'gyms',
-                module: GymsEndpointModule,
+                path: 'grounds',
+                module: GroundsEndpointModule,
               },
             ],
           },
