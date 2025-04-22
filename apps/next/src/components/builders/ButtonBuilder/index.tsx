@@ -107,7 +107,8 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
         color={buttonBuilder?.color || 'primary'}
         isDisabled={
           state?.form?.button?.errorMessages &&
-          state?.form?.button?.errorMessages?.length > 0
+          (state?.form?.button?.errorMessages?.length > 0 ||
+            state.form.button.errorMessages.length === 0)
         }
       >
         {icon ? icon : buttonBuilder?.name}

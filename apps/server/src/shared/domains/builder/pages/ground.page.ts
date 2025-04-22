@@ -106,6 +106,9 @@ export class GroundPage {
       state: {
         form: {
           inputs: this.getDefaultCDO(),
+          button: {
+            errorMessages: [],
+          },
         },
       },
     };

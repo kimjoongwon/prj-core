@@ -115,19 +115,14 @@ export const InputValidationBuilder = observer(
               if (!regex.test(value)) {
                 localState.errorMessages.push(pattern.message);
                 state?.form?.button?.errorMessages?.push(pattern.message);
+              } else {
+                if (state?.form?.button) {
+                  state.form.button.errorMessages = (
+                    state?.form?.button?.errorMessages || []
+                  ).filter(errorMessage => pattern.message !== errorMessage);
+                }
               }
             });
-          } else {
-            const patternErrorMessages = validation?.patterns?.map(
-              pattern => pattern.message,
-            );
-            if (state?.form?.button) {
-              state.form.button.errorMessages = (
-                state?.form?.button?.errorMessages || []
-              ).filter(
-                errorMessage => !patternErrorMessages?.includes(errorMessage),
-              );
-            }
           }
 
           localState.isInvalid = localState.errorMessages.length > 0;

@@ -53,8 +53,7 @@ export class InputBuilderService {
   private getNameInput() {
     return this.createInput({
       path: 'name',
-      placeholder: '그라운드명을 입력해주세요.',
-      label: '그라운드명',
+      label: '이름',
     });
   }
 
@@ -66,7 +65,6 @@ export class InputBuilderService {
     return this.createInput({
       path: 'businessNo',
       label: '사업자 번호',
-      placeholder: '사업자 번호를 입력해주세요.',
     });
   }
 
@@ -74,7 +72,6 @@ export class InputBuilderService {
     return this.createInput({
       path: 'address',
       label: '주소',
-      placeholder: '주소를 입력해주세요.',
     });
   }
 
@@ -82,7 +79,21 @@ export class InputBuilderService {
     return this.createInput({
       path: 'phone',
       label: '전화번호',
-      placeholder: '전화번호를 입력해주세요.',
+      options: {
+        validation: {
+          timings: ['onBlur'],
+          required: {
+            value: true,
+            message: '전화번호을 입력해주세요.',
+          },
+          patterns: [
+            {
+              value: /^\d{3}-\d{3,4}-\d{4}$/,
+              message: '전화번호 형식이 아닙니다.',
+            },
+          ],
+        },
+      },
     });
   }
 
@@ -90,7 +101,6 @@ export class InputBuilderService {
     return this.createInput({
       path: 'email',
       label: '이메일',
-      placeholder: '이메일을 입력해주세요.',
       options: {
         validation: {
           timings: ['onBlur'],
@@ -129,6 +139,7 @@ export class InputBuilderService {
         fullWidth: true,
         label,
         placeholder,
+        isRequired: true,
       },
       validation: {
         timings: ['onBlur'],
