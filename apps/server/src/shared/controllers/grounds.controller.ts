@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { GroundDto, CreateGroundDto, GroundQueryDto } from '../dtos';
+import { GroundDto, CreateGroundDto, GroundQueryDto, UpdateGroundDto } from '../dtos';
 import { PageMetaDto } from '../dtos/query/page-meta.dto';
 import { ResponseEntity } from '../entities/response.entity';
 import { GroundsService } from '../services/grounds.service';
@@ -40,6 +40,18 @@ export class GroundsController {
   async getGround(@Param('groundId') groundId: string) {
     const ground = await this.service.getById(groundId);
     return new ResponseEntity(HttpStatus.OK, '성공', ground.toDto());
+  }
+
+  @Patch(':groundId')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(GroundDto, HttpStatus.OK)
+  async updateGround(
+    @Param('groundId') groundId: string,
+    @Body() updateGroundDto: UpdateGroundDto,
+  ) {
+    const ground = await this.service.updateById(groundId, updateGroundDto);
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GroundDto, ground));
   }
 
   @Patch('removedAt')

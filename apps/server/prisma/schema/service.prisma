@@ -7,8 +7,26 @@ model Ground {
 
     imageDepotId String?
 
-    workspaceId String
+    workspaceId String @unique
 
     workspace  Workspace @relation(fields: [workspaceId], references: [id])
     imageDepot Depot?    @relation(fields: [imageDepotId], references: [id])
+}
+
+model Exercise {
+    id        String    @id @default(uuid())
+    seq       Int       @unique @default(autoincrement())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+    removedAt DateTime? @db.Timestamptz(6)
+
+    name         String
+    description  String?
+    imageDepotId String?
+    videoDepotId String?
+    duration     Int
+    count        Int
+
+    taskId String @unique
+    task   Task   @relation(fields: [taskId], references: [id])
 }

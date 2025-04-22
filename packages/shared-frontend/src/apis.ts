@@ -210,6 +210,8 @@ import type {
   UpdateExerciseDto,
   UpdateFileById200AllOf,
   UpdateFileByIdBody,
+  UpdateGround200AllOf,
+  UpdateGroundDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdateProgram200AllOf,
@@ -667,6 +669,65 @@ export function useGetGroundSuspenseInfinite<TData = InfiniteData<Awaited<Return
 
 
 
+export const updateGround = (
+    groundId: string,
+    updateGroundDto: BodyType<UpdateGroundDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateGround200AllOf>(
+      {url: `/api/v1/grounds/${groundId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateGroundDto
+    },
+      options);
+    }
+  
+
+
+export const getUpdateGroundMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGround>>, TError,{groundId: string;data: BodyType<UpdateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGround>>, TError,{groundId: string;data: BodyType<UpdateGroundDto>}, TContext> => {
+    
+const mutationKey = ['updateGround'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGround>>, {groundId: string;data: BodyType<UpdateGroundDto>}> = (props) => {
+          const {groundId,data} = props ?? {};
+
+          return  updateGround(groundId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateGroundMutationResult = NonNullable<Awaited<ReturnType<typeof updateGround>>>
+    export type UpdateGroundMutationBody = BodyType<UpdateGroundDto>
+    export type UpdateGroundMutationError = ErrorType<void>
+
+    export const useUpdateGround = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGround>>, TError,{groundId: string;data: BodyType<UpdateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateGround>>,
+        TError,
+        {groundId: string;data: BodyType<UpdateGroundDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateGroundMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
 export const deleteGround = (
     groundId: string,
  options?: SecondParameter<typeof customInstance>,) => {

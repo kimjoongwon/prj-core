@@ -18,8 +18,16 @@ export class GroundPage {
 
   private getDefaultCDO(): CreateGroundDto {
     return {
+      workspace: {
+        name: '',
+        label: '',
+        phone: '',
+        email: '',
+        address: '',
+        businessNo: '',
+        logoImageDepotId: '',
+      },
       imageDepotId: '',
-      workspaceId: '',
     };
   }
 
@@ -39,7 +47,7 @@ export class GroundPage {
 
   private buildForm(sections: SectionBuilder[], isUpdate: boolean) {
     const button = this.buttonBuilderService.build({
-      name: isUpdate ? '수정' : '생성',
+      name: '저장',
       mutation: {
         invalidationKey: '/api/v1/grounds',
         name: isUpdate ? 'updateGround' : 'createGround',
@@ -64,14 +72,12 @@ export class GroundPage {
     const isUpdate = groundId !== 'new' && type === 'edit';
     const isDetail = type === 'detail';
 
-    const inputs = this.inputBuilderService.build([
-      'name',
-      'label',
-      'phone',
-      'email',
-      'address',
-      'businessNo',
-    ]);
+    this.inputBuilderService.setPathBase('form.inputs.workspace');
+
+    const inputs = this.inputBuilderService.build(
+      ['name', 'label', 'phone', 'email', 'address', 'businessNo'],
+      'form.inputs.workspace',
+    );
 
     const groundDepotIdInput = this.inputBuilderService.getDepotUploaderInput({
       path: 'form.inputs.imageDepotId',
@@ -79,16 +85,17 @@ export class GroundPage {
       label: '그라운드 이미지',
     });
 
-    const logoDepotIdInput = this.inputBuilderService.getDepotUploaderInput({
-      path: 'form.inputs.logoDepotId',
+    const logoImageDepotIdInput = this.inputBuilderService.getDepotUploaderInput({
+      path: 'form.inputs.workspace.logoImageDepotId',
       type: 'image',
       label: '로고 이미지',
     });
 
     const sections = this.buildSections(inputs);
+
     sections[0].stacks.push({
       type: 'HStack',
-      inputs: [groundDepotIdInput, logoDepotIdInput],
+      inputs: [groundDepotIdInput, logoImageDepotIdInput],
     });
 
     const form = this.buildForm(sections, isUpdate);
@@ -104,7 +111,16 @@ export class GroundPage {
     };
 
     if (isDetail || isUpdate) {
-      const ground = await this.groundsRepository.findUnique({ where: { id: groundId } });
+      const ground = await this.groundsRepository.findUnique({
+        where: { id: groundId },
+        include: {
+          workspace: {
+            include: {
+              space: true,
+            },
+          },
+        },
+      });
       if (ground) {
         page.state.form.inputs = ground;
 
@@ -117,7 +133,7 @@ export class GroundPage {
         }
       }
     }
-
+    console.log('page', page.state.form.inputs);
     return page;
   }
 }

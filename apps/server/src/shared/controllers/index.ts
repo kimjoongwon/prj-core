@@ -18,4 +18,3 @@ export * from './files.controller';
 export * from './tenants.controller';
 export * from './assignments.controller';
 export * from './grounds.controller';
-export * from './workspaces.controller';

@@ -9,7 +9,7 @@ export type Validation = {
   maxLength?: { value: number; message: string };
   min?: { value: number; message: string };
   max?: { value: number; message: string };
-  patterns?: { value: string; message: string }[];
+  patterns?: { value: RegExp; message: string }[];
 };
 
 export type ValidationRecord<T extends object> = Omit<

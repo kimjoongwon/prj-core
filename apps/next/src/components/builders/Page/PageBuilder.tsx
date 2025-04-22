@@ -11,6 +11,7 @@ import { v4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 import { Divider } from '@heroui/divider';
 import { observable } from 'mobx';
+import { Form } from '@heroui/react';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
@@ -51,7 +52,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
       <div className="font-bold text-xl">{pageBuilder?.name}</div>
       <Divider />
       {pageBuilder?.form && (
-        <>
+        <Form>
           {pageBuilder?.form?.sections?.map(section => {
             return (
               <div
@@ -73,7 +74,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                       );
                     }
                     return (
-                      <HStack key={v4()} className="justify-evenly">
+                      <HStack key={v4()} className="justify-evenly flex-wrap">
                         {stack.inputs?.map(input => {
                           return (
                             <InputBuilder key={v4()} inputBuilder={input} />
@@ -94,7 +95,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
               </Button>
             </div>
           )}
-        </>
+        </Form>
       )}
       {pageBuilder?.dataGrid && (
         <DataGridBuilder dataGridBuilder={pageBuilder.dataGrid} />

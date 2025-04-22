@@ -12,6 +12,7 @@ import {
   IsPositive,
   IsString,
   IsUrl,
+  Matches,
   Max,
   MaxLength,
   Min,
@@ -41,6 +42,7 @@ import {
 import { Constructor } from '../constants/types';
 import { InputBuilder } from '@shared/types';
 import { inputModules } from '../domains';
+import { each } from 'lodash';
 
 interface IFieldOptions extends Omit<InputProps, 'type'> {
   required?: boolean;
@@ -63,6 +65,8 @@ interface IStringFieldOptions extends IFieldOptions {
   maxLength?: number;
   toLowerCase?: boolean;
   toUpperCase?: boolean;
+  pattern?: string;
+  message?: string;
 }
 
 type IBooleanFieldOptions = IFieldOptions;
@@ -156,8 +160,22 @@ export function Default(value: any) {
 export function StringField(
   options: Omit<ApiPropertyOptions, 'type'> & IStringFieldOptions = {},
 ): PropertyDecorator {
-  const decorators = [Type(() => String), IsString({ each: options.each })];
-
+  const decorators = [
+    Type(() => String),
+    IsString({
+      each: options.each,
+      message: '문자열 형식이 아닙니다.',
+    }),
+  ];
+  if (options.pattern) {
+    decorators.push(
+      Matches(RegExp(options.pattern), {
+        // options.message가 있으면 사용하고, 없으면 기본 메시지 사용
+        message: options.message || `형식이 올바르지 않습니다. (${options.pattern})`,
+        each: options.each, // each 옵션 적용
+      }),
+    );
+  }
   // decorators.push(Default(options.default));
 
   // decorators.push(
@@ -185,8 +203,6 @@ export function StringField(
   //     },
   //   }),
   // );
-
-  decorators.push(SectionName(options.sectionName));
 
   if (options.nullable) {
     decorators.push(
