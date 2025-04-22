@@ -47,7 +47,7 @@ export class GroupPage {
 
   private buildForm(sections: SectionBuilder[], isUpdate: boolean) {
     const button = this.buttonBuilderSerivce.build({
-      name: isUpdate ? '수정' : '생성',
+      name: '저장',
       mutation: {
         invalidationKey: '/api/v1/groups',
         name: isUpdate ? 'updateGroup' : 'createGroup',

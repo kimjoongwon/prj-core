@@ -1,4 +1,4 @@
-리펙토링 규칙
+<!-- 리펙토링 규칙
 
 1. onPress아 prefix로 붙어 있으면 useHanlders.ts 파일을 동일 경로에 만들고 그 안에 넣어서 사용한다.
 
@@ -15,4 +15,4 @@ Dto 생성 규칙
 
 3. 필드가 null을 가질수 있다면 데코레이터 옵션에 {required: false nullable: true}를 주세요.
 
-4. interface에 존재하지 않는 필드는 제거해주세요.
+4. interface에 존재하지 않는 필드는 제거해주세요. -->

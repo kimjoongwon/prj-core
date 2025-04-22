@@ -99,7 +99,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
   console.log('button state', state?.form?.button);
   return (
-    <div>
+    <>
       <BaseButton
         {...rest}
         isIconOnly={!!icon}
@@ -113,15 +113,16 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
         {icon ? icon : buttonBuilder?.name}
       </BaseButton>
       <Alert
+        className="absolute bottom-10 w-[80%]"
         color="danger"
         isVisible={!!state?.form?.button?.errorMessages?.length}
       >
         <ol>
           {state?.form?.button?.errorMessages?.map(message => (
-            <li>{message}</li>
+            <li>- {message}</li>
           ))}
         </ol>
       </Alert>
-    </div>
+    </>
   );
 });

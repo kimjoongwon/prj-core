@@ -14,7 +14,7 @@ export const FormButtonBuilder = observer((props: FormButtonBuilderProps) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-1 w-full justify-between">
+    <div className="flex flex-1 w-full justify-between px-1">
       <Button color="danger" onPress={() => router.back()} size="lg">
         취소
       </Button>
