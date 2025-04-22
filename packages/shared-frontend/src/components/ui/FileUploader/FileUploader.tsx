@@ -107,7 +107,7 @@ export const FileUploader = observer(
     };
 
     return (
-      <Card className="p-6" style={{ width: '400px' }}>
+      <Card className="p-4 m-1 w-full">
         <div className="space-y-6">
           <h1 className="text-xl font-semibold text-center">{label || ''}</h1>
 

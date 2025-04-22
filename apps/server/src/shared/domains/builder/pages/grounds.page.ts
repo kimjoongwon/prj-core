@@ -17,7 +17,7 @@ export class GroundsPage {
 
     const columns = this.columnBuilderService.build(
       'ground',
-      ['name'],
+      ['workspace.name', 'workspace.label'],
       ['edit', 'detail', 'remove', 'add'],
     );
 
@@ -25,8 +25,6 @@ export class GroundsPage {
       queryName: 'useGetGroundsByQuery',
       columns,
       params: {
-        serviceId,
-        tenantId,
         skip: 0,
         take: 10,
       },

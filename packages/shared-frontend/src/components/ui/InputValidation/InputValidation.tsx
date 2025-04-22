@@ -1,13 +1,12 @@
 import { InputProps } from '@heroui/react';
 import { Validation } from '@shared/types';
 import { uniq } from 'lodash-es';
-import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { cloneElement } from 'react';
 
 type InputValidationProps = {
   children: React.ReactElement;
-  validation: Validation;
+  validation?: Validation;
 };
 
 export const InputValidation = observer((props: InputValidationProps) => {

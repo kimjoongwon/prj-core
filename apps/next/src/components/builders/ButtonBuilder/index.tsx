@@ -79,7 +79,15 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       }
     } catch (error: unknown) {
       if (isAxiosError(error)) {
-        console.log('error', error);
+        if (error.response?.data) {
+          if (error.response?.data.message?.length > 0) {
+            addToast({
+              title: '오류',
+              description: error.response?.data?.data?.message.join(', '),
+              color: 'danger',
+            });
+          }
+        }
       }
     }
   };

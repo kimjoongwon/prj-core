@@ -8,32 +8,42 @@ export type ColumnName = 'name' | 'label';
 
 @Injectable()
 export class ColumnBuilderService {
-  private cellActionNames: CellActionName[] = [];
-  private columnName: ColumnName[] = [];
   private resourceName: string;
-
   public build(
     resourceName: string,
-    columnName: ColumnName[] = this.columnName,
-    cellActionNames: CellActionName[] = this.cellActionNames,
+    accessorKeys: string[],
+    cellActionNames: CellActionName[],
   ): ColumnBuilder[] {
     this.resourceName = resourceName;
-
-    const columns: ColumnBuilder[] = [];
-
-    if (columnName.includes('name')) {
-      columns.push(this.createNameColumn());
-    }
-
-    if (columnName.includes('label')) {
-      columns.push(this.createLabelColumn());
-    }
+    const columns: ColumnBuilder[] = accessorKeys.map((accessorKey) => {
+      return this.createColumn(accessorKey);
+    });
 
     if (cellActionNames.length > 0) {
       columns.push(this.createActionColumn(cellActionNames));
     }
 
     return columns;
+  }
+
+  private convertKeyToKorean(key: string): string {
+    const keyMap: Record<string, string> = {
+      name: '이름',
+      label: '라벨',
+      // Add more key mappings as needed
+    };
+    return keyMap[key] || key;
+  }
+
+  private createColumn(accessorKey: string) {
+    const rawAccessorKey = accessorKey.split('.').pop() || '';
+    return {
+      accessorKey,
+      header: { name: this.convertKeyToKorean(rawAccessorKey) },
+      cell: {
+        expandable: true,
+      },
+    };
   }
 
   private createActionColumn(cellActionNames: CellActionName[]): ColumnBuilder {

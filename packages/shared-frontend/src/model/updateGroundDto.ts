@@ -4,14 +4,14 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateGroundDto {
+export interface UpdateGroundDto {
   /** @nullable */
   imageDepotId?: string | null;
-  name: string;
+  name?: string;
   label?: string;
-  phone: string;
-  email: string;
-  address: string;
-  businessNo: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  businessNo?: string;
   logoDepotId?: string;
 }

@@ -77,7 +77,7 @@ export const DepotUploader = observer(
         });
 
         const res = await getDepotById(localState.depotId);
-        localState.depotId = res.data.id;
+        localState.depotId = res.data?.id;
       } else {
         const files = await Promise.all(
           fileDtos.map(async fileDto => {
@@ -94,7 +94,7 @@ export const DepotUploader = observer(
           files,
         });
 
-        localState.depotId = res.data.id;
+        localState.depotId = res.data?.id;
       }
     };
 

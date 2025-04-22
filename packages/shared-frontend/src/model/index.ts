@@ -264,6 +264,8 @@ export * from './updateExercise200AllOf';
 export * from './updateExerciseDto';
 export * from './updateFileById200AllOf';
 export * from './updateFileByIdBody';
+export * from './updateGround200AllOf';
+export * from './updateGroundDto';
 export * from './updateGroup200AllOf';
 export * from './updateGroupDto';
 export * from './updateGym200AllOf';

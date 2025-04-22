@@ -175,12 +175,12 @@ model Workspace {
   phone            String
   email            String
   businessNo       String  @unique
-  logoImageDepotId String?
+  logoImageDepotId String? @unique
 
-  spaceId   String
-  space     Space    @relation(fields: [spaceId], references: [id])
-  logoDepot Depot?   @relation(fields: [logoImageDepotId], references: [id])
-  ground    Ground[]
+  spaceId        String
+  space          Space   @relation(fields: [spaceId], references: [id])
+  logoImageDepot Depot?  @relation(fields: [logoImageDepotId], references: [id])
+  ground         Ground?
 }
 
 model Space {
@@ -272,24 +272,6 @@ model Routine {
 
   program    Program?
   activities Activity[]
-}
-
-model Exercise {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-
-  name         String
-  description  String?
-  imageDepotId String?
-  videoDepotId String?
-  duration     Int
-  count        Int
-
-  taskId String @unique
-  task   Task   @relation(fields: [taskId], references: [id])
 }
 
 model Task {
@@ -460,16 +442,16 @@ model Content {
 }
 
 model Depot {
-  id         String      @id @default(uuid())
-  seq        Int         @unique @default(autoincrement())
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime?   @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?   @db.Timestamptz(6)
-  files      File[]
-  contents   Content[]
-  profiles   Profile[]
-  workspaces Workspace[]
-  grounds    Ground[]
+  id        String     @id @default(uuid())
+  seq       Int        @unique @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
+  removedAt DateTime?  @db.Timestamptz(6)
+  files     File[]
+  contents  Content[]
+  profiles  Profile[]
+  grounds   Ground[]
+  workspace Workspace?
 }
 
 model File {
