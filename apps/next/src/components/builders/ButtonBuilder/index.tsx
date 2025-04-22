@@ -6,7 +6,11 @@ import {
   getQueryClient,
 } from '@shared/frontend';
 import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
-import { addToast, ButtonProps as HeroUIButtonProps } from '@heroui/react';
+import {
+  addToast,
+  Alert,
+  ButtonProps as HeroUIButtonProps,
+} from '@heroui/react';
 import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
@@ -55,6 +59,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
         addToast({
           title: '성공',
           description: '생성 완료',
+          color: 'success',
         });
       }
 
@@ -92,14 +97,31 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     }
   };
 
+  console.log('button state', state?.form?.button);
   return (
-    <BaseButton
-      {...rest}
-      isIconOnly={!!icon}
-      onPress={onPress}
-      color={buttonBuilder?.color || 'primary'}
-    >
-      {icon ? icon : buttonBuilder?.name}
-    </BaseButton>
+    <div>
+      <BaseButton
+        {...rest}
+        isIconOnly={!!icon}
+        onPress={onPress}
+        color={buttonBuilder?.color || 'primary'}
+        isDisabled={
+          state?.form?.button?.errorMessages &&
+          state?.form?.button?.errorMessages?.length > 0
+        }
+      >
+        {icon ? icon : buttonBuilder?.name}
+      </BaseButton>
+      <Alert
+        color="danger"
+        isVisible={!!state?.form?.button?.errorMessages?.length}
+      >
+        <ol>
+          {state?.form?.button?.errorMessages?.map(message => (
+            <li>{message}</li>
+          ))}
+        </ol>
+      </Alert>
+    </div>
   );
 });

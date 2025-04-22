@@ -1,16 +1,18 @@
 import { InputProps } from '@heroui/react';
-import { Validation } from '@shared/types';
+import { PageBuilder, Validation } from '@shared/types';
 import { uniq } from 'lodash-es';
+import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { cloneElement } from 'react';
 
 type InputValidationProps = {
   children: React.ReactElement;
   validation?: Validation;
+  state?: PageBuilder['state'];
 };
 
 export const InputValidation = observer((props: InputValidationProps) => {
-  const { children, validation } = props;
+  const { children, validation, state } = props;
   const timings = validation?.timings;
 
   const localState = useLocalObservable(() => ({
@@ -59,6 +61,7 @@ export const InputValidation = observer((props: InputValidationProps) => {
         }
 
         localState.isInvalid = localState.errorMessages.length > 0;
+        state.form.button.isValid = !localState.isInvalid;
         localState.errorMessages = uniq(localState.errorMessages);
       },
     };

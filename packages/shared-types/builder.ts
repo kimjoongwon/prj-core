@@ -130,6 +130,9 @@ export interface PageState<CDO> {
   form?: {
     inputs: CDO;
     errorMessages?: string[];
+    button?: {
+      errorMessages?: string[];
+    };
   };
   dataGrid?: {
     selectedRowIds?: Key[] | 'all';

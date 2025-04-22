@@ -12,13 +12,10 @@ export class GroundsPage {
   ) {}
 
   build(): PageBuilder {
-    const serviceId = ContextProvider.getServiceId();
-    const tenantId = ContextProvider.getTenantId();
-
     const columns = this.columnBuilderService.build(
       'ground',
       ['workspace.name', 'workspace.label'],
-      ['edit', 'detail', 'remove', 'add'],
+      ['edit', 'detail', 'remove'],
     );
 
     const dataGrid = this.dataGridBuilderService.build({

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { Divider } from '@heroui/divider';
 import { observable } from 'mobx';
 import { Form } from '@heroui/react';
+import { FormButtonBuilder } from '../FormButtonBuilder/FormButtonBuilder';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
@@ -52,7 +53,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
       <div className="font-bold text-xl">{pageBuilder?.name}</div>
       <Divider />
       {pageBuilder?.form && (
-        <Form>
+        <Form className="overflow-auto pb-[200px] scrollbar-hide">
           {pageBuilder?.form?.sections?.map(section => {
             return (
               <div
@@ -60,40 +61,31 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
                 className="border-1 p-4 rounded-xl space-y-4 flex flex-col w-full"
               >
                 <Text variant="h5">{section.name}</Text>
-                <Suspense fallback={<div>loading...</div>}>
-                  {section.stacks?.map(stack => {
-                    if (stack.type === 'VStack') {
-                      return (
-                        <VStack key={v4()} className="space-y-2">
-                          {stack.inputs?.map(input => {
-                            return (
-                              <InputBuilder key={v4()} inputBuilder={input} />
-                            );
-                          })}
-                        </VStack>
-                      );
-                    }
+                {section.stacks?.map(stack => {
+                  if (stack.type === 'VStack') {
                     return (
-                      <HStack key={v4()} className="justify-evenly flex-wrap">
+                      <VStack key={v4()} className="space-y-2">
                         {stack.inputs?.map(input => {
                           return (
                             <InputBuilder key={v4()} inputBuilder={input} />
                           );
                         })}
-                      </HStack>
+                      </VStack>
                     );
-                  })}
-                </Suspense>
+                  }
+                  return (
+                    <HStack key={v4()} className="justify-evenly flex-wrap">
+                      {stack.inputs?.map(input => {
+                        return <InputBuilder key={v4()} inputBuilder={input} />;
+                      })}
+                    </HStack>
+                  );
+                })}
               </div>
             );
           })}
           {pageBuilder.form?.button && (
-            <div className="space-x-1 flex justify-end">
-              <ButtonBuilder buttonBuilder={pageBuilder.form.button} />
-              <Button color="danger" onPress={() => router.back()}>
-                취소
-              </Button>
-            </div>
+            <FormButtonBuilder pageBuilder={pageBuilder} />
           )}
         </Form>
       )}

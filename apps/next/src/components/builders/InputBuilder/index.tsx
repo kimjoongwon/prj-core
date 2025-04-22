@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import { InputBuilder as InputBuilderInterface } from '@shared/types';
-import { ComponentManager, InputValidation } from '@shared/frontend';
+import { ComponentManager } from '@shared/frontend';
 import { usePageState } from '../Page/PageBuilder';
 import { TabNavigation } from '../TabNavigation/TabNavigation';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
+import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
 
 interface InputBuilderProps {
   inputBuilder: InputBuilderInterface;
@@ -30,13 +31,13 @@ export const InputBuilder = observer((props: InputBuilderProps) => {
   }
 
   return (
-    <InputValidation validation={inputBuilder.validation}>
+    <InputValidationBuilder validation={inputBuilder.validation}>
       <Component
         {...inputBuilder.props}
         state={state}
         path={inputBuilder.path}
         inputBuilder={inputBuilder}
       />
-    </InputValidation>
+    </InputValidationBuilder>
   );
 });

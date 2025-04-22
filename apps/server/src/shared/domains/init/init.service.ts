@@ -97,7 +97,7 @@ export class InitService {
           workspace: {
             create: {
               address: '서울시 강남구',
-              businessNo: '1234567890',
+              businessNo: '12345678902',
               name: appName,
               label: appName,
               phone: '01073162347',

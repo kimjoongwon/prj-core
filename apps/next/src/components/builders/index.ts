@@ -2,7 +2,6 @@ export * from './ButtonBuilder';
 export * from './CellBuilder';
 export * from './CellButtonBuilder';
 export * from './DataGridBuilder/DataGridBuilder';
-export * from './FormBuilder';
 export * from './HeaderBuilder';
 export * from './InputBuilder';
 export * from './NotificationBuilder';

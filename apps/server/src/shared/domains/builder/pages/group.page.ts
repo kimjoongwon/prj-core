@@ -82,6 +82,9 @@ export class GroupPage {
       state: {
         form: {
           inputs: this.getDefaultCDO(),
+          button: {
+            errorMessages: [],
+          },
         },
       },
     };
