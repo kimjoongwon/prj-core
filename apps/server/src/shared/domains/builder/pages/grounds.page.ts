@@ -14,7 +14,13 @@ export class GroundsPage {
   build(): PageBuilder {
     const columns = this.columnBuilderService.build(
       'ground',
-      ['workspace.name', 'workspace.label'],
+      [
+        'workspace.name',
+        'workspace.label',
+        'workspace.address',
+        'workspace.businessNo',
+        'workspace.phone',
+      ],
       ['edit', 'detail', 'remove'],
     );
 

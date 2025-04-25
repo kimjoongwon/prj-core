@@ -21,6 +21,8 @@ export class InputBuilderService {
   build(fieldTypes: FieldTypes[], pathBase?: string) {
     if (pathBase) {
       this.setPathBase(pathBase);
+    } else {
+      this.setPathBase('form.inputs');
     }
     const inputs = fieldTypes.map((fieldType) => this.getInputByFieldType(fieldType));
     return inputs.filter((input) => input !== null);

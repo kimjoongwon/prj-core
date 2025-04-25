@@ -61,6 +61,7 @@ export * from './createTimeline200AllOf';
 export * from './createTimelineDto';
 export * from './createUser200AllOf';
 export * from './createUserDto';
+export * from './createWorkspaceDto';
 export * from './deleteAbility200AllOf';
 export * from './deleteAction200AllOf';
 export * from './deleteAssociation200AllOf';

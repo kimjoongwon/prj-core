@@ -30,6 +30,10 @@ export class ColumnBuilderService {
     const keyMap: Record<string, string> = {
       name: '이름',
       label: '라벨',
+      businessNo: '사업자번호',
+      address: '주소',
+      phone: '전화번호',
+      email: '이메일',
       // Add more key mappings as needed
     };
     return keyMap[key] || key;

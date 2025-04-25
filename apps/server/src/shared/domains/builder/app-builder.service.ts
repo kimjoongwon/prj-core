@@ -16,7 +16,7 @@ export class BuilderService {
   }
 
   getRoute() {
-    const routes = [
+    return [
       {
         name: 'admin',
         pathname: '/admin',
@@ -32,7 +32,12 @@ export class BuilderService {
                   {
                     name: 'services',
                     pathname: `/admin/main/tenants/:tenantId/services`,
-                    children: [this.getSpaceServiceRoute()],
+                    children: [
+                      this.getServiceRoute('space', '그라운드 서비스', 'grounds'),
+                      this.getServiceRoute('program', '프로그램 서비스', 'programs'),
+                      this.getServiceRoute('task', 'TASK 서비스', 'tasks'),
+                      this.getServiceRoute('timeline', '타임라인 서비스', 'timelines'),
+                    ],
                   },
                 ],
               },
@@ -61,58 +66,28 @@ export class BuilderService {
         ],
       },
     ];
-
-    return routes;
   }
 
-  getSpaceServiceRoute() {
+  getServiceRoute(serviceName: ServiceNames, displayName: string, resource: string) {
     const tenantId = ContextProvider.getTenantId();
-
     const children = [
       {
-        name: '그라운드',
-        pathname: `/admin/main/tenants/${tenantId}/services/space/grounds`,
+        name: displayName,
+        pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/${resource}`,
         children: [
           {
             name: '편집',
-            pathname: `/admin/main/tenants/${tenantId}/services/space/grounds/:groundId/:type`,
+            pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/${resource}/:id/:type`,
           },
         ],
       },
-    ].concat(this.getCommonRoutes('space'));
+      ...this.getCommonRoutes(serviceName),
+    ];
 
     return {
-      name: '공간 서비스',
-      pathname: `/admin/main/tenants/${tenantId}/services/space`,
+      name: displayName,
+      pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}`,
       children,
-    };
-  }
-
-  getCategoryRoute(serviceName: ServiceNames) {
-    const tenantId = ContextProvider.getTenantId();
-    return {
-      name: '카테고리',
-      pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories`,
-      children: [
-        {
-          name: '편집',
-          pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/categories/:categoryId/:type`,
-        },
-      ],
-    };
-  }
-
-  getGroupRoute(serviceName: ServiceNames) {
-    const tenantId = ContextProvider.getTenantId();
-    return {
-      name: '그룹',
-      pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups`,
-      children: [
-        {
-          name: '편집',
-          pathname: `/admin/main/tenants/${tenantId}/services/${serviceName}/groups/:groupId/:type`,
-        },
-      ],
     };
   }
 

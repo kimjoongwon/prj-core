@@ -38,7 +38,7 @@ CREATE TYPE "TextTypes" AS ENUM ('Editor', 'Input', 'Textarea');
 CREATE TYPE "CategoryTypes" AS ENUM ('LEAF', 'ROOT');
 
 -- CreateEnum
-CREATE TYPE "ServiceNames" AS ENUM ('USER', 'ROLE', 'SPACE', 'CONTENT', 'TIMELINE', 'FILE');
+CREATE TYPE "ServiceNames" AS ENUM ('user', 'role', 'space', 'timeline', 'file', 'task');
 
 -- CreateEnum
 CREATE TYPE "DepotTypes" AS ENUM ('ROOT', 'LEAF');
@@ -65,7 +65,6 @@ CREATE TABLE "Classification" (
     "seq" SERIAL NOT NULL,
     "categoryId" TEXT NOT NULL,
     "userId" TEXT,
-    "contentId" TEXT,
     "spaceId" TEXT,
     "roleId" TEXT,
     "fileId" TEXT,
@@ -73,6 +72,7 @@ CREATE TABLE "Classification" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
+    "taskId" TEXT,
 
     CONSTRAINT "Classification_pkey" PRIMARY KEY ("id")
 );
@@ -85,11 +85,42 @@ CREATE TABLE "Group" (
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
     "name" TEXT NOT NULL,
-    "label" TEXT NOT NULL,
+    "label" TEXT,
     "serviceId" TEXT NOT NULL,
     "tenantId" TEXT NOT NULL,
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Ground" (
+    "id" TEXT NOT NULL,
+    "seq" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6),
+    "removedAt" TIMESTAMPTZ(6),
+    "imageDepotId" TEXT,
+    "workspaceId" TEXT NOT NULL,
+
+    CONSTRAINT "Ground_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Exercise" (
+    "id" TEXT NOT NULL,
+    "seq" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6),
+    "removedAt" TIMESTAMPTZ(6),
+    "duration" INTEGER NOT NULL,
+    "count" INTEGER NOT NULL,
+    "taskId" TEXT NOT NULL,
+    "description" TEXT,
+    "imageDepotId" TEXT,
+    "name" TEXT NOT NULL,
+    "videoDepotId" TEXT,
+
+    CONSTRAINT "Exercise_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -119,6 +150,7 @@ CREATE TABLE "Association" (
     "roleId" TEXT,
     "fileId" TEXT,
     "contentId" TEXT,
+    "taskId" TEXT,
 
     CONSTRAINT "Association_pkey" PRIMARY KEY ("id")
 );
@@ -167,20 +199,22 @@ CREATE TABLE "Tenant" (
 );
 
 -- CreateTable
-CREATE TABLE "Gym" (
+CREATE TABLE "Workspace" (
     "id" TEXT NOT NULL,
     "seq" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
+    "name" TEXT NOT NULL,
+    "label" TEXT,
     "address" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "businessNumber" TEXT NOT NULL,
-    "depotId" TEXT,
+    "businessNo" TEXT NOT NULL,
+    "logoImageDepotId" TEXT,
     "spaceId" TEXT NOT NULL,
 
-    CONSTRAINT "Gym_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Workspace_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -190,8 +224,6 @@ CREATE TABLE "Space" (
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
-    "name" TEXT NOT NULL,
-    "label" TEXT NOT NULL,
 
     CONSTRAINT "Space_pkey" PRIMARY KEY ("id")
 );
@@ -203,8 +235,6 @@ CREATE TABLE "Timeline" (
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
-    "name" TEXT NOT NULL,
-    "label" TEXT NOT NULL,
     "tenantId" TEXT NOT NULL,
 
     CONSTRAINT "Timeline_pkey" PRIMARY KEY ("id")
@@ -224,6 +254,8 @@ CREATE TABLE "Session" (
     "recurringDayOfWeek" "RecurringDayOfWeek",
     "recurringMonth" INTEGER,
     "timelineId" TEXT NOT NULL,
+    "label" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
 );
@@ -244,6 +276,19 @@ CREATE TABLE "Program" (
 );
 
 -- CreateTable
+CREATE TABLE "Activity" (
+    "id" TEXT NOT NULL,
+    "seq" SERIAL NOT NULL,
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(6),
+    "removedAt" TIMESTAMPTZ(6),
+    "routineId" TEXT NOT NULL,
+    "taskId" TEXT NOT NULL,
+
+    CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Routine" (
     "id" TEXT NOT NULL,
     "seq" SERIAL NOT NULL,
@@ -252,48 +297,18 @@ CREATE TABLE "Routine" (
     "removedAt" TIMESTAMPTZ(6),
     "name" TEXT NOT NULL,
     "label" TEXT NOT NULL,
-    "contentId" TEXT NOT NULL,
 
     CONSTRAINT "Routine_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Activity" (
-    "id" TEXT NOT NULL,
-    "seq" SERIAL NOT NULL,
-    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ(6),
-    "removedAt" TIMESTAMPTZ(6),
-    "taskId" TEXT NOT NULL,
-    "routineId" TEXT NOT NULL,
-
-    CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Exercise" (
-    "id" TEXT NOT NULL,
-    "seq" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ(6),
-    "removedAt" TIMESTAMPTZ(6),
-    "duration" INTEGER NOT NULL,
-    "count" INTEGER NOT NULL,
-    "taskId" TEXT NOT NULL,
-
-    CONSTRAINT "Exercise_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Task" (
     "id" TEXT NOT NULL,
     "seq" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "label" TEXT NOT NULL,
-    "contentId" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6),
     "removedAt" TIMESTAMPTZ(6),
+    "tenantId" TEXT NOT NULL,
 
     CONSTRAINT "Task_pkey" PRIMARY KEY ("id")
 );
@@ -438,9 +453,6 @@ CREATE UNIQUE INDEX "Classification_seq_key" ON "Classification"("seq");
 CREATE UNIQUE INDEX "Classification_userId_key" ON "Classification"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Classification_contentId_key" ON "Classification"("contentId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Classification_spaceId_key" ON "Classification"("spaceId");
 
 -- CreateIndex
@@ -451,6 +463,9 @@ CREATE UNIQUE INDEX "Classification_fileId_key" ON "Classification"("fileId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Classification_timelineId_key" ON "Classification"("timelineId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Classification_taskId_key" ON "Classification"("taskId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Classification_categoryId_userId_key" ON "Classification"("categoryId", "userId");
@@ -465,13 +480,25 @@ CREATE UNIQUE INDEX "Classification_categoryId_roleId_key" ON "Classification"("
 CREATE UNIQUE INDEX "Classification_categoryId_timelineId_key" ON "Classification"("categoryId", "timelineId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Classification_categoryId_contentId_key" ON "Classification"("categoryId", "contentId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Classification_categoryId_fileId_key" ON "Classification"("categoryId", "fileId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Classification_categoryId_taskId_key" ON "Classification"("categoryId", "taskId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Group_seq_key" ON "Group"("seq");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Ground_seq_key" ON "Ground"("seq");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Ground_workspaceId_key" ON "Ground"("workspaceId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Exercise_seq_key" ON "Exercise"("seq");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Exercise_taskId_key" ON "Exercise"("taskId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Service_seq_key" ON "Service"("seq");
@@ -501,13 +528,16 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 CREATE UNIQUE INDEX "Tenant_seq_key" ON "Tenant"("seq");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Gym_seq_key" ON "Gym"("seq");
+CREATE UNIQUE INDEX "Workspace_seq_key" ON "Workspace"("seq");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Gym_businessNumber_key" ON "Gym"("businessNumber");
+CREATE UNIQUE INDEX "Workspace_businessNo_key" ON "Workspace"("businessNo");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Gym_spaceId_key" ON "Gym"("spaceId");
+CREATE UNIQUE INDEX "Workspace_logoImageDepotId_key" ON "Workspace"("logoImageDepotId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Workspace_spaceId_key" ON "Workspace"("spaceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Space_seq_key" ON "Space"("seq");
@@ -522,19 +552,16 @@ CREATE UNIQUE INDEX "Session_seq_key" ON "Session"("seq");
 CREATE UNIQUE INDEX "Program_seq_key" ON "Program"("seq");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Program_sessionId_key" ON "Program"("sessionId");
+CREATE UNIQUE INDEX "Program_routineId_key" ON "Program"("routineId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Routine_seq_key" ON "Routine"("seq");
+CREATE UNIQUE INDEX "Program_sessionId_key" ON "Program"("sessionId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Activity_seq_key" ON "Activity"("seq");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Exercise_seq_key" ON "Exercise"("seq");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Exercise_taskId_key" ON "Exercise"("taskId");
+CREATE UNIQUE INDEX "Routine_seq_key" ON "Routine"("seq");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Task_seq_key" ON "Task"("seq");
@@ -570,10 +597,10 @@ CREATE UNIQUE INDEX "Depot_seq_key" ON "Depot"("seq");
 CREATE UNIQUE INDEX "File_seq_key" ON "File"("seq");
 
 -- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Category" ADD CONSTRAINT "Category_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Category" ADD CONSTRAINT "Category_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Category" ADD CONSTRAINT "Category_tenantId_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -582,19 +609,22 @@ ALTER TABLE "Category" ADD CONSTRAINT "Category_tenantId_fkey" FOREIGN KEY ("ten
 ALTER TABLE "Classification" ADD CONSTRAINT "Classification_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Classification" ADD CONSTRAINT "Classification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Classification" ADD CONSTRAINT "Classification_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Classification" ADD CONSTRAINT "Classification_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Classification" ADD CONSTRAINT "Classification_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Classification" ADD CONSTRAINT "Classification_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Classification" ADD CONSTRAINT "Classification_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Classification" ADD CONSTRAINT "Classification_timelineId_fkey" FOREIGN KEY ("timelineId") REFERENCES "Timeline"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Classification" ADD CONSTRAINT "Classification_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Classification" ADD CONSTRAINT "Classification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Group" ADD CONSTRAINT "Group_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -603,19 +633,13 @@ ALTER TABLE "Group" ADD CONSTRAINT "Group_serviceId_fkey" FOREIGN KEY ("serviceI
 ALTER TABLE "Group" ADD CONSTRAINT "Group_tenantId_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Association" ADD CONSTRAINT "Association_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Ground" ADD CONSTRAINT "Ground_imageDepotId_fkey" FOREIGN KEY ("imageDepotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Association" ADD CONSTRAINT "Association_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Ground" ADD CONSTRAINT "Ground_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Association" ADD CONSTRAINT "Association_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Association" ADD CONSTRAINT "Association_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Association" ADD CONSTRAINT "Association_timelineId_fkey" FOREIGN KEY ("timelineId") REFERENCES "Timeline"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Exercise" ADD CONSTRAINT "Exercise_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Association" ADD CONSTRAINT "Association_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -624,22 +648,40 @@ ALTER TABLE "Association" ADD CONSTRAINT "Association_contentId_fkey" FOREIGN KE
 ALTER TABLE "Association" ADD CONSTRAINT "Association_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Association" ADD CONSTRAINT "Association_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "Group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Association" ADD CONSTRAINT "Association_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Association" ADD CONSTRAINT "Association_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Association" ADD CONSTRAINT "Association_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Association" ADD CONSTRAINT "Association_timelineId_fkey" FOREIGN KEY ("timelineId") REFERENCES "Timeline"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Association" ADD CONSTRAINT "Association_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_depotId_fkey" FOREIGN KEY ("depotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Tenant" ADD CONSTRAINT "Tenant_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Tenant" ADD CONSTRAINT "Tenant_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Gym" ADD CONSTRAINT "Gym_depotId_fkey" FOREIGN KEY ("depotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Tenant" ADD CONSTRAINT "Tenant_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Gym" ADD CONSTRAINT "Gym_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Workspace" ADD CONSTRAINT "Workspace_logoImageDepotId_fkey" FOREIGN KEY ("logoImageDepotId") REFERENCES "Depot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Workspace" ADD CONSTRAINT "Workspace_spaceId_fkey" FOREIGN KEY ("spaceId") REFERENCES "Space"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Timeline" ADD CONSTRAINT "Timeline_tenantId_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -648,22 +690,16 @@ ALTER TABLE "Timeline" ADD CONSTRAINT "Timeline_tenantId_fkey" FOREIGN KEY ("ten
 ALTER TABLE "Session" ADD CONSTRAINT "Session_timelineId_fkey" FOREIGN KEY ("timelineId") REFERENCES "Timeline"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Program" ADD CONSTRAINT "Program_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Program" ADD CONSTRAINT "Program_routineId_fkey" FOREIGN KEY ("routineId") REFERENCES "Routine"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Routine" ADD CONSTRAINT "Routine_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Program" ADD CONSTRAINT "Program_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Activity" ADD CONSTRAINT "Activity_routineId_fkey" FOREIGN KEY ("routineId") REFERENCES "Routine"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Activity" ADD CONSTRAINT "Activity_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Exercise" ADD CONSTRAINT "Exercise_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "Content"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Role" ADD CONSTRAINT "Role_tenantId_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

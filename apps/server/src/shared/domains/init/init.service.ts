@@ -322,14 +322,14 @@ export class InitService {
   }
 
   async initApp() {
-    await this.createServices();
-    const { spaceId } = await this.createDefaultGround();
-    const user = await this.createDefaultUser();
-    const tenant = await this.createDefaultTenant(spaceId, user.id);
-    const tenantId = tenant.id;
-    await this.createDefaultRoles(tenantId);
-    await this.createSubjects(tenantId);
-    await this.createCategory(tenantId);
-    await this.createGroup(tenantId);
+    // await this.createServices();
+    // const { spaceId } = await this.createDefaultGround();
+    // const user = await this.createDefaultUser();
+    // const tenant = await this.createDefaultTenant(spaceId, user.id);
+    // const tenantId = tenant.id;
+    // await this.createDefaultRoles(tenantId);
+    // await this.createSubjects(tenantId);
+    // await this.createCategory(tenantId);
+    // await this.createGroup(tenantId);
   }
 }

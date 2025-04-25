@@ -32,9 +32,10 @@ export const ModalMount = observer(() => {
 const GroundSelectModalBody = observer(() => {
   const router = useRouter();
   const userId = localStorage.getItem('userId') || '';
+  console.log('userId', userId);
   const { data: getMyGroundsResponse } = useGetGroundsByUserId(userId);
   const myGrounds = getMyGroundsResponse?.data || [];
-
+  console.log('myGrounds', myGrounds);
   const localState = useLocalObservable(() => ({
     selectedGroundId: '',
   }));

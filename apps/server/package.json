@@ -21,6 +21,9 @@
     "db:prod:generate": "dotenv -e .env.prod npx prisma db pull",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.750.0",
     "@casl/ability": "^6.7.3",
@@ -95,6 +98,7 @@
     "prettier": "^3.5.2",
     "prisma": "^6.4.1",
     "supertest": "^7.0.0",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "^5.7.3",
     "unplugin-swc": "^1.5.1",

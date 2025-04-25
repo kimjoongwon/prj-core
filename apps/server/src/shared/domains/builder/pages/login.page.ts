@@ -11,7 +11,7 @@ export class LoginPage {
     const state = {
       form: {
         inputs: {
-          email: 'galaxy@gmail.com',
+          email: 'plate@gmail.com',
           password: 'rkdmf12!@',
         },
       },

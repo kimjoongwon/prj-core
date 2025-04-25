@@ -98,10 +98,14 @@ export class AuthService {
 
     this.logger.log(`User: ${JSON.stringify(user)}`);
 
+    if (!user) {
+      throw new UnauthorizedException('유저가 존재하지 않습니다.');
+    }
+
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {
-      throw new BadRequestException('Invalid password');
+      throw new BadRequestException('비밀번호가 일치하지 않습니다.');
     }
 
     const { accessToken, refreshToken } = this.tokenService.generateTokens({ userId: user.id });

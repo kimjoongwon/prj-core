@@ -18,6 +18,7 @@ import { cloneDeep, defaultsDeep, isEmpty } from 'lodash-es';
 import { usePageState } from '../Page/PageBuilder';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
+import { v4 } from 'uuid';
 
 interface ButtonProps extends HeroUIButtonProps {
   row?: unknown & { id: string };
@@ -120,7 +121,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
       >
         <ol>
           {state?.form?.button?.errorMessages?.map(message => (
-            <li>- {message}</li>
+            <li key={v4()}>- {message}</li>
           ))}
         </ol>
       </Alert>

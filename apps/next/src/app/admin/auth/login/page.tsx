@@ -11,7 +11,13 @@ import {
   Text,
   useGetAdminAuthLoginRoute,
 } from '@shared/frontend';
-import { Card, CardBody, CardFooter, CardHeader } from '@heroui/react';
+import {
+  addToast,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+} from '@heroui/react';
 import { PageBuilder } from '@shared/types';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react-lite';
@@ -40,7 +46,11 @@ export const LoginPage = observer(() => {
         type: 'MyGroundSelect',
       });
     } catch (error) {
-      alert('로그인에 실패했습니다. 다시 시도해주세요.');
+      addToast({
+        title: '로그인 실패',
+        description: '로그인에 실패했습니다. 다시 시도해주세요.',
+        color: 'danger',
+      });
     }
   };
 
