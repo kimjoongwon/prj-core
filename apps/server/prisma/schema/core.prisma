@@ -258,20 +258,19 @@ model Activity {
   removedAt DateTime? @db.Timestamptz(6)
   routineId String
   taskId    String
-  routine   Routine   @relation(fields: [routineId], references: [id])
-  task      Task      @relation(fields: [taskId], references: [id])
+
+  @@unique([routineId, taskId])
 }
 
 model Routine {
-  id         String     @id @default(uuid())
-  seq        Int        @unique @default(autoincrement())
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?  @db.Timestamptz(6)
-  name       String
-  label      String
-  activities Activity[]
-  program    Program?
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  name      String
+  label     String
+  program   Program?
 }
 
 model Task {
@@ -281,7 +280,6 @@ model Task {
   updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
   removedAt      DateTime?       @db.Timestamptz(6)
   tenantId       String
-  activities     Activity[]
   associations   Association[]
   classification Classification?
   exercise       Exercise?
@@ -303,7 +301,7 @@ model Role {
 }
 
 model Assignment {
-  id        String    @id @default(uuid())
+  id        String    @id @default(cuid())
   seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
