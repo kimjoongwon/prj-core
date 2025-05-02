@@ -18,35 +18,35 @@ export class BuilderService {
   getRoute() {
     return [
       {
-        name: 'admin',
+        name: '관리자',
         pathname: '/admin',
         children: [
           {
-            name: 'main',
+            name: '메인',
             pathname: '/admin/main',
             children: [
               {
-                name: 'tenants',
+                name: '테넌트',
                 pathname: '/admin/main/tenants',
                 children: [
                   {
-                    name: 'services',
+                    name: '서비스',
                     pathname: `/admin/main/tenants/:tenantId/services`,
                     children: [
-                      this.getServiceRoute('space', '그라운드 서비스', 'grounds'),
+                      this.getServiceRoute('space', '공간 서비스', 'grounds'),
                       this.getServiceRoute('program', '프로그램 서비스', 'programs'),
-                      this.getServiceRoute('task', 'TASK 서비스', 'tasks'),
+                      this.getServiceRoute('task', '운동 서비스', 'tasks'),
                       this.getServiceRoute('timeline', '타임라인 서비스', 'timelines'),
                     ],
                   },
                 ],
               },
               {
-                name: 'categories',
+                name: '카테고리',
                 pathname: '/admin/main/categories',
                 children: [
                   {
-                    name: 'edit',
+                    name: '편집',
                     pathname: '/admin/main/categories/:categoryId/edit',
                   },
                 ],
@@ -54,11 +54,11 @@ export class BuilderService {
             ],
           },
           {
-            name: 'auth',
+            name: '인증',
             pathname: '/admin/auth',
             children: [
               {
-                name: 'login',
+                name: '로그인',
                 pathname: '/admin/auth/login',
               },
             ],
