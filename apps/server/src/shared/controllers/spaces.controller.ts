@@ -13,9 +13,10 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorators';
-import { SpaceDto, CreateSpaceDto, UpdateSpaceDto, SpaceQueryDto } from '../dtos';
+import { CreateSpaceDto, UpdateSpaceDto, SpaceQueryDto } from '../dtos';
 import { ResponseEntity } from '../entities';
 import { SpacesService } from '../services';
+import { SpaceDto } from '../dtos';
 
 @ApiTags('SPACES')
 @Controller()

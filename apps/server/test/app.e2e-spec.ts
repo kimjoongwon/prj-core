@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/gateway/app.module';
 import * as request from 'supertest';
+import { AppModule } from '../src/gateway/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -15,8 +15,6 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    // Get the authentication cookie
-    // Get the authentication cookie
     const authResponse = await request(app.getHttpServer())
       .post('/api/v1/auth/token')
       .send({
