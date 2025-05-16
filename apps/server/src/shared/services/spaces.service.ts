@@ -4,7 +4,7 @@ import { PaginationUtil } from '@shared/utils';
 import { SpacesRepository } from '../repositories/spaces.repository';
 import { UpdateSpaceDto } from '../dtos/update/update-space.dto';
 import { SpaceQueryDto } from '../dtos/query/space-query.dto';
-import { CreateSpaceDto } from '../dtos';
+import { CreateSpaceDto } from '../dtos/create/create-space.dto';
 
 @Injectable()
 export class SpacesService {
