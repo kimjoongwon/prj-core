@@ -16,8 +16,6 @@ export class PathUtil {
       pathWithParams = path.build(params);
     }
 
-    console.log('pathWithParams', pathWithParams);
-
     if (queryString) {
       pathWithParams = pathWithParams + '?' + queryString;
     }

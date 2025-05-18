@@ -29,7 +29,7 @@ export const AppProvider = (props: StoreProviderProps) => {
 
   const { data: response } = useGetAppBuilder();
   // @ts-ignore
-  const routes: RouteBuilder[] = response?.data.routes;
+  const routes: RouteBuilder[] = response?.data?.routes;
   // @ts-ignore
   const services = response?.data?.services || [];
 

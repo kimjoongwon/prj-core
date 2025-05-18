@@ -5,10 +5,10 @@ export default defineConfig(option => ({
   format: ['esm', 'cjs'],
   outDir: './dist',
   clean: !option.watch,
-  minify: !option.watch,
   watch: option.watch,
   env: {
     NODE_ENV: option.watch ? 'development' : 'production',
   },
+  sourcemap: true,
   dts: true,
 }));

@@ -1,6 +1,6 @@
 import { $Enums, PrismaClient } from '@prisma/client';
 import { CreateGroupDto } from '@shared';
-import { GroupNames } from '../src/shared/enums/group-names.enum';
+import { GroupNames } from '../src/shared/enum/group-names.enum';
 import { hash } from 'bcrypt';
 const prisma = new PrismaClient();
 async function main() {

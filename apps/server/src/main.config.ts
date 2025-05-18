@@ -7,7 +7,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import smtpConfig from './shared/configs/smtp.config';
+import smtpConfig from './shared/config/smtp.config';
 import pino from 'pino';
 
 export const adminModules = [];
