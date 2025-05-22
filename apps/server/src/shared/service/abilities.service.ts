@@ -6,7 +6,7 @@ import { CreateAbilityDto } from '../dto';
 
 @Injectable()
 export class AbilitiesService {
-  constructor(private readonly repository: AbilitiesRepository) {}
+  constructor(private readonly repository: AbilitiesRepository) { }
 
   getUnique(args: Prisma.AbilityFindUniqueArgs) {
     return this.repository.findUnique(args);
