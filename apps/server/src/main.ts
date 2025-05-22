@@ -1,4 +1,4 @@
-import { AppModule } from './gateway/app.module';
+import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { AllExceptionsFilter, PrismaClientExceptionFilter } from '@shared';

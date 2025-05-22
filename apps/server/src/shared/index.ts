@@ -13,5 +13,5 @@ export * from './provider';
 export * from './guard';
 export * from './lib';
 export * from './domain';
-export * from './module';
 export * from './pipe';
+export * from './global-module';

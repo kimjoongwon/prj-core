@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repository/users.repository';
 import { Prisma } from '@prisma/client';
-import { ContextProvider } from '../provider';
 import { GroundsRepository } from '../repository';
 
 @Injectable()
