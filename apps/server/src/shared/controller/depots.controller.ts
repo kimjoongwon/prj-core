@@ -1,7 +1,6 @@
 import {
   Controller,
   Post,
-  Body,
   HttpStatus,
   Patch,
   Delete,
@@ -13,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { DepotDto, UpdateDepotDto, DepotQueryDto } from '../dto';
+import { DepotDto, DepotQueryDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { DepotsService } from '../service/depots.service';
@@ -24,7 +23,7 @@ import { ApiFile } from '../decorator/swagger.schema';
 @ApiTags('DEPOTS')
 @Controller()
 export class DepotsController {
-  constructor(private readonly service: DepotsService) { }
+  constructor(private readonly service: DepotsService) {}
 
   @Post()
   @Auth([])
@@ -43,12 +42,7 @@ export class DepotsController {
   )
   async createDepot(
     @UploadedFiles()
-    {
-      files,
-
-    }: {
-      files: Express.Multer.File[];
-    },
+    { files }: { files: Express.Multer.File[] },
   ) {
     const depot = await this.service.create(files);
     return new ResponseEntity(HttpStatus.CREATED, 'success', depot.toDto());

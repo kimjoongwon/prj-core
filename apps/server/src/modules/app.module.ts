@@ -161,7 +161,7 @@ import { GlobalModule } from '@shared';
                 module: ExercisesModule,
               },
               {
-                path: 'file',
+                path: 'files',
                 module: FilesModule,
               },
               {

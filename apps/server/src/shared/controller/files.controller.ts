@@ -17,7 +17,6 @@ import { FilesService } from '../service/files.service';
 import _ from 'lodash';
 import { ApiFile } from '../decorator/swagger.schema';
 
-@ApiTags('FILES')
 @Controller()
 export class FilesController {
   constructor(private readonly service: FilesService) {}

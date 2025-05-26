@@ -5,3 +5,8 @@ import { FilesController } from '@shared';
   controllers: [FilesController],
 })
 export class FilesModule {}
+
+@Module({
+  controllers: [FilesController],
+})
+export class FileModule {}

@@ -104,4 +104,19 @@ export class ContextProvider {
   static getPageContext(): 'detail' | 'edit' | 'new' | 'add' {
     return ContextProvider.get('pageContext');
   }
+
+  static setSpaceId(spaceId: string): void {
+    ContextProvider.set('spaceId', spaceId);
+  }
+
+  static getSpaceId(): string {
+    return ContextProvider.get('spaceId');
+  }
+
+  static getSpaceNumber(): string {
+    return ContextProvider.get('spaceNumber');
+  }
+  static setSpaceNumber(spaceNumber: string): void {
+    ContextProvider.set('spaceNumber', spaceNumber);
+  }
 }
