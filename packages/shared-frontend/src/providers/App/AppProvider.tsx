@@ -5,8 +5,6 @@ import { RouteBuilder } from '@shared/types';
 import { useGetAppBuilder } from '../../apis';
 import { useParams, useRouter } from 'next/navigation';
 import {
-  ButtonService,
-  ColumnService,
   DepotService,
   Illit,
   ModalService,
@@ -59,7 +57,7 @@ export const AppProvider = (props: StoreProviderProps) => {
   }, [routes]);
 
   if (!isInitialized) {
-    return null;
+    return <></>;
   }
 
   return (

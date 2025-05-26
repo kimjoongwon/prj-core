@@ -1,32 +1,29 @@
-// import { StoreProvider, Store, Navigation } from '@shared/stores';
-// import { HeroUIProvider } from "@heroui/react";
-// import { AppBuilder } from '@shared/types';
+'use client';
 
-// interface ProvidersProps {
-//   children?: React.ReactNode;
-// }
+// import { ModalMount } from '@/components';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
+import { AppProvider, QueryProvider } from '@shared/frontend';
+import { NuqsAdapter } from 'nuqs/adapters/next';
 
-// export const Providers = (props: ProvidersProps) => {
-//   const { children } = props;
+interface ProvidersProps {
+  children: React.ReactNode;
+}
 
-//   const { data: getAppBuilderResponse, isLoading } = useGetAppBuilderSuspense();
-//   const appBuilder = (
-//     getAppBuilderResponse as {
-//       data: AppBuilder;
-//     }
-//   )?.data;
+export const Providers = (props: ProvidersProps) => {
+  const { children } = props;
 
-//   const navigation = new Navigation(appBuilder.routes);
-//   const store = new Store(navigation, appBuilder);
-//   store.isInitialized = true;
-
-//   if (isLoading) {
-//     return null;
-//   }
-
-//   return (
-//     <StoreProvider value={store}>
-//       <HeroUIProvider>{children}</HeroUIProvider>
-//     </StoreProvider>
-//   );
-// };
+  return (
+    <QueryProvider>
+      <HeroUIProvider>
+        <NuqsAdapter>
+          <AppProvider>
+            {children}
+            {/* <ModalMount /> */}
+          </AppProvider>
+          <ToastProvider placement="top-center" />
+        </NuqsAdapter>
+        {/* <ToastProvider /> */}
+      </HeroUIProvider>
+    </QueryProvider>
+  );
+};

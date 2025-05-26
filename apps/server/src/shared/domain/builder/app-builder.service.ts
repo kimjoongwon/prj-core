@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { RouteBuilder } from '@shared/types';
+import { LoginPage } from './pages/login.page';
 /**
  * @description Top Menu는 무엇이 되어야 하는가?
  * @ 1급 도메인
@@ -13,7 +14,10 @@ import { RouteBuilder } from '@shared/types';
 
 @Injectable()
 export class BuilderService {
-  constructor(readonly prisma: PrismaService) {}
+  constructor(
+    readonly prisma: PrismaService,
+    readonly loginPage: LoginPage,
+  ) {}
 
   async build() {
     return {
@@ -34,6 +38,7 @@ export class BuilderService {
               {
                 name: '로그인',
                 pathname: 'login',
+                page: this.loginPage.getMeta(),
               },
             ],
           },
