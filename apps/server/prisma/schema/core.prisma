@@ -1,63 +1,96 @@
 model Category {
-  id              String           @id @default(uuid())
-  seq             Int              @unique @default(autoincrement())
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?        @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?        @db.Timestamptz(6)
-  name            String           @unique
-  type            CategoryTypes    @default(ROOT)
-  parentId        String?
-  serviceId       String
-  tenantId        String
-  parent          Category?        @relation("CategoryToCategory", fields: [parentId], references: [id])
-  children        Category[]       @relation("CategoryToCategory")
-  service         Service          @relation(fields: [serviceId], references: [id])
-  tenant          Tenant           @relation(fields: [tenantId], references: [id])
-  classifications Classification[]
+  id                   String                @id @default(uuid())
+  seq                  Int                   @unique @default(autoincrement())
+  createdAt            DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime?             @updatedAt @db.Timestamptz(6)
+  removedAt            DateTime?             @db.Timestamptz(6)
+  name                 String                @unique
+  type                 CategoryTypes         @default(ROOT)
+  parentId             String?
+  serviceId            String
+  tenantId             String
+  parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children             Category[]            @relation("CategoryToCategory")
+  service              Service               @relation(fields: [serviceId], references: [id])
+  tenant               Tenant                @relation(fields: [tenantId], references: [id])
+  userClassifications  UserClassification[]
+  roleClassifications  RoleClassification[]
+  spaceClassifications SpaceClassification[]
+  fileClassifications  FileClassification[]
 }
 
-model Classification {
+model UserClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
   categoryId String
-  userId     String?   @unique
+  userId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
+  user       User      @relation(fields: [userId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, userId])
+}
+
+model RoleClassification {
+  id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
+  categoryId String
+  roleId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
+  role       Role      @relation(fields: [roleId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, roleId])
+}
+
+model FileClassification {
+  id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
+  categoryId String
+  fileId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
+  file       File      @relation(fields: [fileId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, fileId])
+}
+
+model SpaceClassification {
+  id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
+  categoryId String
   spaceId    String?   @unique
-  roleId     String?   @unique
-  fileId     String?   @unique
-  timelineId String?   @unique
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
   taskId     String?   @unique
   category   Category  @relation(fields: [categoryId], references: [id])
-  file       File?     @relation(fields: [fileId], references: [id])
-  role       Role?     @relation(fields: [roleId], references: [id])
   space      Space?    @relation(fields: [spaceId], references: [id])
   task       Task?     @relation(fields: [taskId], references: [id])
-  timeline   Timeline? @relation(fields: [timelineId], references: [id])
-  user       User?     @relation(fields: [userId], references: [id])
 
-  @@unique([categoryId, userId])
   @@unique([categoryId, spaceId])
-  @@unique([categoryId, roleId])
-  @@unique([categoryId, timelineId])
-  @@unique([categoryId, fileId])
-  @@unique([categoryId, taskId])
 }
 
 model Group {
-  id           String        @id @default(uuid())
-  seq          Int           @unique @default(autoincrement())
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime?     @db.Timestamptz(6)
-  name         String
-  label        String?
-  serviceId    String
-  tenantId     String
-  associations Association[]
-  service      Service       @relation(fields: [serviceId], references: [id])
-  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  id              String            @id @default(uuid())
+  seq             Int               @unique @default(autoincrement())
+  createdAt       DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?         @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?         @db.Timestamptz(6)
+  name            String
+  label           String?
+  serviceId       String
+  tenantId        String
+  service         Service           @relation(fields: [serviceId], references: [id])
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  UserAssociation UserAssociation[]
+  RoleAssociation RoleAssociation[]
 }
 
 model Ground {
@@ -100,28 +133,84 @@ model Service {
   groups     Group[]
 }
 
-model Association {
-  id         String    @id @default(uuid())
-  seq        Int       @unique @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime? @db.Timestamptz(6)
-  groupId    String
-  userId     String?
-  spaceId    String?
-  timelineId String?
-  roleId     String?
-  fileId     String?
-  contentId  String?
-  taskId     String?
-  content    Content?  @relation(fields: [contentId], references: [id])
-  file       File?     @relation(fields: [fileId], references: [id])
-  group      Group     @relation(fields: [groupId], references: [id])
-  role       Role?     @relation(fields: [roleId], references: [id])
-  space      Space?    @relation(fields: [spaceId], references: [id])
-  task       Task?     @relation(fields: [taskId], references: [id])
-  timeline   Timeline? @relation(fields: [timelineId], references: [id])
-  user       User?     @relation(fields: [userId], references: [id])
+// model Association {
+//   id         String    @id @default(uuid())
+//   seq        Int       @unique @default(autoincrement())
+//   createdAt  DateTime  @default(now())
+//   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+//   removedAt  DateTime? @db.Timestamptz(6)
+//   groupId    String
+//   userId     String?
+//   spaceId    String?
+//   timelineId String?
+//   roleId     String?
+//   fileId     String?
+//   taskId     String?
+//   file       File?     @relation(fields: [fileId], references: [id])
+//   group      Group     @relation(fields: [groupId], references: [id])
+//   role       Role?     @relation(fields: [roleId], references: [id])
+//   space      Space?    @relation(fields: [spaceId], references: [id])
+//   task       Task?     @relation(fields: [taskId], references: [id])
+//   timeline   Timeline? @relation(fields: [timelineId], references: [id])
+//   user       User?     @relation(fields: [userId], references: [id])
+//   Content    Content?  @relation(fields: [contentId], references: [id])
+//   contentId  String?
+// }
+
+model UserAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  userId    String
+  groupId   String
+  user      User      @relation(fields: [userId], references: [id])
+  group     Group     @relation(fields: [groupId], references: [id])
+
+  @@unique([userId, groupId])
+}
+
+model RoleAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  groupId   String
+  roleId    String
+  group     Group     @relation(fields: [groupId], references: [id])
+  role      Role      @relation(fields: [roleId], references: [id])
+
+  @@unique([groupId, roleId])
+}
+
+model SpaceAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  userId    String
+  spaceId   String
+  user      User      @relation(fields: [userId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+
+  @@unique([userId, spaceId])
+}
+
+model FileAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  userId    String
+  fileId    String
+  user      User      @relation(fields: [userId], references: [id])
+  file      File      @relation(fields: [fileId], references: [id])
+
+  @@unique([userId, fileId])
 }
 
 model Profile {
@@ -139,18 +228,20 @@ model Profile {
 }
 
 model User {
-  id             String          @id @default(uuid())
-  seq            Int             @unique @default(autoincrement())
-  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
-  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
-  removedAt      DateTime?       @db.Timestamptz(6)
-  phone          String          @unique
-  name           String          @unique
-  password       String
-  associations   Association[]
-  classification Classification?
-  profiles       Profile[]
-  tenants        Tenant[]
+  id               String               @id @default(uuid())
+  seq              Int                  @unique @default(autoincrement())
+  updatedAt        DateTime?            @updatedAt @db.Timestamptz(6)
+  createdAt        DateTime             @default(now()) @db.Timestamptz(6)
+  removedAt        DateTime?            @db.Timestamptz(6)
+  phone            String               @unique
+  name             String               @unique
+  password         String
+  profiles         Profile[]
+  tenants          Tenant[]
+  classifications  UserClassification[]
+  associations     UserAssociation[]
+  SpaceAssociation SpaceAssociation[]
+  FileAssociation  FileAssociation[]
 }
 
 model Tenant {
@@ -193,28 +284,26 @@ model Workspace {
 }
 
 model Space {
-  id             String          @id @default(uuid())
-  seq            Int             @unique @default(autoincrement())
-  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?       @db.Timestamptz(6)
-  associations   Association[]
-  classification Classification?
-  tenants        Tenant[]
-  workspace      Workspace?
+  id              String                @id @default(uuid())
+  seq             Int                   @unique @default(autoincrement())
+  createdAt       DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?             @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?             @db.Timestamptz(6)
+  classifications SpaceClassification[]
+  associations    SpaceAssociation[]
+  tenants         Tenant[]
+  workspace       Workspace?
 }
 
 model Timeline {
-  id              String          @id @default(uuid())
-  seq             Int             @unique @default(autoincrement())
-  createdAt       DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?       @db.Timestamptz(6)
-  tenantId        String
-  associations    Association[]
-  classifications Classification?
-  sessions        Session[]
-  tenant          Tenant          @relation(fields: [tenantId], references: [id])
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  tenantId  String
+  sessions  Session[]
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
 }
 
 model Session {
@@ -274,34 +363,33 @@ model Routine {
 }
 
 model Task {
-  id             String          @id @default(uuid())
-  seq            Int             @unique @default(autoincrement())
-  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?       @db.Timestamptz(6)
-  tenantId       String
-  associations   Association[]
-  classification Classification?
-  exercise       Exercise?
+  id                  String               @id @default(uuid())
+  seq                 Int                  @unique @default(autoincrement())
+  createdAt           DateTime             @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt           DateTime?            @db.Timestamptz(6)
+  tenantId            String
+  exercise            Exercise?
+  SpaceClassification SpaceClassification?
 }
 
 model Role {
-  id             String          @id @default(uuid())
-  seq            Int             @unique @default(autoincrement())
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?       @db.Timestamptz(6)
-  name           Roles           @default(USER)
-  tenantId       String
-  abilities      Ability[]
-  assignments    Assignment[]
-  associations   Association[]
-  classification Classification?
-  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  id              String               @id @default(uuid())
+  seq             Int                  @unique @default(autoincrement())
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?            @db.Timestamptz(6)
+  name            Roles                @default(USER)
+  tenantId        String
+  abilities       Ability[]
+  assignments     Assignment[]
+  classifications RoleClassification[]
+  associations    RoleAssociation[]
+  tenant          Tenant               @relation(fields: [tenantId], references: [id])
 }
 
 model Assignment {
-  id        String    @id @default(cuid())
+  id        String    @id @default(uuid())
   seq       Int       @unique @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
@@ -359,21 +447,20 @@ model Post {
 }
 
 model Content {
-  id           String        @id @default(uuid())
-  seq          Int           @unique @default(autoincrement())
-  createdAt    DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime?     @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime?     @db.Timestamptz(6)
-  title        String?
-  description  String?
-  type         TextTypes     @default(Editor)
-  text         String?       @db.VarChar(1000)
-  depotId      String?
-  tenantId     String
-  associations Association[]
-  depot        Depot?        @relation(fields: [depotId], references: [id])
-  tenant       Tenant        @relation(fields: [tenantId], references: [id])
-  posts        Post[]
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime? @db.Timestamptz(6)
+  title       String?
+  description String?
+  type        TextTypes @default(Editor)
+  text        String?   @db.VarChar(1000)
+  depotId     String?
+  tenantId    String
+  depot       Depot?    @relation(fields: [depotId], references: [id])
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+  posts       Post[]
 }
 
 model Depot {
@@ -390,21 +477,21 @@ model Depot {
 }
 
 model File {
-  id             String          @id @default(uuid())
-  seq            Int             @unique @default(autoincrement())
-  name           String
-  depotId        String
-  size           Int
-  mimeType       String
-  url            String
-  tenantId       String
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime?       @updatedAt @db.Timestamptz(6)
-  removedAt      DateTime?       @db.Timestamptz(6)
-  associations   Association[]
-  classification Classification?
-  depot          Depot           @relation(fields: [depotId], references: [id])
-  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  id              String               @id @default(uuid())
+  seq             Int                  @unique @default(autoincrement())
+  name            String
+  depotId         String
+  size            Int
+  mimeType        String
+  url             String
+  tenantId        String
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?            @db.Timestamptz(6)
+  associations    FileAssociation[]
+  depot           Depot                @relation(fields: [depotId], references: [id])
+  tenant          Tenant               @relation(fields: [tenantId], references: [id])
+  classifications FileClassification[]
 }
 
 enum SMSStatus {

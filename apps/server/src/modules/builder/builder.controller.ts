@@ -4,7 +4,7 @@ import { Auth, BuilderService, ResponseEntity } from '@shared';
 
 @ApiTags('BUILDER')
 @Controller()
-export class BuilderEndpoint {
+export class BuilderController {
   constructor(private readonly builderService: BuilderService) {}
   @Get()
   @Auth([], { public: true })
