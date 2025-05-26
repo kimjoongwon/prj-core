@@ -1,76 +1,76 @@
-// import { ReactNode } from 'react';
-// import {
-//   AppBar,
-//   Button,
-//   HStack,
-//   Layout,
-//   List,
-//   VStack,
-//   Text,
-// } from '@shared/frontend';
-// import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
-// import { observer } from 'mobx-react-lite';
-// import { action } from 'mobx';
-// import { v4 } from 'uuid';
-// import { PathUtil } from '@shared/utils';
-// import {
-//   Card,
-//   CardBody,
-//   CardHeader,
-//   Divider,
-//   Modal,
-//   ModalBody,
-//   ModalContent,
-//   ModalHeader,
-//   Spacer,
-// } from '@heroui/react';
-// interface Layout {
-//   children: ReactNode;
-//   layoutBuilder?: LayoutBuilderInterface;
-// }
+import { ReactNode } from 'react';
+import {
+  AppBar,
+  Button,
+  HStack,
+  Layout,
+  List,
+  VStack,
+  Text,
+} from '@shared/frontend';
+import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
+import { observer } from 'mobx-react-lite';
+import { action } from 'mobx';
+import { v4 } from 'uuid';
+import { PathUtil } from '@shared/utils';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  Spacer,
+} from '@heroui/react';
+interface Layout {
+  children: ReactNode;
+  layoutBuilder?: LayoutBuilderInterface;
+}
 
-// type LayoutBuilderProps = Layout;
-// type ModalLayoutProps = Layout;
-// type DataGridLayoutProps = Layout;
-// type AuthLayoutProps = Layout;
-// type ServiceLayoutProps = Layout;
-// type ServicesLayoutProps = Layout;
+type LayoutBuilderProps = Layout;
+type ModalLayoutProps = Layout;
+type DataGridLayoutProps = Layout;
+type AuthLayoutProps = Layout;
+type ServiceLayoutProps = Layout;
+type ServicesLayoutProps = Layout;
 
-// export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
-//   const { children, layoutBuilder } = props;
+export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
+  const { children, layoutBuilder } = props;
 
-//   if (layoutBuilder?.type === 'Auth') {
-//     return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
-//   }
+  // if (layoutBuilder?.type === 'Auth') {
+  //   return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
+  // }
 
-//   if (layoutBuilder?.type === 'Services') {
-//     return (
-//       <ServicesLayout layoutBuilder={layoutBuilder}>{children}</ServicesLayout>
-//     );
-//   }
+  // if (layoutBuilder?.type === 'Services') {
+  //   return (
+  //     <ServicesLayout layoutBuilder={layoutBuilder}>{children}</ServicesLayout>
+  //   );
+  // }
 
-//   if (layoutBuilder?.type === 'Service') {
-//     return (
-//       <ServiceLayout layoutBuilder={layoutBuilder}>{children}</ServiceLayout>
-//     );
-//   }
+  // if (layoutBuilder?.type === 'Service') {
+  //   return (
+  //     <ServiceLayout layoutBuilder={layoutBuilder}>{children}</ServiceLayout>
+  //   );
+  // }
 
-//   if (layoutBuilder?.type === 'DataGrid') {
-//     return (
-//       <DataGridLayout layoutBuilder={layoutBuilder}>{children}</DataGridLayout>
-//     );
-//   }
+  // if (layoutBuilder?.type === 'DataGrid') {
+  //   return (
+  //     <DataGridLayout layoutBuilder={layoutBuilder}>{children}</DataGridLayout>
+  //   );
+  // }
 
-//   if (layoutBuilder?.type === 'Modal') {
-//     return <ModalLayout layoutBuilder={layoutBuilder}>{children}</ModalLayout>;
-//   }
+  // if (layoutBuilder?.type === 'Modal') {
+  //   return <ModalLayout layoutBuilder={layoutBuilder}>{children}</ModalLayout>;
+  // }
 
-//   if (!layoutBuilder) {
-//     return <Outlet />;
-//   }
+  // if (!layoutBuilder) {
+  //   return <Outlet />;
+  // }
 
-//   return children;
-// });
+  return children;
+});
 
 // export const AuthLayout = observer((props: AuthLayoutProps) => {
 //   const { children } = props;
