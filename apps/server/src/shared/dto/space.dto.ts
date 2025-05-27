@@ -3,7 +3,7 @@ import { ClassField, StringField, UUIDField } from '../decorator/field.decorator
 import { Association } from '../entity/association.entity';
 import { AbstractDto } from './abstract.dto';
 import { AssociationDto } from './association.dto';
-import { ClassificationDto } from './classification.dto';
+import { ClassificationDto } from './user-classification.dto';
 import { TenantDto } from './tenant.dto';
 
 export class SpaceDto extends AbstractDto implements Space {

@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PageBuilder } from '@shared/types';
-import { ActionColumns } from '../columns/action.columns';
 import { ExerciseDto } from '../../../../shared/dto';
 
 @Injectable()
 export class ExercisesPage {
-  constructor(private readonly actionColumns: ActionColumns) {}
+  constructor() {}
   getMeta() {
-    const actionColumns = this.actionColumns.getMeta();
     const page: PageBuilder<Partial<ExerciseDto>> = {
       type: 'Page',
       name: '목록',
@@ -27,7 +25,6 @@ export class ExercisesPage {
                 name: 'ID',
               },
             },
-            ...actionColumns,
           ],
         },
         buttons: [

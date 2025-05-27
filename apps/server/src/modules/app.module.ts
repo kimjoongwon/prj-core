@@ -6,8 +6,6 @@ import {
   JwtStrategy,
   LoggerMiddleware,
   PagesModule,
-  ColumnsModule,
-  CellButtonsModule,
 } from '@shared';
 import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
@@ -28,8 +26,6 @@ import { TimelinesModule } from './timelines/timelines.module';
 import { SessionsModule } from './sessions/sessions.module';
 import { RoutinesModule } from './routines/routines.module';
 import { ProgramsModule } from './programs/programs.module';
-import { AdminAuthRouteModule } from './app/admin-auth.module';
-import { AdminMainRouteModule } from './app/admin-main.module';
 import { DepotsModule } from './depots/depots.module';
 import { ExercisesModule } from './exercise/exercises.module';
 import { FilesModule } from './files/files.module';
@@ -42,11 +38,9 @@ import { GlobalModule } from '@shared';
     ...libModules,
     GlobalModule,
     GroundsModule,
-    ColumnsModule,
     InputsModule,
     FormsModule,
     PagesModule,
-    CellButtonsModule,
     CaslModule,
     InitModule,
     ClassificationsModule,
@@ -69,8 +63,6 @@ import { GlobalModule } from '@shared';
     ExercisesModule,
     FilesModule,
     TenantsModule,
-    AdminAuthRouteModule,
-    AdminMainRouteModule,
     RouterModule.register([
       {
         path: 'api',
@@ -78,14 +70,6 @@ import { GlobalModule } from '@shared';
           {
             path: 'v1',
             children: [
-              {
-                path: 'admin/auth',
-                module: AdminAuthRouteModule,
-              },
-              {
-                path: 'admin/main',
-                module: AdminMainRouteModule,
-              },
               {
                 path: 'associations',
                 module: AssociationsModule,

@@ -43,45 +43,6 @@ async function main() {
           nickname: '플레이트',
         },
       },
-      associations: {
-        create: {
-          group: {
-            create: {
-              name: '공간그룹',
-              tenant: {
-                connect: {
-                  seq: 1,
-                },
-              },
-              service: {
-                connect: {
-                  seq: 2,
-                },
-              },
-            },
-          },
-        },
-      },
-      classification: {
-        create: {
-          category: {
-            create: {
-              name: '공통',
-              type: 'ROOT',
-              tenant: {
-                connect: {
-                  seq: 1,
-                },
-              },
-              service: {
-                connect: {
-                  seq: 1,
-                },
-              },
-            },
-          },
-        },
-      },
       tenants: {
         create: {
           main: true,

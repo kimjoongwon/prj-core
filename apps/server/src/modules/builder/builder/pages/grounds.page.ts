@@ -21,7 +21,7 @@ export class GroundsPage {
         'workspace.businessNo',
         'workspace.phone',
       ],
-      ['edit', 'detail', 'remove'],
+      ['modify', 'detail', 'remove'],
     );
 
     const dataGrid = this.dataGridBuilderService.build({

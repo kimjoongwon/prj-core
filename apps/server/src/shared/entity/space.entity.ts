@@ -1,6 +1,6 @@
 import { Space as SpaceEntity } from '@prisma/client';
 import { AbstractEntity } from './abstract.entity';
-import { Classification } from './classification.entity';
+import { Classification } from './user-classification.entity';
 import { Association } from './association.entity';
 import { Tenant } from './tenant.entity';
 import { UseDto } from '../decorator/use-dto.decorator';

@@ -11,7 +11,6 @@ import { AbstractDto } from './abstract.dto';
 import { ProfileDto } from '.';
 import { TenantDto } from './tenant.dto';
 import { AssociationDto } from './association.dto';
-import { ClassificationDto } from './classification.dto';
 import { ResponseExcludedField } from '../constant';
 
 export class UserDto extends AbstractDto implements User {
@@ -39,7 +38,4 @@ export class UserDto extends AbstractDto implements User {
 
   @ClassField(() => AssociationDto, { each: true, required: false, swagger: false })
   associations?: AssociationDto[];
-
-  @ClassField(() => ClassificationDto, { required: false, swagger: false })
-  classification?: ClassificationDto;
 }

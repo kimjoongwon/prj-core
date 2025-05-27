@@ -86,6 +86,7 @@ export interface SuccessOrFailure {
   params?: object & { resourceId: string };
 }
 
+export type PageTypes = 'cretea' | 'modify' | 'detail' | 'add';
 export interface AppBuilder {
   name: string;
   routes: RouteBuilder[];
