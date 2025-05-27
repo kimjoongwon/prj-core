@@ -1,12 +1,15 @@
 import { Button } from '@heroui/react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  type RouteObject,
+} from 'react-router';
 import { observer } from 'mobx-react-lite';
-// import { useStore } from '@shared/stores';
-// import { Providers } from './Providers';
 import { RouteBuilder as IRouteBuilder } from '@shared/types';
 import { v4 } from 'uuid';
 import { Spinner } from '@heroui/react';
+import { Providers } from './Providers';
 
 const rootElement = document.getElementById('root')!;
 
@@ -18,7 +21,7 @@ const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
 });
 
 const App = observer(() => {
-  const { navigation, isInitialized } = useStore();
+
   const router = createBrowserRouter(
     navigation.routeBuilders?.map(generateRouteObject),
   );
@@ -28,11 +31,9 @@ const App = observer(() => {
 
 if (!rootElement.innerHTML) {
   ReactDOM.createRoot(rootElement).render(
-    <ReactQueryProvider>
-      <Providers>
-        <App />
-      </Providers>
-    </ReactQueryProvider>,
+    <Providers>
+      <App />
+    </Providers>,
   );
 }
 if (!rootElement.innerHTML) {

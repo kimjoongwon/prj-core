@@ -15,4 +15,5 @@ export const ServiceNames = {
   timeline: 'timeline',
   file: 'file',
   task: 'task',
+  program: 'program',
 } as const;

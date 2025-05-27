@@ -1,7 +1,17 @@
 import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 
+export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
+
+export type BuilderOptions = {
+  id: string | 'new';
+  type: BuilderOptionTypes;
+  button: ButtonBuilder;
+  sections: SectionBuilder[];
+};
+
 export type Validations = Record<string, any>;
+
 export type Validation = {
   timings?: ('onBlur' | 'onChange' | 'onFocus')[];
   required?: { value: boolean; message: string };
@@ -89,7 +99,6 @@ export interface Option {
 
 export interface LayoutBuilder {
   name?: string;
-  pathOptions?: Option[];
   type?:
     | 'Outlet'
     | 'Auth'
