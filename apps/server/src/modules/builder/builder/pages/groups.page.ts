@@ -16,7 +16,7 @@ export class GroupsPage {
     const columns = this.columnBuilderService.build(
       'group',
       ['name', 'label'],
-      ['edit', 'detail', 'remove'],
+      ['modify', 'detail', 'remove'],
     );
 
     const dataGrid = this.dataGridBuilderService.build({

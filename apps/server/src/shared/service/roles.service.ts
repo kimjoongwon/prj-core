@@ -37,11 +37,6 @@ export class RolesService {
       data: {
         name: createRoleDto.name,
         tenantId: createRoleDto.tenantId,
-        classification: {
-          create: {
-            categoryId: createRoleDto.categoryId,
-          },
-        },
       },
     });
   }

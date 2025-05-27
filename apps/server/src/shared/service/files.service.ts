@@ -14,9 +14,6 @@ export class FilesService {
   getById(id: string) {
     return this.repository.findUnique({
       where: { id },
-      include: {
-        classification: true,
-      },
     });
   }
 

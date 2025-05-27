@@ -1,7 +1,7 @@
 import { $Enums, Category as CategoryEntity } from '@prisma/client';
 import { Service } from './service.entity';
 import { AbstractEntity } from './abstract.entity';
-import { Classification } from './classification.entity';
+import { Classification } from './user-classification.entity';
 import { CategoryDto } from '../dto';
 import { UseDto } from '../decorator/use-dto.decorator';
 import { Tenant } from './tenant.entity';

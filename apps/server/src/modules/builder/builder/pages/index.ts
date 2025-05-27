@@ -9,7 +9,6 @@ import { LoginPage } from './login.page';
 import { RoleEditPage } from './role-edit.page';
 import { RolesPage } from './roles.page';
 import { RoutineEditPage } from './routine-edit.page';
-import { RoutinesPage } from './routines.page';
 import { SessionEditPage } from './session-edit.page';
 import { SessionsPage } from './sessions.page';
 import { SpaceEditPage } from './space-edit.page';
@@ -39,7 +38,6 @@ const modules = [
   RoleEditPage,
   RolesPage,
   RoutineEditPage,
-  RoutinesPage,
   SessionEditPage,
   SessionsPage,
   SpaceEditPage,

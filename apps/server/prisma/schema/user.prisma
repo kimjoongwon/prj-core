@@ -1,0 +1,36 @@
+model UserClassification {
+  id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
+  categoryId String
+  userId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, userId])
+}
+
+model User {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  phone     String    @unique
+  name      String    @unique
+  password  String
+  profiles  Profile[]
+  tenants   Tenant[]
+}
+
+model UserAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  userId    String
+  groupId   String
+  group     Group     @relation(fields: [groupId], references: [id])
+}

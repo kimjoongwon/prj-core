@@ -2,6 +2,7 @@ import { ClsServiceManager } from 'nestjs-cls';
 import { LanguageCode } from '../constant/language-code.constant';
 import { UserDto } from '../dto/user.dto';
 import { TenantDto } from '../dto/tenant.dto';
+import { PageTypes } from '@shared/types';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';
@@ -98,10 +99,11 @@ export class ContextProvider {
     return ContextProvider.get('serviceName');
   }
 
-  static setPageContext(pageContext: 'detail' | 'edit' | 'new' | 'add'): void {
+  static setPageContext(pageContext: PageTypes): void {
     ContextProvider.set('pageContext', pageContext);
   }
-  static getPageContext(): 'detail' | 'edit' | 'new' | 'add' {
+
+  static getPageContext(): PageTypes {
     return ContextProvider.get('pageContext');
   }
 
