@@ -8,7 +8,6 @@ import {
   PagesModule,
   ColumnsModule,
   CellButtonsModule,
-  TablesModule,
 } from '@shared';
 import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
@@ -48,7 +47,6 @@ import { GlobalModule } from '@shared';
     FormsModule,
     PagesModule,
     CellButtonsModule,
-    TablesModule,
     CaslModule,
     InitModule,
     ClassificationsModule,

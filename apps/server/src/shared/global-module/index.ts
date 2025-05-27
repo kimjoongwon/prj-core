@@ -38,11 +38,11 @@ import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
-import { ColumnBuilderService } from '../domain/builder/column/column-builder.service';
-import { DataGridBuilderService } from '../domain/builder/data-grid/data-grid-builder.service';
-import { FormBuilderService } from '../domain/builder/form/form-builder.service';
-import { InputBuilderService } from '../domain/builder/Input/Input-builder.service';
-import { ButtonBuilderService } from '../domain/builder/button/button-builder.service';
+import { ColumnBuilderService } from '../../modules/builder/builder/column/column-builder.service';
+import { DataGridBuilderService } from '../../modules/builder/builder/data-grid/data-grid-builder.service';
+import { FormBuilderService } from '../../modules/builder/builder/form/form-builder.service';
+import { InputBuilderService } from '../../modules/builder/builder/Input/Input-builder.service';
+import { ButtonBuilderService } from '../../modules/builder/builder/button/button-builder.service';
 
 const modules = [
   AbilitiesService,
