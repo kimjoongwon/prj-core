@@ -99,16 +99,6 @@ export class AppBuilderService {
               },
             ],
           },
-          {
-            name: '카테고리',
-            pathname: '/admin/main/categories',
-            children: [
-              {
-                name: '편집',
-                pathname: '/admin/main/categories/:categoryId/edit',
-              },
-            ],
-          },
         ],
       },
     ];

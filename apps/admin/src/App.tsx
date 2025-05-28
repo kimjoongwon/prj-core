@@ -1,57 +1,44 @@
-import React from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
   type RouteObject,
 } from 'react-router';
 import { type RouteBuilder as IRouteBuilder } from '@shared/types';
-import { RouteBuilder, ILLIT } from '@shared/frontend';
+import { ILLIT, RouteBuilder } from '@shared/frontend';
 import { v4 } from 'uuid';
-import { Spinner } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
+import { Spinner } from '@heroui/react';
 
-// Helper function to generate route objects for the router
+// 라우트 객체를 생성하기 위한 헬퍼 함수
 const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
   path: routeBuilder?.pathname,
   element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
-  errorElement: <div>error</div>,
+  errorElement: <div>오류가 발생했습니다</div>,
   children: routeBuilder?.children?.map(generateRouteObject),
 });
 
-// Using the global ILLIT instance directly instead of the useApp hook
-// Wrapping with observer to react to changes in the ILLIT mobx store
+// ILLIT 전역 인스턴스를 직접 사용하여 useApp 훅 대신 사용
+// MobX 저장소의 변화에 반응하기 위해 observer로 래핑
 export const App = observer(() => {
-  // Need to use React.useState and useEffect to react to changes in ILLIT
-  const [isIllitInitialized, setIsIllitInitialized] = React.useState(false);
-
-  React.useEffect(() => {
-    // Check if ILLIT is initialized on mount and set up a periodic check
-    const checkIllit = () => {
-      if (ILLIT?.isInitialized) {
-        setIsIllitInitialized(true);
-      }
-    };
-
-    // Check immediately
-    checkIllit();
-
-    // Set up a periodic check until ILLIT is initialized
-    const intervalId = setInterval(() => {
-      checkIllit();
-      if (isIllitInitialized) {
-        clearInterval(intervalId);
-      }
-    }, 100);
-
-    return () => clearInterval(intervalId);
-  }, [isIllitInitialized]);
-
-  if (!isIllitInitialized || !ILLIT?.isInitialized) {
-    return <Spinner />;
+  // ILLIT이 초기화되지 않았거나 routeBuilders가 없는 경우 로딩 스피너 표시
+  if (!ILLIT?.isInitialized || !ILLIT?.navigation?.routeBuilders?.length) {
+    console.log('ILLIT 초기화 상태:', ILLIT?.isInitialized);
+    console.log(
+      'routeBuilders 길이:',
+      ILLIT?.navigation?.routeBuilders?.length,
+    );
+    return <Spinner label="앱을 로딩 중입니다..." />;
   }
 
+  // 라우터 생성
   const router = createBrowserRouter(
-    ILLIT.navigation.routeBuilders?.map(generateRouteObject),
+    ILLIT.navigation.routeBuilders.map(generateRouteObject),
+  );
+
+  console.log(
+    '앱이 라우트와 함께 초기화됨:',
+    router,
+    ILLIT.navigation.routeBuilders.length,
   );
 
   return <RouterProvider router={router} />;

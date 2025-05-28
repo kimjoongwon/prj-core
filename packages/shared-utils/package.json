@@ -1,8 +1,13 @@
 {
   "name": "@shared/utils",
   "version": "1.0.0",
-  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "start:dev": "tsup --watch --sourcemap",
     "build": "tsup",

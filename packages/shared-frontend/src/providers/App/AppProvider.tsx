@@ -10,6 +10,7 @@ import {
   ModalService,
   NavigationService,
 } from '../../services';
+import { observer } from 'mobx-react-lite';
 
 const StoreContext = createContext<Illit | null>(null);
 
@@ -20,52 +21,36 @@ interface StoreProviderProps {
 // Define ILLIT as a global variable that will be initialized by AppProvider
 export let ILLIT: Illit;
 
-export const AppProvider = (props: StoreProviderProps) => {
+export const AppProvider = observer((props: StoreProviderProps) => {
   const { children } = props;
-  const [isInitialized, setIsInitialized] = useState(false);
-  const router = useRouter();
-  const params = useParams<{ serviceName: string }>();
-
   const { data: response } = useGetAppBuilder();
   // @ts-ignore
-  const routes: RouteBuilder[] = response?.data?.routes;
-  // @ts-ignore
-  const services = response?.data?.services || [];
+  const routeBuilders: RouteBuilder[] = response?.data?.routes;
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (params && services) {
-      const serviceId = services?.find(
-        (service: { name: string }) => service.name === params?.serviceName,
-      )?.id;
-
-      localStorage.setItem('serviceName', params?.serviceName);
-      localStorage.setItem('serviceId', serviceId);
-      document.cookie = `serviceName=${params?.serviceName}; path=/`;
-      document.cookie = `serviceId=${serviceId}; path=/`;
-    }
-  }, [params, services]);
-
-  useEffect(() => {
-    if (routes) {
-      const navigationService = new NavigationService(routes, router);
+    if (routeBuilders && !isInitialized) {
+      const navigationService = new NavigationService(routeBuilders);
       const depotService = new DepotService();
       const modalService = new ModalService();
 
       // Initialize the global ILLIT instance
       ILLIT = new Illit(navigationService, depotService, modalService);
-
+      ILLIT.isInitialized = true;
       setIsInitialized(true);
+      console.log('init!');
     }
-  }, [routes]);
+  }, [routeBuilders, isInitialized]);
 
+  console.log('1', isInitialized);
   if (!isInitialized) {
     return <></>;
   }
-
+  console.log('2');
   return (
     <StoreContext.Provider value={ILLIT}>{children}</StoreContext.Provider>
   );
-};
+});
 
 export const useApp = () => {
   const store = React.useContext(StoreContext);

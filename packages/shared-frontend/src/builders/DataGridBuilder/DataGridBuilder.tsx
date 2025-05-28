@@ -4,13 +4,12 @@ import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { toJS } from 'mobx';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { DataGrid, HStack } from '@shared/frontend';
+import { DataGrid, HStack, useGetTableQuery } from '@shared/frontend';
 import { DataGridBuilder as DataGridBuilderInterface } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { usePageState } from '../Page/PageBuilder';
-import { useGetTableQuery } from '@/hooks';
 
 interface DataGridBuilderProps {
   dataGridBuilder: DataGridBuilderInterface;
