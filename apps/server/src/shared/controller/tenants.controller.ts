@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { TenantDto, CreateTenantDto, UpdateTenantDto, TenantQueryDto } from '../dto';
+import { TenantDto, CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ApiTags } from '@nestjs/swagger';
@@ -76,7 +76,7 @@ export class TenantsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
-  async getTenantsByQuery(@Query() query: TenantQueryDto) {
+  async getTenantsByQuery(@Query() query: QueryTenantDto) {
     const { count, tenants } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

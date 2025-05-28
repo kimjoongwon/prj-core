@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { GroundDto, CreateGroundDto, GroundQueryDto, UpdateGroundDto } from '../dto';
+import { GroundDto, CreateGroundDto, QueryGroundDto, UpdateGroundDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { GroundsService } from '../service/grounds.service';
@@ -85,7 +85,7 @@ export class GroundsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
-  async getGroundsByQuery(@Query() query: GroundQueryDto) {
+  async getGroundsByQuery(@Query() query: QueryGroundDto) {
     const { count, grounds } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

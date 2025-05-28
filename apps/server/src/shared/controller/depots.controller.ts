@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { DepotDto, DepotQueryDto } from '../dto';
+import { DepotDto, QueryDepotDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { DepotsService } from '../service/depots.service';
@@ -110,7 +110,7 @@ export class DepotsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(DepotDto, HttpStatus.OK, { isArray: true })
-  async getDepotsByQuery(@Query() query: DepotQueryDto) {
+  async getDepotsByQuery(@Query() query: QueryDepotDto) {
     const { count, depots } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

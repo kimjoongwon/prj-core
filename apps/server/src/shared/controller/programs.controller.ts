@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ProgramDto, CreateProgramDto, UpdateProgramDto, ProgramQueryDto } from '../dto';
+import { ProgramDto, CreateProgramDto, UpdateProgramDto, QueryProgramDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ProgramsService } from '../service/programs.service';
@@ -76,7 +76,7 @@ export class ProgramsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ProgramDto, HttpStatus.OK, { isArray: true })
-  async getProgramsByQuery(@Query() query: ProgramQueryDto) {
+  async getProgramsByQuery(@Query() query: QueryProgramDto) {
     const { count, items } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

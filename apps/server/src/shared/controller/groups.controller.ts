@@ -12,7 +12,7 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Public, ApiResponseEntity } from '../decorator';
-import { GroupDto, CreateGroupDto, GroupQueryDto, UpdateGroupDto } from '../dto';
+import { GroupDto, CreateGroupDto, QueryGroupDto, UpdateGroupDto } from '../dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { GroupsService } from '../service';
 
@@ -35,7 +35,7 @@ export class GroupsController {
   @Public()
   @ApiResponseEntity(GroupDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getGroupsByQuery(@Query() query: GroupQueryDto) {
+  async getGroupsByQuery(@Query() query: QueryGroupDto) {
     const { totalCount, groups } = await this.groupService.getManyByQuery(query);
 
     return new ResponseEntity(

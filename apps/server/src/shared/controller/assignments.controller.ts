@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { AssignmentDto, CreateAssignmentDto, AssignmentQueryDto } from '../dto';
+import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { AssignmentsService } from '../service/assignments.service';
@@ -73,7 +73,7 @@ export class AssignmentsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK, { isArray: true })
-  async getAssignmentsByQuery(@Query() query: AssignmentQueryDto) {
+  async getAssignmentsByQuery(@Query() query: QueryAssignmentDto) {
     const { count, assignments } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

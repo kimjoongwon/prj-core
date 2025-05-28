@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { SubjectDto, CreateSubjectDto, UpdateSubjectDto, SubjectQueryDto } from '../dto';
+import { SubjectDto, CreateSubjectDto, UpdateSubjectDto, QuerySubjectDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ApiTags } from '@nestjs/swagger';
@@ -93,7 +93,7 @@ export class SubjectsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
-  async getSubjectsByQuery(@Query() query: SubjectQueryDto) {
+  async getSubjectsByQuery(@Query() query: QuerySubjectDto) {
     const { count, subjects } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

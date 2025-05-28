@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { RoutineDto, CreateRoutineDto, UpdateRoutineDto, RoutineQueryDto } from '../dto';
+import { RoutineDto, CreateRoutineDto, UpdateRoutineDto, QueryRoutineDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { RoutinesService } from '../service/routines.service';
@@ -75,7 +75,7 @@ export class RoutinesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
-  async getRoutinesByQuery(@Query() query: RoutineQueryDto) {
+  async getRoutinesByQuery(@Query() query: QueryRoutineDto) {
     const { count, items } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

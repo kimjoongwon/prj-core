@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { SessionDto, CreateSessionDto, UpdateSessionDto, SessionQueryDto } from '../dto';
+import { SessionDto, CreateSessionDto, UpdateSessionDto, QuerySessionDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { SessionsService } from '../service';
@@ -93,7 +93,7 @@ export class SessionsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
-  async getSessionsByQuery(@Query() query: SessionQueryDto) {
+  async getSessionsByQuery(@Query() query: QuerySessionDto) {
     const { count, sessions } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ActionDto, CreateActionDto, UpdateActionDto, ActionQueryDto } from '../dto';
+import { ActionDto, CreateActionDto, UpdateActionDto, QueryActionDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ActionsService } from '../service';
@@ -93,7 +93,7 @@ export class ActionsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ActionDto, HttpStatus.OK, { isArray: true })
-  async getActionsByQuery(@Query() query: ActionQueryDto) {
+  async getActionsByQuery(@Query() query: QueryActionDto) {
     const { count, actions } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

@@ -13,7 +13,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { RoleDto, CreateRoleDto, UpdateRoleDto, RoleQueryDto } from '../dto';
+import { RoleDto, CreateRoleDto, UpdateRoleDto, QueryRoleDto } from '../dto';
 import { ResponseEntity } from '../entity';
 import { RolesService } from '../service';
 
@@ -71,7 +71,7 @@ export class RolesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
-  async getRolesByQuery(@Query() query: RoleQueryDto) {
+  async getRolesByQuery(@Query() query: QueryRoleDto) {
     const { count, roles } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ExerciseDto, CreateExerciseDto, UpdateExerciseDto, ExerciseQueryDto } from '../dto';
+import { ExerciseDto, CreateExerciseDto, UpdateExerciseDto, QueryExerciseDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ExercisesService } from '../service/exercises.service';
@@ -28,7 +28,7 @@ export class ExercisesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK, { isArray: true })
-  async getExercisesByQuery(@Query() query: ExerciseQueryDto) {
+  async getExercisesByQuery(@Query() query: QueryExerciseDto) {
     const { count, exercises } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
