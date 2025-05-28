@@ -1,6 +1,5 @@
 'use client';
 
-// import { ModalMount } from '@/components';
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import { AppProvider, QueryProvider } from '@shared/frontend';
 import { NuqsAdapter } from 'nuqs/adapters/next';

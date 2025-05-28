@@ -17,6 +17,7 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
+// Define ILLIT as a global variable that will be initialized by AppProvider
 export let ILLIT: Illit;
 
 export const AppProvider = (props: StoreProviderProps) => {
@@ -50,6 +51,7 @@ export const AppProvider = (props: StoreProviderProps) => {
       const depotService = new DepotService();
       const modalService = new ModalService();
 
+      // Initialize the global ILLIT instance
       ILLIT = new Illit(navigationService, depotService, modalService);
 
       setIsInitialized(true);
