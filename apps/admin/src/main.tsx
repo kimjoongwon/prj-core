@@ -6,7 +6,8 @@ import {
   type RouteObject,
 } from 'react-router';
 import { observer } from 'mobx-react-lite';
-import { RouteBuilder as IRouteBuilder } from '@shared/types';
+import { type RouteBuilder as IRouteBuilder } from '@shared/types';
+import { RouteBuilder, useApp } from '@shared/frontend';
 import { v4 } from 'uuid';
 import { Spinner } from '@heroui/react';
 import { Providers } from './Providers';
@@ -21,6 +22,10 @@ const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
 });
 
 const App = observer(() => {
+  const app = useApp();
+  const navigation = app.navigation;
+  const isInitialized = app.isInitialized;
+
   const router = createBrowserRouter(
     navigation.routeBuilders?.map(generateRouteObject),
   );

@@ -87,8 +87,8 @@ export class UserClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
-  async deleteUserClassification(@Param('userClassificationId') userClassificationId: string) {
-    const userClassification = await this.service.deleteById(userClassificationId);
+  async deleteUserClassification(@Param('id') id: string) {
+    const userClassification = await this.service.deleteById(id);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

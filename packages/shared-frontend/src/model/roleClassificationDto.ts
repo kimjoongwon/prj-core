@@ -3,18 +3,18 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDto } from './tenantDto';
+import type { CategoryDto } from './categoryDto';
+import type { RoleDto } from './roleDto';
 
-export interface GroupDto {
+export interface RoleClassificationDto {
   id: string;
   seq: number;
   createdAt: string;
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  name: string;
-  /** @nullable */
-  label?: string | null;
-  tenantId: string;
-  tenant?: TenantDto;
+  roleId: string;
+  categoryId: string;
+  category?: CategoryDto;
+  role?: RoleDto;
 }

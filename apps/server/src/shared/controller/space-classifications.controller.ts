@@ -1,10 +1,26 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
 import { ResponseEntity } from '../entity';
 import { SpaceClassificationsService } from '../service/space-classifications.service';
-import { CreateSpaceClassificationDto, UpdateSpaceClassificationDto, SpaceClassificationDto, QuerySpaceClassificationDto } from '../dto';
+import {
+  CreateSpaceClassificationDto,
+  UpdateSpaceClassificationDto,
+  SpaceClassificationDto,
+  QuerySpaceClassificationDto,
+} from '../dto';
 
 @ApiTags('SPACE-CLASSIFICATIONS')
 @Controller()
@@ -15,7 +31,9 @@ export class SpaceClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async createSpaceClassification(@Body() createSpaceClassificationDto: CreateSpaceClassificationDto) {
+  async createSpaceClassification(
+    @Body() createSpaceClassificationDto: CreateSpaceClassificationDto,
+  ) {
     const spaceClassification = await this.service.create(createSpaceClassificationDto);
 
     return new ResponseEntity(
@@ -71,8 +89,8 @@ export class SpaceClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async deleteSpaceClassification(@Param('spaceClassificationId') spaceClassificationId: string) {
-    const spaceClassification = await this.service.deleteById(spaceClassificationId);
+  async deleteSpaceClassification(@Param('id') id: string) {
+    const spaceClassification = await this.service.deleteById(id);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

@@ -11,5 +11,4 @@ export interface CreateCategoryDto {
   type: CategoryTypes;
   /** @nullable */
   parentId: string | null;
-  serviceId: string;
 }

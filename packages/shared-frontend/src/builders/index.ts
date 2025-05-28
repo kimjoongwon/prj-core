@@ -7,3 +7,4 @@ export * from './InputBuilder';
 export * from './NotificationBuilder';
 export * from './Page/PageBuilder';
 export * from './TabNavigation/TabNavigation';
+export * from './RouteBuilder/RouteBuilder';

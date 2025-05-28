@@ -8,6 +8,5 @@ export interface UpdateGroupDto {
   name?: string;
   /** @nullable */
   label?: string | null;
-  serviceId?: string;
   tenantId?: string;
 }

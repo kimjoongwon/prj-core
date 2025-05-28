@@ -3,18 +3,16 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDto } from './tenantDto';
+import type { UserDto } from './userDto';
 
-export interface GroupDto {
+export interface UserClassificationDto {
   id: string;
   seq: number;
   createdAt: string;
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  name: string;
-  /** @nullable */
-  label?: string | null;
-  tenantId: string;
-  tenant?: TenantDto;
+  categoryId?: string;
+  userId?: string;
+  user?: UserDto;
 }

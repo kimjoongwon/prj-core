@@ -4,7 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { TenantDto } from './tenantDto';
-import type { ClassificationDto } from './classificationDto';
+import type { FileClassificationDto } from './fileClassificationDto';
 
 export interface FileDto {
   id: string;
@@ -20,5 +20,5 @@ export interface FileDto {
   mimeType: string;
   url: string;
   tenant?: TenantDto;
-  classification?: ClassificationDto;
+  classification?: FileClassificationDto;
 }

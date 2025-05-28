@@ -1,10 +1,26 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
 import { ResponseEntity } from '../entity';
 import { FileClassificationsService } from '../service/file-classifications.service';
-import { CreateFileClassificationDto, UpdateFileClassificationDto, FileClassificationDto, QueryFileClassificationDto } from '../dto';
+import {
+  CreateFileClassificationDto,
+  UpdateFileClassificationDto,
+  FileClassificationDto,
+  QueryFileClassificationDto,
+} from '../dto';
 
 @ApiTags('FILE-CLASSIFICATIONS')
 @Controller()
@@ -71,8 +87,8 @@ export class FileClassificationsController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
-  async deleteFileClassification(@Param('fileClassificationId') fileClassificationId: string) {
-    const fileClassification = await this.service.deleteById(fileClassificationId);
+  async deleteFileClassification(@Param('id') id: string) {
+    const fileClassification = await this.service.deleteById(id);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

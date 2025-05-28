@@ -11,5 +11,4 @@ export interface UpdateCategoryDto {
   type?: CategoryTypes;
   /** @nullable */
   parentId?: string | null;
-  serviceId?: string;
 }

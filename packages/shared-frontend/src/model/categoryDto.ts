@@ -4,8 +4,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CategoryTypes } from './categoryTypes';
-import type { ServiceDto } from './serviceDto';
-import type { ClassificationDto } from './classificationDto';
 
 export interface CategoryDto {
   id: string;
@@ -19,9 +17,6 @@ export interface CategoryDto {
   type: CategoryTypes;
   /** @nullable */
   parentId: string | null;
-  serviceId: string;
-  service?: ServiceDto;
   parent?: CategoryDto;
   children?: CategoryDto;
-  classifications?: ClassificationDto;
 }
