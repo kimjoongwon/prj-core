@@ -31,3 +31,6 @@ export * from './assignment.dto';
 export * from './ground.dto';
 export * from './workspace.dto';
 export * from './profile.dto';
+export * from './classification.dto';
+export * from './content.dto';
+export * from './task.dto';

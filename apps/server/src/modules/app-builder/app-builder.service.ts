@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { RouteBuilder } from '@shared/types';
-import { LoginPage } from './pages/login.page';
+import { LoginPage } from './components/pages/login.page';
 
 @Injectable()
-export class BuilderService {
+export class AppBuilderService {
   constructor(
     readonly prisma: PrismaService,
     readonly loginPage: LoginPage,
