@@ -11,14 +11,6 @@ import { RolesPage } from './roles.page';
 import { RoutineEditPage } from './routine-edit.page';
 import { SessionEditPage } from './session-edit.page';
 import { SessionsPage } from './sessions.page';
-import { SpaceEditPage } from './space-edit.page';
-import { SpacesPage } from './spaces.page';
-import { TenantsPage } from './tenants.page';
-import { TimelineEditPage } from './timeline-edit.page';
-import { TimelinesPage } from './timelines.page';
-import { UsersPage } from './users.page';
-import { TasksPage } from './tasks.page';
-import { TaskEditPage } from './task-edit.page';
 import { ExercisesPage } from './exercises.page';
 import { ExerciseEditPage } from './exercise-edit.page';
 import { GroupPage } from './group.page';
@@ -40,14 +32,6 @@ const modules = [
   RoutineEditPage,
   SessionEditPage,
   SessionsPage,
-  SpaceEditPage,
-  SpacesPage,
-  TenantsPage,
-  TimelineEditPage,
-  TimelinesPage,
-  UsersPage,
-  TasksPage,
-  TaskEditPage,
   ExercisesPage,
   ExerciseEditPage,
   GroundsPage,

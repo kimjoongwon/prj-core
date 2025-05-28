@@ -41,8 +41,6 @@ import {
 } from './validator.decorators';
 import { Constructor } from '../constant/types';
 import { InputBuilder } from '@shared/types';
-import { inputModules } from '../domain';
-import { each } from 'lodash';
 
 interface IFieldOptions extends Omit<InputProps, 'type'> {
   required?: boolean;
@@ -137,18 +135,6 @@ export function NumberFieldOptional(
   return applyDecorators(IsUndefinable(), NumberField({ required: false, ...options }));
 }
 
-// export function Validation(validation: ValidationBuilder) {
-//   return (target: any, propertyKey: string) => {
-//     Reflect.defineMetadata(ValidationKey, validation, target, propertyKey);
-//   };
-// }
-
-export function FormType(type: keyof typeof inputModules) {
-  return (target: any, propertyKey: string) => {
-    Reflect.defineMetadata(FormTypeKey, type, target, propertyKey);
-  };
-}
-
 export const DefaultKey = 'default';
 
 export function Default(value: any) {
@@ -176,33 +162,6 @@ export function StringField(
       }),
     );
   }
-  // decorators.push(Default(options.default));
-
-  // decorators.push(
-  //   Input({
-  //     type: options.formType || 'Input',
-  //     props: {
-  //       label: options.label,
-  //       placeholder: options.placeholder,
-  //     } as InputProps,
-  //     path: '',
-  //     validation: {
-  //       type: 'string',
-  //       minLength: options.minLength || 1,
-  //       maxLength: options.maxLength,
-  //       required: options.required || true,
-  //       pattern: options.pattern,
-  //       errorMessages: {
-  //         pattern: options.pattern ? `형식이 올바르지 않습니다.` : undefined,
-  //         minLength: `최소 ${options.minLength || 1}자 이상 입력해주세요.`,
-  //         maxLength: options.maxLength
-  //           ? `최대 ${options.maxLength}자까지 입력 가능합니다.`
-  //           : undefined,
-  //         required: options.required ? `필수 입력 항목입니다.` : undefined,
-  //       },
-  //     },
-  //   }),
-  // );
 
   if (options.nullable) {
     decorators.push(

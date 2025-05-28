@@ -44,12 +44,12 @@ import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
-import { ColumnBuilderService } from '../../modules/builder/builder/column/column-builder.service';
-import { DataGridBuilderService } from '../../modules/builder/builder/data-grid/data-grid-builder.service';
-import { FormBuilderService } from '../../modules/builder/builder/form/form-builder.service';
-import { InputBuilderService } from '../../modules/builder/builder/Input/Input-builder.service';
-import { ButtonBuilderService } from '../../modules/builder/builder/button/button-builder.service';
-import { ResourceConfigService } from '../../modules/builder/builder/services/resource-config.service';
+import { ColumnBuilderService } from '../../modules/app-builder/components/column/column-builder.service';
+import { DataGridBuilderService } from '../../modules/app-builder/components/data-grid/data-grid-builder.service';
+import { FormBuilderService } from '../../modules/app-builder/components/form/form-builder.service';
+import { InputBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
+import { ButtonBuilderService } from '../../modules/app-builder/components/button/button-builder.service';
+import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
 
 const modules = [
   AbilitiesService,

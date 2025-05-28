@@ -1,4 +1,4 @@
-import { ClassField, UUIDField, UUIDFieldOptional } from '../decorator';
+import { ClassField, UUIDField} from '../decorator';
 import { AbstractDto, CategoryDto } from '.';
 
 export abstract class ClassificationDto extends AbstractDto {
