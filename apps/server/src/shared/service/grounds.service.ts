@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GroundsRepository } from '../repository/grounds.repository';
-import { CreateGroundDto, GroundQueryDto, UpdateGroundDto } from '../dto';
+import { CreateGroundDto, QueryGroundDto, UpdateGroundDto } from '../dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 
@@ -98,7 +98,7 @@ export class GroundsService {
     });
   }
 
-  async getManyByQuery(query: GroundQueryDto) {
+  async getManyByQuery(query: QueryGroundDto) {
     const args = query.toArgs<Prisma.GroundFindManyArgs>({
       include: {
         workspace: {

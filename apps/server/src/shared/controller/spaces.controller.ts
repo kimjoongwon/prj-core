@@ -13,7 +13,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { CreateSpaceDto, UpdateSpaceDto, SpaceQueryDto } from '../dto';
+import { CreateSpaceDto, UpdateSpaceDto, QuerySpaceDto } from '../dto';
 import { ResponseEntity } from '../entity';
 import { SpacesService } from '../service';
 import { SpaceDto } from '../dto';
@@ -72,7 +72,7 @@ export class SpacesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
-  async getSpacesByQuery(@Query() query: SpaceQueryDto) {
+  async getSpacesByQuery(@Query() query: QuerySpaceDto) {
     const { count, spaces } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

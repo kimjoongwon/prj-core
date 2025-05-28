@@ -1,14 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
 import { COMMON_ENTITY_FIELDS } from '../../constant/entity-common-fields';
-import { AssociationDto } from '../association.dto';
+import { UserAssociationDto } from '../user-association.dto';
 
-export class CreateAssociationDto extends OmitType(AssociationDto, [
-  ...COMMON_ENTITY_FIELDS,
-  'group',
-  'user',
-  'service',
-  'timeline',
-  'content',
-  'file',
-  'task',
-]) {}
+export class CreateAssociationDto extends OmitType(UserAssociationDto, [...COMMON_ENTITY_FIELDS]) {}

@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { InitService } from './init.service';
 import { ConfigService } from '@nestjs/config';
 import { PasswordService } from '../password/password.service';
@@ -7,9 +7,4 @@ import { PasswordService } from '../password/password.service';
   providers: [InitService, ConfigService, PasswordService],
   exports: [InitService],
 })
-export class InitModule implements OnModuleInit {
-  constructor(private readonly initService: InitService) {}
-  async onModuleInit() {
-    await this.initService.initApp();
-  }
-}
+export class InitModule {}

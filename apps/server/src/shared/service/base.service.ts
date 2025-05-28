@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from '../common/base.repository';
 import { AbstractEntity } from '../entity';
+import { QueryDto } from '../dto';
 
 @Injectable()
 export class BaseService<
   CreateDto,
   UpdateDto,
-  R extends AbstractEntity<R, unknown>,
+  QD extends QueryDto,
+  R extends AbstractEntity<any, unknown>,
   TRepository extends BaseRepository<
     unknown,
     unknown,
@@ -32,7 +34,7 @@ export class BaseService<
     }) as Promise<R>;
   }
 
-  async getManyByQuery(query: any) {
+  async getManyByQuery(query: QD) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const items = await this.repository.findMany(args);

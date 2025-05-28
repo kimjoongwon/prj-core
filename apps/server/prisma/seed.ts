@@ -80,7 +80,6 @@ async function main() {
     if (!existGroup) {
       await prisma.group.create({
         data: {
-          service: { connect: { seq: 2 } },
           tenant: { connect: { seq: 1 } },
           name: group.name,
         },
@@ -103,25 +102,21 @@ const spaceGroupSeed: CreateGroupDto[] = [
   {
     name: GroupNames.TEAM_TRAINING.name,
     label: '',
-    serviceId: '',
     tenantId: '',
   },
   {
     name: GroupNames.PERSONAL_TRAINNING.name,
     label: '',
-    serviceId: '',
     tenantId: '',
   },
   {
     name: GroupNames.GROUND.name,
     label: '',
-    serviceId: '',
     tenantId: '',
   },
   {
     name: GroupNames.PILATES.name,
     label: '',
-    serviceId: '',
     tenantId: '',
   },
 ];

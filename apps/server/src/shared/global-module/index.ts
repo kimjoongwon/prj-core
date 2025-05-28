@@ -4,15 +4,18 @@ import {
   ActionsService,
   AssignmentsService,
   CategoriesService,
-  ClassificationsService,
   DepotsService,
+  FileClassificationsService,
   GroundsService,
   ProgramsService,
+  RoleClassificationsService,
   RolesService,
   RoutinesService,
   SessionsService,
+  SpaceClassificationsService,
   SubjectsService,
   TimelinesService,
+  UserClassificationsService,
   UsersService,
 } from '../service';
 import {
@@ -20,16 +23,19 @@ import {
   ActionsRepository,
   AssignmentsRepository,
   CategoriesRepository,
-  ClassificationsRepository,
   ExercisesRepository,
+  FileClassificationsRepository,
   FilesRepository,
   GroundsRepository,
   ProgramsRepository,
+  RoleClassificationsRepository,
   RoutinesRepository,
   SessionsRepository,
+  SpaceClassificationsRepository,
   SubjectsRepository,
   TenantsRepository,
   TimelinesRepository,
+  UserClassificationsRepository,
   UsersRepository,
 } from '../repository';
 import { DepotsRepository } from '../repository/depots.repository';
@@ -43,6 +49,7 @@ import { DataGridBuilderService } from '../../modules/builder/builder/data-grid/
 import { FormBuilderService } from '../../modules/builder/builder/form/form-builder.service';
 import { InputBuilderService } from '../../modules/builder/builder/Input/Input-builder.service';
 import { ButtonBuilderService } from '../../modules/builder/builder/button/button-builder.service';
+import { ResourceConfigService } from '../../modules/builder/builder/services/resource-config.service';
 
 const modules = [
   AbilitiesService,
@@ -71,8 +78,6 @@ const modules = [
   UsersRepository,
   CategoriesService,
   CategoriesRepository,
-  ClassificationsService,
-  ClassificationsRepository,
   AwsService,
   ExercisesService,
   ExercisesRepository,
@@ -89,6 +94,15 @@ const modules = [
   ButtonBuilderService,
   GroundsService,
   GroundsRepository,
+  ResourceConfigService,
+  RoleClassificationsRepository,
+  RoleClassificationsService,
+  UserClassificationsRepository,
+  UserClassificationsService,
+  SpaceClassificationsRepository,
+  SpaceClassificationsService,
+  FileClassificationsRepository,
+  FileClassificationsService,
 ];
 @Global()
 @Module({

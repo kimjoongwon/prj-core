@@ -21,7 +21,6 @@ const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
 });
 
 const App = observer(() => {
-
   const router = createBrowserRouter(
     navigation.routeBuilders?.map(generateRouteObject),
   );

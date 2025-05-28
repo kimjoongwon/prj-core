@@ -6,6 +6,4 @@ export class CreateCategoryDto extends OmitType(CategoryDto, [
   ...COMMON_ENTITY_FIELDS,
   'children',
   'parent',
-  'service',
-  'classifications',
 ]) {}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AssignmentsRepository } from '../repository/assignments.repository';
-import { CreateAssignmentDto, AssignmentQueryDto, UpdateAssignmentDto } from '../dto';
+import { CreateAssignmentDto, QueryAssignmentDto, UpdateAssignmentDto } from '../dto';
 
 @Injectable()
 export class AssignmentsService {
@@ -36,7 +36,7 @@ export class AssignmentsService {
     });
   }
 
-  async getManyByQuery(query: AssignmentQueryDto) {
+  async getManyByQuery(query: QueryAssignmentDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const assignments = await this.repository.findMany(args);

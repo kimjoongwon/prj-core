@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { SubjectsRepository } from '../repository/subjects.repository';
-import { CreateSubjectDto, SubjectQueryDto } from '../dto';
+import { CreateSubjectDto, QuerySubjectDto } from '../dto';
 
 @Injectable()
 export class SubjectsService {
@@ -29,7 +29,7 @@ export class SubjectsService {
     });
   }
 
-  async getManyByQuery(query?: SubjectQueryDto) {
+  async getManyByQuery(query?: QuerySubjectDto) {
     const args = query?.toArgs();
     const countArgs = query?.toCountArgs();
     const subjects = await this.repository.findMany(args);

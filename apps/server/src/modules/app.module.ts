@@ -11,8 +11,10 @@ import { libModules } from '../main.config';
 import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
 import { CategoriesModule } from './categories/categories.module';
-import { ClassificationsModule } from './classifications/classifications.module';
-import { AssociationsModule } from './associations/associations.module';
+import { UserClassificationsModule } from './user-classifications/user-classifications.module';
+import { RoleClassificationsModule } from './role-classifications/role-classifications.module';
+import { FileClassificationsModule } from './file-classifications/file-classifications.module';
+import { SpaceClassificationsModule } from './space-classifications/space-classifications.module';
 import { BuilderModule } from './builder/builder.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from './users/users.module';
@@ -43,8 +45,10 @@ import { GlobalModule } from '@shared';
     PagesModule,
     CaslModule,
     InitModule,
-    ClassificationsModule,
-    AssociationsModule,
+    UserClassificationsModule,
+    RoleClassificationsModule,
+    FileClassificationsModule,
+    SpaceClassificationsModule,
     BuilderModule,
     CategoriesModule,
     GroupsModule,
@@ -71,10 +75,6 @@ import { GlobalModule } from '@shared';
             path: 'v1',
             children: [
               {
-                path: 'associations',
-                module: AssociationsModule,
-              },
-              {
                 path: 'auth',
                 module: AuthModule,
               },
@@ -87,24 +87,38 @@ import { GlobalModule } from '@shared';
                 module: CategoriesModule,
               },
               {
-                path: 'classifications',
-                module: ClassificationsModule,
-              },
-              {
                 path: 'groups',
                 module: GroupsModule,
               },
               {
                 path: 'spaces',
                 module: SpacesModule,
+                children: [
+                  {
+                    path: 'classifications',
+                    module: SpaceClassificationsModule,
+                  },
+                ],
               },
               {
                 path: 'users',
                 module: UsersModule,
+                children: [
+                  {
+                    path: 'classifications',
+                    module: UserClassificationsModule,
+                  },
+                ],
               },
               {
                 path: 'roles',
                 module: RolesModule,
+                children: [
+                  {
+                    path: 'classifications',
+                    module: RoleClassificationsModule,
+                  },
+                ],
               },
               {
                 path: 'actions',
@@ -145,6 +159,12 @@ import { GlobalModule } from '@shared';
               {
                 path: 'files',
                 module: FilesModule,
+                children: [
+                  {
+                    path: 'classifications',
+                    module: FileClassificationsModule,
+                  },
+                ],
               },
               {
                 path: 'grounds',

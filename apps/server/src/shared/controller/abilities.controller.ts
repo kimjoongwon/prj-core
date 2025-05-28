@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { AbilityDto, CreateAbilityDto, UpdateAbilityDto, AbilityQueryDto } from '../dto';
+import { AbilityDto, CreateAbilityDto, UpdateAbilityDto, QueryAbilityDto } from '../dto';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { AbilitiesService } from '../service';
@@ -93,7 +93,7 @@ export class AbilitiesController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AbilityDto, HttpStatus.OK, { isArray: true })
-  async getAbilitiesByQuery(@Query() query: AbilityQueryDto) {
+  async getAbilitiesByQuery(@Query() query: QueryAbilityDto) {
     const { count, abilities } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

@@ -1,4 +1,4 @@
-import { SessionQueryDto } from '../../../../shared/dto';
+import { QuerySessionDto } from '../../../../shared/dto';
 import { Order } from '../../../../shared/constant';
 
 export class SessionsPage {
@@ -18,7 +18,7 @@ export class SessionsPage {
           query: {
             params: {
               startDateTimeSortOrder: Order.ASC,
-            } as SessionQueryDto,
+            } as QuerySessionDto,
             name: 'useGetSessionsByQuery',
           },
           columns: [

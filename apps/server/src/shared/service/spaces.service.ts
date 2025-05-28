@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PaginationUtil } from '@shared/utils';
 import { SpacesRepository } from '../repository/spaces.repository';
 import { UpdateSpaceDto } from '../dto/update/update-space.dto';
-import { SpaceQueryDto } from '../dto/query/space-query.dto';
+import { QuerySpaceDto } from '../dto/query/query-space.dto';
 import { CreateSpaceDto } from '../dto/create/create-space.dto';
 
 @Injectable()
@@ -55,7 +55,7 @@ export class SpacesService {
     return this.repository.delete({ where: { id: spaceId } });
   }
 
-  async getManyByQuery(query: SpaceQueryDto) {
+  async getManyByQuery(query: QuerySpaceDto) {
     const args = PaginationUtil.toArgs(query);
     const spaceCount = await this.repository.count(args);
     const spaces = await this.repository.findMany(args);

@@ -11,18 +11,18 @@ export class TasksPage {
     const page: PageBuilder = {
       name: '리스트',
       type: 'Page',
-      dataGrid: {
-        buttons: [],
-        table: {
-          query: {
-            name: 'useGetTasksByQuery',
-            params: {
-              tenancyId,
-            },
-          },
-          // columns,
-        },
-      },
+      // dataGrid: {
+      //   buttons: [],
+      //   table: {
+      //     query: {
+      //       name: 'useGetTasksByQuery',
+      //       params: {
+      //         tenancyId,
+      //       },
+      //     },
+      //     // columns,
+      //   },
+      // },
     };
 
     return page;

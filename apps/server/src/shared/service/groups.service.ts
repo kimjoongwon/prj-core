@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { GroupsRepository } from '../repository/groups.repository';
 import { CreateGroupDto } from '../dto/create/create-group.dto';
-import { GroupQueryDto } from '../dto/query/group-query.dto';
+import { QueryGroupDto } from '../dto/query/query-group.dto';
 import { UpdateGroupDto } from '../dto/update/update-group.dto';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class GroupsService {
     return this.repository.create({ data: createGroupDto });
   }
 
-  async getManyByQuery(query: GroupQueryDto) {
+  async getManyByQuery(query: QueryGroupDto) {
     const args = query.toArgs<Prisma.GroupFindManyArgs>({
       orderBy: {
         createdAt: 'desc',

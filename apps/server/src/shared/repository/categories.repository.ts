@@ -31,9 +31,6 @@ export class CategoriesRepository extends BaseRepository<
   async findLastLeafCategoriesByServiceName(serviceName: $Enums.ServiceNames) {
     const categories = await this.prisma.category.findMany({
       where: {
-        service: {
-          name: serviceName,
-        },
         children: {
           none: {},
         },

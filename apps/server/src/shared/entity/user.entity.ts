@@ -1,4 +1,4 @@
-import { Association, Profile, Tenant, User as UserEntity } from '@prisma/client';
+import { Profile, Tenant, UserAssociation, User as UserEntity } from '@prisma/client';
 import { AbstractEntity } from './abstract.entity';
 import { UseDto } from '../decorator/use-dto.decorator';
 import { UserDto } from '../dto';
@@ -12,5 +12,5 @@ export class User extends AbstractEntity<UserDto> implements UserEntity {
 
   profiles?: Profile[];
   tenants?: Tenant[];
-  associations?: Association[];
+  associations?: UserAssociation[];
 }

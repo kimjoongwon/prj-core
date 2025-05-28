@@ -29,7 +29,6 @@ export class CategoryPage extends BasePageBuilder<CreateCategoryDto, any> {
     return {
       name: '',
       parentId: undefined,
-      serviceId: ContextProvider.getServiceId(),
       tenantId: ContextProvider.getTenantId(),
       type: 'ROOT',
     };

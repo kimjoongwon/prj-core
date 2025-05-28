@@ -12,7 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { CategoryDto, CategoryQueryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto';
+import { CategoryDto, QueryCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { CategoriesService } from '../service';
 
@@ -23,7 +23,7 @@ export class CategoriesController {
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
-  async getCategoriesByQuery(@Query() query: CategoryQueryDto) {
+  async getCategoriesByQuery(@Query() query: QueryCategoryDto) {
     const { categories, count } = await this.categoriesService.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

@@ -6,8 +6,6 @@ import {
   StringFieldOptional,
   UUIDField,
 } from '../decorator/field.decorators';
-import { ServiceDto } from './service.dto';
-import { AssociationDto } from './association.dto';
 import { TenantDto } from './tenant.dto';
 
 export class GroupDto extends AbstractDto implements Group {
@@ -17,17 +15,8 @@ export class GroupDto extends AbstractDto implements Group {
   @StringFieldOptional({ nullable: true })
   label: string | null;
 
-  @StringField()
-  serviceId: string;
-
   @UUIDField()
   tenantId: string;
-
-  @ClassField(() => ServiceDto, { required: false })
-  service?: ServiceDto;
-
-  @ClassField(() => AssociationDto, { each: true, required: false })
-  associations?: AssociationDto[];
 
   @ClassField(() => TenantDto, { required: false })
   tenant?: TenantDto;

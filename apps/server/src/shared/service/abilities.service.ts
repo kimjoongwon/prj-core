@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { AbilitiesRepository } from '../repository/abilities.repository';
-import { AbilityQueryDto } from '../dto/query/ability-query.dto';
+import { QueryAbilityDto } from '../dto/query/query-ability.dto';
 import { CreateAbilityDto } from '../dto';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class AbilitiesService {
     });
   }
 
-  async getManyByQuery(query: AbilityQueryDto) {
+  async getManyByQuery(query: QueryAbilityDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const abilities = await this.repository.findMany(args);

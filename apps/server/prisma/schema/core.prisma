@@ -7,11 +7,9 @@ model Category {
   name                 String                @unique
   type                 CategoryTypes         @default(ROOT)
   parentId             String?
-  serviceId            String
   tenantId             String
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
   children             Category[]            @relation("CategoryToCategory")
-  service              Service               @relation(fields: [serviceId], references: [id])
   tenant               Tenant                @relation(fields: [tenantId], references: [id])
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
@@ -27,9 +25,7 @@ model Group {
   removedAt         DateTime?          @db.Timestamptz(6)
   name              String
   label             String?
-  serviceId         String
   tenantId          String
-  service           Service            @relation(fields: [serviceId], references: [id])
   tenant            Tenant             @relation(fields: [tenantId], references: [id])
   userAssociations  UserAssociation[]
   roleAssociations  RoleAssociation[]
@@ -65,15 +61,13 @@ model Exercise {
 }
 
 model Service {
-  id         String       @id @default(uuid())
-  seq        Int          @unique @default(autoincrement())
-  createdAt  DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt  DateTime?    @db.Timestamptz(6)
-  label      String
-  name       ServiceNames @unique
-  categories Category[]
-  groups     Group[]
+  id        String       @id @default(uuid())
+  seq       Int          @unique @default(autoincrement())
+  createdAt DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime?    @updatedAt @db.Timestamptz(6)
+  removedAt DateTime?    @db.Timestamptz(6)
+  label     String
+  name      ServiceNames @unique
 }
 
 model Profile {

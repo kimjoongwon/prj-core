@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from '../repository';
-import { CreateTenantDto, UpdateTenantDto, TenantQueryDto } from '../dto';
+import { CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '../dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class TenantsService {
     });
   }
 
-  async getManyByQuery(query: TenantQueryDto) {
+  async getManyByQuery(query: QueryTenantDto) {
     const args = query.toArgs() as Prisma.TenantFindManyArgs;
     args.include = {
       space: true,

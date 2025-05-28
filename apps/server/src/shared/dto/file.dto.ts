@@ -2,7 +2,7 @@ import { File } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import { ClassField, NumberField, StringField, UUIDField } from '../decorator';
 import { TenantDto } from './tenant.dto';
-import { ClassificationDto } from './user-classification.dto';
+import { FileClassificationDto } from './file-classification.dto';
 
 export class FileDto extends AbstractDto implements File {
   @UUIDField()
@@ -26,6 +26,6 @@ export class FileDto extends AbstractDto implements File {
   @ClassField(() => TenantDto, { required: false })
   tenant?: TenantDto;
 
-  @ClassField(() => ClassificationDto, { required: false })
-  classification?: ClassificationDto;
+  @ClassField(() => FileClassificationDto, { required: false })
+  classification?: FileClassificationDto;
 }

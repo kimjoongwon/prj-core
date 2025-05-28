@@ -22,7 +22,6 @@ export class GroupPage {
     return {
       name: '',
       label: undefined,
-      serviceId: ContextProvider.getServiceId(),
       tenantId: ContextProvider.getTenantId(),
     };
   }

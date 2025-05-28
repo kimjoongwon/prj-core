@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ExercisesRepository } from '../repository';
-import { CreateExerciseDto, ExerciseQueryDto, UpdateExerciseDto } from '../dto';
+import { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '../dto';
 import { ContextProvider } from '../provider/context.provider';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ExercisesService {
 
     return exercise;
   }
-  async getManyByQuery(query: ExerciseQueryDto) {
+  async getManyByQuery(query: QueryExerciseDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const exercises = await this.repository.findMany(args);

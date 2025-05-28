@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { UserDto, CreateUserDto, UpdateUserDto, UserQueryDto, GroundDto } from '../dto';
+import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto, GroundDto } from '../dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { UsersService } from '../service';
 import { ApiTags } from '@nestjs/swagger';
@@ -99,7 +99,7 @@ export class UsersController {
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK, { isArray: true })
-  async getUsersByQuery(@Query() query: UserQueryDto) {
+  async getUsersByQuery(@Query() query: QueryUserDto) {
     const { count, users } = await this.service.getManyByQuery(query);
 
     return new ResponseEntity(

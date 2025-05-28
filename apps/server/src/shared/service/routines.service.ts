@@ -8,6 +8,7 @@ import { Routine } from '../entity/routine.entity';
 export class RoutinesService extends BaseService<
   CreateRoutineDto,
   UpdateRoutineDto,
+  any,
   Routine,
   RoutinesRepository
 > {

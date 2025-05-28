@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProgramsRepository } from '../repository/programs.repository';
-import { CreateProgramDto, ProgramQueryDto, UpdateProgramDto } from '../dto';
+import { CreateProgramDto, QueryProgramDto, UpdateProgramDto } from '../dto';
 import { Program } from '../entity/program.entity';
 import { BaseService } from './base.service';
 
@@ -8,6 +8,7 @@ import { BaseService } from './base.service';
 export class ProgramsService extends BaseService<
   CreateProgramDto,
   UpdateProgramDto,
+  QueryProgramDto,
   Program,
   ProgramsRepository
 > {

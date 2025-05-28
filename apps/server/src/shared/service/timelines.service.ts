@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { TimelinesRepository } from '../repository/timeline.repository';
-import { CreateTimelineDto, TimelineQueryDto } from '../dto';
+import { CreateTimelineDto, QueryTimelineDto } from '../dto';
 
 @Injectable()
 export class TimelinesService {
@@ -29,7 +29,7 @@ export class TimelinesService {
     });
   }
 
-  async getManyByQuery(query: TimelineQueryDto) {
+  async getManyByQuery(query: QueryTimelineDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const timelines = await this.repository.findMany(args);

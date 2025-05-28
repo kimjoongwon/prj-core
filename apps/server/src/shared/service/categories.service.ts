@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { $Enums, Prisma } from '@prisma/client';
 import { UpdateCategoryDto } from '../dto/update/update-category.dto';
-import { CategoryQueryDto } from '../dto/query/category-query.dto';
+import { QueryCategoryDto } from '../dto/query/query-category.dto';
 import { CategoriesRepository } from '../repository';
 import { Category } from '../entity/category.entity';
 
@@ -53,7 +53,7 @@ export class CategoriesService {
     });
   }
 
-  async getManyByQuery(query: CategoryQueryDto) {
+  async getManyByQuery(query: QueryCategoryDto) {
     const args = query.toArgs<Prisma.CategoryFindManyArgs>({
       include: {
         children: {

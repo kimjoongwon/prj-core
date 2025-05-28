@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repository/depots.repository';
-import { CreateFileDto, DepotQueryDto, UpdateDepotDto } from '../dto';
+import { CreateFileDto, QueryDepotDto, UpdateDepotDto } from '../dto';
 import { AwsService } from '../domain/aws/aws.service';
 import { ContextProvider } from '../provider';
 import { PrismaService } from 'nestjs-prisma';
@@ -14,7 +14,7 @@ export class DepotsService {
     private readonly repository: DepotsRepository,
     private readonly awsService: AwsService,
     private readonly categoriesRepository: CategoriesRepository,
-  ) { }
+  ) {}
 
   getUnique(args: Prisma.DepotFindUniqueArgs) {
     return this.repository.findUnique(args);
@@ -28,21 +28,12 @@ export class DepotsService {
           where: {
             removedAt: null,
           },
-          include: {
-            classification: {
-              include: {
-                category: true,
-              },
-            },
-          },
         },
       },
     });
   }
 
-  async create(
-    files: Express.Multer.File[] = [],
-  ) {
+  async create(files: Express.Multer.File[] = []) {
     const tenantId = ContextProvider.getTenantId();
 
     const fileDtos = await Promise.all(
@@ -58,7 +49,6 @@ export class DepotsService {
           mimeType: file.mimetype,
           size: file.size,
           tenantId,
-
         };
       }),
     );
@@ -76,7 +66,7 @@ export class DepotsService {
     return this.repository.delete({ where: { id } });
   }
 
-  async getManyByQuery(query: DepotQueryDto) {
+  async getManyByQuery(query: QueryDepotDto) {
     const args = query.toArgs();
     const countArgs = query.toCountArgs();
     const depots = await this.repository.findMany(args);
