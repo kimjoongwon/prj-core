@@ -7,6 +7,7 @@ import { AppBuilderService } from './app-builder.service';
 @Controller()
 export class AppBuilderController {
   constructor(private readonly appBuilderService: AppBuilderService) {}
+
   @Get()
   @Auth([], { public: true })
   async getAppBuilder() {

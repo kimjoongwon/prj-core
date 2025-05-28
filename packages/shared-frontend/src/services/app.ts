@@ -12,7 +12,6 @@ export class Illit {
     readonly depot: DepotService,
     readonly modal: ModalService,
   ) {
-    this.isInitialized = true;
     makeAutoObservable(this);
   }
 }

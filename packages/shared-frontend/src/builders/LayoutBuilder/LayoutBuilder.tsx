@@ -10,6 +10,7 @@ import {
 } from '@shared/frontend';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
+import { Outlet } from 'react-router';
 // import { action } from 'mobx';
 // import { v4 } from 'uuid';
 // import { PathUtil } from '@shared/utils';
@@ -65,11 +66,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   //   return <ModalLayout layoutBuilder={layoutBuilder}>{children}</ModalLayout>;
   // }
 
-  // if (!layoutBuilder) {
-  //   return <Outlet />;
-  // }
-
-  return children;
+  return <Outlet />;
 });
 
 // export const AuthLayout = observer((props: AuthLayoutProps) => {

@@ -1,18 +1,16 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 type NavigateFunction = (pathnameWithSearchParams: string) => void;
 
 export class NavigationService {
   routes: Route[] = [];
+  routeBuilders: RouteBuilder[] = [];
   navigateFunction?: NavigateFunction;
 
-  constructor(
-    readonly routeBuilders: RouteBuilder[],
-    readonly router: AppRouterInstance,
-  ) {
+  constructor(routeBuilders: RouteBuilder[] = []) {
+    this.routeBuilders = routeBuilders;
     this.getRoutes();
     this.activateRoute(window.location.pathname);
     makeAutoObservable(this);
@@ -79,6 +77,10 @@ export class NavigationService {
     };
 
     this.routes?.forEach(changeRouteActiveState);
+  }
+
+  setRoutes(routeBuilders: RouteBuilder[]) {
+    this.routeBuilders = routeBuilders;
   }
 
   getRoutes() {
