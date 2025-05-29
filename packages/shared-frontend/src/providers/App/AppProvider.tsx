@@ -9,8 +9,10 @@ import {
   Illit,
   ModalService,
   NavigationService,
+  routeNavigator,
 } from '../../services';
 import { observer } from 'mobx-react-lite';
+import DevTools from 'mobx-react-devtools';
 
 const StoreContext = createContext<Illit | null>(null);
 
@@ -34,21 +36,25 @@ export const AppProvider = observer((props: StoreProviderProps) => {
       const depotService = new DepotService();
       const modalService = new ModalService();
 
+      // RouteNavigator 초기화
+      routeNavigator.setRoutes(routeBuilders);
+
       // Initialize the global ILLIT instance
       ILLIT = new Illit(navigationService, depotService, modalService);
       ILLIT.isInitialized = true;
       setIsInitialized(true);
-      console.log('init!');
     }
   }, [routeBuilders, isInitialized]);
 
-  console.log('1', isInitialized);
   if (!isInitialized) {
     return <></>;
   }
-  console.log('2');
+
   return (
-    <StoreContext.Provider value={ILLIT}>{children}</StoreContext.Provider>
+    <StoreContext.Provider value={ILLIT}>
+      {children}
+      <DevTools position="topRight" />
+    </StoreContext.Provider>
   );
 });
 

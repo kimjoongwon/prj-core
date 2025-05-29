@@ -5,14 +5,14 @@ import {
 } from 'react-router';
 import { type RouteBuilder as IRouteBuilder } from '@shared/types';
 import { ILLIT, RouteBuilder } from '@shared/frontend';
-import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';
+// Any configurations are optional
 
 // 라우트 객체를 생성하기 위한 헬퍼 함수
 const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
   path: routeBuilder?.pathname,
-  element: <RouteBuilder key={v4()} routeBuilder={routeBuilder} />,
+  Component: () => <RouteBuilder routeBuilder={routeBuilder} />,
   errorElement: <div>오류가 발생했습니다</div>,
   children: routeBuilder?.children?.map(generateRouteObject),
 });
@@ -22,11 +22,6 @@ const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
 export const App = observer(() => {
   // ILLIT이 초기화되지 않았거나 routeBuilders가 없는 경우 로딩 스피너 표시
   if (!ILLIT?.isInitialized || !ILLIT?.navigation?.routeBuilders?.length) {
-    console.log('ILLIT 초기화 상태:', ILLIT?.isInitialized);
-    console.log(
-      'routeBuilders 길이:',
-      ILLIT?.navigation?.routeBuilders?.length,
-    );
     return <Spinner label="앱을 로딩 중입니다..." />;
   }
 

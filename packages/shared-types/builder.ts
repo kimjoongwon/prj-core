@@ -100,14 +100,15 @@ export interface Option {
 
 export interface LayoutBuilder {
   name?: string;
-  type?:
-    | 'Outlet'
-    | 'Auth'
-    | 'Modal'
-    | 'Services'
-    | 'Service'
-    | 'Tab'
-    | 'DataGrid';
+  // type?:
+  //   | 'Outlet'
+  //   | 'Auth'
+  //   | 'Modal'
+  //   | 'Services'
+  //   | 'Service'
+  //   | 'Tab'
+  //   | 'DataGrid';
+  type?: string;
 }
 
 export interface RouteBuilder {

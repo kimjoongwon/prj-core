@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import {
+  AppBar,
   // AppBar,
   // Button,
   // HStack,
@@ -31,18 +32,26 @@ interface Layout {
 }
 
 type LayoutBuilderProps = Layout;
-type ModalLayoutProps = Layout;
-type DataGridLayoutProps = Layout;
-type AuthLayoutProps = Layout;
-type ServiceLayoutProps = Layout;
-type ServicesLayoutProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
 
-  // if (layoutBuilder?.type === 'Auth') {
-  //   return <AuthLayout layoutBuilder={layoutBuilder}>{children}</AuthLayout>;
-  // }
+  if (layoutBuilder?.type === 'Auth') {
+    return (
+      <AuthLayout>
+        <Outlet />
+      </AuthLayout>
+    );
+  }
+
+  if (layoutBuilder?.type === 'Root') {
+    return (
+      <div>
+        root
+        <Outlet />
+      </div>
+    );
+  }
 
   // if (layoutBuilder?.type === 'Services') {
   //   return (
@@ -65,20 +74,19 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   // if (layoutBuilder?.type === 'Modal') {
   //   return <ModalLayout layoutBuilder={layoutBuilder}>{children}</ModalLayout>;
   // }
-
-  return <Outlet />;
+  return children;
 });
 
-// export const AuthLayout = observer((props: AuthLayoutProps) => {
-//   const { children } = props;
+export const AuthLayout = observer((props: { children: ReactNode }) => {
+  const { children } = props;
 
-//   return (
-//     <>
-//       <AppBar />
-//       {children}
-//     </>
-//   );
-// });
+  return (
+    <>
+      <AppBar />
+      {children}
+    </>
+  );
+});
 
 // export const ServiceLayout = observer((props: ServiceLayoutProps) => {
 //   const { children } = props;

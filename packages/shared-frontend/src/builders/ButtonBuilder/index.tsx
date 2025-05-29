@@ -16,9 +16,9 @@ import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
 import { cloneDeep, defaultsDeep, isEmpty } from 'lodash-es';
 import { usePageState } from '../Page/PageBuilder';
-import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { v4 } from 'uuid';
+import { useNavigate } from 'react-router';
 
 interface ButtonProps extends HeroUIButtonProps {
   row?: unknown & { id: string };
@@ -29,7 +29,7 @@ interface ButtonProps extends HeroUIButtonProps {
 export const ButtonBuilder = observer((props: ButtonProps) => {
   const { buttonBuilder, row, icon, ...rest } = props;
   const state = usePageState();
-  const router = useRouter();
+  const navigate = useNavigate();
   const qc = useQueryClient();
 
   const onPress = async () => {
@@ -68,7 +68,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
 
       if (navigator) {
         if (navigator.type === 'back') {
-          router.back();
+          navigate(-1);
           return;
         }
         const pathname = PathUtil.getUrlWithParamsAndQueryString(
@@ -76,7 +76,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
           params,
         );
 
-        router.push(window.location.pathname + '/' + pathname);
+        navigate(window.location.pathname + '/' + pathname);
       }
       if (button.mutation?.invalidationKey) {
         qc.invalidateQueries({

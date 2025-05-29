@@ -4,3 +4,4 @@ export * from './column';
 export * from './depot';
 export * from './modal';
 export * from './navigation';
+export * from './RouteNavigator';

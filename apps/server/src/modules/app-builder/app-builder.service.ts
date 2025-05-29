@@ -21,10 +21,16 @@ export class AppBuilderService {
       {
         name: '관리자',
         pathname: 'admin',
+        layout: {
+          type: 'Root',
+        },
         children: [
           {
             name: '인증',
             pathname: 'auth',
+            layout: {
+              type: 'Auth',
+            },
             children: [
               {
                 name: '로그인',

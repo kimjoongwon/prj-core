@@ -45,7 +45,7 @@ export const usePageState = (): PageBuilderInterface['state'] => {
 
 export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
-  const router = useRouter();
+  console.log('PageBuilder props:', pageBuilder);
 
   return (
     <PageProvder state={pageBuilder?.state}>
