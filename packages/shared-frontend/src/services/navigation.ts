@@ -1,12 +1,12 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
-
-type NavigateFunction = (pathnameWithSearchParams: string) => void;
+import { NavigateFunction } from 'react-router';
 
 export class NavigationService {
   routes: Route[] = [];
   routeBuilders: RouteBuilder[] = [];
+  navigate: NavigateFunction;
   navigateFunction?: NavigateFunction;
 
   constructor(routeBuilders: RouteBuilder[] = []) {
@@ -34,7 +34,7 @@ export class NavigationService {
       pathParams,
       urlSearchParams,
     );
-    this.router.push(pathnameWithSearchParams);
+    this.navigateFunction(pathnameWithSearchParams);
   }
 
   private findRouteByPath(pathname: string): Route | undefined {

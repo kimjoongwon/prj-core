@@ -3,7 +3,6 @@
 import React, { useEffect, useState, createContext } from 'react';
 import { RouteBuilder } from '@shared/types';
 import { useGetAppBuilder } from '../../apis';
-import { useParams, useRouter } from 'next/navigation';
 import {
   DepotService,
   Illit,
@@ -12,7 +11,6 @@ import {
   routeNavigator,
 } from '../../services';
 import { observer } from 'mobx-react-lite';
-import DevTools from 'mobx-react-devtools';
 
 const StoreContext = createContext<Illit | null>(null);
 
@@ -20,8 +18,8 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
-// Define ILLIT as a global variable that will be initialized by AppProvider
-export let ILLIT: Illit;
+// Define Plate as a global variable that will be initialized by AppProvider
+export let Plate: Illit;
 
 export const AppProvider = observer((props: StoreProviderProps) => {
   const { children } = props;
@@ -39,9 +37,9 @@ export const AppProvider = observer((props: StoreProviderProps) => {
       // RouteNavigator 초기화
       routeNavigator.setRoutes(routeBuilders);
 
-      // Initialize the global ILLIT instance
-      ILLIT = new Illit(navigationService, depotService, modalService);
-      ILLIT.isInitialized = true;
+      // Initialize the global Plate instance
+      Plate = new Illit(navigationService, depotService, modalService);
+      Plate.isInitialized = true;
       setIsInitialized(true);
     }
   }, [routeBuilders, isInitialized]);
@@ -51,10 +49,7 @@ export const AppProvider = observer((props: StoreProviderProps) => {
   }
 
   return (
-    <StoreContext.Provider value={ILLIT}>
-      {children}
-      <DevTools position="topRight" />
-    </StoreContext.Provider>
+    <StoreContext.Provider value={Plate}>{children}</StoreContext.Provider>
   );
 });
 

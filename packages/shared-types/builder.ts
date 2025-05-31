@@ -1,5 +1,5 @@
-import { Selection, TableProps } from '@heroui/react';
 import { HeaderContext, CellContext } from '@tanstack/react-table';
+import { ButtonProps, TableProps } from '.';
 
 export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
 
@@ -54,11 +54,12 @@ export interface ButtonBuilder {
   name: string;
   mutation?: Mutation;
   navigator?: Navigator;
-  alert?: Alert;
+  alert?: AlertBuilder;
   toast?: {
     title: string;
     description: string;
   };
+  buttonProps?: ButtonProps;
 }
 
 export interface CellButtonBuilder {
@@ -67,10 +68,10 @@ export interface CellButtonBuilder {
   name: string;
   mutation?: Mutation;
   navigator?: Navigator;
-  alert?: Alert;
+  alert?: AlertBuilder;
 }
 
-export interface Alert {
+export interface AlertBuilder {
   message: string;
 }
 
@@ -222,7 +223,11 @@ export interface SectionBuilder {
 
 export interface StackBuilder {
   type: 'VStack' | 'HStack';
-  inputs: InputBuilder[];
+  inputs: (InputBuilder | ElementBuilder)[];
+}
+
+export interface ElementBuilder {
+  type: 'Logo';
 }
 
 export interface DepotUploaderOptions {

@@ -7,8 +7,6 @@ import { InputBuilder } from '../InputBuilder';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { HStack, Text, VStack } from '@shared/frontend';
 import { v4 } from 'uuid';
-import { useRouter } from 'next/navigation';
-import { Divider } from '@heroui/divider';
 import { observable } from 'mobx';
 import { Form } from '@heroui/react';
 import { FormButtonBuilder } from '../FormButtonBuilder/FormButtonBuilder';
@@ -49,8 +47,6 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
 
   return (
     <PageProvder state={pageBuilder?.state}>
-      <div className="font-bold text-xl">{pageBuilder?.name}</div>
-      <Divider />
       {pageBuilder?.form && (
         <Form className="overflow-auto pb-[200px] scrollbar-hide">
           {pageBuilder?.form?.sections?.map(section => {

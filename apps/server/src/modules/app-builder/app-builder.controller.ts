@@ -14,4 +14,9 @@ export class AppBuilderController {
     const app = await this.appBuilderService.build();
     return new ResponseEntity(200, '성공', app);
   }
+
+  @Get('login-button')
+  async loginButton() {
+    return new ResponseEntity(200, '성공', {});
+  }
 }

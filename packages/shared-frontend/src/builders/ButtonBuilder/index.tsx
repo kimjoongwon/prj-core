@@ -20,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { v4 } from 'uuid';
 import { useNavigate } from 'react-router';
 
-interface ButtonProps extends HeroUIButtonProps {
+interface ButtonProps {
   row?: unknown & { id: string };
   buttonBuilder: ButtonBuilderProps;
   icon?: React.ReactNode;
@@ -28,6 +28,8 @@ interface ButtonProps extends HeroUIButtonProps {
 
 export const ButtonBuilder = observer((props: ButtonProps) => {
   const { buttonBuilder, row, icon, ...rest } = props;
+  const { buttonProps } = buttonBuilder;
+  console.log('ButtonBuilder props:', props.buttonBuilder.buttonProps);
   const state = usePageState();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -98,11 +100,11 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
     }
   };
 
-  console.log('button state', state?.form?.button);
   return (
     <>
       <BaseButton
         {...rest}
+        {...buttonProps}
         isIconOnly={!!icon}
         onPress={onPress}
         color={buttonBuilder?.color || 'primary'}

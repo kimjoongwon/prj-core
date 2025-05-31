@@ -16,6 +16,14 @@ export class AppBuilderService {
     };
   }
 
+  path() {
+    return {
+      routeName: '',
+      state: '',
+      routes: {},
+    };
+  }
+
   getRoute(): RouteBuilder[] {
     return [
       {
@@ -48,52 +56,58 @@ export class AppBuilderService {
                 pathname: ':id',
                 children: [
                   {
-                    name: '그라운드',
-                    pathname: 'ground',
+                    name: '대시보드',
+                    pathname: 'dashboard',
                     children: [
                       {
-                        name: '리스트',
-                        pathname: 'resources',
+                        name: '그라운드',
+                        pathname: 'ground',
                         children: [
                           {
-                            name: '디테일',
-                            pathname: ':id',
+                            name: '리스트',
+                            pathname: 'resources',
                             children: [
                               {
-                                name: '편집',
-                                pathname: ':type',
+                                name: '디테일',
+                                pathname: ':id',
+                                children: [
+                                  {
+                                    name: '편집',
+                                    pathname: ':type',
+                                  },
+                                ],
                               },
                             ],
                           },
-                        ],
-                      },
-                      {
-                        name: '카테고리',
-                        pathname: 'categories',
-                        children: [
                           {
-                            name: '디테일',
-                            pathname: ':id',
+                            name: '카테고리',
+                            pathname: 'categories',
                             children: [
                               {
-                                name: '편집',
-                                pathname: ':type',
+                                name: '디테일',
+                                pathname: ':id',
+                                children: [
+                                  {
+                                    name: '편집',
+                                    pathname: ':type',
+                                  },
+                                ],
                               },
                             ],
                           },
-                        ],
-                      },
-                      {
-                        name: '그룹',
-                        pathname: 'groups',
-                        children: [
                           {
-                            name: '디테일',
-                            pathname: ':id',
+                            name: '그룹',
+                            pathname: 'groups',
                             children: [
                               {
-                                name: '편집',
-                                pathname: ':type',
+                                name: '디테일',
+                                pathname: ':id',
+                                children: [
+                                  {
+                                    name: '편집',
+                                    pathname: ':type',
+                                  },
+                                ],
                               },
                             ],
                           },

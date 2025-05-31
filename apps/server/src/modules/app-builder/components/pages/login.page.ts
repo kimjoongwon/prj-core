@@ -39,6 +39,11 @@ export class LoginPage {
         type: 'push' as const,
         pathname: '/admin/main/tenants',
       },
+      buttonProps: {
+        size: 'md',
+        fullWidth: true,
+        color: 'primary',
+      },
     });
   }
 
@@ -61,7 +66,6 @@ export class LoginPage {
     const button = this.createLoginButton();
     const formInputs = this.getDefaultLoginDto();
     const sections = this.buildSections(inputs);
-
     const form = this.formBuilderService.build({
       id: 'login',
       type: 'create',
