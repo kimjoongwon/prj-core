@@ -3,15 +3,18 @@ import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
 import { NavigateFunction } from 'react-router';
 
+// Next.js와 React Router 모두 지원하기 위한 타입
+type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
+
 /**
  * UnifiedNavigationService - 통합된 네비게이션 서비스
  * 라우트 관리, 네비게이션, 활성 상태 추적 등 모든 라우팅 관련 기능을 통합
  */
 export class UnifiedNavigationService {
   private routes: Route[] = [];
-  private routeBuilders: RouteBuilder[] = [];
+  private _routeBuilders: RouteBuilder[] = [];
   private flatRoutes: Map<string, RouteBuilder> = new Map();
-  private navigateFunction?: NavigateFunction;
+  private navigateFunction?: UniversalNavigateFunction;
 
   constructor(routeBuilders: RouteBuilder[] = []) {
     this.setRoutes(routeBuilders);
@@ -20,21 +23,21 @@ export class UnifiedNavigationService {
   }
 
   // ===== 네비게이션 함수 관리 =====
-  
+
   /**
-   * React Router의 navigate 함수 설정
+   * React Router의 navigate 함수 또는 Next.js router.push 설정
    */
-  setNavigateFunction(navigateFunction: NavigateFunction): void {
+  setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
     this.navigateFunction = navigateFunction;
   }
 
   // ===== 라우트 데이터 관리 =====
-  
+
   /**
    * 라우트 빌더 설정 및 초기화
    */
   setRoutes(routeBuilders: RouteBuilder[]): void {
-    this.routeBuilders = routeBuilders;
+    this._routeBuilders = routeBuilders;
     this.generateRoutesFromBuilders();
     this.flattenRoutes(routeBuilders);
   }
@@ -60,14 +63,14 @@ export class UnifiedNavigationService {
   private flattenRoutes(routes: RouteBuilder[], parentPath: string = ''): void {
     routes.forEach(route => {
       const fullPath = this.combinePaths(parentPath, route.pathname || '');
-      
+
       if (route.name) {
         this.flatRoutes.set(route.name, {
           ...route,
-          pathname: fullPath
+          pathname: fullPath,
         });
       }
-      
+
       if (route.children && route.children.length > 0) {
         this.flattenRoutes(route.children, fullPath);
       }
@@ -75,7 +78,7 @@ export class UnifiedNavigationService {
   }
 
   // ===== 라우트 검색 및 조회 =====
-  
+
   /**
    * 이름으로 라우트 검색
    */
@@ -140,7 +143,7 @@ export class UnifiedNavigationService {
   }
 
   // ===== 네비게이션 기능 =====
-  
+
   /**
    * 경로 네비게이션
    */
@@ -150,7 +153,9 @@ export class UnifiedNavigationService {
     searchParams?: Record<string, string>,
   ): void {
     if (!this.navigateFunction) {
-      console.warn('NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.');
+      console.warn(
+        'NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.',
+      );
       return;
     }
 
@@ -158,13 +163,13 @@ export class UnifiedNavigationService {
     if (searchParams) {
       urlSearchParams = new URLSearchParams(searchParams).toString();
     }
-    
+
     const pathnameWithSearchParams = PathUtil.getUrlWithParamsAndQueryString(
       pathname,
       pathParams,
       urlSearchParams,
     );
-    
+
     this.navigateFunction(pathnameWithSearchParams);
   }
 
@@ -181,7 +186,7 @@ export class UnifiedNavigationService {
       console.warn(`라우트 이름 "${routeName}"을 찾을 수 없습니다.`);
       return;
     }
-    
+
     this.push(pathname, pathParams, searchParams);
   }
 
@@ -191,7 +196,7 @@ export class UnifiedNavigationService {
   getConditionalPath(
     condition: boolean,
     routeNameIfTrue: string,
-    routeNameIfFalse: string
+    routeNameIfFalse: string,
   ): string | undefined {
     return condition
       ? this.getPathByName(routeNameIfTrue)
@@ -213,7 +218,7 @@ export class UnifiedNavigationService {
   }
 
   // ===== 활성 상태 관리 =====
-  
+
   /**
    * 현재 경로에 따라 라우트 활성 상태 업데이트
    */
@@ -227,14 +232,14 @@ export class UnifiedNavigationService {
   }
 
   // ===== 유틸리티 메서드 =====
-  
+
   /**
    * 경로 결합 헬퍼 함수
    */
   private combinePaths(parent: string, child: string): string {
     if (!parent) return child;
     if (!child) return parent;
-    
+
     // 중복된 '/' 제거
     return `${parent.endsWith('/') ? parent.slice(0, -1) : parent}${
       child.startsWith('/') ? child : `/${child}`
@@ -246,7 +251,7 @@ export class UnifiedNavigationService {
    */
   getActiveRoutes(): Route[] {
     const activeRoutes: Route[] = [];
-    
+
     const findActiveRoutes = (routes: Route[]) => {
       routes.forEach(route => {
         if (route.active) {
@@ -257,7 +262,7 @@ export class UnifiedNavigationService {
         }
       });
     };
-    
+
     findActiveRoutes(this.routes);
     return activeRoutes;
   }
@@ -267,12 +272,15 @@ export class UnifiedNavigationService {
    */
   getBreadcrumbPath(currentPathname: string): Route[] {
     const breadcrumbs: Route[] = [];
-    
+
     const findPath = (routes: Route[], targetPath: string): boolean => {
       for (const route of routes) {
         breadcrumbs.push(route);
-        
-        if (route.pathname === targetPath || targetPath.includes(route.pathname)) {
+
+        if (
+          route.pathname === targetPath ||
+          targetPath.includes(route.pathname)
+        ) {
           if (route.children) {
             if (findPath(route.children, targetPath)) {
               return true;
@@ -281,12 +289,12 @@ export class UnifiedNavigationService {
             return true;
           }
         }
-        
+
         breadcrumbs.pop();
       }
       return false;
     };
-    
+
     findPath(this.routes, currentPathname);
     return breadcrumbs;
   }
@@ -297,7 +305,11 @@ export class UnifiedNavigationService {
   debugFlatRoutes(): Map<string, RouteBuilder> {
     return this.flatRoutes;
   }
-}
 
-// 싱글톤 인스턴스 생성
-export const unifiedNavigationService = new UnifiedNavigationService();
+  /**
+   * 라우트 빌더 목록 조회
+   */
+  get routeBuilders(): RouteBuilder[] {
+    return this._routeBuilders;
+  }
+}

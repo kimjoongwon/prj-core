@@ -1,3 +1,3 @@
-export * from './src/types';
-export * from './src/routes';
-export * from '@heroui/react';
+export type * from './src/routes';
+export type * from './src/types';
+export type * from '@heroui/react';

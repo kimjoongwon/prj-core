@@ -1,24 +1,23 @@
 'use client';
 
-import { Button as BaseButton, APIManager } from '@shared/frontend';
+import { Button as BaseButton, APIManager, Plate } from '@shared/frontend';
 import { ButtonBuilder as ButtonBuilderProps } from '@shared/specs';
-import { addToast } from '@heroui/react';
-import { PathUtil } from '@shared/utils';
+import { addToast, ToastProps } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
-import { useNavigate } from 'react-router';
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
-  const navigate = useNavigate();
-  const { apiKey, state, toast: buttonToast } = props;
+  const { apiKey, state } = props;
 
   const onPress = async () => {
     // 기본 성공/에러 토스트 설정
-    const successToast = buttonToast || {
+    const successToast = {
+      color: 'success' as ToastProps['color'],
       title: '성공',
       description: '작업이 완료되었습니다.',
     };
     const errorToast = {
+      color: 'danger',
       title: '오류',
       description: '작업 중 오류가 발생했습니다.',
     };
@@ -52,28 +51,19 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
 
         // 성공 토스트 표시
         addToast({
+          color: successToast.color || 'success',
           title: successToast.title,
           description: successToast.description,
         });
 
         // 라우트 이름이 있으면 해당 경로로 이동
-        if (responseData?.routeName && navigate) {
-          const pathname = PathUtil.getUrlWithParamsAndQueryString(
-            responseData.routeName,
-            {}, // 파라미터 없음
-          );
-
-          navigate(window.location.pathname + '/' + pathname);
+        if (responseData?.routeName) {
+          Plate.navigation.pushByName(responseData.routeName);
         }
 
-        state.form = response.state.form;
-      }
-      // apiKey가 없는 경우 성공 토스트만 표시
-      else if (buttonToast) {
-        addToast({
-          title: buttonToast.title,
-          description: buttonToast.description,
-        });
+        if (response.state) {
+          state.form = response?.state?.form;
+        }
       }
     } catch (error: unknown) {
       console.error('API call error:', error);

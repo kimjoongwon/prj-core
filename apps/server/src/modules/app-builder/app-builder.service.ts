@@ -19,10 +19,6 @@ export class AppBuilderService {
   async build() {
     // 로그인 페이지 설정
     const loginPageBuilder: PageBuilder = this.loginPage.build();
-    const authLayoutBuilder: LayoutBuilder = {
-      type: 'Auth',
-      name: '인증 레이아웃',
-    };
 
     this.setRoutePageAndLayout('어드민', undefined, {
       type: 'Root',

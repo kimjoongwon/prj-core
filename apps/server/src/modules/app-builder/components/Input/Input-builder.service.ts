@@ -82,21 +82,21 @@ export class ElementBuilderService {
     return this.createInput({
       path: 'phone',
       label: '전화번호',
-      options: {
-        validation: {
-          timings: ['onBlur'],
-          required: {
-            value: true,
-            message: '전화번호을 입력해주세요.',
-          },
-          patterns: [
-            {
-              value: /^\d{3}-\d{3,4}-\d{4}$/,
-              message: '전화번호 형식이 아닙니다.',
-            },
-          ],
-        },
-      },
+      // options: {
+      //   validation: {
+      //     timings: ['onBlur'],
+      //     required: {
+      //       value: true,
+      //       message: '전화번호을 입력해주세요.',
+      //     },
+      //     patterns: [
+      //       {
+      //         value: /^\d{3}-\d{3,4}-\d{4}$/,
+      //         message: '전화번호 형식이 아닙니다.',
+      //       },
+      //     ],
+      //   },
+      // },
     });
   }
 
@@ -104,21 +104,21 @@ export class ElementBuilderService {
     return this.createInput({
       path: 'email',
       label: '이메일',
-      options: {
-        validation: {
-          timings: ['onBlur'],
-          required: {
-            value: true,
-            message: '이메일을 입력해주세요.',
-          },
-          patterns: [
-            {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: '이메일 형식이 아닙니다.',
-            },
-          ],
-        },
-      },
+      // options: {
+      //   validation: {
+      //     timings: ['onBlur'],
+      //     required: {
+      //       value: true,
+      //       message: '이메일을 입력해주세요.',
+      //     },
+      //     patterns: [
+      //       {
+      //         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      //         message: '이메일 형식이 아닙니다.',
+      //       },
+      //     ],
+      //   },
+      // },
     });
   }
 
@@ -127,18 +127,18 @@ export class ElementBuilderService {
       path: 'password',
       label: '비밀번호',
       placeholder: '비밀번호를 입력해주세요.',
-      options: {
-        props: {
-          type: 'password',
-        },
-        validation: {
-          timings: ['onBlur'],
-          required: {
-            value: true,
-            message: '비밀번호를 입력해주세요.',
-          },
-        },
-      },
+      // options: {
+      //   props: {
+      //     type: 'password',
+      //   },
+      //   validation: {
+      //     timings: ['onBlur'],
+      //     required: {
+      //       value: true,
+      //       message: '비밀번호를 입력해주세요.',
+      //     },
+      //   },
+      // },
     });
   }
 

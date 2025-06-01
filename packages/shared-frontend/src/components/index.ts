@@ -19,3 +19,4 @@ export {
 } from './navigation/Breadcrumb';
 
 export { RouteDebugger, RouteTree } from './navigation/RouteDebugger';
+export * from './NavigationSetup';

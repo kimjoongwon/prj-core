@@ -82,9 +82,9 @@ export type ElementProps<T extends ElementName> = T extends 'Button'
 
 export interface ButtonResponse<T> {
   routeName?: RouteNames;
-  state?: T;
+  state?: PageState<any>;
   toast?: {
-    state: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
     title: string;
     description: string;
   };
@@ -103,10 +103,6 @@ export interface ButtonBuilder extends ButtonProps {
   name: string;
   state: PageState<any>;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-  toast?: {
-    title: string;
-    description: string;
-  };
 }
 
 export interface CellButtonBuilder {

@@ -18,9 +18,9 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { RouteNode } from './RouteNode';
 import { RouteBuilder } from '@shared/specs';
-import { routeNavigator } from '@shared/frontend';
 import { Button, Card, CardBody, CardHeader, Divider } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
+import { Plate } from '../../../providers';
 
 /**
  * 라우트 시각화 컴포넌트
@@ -53,36 +53,31 @@ const RouteFlowContent = observer(() => {
   const { fitView } = useReactFlow();
 
   // 노드 변경 처리
-  const onNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      setNodes((nds) => applyNodeChanges(changes, nds));
-    },
-    []
-  );
+  const onNodesChange = useCallback((changes: NodeChange[]) => {
+    setNodes(nds => applyNodeChanges(changes, nds));
+  }, []);
 
   // 엣지 변경 처리
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) => {
-      setEdges((eds) => applyEdgeChanges(changes, eds));
-    },
-    []
-  );
-  
+  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
+    setEdges(eds => applyEdgeChanges(changes, eds));
+  }, []);
+
   // 라우트 데이터에서 노드와 엣지 생성
   useEffect(() => {
-    const routes = routeNavigator.getAllRoutes();
+    const routes = Plate.navigation.getAllRoutes();
     if (!routes || routes.length === 0) return;
-    
-    const { nodes: routeNodes, edges: routeEdges } = createNodesAndEdgesFromRoutes(routes);
+
+    const { nodes: routeNodes, edges: routeEdges } =
+      createNodesAndEdgesFromRoutes(routes);
     setNodes(routeNodes);
     setEdges(routeEdges);
-    
+
     // 모든 노드가 보이도록 뷰 조정
     setTimeout(() => {
       fitView({ padding: 0.2 });
     }, 200);
   }, [fitView]);
-  
+
   // 커스텀 노드 타입 정의
   const nodeTypes = {
     routeNode: RouteNode,
@@ -101,8 +96,8 @@ const RouteFlowContent = observer(() => {
       <Background />
       <Controls />
       <Panel position="top-right">
-        <Button 
-          color="primary" 
+        <Button
+          color="primary"
           size="sm"
           onPress={() => fitView({ padding: 0.2 })}
         >
@@ -119,34 +114,34 @@ const RouteFlowContent = observer(() => {
 function createNodesAndEdgesFromRoutes(routes: RouteBuilder[]) {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
-  
+
   // 라우트 구조를 재귀적으로 순회하며 노드와 엣지 생성
   function processRoutes(
-    routeItems: RouteBuilder[], 
-    parentId: string | null = null, 
-    level: number = 0, 
-    xOffset: number = 0
+    routeItems: RouteBuilder[],
+    parentId: string | null = null,
+    level: number = 0,
+    xOffset: number = 0,
   ) {
     const itemCount = routeItems.length;
     const ySpacing = 100; // 같은 레벨의 노드 간 세로 간격
     const xSpacing = 250; // 레벨 간 가로 간격
-    
+
     routeItems.forEach((route, index) => {
       if (!route.name) return;
-      
+
       const id = `${level}-${xOffset}-${index}`;
       const position = {
         x: level * xSpacing,
-        y: (index - (itemCount - 1) / 2) * ySpacing
+        y: (index - (itemCount - 1) / 2) * ySpacing,
       };
-      
+
       // 노드 생성
       nodes.push({
         id,
-        data: { 
+        data: {
           label: route.name,
           pathname: route.pathname || '',
-          layout: route.layout?.type || ''
+          layout: route.layout?.type || '',
         },
         position,
         type: 'routeNode',
@@ -156,9 +151,9 @@ function createNodesAndEdgesFromRoutes(routes: RouteBuilder[]) {
           color: 'black',
           border: '1px solid #ddd',
           borderRadius: '5px',
-        }
+        },
       });
-      
+
       // 부모 노드와 연결하는 엣지 생성
       if (parentId) {
         edges.push({
@@ -170,17 +165,17 @@ function createNodesAndEdgesFromRoutes(routes: RouteBuilder[]) {
           animated: false,
         });
       }
-      
+
       // 자식 라우트가 있으면 재귀적으로 처리
       if (route.children && route.children.length > 0) {
         processRoutes(route.children, id, level + 1, xOffset + index);
       }
     });
   }
-  
+
   // 루트 라우트부터 처리 시작
   processRoutes(routes);
-  
+
   return { nodes, edges };
 }
 

@@ -32,9 +32,11 @@ export const AppProvider = observer((props: StoreProviderProps) => {
       const navigationService = new UnifiedNavigationService(routeBuilders);
       const depotService = new DepotService();
       const modalService = new ModalService();
-
+      // console.log('navigationService:', navigationService);
       // RouteNavigator 초기화
-      navigationService.setRoutes(routeBuilders);
+      // navigationService.setRoutes(routeBuilders);
+      
+      // Navigation function will be set later by NavigationSetup component
 
       // Initialize the global Plate instance
       Plate = new Illit(navigationService, depotService, modalService);

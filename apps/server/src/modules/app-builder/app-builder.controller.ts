@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth, AuthService, LoginPayloadDto, ResponseEntity, TokenDto } from '@shared';
 import { AppBuilderService } from './app-builder.service';
 import { Response } from 'express';
-import { ButtonResponse } from '@shared/specs';
+import { ButtonResponse, ROUTE_NAMES } from '@shared/specs';
 
 @ApiTags('BUILDER')
 @Controller()
@@ -44,8 +44,14 @@ export class AppBuilderController {
     });
 
     const buttonResponse: ButtonResponse<TokenDto> = {
-      routeName: '대시보드',
+      routeName: '관리자',
+      toast: {
+        color: 'success',
+        title: '로그인 성공',
+        description: '로그인에 성공했습니다.',
+      },
     };
+
     return new ResponseEntity(200, '성공', buttonResponse);
   }
 }

@@ -2,12 +2,23 @@ import {
   createBrowserRouter,
   RouterProvider,
   type RouteObject,
+  Outlet,
 } from 'react-router';
 import { type RouteBuilder as IRouteBuilder } from '@shared/specs';
-import { DarkModeSwitch, Plate, RouteBuilder } from '@shared/frontend';
+import { DarkModeSwitch, Plate, RouteBuilder, NavigationSetup } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';
 // Any configurations are optional
+
+// Router 내부에서 NavigationSetup을 실행하기 위한 Layout 컴포넌트
+const AppLayout = () => {
+  return (
+    <>
+      <NavigationSetup />
+      <Outlet />
+    </>
+  );
+};
 
 // 라우트 객체를 생성하기 위한 헬퍼 함수
 const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
@@ -25,10 +36,14 @@ export const App = observer(() => {
     return <Spinner label="앱을 로딩 중입니다..." />;
   }
 
-  // 라우터 생성
-  const router = createBrowserRouter(
-    Plate.navigation.routeBuilders.map(generateRouteObject),
-  );
+  // 라우터 생성 - 모든 라우트의 부모로 AppLayout 설정
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      Component: AppLayout,
+      children: Plate.navigation.routeBuilders.map(generateRouteObject),
+    },
+  ]);
 
   console.log(
     '앱이 라우트와 함께 초기화됨:',
