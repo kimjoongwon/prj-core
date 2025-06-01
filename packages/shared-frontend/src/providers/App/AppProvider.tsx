@@ -7,8 +7,7 @@ import {
   DepotService,
   Illit,
   ModalService,
-  NavigationService,
-  routeNavigator,
+  UnifiedNavigationService,
 } from '../../services';
 import { observer } from 'mobx-react-lite';
 
@@ -30,12 +29,12 @@ export const AppProvider = observer((props: StoreProviderProps) => {
 
   useEffect(() => {
     if (routeBuilders && !isInitialized) {
-      const navigationService = new NavigationService(routeBuilders);
+      const navigationService = new UnifiedNavigationService(routeBuilders);
       const depotService = new DepotService();
       const modalService = new ModalService();
 
       // RouteNavigator 초기화
-      routeNavigator.setRoutes(routeBuilders);
+      navigationService.setRoutes(routeBuilders);
 
       // Initialize the global Plate instance
       Plate = new Illit(navigationService, depotService, modalService);

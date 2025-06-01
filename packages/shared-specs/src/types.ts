@@ -28,6 +28,26 @@ export type ValidationRecord<T extends object> = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'removedAt' | 'seq'
 >;
 
+export type ElementName =
+  | 'Button'
+  | 'Input'
+  | 'Card'
+  | 'Table'
+  | 'Spacer'
+  | 'Logo'
+  | 'DateRangePicker'
+  | 'Select'
+  | 'DepotUploader'
+  | 'Text'
+  | 'Checkbox'
+  | 'RadioGroup'
+  | 'Switch'
+  | 'Tabs'
+  | 'Depot'
+  | 'Textarea'
+  | 'ButtonBuilder'
+  | 'Copyright';
+
 export interface ElementBuilder {
   visibleCondition?: {
     eq: {
@@ -35,31 +55,13 @@ export interface ElementBuilder {
       value: any;
     };
   };
-  name?:
-    | 'Button'
-    | 'Input'
-    | 'Card'
-    | 'Table'
-    | 'Spacer'
-    | 'Logo'
-    | 'DateRangePicker'
-    | 'Select'
-    | 'DepotUploader'
-    | 'Text'
-    | 'Checkbox'
-    | 'RadioGroup'
-    | 'Switch'
-    | 'Tabs'
-    | 'Depot'
-    | 'Textarea'
-    | 'ButtonBuilder'
-    | any;
-  props?: ElementProps<ElementBuilder['name']>;
+  name: ElementName;
+  props?: ElementProps<ElementName>;
   path?: string;
   validation?: Validation;
 }
 
-export type ElementProps<T extends string | undefined> = T extends 'Button'
+export type ElementProps<T extends ElementName> = T extends 'Button'
   ? ButtonProps
   : T extends 'Input'
   ? InputProps
@@ -67,12 +69,15 @@ export type ElementProps<T extends string | undefined> = T extends 'Button'
   ? CardProps
   : T extends 'Table'
   ? TableProps
-  : T extends 'Spacer'
-  ? {
-      size?: number;
-    }
   : T extends 'ButtonBuilder'
-  ? ButtonBuilder
+  ? ButtonProps & {
+      apiKey?: string;
+      color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    }
+  : T extends 'Spacer'
+  ? { size?: string }
+  : T extends 'Copyright'
+  ? { companyName?: string }
   : any;
 
 export interface ButtonResponse<T> {

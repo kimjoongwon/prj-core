@@ -1,3 +1,4 @@
+import { InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
 import { ElementBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
 
@@ -82,7 +83,7 @@ export class LoginPage {
           label: '이메일',
           placeholder: '이메일을 입력하세요',
           type: 'email',
-        },
+        } as InputProps,
         path: 'form.inputs.email',
         validation: {
           required: { value: true, message: '이메일을 입력해주세요' },
@@ -107,7 +108,7 @@ export class LoginPage {
           minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
         },
       },
-    ];
+    ] as ElementBuilder[];
   }
 
   build(): PageBuilder {

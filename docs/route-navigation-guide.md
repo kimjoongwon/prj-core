@@ -1,8 +1,34 @@
 # 라우트 메타데이터 기반 네비게이션 가이드
 
+> **⚠️ 중요:** 이 문서는 새로운 `UnifiedNavigationService`를 기준으로 업데이트되었습니다. 
+> 기존 `NavigationService`와 `RouteNavigator`에서 마이그레이션하는 경우 [마이그레이션 가이드](./navigation-migration-guide.md)를 참조하세요.
+
 ## 개요
 
-이 문서는 라우트 메타데이터를 기반으로 네비게이션 시스템을 사용하는 방법을 설명합니다. 이 시스템을 통해 라우트의 이름을 키로 사용하여 직접적이고 유연한 네비게이션이 가능하며, 조건에 따른 경로 이동을 구현할 수 있습니다.
+이 문서는 라우트 메타데이터를 기반으로 네비게이션 시스템을 사용하는 방법을 설명합니다. 새로운 `UnifiedNavigationService`를 통해 라우트의 이름을 키로 사용하여 직접적이고 유연한 네비게이션이 가능하며, 조건에 따른 경로 이동을 구현할 수 있습니다.
+
+## 0. UnifiedNavigationService 소개
+
+### 주요 기능
+- **라우트 관리**: RouteBuilder에서 Route 객체 생성 및 관리
+- **이름 기반 네비게이션**: 라우트 이름으로 직접 네비게이션
+- **조건부 라우팅**: 조건에 따른 동적 경로 결정
+- **활성 상태 추적**: 현재 활성화된 라우트 자동 추적
+- **브레드크럼 생성**: 현재 경로의 브레드크럼 자동 생성
+- **타입 안전성**: 완전한 TypeScript 지원
+
+### 기본 사용법
+
+```typescript
+import { UnifiedNavigationService, unifiedNavigationService } from '@shared/frontend';
+import { rawRoutes } from '@shared/specs';
+
+// 새 인스턴스 생성
+const navigation = new UnifiedNavigationService(rawRoutes);
+
+// 또는 글로벌 싱글톤 사용
+unifiedNavigationService.setRoutes(rawRoutes);
+```
 
 ## 1. 라우트 네비게이션 훅 사용하기
 
