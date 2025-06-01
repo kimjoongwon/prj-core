@@ -100,9 +100,8 @@ export interface FormBuilder {
 
 export interface ButtonBuilder extends ButtonProps {
   apiKey?: string;
-  name: string;
-  state: PageState<any>;
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  name?: string;
+  state?: PageState<any>;
 }
 
 export interface CellButtonBuilder {

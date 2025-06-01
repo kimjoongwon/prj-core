@@ -1,6 +1,6 @@
-import { InputProps } from '@heroui/react';
+import { Button, InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
-import { ElementBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
+import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
 
 interface LoginDto {
   email: string;
@@ -51,15 +51,16 @@ export class LoginPage {
                   children: '로그인',
                   color: 'primary',
                   fullWidth: true,
-                },
+                } satisfies ButtonBuilder,
               },
               {
                 name: 'ButtonBuilder',
                 props: {
+                  variant: 'ghost',
                   children: '회원가입',
                   color: 'secondary',
                   fullWidth: true,
-                },
+                } satisfies ButtonBuilder,
               },
               {
                 name: 'Copyright',

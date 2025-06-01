@@ -1,7 +1,10 @@
 'use client';
 
 import { Button as BaseButton, APIManager, Plate } from '@shared/frontend';
-import { ButtonBuilder as ButtonBuilderProps } from '@shared/specs';
+import {
+  ButtonBuilder as ButtonBuilderProps,
+  ButtonResponse,
+} from '@shared/specs';
 import { addToast, ToastProps } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
@@ -47,14 +50,16 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
         const response = await (apiFunction as Function)(state.form.inputs);
 
         // 응답 데이터 추출
-        const responseData = response?.data;
-
+        const responseData = response?.data as ButtonResponse<any>;
+        if (responseData.toast) {
+          addToast({
+            title: responseData.toast.title || successToast.title,
+            description:
+              responseData.toast.description || successToast.description,
+            color: responseData.toast.color || successToast.color,
+          });
+        }
         // 성공 토스트 표시
-        addToast({
-          color: successToast.color || 'success',
-          title: successToast.title,
-          description: successToast.description,
-        });
 
         // 라우트 이름이 있으면 해당 경로로 이동
         if (responseData?.routeName) {

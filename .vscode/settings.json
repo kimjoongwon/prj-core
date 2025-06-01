@@ -1,0 +1,14 @@
+{
+  "git.inputValidation": "off",
+  "git.inputValidationLength": 500,
+  "git.useCommitInputAsStashMessage": true,
+  "scm.inputFontSize": 14,
+  "scm.inputMinLineCount": 2,
+  "scm.inputMaxLineCount": 10,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": true
+  },
+}
