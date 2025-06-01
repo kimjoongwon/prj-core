@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DepotsRepository } from '../repository/depots.repository';
-import { CreateFileDto, QueryDepotDto, UpdateDepotDto } from '../dto';
+import { QueryDepotDto } from '../dto';
 import { AwsService } from '../domain/aws/aws.service';
 import { ContextProvider } from '../provider';
-import { PrismaService } from 'nestjs-prisma';
 import { CategoriesRepository } from '../repository/categories.repository';
 import { CategoryNames } from '../enum/category-names.enum';
 
@@ -43,6 +42,7 @@ export class DepotsService {
           file,
           file.mimetype.split('/')[1],
         );
+
         return {
           name: file.originalname,
           url,

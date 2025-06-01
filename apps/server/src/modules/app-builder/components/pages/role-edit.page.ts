@@ -35,10 +35,10 @@ export class RoleEditPage {
             stacks: [
               {
                 type: 'VStack',
-                inputs: [
+                elements: [
                   {
-                    type: 'Select',
-                    path: 'form.inputs.name',
+                    name: 'Select',
+                    path: 'form.elements.name',
                     props: {
                       label: '역할 이름',
                       options: roleOptions,
@@ -46,8 +46,8 @@ export class RoleEditPage {
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.categoryId',
+                    name: 'Select',
+                    path: 'form.elements.categoryId',
                     props: {
                       label: '카테고리',
                       options,

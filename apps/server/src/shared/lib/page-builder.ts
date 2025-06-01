@@ -22,14 +22,14 @@ export function pageBuilder<T extends object>(
   const metaDataKeysGroupedBySectionName = Object.keys(metaDataGroupedBySectionName);
 
   metaDataKeysGroupedBySectionName.forEach((sectionName) => {
-    const inputs = metaDataGroupedBySectionName[sectionName].map((value) => value?.[FormTypeKey]);
+    const elements = metaDataGroupedBySectionName[sectionName].map((value) => value?.[FormTypeKey]);
     if (sectionName !== 'undefined') {
       sections.push({
         name: sectionName,
         stacks: [
           {
             type: 'VStack',
-            inputs,
+            elements,
           },
         ],
       });
@@ -41,7 +41,7 @@ export function pageBuilder<T extends object>(
     type: 'Page',
     state: {
       form: {
-        inputs: defaultObject,
+        elements: defaultObject,
       },
     },
     form: {

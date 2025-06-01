@@ -3,9 +3,8 @@
 import { Button } from '../Button/Button';
 import { cn } from '@heroui/react';
 import { HStack } from '../HStack';
-import Image from 'next/image';
 
-interface LogoProps {
+export interface LogoProps {
   variants: 'text' | 'icon';
   onClick?: () => void;
   className?: string;

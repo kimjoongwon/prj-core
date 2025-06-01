@@ -37,7 +37,7 @@ export const AuthLayout = observer(
     const { formComponent, adComponent } = props;
 
     return (
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen">
         <div className="flex flex-col md:flex-row flex-1 w-full">
           {/* Mobile */}
           <div className="flex flex-col w-full md:hidden">

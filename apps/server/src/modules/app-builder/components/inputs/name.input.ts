@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 @Injectable()
 export class NameInput {
   getMeta() {
-    const input: InputBuilder = {
-      path: 'form.inputs.name',
-      type: 'Input',
+    const input: ElementBuilder = {
+      path: 'form.elements.name',
+      name: 'Input',
       props: {
         fullWidth: true,
         label: '이름',

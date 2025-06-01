@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 @Injectable()
 export class DescriptionInput {
@@ -8,9 +8,9 @@ export class DescriptionInput {
   }
 
   getMeta() {
-    const input: InputBuilder = {
+    const input: ElementBuilder = {
       path: 'description',
-      type: 'Input',
+      name: 'Input',
       props: {
         label: this.getLabel(),
         placeholder: `${this.getLabel()}을 입력해주세요.`,

@@ -1,6 +1,5 @@
 import { HeaderContext, CellContext } from '@tanstack/react-table';
-import { ButtonProps, TableProps } from '.';
-
+import { ButtonProps, CardProps, TableProps, InputProps, ToastProps } from '..';
 export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
 
 export type BuilderOptions = {
@@ -27,17 +26,58 @@ export type ValidationRecord<T extends object> = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'removedAt' | 'seq'
 >;
 
-export interface InputBuilder {
+export interface ElementBuilder {
   visibleCondition?: {
     eq: {
       path: string;
       value: any;
     };
   };
-  type?: string;
-  props?: any;
+  name?:
+    | 'Button'
+    | 'Input'
+    | 'Card'
+    | 'Table'
+    | 'Spacer'
+    | 'Logo'
+    | 'DateRangePicker'
+    | 'Select'
+    | 'DepotUploader'
+    | 'Text'
+    | 'Checkbox'
+    | 'RadioGroup'
+    | 'Switch'
+    | 'Tabs'
+    | 'Depot'
+    | 'Textarea'
+    | any;
+  props?: ElementProps<ElementBuilder['name']>;
   path?: string;
   validation?: Validation;
+}
+
+export type ElementProps<T extends string | undefined> = T extends 'Button'
+  ? ButtonProps
+  : T extends 'Input'
+  ? InputProps
+  : T extends 'Card'
+  ? CardProps
+  : T extends 'Table'
+  ? TableProps
+  : T extends 'Spacer'
+  ? {
+      size?: number;
+    }
+  : any;
+
+export interface ButtonResponse<T> {
+  routeName?: string;
+  state?: T;
+  toast?: {
+    state: ToastProps['state'];
+    title: string;
+    description: string;
+  };
 }
 
 export interface FormBuilder {
@@ -140,7 +180,7 @@ export type Key = string | number;
 
 export interface PageState<CDO> {
   form?: {
-    inputs: CDO;
+    elements: CDO;
     errorMessages?: string[];
     button?: {
       errorMessages?: string[];
@@ -217,21 +257,100 @@ export interface CellBuilderProps
     CellBuilder {}
 
 export interface SectionBuilder {
-  name: string;
+  name?: string;
+  bordered?: boolean;
   stacks: StackBuilder[];
+  style?: React.CSSProperties;
 }
 
 export interface StackBuilder {
   type: 'VStack' | 'HStack';
-  inputs: (InputBuilder | ElementBuilder)[];
-}
-
-export interface ElementBuilder {
-  type: 'Logo';
+  elements: ElementBuilder[];
 }
 
 export interface DepotUploaderOptions {
   path: string;
   label?: string;
   type: 'file' | 'image';
+}
+
+export interface Route {
+  name: string;
+  pathname: string;
+  active?: boolean;
+  params: any;
+  icon?: string;
+  visible?: boolean;
+  onClick?: () => void;
+  children?: Route[];
+}
+
+export type CommonEntities =
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'removedAt'
+  | 'seq';
+
+export type State<T> = {
+  form: {
+    elements: T;
+  };
+};
+
+export type PageTypeParams = {
+  type: 'add' | 'edit' | 'read';
+};
+
+export type Join<K, P> = K extends string | number
+  ? P extends string | number
+    ? `${K}${'' extends P ? '' : '.'}${P}`
+    : never
+  : never;
+
+export type Prev = [
+  never,
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  ...0[],
+];
+
+export type Paths<T, D extends number = 10> = [D] extends [never]
+  ? never
+  : T extends object
+  ? {
+      [K in keyof T]-?: K extends string | number
+        ? `${K}` | Join<K, Paths<T[K], Prev[D]>>
+        : never;
+    }[keyof T]
+  : '';
+
+export type Leaves<T, D extends number = 10> = [D] extends [never]
+  ? never
+  : T extends object
+  ? { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T]
+  : '';
+
+export interface MobxProps<T = any> {
+  path: Paths<T, 4>;
+  state: T;
 }

@@ -1,7 +1,7 @@
 
 import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 import { FormBuilderService } from '../form/form-builder.service';
-import { InputBuilderService } from '../Input/Input-builder.service';
+import { ElementBuilderService } from '../Input/Input-builder.service';
 import { ButtonBuilderService } from '../button/button-builder.service';
 import { ResourceConfigService } from '../services/resource-config.service';
 import { PageType, PageBuilderOptions } from '../types/page.types';
@@ -9,7 +9,7 @@ import { PageType, PageBuilderOptions } from '../types/page.types';
 export abstract class BasePageBuilder<TDto = any, TEntity = any> {
   constructor(
     protected readonly formBuilderService: FormBuilderService,
-    protected readonly inputBuilderService: InputBuilderService,
+    protected readonly elementBuilderService: ElementBuilderService,
     protected readonly buttonBuilderService: ButtonBuilderService,
     protected readonly resourceConfigService?: ResourceConfigService,
   ) {}
@@ -17,7 +17,7 @@ export abstract class BasePageBuilder<TDto = any, TEntity = any> {
   protected abstract getResourceName(): string;
   protected abstract getDefaultDto(): TDto;
   protected abstract buildInputs(): any[];
-  protected abstract buildSections(inputs: any[]): SectionBuilder[];
+  protected abstract buildSections(elements: any[]): SectionBuilder[];
   protected abstract loadEntity(id: string): Promise<TEntity | null>;
 
   // 기본 버튼 생성 (오버라이드 가능)
@@ -37,7 +37,7 @@ export abstract class BasePageBuilder<TDto = any, TEntity = any> {
       resourceName: resourceConfig.name,
       resourceLabel: resourceConfig.label,
       id: type === 'modify' ? id : undefined,
-      payloadPath: (type === 'create' || type === 'add') ? 'form.inputs' : undefined,
+      payloadPath: (type === 'create' || type === 'add') ? 'form.elements' : undefined,
     });
   }
 
@@ -87,7 +87,7 @@ export abstract class BasePageBuilder<TDto = any, TEntity = any> {
 
     return {
       name: resourceConfig?.label || this.getResourceName(),
-      state: { form: { inputs: formInputs } },
+      state: { form: { elements: formInputs } },
       form,
     };
   }

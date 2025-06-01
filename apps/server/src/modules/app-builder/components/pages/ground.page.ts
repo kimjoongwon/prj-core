@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 import { FormBuilderService } from '../form/form-builder.service';
-import { InputBuilderService } from '../Input/Input-builder.service';
+import { ElementBuilderService } from '../Input/Input-builder.service';
 import { CreateGroundDto } from '../../../../shared/dto';
 import { ContextProvider } from '../../../../shared/provider/context.provider';
 import { GroundsRepository } from '../../../../shared/repository';
@@ -10,7 +10,7 @@ import { GroundsRepository } from '../../../../shared/repository';
 export class GroundPage {
   constructor(
     private readonly formBuilderService: FormBuilderService,
-    private readonly inputBuilderService: InputBuilderService,
+    private readonly elementBuilderService: ElementBuilderService,
     private readonly groundsRepository: GroundsRepository,
   ) {}
 
@@ -29,14 +29,14 @@ export class GroundPage {
     };
   }
 
-  private buildSections(inputs: any[]): SectionBuilder[] {
+  private buildSections(elements: any[]): SectionBuilder[] {
     return [
       {
         name: '기본 정보',
         stacks: [
           {
             type: 'VStack',
-            inputs,
+            elements,
           },
         ],
       },
@@ -79,30 +79,30 @@ export class GroundPage {
     const isUpdate = groundId !== 'new' && type === 'modify';
     const isDetail = type === 'detail';
 
-    this.inputBuilderService.setPathBase('form.inputs.workspace');
+    this.elementBuilderService.setPathBase('form.elements.workspace');
 
-    const inputs = this.inputBuilderService.build(
+    const elements = this.elementBuilderService.build(
       ['name', 'label', 'phone', 'email', 'address', 'businessNo'],
-      'form.inputs.workspace',
+      'form.elements.workspace',
     );
 
-    const groundDepotIdInput = this.inputBuilderService.getDepotUploaderInput({
-      path: 'form.inputs.imageDepotId',
+    const groundDepotIdInput = this.elementBuilderService.getDepotUploaderInput({
+      path: 'form.elements.imageDepotId',
       type: 'image',
       label: '그라운드 이미지',
     });
 
-    const logoImageDepotIdInput = this.inputBuilderService.getDepotUploaderInput({
-      path: 'form.inputs.workspace.logoImageDepotId',
+    const logoImageDepotIdInput = this.elementBuilderService.getDepotUploaderInput({
+      path: 'form.elements.workspace.logoImageDepotId',
       type: 'image',
       label: '로고 이미지',
     });
 
-    const sections = this.buildSections(inputs);
+    const sections = this.buildSections(elements);
 
     sections[0].stacks.push({
       type: 'HStack',
-      inputs: [groundDepotIdInput, logoImageDepotIdInput],
+      elements: [groundDepotIdInput, logoImageDepotIdInput],
     });
 
     const form = this.buildForm(sections, isUpdate, groundId);
@@ -112,7 +112,7 @@ export class GroundPage {
       form,
       state: {
         form: {
-          inputs: this.getDefaultCDO(),
+          elements: this.getDefaultCDO(),
           button: {
             errorMessages: [],
           },
@@ -132,7 +132,7 @@ export class GroundPage {
         },
       });
       if (ground) {
-        page.state.form.inputs = ground;
+        page.state.form.elements = ground;
 
         if (isDetail) {
           delete page.form.button;
@@ -143,7 +143,7 @@ export class GroundPage {
         }
       }
     }
-    console.log('page', page.state.form.inputs);
+    console.log('page', page.state.form.elements);
     return page;
   }
 }

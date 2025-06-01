@@ -49,6 +49,7 @@ export * from './FileUploader/FileUploader';
 export * from './DepotUploader/DepotUploader';
 export * from './VideoDepot/VideoDepot';
 export * from './Textarea';
+export * from './DarkModeSwitch';
 export * from './Email/EmailInput';
-export * from './InputValidation/InputValidation';
 export * from './SubmitButton/SubmitButton';
+export * from './Spacer';

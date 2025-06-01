@@ -15,14 +15,14 @@ export class RoutineEditPage {
       name: '편집',
       state: {
         form: {
-          inputs: {} as CreateRoutineDto,
+          elements: {} as CreateRoutineDto,
         },
       },
       form: this.getRoutineForm(),
     };
 
     if (routineId !== 'new' && type === 'edit') {
-      page.state.form.inputs = routine;
+      page.state.form.elements = routine;
       page.form.button.mutation = {
         name: 'updateRoutine',
         id: routineId,

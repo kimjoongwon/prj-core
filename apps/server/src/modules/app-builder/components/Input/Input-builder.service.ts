@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../../../shared/provider';
-import { DepotUploaderOptions, InputBuilder } from '@shared/types';
+import { DepotUploaderOptions, ElementBuilder } from '@shared/types';
 import { defaultsDeep } from 'lodash';
 
 type FieldTypes = 'name' | 'label' | 'businessNo' | 'address' | 'phone' | 'email' | 'password';
 
 @Injectable()
-export class InputBuilderService {
+export class ElementBuilderService {
   label: string;
-  pathBase: string = 'form.inputs';
+  pathBase: string = 'form.elements';
 
   setLabel(label: string) {
     this.label = label;
@@ -22,10 +22,10 @@ export class InputBuilderService {
     if (pathBase) {
       this.setPathBase(pathBase);
     } else {
-      this.setPathBase('form.inputs');
+      this.setPathBase('form.elements');
     }
-    const inputs = fieldTypes.map((fieldType) => this.getInputByFieldType(fieldType));
-    return inputs.filter((input) => input !== null);
+    const elements = fieldTypes.map((fieldType) => this.getInputByFieldType(fieldType));
+    return elements.filter((input) => input !== null);
   }
 
   private getInputByFieldType(fieldType: FieldTypes) {
@@ -151,11 +151,11 @@ export class InputBuilderService {
     path: string;
     placeholder?: string;
     label?: string;
-    options?: InputBuilder;
+    options?: ElementBuilder;
   }) {
     const pageContext = ContextProvider.getPageContext();
-    const _inputBuilder: InputBuilder = {
-      type: 'Input',
+    const _elementBuilder: ElementBuilder = {
+      name: 'Input',
       path: this.pathBase + '.' + path,
       props: {
         isDisabled: pageContext === 'detail',
@@ -173,8 +173,8 @@ export class InputBuilderService {
       },
     };
 
-    const inputBuilder = defaultsDeep(_inputBuilder, options);
+    const elementBuilder = defaultsDeep(_elementBuilder, options);
 
-    return inputBuilder;
+    return elementBuilder;
   }
 }

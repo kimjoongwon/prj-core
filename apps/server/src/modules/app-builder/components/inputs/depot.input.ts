@@ -1,4 +1,4 @@
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 export class DepotInput {
   label: string;
@@ -11,8 +11,8 @@ export class DepotInput {
   }
 
   getMeta(path: string = 'files') {
-    const input: InputBuilder = {
-      type: 'Depot',
+    const input: ElementBuilder = {
+      name: 'Depot',
       path: path,
       props: {
         label: this.getLabel(),
