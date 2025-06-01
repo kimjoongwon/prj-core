@@ -3,7 +3,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { Injectable } from '@nestjs/common';
 import { ContextProvider, CreateCategoryDto } from '@shared';
 import { FormBuilderService } from '../form/form-builder.service';
-import { InputBuilderService } from '../Input/Input-builder.service';
+import { ElementBuilderService } from '../Input/Input-builder.service';
 import { ButtonBuilderService } from '../button/button-builder.service';
 import { ResourceConfigService } from '../services/resource-config.service';
 import { BasePageBuilder } from './base-page.builder';
@@ -14,11 +14,11 @@ export class CategoryPage extends BasePageBuilder<CreateCategoryDto, any> {
   constructor(
     private readonly prisma: PrismaService,
     formBuilderService: FormBuilderService,
-    inputBuilderService: InputBuilderService,
+    elementBuilderService: ElementBuilderService,
     buttonBuilderService: ButtonBuilderService,
     resourceConfigService: ResourceConfigService,
   ) {
-    super(formBuilderService, inputBuilderService, buttonBuilderService, resourceConfigService);
+    super(formBuilderService, elementBuilderService, buttonBuilderService, resourceConfigService);
   }
 
   protected getResourceName(): string {
@@ -35,17 +35,17 @@ export class CategoryPage extends BasePageBuilder<CreateCategoryDto, any> {
   }
 
   protected buildInputs(): any[] {
-    return this.inputBuilderService.build(['name']);
+    return this.elementBuilderService.build(['name']);
   }
 
-  protected buildSections(inputs: any[]): SectionBuilder[] {
+  protected buildSections(elements: any[]): SectionBuilder[] {
     return [
       {
         name: '기본 정보',
         stacks: [
           {
             type: 'VStack' as const,
-            inputs,
+            elements,
           },
         ],
       },

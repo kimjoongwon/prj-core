@@ -27,7 +27,7 @@ export class ExerciseEditPage {
     const page: PageBuilder<CreateExerciseDto> = {
       state: {
         form: {
-          inputs: createExerciseDto,
+          elements: createExerciseDto,
         },
       },
       form: {
@@ -35,7 +35,7 @@ export class ExerciseEditPage {
       },
     };
 
-    page.state.form.inputs.tenantId = tenantId;
+    page.state.form.elements.tenantId = tenantId;
 
     if (exerciseId !== 'new' && type === 'edit') {
       const exercise = await this.prisma.exercise.findUnique({

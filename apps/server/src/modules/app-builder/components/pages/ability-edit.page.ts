@@ -60,7 +60,7 @@ export class AbilityEditPage {
       name: '새편집',
       state: {
         form: {
-          inputs: {},
+          elements: {},
         },
       },
       form: {
@@ -77,13 +77,12 @@ export class AbilityEditPage {
         sections: [
           {
             name: '기본정보',
-            stacks: [
-              {
+            stacks: [                {
                 type: 'VStack',
-                inputs: [
+                elements: [
                   {
-                    type: 'Input',
-                    path: 'form.inputs.name',
+                    name: 'Input',
+                    path: 'form.elements.name',
                     props: {
                       fullWidth: true,
                       label: '능력 이름',
@@ -91,8 +90,8 @@ export class AbilityEditPage {
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.roleId',
+                    name: 'Select',
+                    path: 'form.elements.roleId',
                     props: {
                       fullWidth: true,
                       label: '역할',
@@ -100,8 +99,8 @@ export class AbilityEditPage {
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.type',
+                    name: 'Select',
+                    path: 'form.elements.type',
                     props: {
                       fullWidth: true,
                       label: '능력 타입',
@@ -109,8 +108,8 @@ export class AbilityEditPage {
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.actionId',
+                    name: 'Select',
+                    path: 'form.elements.actionId',
                     props: {
                       fullWidth: true,
                       label: '액션',
@@ -118,8 +117,8 @@ export class AbilityEditPage {
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.subjectId',
+                    name: 'Select',
+                    path: 'form.elements.subjectId',
                     props: {
                       fullWidth: true,
                       label: '과목',

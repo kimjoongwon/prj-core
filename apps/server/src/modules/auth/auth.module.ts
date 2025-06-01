@@ -5,5 +5,6 @@ import { AuthService, LocalStrategy, PasswordService, TokenService } from '@shar
 @Module({
   providers: [AuthService, PasswordService, TokenService, LocalStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

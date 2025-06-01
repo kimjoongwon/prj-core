@@ -40,7 +40,7 @@ import {
   IsUndefinable,
 } from './validator.decorators';
 import { Constructor } from '../constant/types';
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 interface IFieldOptions extends Omit<InputProps, 'type'> {
   required?: boolean;
@@ -74,9 +74,9 @@ export const SectionNameKey = 'section-name';
 export const FormTypeKey = 'form-type';
 export const ValidationKey = 'validation';
 
-export function Input(input: InputBuilder) {
+export function Input(input: ElementBuilder) {
   return (target: any, propertyKey: string) => {
-    input.path = 'form.inputs.' + propertyKey;
+    input.path = 'form.elements.' + propertyKey;
     Reflect.defineMetadata(FormTypeKey, input, target, propertyKey);
   };
 }

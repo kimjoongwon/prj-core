@@ -22,7 +22,7 @@ export class ActionEditPage {
       name: '새편집',
       state: {
         form: {
-          inputs: {},
+          elements: {},
         },
       },
       form: {
@@ -42,10 +42,10 @@ export class ActionEditPage {
             stacks: [
               {
                 type: 'VStack',
-                inputs: [
+                elements: [
                   {
-                    path: 'form.inputs.name',
-                    type: 'Input',
+                    path: 'form.elements.name',
+                    name: 'Input',
                     props: {
                       fullWidth: true,
                       label: '액션 이름',
@@ -53,8 +53,8 @@ export class ActionEditPage {
                     },
                   },
                   {
-                    path: 'form.inputs.subjectId',
-                    type: 'Select',
+                    path: 'form.elements.subjectId',
+                    name: 'Select',
                     props: {
                       fullWidth: true,
                       label: '과목',

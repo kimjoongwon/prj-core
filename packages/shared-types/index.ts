@@ -1,4 +1,2 @@
-export * from './common';
-export * from './mobx';
-export * from './builder';
+export * from './src/builder';
 export * from '@heroui/react';

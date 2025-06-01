@@ -4,7 +4,7 @@ import {
   type RouteObject,
 } from 'react-router';
 import { type RouteBuilder as IRouteBuilder } from '@shared/types';
-import { Plate, RouteBuilder } from '@shared/frontend';
+import { DarkModeSwitch, Plate, RouteBuilder } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';
 // Any configurations are optional
@@ -36,5 +36,10 @@ export const App = observer(() => {
     Plate.navigation.routeBuilders.length,
   );
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <DarkModeSwitch position="top-right" />
+    </>
+  );
 });

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
+import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 import { FormBuilderService } from '../form/form-builder.service';
-import { InputBuilderService } from '../Input/Input-builder.service';
+import { ElementBuilderService } from '../Input/Input-builder.service';
 import { ButtonBuilderService } from '../button/button-builder.service';
 
 interface LoginDto {
@@ -13,7 +13,7 @@ interface LoginDto {
 export class LoginPage {
   constructor(
     private readonly formBuilderService: FormBuilderService,
-    private readonly inputBuilderService: InputBuilderService,
+    private readonly elementBuilderService: ElementBuilderService,
     private readonly buttonBuilderService: ButtonBuilderService,
   ) {}
 
@@ -29,7 +29,7 @@ export class LoginPage {
       name: '로그인',
       mutation: {
         name: 'getToken',
-        payloadPath: 'form.inputs',
+        payloadPath: 'form.elements',
       },
       toast: {
         title: '성공',
@@ -47,14 +47,57 @@ export class LoginPage {
     });
   }
 
-  private buildSections(inputs: any[]): SectionBuilder[] {
+  private buildSections(elements: ElementBuilder[]): SectionBuilder[] {
     return [
       {
-        name: '로그인',
         stacks: [
           {
             type: 'VStack' as const,
-            inputs,
+            elements: [
+              {
+                name: 'Logo',
+              },
+              {
+                name: 'Spacer',
+                props: {
+                  size: '4',
+                },
+              },
+              ...elements,
+              {
+                name: 'Spacer',
+                props: {
+                  size: '4',
+                },
+              },
+            ],
+          },
+          {
+            type: 'VStack' as const,
+            elements: [
+              {
+                name: 'Button',
+                props: {
+                  children: '로그인',
+                  color: 'primary',
+                  fullWidth: true,
+                },
+              },
+              {
+                name: 'Button',
+                props: {
+                  children: '회원가입',
+                  color: 'secondary',
+                  fullWidth: true,
+                },
+              },
+              {
+                name: 'Copyright',
+                props: {
+                  companyName: 'Plate',
+                },
+              },
+            ],
           },
         ],
       },
@@ -62,7 +105,7 @@ export class LoginPage {
   }
 
   build(): PageBuilder {
-    const inputs = this.inputBuilderService.build(['email', 'password']);
+    const inputs = this.elementBuilderService.build(['email', 'password']);
     const button = this.createLoginButton();
     const formInputs = this.getDefaultLoginDto();
     const sections = this.buildSections(inputs);
@@ -77,7 +120,7 @@ export class LoginPage {
 
     return {
       name: '로그인',
-      state: { form: { inputs: formInputs } },
+      state: { form: { elements: formInputs } },
       form,
     };
   }
@@ -86,7 +129,7 @@ export class LoginPage {
   getState() {
     const state = {
       form: {
-        inputs: this.getDefaultLoginDto(),
+        elements: this.getDefaultLoginDto(),
       },
     };
     return state;

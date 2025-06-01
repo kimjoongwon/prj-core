@@ -23,8 +23,8 @@ export const SubmitButton = observer(
       const disposer = reaction(
         () => JSON.stringify(get(state, path)),
         () => {
-          const inputs = get(state, path);
-          Object.entries(inputs).forEach(([key, value]) => {
+          const elements = get(state, path);
+          Object.entries(elements).forEach(([key, value]) => {
             const validation = validations[key];
 
             localState.errorMessages = [];

@@ -37,7 +37,7 @@ export class SessionEditPage {
     const page: PageBuilder = {
       state: {
         form: {
-          inputs: {},
+          elements: {},
         },
       },
       name: '새편집',
@@ -59,28 +59,28 @@ export class SessionEditPage {
             stacks: [
               {
                 type: 'VStack',
-                inputs: [
+                elements: [
                   {
-                    type: 'Input',
-                    path: 'form.inputs.name',
+                    name: 'Input',
+                    path: 'form.elements.name',
                     props: {
                       label: '이름',
                     },
                   },
 
                   {
-                    type: 'DateRangePicker',
-                    path: 'form.inputs.startDateTime,endDateTime',
+                    name: 'DateRangePicker',
+                    path: 'form.elements.startDateTime,endDateTime',
                     props: {
                       label: '시작 ~ 종료',
                     },
                   },
                   {
-                    type: 'Select',
+                    name: 'Select',
                     path: 'repeatCycleType',
                     visibleCondition: {
                       eq: {
-                        path: 'form.inputs.type',
+                        path: 'form.elements.name',
                         value: $Enums.SessionTypes.RECURRING,
                       },
                     },
@@ -96,12 +96,12 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'form.inputs.repeatCycleType',
+                        path: 'form.elements.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.WEEKLY,
                       },
                     },
-                    type: 'WeekInput',
-                    path: 'form.inputs.recurringDayOfWeek',
+                    name: 'WeekInput',
+                    path: 'form.elements.recurringDayOfWeek',
                     props: {
                       label: '반복일',
                     },
@@ -109,20 +109,20 @@ export class SessionEditPage {
                   {
                     visibleCondition: {
                       eq: {
-                        path: 'form.inputs.repeatCycleType',
+                        path: 'form.elements.repeatCycleType',
                         value: $Enums.RepeatCycleTypes.MONTHLY,
                       },
                     },
-                    type: 'Select',
-                    path: 'form.inputs.recurringMonth',
+                    name: 'Select',
+                    path: 'form.elements.recurringMonth',
                     props: {
                       label: '반복월',
                       options: monthOptions,
                     },
                   },
                   {
-                    type: 'Select',
-                    path: 'form.inputs.type',
+                    name: 'Select',
+                    path: 'form.elements.type',
                     props: {
                       label: '세션타입',
                       options: sessionTypeOptions,
@@ -144,7 +144,7 @@ export class SessionEditPage {
       });
       page.form.button.mutation.name = 'updateSession';
       page.form.button.mutation.id = sessionId;
-      page.state.form.inputs = session;
+      page.state.form.elements = session;
     }
 
     return page;

@@ -6,11 +6,7 @@ import {
   getQueryClient,
 } from '@shared/frontend';
 import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
-import {
-  addToast,
-  Alert,
-  ButtonProps as HeroUIButtonProps,
-} from '@heroui/react';
+import { addToast, Alert } from '@heroui/react';
 import { PathUtil } from '@shared/utils';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
@@ -29,7 +25,6 @@ interface ButtonProps {
 export const ButtonBuilder = observer((props: ButtonProps) => {
   const { buttonBuilder, row, icon, ...rest } = props;
   const { buttonProps } = buttonBuilder;
-  console.log('ButtonBuilder props:', props.buttonBuilder.buttonProps);
   const state = usePageState();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -37,7 +32,7 @@ export const ButtonBuilder = observer((props: ButtonProps) => {
   const onPress = async () => {
     const button = cloneDeep(buttonBuilder);
     const params = button.mutation?.params;
-    const formData = defaultsDeep(state?.form?.inputs, params);
+    const formData = defaultsDeep(state?.form?.elements, params);
     const args = [];
 
     if (button.mutation?.id) {

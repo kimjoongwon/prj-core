@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 @Injectable()
 export class EmailInput {
-  build(): InputBuilder {
+  build(): ElementBuilder {
     return {
-      type: 'Input',
+      name: 'Input',
       path: 'email',
       props: {
         type: 'email',

@@ -19,6 +19,6 @@ export default {
       },
     },
   },
-  darkMode: 'light',
+  darkMode: 'dark',
   plugins: [heroui()],
 };

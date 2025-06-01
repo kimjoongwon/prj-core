@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
-import { InputBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/types';
 
 @Injectable()
 export class TextInput {
@@ -8,10 +8,10 @@ export class TextInput {
     return '내용';
   }
 
-  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'form.inputs.content.text') {
-    const input: InputBuilder = {
+  getMeta(type: $Enums.TextTypes = 'Textarea', path: string = 'form.elements.content.text') {
+    const input: ElementBuilder = {
       path,
-      type,
+      name: type,
       props: {
         label: this.getLabel(),
         placeholder: `${this.getLabel()}을 입력해주세요.`,

@@ -1,19 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import {
-  BuilderOptions,
-  ButtonBuilder,
-  FormBuilder,
-  InputBuilder,
-  SectionBuilder,
-} from '@shared/types';
+import { BuilderOptions, ButtonBuilder, FormBuilder, ElementBuilder } from '@shared/types';
 import _ from 'lodash';
 
 type ButtonMode = '생성' | '수정';
-
-type Options = {
-  sections: SectionBuilder[];
-  button: ButtonBuilder;
-};
 
 // 리소스별 라벨 매핑
 const ResourceLabels: Record<string, string> = {
@@ -25,7 +14,7 @@ const ResourceLabels: Record<string, string> = {
 @Injectable()
 export class FormBuilderService {
   buttonMode: ButtonMode;
-  inputs: InputBuilder[];
+  elements: ElementBuilder[];
 
   /**
    * @deprecated Use ButtonBuilderService.buildFormButton instead
