@@ -9,7 +9,7 @@ import {
 } from '../../../apis';
 import { useEffect } from 'react';
 import { reaction, toJS } from 'mobx';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { DepotDto, FileDto } from '../../../model';
 import { DepotService } from '../../../services/depot';
 

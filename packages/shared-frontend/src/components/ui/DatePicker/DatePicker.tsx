@@ -3,7 +3,7 @@ import {
   DatePicker as HeroUiDatePicker,
 } from '@heroui/react';
 import { parseAbsoluteToLocal } from '@internationalized/date';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { get, set } from 'lodash-es';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';

@@ -1,4 +1,4 @@
-import { HeaderBuilderProps } from '@shared/types';
+import { HeaderBuilderProps } from '@shared/specs';
 
 export const HeaderBuilder = (props: HeaderBuilderProps) => {
   const { table, name = '-', expandable = false } = props;

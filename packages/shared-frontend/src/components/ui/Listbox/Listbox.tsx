@@ -8,7 +8,7 @@ import {
 import { get, set } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ReactNode, useEffect } from 'react';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { reaction } from 'mobx';
 
 export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &

@@ -1,4 +1,4 @@
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/specs';
 
 /**
  * RouteNavigator - 라우트 이름 기준 네비게이션 서비스

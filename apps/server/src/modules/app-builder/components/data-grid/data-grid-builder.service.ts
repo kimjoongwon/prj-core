@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder, DataGridBuilder } from '@shared/types';
+import { ColumnBuilder, DataGridBuilder } from '@shared/specs';
 
 @Injectable()
 export class DataGridBuilderService {
@@ -20,14 +20,14 @@ export class DataGridBuilderService {
         },
         columns,
       },
-      buttons: [
-        {
-          name: '생성',
-          navigator: {
-            pathname: `new/create`,
-          },
-        },
-      ],
+      // buttons: [
+      //   {
+      //     name: '생성',
+      //     // navigator: {
+      //     //   pathname: `new/create`,
+      //     // },
+      //   },
+      // ],
     };
   }
 }

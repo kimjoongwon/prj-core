@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ColumnBuilder } from '@shared/types';
+import { ButtonBuilder, ColumnBuilder } from '@shared/specs';
 import { upperFirst } from 'lodash';
 import Pluaralize from 'pluralize';
 
@@ -54,7 +54,7 @@ export class ColumnBuilderService {
     return {
       id: 'action',
       header: { name: '액션' },
-      cell: { buttons: this.getCellActionNames(cellActionNames) },
+      cell: { buttons: [] },
     };
   }
 
@@ -73,64 +73,64 @@ export class ColumnBuilderService {
       header: { name: '라벨' },
     };
   }
-  private getCellActionNames(cellActionNames: CellActionName[]): ButtonBuilder[] {
-    return cellActionNames
-      .map((buttonType) => this.createButton(buttonType))
-      .filter(Boolean) as ButtonBuilder[];
-  }
+  // private getCellActionNames(cellActionNames: CellActionName[]): ButtonBuilder[] {
+  //   return cellActionNames
+  //     .map((buttonType) => this.createButton(buttonType))
+  //     .filter(Boolean) as ButtonBuilder[];
+  // }
 
-  private createButton(buttonType: CellActionName): ButtonBuilder | null {
-    const buttonCreators: Record<CellActionName, () => ButtonBuilder> = {
-      modify: this.getModifyButton.bind(this),
-      detail: this.getDetailButton.bind(this),
-      remove: this.getRemoveButton.bind(this),
-      create: this.getCreateButton.bind(this),
-    };
+  // private createButton(buttonType: CellActionName): ButtonBuilder | null {
+  //   const buttonCreators: Record<CellActionName, () => ButtonBuilder> = {
+  //     modify: this.getModifyButton.bind(this),
+  //     detail: this.getDetailButton.bind(this),
+  //     remove: this.getRemoveButton.bind(this),
+  //     create: this.getCreateButton.bind(this),
+  //   };
 
-    return buttonCreators[buttonType]?.();
-  }
+  //   return buttonCreators[buttonType]?.();
+  // }
 
-  private getModifyButton(): ButtonBuilder {
-    return {
-      color: 'secondary',
-      name: '수정',
-      navigator: {
-        type: 'push',
-        pathname: ':rowId/modify',
-      },
-    };
-  }
+  // private getModifyButton(): ButtonBuilder {
+  //   return {
+  //     color: 'secondary',
+  //     name: '수정',
+  //     // navigator: {
+  //     //   type: 'push',
+  //     //   pathname: ':rowId/modify',
+  //     // },
+  //   };
+  // }
 
-  private getDetailButton(): ButtonBuilder {
-    return {
-      color: 'primary',
-      name: '상세',
-      navigator: {
-        type: 'push',
-        pathname: ':rowId/detail',
-      },
-    };
-  }
+  // private getDetailButton(): ButtonBuilder {
+  //   return {
+  //     color: 'primary',
+  //     name: '상세',
+  //     // navigator: {
+  //     //   type: 'push',
+  //     //   pathname: ':rowId/detail',
+  //     // },
+  //   };
+  // }
 
-  private getRemoveButton(): ButtonBuilder {
-    return {
-      color: 'danger',
-      name: '삭제',
-      mutation: {
-        name: `delete${upperFirst(this.resourceName)}`,
-        invalidationKey: `/api/v1/${Pluaralize(this.resourceName || '')}`,
-      },
-    };
-  }
+  // private getRemoveButton(): ButtonBuilder {
+  //   return {
+  //     color: 'danger',
+  //     name: '삭제',
+  //     // mutation: {
+  //     //   name: `delete${upperFirst(this.resourceName)}`,
+  //     //   invalidationKey: `/api/v1/${Pluaralize(this.resourceName || '')}`,
+  //     // },
+  //   };
+  // }
 
-  private getCreateButton(): ButtonBuilder {
-    return {
-      color: 'success',
-      name: '추가',
-      navigator: {
-        type: 'push',
-        pathname: ':rowId/create',
-      },
-    };
-  }
+  // private getCreateButton(): ButtonBuilder {
+  //   return {
+  //     color: 'success',
+  //     name: '추가',
+  //     // navigator: {
+  //     //   type: 'push',
+  //     //   pathname: ':rowId/create',
+  //     // },
+  //   };
+  // }
 }

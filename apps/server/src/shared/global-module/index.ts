@@ -46,11 +46,8 @@ import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
 import { ColumnBuilderService } from '../../modules/app-builder/components/column/column-builder.service';
 import { DataGridBuilderService } from '../../modules/app-builder/components/data-grid/data-grid-builder.service';
-import { FormBuilderService } from '../../modules/app-builder/components/form/form-builder.service';
 import { ElementBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
-import { ButtonBuilderService } from '../../modules/app-builder/components/button/button-builder.service';
 import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
-import { AuthService } from '../domain/auth/auth.service';
 
 const modules = [
   AbilitiesService,
@@ -91,8 +88,6 @@ const modules = [
   ElementBuilderService,
   ColumnBuilderService,
   DataGridBuilderService,
-  FormBuilderService,
-  ButtonBuilderService,
   GroundsService,
   GroundsRepository,
   ResourceConfigService,

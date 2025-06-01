@@ -2,7 +2,7 @@
 
 import React, { createContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { PageBuilder as PageBuilderInterface } from '@shared/types';
+import { PageBuilder as PageBuilderInterface } from '@shared/specs';
 import { DataGridBuilder } from '../DataGridBuilder/DataGridBuilder';
 import { v4 } from 'uuid';
 import { observable } from 'mobx';

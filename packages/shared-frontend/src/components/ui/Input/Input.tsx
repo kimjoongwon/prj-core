@@ -8,7 +8,7 @@ import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { InputView } from './InputView';
-import { Validation } from '@shared/types';
+import { Validation } from '@shared/specs';
 
 export type InputProps<T> = MobxProps<T> &
   NextUIInputProps & {

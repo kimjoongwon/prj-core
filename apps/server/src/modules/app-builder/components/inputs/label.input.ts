@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ElementBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/specs';
 
 @Injectable()
 export class LabelInput {

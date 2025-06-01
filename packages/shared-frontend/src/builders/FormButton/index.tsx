@@ -55,9 +55,11 @@ export const FormButton = observer((props: FormButtonProps) => {
     try {
       // APIManager[key]()를 호출
       const apiFunction = APIManager[apiKey as keyof typeof APIManager];
-      
+
       if (!apiFunction) {
-        console.error(`API function with key "${apiKey}" not found in APIManager`);
+        console.error(
+          `API function with key "${apiKey}" not found in APIManager`,
+        );
         addToast({
           title: errorToast.title,
           description: `API 함수를 찾을 수 없습니다: ${apiKey}`,
@@ -68,10 +70,10 @@ export const FormButton = observer((props: FormButtonProps) => {
 
       // API 함수 호출
       const response = await (apiFunction as Function)(params);
-      
+
       // 응답에서 data 추출
       const responseData = response?.data;
-      
+
       // 성공 토스트 표시
       addToast({
         title: successToast.title,
@@ -90,17 +92,16 @@ export const FormButton = observer((props: FormButtonProps) => {
 
       // 응답 데이터 반환 (필요 시 사용할 수 있도록)
       return responseData;
-
     } catch (error: unknown) {
       console.error('FormButton API call error:', error);
-      
+
       // 에러 처리
       if (isAxiosError(error)) {
         const errorMessage = error.response?.data?.message;
         const errorMessages = error.response?.data?.data?.message;
-        
+
         let description = errorToast.description;
-        
+
         if (Array.isArray(errorMessages) && errorMessages.length > 0) {
           description = errorMessages.join(', ');
         } else if (errorMessage) {
@@ -119,7 +120,7 @@ export const FormButton = observer((props: FormButtonProps) => {
           color: 'danger',
         });
       }
-      
+
       throw error; // 에러를 다시 throw하여 상위에서 처리할 수 있도록
     }
   };

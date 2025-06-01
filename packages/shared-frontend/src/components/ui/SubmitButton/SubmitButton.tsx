@@ -1,7 +1,7 @@
 import { ButtonProps } from '@heroui/react';
 import { Button } from '../Button/Button';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { MobxProps, Validations } from '@shared/types';
+import { MobxProps, Validations } from '@shared/specs';
 import { useEffect } from 'react';
 import { get } from 'lodash-es';
 import { reaction } from 'mobx';

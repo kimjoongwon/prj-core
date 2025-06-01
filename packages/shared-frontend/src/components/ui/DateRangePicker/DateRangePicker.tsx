@@ -3,7 +3,7 @@ import {
   DateRangePicker as HeroUiDateRangePicker,
   DateRangePickerProps as HeroUiDateRangePickerProps,
 } from '@heroui/react';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { get, set } from 'lodash-es';
 import { parseAbsoluteToLocal } from '@internationalized/date';
 import { useEffect } from 'react';

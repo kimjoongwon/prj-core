@@ -1,5 +1,5 @@
 import { APIManager } from '@shared/frontend';
-import { TableBuilder } from '@shared/types';
+import { TableBuilder } from '@shared/specs';
 import { isEmpty } from 'lodash-es';
 import { useSearchParams } from 'next/navigation';
 

@@ -3,7 +3,7 @@ import {
   RouterProvider,
   type RouteObject,
 } from 'react-router';
-import { type RouteBuilder as IRouteBuilder } from '@shared/types';
+import { type RouteBuilder as IRouteBuilder } from '@shared/specs';
 import { DarkModeSwitch, Plate, RouteBuilder } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Button, Layout, List, Plate, Text } from '@shared/frontend';
-import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
+import { LayoutBuilder as LayoutBuilderInterface } from '@shared/specs';
 import { observer } from 'mobx-react-lite';
 import { Outlet, useNavigate } from 'react-router';
 import { Card, CardHeader, Divider, CardBody } from '@heroui/react';

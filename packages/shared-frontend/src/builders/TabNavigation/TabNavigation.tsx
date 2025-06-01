@@ -1,5 +1,5 @@
 import { Tabs } from '@shared/frontend';
-import { TabBuilder } from '@shared/types';
+import { TabBuilder } from '@shared/specs';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';

@@ -3,7 +3,7 @@ import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { FormTypeKey, SectionNameKey } from '../decorator/field.decorators';
 import { CreateExerciseDto } from '../dto';
 import { groupBy } from 'lodash';
-import { PageBuilder, SectionBuilder } from '@shared/types';
+import { PageBuilder, SectionBuilder } from '@shared/specs';
 
 export function pageBuilder<T extends object>(
   ClassConstructor: ClassConstructor<unknown> = CreateExerciseDto,
@@ -41,21 +41,11 @@ export function pageBuilder<T extends object>(
     type: 'Page',
     state: {
       form: {
-        elements: defaultObject,
+        inputs: defaultObject,
       },
     },
     form: {
       name: '정보',
-      button: {
-        name: '저장',
-        mutation: {
-          name: '',
-          payloadPath: '',
-        },
-        navigator: {
-          pathname: '..',
-        },
-      },
       sections,
     },
   };

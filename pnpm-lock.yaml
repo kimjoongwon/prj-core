@@ -26,9 +26,9 @@ importers:
       '@shared/frontend':
         specifier: workspace:*
         version: link:../../packages/shared-frontend
-      '@shared/types':
+      '@shared/specs':
         specifier: workspace:*
-        version: link:../../packages/shared-types
+        version: link:../../packages/shared-specs
       framer-motion:
         specifier: ^11.5.6
         version: 11.18.2(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -256,9 +256,9 @@ importers:
       '@prisma/client':
         specifier: 6.4.1
         version: 6.4.1(prisma@6.4.1(typescript@5.7.3))(typescript@5.7.3)
-      '@shared/types':
+      '@shared/specs':
         specifier: workspace:*
-        version: link:../../packages/shared-types
+        version: link:../../packages/shared-specs
       '@types/cookie-parser':
         specifier: ^1.4.8
         version: 1.4.8(@types/express@5.0.0)
@@ -492,9 +492,9 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
     devDependencies:
-      '@shared/types':
+      '@shared/specs':
         specifier: workspace:*
-        version: link:../shared-types
+        version: link:../shared-specs
       '@tanstack/react-query-devtools':
         specifier: ^5.66.9
         version: 5.66.9(@tanstack/react-query@5.66.9(react@19.1.0))(react@19.1.0)
@@ -550,31 +550,7 @@ importers:
         specifier: 3.0.7
         version: 3.0.7(@types/node@22.13.5)(jiti@2.4.2)(jsdom@26.0.0)(lightningcss@1.29.1)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.3))(terser@5.31.3)(tsx@4.19.2)(yaml@2.7.1)
 
-  packages/shared-meta:
-    devDependencies:
-      '@heroui/react':
-        specifier: ^2.7.8
-        version: 2.7.8(@types/react@19.1.5)(framer-motion@12.4.7(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.0.9)
-      '@react-stately/toast':
-        specifier: ^3.1.0
-        version: 3.1.0(react@19.1.0)
-      '@shared/types':
-        specifier: workspace:*
-        version: link:../shared-types
-      '@tanstack/react-query':
-        specifier: 5.66.9
-        version: 5.66.9(react@19.1.0)
-      '@tanstack/react-table':
-        specifier: ^8.21.2
-        version: 8.21.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@types/react':
-        specifier: ^19.1.2
-        version: 19.1.5
-      '@types/react-dom':
-        specifier: ^19.1.2
-        version: 19.1.5(@types/react@19.1.5)
-
-  packages/shared-types:
+  packages/shared-specs:
     devDependencies:
       '@heroui/react':
         specifier: ^2.7.8

@@ -1,5 +1,5 @@
 import { ButtonBuilder } from '../ButtonBuilder';
-import { PageBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/specs';
 import { observer } from 'mobx-react-lite';
 
 interface FormButtonBuilderProps {
@@ -9,5 +9,5 @@ interface FormButtonBuilderProps {
 export const FormButtonBuilder = observer((props: FormButtonBuilderProps) => {
   const { pageBuilder } = props;
 
-  return <ButtonBuilder buttonBuilder={pageBuilder.form.button} />;
+  return <ButtonBuilder {...pageBuilder.form.button} />;
 });

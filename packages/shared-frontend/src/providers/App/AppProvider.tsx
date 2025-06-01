@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, createContext } from 'react';
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/specs';
 import { useGetAppBuilder } from '../../apis';
 import {
   DepotService,

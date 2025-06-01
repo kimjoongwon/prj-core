@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { FileUploaderProps } from '../FileUploader/FileUploader';
 import { VideoUploader } from '../VideoUploader/VideoUploader';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 
 interface DepotProps<T>
   extends MobxProps<T>,
