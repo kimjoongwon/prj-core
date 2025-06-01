@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider } from '../../../../shared/provider';
-import { DepotUploaderOptions, ElementBuilder } from '@shared/types';
+import { DepotUploaderOptions, ElementBuilder } from '@shared/specs';
 import { defaultsDeep } from 'lodash';
 
 type FieldTypes = 'name' | 'label' | 'businessNo' | 'address' | 'phone' | 'email' | 'password';

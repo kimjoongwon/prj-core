@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PageBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/specs';
 import { ContextProvider } from '../../../../shared/provider/context.provider';
 import { ColumnBuilderService } from '../column/column-builder.service';
 import { DataGridBuilderService } from '../data-grid/data-grid-builder.service';

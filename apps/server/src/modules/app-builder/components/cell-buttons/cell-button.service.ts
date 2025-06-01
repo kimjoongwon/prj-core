@@ -1,52 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder } from '@shared/types';
+import { ButtonBuilder } from '@shared/specs';
 
 @Injectable()
 export class CellButtonService {
-  getMeta(types: ('modify' | 'detail' | 'remove')[]) {
-    const buttons = [];
-    if (types.includes('modify')) {
-      buttons.push(this.getModifyButton());
-    }
-    if (types.includes('detail')) {
-      buttons.push(this.getDetailButton());
-    }
-    if (types.includes('remove')) {
-      buttons.push(this.getRemoveButton());
-    }
-    return buttons;
-  }
+  // getMeta(types: ('modify' | 'detail' | 'remove')[]) {
+  //   const buttons = [];
+  //   if (types.includes('modify')) {
+  //     buttons.push(this.getModifyButton());
+  //   }
+  //   if (types.includes('detail')) {
+  //     buttons.push(this.getDetailButton());
+  //   }
+  //   if (types.includes('remove')) {
+  //     buttons.push(this.getRemoveButton());
+  //   }
+  //   return buttons;
+  // }
 
-  getModifyButton() {
-    const button: ButtonBuilder = {
-      color: 'primary',
-      name: '수정',
-      navigator: {
-        pathname: 'groups/:groupId/modify',
-      },
-    };
+  // getModifyButton() {
+  //   const button: ButtonBuilder = {
+  //     // color: 'primary',
+  //     name: '수정',
+  //     // navigator: {
+  //     //   pathname: 'groups/:groupId/modify',
+  //     // },
+  //   };
 
-    return button;
-  }
+  //   return button;
+  // }
 
-  getDetailButton() {
-    const button: ButtonBuilder = {
-      color: 'secondary',
-      name: '상세',
-      navigator: {
-        pathname: 'groups/:groupId',
-      },
-    };
+  // getDetailButton() {
+  //   const button: ButtonBuilder = {
+  //     name: '상세',
+  //     // navigator: {
+  //     //   pathname: 'groups/:groupId',
+  //     // },
+  //   };
 
-    return button;
-  }
+  //   return button;
+  // }
 
-  getRemoveButton() {
-    const button: ButtonBuilder = {
-      color: 'danger',
-      name: '삭제',
-    };
+  // getRemoveButton() {
+  //   const button: ButtonBuilder = {
+  //     // color: 'danger',
+  //     name: '삭제',
+  //   };
 
-    return button;
-  }
+  //   return button;
+  // }
 }

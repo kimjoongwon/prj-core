@@ -1,6 +1,6 @@
 'use client';
 
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { TabsView } from './TabsView';
 import { get } from 'lodash-es';
 import { Key } from 'react';

@@ -20,7 +20,7 @@ import {
 } from '@heroui/react';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { action, reaction } from 'mobx';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { get, set } from 'lodash-es';
 
 export type Key = string | number;

@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { toJS } from 'mobx';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { DataGrid, HStack, useGetTableQuery } from '@shared/frontend';
-import { DataGridBuilder as DataGridBuilderInterface } from '@shared/types';
+import { DataGridBuilder as DataGridBuilderInterface } from '@shared/specs';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';

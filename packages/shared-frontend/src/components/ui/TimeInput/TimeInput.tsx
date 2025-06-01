@@ -2,7 +2,7 @@ import {
   TimeInputProps as HeroUiTimeInputProps,
   TimeInput as NextUiTimeInput,
 } from '@heroui/react';
-import { MobxProps } from '@shared/types';
+import { MobxProps } from '@shared/specs';
 import { get, set } from 'lodash-es';
 import { action, reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';

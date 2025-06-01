@@ -17,7 +17,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { RouteNode } from './RouteNode';
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/specs';
 import { routeNavigator } from '@shared/frontend';
 import { Button, Card, CardBody, CardHeader, Divider } from '@heroui/react';
 import { observer } from 'mobx-react-lite';

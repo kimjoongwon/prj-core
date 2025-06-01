@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { SectionBuilder as SectionBuilderInterface } from '@shared/types';
+import { SectionBuilder as SectionBuilderInterface } from '@shared/specs';
 import { ElementBuilder } from '../ElementBuilder';
 import { v4 } from 'uuid';
 import { VStack, HStack } from '../../components';

@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { CellBuilderProps } from '@shared/types';
+import { CellBuilderProps } from '@shared/specs';
 import { CellButtonBuilder } from '../CellButtonBuilder';
 import dayjs from 'dayjs';
 

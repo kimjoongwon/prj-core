@@ -1,4 +1,4 @@
-import { type RouteBuilder, type Route } from '@shared/types';
+import { type RouteBuilder, type Route } from '@shared/specs';
 import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
 import { NavigateFunction } from 'react-router';

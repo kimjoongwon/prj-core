@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/types';
-import { FormBuilderService } from '../form/form-builder.service';
-import { ElementBuilderService } from '../Input/Input-builder.service';
-import { ButtonBuilderService } from '../button/button-builder.service';
+import { ElementBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
 
 interface LoginDto {
   email: string;
@@ -11,40 +8,11 @@ interface LoginDto {
 
 @Injectable()
 export class LoginPage {
-  constructor(
-    private readonly formBuilderService: FormBuilderService,
-    private readonly elementBuilderService: ElementBuilderService,
-    private readonly buttonBuilderService: ButtonBuilderService,
-  ) {}
-
   private getDefaultLoginDto(): LoginDto {
     return {
       email: 'plate@gmail.com',
       password: 'rkdmf12!@',
     };
-  }
-
-  private createLoginButton(): ButtonBuilder {
-    return this.buttonBuilderService.build({
-      name: '로그인',
-      mutation: {
-        name: 'getToken',
-        payloadPath: 'form.elements',
-      },
-      toast: {
-        title: '성공',
-        description: '로그인되었습니다.',
-      },
-      navigator: {
-        type: 'push' as const,
-        pathname: '/admin/main/tenants',
-      },
-      buttonProps: {
-        size: 'md',
-        fullWidth: true,
-        color: 'primary',
-      },
-    });
   }
 
   private buildSections(elements: ElementBuilder[]): SectionBuilder[] {
@@ -76,15 +44,16 @@ export class LoginPage {
             type: 'VStack' as const,
             elements: [
               {
-                name: 'Button',
+                name: 'ButtonBuilder',
                 props: {
+                  apiKey: 'loginButton',
                   children: '로그인',
                   color: 'primary',
                   fullWidth: true,
                 },
               },
               {
-                name: 'Button',
+                name: 'ButtonBuilder',
                 props: {
                   children: '회원가입',
                   color: 'secondary',
@@ -104,23 +73,61 @@ export class LoginPage {
     ];
   }
 
+  // 직접 입력 필드를 생성하는 메서드
+  private createInputElements(): ElementBuilder[] {
+    return [
+      {
+        name: 'Input',
+        props: {
+          label: '이메일',
+          placeholder: '이메일을 입력하세요',
+          type: 'email',
+        },
+        path: 'form.inputs.email',
+        validation: {
+          required: { value: true, message: '이메일을 입력해주세요' },
+          patterns: [
+            {
+              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+              message: '올바른 이메일 형식이 아닙니다',
+            },
+          ],
+        },
+      },
+      {
+        name: 'Input',
+        props: {
+          label: '비밀번호',
+          placeholder: '비밀번호를 입력하세요',
+          type: 'password',
+        },
+        path: 'form.inputs.password',
+        validation: {
+          required: { value: true, message: '비밀번호를 입력해주세요' },
+          minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
+        },
+      },
+    ];
+  }
+
   build(): PageBuilder {
-    const inputs = this.elementBuilderService.build(['email', 'password']);
-    const button = this.createLoginButton();
+    const inputs = this.createInputElements();
     const formInputs = this.getDefaultLoginDto();
     const sections = this.buildSections(inputs);
-    const form = this.formBuilderService.build({
+
+    // 직접 form 객체 생성
+    const form = {
       id: 'login',
       type: 'create',
       resourceName: 'Auth',
       resourceLabel: '로그인',
-      button,
+      button: undefined,
       sections,
-    });
+    };
 
     return {
       name: '로그인',
-      state: { form: { elements: formInputs } },
+      state: { form: { inputs: formInputs } },
       form,
     };
   }

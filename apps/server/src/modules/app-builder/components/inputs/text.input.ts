@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
-import { ElementBuilder } from '@shared/types';
+import { ElementBuilder } from '@shared/specs';
 
 @Injectable()
 export class TextInput {

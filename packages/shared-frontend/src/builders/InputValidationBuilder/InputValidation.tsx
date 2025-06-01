@@ -1,5 +1,5 @@
 import { InputProps } from '@heroui/react';
-import { PageBuilder, Validation } from '@shared/types';
+import { PageBuilder, Validation } from '@shared/specs';
 import { uniq } from 'lodash-es';
 import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';

@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth, AuthService, LoginPayloadDto, ResponseEntity, TokenDto } from '@shared';
 import { AppBuilderService } from './app-builder.service';
 import { Response } from 'express';
-import { ButtonResponse } from '@shared/types';
+import { ButtonResponse } from '@shared/specs';
 
 @ApiTags('BUILDER')
 @Controller()
@@ -21,9 +21,15 @@ export class AppBuilderController {
   }
 
   @Post('login-button')
-  async loginButton(@Body() login: LoginPayloadDto, @Res() res: Response) {
+  async loginButton(
+    @Body() login: LoginPayloadDto,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
     const { accessToken, refreshToken, user } = await this.authService.login(login);
-    const tenant = user.tenants.find((tenant) => tenant.main);
+    const tenant = user.tenants?.find((tenant) => tenant.main);
 
     res.cookie('tenantId', tenant.id, {
       httpOnly: true,
@@ -40,7 +46,6 @@ export class AppBuilderController {
     const buttonResponse: ButtonResponse<TokenDto> = {
       routeName: '대시보드',
     };
-
     return new ResponseEntity(200, '성공', buttonResponse);
   }
 }

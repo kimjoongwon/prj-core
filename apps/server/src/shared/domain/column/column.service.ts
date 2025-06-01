@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder } from '@shared/types';
+import { ColumnBuilder } from '@shared/specs';
 
 @Injectable()
 export class ColumnService {
@@ -45,16 +45,16 @@ export class ColumnService {
           {
             color: 'primary',
             name: '수정',
-            navigator: {
-              pathname: 'edit',
-            },
+            // navigator: {
+            //   pathname: 'edit',
+            // },
           },
           {
             color: 'danger',
             name: '삭제',
-            mutation: {
-              name: 'deleteSpace',
-            },
+            // mutation: {
+            //   name: 'deleteSpace',
+            // },
           },
         ],
       },

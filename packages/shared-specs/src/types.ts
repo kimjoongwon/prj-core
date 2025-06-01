@@ -1,5 +1,7 @@
 import { HeaderContext, CellContext } from '@tanstack/react-table';
 import { ButtonProps, CardProps, TableProps, InputProps, ToastProps } from '..';
+import type { RouteNames } from './routes';
+
 export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
 
 export type BuilderOptions = {
@@ -50,6 +52,7 @@ export interface ElementBuilder {
     | 'Tabs'
     | 'Depot'
     | 'Textarea'
+    | 'ButtonBuilder'
     | any;
   props?: ElementProps<ElementBuilder['name']>;
   path?: string;
@@ -68,13 +71,15 @@ export type ElementProps<T extends string | undefined> = T extends 'Button'
   ? {
       size?: number;
     }
+  : T extends 'ButtonBuilder'
+  ? ButtonBuilder
   : any;
 
 export interface ButtonResponse<T> {
-  routeName?: string;
+  routeName?: RouteNames;
   state?: T;
   toast?: {
-    state: ToastProps['state'];
+    state: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
     title: string;
     description: string;
   };
@@ -88,27 +93,26 @@ export interface FormBuilder {
   button?: ButtonBuilder;
 }
 
-export interface ButtonBuilder {
-  icon?: string;
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+export interface ButtonBuilder extends ButtonProps {
+  apiKey?: string;
   name: string;
-  mutation?: Mutation;
-  navigator?: Navigator;
-  alert?: AlertBuilder;
+  state: PageState<any>;
+  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   toast?: {
     title: string;
     description: string;
   };
-  buttonProps?: ButtonProps;
 }
 
 export interface CellButtonBuilder {
   icon?: string;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
   name: string;
-  mutation?: Mutation;
-  navigator?: Navigator;
-  alert?: AlertBuilder;
+  apiKey?: string;
+  toast?: {
+    title: string;
+    description: string;
+  };
 }
 
 export interface AlertBuilder {
@@ -180,7 +184,7 @@ export type Key = string | number;
 
 export interface PageState<CDO> {
   form?: {
-    elements: CDO;
+    inputs: CDO;
     errorMessages?: string[];
     button?: {
       errorMessages?: string[];

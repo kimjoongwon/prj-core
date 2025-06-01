@@ -52,7 +52,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@shared/types": "workspace:*",
+    "@shared/specs": "workspace:*",
     "@tanstack/react-query-devtools": "^5.66.9",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
