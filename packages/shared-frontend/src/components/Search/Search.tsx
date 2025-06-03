@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { get, isUndefined, set } from 'lodash-es';
 import { MobxProps } from '@shared/types';
 import { KeyboardEventHandler } from 'react';
-import { Input } from '../Input/Input';
+import { Input } from '../Input';
 
 interface SearchProps<T> extends MobxProps<T> {
   queryState: any;

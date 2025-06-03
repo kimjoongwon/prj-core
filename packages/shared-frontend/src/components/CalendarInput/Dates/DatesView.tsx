@@ -1,5 +1,5 @@
 import { useProps } from '../_hooks/useProps';
-import { Date } from '../Date/Date';
+import { Date } from '../Date';
 import { observer } from 'mobx-react-lite';
 
 interface DatesViewProps {

@@ -2,7 +2,7 @@ import { X, Play } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { type SortableMediaProps } from '@shared/types';
-import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
+import { VideoPlayer } from '../VideoPlayer';
 import { action, observable } from 'mobx';
 import { v4 } from 'uuid';
 

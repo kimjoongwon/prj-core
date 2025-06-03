@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '../Button/Button';
+import { Button } from '../Button';
 import { cn } from '@heroui/react';
 import { HStack } from '../HStack';
 

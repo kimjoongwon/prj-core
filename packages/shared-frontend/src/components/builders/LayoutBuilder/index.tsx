@@ -1,10 +1,8 @@
 import { ReactNode } from 'react';
-import { Button, Layout, List, Plate, Text } from '@shared/frontend';
+import { Layout } from '@shared/frontend';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import { Outlet, useNavigate } from 'react-router';
-import { Card, CardHeader, Divider, CardBody } from '@heroui/react';
-import { v4 } from 'uuid';
+import { Outlet } from 'react-router';
 interface Layout {
   children: ReactNode;
   layoutBuilder?: LayoutBuilderInterface;
@@ -58,45 +56,45 @@ export const AuthLayout = observer(
   },
 );
 
-export const DashboardLayout = observer((props: { children: ReactNode }) => {
-  const { children } = props;
-  const navigate = useNavigate();
+// export const DashboardLayout = observer((props: { children: ReactNode }) => {
+//   const { children } = props;
+//   const navigate = useNavigate();
 
-  return (
-    <>
-      <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">
-        <Card className="rounded-xl w-full md:w-[200px]">
-          <CardHeader>
-            <Text variant="h6">{Plate.navigation.serviceRoute?.name} </Text>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <List
-              className="flex flex-row md:flex-col"
-              data={Plate.navigation.serviceRoute?.children || []}
-              renderItem={route => {
-                return (
-                  <Button
-                    variant="light"
-                    key={v4()}
-                    color={route.active ? 'primary' : 'default'}
-                    onPress={() => {
-                      navigate(route.pathname);
-                      Plate.navigation.activateRoute(route.pathname);
-                    }}
-                  >
-                    {route.name}
-                  </Button>
-                );
-              }}
-            />
-          </CardBody>
-        </Card>
-        {children}
-      </div>
-    </>
-  );
-});
+//   return (
+//     <>
+//       <div className="flex flex-col md:flex-row h-full flex-1 space-y-2 md:space-y-0 md:space-x-2 px-4 md:p-0">
+//         <Card className="rounded-xl w-full md:w-[200px]">
+//           <CardHeader>
+//             <Text variant="h6">{Plate.navigation.serviceRoute?.name} </Text>
+//           </CardHeader>
+//           <Divider />
+//           <CardBody>
+//             <List
+//               className="flex flex-row md:flex-col"
+//               data={Plate.navigation.serviceRoute?.children || []}
+//               renderItem={route => {
+//                 return (
+//                   <Button
+//                     variant="light"
+//                     key={v4()}
+//                     color={route.active ? 'primary' : 'default'}
+//                     onPress={() => {
+//                       navigate(route.pathname);
+//                       Plate.navigation.activateRoute(route.pathname);
+//                     }}
+//                   >
+//                     {route.name}
+//                   </Button>
+//                 );
+//               }}
+//             />
+//           </CardBody>
+//         </Card>
+//         {children}
+//       </div>
+//     </>
+//   );
+// });
 
 // export const ServicesLayout = observer((props: ServicesLayoutProps) => {
 //   const { children } = props;

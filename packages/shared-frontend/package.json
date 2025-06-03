@@ -13,6 +13,7 @@
   },
   "scripts": {
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
+    "build": "tsup index.ts --format esm,cjs --dts --out-dir dist --external react,react-dom,react-router,dayjs,nuqs,axios,@tanstack/react-query,@tanstack/react-table,@heroui/react,@heroui/use-theme,@dnd-kit/core,@dnd-kit/sortable,@dnd-kit/utilities,lodash-es,framer-motion,mobx,mobx-react-lite,remeda,tailwind-variants,class-variance-authority,uuid",
     "test": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "codegen": "openapi-rq -i http://localhost:3005/api-json --output ./src/api -c axios"

@@ -4,23 +4,17 @@ import { Button as BaseButton, APIManager } from '@shared/frontend';
 import { CellButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { cloneDeep } from 'lodash-es';
-import { useRouter } from 'next/navigation';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { addToast } from '@heroui/react';
 import { isAxiosError } from 'axios';
 
-interface ButtonProps {
-  row?: unknown & { id: string };
-  buttonBuilder: ButtonBuilderProps;
-  icon?: React.ReactNode;
-}
+interface ButtonProps extends ButtonBuilderProps {}
 
 export const CellButtonBuilder = observer((props: ButtonProps) => {
-  const { buttonBuilder, row, icon, ...rest } = props;
-  const router = useRouter();
+  const { icon, ...rest } = props;
 
   const onPress = async () => {
-    const button = cloneDeep(buttonBuilder);
+    const button = cloneDeep(props);
     const successToast = button.toast || {
       title: '성공',
       description: '작업이 완료되었습니다.',
@@ -52,7 +46,7 @@ export const CellButtonBuilder = observer((props: ButtonProps) => {
         }
 
         // API 함수 호출 (row.id를 파라미터로 전달)
-        await (apiFunction as Function)(row?.id);
+        await (apiFunction as Function)();
 
         // 성공 토스트 표시
         addToast({
@@ -113,9 +107,9 @@ export const CellButtonBuilder = observer((props: ButtonProps) => {
     }
   };
 
-  let buttonChildren: any = buttonBuilder.name;
+  let buttonChildren: any = props.name;
 
-  switch (buttonBuilder.icon) {
+  switch (props.icon) {
     case 'detail':
       buttonChildren = <List />;
       break;
@@ -129,15 +123,11 @@ export const CellButtonBuilder = observer((props: ButtonProps) => {
       buttonChildren = <Delete />;
       break;
     default:
-      buttonChildren = buttonBuilder.name;
+      buttonChildren = props.name;
   }
 
   return (
-    <BaseButton
-      {...rest}
-      onPress={onPress}
-      color={buttonBuilder?.color || 'primary'}
-    >
+    <BaseButton {...rest} onPress={onPress} color={props?.color || 'primary'}>
       {buttonChildren}
     </BaseButton>
   );

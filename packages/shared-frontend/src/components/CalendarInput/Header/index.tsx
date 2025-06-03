@@ -1,4 +1,4 @@
-import { Button } from '../../Button/Button';
+import { Button } from '../../Button';
 import { HStack } from '../../HStack';
 import { useProps } from '../_hooks/useProps';
 import { observer } from 'mobx-react-lite';

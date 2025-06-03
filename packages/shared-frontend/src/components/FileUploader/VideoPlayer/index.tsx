@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { Play, Pause, Maximize, Minimize } from 'lucide-react';
 import { VideoPlayerProps } from '@shared/types';
 import { Modal, ModalContent } from '@heroui/react';
-import { state } from '../SortableMedia/SortableMedia';
+import { state } from '../SortableMedia';
 import { observer } from 'mobx-react-lite';
 
 export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {

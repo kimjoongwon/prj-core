@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { Button } from '../Button/Button';
+import { Button } from '../Button';
 import { ButtonGroup } from '@heroui/react';
 import { CategoryDto } from '../../model/categoryDto';
 
