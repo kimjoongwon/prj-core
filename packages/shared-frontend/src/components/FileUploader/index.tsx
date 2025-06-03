@@ -19,7 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 import { Card } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-import { SortableMedia } from './SortableMedia/SortableMedia';
+import { SortableMedia } from './SortableMedia';
 import { v4 } from 'uuid';
 import { FileDto } from '../../model/fileDto';
 

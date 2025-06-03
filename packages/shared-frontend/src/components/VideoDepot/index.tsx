@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import type { FileUploaderProps } from '../FileUploader/FileUploader';
-import { VideoUploader } from '../VideoUploader/VideoUploader';
+import type { FileUploaderProps } from '../FileUploader';
+import { VideoUploader } from '../VideoUploader';
 import type { MobxProps } from '@shared/types';
 
 interface DepotProps<T>

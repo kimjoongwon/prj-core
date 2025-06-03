@@ -43,7 +43,7 @@ export class AppBuilderController {
       httpOnly: true,
     });
 
-    const buttonResponse: ButtonResponse<TokenDto> = {
+    const buttonResponse: ButtonResponse = {
       routeName: '관리자',
       toast: {
         color: 'success',

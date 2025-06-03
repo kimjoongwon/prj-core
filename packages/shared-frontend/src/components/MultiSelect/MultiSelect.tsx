@@ -3,7 +3,7 @@ import {
   Select as NextSelect,
   SelectItem,
   SelectProps as NextUISelectProps,
-} from "@heroui/react";
+} from '@heroui/react';
 import { MobxProps } from '@shared/types';
 import { useEffect } from 'react';
 import { reaction } from 'mobx';
@@ -64,11 +64,7 @@ export const MultiSelect = observer(
         selectedKeys={new Set(localState.value)}
       >
         {options.map(option => {
-          return (
-            <SelectItem key={option.value} value={option.value}>
-              {option.name}
-            </SelectItem>
-          );
+          return <SelectItem key={option.value}>{option.name}</SelectItem>;
         })}
       </NextSelect>
     );

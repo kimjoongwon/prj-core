@@ -2,7 +2,7 @@
 
 import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
-import { Logo } from '../Logo/Logo';
+import { Logo } from '../Logo';
 import { Button, Card } from '@heroui/react';
 import { v4 } from 'uuid';
 import { Paths } from '../../constants/Paths';

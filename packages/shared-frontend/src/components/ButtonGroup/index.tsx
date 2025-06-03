@@ -2,7 +2,7 @@
 import { Link } from "@heroui/react";
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
-import { Button } from '../Button/Button';
+import { Button } from '../Button';
 import { GroupButton } from '@shared/types';
 
 interface ButtonGroupProps {

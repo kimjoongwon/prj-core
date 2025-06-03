@@ -26,15 +26,7 @@ export const CellBuilder = ({
     return (
       <div className="flex space-x-1">
         {buttons.map(button => {
-          return (
-            <CellButtonBuilder
-              key={v4()}
-              size="sm"
-              variant="flat"
-              buttonBuilder={button}
-              row={row.original}
-            />
-          );
+          return <CellButtonBuilder key={v4()} {...button} />;
         })}
       </div>
     );

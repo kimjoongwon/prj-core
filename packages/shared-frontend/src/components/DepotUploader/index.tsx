@@ -1,5 +1,5 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { FileUploader, FileUploaderProps } from '../FileUploader/FileUploader';
+import { FileUploader, FileUploaderProps } from '../FileUploader';
 import { get, set } from 'lodash-es';
 import {
   createDepot,

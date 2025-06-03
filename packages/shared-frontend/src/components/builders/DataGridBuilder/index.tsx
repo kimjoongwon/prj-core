@@ -45,7 +45,7 @@ export const DataGridBuilder = observer(
         <HStack>
           <ButtonGroup size="sm">
             {dataGridBuilder.buttons?.map(button => {
-              return <ButtonBuilder key={v4()} buttonBuilder={button} />;
+              return <ButtonBuilder key={v4()} {...button} />;
             })}
           </ButtonGroup>
         </HStack>

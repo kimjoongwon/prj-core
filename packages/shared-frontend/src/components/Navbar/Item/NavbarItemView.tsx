@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 
 import { NavbarItemProps } from './index';
-import { Button } from '../../Button/Button';
+import { Button } from '../../Button';
 
 export const NavbarItemView = observer((props: NavbarItemProps) => {
   const { text, active } = props;

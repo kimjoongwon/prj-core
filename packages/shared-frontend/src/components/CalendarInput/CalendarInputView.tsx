@@ -2,7 +2,7 @@
 
 import { DaysOfWeek } from './DaysOfWeek';
 import { CalendarInputPropsView } from '@shared/types';
-import { Dates } from './Dates/Dates';
+import { Dates } from './Dates';
 import { Header } from './Header';
 import { observer } from 'mobx-react-lite';
 

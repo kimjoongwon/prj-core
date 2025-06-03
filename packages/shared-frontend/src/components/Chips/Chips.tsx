@@ -1,4 +1,4 @@
-import { Chip } from '../Chip/Chip';
+import { Chip } from '../Chip';
 import { observer } from 'mobx-react-lite';
 import { MobxProps } from '@shared/types';
 import { useInputState } from '../../hooks/useInputState';

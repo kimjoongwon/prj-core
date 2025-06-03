@@ -50,7 +50,7 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
         const response = await (apiFunction as Function)(state.form.inputs);
 
         // 응답 데이터 추출
-        const responseData = response?.data as ButtonResponse<any>;
+        const responseData = response?.data as ButtonResponse;
         if (responseData.toast) {
           addToast({
             title: responseData.toast.title || successToast.title,

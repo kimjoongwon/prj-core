@@ -1,6 +1,6 @@
 import { RouteBuilder as RouteBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import { LayoutBuilder } from '../LayoutBuilder/LayoutBuilder';
+import { LayoutBuilder } from '../LayoutBuilder';
 import { PageBuilder } from '../Page/PageBuilder';
 
 interface RouteBuilderProps {
