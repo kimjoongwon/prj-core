@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth, AuthService, LoginPayloadDto, ResponseEntity, TokenDto } from '@shared';
 import { AppBuilderService } from './app-builder.service';
 import { Response } from 'express';
-import { ButtonResponse } from '@shared/specs';
+import { ButtonResponse } from '@shared/types';
 
 @ApiTags('BUILDER')
 @Controller()

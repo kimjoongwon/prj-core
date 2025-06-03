@@ -2,7 +2,7 @@ import { Exercise as ExcerciesEntity } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
 import { ClassField, NumberField, StringField, UUIDField, UUIDFieldOptional } from '../decorator';
 import { CreateExerciseDto, CreateTaskDto } from './create';
-import { ValidationRecord } from '@shared/specs';
+import { ValidationRecord } from '@shared/types';
 
 // export const createDefaultExerciseObject: Omit<CreateExerciseDto, 'task'> = {
 //   duration: 18,

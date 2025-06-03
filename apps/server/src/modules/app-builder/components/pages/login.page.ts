@@ -1,6 +1,6 @@
 import { Button, InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
+import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 
 interface LoginDto {
   email: string;

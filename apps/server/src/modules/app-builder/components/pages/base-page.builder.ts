@@ -1,5 +1,5 @@
 
-// import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/specs';
+// import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 // import { FormBuilderService } from '../form/form-builder.service';
 // import { ElementBuilderService } from '../Input/Input-builder.service';
 // import { ButtonBuilderService } from '../button/button-builder.service';

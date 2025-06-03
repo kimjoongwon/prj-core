@@ -1,7 +1,7 @@
-import { type RouteBuilder, type Route } from '@shared/specs';
+import { type RouteBuilder, type Route } from '@shared/types';
 import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
-import { NavigateFunction } from 'react-router';
+import { type NavigateFunction } from 'react-router';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);

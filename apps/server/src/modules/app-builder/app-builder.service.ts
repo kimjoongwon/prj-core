@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/specs';
+import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/types';
 import { LoginPage } from './components/pages/login.page';
 import { rawRoutes } from '@shared/vars';
 

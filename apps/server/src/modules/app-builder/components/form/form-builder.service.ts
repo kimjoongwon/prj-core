@@ -1,5 +1,5 @@
 // import { Injectable } from '@nestjs/common';
-// import { BuilderOptions, ButtonBuilder, FormBuilder, ElementBuilder } from '@shared/specs';
+// import { BuilderOptions, ButtonBuilder, FormBuilder, ElementBuilder } from '@shared/types';
 // import _ from 'lodash';
 
 // type ButtonMode = '생성' | '수정';

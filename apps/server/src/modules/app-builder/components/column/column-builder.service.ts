@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ColumnBuilder } from '@shared/specs';
+import { ButtonBuilder, ColumnBuilder } from '@shared/types';
 import { upperFirst } from 'lodash';
 import Pluaralize from 'pluralize';
 

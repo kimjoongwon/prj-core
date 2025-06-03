@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ElementBuilder, ElementName } from '@shared/specs';
+import { ElementBuilder, ElementName } from '@shared/types';
 
 @Injectable()
 export class TextInput {

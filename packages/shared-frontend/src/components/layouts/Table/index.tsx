@@ -1,7 +1,7 @@
 'use client';
 
 import { observer } from 'mobx-react-lite';
-import { VStack } from '../../ui';
+import { VStack } from '../../VStack';
 
 interface TableLayoutProps {
   children: React.ReactNode;

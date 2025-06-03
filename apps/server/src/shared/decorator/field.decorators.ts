@@ -40,7 +40,7 @@ import {
   IsUndefinable,
 } from './validator.decorators';
 import { Constructor } from '../constant/types';
-import { ElementBuilder } from '@shared/specs';
+import { ElementBuilder } from '@shared/types';
 
 interface IFieldOptions extends Omit<InputProps, 'type'> {
   required?: boolean;

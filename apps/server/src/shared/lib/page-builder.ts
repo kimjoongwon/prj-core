@@ -3,7 +3,7 @@ import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { FormTypeKey, SectionNameKey } from '../decorator/field.decorators';
 import { CreateExerciseDto } from '../dto';
 import { groupBy } from 'lodash';
-import { PageBuilder, SectionBuilder } from '@shared/specs';
+import { PageBuilder, SectionBuilder } from '@shared/types';
 
 export function pageBuilder<T extends object>(
   ClassConstructor: ClassConstructor<unknown> = CreateExerciseDto,

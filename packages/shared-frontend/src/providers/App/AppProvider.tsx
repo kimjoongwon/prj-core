@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, createContext } from 'react';
-import { RouteBuilder } from '@shared/specs';
+import type { RouteBuilder } from '@shared/types';
 import { useGetAppBuilder } from '../../apis';
 import {
   DepotService,
@@ -35,7 +35,7 @@ export const AppProvider = observer((props: StoreProviderProps) => {
       // console.log('navigationService:', navigationService);
       // RouteNavigator 초기화
       // navigationService.setRoutes(routeBuilders);
-      
+
       // Navigation function will be set later by NavigationSetup component
 
       // Initialize the global Plate instance
