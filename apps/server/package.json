@@ -40,6 +40,7 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@shared/utils": "workspace:*",
+    "@shared/vars": "workspace:*",
     "@types/express": "^5.0.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",

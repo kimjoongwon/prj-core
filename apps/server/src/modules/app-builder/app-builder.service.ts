@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/specs';
 import { LoginPage } from './components/pages/login.page';
-import { rawRoutes } from './routes';
+import { rawRoutes } from '@shared/vars';
 
 @Injectable()
 export class AppBuilderService {
@@ -13,7 +13,7 @@ export class AppBuilderService {
     readonly loginPage: LoginPage,
   ) {
     // rawRoutes를 deep copy하여 초기화
-    this.routes = JSON.parse(JSON.stringify(rawRoutes));
+    this.routes = rawRoutes;
   }
 
   async build() {
