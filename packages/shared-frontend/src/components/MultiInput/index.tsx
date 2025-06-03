@@ -1,13 +1,11 @@
 'use client';
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { MobxProps } from '@shared/types';
+import { MobxProps, MultiInputProps } from '@shared/types';
 import { MultiInputView } from './MultiInputView';
 import { get } from 'lodash-es';
 import { InputProps } from '@heroui/react';
 import { useInputState } from '../../hooks/useInputState';
-
-interface MultiInputProps<T> extends MobxProps<T>, InputProps {}
 
 export const MultiInput = observer(
   <T extends object>(props: MultiInputProps<T>) => {

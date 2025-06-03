@@ -1,9 +1,5 @@
 import { CopyrightView } from './CopyrightView';
-
-export interface CopyrightProps {
-  companyName: string;
-  className?: string;
-}
+import { CopyrightProps } from '@shared/types';
 
 export const Copyright = (props: CopyrightProps) => {
   return <CopyrightView companyName={props.companyName} />;

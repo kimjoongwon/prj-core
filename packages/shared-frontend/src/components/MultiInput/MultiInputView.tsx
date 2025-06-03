@@ -1,7 +1,7 @@
 import { Input, InputProps } from "@heroui/react";
 
-interface MultiInputProps extends InputProps {}
+interface MultiInputViewProps extends InputProps {}
 
-export const MultiInputView = (props: MultiInputProps) => {
+export const MultiInputView = (props: MultiInputViewProps) => {
   return <Input {...props} />;
 };

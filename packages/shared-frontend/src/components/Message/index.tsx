@@ -1,9 +1,5 @@
 import { Text } from '../Text';
-
-interface MessageProps {
-  title: string;
-  message: string;
-}
+import { MessageProps } from '@shared/types';
 
 export const Message = (props: MessageProps) => {
   const { message, title } = props;

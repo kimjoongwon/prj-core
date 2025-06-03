@@ -1,7 +1,4 @@
-interface VStackProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import { VStackProps } from '@shared/types';
 
 export const VStack = (props: VStackProps) => {
   const { children } = props;

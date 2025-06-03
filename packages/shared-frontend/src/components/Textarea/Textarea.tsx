@@ -1,10 +1,8 @@
 import { TextAreaProps, Textarea } from '@heroui/react';
-import { MobxProps } from '@shared/types';
+import { MobxProps, BaseTextareaProps } from '@shared/types';
 import { useMobxHookForm } from '../../hooks';
 import { get } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
-
-export interface BaseTextareaProps<T> extends TextAreaProps, MobxProps<T> {}
 
 export const BaseTextarea = observer(
   <T extends object>(props: BaseTextareaProps<T>) => {

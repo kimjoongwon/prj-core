@@ -1,11 +1,7 @@
 'use client';
 
 import React from 'react';
-
-interface FormGroupControlProps {
-  direction?: 'row' | 'col';
-  children: React.ReactNode;
-}
+import { FormGroupControlProps } from '@shared/types';
 
 export function FormGroupControl(props: FormGroupControlProps) {
   const { children, direction = 'row' } = props;

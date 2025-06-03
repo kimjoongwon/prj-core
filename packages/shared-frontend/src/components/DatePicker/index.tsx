@@ -3,13 +3,11 @@ import {
   DatePicker as HeroUiDatePicker,
 } from '@heroui/react';
 import { parseAbsoluteToLocal } from '@internationalized/date';
-import { MobxProps } from '@shared/types';
+import { MobxProps, DatePickerProps } from '@shared/types';
 import { get, set } from 'lodash-es';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
-
-interface DatePickerProps<T> extends HeroUiDatePickerProps, MobxProps<T> {}
 
 export const DatePicker = observer(
   <T extends object>(props: DatePickerProps<T>) => {

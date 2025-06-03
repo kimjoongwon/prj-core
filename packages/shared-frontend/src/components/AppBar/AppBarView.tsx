@@ -2,7 +2,7 @@ import { Logo } from '../Logo';
 import { Card, Chip } from '@heroui/react';
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
-import { AppBarViewProps } from './AppBar';
+import { AppBarViewProps } from '.';
 
 export const AppBarView = (props: AppBarViewProps) => {
   const { content } = props;

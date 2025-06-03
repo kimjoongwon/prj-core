@@ -1,7 +1,4 @@
-type LayoutProps = {
-  children: React.ReactNode;
-  className?: string;
-};
+import { LayoutProps } from '@shared/types';
 
 export const Layout = (props: LayoutProps) => {
   return (

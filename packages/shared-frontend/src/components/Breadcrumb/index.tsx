@@ -1,25 +1,7 @@
 import React from 'react';
 import { Route } from '@shared/types';
 import { useGlobalNavigation } from '../../hooks';
-
-interface BreadcrumbItem {
-  name: string;
-  pathname?: string;
-  active?: boolean;
-}
-
-interface BreadcrumbProps {
-  items?: BreadcrumbItem[] | Route[];
-  separator?: string | React.ReactNode;
-  className?: string;
-  itemClassName?: string;
-  activeItemClassName?: string;
-  separatorClassName?: string;
-  maxItems?: number;
-  showHomeIcon?: boolean;
-  homeRouteName?: string;
-  onItemClick?: (item: BreadcrumbItem | Route) => void;
-}
+import { BreadcrumbItem, BreadcrumbProps, BreadcrumbBuilderProps } from '@shared/types';
 
 /**
  * 브레드크럼 컴포넌트
@@ -51,7 +33,7 @@ export function Breadcrumb({
     onItemClick?.(item);
 
     // pathname이 있으면 해당 경로로 이동
-    if (item.pathname && !item.active) {
+    if ('pathname' in item && item.pathname && !('active' in item && item.active)) {
       navigateByName(item.name);
     }
   };
@@ -140,14 +122,6 @@ export function Breadcrumb({
       </ol>
     </nav>
   );
-}
-
-interface BreadcrumbBuilderProps {
-  routeNames: string[];
-  separator?: string | React.ReactNode;
-  className?: string;
-  itemClassName?: string;
-  activeItemClassName?: string;
 }
 
 /**

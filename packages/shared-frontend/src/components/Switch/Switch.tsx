@@ -1,13 +1,9 @@
-;
-
 import { ForwardedRef } from 'react';
 import { action } from 'mobx';
-import { MobxProps } from '@shared/types';
+import { MobxProps, SwitchProps } from '@shared/types';
 import { Switch as NextUISwitch, SwitchProps as NextUISwitchProps } from "@heroui/react";
 import { useMobxHookForm } from '../../hooks';
 import { get } from 'lodash-es';
-
-export interface SwitchProps<T> extends NextUISwitchProps, MobxProps<T> {}
 
 export function BaseSwitch<T extends object>(props: SwitchProps<T>, ref: ForwardedRef<HTMLInputElement>) {
   const { path = '', state = {}, ...rest } = props;

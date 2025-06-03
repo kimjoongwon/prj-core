@@ -1,8 +1,6 @@
-import { MetaProps } from '.';
+import { MetaProps, MetaViewProps } from '@shared/types';
 import { HStack } from '../HStack';
 import { Text } from '../Text';
-
-export interface MetaViewProps extends MetaProps {}
 
 export const MetaView = (props: MetaViewProps) => {
   const { name, value } = props;

@@ -1,8 +1,5 @@
 import { tv } from 'tailwind-variants';
-interface ContainerProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import { ContainerProps } from '@shared/types';
 
 const container = tv({
   base: 'flex flex-col',

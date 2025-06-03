@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { get, isUndefined, set } from 'lodash-es';
-import { MobxProps } from '@shared/types';
+import { MobxProps, SearchProps } from '@shared/types';
 import { KeyboardEventHandler } from 'react';
 import { Input } from '../Input';
-
-interface SearchProps<T> extends MobxProps<T> {
-  queryState: any;
-}
 
 export const Search = observer(<T extends object>(props: SearchProps<T>) => {
   const { state, path, queryState } = props;

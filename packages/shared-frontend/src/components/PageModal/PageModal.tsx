@@ -1,8 +1,5 @@
 import { Modal, ModalContent, ModalProps } from "@heroui/react";
-
-interface CoCModalProps extends ModalProps {
-  children: React.ReactNode;
-}
+import { CoCModalProps } from '@shared/types';
 
 export function PageModal(props: CoCModalProps) {
   const { children } = props;

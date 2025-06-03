@@ -1,7 +1,4 @@
-interface HStackProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import { HStackProps } from '@shared/types';
 
 export const HStack = (props: HStackProps) => {
   const { children, className, ...rest } = props;

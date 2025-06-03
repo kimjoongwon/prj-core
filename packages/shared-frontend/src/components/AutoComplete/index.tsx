@@ -5,19 +5,9 @@ import {
 } from '@heroui/react';
 import { cloneDeep, get } from 'lodash-es';
 import React from 'react';
-import { MobxProps } from '@shared/types';
+import { MobxProps, BaseAutoCompleteProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { useMobxHookForm } from '../../hooks';
-
-export interface BaseAutoCompleteProps<T>
-  extends Omit<AutocompleteProps, 'children'>,
-    MobxProps<T> {
-  options: {
-    text: string;
-    value: any;
-    description?: string;
-  }[];
-}
 
 export const AutoComplete = observer(
   <T extends object>(props: BaseAutoCompleteProps<T>) => {

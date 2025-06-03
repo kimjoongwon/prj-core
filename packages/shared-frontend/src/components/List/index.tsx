@@ -6,14 +6,7 @@ import { VStack } from '../VStack';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { tv } from 'tailwind-variants';
-
-interface ListProps<T> {
-  data: T[];
-  renderItem: (item: T) => ReactNode;
-  horizontal?: boolean;
-  className?: string;
-  placeholder?: ReactNode;
-}
+import { ListProps } from '@shared/types';
 
 const listView = tv({});
 

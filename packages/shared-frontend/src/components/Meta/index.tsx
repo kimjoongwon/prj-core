@@ -1,9 +1,5 @@
 import { MetaView } from './MetaView';
-
-export interface MetaProps {
-  name: string;
-  value: string;
-}
+import { MetaProps } from '@shared/types';
 
 export const Meta = (props: MetaProps) => {
   return <MetaView {...props} />;

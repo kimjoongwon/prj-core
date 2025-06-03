@@ -3,15 +3,11 @@ import {
   DateRangePicker as HeroUiDateRangePicker,
   DateRangePickerProps as HeroUiDateRangePickerProps,
 } from '@heroui/react';
-import { MobxProps } from '@shared/types';
+import { MobxProps, DateRangePickerProps } from '@shared/types';
 import { get, set } from 'lodash-es';
 import { parseAbsoluteToLocal } from '@internationalized/date';
 import { useEffect } from 'react';
 import { reaction } from 'mobx';
-
-export interface DateRangePickerProps<T extends object>
-  extends HeroUiDateRangePickerProps,
-    MobxProps<T> {}
 
 export const DateRangePicker = observer(
   <T extends object>(props: DateRangePickerProps<T>) => {

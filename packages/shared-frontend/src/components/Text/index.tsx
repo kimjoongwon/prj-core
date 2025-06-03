@@ -1,8 +1,5 @@
 import { tv, VariantProps } from 'tailwind-variants';
-
-interface TextProps
-  extends React.HTMLAttributes<HTMLParagraphElement>,
-    VariantProps<typeof text> {}
+import { TextProps } from '@shared/types';
 
 const text = tv({
   base: 'font-pretendard',

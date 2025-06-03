@@ -1,10 +1,7 @@
 'use client';
 
 import { VStack } from '../../VStack';
-
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
+import { MainLayoutProps } from '@shared/types';
 
 export const AdminMainLayout = (props: MainLayoutProps) => {
   const { children } = props;

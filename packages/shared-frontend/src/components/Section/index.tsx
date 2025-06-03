@@ -1,6 +1,4 @@
-export type SectionProps = {
-  children: React.ReactNode;
-};
+import { SectionProps } from '@shared/types';
 
 export const Section = (props: SectionProps) => {
   const { children } = props;

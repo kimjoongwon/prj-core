@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
-import type { CopyrightProps } from '.';
-
-interface CopyrightViewProps extends CopyrightProps {}
+import { CopyrightViewProps } from '@shared/types';
 
 export const CopyrightView = (props: CopyrightViewProps) => {
   const { companyName } = props;
