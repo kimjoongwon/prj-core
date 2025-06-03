@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder } from '@shared/specs';
+import { ButtonBuilder } from '@shared/types';
 
 @Injectable()
 export class CellButtonService {

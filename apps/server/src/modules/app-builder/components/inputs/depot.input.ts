@@ -1,4 +1,4 @@
-import { ElementBuilder } from '@shared/specs';
+import { ElementBuilder } from '@shared/types';
 
 export class DepotInput {
   label: string;

@@ -1,4 +1,4 @@
-// import { SectionBuilder } from '@shared/specs';
+// import { SectionBuilder } from '@shared/types';
 // import { PrismaService } from 'nestjs-prisma';
 // import { Injectable } from '@nestjs/common';
 // import { ContextProvider, CreateCategoryDto } from '@shared';

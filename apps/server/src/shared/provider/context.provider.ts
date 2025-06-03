@@ -2,7 +2,7 @@ import { ClsServiceManager } from 'nestjs-cls';
 import { LanguageCode } from '../constant/language-code.constant';
 import { UserDto } from '../dto/user.dto';
 import { TenantDto } from '../dto/tenant.dto';
-import { PageTypes } from '@shared/specs';
+import { PageTypes } from '@shared/types';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';

@@ -21,7 +21,7 @@
 
 ```typescript
 import { UnifiedNavigationService, unifiedNavigationService } from '@shared/frontend';
-import { rawRoutes } from '@shared/specs';
+import { rawRoutes } from '@shared/types';
 
 // 새 인스턴스 생성
 const navigation = new UnifiedNavigationService(rawRoutes);

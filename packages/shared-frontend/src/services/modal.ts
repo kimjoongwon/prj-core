@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx';
 
 export class ModalService {
   open = false;
-  type: 'MyGroundSelect';
+  type: any;
   header?: string;
   // actions: ButtonProps[] = [];
 

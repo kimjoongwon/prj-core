@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder } from '@shared/specs';
+import { ColumnBuilder } from '@shared/types';
 
 @Injectable()
 export class ColumnService {

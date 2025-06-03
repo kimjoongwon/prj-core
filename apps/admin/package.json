@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "NODE_OPTIONS='--max_old_space_size=8096' tsc -b && NODE_OPTIONS='--max_old_space_size=8096' vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -13,7 +13,6 @@
     "@heroui/react": "^2.7.8",
     "@heroui/use-theme": "^2.1.8",
     "@shared/frontend": "workspace:*",
-    "@shared/specs": "workspace:*",
     "framer-motion": "^11.5.6",
     "mobx": "^6.13.6",
     "mobx-react-lite": "^4.1.0",
@@ -24,6 +23,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@shared/types": "workspace:*",
     "@eslint/js": "^9.25.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",

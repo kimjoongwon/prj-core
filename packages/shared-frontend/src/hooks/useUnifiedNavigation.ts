@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { UnifiedNavigationService } from '../services/UnifiedNavigationService';
-import { RouteBuilder, Route } from '@shared/specs';
+import type { RouteBuilder } from '@shared/types';
 
 /**
  * UnifiedNavigationService를 React 컴포넌트에서 사용하기 위한 훅

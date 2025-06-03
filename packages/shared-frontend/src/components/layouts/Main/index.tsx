@@ -1,5 +1,6 @@
 'use client';
-import { VStack } from '../../ui';
+
+import { VStack } from '../../VStack';
 
 interface MainLayoutProps {
   children: React.ReactNode;

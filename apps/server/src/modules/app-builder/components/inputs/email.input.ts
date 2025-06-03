@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ElementBuilder } from '@shared/specs';
+import { ElementBuilder } from '@shared/types';
 
 @Injectable()
 export class EmailInput {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ColumnBuilder, DataGridBuilder } from '@shared/specs';
+import { ColumnBuilder, DataGridBuilder } from '@shared/types';
 
 @Injectable()
 export class DataGridBuilderService {

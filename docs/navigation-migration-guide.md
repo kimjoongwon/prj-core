@@ -283,7 +283,7 @@ import { NavigationService, routeNavigator } from '@shared/frontend';
 
 ```typescript
 import { UnifiedNavigationService } from '@shared/frontend';
-import { rawRoutes } from '@shared/specs';
+import { rawRoutes } from '@shared/types';
 import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트에서 사용

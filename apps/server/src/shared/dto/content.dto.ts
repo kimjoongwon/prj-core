@@ -2,7 +2,7 @@ import { EnumField, StringField, StringFieldOptional, UUIDField } from '../decor
 import { AbstractDto } from './abstract.dto';
 import { $Enums, Content as ContentEntity } from '@prisma/client';
 import { CreateContentDto } from './create';
-import { ValidationRecord } from '@shared/specs';
+import { ValidationRecord } from '@shared/types';
 
 export const defaultCreateContentDto: CreateContentDto = {
   depotId: '',

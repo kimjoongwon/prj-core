@@ -12,7 +12,6 @@
     ".": "./index.ts"
   },
   "scripts": {
-    "start:dev": "",
     "lint": "tsc --noEmit && eslint \"src/*.ts*\"",
     "test": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
@@ -52,7 +51,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@shared/specs": "workspace:*",
+    "@shared/types": "workspace:*",
     "@tanstack/react-query-devtools": "^5.66.9",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
