@@ -1,6 +1,6 @@
 'use client';
 
-import { Button as BaseButton, APIManager, Plate } from '@shared/frontend';
+import { Button as BaseButton, Plate } from '@shared/frontend';
 import {
   ButtonBuilder as ButtonBuilderProps,
   ButtonResponse,
@@ -8,6 +8,7 @@ import {
 import { addToast, ToastProps } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { observer } from 'mobx-react-lite';
+import { APIManager } from '@shared/api-client';
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
   const { apiKey, state } = props;

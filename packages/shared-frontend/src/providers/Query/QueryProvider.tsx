@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { AXIOS_INSTANCE } from '../../libs/customAxios';
+import { AXIOS_INSTANCE } from '@shared/api-client';
 
 interface InitContainerProps {
   children: React.ReactNode;

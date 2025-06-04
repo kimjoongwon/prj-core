@@ -5,11 +5,11 @@
 //   TenantDto,
 //   TokenDto,
 //   UserDto,
-// } from '../model';
+// } from '@shared/api-client/types';
 // import { Galaxy } from './Plate';
 // import { Effect, pipe } from 'effect';
 // import { AxiosError } from 'axios';
-// import { getNewToken, getToken } from '../apis';
+// import { getNewToken, getToken } from '@shared/api-client';
 // import { GalaxyError, InvalidPasswordError } from '../errors';
 // import { AuthStatus } from '@shared/types';
 

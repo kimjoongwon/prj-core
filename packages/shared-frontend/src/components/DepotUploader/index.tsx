@@ -6,11 +6,11 @@ import {
   getDepotById,
   removeFileById,
   updateDepotById,
-} from '../../apis';
+} from '@shared/api-client';
 import { useEffect } from 'react';
 import { reaction, toJS } from 'mobx';
 import { MobxProps } from '@shared/types';
-import { DepotDto, FileDto } from '../../model';
+import { DepotDto, FileDto } from '@shared/api-client/types';
 import { DepotService } from '../../services/depot';
 
 interface DepotProps<T>

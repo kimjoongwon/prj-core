@@ -1,12 +1,13 @@
 'use client';
 
-import { Button as BaseButton, APIManager } from '@shared/frontend';
+import { Button as BaseButton } from '@shared/frontend';
 import { CellButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { cloneDeep } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { addToast } from '@heroui/react';
 import { isAxiosError } from 'axios';
+import { APIManager } from '@shared/api-client';
 
 interface ButtonProps extends ButtonBuilderProps {}
 

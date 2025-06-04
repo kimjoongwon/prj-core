@@ -21,7 +21,7 @@ import { Card } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { SortableMedia } from './SortableMedia';
 import { v4 } from 'uuid';
-import { FileDto } from '../../model/fileDto';
+import { FileDto } from '@shared/api-client';
 
 export interface FileUploaderProps {
   label?: string;
