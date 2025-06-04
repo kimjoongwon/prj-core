@@ -1,13 +1,9 @@
 import { Tabs } from '@shared/frontend';
-import { TabBuilder } from '@shared/types';
+import { TabNavigationProps } from '@shared/types';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-
-interface TabNavigationProps {
-  tabBuilder: TabBuilder;
-}
 
 export const TabNavigation = observer((props: TabNavigationProps) => {
   const { tabBuilder } = props;

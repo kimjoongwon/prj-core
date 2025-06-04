@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { ElementBuilder as ElementBuilderInterface } from '@shared/types';
 import { ComponentManager } from '../../../../index';
-import { usePageState } from '../Page/PageBuilder';
+import { usePageState } from '../PageBuilder';
 import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
 
 interface ElementBuilderProps {

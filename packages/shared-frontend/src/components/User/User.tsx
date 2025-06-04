@@ -4,13 +4,10 @@ import {
   DropdownMenu,
   DropdownTrigger,
   User as BaseUser,
-} from "@heroui/react";
+} from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-// import { useApp } from '../../../providers/App';
 
 export const User = observer(() => {
-  // const { auth } = useApp();
-  // const email = auth.user?.email;
   return (
     <Dropdown>
       <DropdownTrigger>

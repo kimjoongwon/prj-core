@@ -9,7 +9,7 @@ import { DataGridBuilder as DataGridBuilderInterface } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { usePageState } from '../Page/PageBuilder';
+import { usePageState } from '../PageBuilder';
 
 interface DataGridBuilderProps {
   dataGridBuilder: DataGridBuilderInterface;

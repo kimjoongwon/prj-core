@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { Layout } from '@shared/frontend';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { Outlet } from 'react-router';

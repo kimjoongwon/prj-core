@@ -363,3 +363,9 @@ export interface MobxProps<T = any> {
   path: Paths<T, 4>;
   state: T;
 }
+export interface SectionBuilderProps {
+  sectionBuilder: SectionBuilder;
+}
+export interface TabNavigationProps {
+  tabBuilder: TabBuilder;
+}

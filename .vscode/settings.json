@@ -1,5 +1,5 @@
 {
-  "git.inputValidation": "off",
+  "git.inputValidation": false,
   "git.inputValidationLength": 500,
   "git.useCommitInputAsStashMessage": true,
   "scm.inputFontSize": 14,
