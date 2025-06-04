@@ -1,17 +1,13 @@
 'use client';
 
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { SectionBuilder as SectionBuilderInterface } from '@shared/types';
-import { ElementBuilder } from '../ElementBuilder';
-import { v4 } from 'uuid';
 import { Card, CardBody, CardHeader } from '@heroui/react';
+import { observer } from 'mobx-react-lite';
+import { SectionBuilderProps } from '@shared/types';
+import { v4 } from 'uuid';
+import { ElementBuilder } from '../ElementBuilder';
 import { VStack } from '../../VStack';
 import { HStack } from '../../HStack';
-
-interface SectionBuilderProps {
-  sectionBuilder: SectionBuilderInterface;
-}
 
 export const SectionBuilder = observer((props: SectionBuilderProps) => {
   const { sectionBuilder } = props;

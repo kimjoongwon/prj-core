@@ -1,10 +1,3 @@
-import type {
-  ButtonProps,
-  LinkProps,
-  ModalProps,
-  VariantProps,
-} from '@heroui/react';
-
 // UI-specific interfaces only - purely presentation/layout related
 // All component interfaces moved to components.ts to avoid conflicts
 

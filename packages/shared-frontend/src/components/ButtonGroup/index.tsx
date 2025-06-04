@@ -1,14 +1,9 @@
 'use client';
-import { Link } from "@heroui/react";
+import { Link } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { Button } from '../Button';
-import { GroupButton } from '@shared/types';
-
-interface ButtonGroupProps {
-  leftButtons?: GroupButton[];
-  rightButtons?: GroupButton[];
-}
+import { ButtonGroupProps, GroupButton } from '@shared/types';
 
 export const ButtonGroup = observer((props: ButtonGroupProps) => {
   const { leftButtons, rightButtons } = props;

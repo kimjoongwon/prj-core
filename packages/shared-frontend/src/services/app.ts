@@ -3,7 +3,7 @@ import { DepotService } from './depot';
 import { ModalService } from './modal';
 import { UnifiedNavigationService } from './UnifiedNavigationService';
 
-export class Illit {
+export class Plate {
   name: string = 'PROTOTYPE';
   isInitialized = false;
 

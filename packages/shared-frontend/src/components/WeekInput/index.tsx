@@ -1,11 +1,12 @@
 'use client';
 
-import { RecurringDayOfTheWeek, WeekInputView } from './WeekInputView';
+import { WeekInputView } from './WeekInputView';
 import { get } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
 import { useMobxHookForm } from '../../hooks';
+import { RecurringDayOfTheWeek } from '@shared/types';
 
-export const WeekInput = observer(<T extends object>(props: any) => {
+export const WeekInput = observer((props: any) => {
   const { state, path, ...rest } = props;
   const initialValue = get(state, path);
   const { localState } = useMobxHookForm(initialValue, state, path);

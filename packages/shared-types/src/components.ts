@@ -13,7 +13,7 @@ import type {
   SelectProps as NextUISelectProps,
 } from '@heroui/react';
 import type { HeaderContext } from '@tanstack/react-table';
-import type { Leaves, MobxProps, Route, Option, State, TableState } from './types';
+import type { Leaves, MobxProps, Route, Option } from './types';
 import type { ReactNode } from 'react';
 
 // Form and component props interfaces
@@ -371,3 +371,21 @@ export interface BaseAutoCompleteProps<T>
     description?: string;
   }[];
 }
+
+export interface ButtonGroupProps {
+  leftButtons?: GroupButton[];
+  rightButtons?: GroupButton[];
+}
+
+export interface DepotProps<T>
+  extends MobxProps<T>,
+    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
+
+export type RecurringDayOfTheWeek =
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY';

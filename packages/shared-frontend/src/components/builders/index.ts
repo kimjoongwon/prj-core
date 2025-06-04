@@ -5,7 +5,7 @@ export * from './DataGridBuilder';
 export * from './FormButton';
 export * from './HeaderBuilder';
 export * from './ElementBuilder';
-export * from './Page/PageBuilder';
+export * from './PageBuilder';
 export * from './SectionBuilder';
 export * from './TabNavigation';
 export * from './RouteBuilder';

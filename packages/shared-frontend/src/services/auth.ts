@@ -6,7 +6,7 @@
 //   TokenDto,
 //   UserDto,
 // } from '../model';
-// import { Galaxy } from './Illit';
+// import { Galaxy } from './Plate';
 // import { Effect, pipe } from 'effect';
 // import { AxiosError } from 'axios';
 // import { getNewToken, getToken } from '../apis';
