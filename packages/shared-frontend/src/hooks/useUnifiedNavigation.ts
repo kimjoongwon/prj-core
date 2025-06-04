@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router';
-import { UnifiedNavigationService } from '../services/UnifiedNavigationService';
+import { UnifiedNavigationService } from '../services/navigation';
 import type { RouteBuilder } from '@shared/types';
 
 /**

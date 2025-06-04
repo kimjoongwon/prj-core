@@ -1,9 +1,9 @@
 import { makeAutoObservable } from 'mobx';
 import { DepotService } from './depot';
 import { ModalService } from './modal';
-import { UnifiedNavigationService } from './UnifiedNavigationService';
+import { UnifiedNavigationService } from './navigation';
 
-export class PlateModel {
+export class PlateService {
   name: string = 'PROTOTYPE';
   isInitialized = false;
 
