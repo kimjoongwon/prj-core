@@ -4,21 +4,21 @@ import React, { useEffect, useState, createContext } from 'react';
 import type { RouteBuilder } from '@shared/types';
 import {
   DepotService,
-  PlateModel,
+  PlateService,
   ModalService,
   UnifiedNavigationService,
 } from '../../services';
 import { observer } from 'mobx-react-lite';
 import { useGetAppBuilder } from '@shared/api-client';
 
-const StoreContext = createContext<PlateModel | null>(null);
+const StoreContext = createContext<PlateService | null>(null);
 
 interface StoreProviderProps {
   children: React.ReactNode;
 }
 
 // Define Plate as a global variable that will be initialized by AppProvider
-export let Plate: PlateModel;
+export let Plate: PlateService;
 
 export const AppProvider = observer((props: StoreProviderProps) => {
   const { children } = props;
@@ -39,7 +39,7 @@ export const AppProvider = observer((props: StoreProviderProps) => {
       // Navigation function will be set later by NavigationSetup component
 
       // Initialize the global Plate instance
-      Plate = new PlateModel(navigationService, depotService, modalService);
+      Plate = new PlateService(navigationService, depotService, modalService);
       Plate.isInitialized = true;
       setIsInitialized(true);
     }
