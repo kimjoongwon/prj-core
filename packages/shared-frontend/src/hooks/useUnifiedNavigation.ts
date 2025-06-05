@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { UnifiedNavigationService } from '../services/navigation';
 import type { RouteBuilder } from '@shared/types';
+import { Plate } from '../providers/App/AppProvider';
 
 /**
  * UnifiedNavigationService를 React 컴포넌트에서 사용하기 위한 훅
@@ -126,19 +127,14 @@ export function useGlobalNavigation() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 글로벌 서비스 import
-  const {
-    unifiedNavigationService,
-  } = require('../services/UnifiedNavigationService');
-
   // navigate 함수 설정
   useEffect(() => {
-    unifiedNavigationService.setNavigateFunction(navigate);
+    Plate.navigation.setNavigateFunction(navigate);
   }, [navigate]);
 
   // 경로 변경 시 활성 상태 업데이트
   useEffect(() => {
-    unifiedNavigationService.activateRoute(location.pathname);
+    Plate.navigation.activateRoute(location.pathname);
   }, [location.pathname]);
 
   // 이름으로 네비게이션
@@ -148,7 +144,7 @@ export function useGlobalNavigation() {
       pathParams?: object,
       searchParams?: Record<string, string>,
     ) => {
-      unifiedNavigationService.pushByName(routeName, pathParams, searchParams);
+      Plate.navigation.pushByName(routeName, pathParams, searchParams);
     },
     [],
   );
@@ -162,7 +158,7 @@ export function useGlobalNavigation() {
       pathParams?: object,
       searchParams?: Record<string, string>,
     ) => {
-      unifiedNavigationService.pushConditional(
+      Plate.navigation.pushConditional(
         condition,
         routeNameIfTrue,
         routeNameIfFalse,
@@ -180,30 +176,30 @@ export function useGlobalNavigation() {
       pathParams?: object,
       searchParams?: Record<string, string>,
     ) => {
-      unifiedNavigationService.push(pathname, pathParams, searchParams);
+      Plate.navigation.push(pathname, pathParams, searchParams);
     },
     [],
   );
 
   // 현재 브레드크럼 가져오기
   const breadcrumbs = useMemo(() => {
-    return unifiedNavigationService.getBreadcrumbPath(location.pathname);
+    return Plate.navigation.getBreadcrumbPath(location.pathname);
   }, [location.pathname]);
 
   // 현재 활성 라우트들
   const activeRoutes = useMemo(() => {
-    return unifiedNavigationService.getActiveRoutes();
+    return Plate.navigation.getActiveRoutes();
   }, [location.pathname]);
 
   // 경로 가져오기
   const getPathByName = useCallback((routeName: string) => {
-    return unifiedNavigationService.getPathByName(routeName);
+    return Plate.navigation.getPathByName(routeName);
   }, []);
 
   // 조건부 경로 가져오기
   const getConditionalPath = useCallback(
     (condition: boolean, routeNameIfTrue: string, routeNameIfFalse: string) => {
-      return unifiedNavigationService.getConditionalPath(
+      return Plate.navigation.getConditionalPath(
         condition,
         routeNameIfTrue,
         routeNameIfFalse,
@@ -228,7 +224,7 @@ export function useGlobalNavigation() {
     currentPath: location.pathname,
 
     // 서비스 인스턴스 (고급 사용자용)
-    navigationService: unifiedNavigationService,
+    navigationService: Plate.navigation,
   };
 }
 
