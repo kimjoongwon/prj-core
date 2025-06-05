@@ -91,7 +91,7 @@ export class LoginPage {
               {
                 name: 'ButtonBuilder',
                 props: {
-                  variant: 'ghost',
+                  variant: 'light',
                   children: '회원가입',
                   color: 'secondary',
                   fullWidth: true,
