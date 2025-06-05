@@ -1,11 +1,11 @@
 import type { HeaderContext, CellContext } from '@tanstack/react-table';
-import type { RouteNames } from './routes';
 import type {
   ButtonProps,
   CardProps,
   InputProps,
   TableProps,
 } from '@heroui/react';
+import { RouteNames } from './routes';
 
 export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
 
@@ -51,7 +51,8 @@ export type ElementName =
   | 'Depot'
   | 'Textarea'
   | 'ButtonBuilder'
-  | 'Copyright';
+  | 'Copyright'
+  | 'WorkspaceSelect';
 
 export interface ElementBuilder {
   visibleCondition?: {
@@ -360,6 +361,11 @@ export type Leaves<T, D extends number = 10> = [D] extends [never]
   : '';
 
 export interface MobxProps<T = any> {
+  path: Paths<T, 4>;
+  state: T;
+}
+
+export interface ValtioProps<T = any> {
   path: Paths<T, 4>;
   state: T;
 }

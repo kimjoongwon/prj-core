@@ -44,7 +44,7 @@ export class AppBuilderController {
     });
 
     const buttonResponse: ButtonResponse = {
-      routeName: '관리자',
+      routeName: '테넌츠',
       toast: {
         color: 'success',
         title: '로그인 성공',

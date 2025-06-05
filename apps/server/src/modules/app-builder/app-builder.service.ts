@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/types';
-import { LoginPage } from './components/pages/login.page';
 import { rawRoutes } from '@shared/vars';
+import { LoginPage } from './components/pages/login.page';
+import { TenantsPage } from './components/pages/tenants.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -11,6 +12,7 @@ export class AppBuilderService {
   constructor(
     readonly prisma: PrismaService,
     readonly loginPage: LoginPage,
+    readonly tenantsPage: TenantsPage,
   ) {
     // rawRoutes를 deep copy하여 초기화
     this.routes = rawRoutes;
@@ -19,14 +21,20 @@ export class AppBuilderService {
   async build() {
     // 로그인 페이지 설정
     const loginPageBuilder: PageBuilder = this.loginPage.build();
+    const tenantsPageBuilder: PageBuilder = this.tenantsPage.build();
 
-    this.setRoutePageAndLayout('어드민', undefined, {
+    this.setRoutePageAndLayout('관리자', undefined, {
       type: 'Root',
     });
     this.setRoutePageAndLayout('인증', undefined, {
       type: 'Auth',
     });
-    this.setRoutePageAndLayout('로그인', loginPageBuilder, null);
+    this.setRoutePageAndLayout('로그인', loginPageBuilder, {
+      type: '',
+    });
+    this.setRoutePageAndLayout('테넌츠', tenantsPageBuilder, {
+      type: 'Modal',
+    });
 
     return {
       routes: this.routes,

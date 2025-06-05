@@ -13,6 +13,7 @@ import {
 } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';
+import { toJS } from 'mobx';
 // Any configurations are optional
 
 // Router 내부에서 NavigationSetup을 실행하기 위한 Layout 컴포넌트
@@ -41,6 +42,7 @@ export const App = observer(() => {
     return <Spinner label="앱을 로딩 중입니다..." />;
   }
 
+  console.log('앱이 초기화됨:', toJS(Plate.navigation.routeBuilders));
   // 라우터 생성 - 모든 라우트의 부모로 AppLayout 설정
   const router = createBrowserRouter([
     {

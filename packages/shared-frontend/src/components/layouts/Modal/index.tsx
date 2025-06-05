@@ -1,11 +1,35 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from '@heroui/react';
 import { ReactNode, useEffect, useState } from 'react';
+import { Plate } from '../../../providers';
+import { useNavigate } from 'react-router';
 
 interface ModalLayoutProps {
   children: ReactNode;
   title?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | 'full';
-  placement?: 'auto' | 'top' | 'top-center' | 'center' | 'bottom' | 'bottom-center';
+  size?:
+    | 'xs'
+    | 'sm'
+    | 'md'
+    | 'lg'
+    | 'xl'
+    | '2xl'
+    | '3xl'
+    | '4xl'
+    | '5xl'
+    | 'full';
+  placement?:
+    | 'auto'
+    | 'top'
+    | 'top-center'
+    | 'center'
+    | 'bottom'
+    | 'bottom-center';
   backdrop?: 'transparent' | 'opaque' | 'blur';
   hideCloseButton?: boolean;
   isDismissable?: boolean;
@@ -28,27 +52,13 @@ export function ModalLayout({
   onClose,
   footer,
   className,
-  scrollBehavior = 'normal'
+  scrollBehavior = 'normal',
 }: ModalLayoutProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // 컴포넌트가 마운트되면 항상 모달을 표시
-    setIsOpen(true);
-  }, []);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    if (onClose) {
-      onClose();
-    }
-  };
-
+  const naviate = useNavigate();
   return (
     <Modal
-      isOpen={isOpen}
-      onOpenChange={setIsOpen}
-      onClose={handleClose}
+      isOpen={true}
+      onClose={() => naviate(-1)}
       size={size}
       placement={placement}
       backdrop={backdrop}
@@ -59,21 +69,13 @@ export function ModalLayout({
       scrollBehavior={scrollBehavior}
     >
       <ModalContent>
-        {(onClose) => (
+        {onClose => (
           <>
             {title && (
-              <ModalHeader className="flex flex-col gap-1">
-                {title}
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             )}
-            <ModalBody>
-              {children}
-            </ModalBody>
-            {footer && (
-              <ModalFooter>
-                {footer}
-              </ModalFooter>
-            )}
+            <ModalBody>{children}</ModalBody>
+            {footer && <ModalFooter>{footer}</ModalFooter>}
           </>
         )}
       </ModalContent>

@@ -3,7 +3,8 @@ import { CategoriesPage } from './categories.page';
 import { GroupsPage } from './groups.page';
 import { LoginPage } from './login.page';
 import { GroundsPage } from './grounds.page';
-const modules = [CategoriesPage, GroupsPage, LoginPage, GroundsPage];
+import { TenantsPage } from './tenants.page';
+const modules = [CategoriesPage, GroupsPage, LoginPage, GroundsPage, TenantsPage];
 @Global()
 @Module({
   providers: modules,

@@ -128,7 +128,7 @@ export const textVariants = {
   },
 } as const;
 
-export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface TextProps extends React.HTMLAttributes<HTMLElement> {
   variant?:
     | 'h1'
     | 'h2'
@@ -144,6 +144,8 @@ export interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
     | 'title'
     | 'label'
     | 'text';
+  as?: React.ElementType;
+  children?: React.ReactNode;
 }
 
 export interface SearchProps<T> extends MobxProps<T> {

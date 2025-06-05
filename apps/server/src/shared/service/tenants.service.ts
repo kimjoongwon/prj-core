@@ -16,7 +16,15 @@ export class TenantsService {
   async getManyByQuery(query: QueryTenantDto) {
     const args = query.toArgs() as Prisma.TenantFindManyArgs;
     args.include = {
-      space: true,
+      space: {
+        include: {
+          workspace: {
+            include: {
+              ground: true,
+            },
+          },
+        },
+      },
     };
     const countArgs = query.toCountArgs();
     const tenants = await this.repository.findMany(args);

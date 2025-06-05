@@ -72,6 +72,10 @@ import { UsersModule } from './users/users.module';
             path: 'v1',
             children: [
               {
+                path: 'tenants',
+                module: TenantsModule,
+              },
+              {
                 path: 'auth',
                 module: AuthModule,
               },

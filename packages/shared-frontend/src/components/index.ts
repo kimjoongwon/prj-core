@@ -61,3 +61,4 @@ export * from './WeekInput';
 
 // Layouts
 export * from './layouts';
+export * from './widgets';

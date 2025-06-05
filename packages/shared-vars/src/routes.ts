@@ -16,8 +16,8 @@ export const ROUTE_NAMES = {
   ADMIN: '관리자',
   AUTH: '인증',
   LOGIN: '로그인',
-  SPACE: '공간',
-  SERVICE: '서비스',
+  TENANTS: '테넌츠',
+  TENANT: '테넌트',
   DASHBOARD: '대시보드',
   GROUND: '그라운드',
   GROUND_LIST: '그라운드 리스트',
@@ -35,29 +35,32 @@ export const rawRoutes: RouteBuilder[] = [
   {
     name: ROUTE_NAMES.ADMIN,
     pathname: 'admin',
-    layout: {
-      type: 'Root',
-    },
     children: [
       {
         name: ROUTE_NAMES.AUTH,
         pathname: 'auth',
-        layout: {
-          type: 'Auth',
-        },
         children: [
           {
             name: ROUTE_NAMES.LOGIN,
             pathname: 'login',
+            children: [
+              {
+                name: ROUTE_NAMES.TENANTS,
+                pathname: 'tenants',
+              },
+            ],
           },
         ],
       },
       {
-        name: ROUTE_NAMES.SPACE,
-        pathname: 'spaces',
+        name: 'spaces',
+        pathname: 'haha',
+        layout: {
+          type: 'Modal',
+        },
         children: [
           {
-            name: ROUTE_NAMES.SERVICE,
+            name: ROUTE_NAMES.TENANT,
             pathname: ':id',
             children: [
               {

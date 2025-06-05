@@ -9,7 +9,6 @@ interface RouteBuilderProps {
 
 export const RouteBuilder = observer((props: RouteBuilderProps) => {
   const { routeBuilder } = props;
-  console.log('RouteBuilder props:', routeBuilder);
 
   return (
     <LayoutBuilder layoutBuilder={routeBuilder.layout}>

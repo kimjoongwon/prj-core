@@ -3,6 +3,7 @@ import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { Outlet } from 'react-router';
 import { AuthLayout } from '../../layouts/Auth';
+import { ModalLayout } from '../../layouts/Modal';
 
 interface Layout {
   children: ReactNode;
@@ -13,10 +14,6 @@ type LayoutBuilderProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
-
-  if (layoutBuilder?.type === 'Root') {
-    return <Outlet />;
-  }
 
   if (layoutBuilder?.type === 'Auth') {
     return (
@@ -30,11 +27,17 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (layoutBuilder?.type === 'Modal') {
     return (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg">{children}</div>
-      </div>
+      <ModalLayout>
+        {children}
+        <Outlet />
+      </ModalLayout>
     );
   }
 
-  return children;
+  return (
+    <>
+      <Outlet />
+      {children}
+    </>
+  );
 });
