@@ -74,11 +74,7 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
       >
         {item => {
           return (
-            <ListboxItem
-              className="w-full"
-              key={item.value}
-              textValue={item.value}
-            >
+            <ListboxItem className="w-full" key={item.value}>
               {item.text}
             </ListboxItem>
           );

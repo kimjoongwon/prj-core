@@ -17,10 +17,10 @@ import { ResponseEntity } from '../entity';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 
 /**
- * 기본 CRUD 작업을 위한 추상 베이스 컨트롤러
- * OpenAPI 문서화가 자동으로 적용됩니다.
+ * 자동으로 고유한 함수명을 생성하는 오토 베이스 컨트롤러
+ * 단순히 상속만 하면 자동으로 엔티티명이 포함된 함수명이 생성됩니다.
  */
-export abstract class BaseController<
+export abstract class AutoBaseController<
   TDto,
   TCreateDto,
   TUpdateDto,
@@ -36,7 +36,7 @@ export abstract class BaseController<
 > {
   protected abstract readonly service: TService;
   protected abstract readonly dtoClass: Type<TDto>;
-  protected abstract readonly entityName: string; // 엔티티명을 추상 프로퍼티로 추가
+  protected abstract readonly entityName: string;
 
   @Post()
   @Auth([])
