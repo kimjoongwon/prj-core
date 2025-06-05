@@ -34,6 +34,7 @@ import { TenantsModule } from './tenants/tenants.module';
 import { TimelinesModule } from './timelines/timelines.module';
 import { UserClassificationsModule } from './user-classifications/user-classifications.module';
 import { UsersModule } from './users/users.module';
+import { WorkspacesModule } from './workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { UsersModule } from './users/users.module';
     ExercisesModule,
     FilesModule,
     TenantsModule,
+    WorkspacesModule,
     RouterModule.register([
       {
         path: 'api',
@@ -166,6 +168,10 @@ import { UsersModule } from './users/users.module';
                     module: FileClassificationsModule,
                   },
                 ],
+              },
+              {
+                path: 'workspaces',
+                module: WorkspacesModule,
               },
               {
                 path: 'grounds',

@@ -17,10 +17,10 @@ import { ResponseEntity } from '../entity';
 import { PageMetaDto } from '../dto/query/page-meta.dto';
 
 /**
- * 기본 CRUD 작업을 위한 추상 베이스 컨트롤러
- * OpenAPI 문서화가 자동으로 적용됩니다.
+ * 개선된 CRUD 작업을 위한 추상 베이스 컨트롤러
+ * 각 컨트롤러에서 메서드를 오버라이드하여 고유한 함수명을 가지도록 합니다.
  */
-export abstract class BaseController<
+export abstract class EnhancedBaseController<
   TDto,
   TCreateDto,
   TUpdateDto,
@@ -36,12 +36,12 @@ export abstract class BaseController<
 > {
   protected abstract readonly service: TService;
   protected abstract readonly dtoClass: Type<TDto>;
-  protected abstract readonly entityName: string; // 엔티티명을 추상 프로퍼티로 추가
+  protected abstract readonly entityName: string;
 
-  @Post()
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async create(@Body() createDto: TCreateDto): Promise<ResponseEntity<TDto>> {
+  /**
+   * 엔티티 생성 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async createEntity(createDto: TCreateDto): Promise<ResponseEntity<TDto>> {
     const entity = await this.service.create(createDto);
     return new ResponseEntity(
       HttpStatus.OK,
@@ -50,10 +50,10 @@ export abstract class BaseController<
     );
   }
 
-  @Get(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async getById(@Param('id') id: string): Promise<ResponseEntity<TDto>> {
+  /**
+   * ID로 엔티티 조회 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async getEntityById(id: string): Promise<ResponseEntity<TDto>> {
     const entity = await this.service.getById(id);
     return new ResponseEntity(
       HttpStatus.OK,
@@ -62,12 +62,12 @@ export abstract class BaseController<
     );
   }
 
-  @Patch(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async updateById(
-    @Param('id') id: string,
-    @Body() updateDto: TUpdateDto,
+  /**
+   * ID로 엔티티 수정 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async updateEntityById(
+    id: string,
+    updateDto: TUpdateDto,
   ): Promise<ResponseEntity<TDto>> {
     const entity = await this.service.updateById(id, updateDto);
     return new ResponseEntity(
@@ -77,10 +77,10 @@ export abstract class BaseController<
     );
   }
 
-  @Patch(':id/removedAt')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async removeById(@Param('id') id: string): Promise<ResponseEntity<TDto>> {
+  /**
+   * ID로 엔티티 소프트 삭제 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async removeEntityById(id: string): Promise<ResponseEntity<TDto>> {
     const entity = await this.service.removeById(id);
     return new ResponseEntity(
       HttpStatus.OK,
@@ -89,10 +89,10 @@ export abstract class BaseController<
     );
   }
 
-  @Delete(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async deleteById(@Param('id') id: string): Promise<ResponseEntity<TDto>> {
+  /**
+   * ID로 엔티티 물리적 삭제 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async deleteEntityById(id: string): Promise<ResponseEntity<TDto>> {
     const entity = await this.service.deleteById(id);
     return new ResponseEntity(
       HttpStatus.OK,
@@ -101,10 +101,10 @@ export abstract class BaseController<
     );
   }
 
-  @Get()
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  async getManyByQuery(@Query() query: TQueryDto): Promise<ResponseEntity<TDto[]>> {
+  /**
+   * 쿼리로 엔티티 목록 조회 - 하위 클래스에서 오버라이드 필요
+   */
+  protected async getManyEntitiesByQuery(query: TQueryDto): Promise<ResponseEntity<TDto[]>> {
     const { items, count } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,

@@ -1,4 +1,7 @@
 export * from './base.controller';
+export * from './enhanced-base.controller';
+export * from './auto-base.controller';
+export * from './crud.decorator';
 export * from './smart-base.controller';
 export * from './user-associations.controller';
 export * from './role-associations.controller';
@@ -26,3 +29,4 @@ export * from './files.controller';
 export * from './tenants.controller';
 export * from './assignments.controller';
 export * from './grounds.controller';
+export * from './workspaces.controller';
