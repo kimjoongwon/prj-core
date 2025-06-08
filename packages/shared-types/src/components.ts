@@ -333,7 +333,8 @@ export interface TabsProps<T> extends MobxProps<T> {
 export interface HeaderProps {
   children?: React.ReactNode;
   content?: React.ReactNode;
-  navbarComponent?: React.ReactNode;
+  centerComponent?: React.ReactNode;
+  drawerComponent?: React.ReactNode;
   onMenuOpen?: () => void;
 }
 

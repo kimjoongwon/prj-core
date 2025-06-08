@@ -3,13 +3,17 @@
 import { useState } from 'react';
 import { Logo } from '../Logo';
 import {
-  Card,
+  Navbar,
+  NavbarContent,
+  NavbarBrand,
+  NavbarItem,
   Chip,
   Button,
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerBody,
+  Divider,
 } from '@heroui/react';
 import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
@@ -17,7 +21,7 @@ import { Text } from '../Text';
 import { HeaderProps } from '@shared/types';
 
 export const Header = (props: HeaderProps) => {
-  const { content, children, navbarComponent, onMenuOpen } = props;
+  const { content, centerComponent, drawerComponent, onMenuOpen } = props;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleMenuOpen = () => {
@@ -31,69 +35,86 @@ export const Header = (props: HeaderProps) => {
 
   return (
     <>
-      <Card className="flex h-[62px] flex-col justify-center rounded-none overflow-visible">
-        <HStack className="flex flex-1 items-center px-4">
-          {/* Desktop Layout */}
-          <div className="hidden xl:flex flex-1 items-center justify-between w-full">
-            {/* Desktop: Logo */}
-            <div className="flex-1">
-              <Logo variants={'text'} />
-            </div>
+      <Navbar
+        className="border-b border-divider bg-background/70 backdrop-blur-md"
+        maxWidth="full"
+        height="4rem"
+        isBordered
+      >
+        {/* Desktop Layout */}
+        <div className="hidden xl:flex w-full items-center">
+          <NavbarBrand className="flex-1">
+            <Logo variants={'text'} />
+          </NavbarBrand>
 
-            {/* Desktop: Navigation Content */}
-            <div className="flex-1 flex justify-center">
-              {navbarComponent || content}
-            </div>
+          <NavbarContent className="flex-1" justify="center">
+            {centerComponent || content}
+          </NavbarContent>
 
-            {/* Desktop: Right Side */}
-            <div className="flex-1 flex justify-end items-center space-x-2">
-              <Chip color="primary" size="sm">
-                {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
-              </Chip>
-              <Avatar showInfo={true} />
-            </div>
-          </div>
-
-          {/* Mobile Layout */}
-          <div className="flex xl:hidden items-center w-full relative">
-            <div className="flex items-center w-12">
-              <Button
-                isIconOnly
-                variant="light"
+          <NavbarContent className="flex-1" justify="end">
+            <NavbarItem>
+              <Chip
+                color="primary"
                 size="sm"
-                onPress={handleMenuOpen}
+                variant="flat"
+                className="font-medium"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </Button>
-            </div>
-
-            {/* Mobile: Center - Logo (absolute positioning for true center) */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <Logo variants={'text'} />
-            </div>
-
-            {/* Mobile: Right - Environment Chip + Avatar */}
-            <div className="flex items-center space-x-2 ml-auto">
-              <Chip color="primary" size="sm">
                 {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
               </Chip>
+            </NavbarItem>
+            <NavbarItem>
+              <Avatar showInfo={true} />
+            </NavbarItem>
+          </NavbarContent>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="flex xl:hidden w-full items-center">
+          <NavbarContent>
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              onPress={handleMenuOpen}
+              className="text-default-600"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </Button>
+          </NavbarContent>
+
+          <NavbarBrand className="flex-1 justify-center">
+            <Logo variants={'text'} />
+          </NavbarBrand>
+
+          <NavbarContent justify="end">
+            <NavbarItem>
+              <Chip
+                color="primary"
+                size="sm"
+                variant="flat"
+                className="font-medium"
+              >
+                {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
+              </Chip>
+            </NavbarItem>
+            <NavbarItem>
               <Avatar showInfo={false} />
-            </div>
-          </div>
-        </HStack>
-      </Card>
+            </NavbarItem>
+          </NavbarContent>
+        </div>
+      </Navbar>
 
       {/* Mobile Navigation Drawer */}
       <Drawer
@@ -102,20 +123,46 @@ export const Header = (props: HeaderProps) => {
         placement="left"
         size="sm"
         className="xl:hidden"
-        hideCloseButton
+        backdrop="blur"
+        classNames={{
+          base: 'data-[placement=left]:sm:m-2 data-[placement=left]:sm:rounded-medium',
+          header: 'border-b border-divider',
+          body: 'py-6',
+        }}
       >
         <DrawerContent>
-          <DrawerHeader className="flex flex-col gap-1">
-            <div className="flex items-center justify-between">
-              <Text variant="h6">Navigation</Text>
+          <DrawerHeader className="pb-4">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-primary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </div>
+                <Text variant="h6" className="text-foreground">
+                  Navigation
+                </Text>
+              </div>
               <Button
                 isIconOnly
                 variant="light"
                 size="sm"
+                radius="full"
                 onPress={handleDrawerClose}
+                className="text-default-500 hover:text-foreground"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -130,29 +177,34 @@ export const Header = (props: HeaderProps) => {
               </Button>
             </div>
           </DrawerHeader>
-          <DrawerBody className="flex flex-col gap-4">
+
+          <Divider />
+
+          <DrawerBody className="gap-6">
             {/* Mobile Navigation Content */}
-            <div className="space-y-4">
-              {navbarComponent && (
-                <div>
-                  <Text variant="subtitle2" className="mb-2 text-gray-600">
-                    Main Menu
-                  </Text>
-                  <div>{navbarComponent}</div>
-                </div>
-              )}
-              {content && (
-                <div>
-                  <Text variant="subtitle2" className="mb-2 text-gray-600">
+            {drawerComponent && (
+              <div className="space-y-2">{drawerComponent}</div>
+            )}
+
+            {content && (
+              <>
+                <Divider />
+                <div className="space-y-3">
+                  <Text
+                    variant="subtitle2"
+                    className="text-default-600 font-medium"
+                  >
                     Additional Content
                   </Text>
-                  <div>{content}</div>
+                  <div className="pl-2">{content}</div>
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
     </>
   );
 };
+
+Header.displayName = 'Header';
