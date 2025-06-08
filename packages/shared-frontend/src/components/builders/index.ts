@@ -3,6 +3,7 @@ export * from './CellBuilder';
 export * from './CellButtonBuilder';
 export * from './DataGridBuilder';
 export * from './FormButton';
+export * from './FormButtonBuilder';
 export * from './HeaderBuilder';
 export * from './ElementBuilder';
 export * from './PageBuilder';

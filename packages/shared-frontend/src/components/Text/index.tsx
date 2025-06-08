@@ -20,6 +20,7 @@ const text = tv({
       title: 'text-xl font-normal text-foreground dark:text-foreground',
       label: 'text-sm font-semibold text-default-700 dark:text-default-300',
       text: 'text-base font-normal text-foreground dark:text-foreground',
+      error: 'text-sm font-medium text-danger dark:text-danger',
     },
     truncate: {
       true: 'truncate',

@@ -17,39 +17,7 @@ export class LoginPage {
     };
 
     // 입력 필드 생성
-    const inputs: ElementBuilder[] = [
-      {
-        name: 'Input',
-        props: {
-          label: '이메일',
-          placeholder: '이메일을 입력하세요',
-          type: 'email',
-        } as InputProps,
-        path: 'form.inputs.email',
-        validation: {
-          required: { value: true, message: '이메일을 입력해주세요' },
-          patterns: [
-            {
-              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-              message: '올바른 이메일 형식이 아닙니다',
-            },
-          ],
-        },
-      },
-      {
-        name: 'Input',
-        props: {
-          label: '비밀번호',
-          placeholder: '비밀번호를 입력하세요',
-          type: 'password',
-        },
-        path: 'form.inputs.password',
-        validation: {
-          required: { value: true, message: '비밀번호를 입력해주세요' },
-          minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
-        },
-      },
-    ];
+    const inputs: ElementBuilder[] = [];
 
     // 섹션 구성
     const sections: SectionBuilder[] = [
@@ -67,7 +35,44 @@ export class LoginPage {
                   size: '4',
                 },
               },
-              ...inputs,
+              {
+                name: 'Form',
+                children: [
+                  {
+                    name: 'Input',
+                    props: {
+                      label: '이메일',
+                      placeholder: '이메일을 입력하세요',
+                      type: 'email',
+                    } as InputProps,
+                    path: 'form.inputs.email',
+                    validation: {
+                      timings: ['onBlur', 'onChange'],
+                      required: { value: true, message: '이메일을 입력해주세요' },
+                      patterns: [
+                        {
+                          value: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$',
+                          message: '올바른 이메일 형식이 아닙니다',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    name: 'Input',
+                    props: {
+                      label: '비밀번호',
+                      placeholder: '비밀번호를 입력하세요',
+                      type: 'password',
+                    },
+                    path: 'form.inputs.password',
+                    validation: {
+                      timings: ['onBlur', 'onChange'],
+                      required: { value: true, message: '비밀번호를 입력해주세요' },
+                      minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
+                    },
+                  },
+                ],
+              },
               {
                 name: 'Spacer',
                 props: {
@@ -80,7 +85,7 @@ export class LoginPage {
             type: 'VStack' as const,
             elements: [
               {
-                name: 'ButtonBuilder',
+                name: 'FormButtonBuilder',
                 props: {
                   apiKey: 'loginButton',
                   children: '로그인',
@@ -119,7 +124,7 @@ export class LoginPage {
 
     return {
       name: '로그인',
-      state: { form: { inputs: formInputs } },
+      state: { form: { inputs: formInputs, button: { errorMessages: [] } } },
       form,
     };
   }

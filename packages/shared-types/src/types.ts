@@ -25,7 +25,12 @@ export type Validation = {
   maxLength?: { value: number; message: string };
   min?: { value: number; message: string };
   max?: { value: number; message: string };
-  patterns?: { value: RegExp; message: string }[];
+  patterns?: { value: RegExp | string; message: string }[];
+};
+
+export type ButtonValidation = {
+  required?: { value: boolean; message: string };
+  patterns?: { value: RegExp | string; message: string }[];
 };
 
 export type ValidationRecord<T extends object> = Omit<
@@ -52,7 +57,9 @@ export type ElementName =
   | 'Textarea'
   | 'ButtonBuilder'
   | 'Copyright'
-  | 'WorkspaceSelect';
+  | 'WorkspaceSelect'
+  | 'Form'
+  | 'Listbox';
 
 export interface ElementBuilder {
   visibleCondition?: {
@@ -61,10 +68,11 @@ export interface ElementBuilder {
       value: any;
     };
   };
-  name: ElementName;
+  name: any;
   props?: ElementProps<ElementName>;
   path?: string;
   validation?: Validation;
+  children?: ElementBuilder[];
 }
 
 export type ElementProps<T extends ElementName> = T extends 'Button'
@@ -88,7 +96,7 @@ export type ElementProps<T extends ElementName> = T extends 'Button'
 
 export interface ButtonResponse {
   routeName?: RouteNames;
-  state?: PageState<any>;
+  state?: PageState<unknown>;
   toast?: {
     color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
     title: string;
@@ -107,7 +115,8 @@ export interface FormBuilder {
 export interface ButtonBuilder extends ButtonProps {
   apiKey?: string;
   name?: string;
-  state?: PageState<any>;
+  path?: string;
+  validation?: ButtonValidation;
 }
 
 export interface CellButtonBuilder {
@@ -214,10 +223,10 @@ export interface DataGridBuilder {
   table: TableBuilder;
 }
 
-export interface PageBuilder<CDO = any> {
+export interface PageBuilder {
   type?: 'Outlet' | 'Page';
   name?: string;
-  state?: PageState<CDO>;
+  state?: any;
   query?: Query;
   form?: FormBuilder;
   dataGrid?: DataGridBuilder;

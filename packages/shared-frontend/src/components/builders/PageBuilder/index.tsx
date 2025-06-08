@@ -1,10 +1,10 @@
 'use client';
 
-import React, { createContext } from 'react';
+import React, { createContext, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { v4 } from 'uuid';
-import { observable } from 'mobx';
+import { observable, isObservable } from 'mobx';
 import { SectionBuilder } from '../SectionBuilder';
 
 interface PageBuilderProps {
@@ -22,12 +22,22 @@ const PageContext = createContext<PageBuilderInterface['state']>(
 );
 
 const PageProvder = observer((props: PageProviderProps) => {
-  const state = observable(props.state || {});
+  const [state] = useState(() => {
+    const initialState = props.state || {};
+    // state가 이미 observable이면 그대로 사용, 아니면 observable로 만듦
+    return isObservable(initialState) ? initialState : observable(initialState);
+  });
 
   return (
-    <PageContext.Provider value={state}>{props.children}</PageContext.Provider>
+    <PageContext.Provider value={state}>
+      <div className={`hi-${v4()}`} />
+      {props.children}
+    </PageContext.Provider>
   );
 });
+
+PageContext.displayName = 'PageContext';
+PageProvder.displayName = 'PageProvider';
 
 export const usePageState = (): PageBuilderInterface['state'] => {
   const state = React.useContext(PageContext);
@@ -52,3 +62,5 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
     </PageProvder>
   );
 });
+
+PageBuilder.displayName = 'PageBuilder';

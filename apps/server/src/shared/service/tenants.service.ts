@@ -1,60 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from '../repository';
 import { CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '../dto';
+import { BaseService } from './base.service';
+import { Tenant } from '../entity';
 import { Prisma } from '@prisma/client';
 
+// Define the include type for Tenant with proper type inference
+type TenantInclude = Prisma.TenantInclude;
+
 @Injectable()
-export class TenantsService {
-  constructor(private readonly repository: TenantsRepository) {}
-
-  async create(createTenantDto: CreateTenantDto) {
-    return this.repository.create({
-      data: createTenantDto,
-    });
-  }
-
-  async getManyByQuery(query: QueryTenantDto) {
-    const args = query.toArgs() as Prisma.TenantFindManyArgs;
-    args.include = {
-      space: {
-        include: {
-          workspace: {
+export class TenantsService extends BaseService<
+  CreateTenantDto,
+  UpdateTenantDto,
+  QueryTenantDto,
+  Tenant,
+  TenantsRepository,
+  TenantInclude
+> {
+  constructor(repository: TenantsRepository) {
+    super(repository, {
+      includeMap: {
+        getManyByQuery: {
+          space: {
             include: {
-              ground: true,
+              workspace: {
+                include: {
+                  ground: true,
+                },
+              },
+            },
+          },
+        },
+        getById: {
+          space: {
+            include: {
+              workspace: {
+                include: {
+                  ground: true,
+                },
+              },
             },
           },
         },
       },
-    };
-    const countArgs = query.toCountArgs();
-    const tenants = await this.repository.findMany(args);
-    const count = await this.repository.count(countArgs);
-
-    return {
-      tenants,
-      count,
-    };
-  }
-
-  getById(id: string) {
-    return this.repository.findUnique({ where: { id } });
-  }
-
-  updateById(id: string, updateTenantDto: UpdateTenantDto) {
-    return this.repository.update({
-      where: { id },
-      data: updateTenantDto,
-    });
-  }
-
-  deleteById(id: string) {
-    return this.repository.delete({ where: { id } });
-  }
-
-  removeById(id: string) {
-    return this.repository.update({
-      where: { id },
-      data: { removedAt: new Date() },
     });
   }
 }

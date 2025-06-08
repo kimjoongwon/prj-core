@@ -11,6 +11,7 @@ import type {
   InputProps,
   AutocompleteProps,
   SelectProps as NextUISelectProps,
+  ListboxProps as HeroListboxProps,
 } from '@heroui/react';
 import type { HeaderContext } from '@tanstack/react-table';
 import type { Leaves, MobxProps, Route, Option } from './types';
@@ -143,7 +144,8 @@ export interface TextProps extends React.HTMLAttributes<HTMLElement> {
     | 'body2'
     | 'title'
     | 'label'
-    | 'text';
+    | 'text'
+    | 'error';
   as?: React.ElementType;
   children?: React.ReactNode;
 }
@@ -276,7 +278,7 @@ export interface DateModel {
 // State interface moved to types.ts to avoid conflicts
 // Use the State<T> type from types.ts instead
 
-export interface HeaderProps {
+export interface CalendarHeaderProps {
   state: any; // ReturnType<typeof useProps>['state']
 }
 
@@ -328,12 +330,20 @@ export interface TabsProps<T> extends MobxProps<T> {
   options: Option[];
 }
 
-export interface AppBarProps {
+export interface HeaderProps {
   children?: React.ReactNode;
   content?: React.ReactNode;
 }
 
-export interface AppBarViewProps extends AppBarProps {}
+export interface DashboardLayoutProps {
+  headerComponent?: React.ReactNode;
+  leftSidebarComponent?: React.ReactNode;
+  rightSidebarComponent?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+export interface AppBarProps extends HeaderProps {}
+export interface AppBarViewProps extends HeaderProps {}
 
 export interface MessageProps {
   title: string;
@@ -391,3 +401,14 @@ export type RecurringDayOfTheWeek =
   | 'FRIDAY'
   | 'SATURDAY'
   | 'SUNDAY';
+
+export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &
+  MobxProps<T> & {
+    title?: string;
+    options:
+      | {
+          text: string;
+          value: any;
+        }[]
+      | undefined;
+  };

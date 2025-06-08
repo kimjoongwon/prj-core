@@ -3,6 +3,7 @@ import { ElementBuilder as ElementBuilderInterface } from '@shared/types';
 import { ComponentManager } from '../../../../index';
 import { usePageState } from '../PageBuilder';
 import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
+import { v4 } from 'uuid';
 
 interface ElementBuilderProps {
   elementBuilder: ElementBuilderInterface;
@@ -11,17 +12,24 @@ interface ElementBuilderProps {
 
 export const ElementBuilder = observer((props: ElementBuilderProps) => {
   const state = usePageState();
-  const { elementBuilder } = props; // @ts-ignore
+  const { elementBuilder } = props;
   const Component = ComponentManager?.[elementBuilder.name];
+
+  const renderElement = (element: ElementBuilderInterface) => {
+    return <ElementBuilder key={v4()} elementBuilder={element} />;
+  };
 
   return (
     <InputValidationBuilder validation={elementBuilder.validation}>
       <Component
-        {...elementBuilder.props}
+        key={v4()}
         state={state}
         path={elementBuilder?.path}
-        elementBuilder={elementBuilder}
-      />
+        {...elementBuilder.props}
+      >
+        {elementBuilder.props?.children ||
+          elementBuilder?.children?.map(renderElement)}
+      </Component>
     </InputValidationBuilder>
   );
 });

@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { Outlet } from 'react-router';
 import { AuthLayout } from '../../layouts/Auth';
 import { ModalLayout } from '../../layouts/Modal';
+import { DashboardLayout } from '../../layouts/Dashboard';
+import { Header } from '../../Header';
 
 interface Layout {
   children: ReactNode;
@@ -31,6 +33,15 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
         {children}
         <Outlet />
       </ModalLayout>
+    );
+  }
+
+  if (layoutBuilder?.type === 'Dashboard') {
+    return (
+      <DashboardLayout headerComponent={<Header />}>
+        {children}
+        <Outlet />
+      </DashboardLayout>
     );
   }
 

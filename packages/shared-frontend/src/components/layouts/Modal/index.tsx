@@ -49,7 +49,6 @@ export function ModalLayout({
   hideCloseButton = false,
   isDismissable = true,
   isKeyboardDismissDisabled = false,
-  onClose,
   footer,
   className,
   scrollBehavior = 'normal',
@@ -69,11 +68,9 @@ export function ModalLayout({
       scrollBehavior={scrollBehavior}
     >
       <ModalContent>
-        {onClose => (
+        {() => (
           <>
-            {title && (
-              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-            )}
+            {title && <ModalHeader>{title}</ModalHeader>}
             <ModalBody>{children}</ModalBody>
             {footer && <ModalFooter>{footer}</ModalFooter>}
           </>

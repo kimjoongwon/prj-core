@@ -1,4 +1,3 @@
-
 export type PageType = 'create' | 'modify' | 'detail' | 'add';
 
 export interface ResourceConfig {

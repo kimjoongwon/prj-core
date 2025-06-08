@@ -1,26 +1,12 @@
 'use client';
 
-import {
-  Listbox as HeroListbox,
-  ListboxItem,
-  ListboxProps as HeroListboxProps,
-  Card,
-} from '@heroui/react';
+import { Listbox as HeroListbox, ListboxItem } from '@heroui/react';
 import { get, set } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ReactNode, useEffect } from 'react';
-import { MobxProps } from '@shared/types';
+import { ListboxProps } from '@shared/types';
 import { reaction } from 'mobx';
-
-export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &
-  MobxProps<T> & {
-    options:
-      | {
-          text: string;
-          value: any;
-        }[]
-      | undefined;
-  };
+import { Text } from '../Text';
 
 export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
   const {
@@ -28,6 +14,7 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
     path = '',
     options = [],
     selectionMode = 'multiple',
+    title,
   } = props;
 
   const initialValue = get(state, path);
@@ -61,6 +48,13 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
 
   return (
     <ListboxWrapper>
+      {title && (
+        <div className="mb-3">
+          <Text variant="h6" className="font-semibold">
+            {title}
+          </Text>
+        </div>
+      )}
       <HeroListbox
         className="w-full"
         selectionMode={selectionMode}
