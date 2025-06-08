@@ -271,6 +271,7 @@ export * from './roleClassificationDto';
 export * from './roleDto';
 export * from './roles';
 export * from './routineDto';
+export * from './selectWorkspaceDto';
 export * from './serviceDto';
 export * from './serviceNames';
 export * from './sessionDto';

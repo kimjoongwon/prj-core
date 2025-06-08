@@ -1,133 +1,77 @@
 'use client';
 
-import { Button as BaseButton, Plate } from '@shared/frontend';
-import {
-  ButtonBuilder as ButtonBuilderProps,
-  ButtonResponse,
-} from '@shared/types';
-import { addToast, ToastProps } from '@heroui/react';
-import { isAxiosError } from 'axios';
+import { Button as BaseButton, usePageState, Text } from '@shared/frontend';
+import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
+import { addToast } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-import { APIManager } from '@shared/api-client';
+import { get } from 'lodash-es';
+import { useButtonLogic } from './useButtonLogic';
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
-  const { apiKey, state } = props;
+  const { apiKey, validation, path } = props;
+  const state = usePageState();
+  const { handleApiCall } = useButtonLogic({ apiKey, state });
+  // 버튼 validation 체크 함수
+  const validateButton = (): { isValid: boolean; errorMessage?: string } => {
+    if (!validation) return { isValid: true };
 
-  const onPress = async () => {
-    // 기본 성공/에러 토스트 설정
-    const successToast = {
-      color: 'success' as ToastProps['color'],
-      title: '성공',
-      description: '작업이 완료되었습니다.',
-    };
-    const errorToast = {
-      color: 'danger',
-      title: '오류',
-      description: '작업 중 오류가 발생했습니다.',
-    };
+    const { required, patterns } = validation;
+    const value = get(state, path);
+    // 필수 여부 검증
+    if (required?.value && (!value || value === '')) {
+      return { isValid: false, errorMessage: required.message };
+    }
 
-    try {
-      // Handle apiKey if provided
-      if (apiKey) {
-        // APIManager에서 함수 가져오기
-        const apiFunction = APIManager[apiKey as keyof typeof APIManager];
-
-        if (!apiFunction) {
-          console.error(
-            `API function with key "${apiKey}" not found in APIManager`,
-          );
-
-          // 에러 토스트 표시
-          addToast({
-            title: errorToast.title,
-            description: `API 함수를 찾을 수 없습니다: ${apiKey}`,
-            color: 'danger',
-          });
-
-          return;
-        }
-
-        // API 함수 호출
-        const response = await (apiFunction as Function)(state.form.inputs);
-
-        // 응답 데이터 추출
-        const responseData = response?.data as ButtonResponse;
-        if (responseData.toast) {
-          addToast({
-            title: responseData.toast.title || successToast.title,
-            description:
-              responseData.toast.description || successToast.description,
-            color: responseData.toast.color || successToast.color,
-          });
-        }
-        // 성공 토스트 표시
-
-        // 라우트 이름이 있으면 해당 경로로 이동
-        if (responseData?.routeName) {
-          Plate.navigation.pushByName(responseData.routeName);
-        }
-
-        if (response.state) {
-          state.form = response?.state?.form;
-        }
-      }
-    } catch (error: unknown) {
-      console.error('API call error:', error);
-
-      // 에러 처리
-      if (isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message;
-        const errorMessages = error.response?.data?.data?.message;
-
-        let description = errorToast.description;
-
-        if (Array.isArray(errorMessages) && errorMessages.length > 0) {
-          // 리스트로 정렬하여 표시
-          addToast({
-            title: errorToast.title,
-            description: (
-              <ul style={{ margin: 0, paddingLeft: 20 }}>
-                {errorMessages.map((msg: string, idx: number) => (
-                  <li key={idx}>{msg}</li>
-                ))}
-              </ul>
-            ),
-            color: 'danger',
-          });
-        } else if (errorMessage) {
-          addToast({
-            title: errorToast.title,
-            description: errorMessage,
-            color: 'danger',
-          });
+    // 정규표현식 검증
+    if (patterns && patterns.length > 0) {
+      for (const pattern of patterns) {
+        if (pattern.value instanceof RegExp) {
+          if (!pattern.value.test(String(value))) {
+            return { isValid: false, errorMessage: pattern.message };
+          }
         } else {
-          addToast({
-            title: errorToast.title,
-            description: errorToast.description,
-            color: 'danger',
-          });
+          // pattern.value가 RegExp가 아닌 경우를 처리 (예: string)
+          if (!new RegExp(pattern.value).test(String(value))) {
+            return { isValid: false, errorMessage: pattern.message };
+          }
         }
-      } else {
-        addToast({
-          title: errorToast.title,
-          description: errorToast.description,
-          color: 'danger',
-        });
       }
     }
+
+    return { isValid: true };
+  };
+
+  const validationResult = validateButton();
+
+  const onPress = async () => {
+    // validation 체크
+    if (!validationResult.isValid) {
+      addToast({
+        title: '검증 오류',
+        description: validationResult.errorMessage || '입력값을 확인해주세요.',
+        color: 'danger',
+      });
+      return;
+    }
+
+    await handleApiCall();
   };
 
   return (
-    <BaseButton
-      {...props}
-      onPress={onPress}
-      isDisabled={
-        state?.form?.button?.errorMessages &&
-        (state?.form?.button?.errorMessages?.length > 0 ||
-          state.form.button.errorMessages.length === 0)
-      }
-    >
-      {props.children}
-    </BaseButton>
+    <div className="flex flex-col gap-1">
+      <BaseButton
+        {...props}
+        onPress={onPress}
+        isDisabled={!validationResult.isValid}
+        color={!validationResult.isValid ? 'danger' : props.color}
+      >
+        {props.children}
+      </BaseButton>
+      {!validationResult.isValid && validationResult.errorMessage && (
+        <Text variant="error">
+          {validationResult.errorMessage}
+        </Text>
+      )}
+    </div>
   );
 });

@@ -17,6 +17,7 @@ import {
   TimelinesService,
   UserClassificationsService,
   UsersService,
+  WorkspacesService,
 } from '../service';
 import {
   AbilitiesRepository,
@@ -37,6 +38,7 @@ import {
   TimelinesRepository,
   UserClassificationsRepository,
   UsersRepository,
+  WorkspacesRepository,
 } from '../repository';
 import { DepotsRepository } from '../repository/depots.repository';
 import { FilesService } from '../service/files.service';
@@ -99,6 +101,8 @@ const modules = [
   SpaceClassificationsService,
   FileClassificationsRepository,
   FileClassificationsService,
+  WorkspacesService,
+  WorkspacesRepository,
 ];
 @Global()
 @Module({

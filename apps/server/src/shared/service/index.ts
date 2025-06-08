@@ -22,3 +22,4 @@ export * from './depots.service';
 export * from './assignments.service';
 export * from './grounds.service';
 export * from './workspaces.service';
+export * from './tenants.service';

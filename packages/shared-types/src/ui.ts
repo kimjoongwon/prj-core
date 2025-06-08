@@ -32,6 +32,7 @@ export type {
   CopyrightViewProps,
   DepotProps,
   MainLayoutProps,
+  DashboardLayoutProps,
   Months,
   ISOString,
 } from './components';

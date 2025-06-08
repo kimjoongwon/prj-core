@@ -53,71 +53,56 @@ export const rawRoutes: RouteBuilder[] = [
         ],
       },
       {
-        name: 'spaces',
-        pathname: 'haha',
-        layout: {
-          type: 'Modal',
-        },
+        name: ROUTE_NAMES.DASHBOARD,
+        pathname: 'dashboard',
         children: [
           {
-            name: ROUTE_NAMES.TENANT,
-            pathname: ':id',
+            name: ROUTE_NAMES.GROUND,
+            pathname: 'ground',
             children: [
               {
-                name: ROUTE_NAMES.DASHBOARD,
-                pathname: 'dashboard',
+                name: ROUTE_NAMES.GROUND_LIST,
+                pathname: 'resources',
                 children: [
                   {
-                    name: ROUTE_NAMES.GROUND,
-                    pathname: 'ground',
+                    name: ROUTE_NAMES.GROUND_DETAIL,
+                    pathname: ':id',
                     children: [
                       {
-                        name: ROUTE_NAMES.GROUND_LIST,
-                        pathname: 'resources',
-                        children: [
-                          {
-                            name: ROUTE_NAMES.GROUND_DETAIL,
-                            pathname: ':id',
-                            children: [
-                              {
-                                name: ROUTE_NAMES.GROUND_EDIT,
-                                pathname: ':type',
-                              },
-                            ],
-                          },
-                        ],
+                        name: ROUTE_NAMES.GROUND_EDIT,
+                        pathname: ':type',
                       },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: ROUTE_NAMES.GROUND_CATEGORY,
+                pathname: 'categories',
+                children: [
+                  {
+                    name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
+                    pathname: ':id',
+                    children: [
                       {
-                        name: ROUTE_NAMES.GROUND_CATEGORY,
-                        pathname: 'categories',
-                        children: [
-                          {
-                            name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
-                            pathname: ':id',
-                            children: [
-                              {
-                                name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
-                                pathname: ':type',
-                              },
-                            ],
-                          },
-                        ],
+                        name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
+                        pathname: ':type',
                       },
+                    ],
+                  },
+                ],
+              },
+              {
+                name: ROUTE_NAMES.GROUND_GROUP,
+                pathname: 'groups',
+                children: [
+                  {
+                    name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
+                    pathname: ':id',
+                    children: [
                       {
-                        name: ROUTE_NAMES.GROUND_GROUP,
-                        pathname: 'groups',
-                        children: [
-                          {
-                            name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
-                            pathname: ':id',
-                            children: [
-                              {
-                                name: ROUTE_NAMES.GROUND_GROUP_EDIT,
-                                pathname: ':type',
-                              },
-                            ],
-                          },
-                        ],
+                        name: ROUTE_NAMES.GROUND_GROUP_EDIT,
+                        pathname: ':type',
                       },
                     ],
                   },

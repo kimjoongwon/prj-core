@@ -5,7 +5,7 @@ export * from './builders';
 
 // All UI Components - Explicit exports for better React DevTools naming
 export * from './NavigationSetup';
-export * from './AppBar';
+export * from './Header';
 export * from './AutoComplete';
 export * from './Avatar';
 export * from './Breadcrumb';
@@ -36,6 +36,7 @@ export * from './Meta';
 export * from './MultiInput';
 export * from './MultiSelect';
 export * from './Navbar';
+export * from './NavbarItem';
 export * from './PageModal';
 export * from './Pagination';
 export * from './Placeholder';
@@ -62,3 +63,5 @@ export * from './WeekInput';
 // Layouts
 export * from './layouts';
 export * from './widgets';
+
+export { Form } from '@heroui/react';

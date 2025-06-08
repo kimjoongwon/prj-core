@@ -77,7 +77,7 @@ export class TenantsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
   async getTenantsByQuery(@Query() query: QueryTenantDto) {
-    const { count, tenants } = await this.service.getManyByQuery(query);
+    const { count, items: tenants } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
       'success',

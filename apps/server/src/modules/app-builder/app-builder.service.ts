@@ -4,6 +4,7 @@ import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/types';
 import { rawRoutes } from '@shared/vars';
 import { LoginPage } from './components/pages/login.page';
 import { TenantsPage } from './components/pages/tenants.page';
+import { DashboardPage } from './components/pages/dashboard.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -13,6 +14,7 @@ export class AppBuilderService {
     readonly prisma: PrismaService,
     readonly loginPage: LoginPage,
     readonly tenantsPage: TenantsPage,
+    readonly dashboardPage: DashboardPage,
   ) {
     // rawRoutes를 deep copy하여 초기화
     this.routes = rawRoutes;
@@ -21,7 +23,8 @@ export class AppBuilderService {
   async build() {
     // 로그인 페이지 설정
     const loginPageBuilder: PageBuilder = this.loginPage.build();
-    const tenantsPageBuilder: PageBuilder = this.tenantsPage.build();
+    const tenantsPageBuilder: PageBuilder = await this.tenantsPage.build();
+    const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
 
     this.setRoutePageAndLayout('관리자', undefined, {
       type: 'Root',
@@ -30,10 +33,13 @@ export class AppBuilderService {
       type: 'Auth',
     });
     this.setRoutePageAndLayout('로그인', loginPageBuilder, {
-      type: '',
+      type: 'Root',
     });
     this.setRoutePageAndLayout('테넌츠', tenantsPageBuilder, {
       type: 'Modal',
+    });
+    this.setRoutePageAndLayout('대시보드', dashboardPageBuilder, {
+      type: 'Dashboard',
     });
 
     return {

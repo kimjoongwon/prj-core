@@ -182,6 +182,7 @@ import type {
   RemoveUser200AllOf,
   RemoveUserClassification200AllOf,
   RemoveUsers200AllOf,
+  SelectWorkspaceDto,
   SignUpPayloadDto,
   SignUpUser201AllOf,
   TokenDto,
@@ -3582,6 +3583,65 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getLoginButtonMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+export const selectWorkspace = (
+    selectWorkspaceDto: BodyType<SelectWorkspaceDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/appBuilder/select-workspace`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: selectWorkspaceDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getSelectWorkspaceMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext> => {
+    
+const mutationKey = ['selectWorkspace'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof selectWorkspace>>, {data: BodyType<SelectWorkspaceDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  selectWorkspace(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SelectWorkspaceMutationResult = NonNullable<Awaited<ReturnType<typeof selectWorkspace>>>
+    export type SelectWorkspaceMutationBody = BodyType<SelectWorkspaceDto>
+    export type SelectWorkspaceMutationError = ErrorType<unknown>
+
+    export const useSelectWorkspace = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof selectWorkspace>>,
+        TError,
+        {data: BodyType<SelectWorkspaceDto>},
+        TContext
+      > => {
+
+      const mutationOptions = getSelectWorkspaceMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -13919,7 +13979,7 @@ export const useCreateWorkspace = <TError = ErrorType<void>,
 /**
  * @summary Get workspaces by query
  */
-export const getManyWorkspacesByQuery = (
+export const getWorkspacesByQuery = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -13932,67 +13992,67 @@ export const getManyWorkspacesByQuery = (
     }
   
 
-export const getGetManyWorkspacesByQueryQueryKey = () => {
+export const getGetWorkspacesByQueryQueryKey = () => {
     return [`/api/v1/workspaces`] as const;
     }
 
     
-export const getGetManyWorkspacesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetWorkspacesByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetManyWorkspacesByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkspacesByQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>> = ({ signal }) => getManyWorkspacesByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkspacesByQuery>>> = ({ signal }) => getWorkspacesByQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetManyWorkspacesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>
-export type GetManyWorkspacesByQueryQueryError = ErrorType<void>
+export type GetWorkspacesByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkspacesByQuery>>>
+export type GetWorkspacesByQueryQueryError = ErrorType<void>
 
 
-export function useGetManyWorkspacesByQuery<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>> & Pick<
+export function useGetWorkspacesByQuery<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getManyWorkspacesByQuery>>,
+          Awaited<ReturnType<typeof getWorkspacesByQuery>>,
           TError,
-          Awaited<ReturnType<typeof getManyWorkspacesByQuery>>
+          Awaited<ReturnType<typeof getWorkspacesByQuery>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuery<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>> & Pick<
+export function useGetWorkspacesByQuery<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getManyWorkspacesByQuery>>,
+          Awaited<ReturnType<typeof getWorkspacesByQuery>>,
           TError,
-          Awaited<ReturnType<typeof getManyWorkspacesByQuery>>
+          Awaited<ReturnType<typeof getWorkspacesByQuery>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuery<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuery<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get workspaces by query
  */
 
-export function useGetManyWorkspacesByQuery<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuery<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetManyWorkspacesByQueryQueryOptions(options)
+  const queryOptions = getGetWorkspacesByQueryQueryOptions(options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -14003,50 +14063,50 @@ export function useGetManyWorkspacesByQuery<TData = Awaited<ReturnType<typeof ge
 
 
 
-export const getGetManyWorkspacesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetWorkspacesByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetManyWorkspacesByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkspacesByQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>> = ({ signal }) => getManyWorkspacesByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkspacesByQuery>>> = ({ signal }) => getWorkspacesByQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetManyWorkspacesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>
-export type GetManyWorkspacesByQuerySuspenseQueryError = ErrorType<void>
+export type GetWorkspacesByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkspacesByQuery>>>
+export type GetWorkspacesByQuerySuspenseQueryError = ErrorType<void>
 
 
-export function useGetManyWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get workspaces by query
  */
 
-export function useGetManyWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspense<TData = Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetManyWorkspacesByQuerySuspenseQueryOptions(options)
+  const queryOptions = getGetWorkspacesByQuerySuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -14057,50 +14117,50 @@ export function useGetManyWorkspacesByQuerySuspense<TData = Awaited<ReturnType<t
 
 
 
-export const getGetManyWorkspacesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetWorkspacesByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getWorkspacesByQuery>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetManyWorkspacesByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetWorkspacesByQueryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>> = ({ signal }) => getManyWorkspacesByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWorkspacesByQuery>>> = ({ signal }) => getWorkspacesByQuery(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetManyWorkspacesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>
-export type GetManyWorkspacesByQuerySuspenseInfiniteQueryError = ErrorType<void>
+export type GetWorkspacesByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getWorkspacesByQuery>>>
+export type GetWorkspacesByQuerySuspenseInfiniteQueryError = ErrorType<void>
 
 
-export function useGetManyWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getWorkspacesByQuery>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getWorkspacesByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetManyWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getWorkspacesByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get workspaces by query
  */
 
-export function useGetManyWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getManyWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetWorkspacesByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getWorkspacesByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getWorkspacesByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetManyWorkspacesByQuerySuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetWorkspacesByQuerySuspenseInfiniteQueryOptions(options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
