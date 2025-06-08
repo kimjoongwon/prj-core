@@ -6,6 +6,7 @@ import { AuthLayout } from '../../layouts/Auth';
 import { ModalLayout } from '../../layouts/Modal';
 import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
+import { Navbar } from '../../Navbar';
 
 interface Layout {
   children: ReactNode;
@@ -37,8 +38,40 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   if (layoutBuilder?.type === 'Dashboard') {
+    const mockNavbarItems = [
+      {
+        url: '/dashboard',
+        name: 'Dashboard',
+        onClick: () => console.log('Dashboard clicked'),
+      },
+      {
+        url: '/users',
+        name: 'Users',
+        onClick: () => console.log('Users clicked'),
+      },
+      {
+        url: '/settings',
+        name: 'Settings',
+        onClick: () => console.log('Settings clicked'),
+      },
+      {
+        url: '/analytics',
+        name: 'Analytics',
+        onClick: () => console.log('Analytics clicked'),
+      },
+      {
+        url: '/reports',
+        name: 'Reports',
+        onClick: () => console.log('Reports clicked'),
+      },
+    ];
+
     return (
-      <DashboardLayout headerComponent={<Header />}>
+      <DashboardLayout
+        headerComponent={
+          <Header navbarComponent={<Navbar navbarItems={mockNavbarItems} />} />
+        }
+      >
         {children}
         <Outlet />
       </DashboardLayout>
