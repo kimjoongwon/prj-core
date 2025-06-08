@@ -16,7 +16,7 @@ export const RouteBuilder = observer((props: RouteBuilderProps) => {
       <LayoutBuilder layoutBuilder={routeBuilder.layout}>
         <PageBuilder pageBuilder={routeBuilder?.page} />
       </LayoutBuilder>
-      <RouteStateDebugger routeBuilder={routeBuilder} />
+      {/* <RouteStateDebugger routeBuilder={routeBuilder} /> */}
     </>
   );
 });

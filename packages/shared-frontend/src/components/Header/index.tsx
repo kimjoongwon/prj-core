@@ -53,16 +53,6 @@ export const Header = (props: HeaderProps) => {
 
           <NavbarContent className="flex-1" justify="end">
             <NavbarItem>
-              <Chip
-                color="primary"
-                size="sm"
-                variant="flat"
-                className="font-medium"
-              >
-                {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
-              </Chip>
-            </NavbarItem>
-            <NavbarItem>
               <Avatar showInfo={true} />
             </NavbarItem>
           </NavbarContent>
@@ -100,16 +90,6 @@ export const Header = (props: HeaderProps) => {
 
           <NavbarContent justify="end">
             <NavbarItem>
-              <Chip
-                color="primary"
-                size="sm"
-                variant="flat"
-                className="font-medium"
-              >
-                {process.env.NODE_ENV === 'development' ? '개발' : '운영'}
-              </Chip>
-            </NavbarItem>
-            <NavbarItem>
               <Avatar showInfo={false} />
             </NavbarItem>
           </NavbarContent>
@@ -118,6 +98,7 @@ export const Header = (props: HeaderProps) => {
 
       {/* Mobile Navigation Drawer */}
       <Drawer
+        hideCloseButton
         isOpen={isDrawerOpen}
         onClose={handleDrawerClose}
         placement="left"
