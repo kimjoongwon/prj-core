@@ -69,7 +69,12 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     return (
       <DashboardLayout
         headerComponent={
-          <Header navbarComponent={<Navbar navbarItems={mockNavbarItems} />} />
+          <Header
+            centerComponent={<Navbar navbarItems={mockNavbarItems} />}
+            drawerComponent={
+              <Navbar navbarItems={mockNavbarItems} direction="vertical" />
+            }
+          />
         }
       >
         {children}

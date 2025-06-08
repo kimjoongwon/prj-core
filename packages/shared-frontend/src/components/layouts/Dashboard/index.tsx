@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, CardBody, Divider } from '@heroui/react';
 import { Text } from '../../Text';
 import { DashboardLayoutProps } from '@shared/types';
 
@@ -11,11 +12,30 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
   } = props;
 
   const renderPlaceholder = (componentName: string) => (
-    <div className="flex items-center justify-center h-full p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-600">
-      <Text variant="body1" className="text-gray-500 dark:text-gray-400">
-        {componentName}
-      </Text>
-    </div>
+    <Card className="h-full shadow-sm">
+      <CardBody className="flex items-center justify-center">
+        <div className="text-center space-y-2">
+          <div className="w-12 h-12 mx-auto rounded-lg bg-default-100 flex items-center justify-center">
+            <svg
+              className="w-6 h-6 text-default-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+          <Text variant="body2" className="text-default-500">
+            {componentName}
+          </Text>
+        </div>
+      </CardBody>
+    </Card>
   );
 
   const header = headerComponent || renderPlaceholder('HeaderComponent');
@@ -27,29 +47,47 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <div className="flex-none border-b border-gray-200 dark:border-gray-700">
+      <div className="flex-none backdrop-blur-lg bg-background/95 border-b border-divider sticky top-0 z-40">
         {header}
       </div>
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Hidden on tablet and mobile (iPad Mini and smaller) */}
-        <div className="hidden xl:flex w-64 flex-col border-r border-gray-200 dark:border-gray-700 bg-background">
-          <div className="h-full overflow-y-auto p-4">{leftSidebar}</div>
-        </div>
+        <aside className="hidden xl:flex w-72 flex-col bg-content1 border-r border-divider">
+          <div className="h-full overflow-y-auto scrollbar-thin">
+            <div className="p-4">
+              {leftSidebar}
+            </div>
+          </div>
+        </aside>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <main className="flex-1 overflow-y-auto p-6">{children}</main>
-        </div>
+        <main className="flex-1 flex flex-col overflow-hidden bg-content2">
+          <div className="flex-1 overflow-y-auto scrollbar-thin">
+            <div className="p-6">
+              <Card className="min-h-full shadow-sm">
+                <CardBody className="p-6">
+                  {children}
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+        </main>
 
         {/* Right Sidebar - Hidden on tablet and mobile (iPad Mini and smaller) */}
-        <div className="hidden xl:flex w-64 flex-col border-l border-gray-200 dark:border-gray-700 bg-background">
-          <div className="h-full overflow-y-auto p-4">{rightSidebar}</div>
-        </div>
+        <aside className="hidden xl:flex w-72 flex-col bg-content1 border-l border-divider">
+          <div className="h-full overflow-y-auto scrollbar-thin">
+            <div className="p-4">
+              {rightSidebar}
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );
 };
+
+DashboardLayout.displayName = 'DashboardLayout';
 
 DashboardLayout.displayName = 'DashboardLayout';
