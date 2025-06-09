@@ -3,6 +3,7 @@ import { Card, CardBody } from '@heroui/react';
 import { Text } from '../../Text';
 import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
+import { Plate } from '../../../providers';
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   const {

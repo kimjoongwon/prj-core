@@ -8,7 +8,6 @@ import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
 import { Navbar } from '../../Navbar';
 import { Plate } from '../../../providers';
-import { useSmartRoutes } from '../../../hooks/useRoutes';
 
 interface Layout {
   children: ReactNode;
@@ -41,7 +40,8 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (layoutBuilder?.type === 'Dashboard') {
     // Dashboard에서는 항상 dashboard의 자식 라우트들을 보여줌
-    const dashboardRoutes = Plate.navigation.getRoutesByPathname('dashboard');
+    const dashboardRoutes =
+      Plate.navigation.getDirectChildrenByPath('dashboard');
 
     return (
       <DashboardLayout

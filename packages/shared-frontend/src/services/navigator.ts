@@ -10,12 +10,16 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
  */
 export class NavigatorService {
   private navigateFunction?: UniversalNavigateFunction;
+  private isReactRouter: boolean = false;
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
    */
   setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
     this.navigateFunction = navigateFunction;
+    // NavigateFunction인지 확인 (length가 2 이상이면 React Router로 간주)
+    this.isReactRouter =
+      typeof navigateFunction === 'function' && navigateFunction.length >= 2;
   }
 
   /**
@@ -120,14 +124,13 @@ export class NavigatorService {
     // React Router의 경우 navigate(path, { replace: true })
     // Next.js의 경우 router.replace(path)
     if (this.navigateFunction) {
-      // React Router 스타일 확인 - NavigateFunction 타입인지 확인
-      if ('length' in this.navigateFunction) {
-        // NavigateFunction의 경우 매개변수가 있으므로 length 속성이 있음
+      if (this.isReactRouter) {
+        // React Router NavigateFunction
         (this.navigateFunction as NavigateFunction)(pathnameWithSearchParams, {
           replace: true,
         });
       } else {
-        // Next.js 스타일
+        // Next.js 스타일 - replace 옵션 없이 호출
         (this.navigateFunction as (path: string) => void)(
           pathnameWithSearchParams,
         );

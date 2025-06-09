@@ -5,7 +5,7 @@ import { HStack } from '../HStack';
 import { VStack } from '../VStack';
 import { Button } from '@heroui/react';
 import { RouteBuilder } from '@shared/types';
-import { useUnifiedNavigation } from '../../hooks/useUnifiedNavigation';
+import { Plate } from '../../providers/App/AppProvider';
 import { renderLucideIcon } from '../../utils/iconUtils';
 
 interface NavbarProps {
@@ -15,11 +15,10 @@ interface NavbarProps {
 
 export const Navbar = observer((props: NavbarProps) => {
   const { routes, direction = 'horizontal' } = props;
-  const { navigateByPath } = useUnifiedNavigation();
 
   const handleRouteClick = (route: RouteBuilder) => {
     if (route.pathname) {
-      navigateByPath(route.pathname);
+      Plate.navigation.push(route.pathname);
     }
   };
 
