@@ -1,37 +1,43 @@
-# Turborepo kitchen sink starter
+# PRJ Core Monorepo
 
-This is an official starter Turborepo with multiple meta-frameworks all working in harmony and sharing packages.
+This repository hosts a full‑stack monorepo managed with [Turborepo](https://turbo.build/) and [pnpm](https://pnpm.io/). It contains multiple applications and shared packages used across the project.
 
-## Using this example
+## Repository Structure
 
-Run the following command:
+### Applications
+- **admin** – React + Vite based admin UI.
+- **server** – [NestJS](https://nestjs.com/) backend API.
+- **storybook** – Next.js application for UI component previews.
 
-```sh
-npx create-turbo@latest -e kitchen-sink
+### Packages
+- **@shared/frontend** – shared React component library.
+- **@shared/api-client** – generated API client.
+- **@shared/utils** – utility functions.
+- **@shared/types** – shared TypeScript types.
+- **@shared/vars** – common variables/constants.
+- **@shared/specs** – OpenAPI specifications.
+
+Additional documentation can be found in the [`docs`](./docs) directory.
+
+## Getting Started
+
+Install dependencies and start development servers:
+
+```bash
+pnpm install
+pnpm dev
 ```
 
-## What's inside?
+Use the scripts defined in the root `package.json` to build or test the project:
 
-This Turborepo includes the following packages and apps:
+```bash
+pnpm build   # build all packages and apps
+pnpm test    # run tests
+pnpm clean   # remove generated artifacts
+```
 
-### Apps and Packages
+Dockerfiles and Jenkins pipelines for building production images are located in the `devops` folder.
 
-- `api`: an [Express](https://expressjs.com/) server
-- `storefront`: a [Next.js](https://nextjs.org/) app
-- `admin`: a [Vite](https://vitejs.dev/) single page app
-- `blog`: a [Remix](https://remix.run/) blog
-- `logger`: isomorphic logger (a small wrapper around console.log)
-- `ui`: a dummy React UI library (which contains a single `<CounterButton>` component)
-- `scripts`: Jest and ESLint configurations
-- `tsconfig`: tsconfig.json;s used throughout the monorepo
+## License
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+[ISC](https://opensource.org/licenses/ISC)
