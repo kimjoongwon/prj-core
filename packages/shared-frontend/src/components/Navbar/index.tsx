@@ -4,28 +4,40 @@ import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
 import { VStack } from '../VStack';
 import { Button } from '@heroui/react';
-import { v4 } from 'uuid';
-
-export interface NavbarMenuItemProps {
-  url: string;
-  name: string;
-  onClick?: () => void;
-}
+import { RouteBuilder } from '@shared/types';
+import { useUnifiedNavigation } from '../../hooks/useUnifiedNavigation';
+import { renderLucideIcon } from '../../utils/iconUtils';
 
 interface NavbarProps {
-  navbarItems: NavbarMenuItemProps[];
+  routes: RouteBuilder[];
   direction?: 'horizontal' | 'vertical';
 }
 
 export const Navbar = observer((props: NavbarProps) => {
-  const { navbarItems, direction = 'horizontal' } = props;
+  const { routes, direction = 'horizontal' } = props;
+  const { navigateByPath } = useUnifiedNavigation();
+
+  const handleRouteClick = (route: RouteBuilder) => {
+    if (route.pathname) {
+      navigateByPath(route.pathname);
+    }
+  };
 
   if (direction === 'vertical') {
     return (
       <VStack className="gap-2">
-        {navbarItems?.map(navbarItem => (
-          <Button variant="light" key={v4()} {...navbarItem}>
-            {navbarItem.name}
+        {routes?.map((route, index) => (
+          <Button
+            variant="light"
+            key={route.name || `route-${index}`}
+            onPress={() => handleRouteClick(route)}
+            startContent={
+              route.icon
+                ? renderLucideIcon(route.icon, 'w-4 h-4', 16)
+                : undefined
+            }
+          >
+            {route.name || route.pathname}
           </Button>
         ))}
       </VStack>
@@ -34,9 +46,16 @@ export const Navbar = observer((props: NavbarProps) => {
 
   return (
     <HStack className="flex-1 gap-2 items-center justify-center">
-      {navbarItems?.map(navbarItem => (
-        <Button variant="light" key={v4()} {...navbarItem}>
-          {navbarItem.name}
+      {routes?.map((route, index) => (
+        <Button
+          variant="light"
+          key={route.name || `route-${index}`}
+          onPress={() => handleRouteClick(route)}
+          startContent={
+            route.icon ? renderLucideIcon(route.icon, 'w-4 h-4', 16) : undefined
+          }
+        >
+          {route.name || route.pathname}
         </Button>
       ))}
     </HStack>

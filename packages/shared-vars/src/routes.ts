@@ -6,6 +6,7 @@ type RouteBuilder = {
     type: string;
   };
   children?: RouteBuilder[];
+  icon?: string;
 };
 
 /**
@@ -19,6 +20,9 @@ export const ROUTE_NAMES = {
   TENANTS: '테넌츠',
   TENANT: '테넌트',
   DASHBOARD: '대시보드',
+  USER_SERVICE: '유저 서비스',
+  USERS: '유저',
+  SPACE_SERVICE: '공간 서비스',
   GROUND: '그라운드',
   GROUND_LIST: '그라운드 리스트',
   GROUND_DETAIL: '그라운드 상세',
@@ -55,22 +59,39 @@ export const rawRoutes: RouteBuilder[] = [
       {
         name: ROUTE_NAMES.DASHBOARD,
         pathname: 'dashboard',
+        icon: 'LayoutDashboard',
         children: [
           {
-            name: ROUTE_NAMES.GROUND,
-            pathname: 'ground',
+            name: ROUTE_NAMES.USER_SERVICE,
+            pathname: 'user-service',
+            icon: 'Users',
+            children: [
+              {
+                name: ROUTE_NAMES.USERS,
+                pathname: 'users',
+                icon: 'User',
+              },
+            ],
+          },
+          {
+            name: ROUTE_NAMES.SPACE_SERVICE,
+            pathname: 'space-service',
+            icon: 'MapPin',
             children: [
               {
                 name: ROUTE_NAMES.GROUND_LIST,
-                pathname: 'resources',
+                pathname: 'grounds',
+                icon: 'Map',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_DETAIL,
                     pathname: ':id',
+                    icon: 'MapPin',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_EDIT,
                         pathname: ':type',
+                        icon: 'Edit',
                       },
                     ],
                   },
@@ -79,14 +100,17 @@ export const rawRoutes: RouteBuilder[] = [
               {
                 name: ROUTE_NAMES.GROUND_CATEGORY,
                 pathname: 'categories',
+                icon: 'Folder',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
                     pathname: ':id',
+                    icon: 'FolderOpen',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
                         pathname: ':type',
+                        icon: 'Edit',
                       },
                     ],
                   },
@@ -95,14 +119,17 @@ export const rawRoutes: RouteBuilder[] = [
               {
                 name: ROUTE_NAMES.GROUND_GROUP,
                 pathname: 'groups',
+                icon: 'Group',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
                     pathname: ':id',
+                    icon: 'Users',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_GROUP_EDIT,
                         pathname: ':type',
+                        icon: 'Edit',
                       },
                     ],
                   },

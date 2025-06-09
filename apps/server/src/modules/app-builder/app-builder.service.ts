@@ -29,15 +29,19 @@ export class AppBuilderService {
     this.setRoutePageAndLayout('관리자', undefined, {
       type: 'Root',
     });
+
     this.setRoutePageAndLayout('인증', undefined, {
       type: 'Auth',
     });
+
     this.setRoutePageAndLayout('로그인', loginPageBuilder, {
       type: 'Root',
     });
+
     this.setRoutePageAndLayout('테넌츠', tenantsPageBuilder, {
       type: 'Modal',
     });
+
     this.setRoutePageAndLayout('대시보드', dashboardPageBuilder, {
       type: 'Dashboard',
     });
@@ -83,17 +87,5 @@ export class AppBuilderService {
     };
 
     findAndSetRoute(this.routes);
-  }
-
-  path() {
-    return {
-      routeName: '',
-      state: '',
-      routes: {},
-    };
-  }
-
-  getRoute(): RouteBuilder[] {
-    return this.routes;
   }
 }

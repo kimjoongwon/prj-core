@@ -7,7 +7,6 @@ import {
   NavbarContent,
   NavbarBrand,
   NavbarItem,
-  Chip,
   Button,
   Drawer,
   DrawerContent,
@@ -15,7 +14,6 @@ import {
   DrawerBody,
   Divider,
 } from '@heroui/react';
-import { HStack } from '../HStack';
 import { Avatar } from '../Avatar';
 import { Text } from '../Text';
 import { HeaderProps } from '@shared/types';

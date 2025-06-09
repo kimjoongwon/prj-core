@@ -1,13 +1,15 @@
 import React from 'react';
-import { Card, CardBody, Divider } from '@heroui/react';
+import { Card, CardBody } from '@heroui/react';
 import { Text } from '../../Text';
 import { DashboardLayoutProps } from '@shared/types';
+import { observer } from 'mobx-react-lite';
 
-export const DashboardLayout = (props: DashboardLayoutProps) => {
+export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   const {
     headerComponent,
     leftSidebarComponent,
     rightSidebarComponent,
+    bottomComponent,
     children,
   } = props;
 
@@ -41,8 +43,6 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
   const header = headerComponent || renderPlaceholder('HeaderComponent');
   const leftSidebar =
     leftSidebarComponent || renderPlaceholder('LeftSidebarComponent');
-  const rightSidebar =
-    rightSidebarComponent || renderPlaceholder('RightSidebarComponent');
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -56,9 +56,7 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
         {/* Left Sidebar - Hidden on tablet and mobile (iPad Mini and smaller) */}
         <aside className="hidden xl:flex w-72 flex-col bg-content1 border-r border-divider">
           <div className="h-full overflow-y-auto scrollbar-thin">
-            <div className="p-4">
-              {leftSidebar}
-            </div>
+            <div className="p-4">{leftSidebar}</div>
           </div>
         </aside>
 
@@ -67,27 +65,30 @@ export const DashboardLayout = (props: DashboardLayoutProps) => {
           <div className="flex-1 overflow-y-auto scrollbar-thin">
             <div className="p-6">
               <Card className="min-h-full shadow-sm">
-                <CardBody className="p-6">
-                  {children}
-                </CardBody>
+                <CardBody className="p-6">{children}</CardBody>
               </Card>
             </div>
           </div>
         </main>
 
-        {/* Right Sidebar - Hidden on tablet and mobile (iPad Mini and smaller) */}
-        <aside className="hidden xl:flex w-72 flex-col bg-content1 border-l border-divider">
-          <div className="h-full overflow-y-auto scrollbar-thin">
-            <div className="p-4">
-              {rightSidebar}
+        {/* Right Sidebar - Conditionally rendered when rightSidebarComponent is provided */}
+        {rightSidebarComponent && (
+          <aside className="hidden xl:flex w-72 flex-col bg-content1 border-l border-divider">
+            <div className="h-full overflow-y-auto scrollbar-thin">
+              <div className="p-4">{rightSidebarComponent}</div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        )}
       </div>
+
+      {/* Bottom Component - Only visible on mobile (below xl breakpoint) */}
+      {bottomComponent && (
+        <div className="xl:hidden flex-none bg-content1 border-t border-divider">
+          <div className="p-4">{bottomComponent}</div>
+        </div>
+      )}
     </div>
   );
-};
-
-DashboardLayout.displayName = 'DashboardLayout';
+});
 
 DashboardLayout.displayName = 'DashboardLayout';
