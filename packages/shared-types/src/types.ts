@@ -178,6 +178,7 @@ export interface RouteBuilder {
   page?: PageBuilder;
   params?: object;
   children?: RouteBuilder[];
+  icon?: string;
 }
 
 export interface Query {

@@ -7,6 +7,8 @@ import { ModalLayout } from '../../layouts/Modal';
 import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
 import { Navbar } from '../../Navbar';
+import { Plate } from '../../../providers';
+import { useSmartRoutes } from '../../../hooks/useRoutes';
 
 interface Layout {
   children: ReactNode;
@@ -38,44 +40,20 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   if (layoutBuilder?.type === 'Dashboard') {
-    const mockNavbarItems = [
-      {
-        url: '/dashboard',
-        name: 'Dashboard',
-        onClick: () => console.log('Dashboard clicked'),
-      },
-      {
-        url: '/users',
-        name: 'Users',
-        onClick: () => console.log('Users clicked'),
-      },
-      {
-        url: '/settings',
-        name: 'Settings',
-        onClick: () => console.log('Settings clicked'),
-      },
-      {
-        url: '/analytics',
-        name: 'Analytics',
-        onClick: () => console.log('Analytics clicked'),
-      },
-      {
-        url: '/reports',
-        name: 'Reports',
-        onClick: () => console.log('Reports clicked'),
-      },
-    ];
+    // Dashboard에서는 항상 dashboard의 자식 라우트들을 보여줌
+    const dashboardRoutes = Plate.navigation.getRoutesByPathname('dashboard');
 
     return (
       <DashboardLayout
         headerComponent={
           <Header
-            centerComponent={<Navbar navbarItems={mockNavbarItems} />}
+            centerComponent={<Navbar routes={dashboardRoutes} />}
             drawerComponent={
-              <Navbar navbarItems={mockNavbarItems} direction="vertical" />
+              <Navbar routes={dashboardRoutes} direction="vertical" />
             }
           />
         }
+        leftSidebarComponent={<Navbar direction="vertical" routes={[]} />}
       >
         {children}
         <Outlet />
