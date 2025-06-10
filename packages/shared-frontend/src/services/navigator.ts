@@ -11,6 +11,7 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 export class NavigatorService {
   private navigateFunction?: UniversalNavigateFunction;
   private isReactRouter: boolean = false;
+  private pathResolver?: (name: string) => string | undefined;
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
@@ -27,6 +28,13 @@ export class NavigatorService {
    */
   isNavigateFunctionSet(): boolean {
     return !!this.navigateFunction;
+  }
+
+  /**
+   * 라우트 이름 -> 경로 변환 함수를 설정
+   */
+  setRouteNameResolver(resolver: (name: string) => string | undefined): void {
+    this.pathResolver = resolver;
   }
 
   /**
@@ -61,6 +69,44 @@ export class NavigatorService {
     );
 
     this.navigateFunction(pathnameWithSearchParams);
+  }
+
+  /**
+   * 라우트 이름으로 네비게이션
+   */
+  pushByName(
+    routeName: string,
+    pathParams?: object,
+    searchParams?: Record<string, string>,
+  ): void {
+    if (!this.pathResolver) {
+      console.warn(
+        'Route name resolver가 설정되지 않았습니다. setRouteNameResolver를 먼저 호출하세요.',
+      );
+      return;
+    }
+
+    const pathname = this.pathResolver(routeName);
+    if (!pathname) {
+      console.warn(`라우트 이름 "${routeName}"을 찾을 수 없습니다.`);
+      return;
+    }
+
+    this.push(pathname, pathParams, searchParams);
+  }
+
+  /**
+   * 조건부 네비게이션 실행
+   */
+  pushConditional(
+    condition: boolean,
+    routeNameIfTrue: string,
+    routeNameIfFalse: string,
+    pathParams?: object,
+    searchParams?: Record<string, string>,
+  ): void {
+    const routeName = condition ? routeNameIfTrue : routeNameIfFalse;
+    this.pushByName(routeName, pathParams, searchParams);
   }
 
   /**
