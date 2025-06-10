@@ -109,7 +109,7 @@ console.log(navigationService.debugFlatRoutes());
 ### 1. Hook 사용 예제
 
 ```typescript
-import { useUnifiedNavigation, useGlobalNavigation } from '@shared/frontend';
+import { useUnifiedNavigation, Plate } from '@shared/frontend';
 
 // 로컬 인스턴스 사용 (라우트 빌더 제공)
 function MyComponent() {
@@ -127,12 +127,12 @@ function MyComponent() {
 
 // 글로벌 인스턴스 사용 (더 간단함)
 function AnotherComponent() {
-  const { navigateByName, activeRoutes } = useGlobalNavigation();
+  const activeRoutes = Plate.navigation.getActiveRoutes();
 
   return (
     <div>
       <p>활성 라우트: {activeRoutes.length}개</p>
-      <button onClick={() => navigateByName('LOGIN')}>로그인</button>
+      <button onClick={() => Plate.navigation.pushByName('LOGIN')}>로그인</button>
     </div>
   );
 }
