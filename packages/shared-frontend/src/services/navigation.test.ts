@@ -268,7 +268,12 @@ describe('NavigationService', () => {
       const mockPush = vi.fn();
       navigationService.getNavigator().push = mockPush;
 
-      navigationService.push('/admin/users', { id: '123' }, { tab: 'profile' });
+      navigationService.getNavigator().push(
+        '/admin/users',
+        { id: '123' },
+        { tab: 'profile' },
+      );
+      navigationService.setCurrentPath('/admin/users');
 
       expect(mockPush).toHaveBeenCalledWith(
         '/admin/users',
@@ -282,7 +287,7 @@ describe('NavigationService', () => {
       const mockPush = vi.fn();
       navigationService.getNavigator().push = mockPush;
 
-      navigationService.pushByName('analytics');
+      navigationService.getNavigator().pushByName('analytics');
 
       expect(mockPush).toHaveBeenCalledWith(
         '/admin/dashboard/analytics',
@@ -294,7 +299,7 @@ describe('NavigationService', () => {
     it('존재하지 않는 라우트 이름으로 네비게이션 시 경고를 표시해야 한다', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      navigationService.pushByName('nonexistent');
+      navigationService.getNavigator().pushByName('nonexistent');
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '라우트 이름 "nonexistent"을 찾을 수 없습니다.',

@@ -66,7 +66,7 @@ export const useButtonLogic = ({ apiKey, state }: UseButtonLogicProps) => {
 
         // 라우트 이름이 있으면 해당 경로로 이동
         if (responseData?.routeName) {
-          Plate.navigation.pushByName(responseData.routeName);
+          Plate.navigation.getNavigator().pushByName(responseData.routeName);
         }
 
         if (response?.state) {

@@ -243,7 +243,7 @@ describe('NavigationService - 통합 테스트', () => {
       expect(spaceChildren.find(c => c.name === 'settings')).toBeDefined();
 
       // 3. 그라운드 페이지로 네비게이션
-      navigationService.pushByName('grounds');
+      navigationService.getNavigator().pushByName('grounds');
       expect(mockNavigator.push).toHaveBeenCalledWith(
         '/admin/spaces/:spaceId/grounds',
         undefined,
@@ -268,11 +268,13 @@ describe('NavigationService - 통합 테스트', () => {
 
       // 3. 조건부 네비게이션 (권한에 따라)
       const hasPermissionToEditProfile = true;
-      navigationService.pushConditional(
-        hasPermissionToEditProfile,
-        'user-profile',
-        'user-detail',
-      );
+      navigationService
+        .getNavigator()
+        .pushConditional(
+          hasPermissionToEditProfile,
+          'user-profile',
+          'user-detail',
+        );
 
       expect(mockNavigator.push).toHaveBeenCalledWith(
         '/admin/users/:userId/profile',
@@ -292,7 +294,7 @@ describe('NavigationService - 통합 테스트', () => {
       expect(authChildren.find(c => c.name === 'register')).toBeDefined();
 
       // 3. 로그인 페이지로 네비게이션
-      navigationService.pushByName('login');
+      navigationService.getNavigator().pushByName('login');
       expect(mockNavigator.push).toHaveBeenCalledWith(
         '/public/auth/login',
         undefined,
@@ -385,7 +387,7 @@ describe('NavigationService - 통합 테스트', () => {
       // 비동기 네비게이션 시뮬레이션
       const navigationPromise = new Promise(resolve => {
         setTimeout(() => {
-          navigationService.pushByName('users');
+          navigationService.getNavigator().pushByName('users');
           resolve(true);
         }, 10);
       });
