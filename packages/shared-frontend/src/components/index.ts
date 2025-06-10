@@ -45,6 +45,7 @@ export * from './Pagination';
 export * from './Placeholder';
 export * from './RadioGroup';
 export * from './ResponsiveVisibility';
+export * from './Breadcrumb';
 export * from './Search';
 export * from './Section';
 export * from './Select';
