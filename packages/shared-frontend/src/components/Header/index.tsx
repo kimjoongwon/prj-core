@@ -2,7 +2,7 @@ import { Navbar, NavbarContent, NavbarBrand, NavbarItem } from '@heroui/react';
 import { HeaderProps } from '@shared/types';
 
 export const Header = (props: HeaderProps) => {
-  const { leftComponent, centerComponent, rightComponent } = props;
+  const { left, center, right } = props;
 
   return (
     <>
@@ -14,14 +14,14 @@ export const Header = (props: HeaderProps) => {
       >
         {/* Desktop Layout */}
         <div className="flex w-full items-center">
-          <NavbarBrand className="flex-1">{leftComponent}</NavbarBrand>
+          <NavbarBrand className="flex-1">{left}</NavbarBrand>
 
           <NavbarContent className="flex-1" justify="center">
-            {centerComponent}
+            {center}
           </NavbarContent>
 
           <NavbarContent className="flex-1" justify="end">
-            <NavbarItem>{rightComponent}</NavbarItem>
+            <NavbarItem>{right}</NavbarItem>
           </NavbarContent>
         </div>
       </Navbar>

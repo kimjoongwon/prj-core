@@ -46,13 +46,13 @@ A dashboard layout component with responsive behavior for different screen sizes
 
 ### DashboardLayoutProps
 
-| Prop                    | Type                                      | Required | Description                                                                    |
-| ----------------------- | ----------------------------------------- | -------- | ------------------------------------------------------------------------------ |
-| `children`              | `ReactNode`                               | Yes      | The main content to display in the center area                                 |
-| `headerComponent`       | `ComponentType<{ children?: ReactNode }>` | No       | Optional header component. Receives children prop for hamburger menu on mobile |
-| `leftSidebarComponent`  | `ComponentType`                           | No       | Optional left sidebar component                                                |
-| `rightSidebarComponent` | `ComponentType`                           | No       | Optional right sidebar component                                               |
-| `bottomComponent`       | `ReactNode`                               | No       | Optional bottom component (mobile only - hidden on desktop ≥1280px)            |
+| Prop           | Type                                      | Required | Description                                                                    |
+| -------------- | ----------------------------------------- | -------- | ------------------------------------------------------------------------------ |
+| `children`     | `ReactNode`                               | Yes      | The main content to display in the center area                                 |
+| `header`       | `ComponentType<{ children?: ReactNode }>` | No       | Optional header component. Receives children prop for hamburger menu on mobile |
+| `leftSidebar`  | `ComponentType`                           | No       | Optional left sidebar component                                                |
+| `rightSidebar` | `ComponentType`                           | No       | Optional right sidebar component                                               |
+| `bottom`       | `ReactNode`                               | No       | Optional bottom component (mobile only - hidden on desktop ≥1280px)            |
 
 ## Usage Examples
 
@@ -127,10 +127,10 @@ const MyBottomComponent = () => (
 function MyDashboard() {
   return (
     <DashboardLayout
-      headerComponent={MyHeader}
-      leftSidebarComponent={MyLeftSidebar}
-      rightSidebarComponent={MyRightSidebar}
-      bottomComponent={MyBottomComponent}
+      header={MyHeader}
+      leftSidebar={MyLeftSidebar}
+      rightSidebar={MyRightSidebar}
+      bottom={MyBottomComponent}
     >
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h2>
@@ -176,10 +176,7 @@ function MobileLayout() {
   );
 
   return (
-    <DashboardLayout
-      headerComponent={MyMobileHeader}
-      bottomComponent={MyBottomNav}
-    >
+    <DashboardLayout header={MyMobileHeader} bottom={MyBottomNav}>
       <div className="p-4">
         <h2 className="text-xl font-bold mb-4">Mobile Layout</h2>
         <p>This layout is optimized for mobile with bottom navigation.</p>

@@ -7,13 +7,14 @@ import { Moon, Sun } from 'lucide-react';
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-const darkModeSwitchStyles = cva('fixed p-2 z-50', {
+const darkModeSwitchStyles = cva('p-2', {
   variants: {
     position: {
-      'top-left': 'top-4 left-4',
-      'top-right': 'top-4 right-4',
-      'bottom-left': 'bottom-4 left-4',
-      'bottom-right': 'bottom-4 right-4',
+      'top-left': 'fixed top-4 left-4 z-50',
+      'top-right': 'fixed top-4 right-4 z-50',
+      'bottom-left': 'fixed bottom-4 left-4 z-50',
+      'bottom-right': 'fixed bottom-4 right-4 z-50',
+      'inline': 'relative',
     },
     size: {
       sm: 'text-sm',

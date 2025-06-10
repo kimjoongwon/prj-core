@@ -5,13 +5,7 @@ import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
-  const {
-    headerComponent,
-    leftSidebarComponent,
-    rightSidebarComponent,
-    bottomComponent,
-    children,
-  } = props;
+  const { header, leftSidebar, rightSidebar, bottom, children } = props;
 
   const renderPlaceholder = (componentName: string) => (
     <Card className="h-full shadow-sm">
@@ -40,22 +34,22 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
     </Card>
   );
 
-  const header = headerComponent || renderPlaceholder('HeaderComponent');
+  const headerElement = header || renderPlaceholder('HeaderComponent');
 
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
       <div className="flex-none backdrop-blur-lg bg-background/95 border-b border-divider sticky top-0 z-40">
-        {header}
+        {headerElement}
       </div>
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar - Only rendered when leftSidebarComponent is provided */}
-        {leftSidebarComponent && (
+        {/* Left Sidebar - Only rendered when leftSidebar is provided */}
+        {leftSidebar && (
           <aside className="hidden xl:flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
             <div className="h-full overflow-y-auto scrollbar-thin">
-              {leftSidebarComponent}
+              {leftSidebar}
             </div>
           </aside>
         )}
@@ -71,20 +65,20 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
           </div>
         </main>
 
-        {/* Right Sidebar - Conditionally rendered when rightSidebarComponent is provided */}
-        {rightSidebarComponent && (
+        {/* Right Sidebar - Conditionally rendered when rightSidebar is provided */}
+        {rightSidebar && (
           <aside className="hidden xl:flex w-72 flex-col bg-content1 border-l border-divider">
             <div className="h-full overflow-y-auto scrollbar-thin">
-              <div className="p-4">{rightSidebarComponent}</div>
+              <div className="p-4">{rightSidebar}</div>
             </div>
           </aside>
         )}
       </div>
 
       {/* Bottom Component - Only visible on mobile (below xl breakpoint) */}
-      {bottomComponent && (
+      {bottom && (
         <div className="xl:hidden flex-none bg-content1 border-t border-divider">
-          <div className="p-4">{bottomComponent}</div>
+          <div className="p-4">{bottom}</div>
         </div>
       )}
     </div>

@@ -343,16 +343,16 @@ export interface TabsProps<T> extends MobxProps<T> {
 }
 
 export interface HeaderProps {
-  leftComponent?: React.ReactNode;
-  centerComponent?: React.ReactNode;
-  rightComponent?: React.ReactNode;
+  left?: React.ReactNode;
+  center?: React.ReactNode;
+  right?: React.ReactNode;
 }
 
 export interface DashboardLayoutProps {
-  headerComponent?: React.ReactNode;
-  leftSidebarComponent?: React.ReactNode;
-  rightSidebarComponent?: React.ReactNode;
-  bottomComponent?: React.ReactNode;
+  header?: React.ReactNode;
+  leftSidebar?: React.ReactNode;
+  rightSidebar?: React.ReactNode;
+  bottom?: React.ReactNode;
   children: React.ReactNode;
 }
 

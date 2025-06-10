@@ -49,10 +49,5 @@ export const App = observer(() => {
     },
   ]);
 
-  return (
-    <>
-      <RouterProvider router={router} />
-      <DarkModeSwitch position="bottom-left" />
-    </>
-  );
+  return <RouterProvider router={router} />;
 });

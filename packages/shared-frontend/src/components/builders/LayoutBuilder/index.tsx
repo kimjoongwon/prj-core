@@ -12,6 +12,7 @@ import { Plate } from '../../../providers';
 import { BottomTab } from '../../BottomTab';
 import { Logo } from '../../Logo';
 import { Avatar } from '../../Avatar';
+import { DarkModeSwitch } from '../../DarkModeSwitch';
 import { ResponsiveVisibility } from '../../ResponsiveVisibility';
 
 interface Layout {
@@ -54,25 +55,28 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
     return (
       <DashboardLayout
-        headerComponent={
+        header={
           <Header
-            leftComponent={<Logo variants={'text'} />}
-            centerComponent={
+            left={<Logo variants={'text'} />}
+            center={
               <ResponsiveVisibility device="mobile">
                 <Navbar routes={dashboardRoutes} />
               </ResponsiveVisibility>
             }
-            rightComponent={<Avatar />}
+            right={
+              <div className="flex items-center gap-2">
+                <Avatar />
+                <DarkModeSwitch position="inline" size="sm" />
+              </div>
+            }
           />
         }
-        leftSidebarComponent={
+        leftSidebar={
           selectedDashboardRouteChildren.length > 0 && (
             <CollapsibleSidebar routes={selectedDashboardRouteChildren} />
           )
         }
-        bottomComponent={
-          <BottomTab routes={dashboardRoutes} activeColor="primary" />
-        }
+        bottom={<BottomTab routes={dashboardRoutes} activeColor="primary" />}
       >
         {children}
         <Outlet />
