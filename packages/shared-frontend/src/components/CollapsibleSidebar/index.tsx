@@ -111,16 +111,16 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
                   onPress={() => handleRouteClick(route)}
                   className={`transition-all duration-200 ${
                     sidebarState.isCollapsed
-                      ? 'justify-center px-2 min-w-12 w-12'
+                      ? 'justify-center items-center px-0 min-w-12 w-12 h-12'
                       : 'justify-start px-3 w-full'
                   } ${route.active ? 'bg-primary/10' : ''}`}
                   isIconOnly={sidebarState.isCollapsed}
                   startContent={
-                    route.icon
-                      ? renderLucideIcon(route.icon, 'w-4 h-4', 16)
-                      : !sidebarState.isCollapsed
+                    sidebarState.isCollapsed
                       ? undefined
-                      : renderLucideIcon('Circle', 'w-4 h-4', 16)
+                      : route.icon
+                      ? renderLucideIcon(route.icon, 'w-4 h-4', 16)
+                      : undefined
                   }
                   title={
                     sidebarState.isCollapsed
@@ -128,7 +128,11 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
                       : undefined
                   }
                 >
-                  {buttonContent}
+                  {sidebarState.isCollapsed
+                    ? route.icon
+                      ? renderLucideIcon(route.icon, 'w-5 h-5', 20)
+                      : renderLucideIcon('Circle', 'w-4 h-4', 16)
+                    : buttonContent}
                 </Button>
               );
             })}
