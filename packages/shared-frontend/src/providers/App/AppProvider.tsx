@@ -6,7 +6,7 @@ import {
   DepotService,
   PlateService,
   ModalService,
-  UnifiedNavigationService,
+  NavigationService,
 } from '../../services';
 import { observer } from 'mobx-react-lite';
 import { useGetAppBuilder } from '@shared/api-client';
@@ -29,7 +29,7 @@ export const AppProvider = observer((props: StoreProviderProps) => {
 
   useEffect(() => {
     if (routeBuilders && !isInitialized) {
-      const navigationService = new UnifiedNavigationService(routeBuilders);
+      const navigationService = new NavigationService(routeBuilders);
       const depotService = new DepotService();
       const modalService = new ModalService();
       // console.log('navigationService:', navigationService);

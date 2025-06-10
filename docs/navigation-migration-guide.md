@@ -2,15 +2,17 @@
 
 ## 개요
 
-기존에 분리되어 있던 `NavigationService`와 `RouteNavigator`를 `UnifiedNavigationService`로 통합했습니다. 새로운 서비스는 두 서비스의 모든 기능을 포함하며, 추가적인 유용한 기능들을 제공합니다.
+기존에 분리되어 있던 `NavigationService`와 `RouteNavigator`를 `NavigationService`로 통합했습니다. 새로운 서비스는 두 서비스의 모든 기능을 포함하며, 추가적인 유용한 기능들을 제공합니다.
 
 ## 주요 개선사항
 
 ### 1. 통합된 API
+
 - 라우트 관리, 네비게이션, 활성 상태 추적을 하나의 서비스에서 처리
 - 일관된 메서드명과 구조
 
 ### 2. 강화된 기능
+
 - **이름 기반 네비게이션**: 라우트 이름으로 직접 네비게이션 가능
 - **조건부 네비게이션**: 조건에 따른 라우팅 로직 지원
 - **브레드크럼 생성**: 현재 경로의 브레드크럼 자동 생성
@@ -18,6 +20,7 @@
 - **디버깅 지원**: 플랫 라우트 맵 디버깅 기능
 
 ### 3. 타입 안전성
+
 - 완전한 TypeScript 지원
 - 명확한 인터페이스와 타입 정의
 
@@ -34,9 +37,9 @@ navigationService.setNavigateFunction(navigate);
 navigationService.push('/path', params, searchParams);
 
 // 새로운 코드
-import { UnifiedNavigationService } from '@shared/frontend';
+import { NavigationService } from '@shared/frontend';
 
-const navigationService = new UnifiedNavigationService(routeBuilders);
+const navigationService = new NavigationService(routeBuilders);
 navigationService.setNavigateFunction(navigate);
 navigationService.push('/path', params, searchParams);
 ```
@@ -51,10 +54,10 @@ routeNavigator.setRoutes(routeBuilders);
 const path = routeNavigator.getPathByName('routeName');
 
 // 새로운 코드
-import { unifiedNavigationService } from '@shared/frontend';
+import { NavigationService } from '@shared/frontend';
 
-unifiedNavigationService.setRoutes(routeBuilders);
-const path = unifiedNavigationService.getPathByName('routeName');
+NavigationService.setRoutes(routeBuilders);
+const path = NavigationService.getPathByName('routeName');
 ```
 
 ## 새로운 기능 사용법
@@ -70,7 +73,7 @@ navigationService.pushConditional(
   user.isAdmin,
   'ADMIN_DASHBOARD',
   'USER_DASHBOARD',
-  { userId: user.id }
+  { userId: user.id },
 );
 ```
 
@@ -78,7 +81,9 @@ navigationService.pushConditional(
 
 ```typescript
 // 현재 경로의 브레드크럼 가져오기
-const breadcrumbs = navigationService.getBreadcrumbPath('/admin/spaces/123/dashboard');
+const breadcrumbs = navigationService.getBreadcrumbPath(
+  '/admin/spaces/123/dashboard',
+);
 console.log(breadcrumbs); // [{ name: '관리자', pathname: '/admin' }, ...]
 ```
 
@@ -109,7 +114,7 @@ import { useUnifiedNavigation, useGlobalNavigation } from '@shared/frontend';
 // 로컬 인스턴스 사용 (라우트 빌더 제공)
 function MyComponent() {
   const { navigateByName, breadcrumbs } = useUnifiedNavigation(routeBuilders);
-  
+
   return (
     <div>
       <Breadcrumb items={breadcrumbs} />
@@ -123,13 +128,11 @@ function MyComponent() {
 // 글로벌 인스턴스 사용 (더 간단함)
 function AnotherComponent() {
   const { navigateByName, activeRoutes } = useGlobalNavigation();
-  
+
   return (
     <div>
       <p>활성 라우트: {activeRoutes.length}개</p>
-      <button onClick={() => navigateByName('LOGIN')}>
-        로그인
-      </button>
+      <button onClick={() => navigateByName('LOGIN')}>로그인</button>
     </div>
   );
 }
@@ -143,7 +146,7 @@ import {
   NavigationConditionalButton,
   RouteNavigationLink,
   Breadcrumb,
-  RouteDebugger
+  RouteDebugger,
 } from '@shared/frontend';
 
 function Navigation() {
@@ -209,14 +212,14 @@ navigationService.pushByName('DASHBOARD', { spaceId: '123' });
 navigationService.pushConditional(
   user.hasAdminAccess,
   'ADMIN_PANEL',
-  'ACCESS_DENIED'
+  'ACCESS_DENIED',
 );
 
 // 인증 상태에 따른 라우팅
 const targetPath = navigationService.getConditionalPath(
   user.isAuthenticated,
   'DASHBOARD',
-  'LOGIN'
+  'LOGIN',
 );
 ```
 
@@ -226,7 +229,9 @@ const targetPath = navigationService.getConditionalPath(
 
 ```typescript
 // 현재 경로: /admin/spaces/123/grounds/456
-const breadcrumbs = navigationService.getBreadcrumbPath('/admin/spaces/123/grounds/456');
+const breadcrumbs = navigationService.getBreadcrumbPath(
+  '/admin/spaces/123/grounds/456',
+);
 // 결과: [
 //   { name: '관리자', pathname: '/admin' },
 //   { name: '공간', pathname: '/admin/spaces' },
@@ -259,7 +264,7 @@ const flatRoutes = navigationService.debugFlatRoutes();
 console.log(flatRoutes); // Map { "GROUND_DETAIL" => { name: "...", pathname: "..." } }
 
 // React 컴포넌트로 디버거 표시
-<RouteDebugger position="bottom-right" />
+<RouteDebugger position="bottom-right" />;
 ```
 
 ## 하위 호환성
@@ -273,23 +278,23 @@ import { NavigationService, routeNavigator } from '@shared/frontend';
 
 ## 권장 사항
 
-1. **새로운 코드**: `UnifiedNavigationService` 사용
-2. **기존 코드**: 점진적으로 `UnifiedNavigationService`로 마이그레이션
-3. **싱글톤 사용**: `unifiedNavigationService` 인스턴스 활용
+1. **새로운 코드**: `NavigationService` 사용
+2. **기존 코드**: 점진적으로 `NavigationService`로 마이그레이션
+3. **싱글톤 사용**: `NavigationService` 인스턴스 활용
 
 ## 예제 코드
 
 ### 완전한 설정 예제
 
 ```typescript
-import { UnifiedNavigationService } from '@shared/frontend';
+import { NavigationService } from '@shared/frontend';
 import { rawRoutes } from '@shared/types';
 import { useNavigate } from 'react-router-dom';
 
 // 컴포넌트에서 사용
 function App() {
   const navigate = useNavigate();
-  const [navigationService] = useState(() => new UnifiedNavigationService(rawRoutes));
+  const [navigationService] = useState(() => new NavigationService(rawRoutes));
 
   useEffect(() => {
     navigationService.setNavigateFunction(navigate);
@@ -306,8 +311,10 @@ function App() {
   return (
     <div>
       {/* 브레드크럼 예제 */}
-      <Breadcrumb items={navigationService.getBreadcrumbPath(location.pathname)} />
-      
+      <Breadcrumb
+        items={navigationService.getBreadcrumbPath(location.pathname)}
+      />
+
       {/* 네비게이션 예제 */}
       <button onClick={() => navigateToGround('123')}>
         그라운드 상세 보기
@@ -320,21 +327,21 @@ function App() {
 ### 글로벌 서비스 사용 예제
 
 ```typescript
-import { unifiedNavigationService } from '@shared/frontend';
+import { NavigationService } from '@shared/frontend';
 
 // 어디서든 사용 가능
 export const navigateToLogin = () => {
-  unifiedNavigationService.pushByName('LOGIN');
+  NavigationService.pushByName('LOGIN');
 };
 
 export const getAdminDashboardPath = () => {
-  return unifiedNavigationService.getPathByName('ADMIN_DASHBOARD');
+  return NavigationService.getPathByName('ADMIN_DASHBOARD');
 };
 ```
 
 ## 마이그레이션 체크리스트
 
-- [ ] `UnifiedNavigationService` import로 변경
+- [ ] `NavigationService` import로 변경
 - [ ] 기존 메서드 호출 확인 및 새로운 메서드로 전환
 - [ ] 새로운 기능 활용 검토 (이름 기반 네비게이션, 브레드크럼 등)
 - [ ] 테스트 코드 업데이트

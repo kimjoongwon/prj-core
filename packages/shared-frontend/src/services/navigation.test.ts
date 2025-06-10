@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { UnifiedNavigationService } from './navigation';
+import { NavigationService } from './navigation';
 import { type RouteBuilder } from '@shared/types';
 
 // 모킹되지 않은 외부 의존성을 간단히 대체
@@ -28,8 +28,8 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-describe('UnifiedNavigationService', () => {
-  let navigationService: UnifiedNavigationService;
+describe('NavigationService', () => {
+  let navigationService: NavigationService;
   let mockRoutes: RouteBuilder[];
 
   beforeEach(() => {
@@ -89,7 +89,7 @@ describe('UnifiedNavigationService', () => {
       },
     ];
 
-    navigationService = new UnifiedNavigationService(mockRoutes);
+    navigationService = new NavigationService(mockRoutes);
   });
 
   afterEach(() => {
@@ -403,7 +403,7 @@ describe('UnifiedNavigationService', () => {
 
   describe('엣지 케이스', () => {
     it('빈 라우트 배열로 초기화해도 오류가 발생하지 않아야 한다', () => {
-      const emptyService = new UnifiedNavigationService([]);
+      const emptyService = new NavigationService([]);
       expect(emptyService.routeBuilders).toHaveLength(0);
       expect(emptyService.debugFlatRoutes().size).toBe(0);
     });

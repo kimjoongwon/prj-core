@@ -1,15 +1,16 @@
 # 라우트 메타데이터 기반 네비게이션 가이드
 
-> **⚠️ 중요:** 이 문서는 새로운 `UnifiedNavigationService`를 기준으로 업데이트되었습니다. 
+> **⚠️ 중요:** 이 문서는 새로운 `NavigationService`를 기준으로 업데이트되었습니다.
 > 기존 `NavigationService`와 `RouteNavigator`에서 마이그레이션하는 경우 [마이그레이션 가이드](./navigation-migration-guide.md)를 참조하세요.
 
 ## 개요
 
-이 문서는 라우트 메타데이터를 기반으로 네비게이션 시스템을 사용하는 방법을 설명합니다. 새로운 `UnifiedNavigationService`를 통해 라우트의 이름을 키로 사용하여 직접적이고 유연한 네비게이션이 가능하며, 조건에 따른 경로 이동을 구현할 수 있습니다.
+이 문서는 라우트 메타데이터를 기반으로 네비게이션 시스템을 사용하는 방법을 설명합니다. 새로운 `NavigationService`를 통해 라우트의 이름을 키로 사용하여 직접적이고 유연한 네비게이션이 가능하며, 조건에 따른 경로 이동을 구현할 수 있습니다.
 
-## 0. UnifiedNavigationService 소개
+## 0. NavigationService 소개
 
 ### 주요 기능
+
 - **라우트 관리**: RouteBuilder에서 Route 객체 생성 및 관리
 - **이름 기반 네비게이션**: 라우트 이름으로 직접 네비게이션
 - **조건부 라우팅**: 조건에 따른 동적 경로 결정
@@ -20,14 +21,14 @@
 ### 기본 사용법
 
 ```typescript
-import { UnifiedNavigationService, unifiedNavigationService } from '@shared/frontend';
+import { NavigationService, NavigationService } from '@shared/frontend';
 import { rawRoutes } from '@shared/types';
 
 // 새 인스턴스 생성
-const navigation = new UnifiedNavigationService(rawRoutes);
+const navigation = new NavigationService(rawRoutes);
 
 // 또는 글로벌 싱글톤 사용
-unifiedNavigationService.setRoutes(rawRoutes);
+NavigationService.setRoutes(rawRoutes);
 ```
 
 ## 1. 라우트 네비게이션 훅 사용하기
@@ -45,7 +46,7 @@ const MyComponent = () => {
     navigateByName('로그인');
   };
 
-  const handleSubmit = (isValid) => {
+  const handleSubmit = isValid => {
     // 조건에 따라 다른 라우트로 이동
     navigateByCondition(isValid, '성공', '실패');
   };
@@ -69,10 +70,7 @@ import { RouteNavigationButton } from '@shared/frontend';
 const MyComponent = () => {
   return (
     <div>
-      <RouteNavigationButton 
-        routeName="로그인" 
-        color="primary"
-      >
+      <RouteNavigationButton routeName="로그인" color="primary">
         로그인 페이지로
       </RouteNavigationButton>
     </div>
@@ -126,8 +124,8 @@ const RoutesPage = () => {
 const handleAccessArea = () => {
   navigateByCondition(
     userHasPermission('admin'),
-    '관리자_대시보드', 
-    '접근_거부'
+    '관리자_대시보드',
+    '접근_거부',
   );
 };
 ```
@@ -136,14 +134,10 @@ const handleAccessArea = () => {
 
 ```tsx
 // 폼 검증 후 결과에 따라 다른 페이지로 이동
-const handleFormSubmit = async (data) => {
+const handleFormSubmit = async data => {
   const validationResult = await validateForm(data);
-  
-  navigateByCondition(
-    validationResult.isValid,
-    '결제_페이지', 
-    '폼_오류'
-  );
+
+  navigateByCondition(validationResult.isValid, '결제_페이지', '폼_오류');
 };
 ```
 
@@ -154,12 +148,8 @@ const handleFormSubmit = async (data) => {
 const proceedToNextStep = (currentStep, stepData) => {
   if (currentStep === 'verification') {
     const verified = verifyData(stepData);
-    
-    navigateByCondition(
-      verified,
-      '최종_확인', 
-      '정보_수정'
-    );
+
+    navigateByCondition(verified, '최종_확인', '정보_수정');
   }
 };
 ```

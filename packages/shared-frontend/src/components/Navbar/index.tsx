@@ -4,22 +4,27 @@ import { observer } from 'mobx-react-lite';
 import { HStack } from '../HStack';
 import { VStack } from '../VStack';
 import { Button } from '@heroui/react';
-import { RouteBuilder } from '@shared/types';
+import { Route } from '@shared/types';
 import { Plate } from '../../providers/App/AppProvider';
 import { renderLucideIcon } from '../../utils/iconUtils';
 
 interface NavbarProps {
-  routes: RouteBuilder[];
+  routes: Route[];
   direction?: 'horizontal' | 'vertical';
 }
 
 export const Navbar = observer((props: NavbarProps) => {
   const { routes, direction = 'horizontal' } = props;
 
-  const handleRouteClick = (route: RouteBuilder) => {
+  const handleRouteClick = (route: Route) => {
     if (route.pathname) {
       Plate.navigation.push(route.pathname);
     }
+  };
+
+  // Route의 active 속성을 직접 사용
+  const isRouteActive = (route: Route): boolean => {
+    return route.active || false;
   };
 
   if (direction === 'vertical') {
@@ -28,6 +33,7 @@ export const Navbar = observer((props: NavbarProps) => {
         {routes?.map((route, index) => (
           <Button
             variant="light"
+            color={route.active ? 'primary' : 'default'}
             key={route.name || `route-${index}`}
             onPress={() => handleRouteClick(route)}
             startContent={
@@ -48,6 +54,7 @@ export const Navbar = observer((props: NavbarProps) => {
       {routes?.map((route, index) => (
         <Button
           variant="light"
+          color={route.active ? 'primary' : 'default'}
           key={route.name || `route-${index}`}
           onPress={() => handleRouteClick(route)}
           startContent={

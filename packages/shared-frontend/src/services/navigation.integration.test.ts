@@ -7,7 +7,7 @@ import {
   afterEach,
   type MockedFunction,
 } from 'vitest';
-import { UnifiedNavigationService } from './navigation';
+import { NavigationService } from './navigation';
 import { NavigatorService } from './navigator';
 import { type RouteBuilder } from '@shared/types';
 
@@ -40,8 +40,8 @@ vi.mock('@shared/utils', () => ({
   },
 }));
 
-describe('UnifiedNavigationService - 통합 테스트', () => {
-  let navigationService: UnifiedNavigationService;
+describe('NavigationService - 통합 테스트', () => {
+  let navigationService: NavigationService;
   let mockNavigator: {
     setNavigateFunction: MockedFunction<any>;
     push: MockedFunction<any>;
@@ -178,7 +178,7 @@ describe('UnifiedNavigationService - 통합 테스트', () => {
       },
     ];
 
-    navigationService = new UnifiedNavigationService(complexRoutes);
+    navigationService = new NavigationService(complexRoutes);
 
     // Mock window.location
     Object.defineProperty(window, 'location', {
@@ -316,7 +316,7 @@ describe('UnifiedNavigationService - 통합 테스트', () => {
         });
       }
 
-      const largeNavigationService = new UnifiedNavigationService(largeRoutes);
+      const largeNavigationService = new NavigationService(largeRoutes);
       const flatRoutes = largeNavigationService.debugFlatRoutes();
 
       // 1100개의 라우트 (100개 부모 + 1000개 자식)
@@ -371,7 +371,7 @@ describe('UnifiedNavigationService - 통합 테스트', () => {
       ];
 
       expect(() => {
-        const faultyService = new UnifiedNavigationService(malformedRoutes);
+        const faultyService = new NavigationService(malformedRoutes);
         faultyService.getRouteByName('valid-route');
         faultyService.getDirectChildrenByName('empty-children');
         faultyService.getSmartChildRoutes('/invalid-path');
@@ -450,7 +450,7 @@ describe('UnifiedNavigationService - 통합 테스트', () => {
       ];
 
       expect(() => {
-        const specialService = new UnifiedNavigationService(specialRoutes);
+        const specialService = new NavigationService(specialRoutes);
         specialService.getDirectChildrenByName('special-chars');
       }).not.toThrow();
     });

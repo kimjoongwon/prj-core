@@ -43,6 +43,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     const dashboardRoutes =
       Plate.navigation.getDirectChildrenByPath('dashboard');
 
+    // 선택된 대시보드 라우트의 자식들을 leftSidebar에 표시
+    const selectedDashboardRouteChildren =
+      Plate.navigation.getSelectedDashboardRouteChildren();
+
     return (
       <DashboardLayout
         headerComponent={
@@ -53,7 +57,12 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
             }
           />
         }
-        leftSidebarComponent={<Navbar direction="vertical" routes={[]} />}
+        leftSidebarComponent={
+          <Navbar
+            direction="vertical"
+            routes={selectedDashboardRouteChildren}
+          />
+        }
       >
         {children}
         <Outlet />

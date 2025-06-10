@@ -1,5 +1,4 @@
 import { type RouteBuilder, type Route } from '@shared/types';
-import { PathUtil } from '@shared/utils';
 import { makeAutoObservable } from 'mobx';
 import { type NavigateFunction } from 'react-router';
 import { NavigatorService } from './navigator';
@@ -8,11 +7,11 @@ import { NavigatorService } from './navigator';
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 
 /**
- * UnifiedNavigationService - 통합된 네비게이션 서비스
+ * NavigationService - 통합된 네비게이션 서비스
  * 라우트 관리, 네비게이션, 활성 상태 추적 등 모든 라우팅 관련 기능을 통합
  */
-export class UnifiedNavigationService {
-  private routes: Route[] = [];
+export class NavigationService {
+  private _routes: Route[] = [];
   private _routeBuilders: RouteBuilder[] = [];
   private flatRoutes: Map<string, RouteBuilder> = new Map();
   private navigator: NavigatorService;
@@ -21,11 +20,16 @@ export class UnifiedNavigationService {
   private _currentFullPath: string = '';
   private _currentRelativePath: string = '';
 
+  // 선택된 대시보드 라우트 추적
+  private _selectedDashboardRoute: RouteBuilder | null = null;
+
   constructor(routeBuilders: RouteBuilder[] = []) {
     this.navigator = new NavigatorService();
     this.setRoutes(routeBuilders);
     if (typeof window !== 'undefined' && window.location) {
       this.activateRoute(window.location.pathname);
+      // 초기화 시에도 대시보드 라우트 선택 상태 설정
+      this.updateSelectedDashboardRoute(window.location.pathname);
     }
     makeAutoObservable(this);
   }
@@ -65,10 +69,34 @@ export class UnifiedNavigationService {
   }
 
   /**
+   * 선택된 대시보드 라우트 반환
+   */
+  get selectedDashboardRoute(): RouteBuilder | null {
+    return this._selectedDashboardRoute;
+  }
+
+  /**
+   * 대시보드 라우트 선택 설정
+   */
+  setSelectedDashboardRoute(route: RouteBuilder | null): void {
+    this._selectedDashboardRoute = route;
+  }
+
+  /**
+   * 선택된 대시보드 라우트의 자식 라우트들 반환 (Route 타입)
+   */
+  getSelectedDashboardRouteChildren(): Route[] {
+    if (!this._selectedDashboardRoute) return [];
+    const routeBuilders = this.createChildRoutes(this._selectedDashboardRoute);
+    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
+  }
+
+  /**
    * 현재 경로 정보를 수동으로 업데이트
    */
   setCurrentPath(fullPath: string): void {
     this.activateRoute(fullPath);
+    this.updateSelectedDashboardRoute(fullPath);
   }
 
   // ===== 네비게이션 함수 관리 =====
@@ -133,7 +161,7 @@ export class UnifiedNavigationService {
       };
     };
 
-    this.routes =
+    this._routes =
       this.routeBuilders?.map(builder => convertRouteBuilderToRoute(builder)) ||
       [];
   }
@@ -240,20 +268,30 @@ export class UnifiedNavigationService {
   }
 
   /**
-   * 경로로 직계 자식 라우트들 가져오기
-   * 절대경로(/admin/dashboard) 또는 상대경로(dashboard) 모두 지원
+   * 경로로 직계 자식 라우트들 가져오기 (RouteBuilder 타입 - 내부용)
    */
-  getDirectChildrenByPath(pathname: string): RouteBuilder[] {
+  private getDirectChildrenByPathInternal(pathname: string): RouteBuilder[] {
     const targetRoute = this.findRouteByPath(pathname);
     return targetRoute ? this.createChildRoutes(targetRoute) : [];
   }
 
   /**
-   * 라우트 이름으로 직계 자식 라우트들 가져오기
+   * 경로로 직계 자식 라우트들 가져오기 (Route 타입)
+   * 절대경로(/admin/dashboard) 또는 상대경로(dashboard) 모두 지원
    */
-  getDirectChildrenByName(routeName: string): RouteBuilder[] {
+  getDirectChildrenByPath(pathname: string): Route[] {
+    const routeBuilders = this.getDirectChildrenByPathInternal(pathname);
+    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
+  }
+
+  /**
+   * 라우트 이름으로 직계 자식 라우트들 가져오기 (Route 타입)
+   */
+  getDirectChildrenByName(routeName: string): Route[] {
     const targetRoute = this.getRouteByName(routeName);
-    return targetRoute ? this.createChildRoutes(targetRoute) : [];
+    if (!targetRoute) return [];
+    const routeBuilders = this.createChildRoutes(targetRoute);
+    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
   }
 
   /**
@@ -265,9 +303,9 @@ export class UnifiedNavigationService {
   }
 
   /**
-   * 현재 경로 기준으로 브레드크럼의 마지막 라우트의 직계 자식들 반환
+   * 현재 경로 기준으로 브레드크럼의 마지막 라우트의 직계 자식들 반환 (Route 타입)
    */
-  getDirectChildrenFromBreadcrumb(currentPathname: string): RouteBuilder[] {
+  getDirectChildrenFromBreadcrumb(currentPathname: string): Route[] {
     const breadcrumbs = this.getBreadcrumbPath(currentPathname);
 
     if (breadcrumbs.length === 0) {
@@ -288,8 +326,11 @@ export class UnifiedNavigationService {
           parentRoute.pathname || '',
           child.pathname || '',
         ),
+        active: child.active || false,
         children: child.children,
-      })) as RouteBuilder[];
+        params: child.params,
+        icon: child.icon,
+      })) as Route[];
     }
 
     return [];
@@ -298,7 +339,7 @@ export class UnifiedNavigationService {
   /**
    * @deprecated getCurrentRoutes 대신 getDirectChildrenFromBreadcrumb 사용
    */
-  getCurrentRoutes(currentPathname: string): RouteBuilder[] {
+  getCurrentRoutes(currentPathname: string): Route[] {
     console.warn(
       'getCurrentRoutes는 deprecated입니다. getDirectChildrenFromBreadcrumb을 사용하세요.',
     );
@@ -316,6 +357,8 @@ export class UnifiedNavigationService {
     this.navigator.push(pathname, pathParams, searchParams);
     // 네비게이션 후 현재 경로 업데이트 및 라우트 활성화
     this.activateRoute(pathname);
+    // 대시보드 라우트가 클릭된 경우 선택된 라우트로 설정
+    this.updateSelectedDashboardRoute(pathname);
   }
 
   /**
@@ -372,30 +415,32 @@ export class UnifiedNavigationService {
     this.updateCurrentPaths(currentPathname);
 
     const changeRouteActiveState = (route: Route) => {
-      route.active = currentPathname?.includes(route.pathname);
+      // 더 정확한 활성화 매칭 로직
+      route.active =
+        currentPathname === route.pathname ||
+        currentPathname.startsWith(route.pathname + '/');
       route.children?.forEach(changeRouteActiveState);
     };
 
     this.routes?.forEach(changeRouteActiveState);
   }
 
-  // ===== 유틸리티 메서드 =====
-
   /**
-   * 경로 결합 헬퍼 함수
+   * Route 객체 배열 반환 (활성 상태가 포함된)
    */
-  private combinePaths(parent: string, child: string): string {
-    if (!parent) return child;
-    if (!child) return parent;
-
-    // 중복된 '/' 제거
-    return `${parent.endsWith('/') ? parent.slice(0, -1) : parent}${
-      child.startsWith('/') ? child : `/${child}`
-    }`;
+  get routes(): Route[] {
+    return this._routes;
   }
 
   /**
-   * 현재 활성 라우트들 가져오기
+   * Route 객체 저장
+   */
+  private set routes(routes: Route[]) {
+    this._routes = routes;
+  }
+
+  /**
+   * 현재 활성화된 Route들 반환 (MobX observable)
    */
   getActiveRoutes(): Route[] {
     const activeRoutes: Route[] = [];
@@ -411,8 +456,48 @@ export class UnifiedNavigationService {
       });
     };
 
-    findActiveRoutes(this.routes);
+    findActiveRoutes(this._routes);
     return activeRoutes;
+  }
+
+  /**
+   * 이름으로 활성화된 Route 검색
+   */
+  getActiveRouteByName(name: string): Route | undefined {
+    return this.getActiveRoutes().find(route => route.name === name);
+  }
+
+  /**
+   * 네비게이션 시 대시보드 라우트 선택 상태 업데이트
+   */
+  private updateSelectedDashboardRoute(pathname: string): void {
+    // 대시보드 라우트들 가져오기 (내부 RouteBuilder 메서드 사용)
+    const dashboardRoutes = this.getDirectChildrenByPathInternal('dashboard');
+
+    // 현재 경로가 대시보드 라우트 중 하나와 매칭되는지 확인
+    const matchingDashboardRoute = dashboardRoutes.find(route => {
+      if (!route.pathname) return false;
+      return pathname.startsWith(route.pathname);
+    });
+
+    if (matchingDashboardRoute) {
+      this.setSelectedDashboardRoute(matchingDashboardRoute);
+    }
+  }
+
+  // ===== 유틸리티 메서드 =====
+
+  /**
+   * 경로 결합 헬퍼 함수
+   */
+  private combinePaths(parent: string, child: string): string {
+    if (!parent) return child;
+    if (!child) return parent;
+
+    // 중복된 '/' 제거
+    return `${parent.endsWith('/') ? parent.slice(0, -1) : parent}${
+      child.startsWith('/') ? child : `/${child}`
+    }`;
   }
 
   /**
@@ -447,7 +532,7 @@ export class UnifiedNavigationService {
       return false;
     };
 
-    findPath(this.routes, currentPathname);
+    findPath(this._routes, currentPathname);
     return breadcrumbs;
   }
 
@@ -466,31 +551,126 @@ export class UnifiedNavigationService {
   }
 
   /**
-   * 현재 브라우저 경로를 기반으로 직계 자식 라우트를 자동으로 반환
-   * 추적 중인 현재 경로를 사용하여 자식 메뉴를 가져옴
+   * 현재 경로의 자식 Route들을 가져오기 (active 상태 포함)
    */
-  getChildRoutesFromCurrentPath(): RouteBuilder[] {
+  getChildRoutesFromCurrentPath(): Route[] {
     if (typeof window === 'undefined') return [];
 
-    // 추적 중인 현재 경로를 우선 사용하고, 없으면 window.location.pathname 사용
     const currentPath = this._currentFullPath || window.location.pathname;
     return this.getDirectChildrenByPath(currentPath);
   }
 
   /**
-   * 현재 추적 중인 경로를 기반으로 스마트하게 자식 라우트 가져오기
+   * 경로로 직계 자식 Route들 가져오기 (active 상태 포함)
    */
-  getSmartChildRoutesFromCurrentPath(): RouteBuilder[] {
+  getDirectChildRoutesByPath(pathname: string): Route[] {
+    const findRouteInRoutes = (
+      routes: Route[],
+      targetPath: string,
+    ): Route | undefined => {
+      for (const route of routes) {
+        if (
+          route.pathname === targetPath ||
+          targetPath.startsWith(route.pathname + '/')
+        ) {
+          return route;
+        }
+        if (route.children) {
+          const found = findRouteInRoutes(route.children, targetPath);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    const targetRoute = findRouteInRoutes(this._routes, pathname);
+    return targetRoute?.children || [];
+  }
+
+  /**
+   * RouteBuilder를 Route로 변환하여 반환 (active 상태 포함)
+   */
+  convertRouteBuilderToRoute(
+    routeBuilder: RouteBuilder,
+    parentPath: string = '',
+  ): Route {
+    const fullPath = this.combinePaths(
+      parentPath,
+      routeBuilder?.pathname || '',
+    );
+    const currentPath =
+      this._currentFullPath ||
+      (typeof window !== 'undefined' ? window.location.pathname : '');
+
+    return {
+      name: routeBuilder?.name || '',
+      pathname: fullPath,
+      params: routeBuilder?.params,
+      active:
+        currentPath === fullPath || currentPath.startsWith(fullPath + '/'),
+      icon: routeBuilder?.icon,
+      children:
+        routeBuilder?.children?.map(child =>
+          this.convertRouteBuilderToRoute(child, fullPath),
+        ) || [],
+    };
+  }
+
+  /**
+   * RouteBuilder 배열을 Route 배열로 변환 (active 상태 포함)
+   */
+  convertRouteBuilderArrayToRoutes(routeBuilders: RouteBuilder[]): Route[] {
+    return routeBuilders.map(builder =>
+      this.convertRouteBuilderToRoute(builder),
+    );
+  }
+
+  /**
+   * 라우트 배열의 활성화 상태를 업데이트
+   */
+  updateRoutesActiveState(routes: Route[]): Route[] {
+    const currentPath =
+      this._currentFullPath ||
+      (typeof window !== 'undefined' ? window.location.pathname : '');
+
+    const updateActive = (routeList: Route[]): Route[] => {
+      return routeList.map(route => ({
+        ...route,
+        active:
+          currentPath === route.pathname ||
+          currentPath.startsWith(route.pathname + '/'),
+        children: route.children ? updateActive(route.children) : undefined,
+      }));
+    };
+
+    return updateActive(routes);
+  }
+
+  /**
+   * 현재 추적 중인 경로를 기반으로 스마트하게 자식 Route 가져오기
+   */
+  getSmartChildRoutesFromCurrentPath(): Route[] {
     if (typeof window === 'undefined') return [];
 
     const currentPath = this._currentFullPath || window.location.pathname;
     return this.getSmartChildRoutes(currentPath);
   }
+
   /**
-   * 현재 경로의 자식 라우트들을 스마트하게 가져오기
+   * 현재 경로의 자식 Route들을 스마트하게 가져오기 (Route 타입 반환)
+   * @deprecated getSmartChildRoutes를 사용하세요 (이제 Route를 직접 반환함)
+   */
+  getSmartChildRoutesAsRoute(pathname: string): Route[] {
+    console.warn(
+      'getSmartChildRoutesAsRoute는 deprecated입니다. getSmartChildRoutes를 사용하세요.',
+    );
+    return this.getSmartChildRoutes(pathname);
+  }
+  /**
+   * 현재 경로의 자식 라우트들을 스마트하게 가져오기 (Route 타입)
    * 여러 단계의 매칭 전략을 통해 가장 적절한 자식 라우트들을 반환
    */
-  getSmartChildRoutes(pathname: string): RouteBuilder[] {
+  getSmartChildRoutes(pathname: string): Route[] {
     console.log('🔍 getSmartChildRoutes called with:', pathname);
     if (!pathname) return [];
 
@@ -509,25 +689,28 @@ export class UnifiedNavigationService {
 
     // 1단계: 정확한 경로 매칭
     const exactMatch = this.tryExactMatch(normalizedPath);
-    if (exactMatch.length > 0) return exactMatch;
+    if (exactMatch.length > 0)
+      return this.convertRouteBuilderArrayToRoutes(exactMatch);
 
     // 2단계: 부분 경로 매칭 (접두사 매칭)
     const partialMatch = this.tryPartialMatch(normalizedPath);
-    if (partialMatch.length > 0) return partialMatch;
+    if (partialMatch.length > 0)
+      return this.convertRouteBuilderArrayToRoutes(partialMatch);
 
     // 3단계: 세그먼트 기반 매칭
     const segmentMatch = this.trySegmentMatch(normalizedPath);
-    if (segmentMatch.length > 0) return segmentMatch;
+    if (segmentMatch.length > 0)
+      return this.convertRouteBuilderArrayToRoutes(segmentMatch);
 
-    // 4단계: 폴백 - deprecated 메서드 사용
-    console.log('🔄 Trying fallback with deprecated method...');
-    const fallbackResult = this.getDirectChildrenByPath(normalizedPath);
+    // 4단계: 폴백 - 내부 RouteBuilder 메서드 사용
+    console.log('🔄 Trying fallback with internal method...');
+    const fallbackResult = this.getDirectChildrenByPathInternal(normalizedPath);
     if (fallbackResult.length > 0) {
       console.log(
         '✅ Found with fallback method:',
         fallbackResult.map(r => ({ name: r.name, pathname: r.pathname })),
       );
-      return fallbackResult;
+      return this.convertRouteBuilderArrayToRoutes(fallbackResult);
     }
 
     console.log('❌ No matching routes found');
@@ -658,7 +841,7 @@ export class UnifiedNavigationService {
    * 예: '/admin/dashboard/users' -> 'dashboard'의 직계 자식들 반환
    * @deprecated getSmartChildRoutes 사용을 권장합니다.
    */
-  getDirectChildrenByPathSegments(pathname: string): RouteBuilder[] {
+  getDirectChildrenByPathSegments(pathname: string): Route[] {
     console.warn(
       'getDirectChildrenByPathSegments는 deprecated입니다. getSmartChildRoutes를 사용하세요.',
     );
