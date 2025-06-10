@@ -1,7 +1,7 @@
-import { DateTimeUtil } from './DateTimeUtil';
-import { PathUtil } from './PathUtil';
-import { PaginationUtil } from './PaginationUtil';
-import { ValidationUtil } from './ValidationUtil';
+import { DateTimeUtil } from './src/DateTimeUtil';
+import { PathUtil } from './src/PathUtil';
+import { PaginationUtil } from './src/PaginationUtil';
+import { ValidationUtil } from './src/ValidationUtil';
 
 const Util = {
   DateTimeUtil,
