@@ -10,7 +10,6 @@ export * from './query-user.dto';
 export * from './query-group.dto';
 export * from './query-service.dto';
 export * from './query-category.dto';
-export * from './query-classification.dto';
 export * from './query-action.dto';
 export * from './query-ability.dto';
 export * from './query-subject.dto';

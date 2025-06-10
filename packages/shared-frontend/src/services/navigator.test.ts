@@ -1,6 +1,17 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  vi,
+  afterEach,
+  type MockedFunction,
+} from 'vitest';
 import { NavigatorService } from './navigator';
 import { type NavigateFunction } from 'react-router';
+
+// Next.js와 React Router 모두 지원하기 위한 타입
+type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 
 // PathUtil 모킹
 vi.mock('@shared/utils', () => ({
@@ -24,8 +35,8 @@ vi.mock('@shared/utils', () => ({
 
 describe('NavigatorService', () => {
   let navigatorService: NavigatorService;
-  let mockNavigateFunction: vi.MockedFunction<NavigateFunction>;
-  let mockNextJsNavigate: vi.MockedFunction<(path: string) => void>;
+  let mockNavigateFunction: MockedFunction<UniversalNavigateFunction>;
+  let mockNextJsNavigate: MockedFunction<(path: string) => void>;
 
   beforeEach(() => {
     navigatorService = new NavigatorService();

@@ -5,5 +5,9 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    globals: true,
+    typecheck: {
+      tsconfig: './tsconfig.test.json',
+    },
   },
 });

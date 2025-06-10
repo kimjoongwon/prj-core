@@ -1,4 +1,12 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  vi,
+  afterEach,
+  type MockedFunction,
+} from 'vitest';
 import { UnifiedNavigationService } from './navigation';
 import { NavigatorService } from './navigator';
 import { type RouteBuilder } from '@shared/types';
@@ -35,12 +43,12 @@ vi.mock('@shared/utils', () => ({
 describe('UnifiedNavigationService - 통합 테스트', () => {
   let navigationService: UnifiedNavigationService;
   let mockNavigator: {
-    setNavigateFunction: vi.MockedFunction<any>;
-    push: vi.MockedFunction<any>;
-    goBack: vi.MockedFunction<any>;
-    goForward: vi.MockedFunction<any>;
-    go: vi.MockedFunction<any>;
-    replace: vi.MockedFunction<any>;
+    setNavigateFunction: MockedFunction<any>;
+    push: MockedFunction<any>;
+    goBack: MockedFunction<any>;
+    goForward: MockedFunction<any>;
+    go: MockedFunction<any>;
+    replace: MockedFunction<any>;
   };
   let complexRoutes: RouteBuilder[];
 
