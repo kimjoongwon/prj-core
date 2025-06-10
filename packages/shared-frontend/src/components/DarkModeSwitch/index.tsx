@@ -14,7 +14,7 @@ const darkModeSwitchStyles = cva('p-2', {
       'top-right': 'fixed top-4 right-4 z-50',
       'bottom-left': 'fixed bottom-4 left-4 z-50',
       'bottom-right': 'fixed bottom-4 right-4 z-50',
-      'inline': 'relative',
+      inline: 'relative',
     },
     size: {
       sm: 'text-sm',
