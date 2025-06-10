@@ -3,7 +3,6 @@ import { Card, CardBody } from '@heroui/react';
 import { Text } from '../../Text';
 import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import { Plate } from '../../../providers';
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   const {
@@ -42,8 +41,6 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   );
 
   const header = headerComponent || renderPlaceholder('HeaderComponent');
-  const leftSidebar =
-    leftSidebarComponent || renderPlaceholder('LeftSidebarComponent');
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -54,12 +51,14 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar - Hidden on tablet and mobile (iPad Mini and smaller) */}
-        <aside className="hidden xl:flex w-72 flex-col bg-content1 border-r border-divider">
-          <div className="h-full overflow-y-auto scrollbar-thin">
-            <div className="p-4">{leftSidebar}</div>
-          </div>
-        </aside>
+        {/* Left Sidebar - Only rendered when leftSidebarComponent is provided */}
+        {leftSidebarComponent && (
+          <aside className="hidden xl:flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
+            <div className="h-full overflow-y-auto scrollbar-thin">
+              {leftSidebarComponent}
+            </div>
+          </aside>
+        )}
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-hidden bg-content2">

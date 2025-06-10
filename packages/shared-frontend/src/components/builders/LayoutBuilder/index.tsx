@@ -7,8 +7,12 @@ import { ModalLayout } from '../../layouts/Modal';
 import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
 import { Navbar } from '../../Navbar';
+import { CollapsibleSidebar } from '../../CollapsibleSidebar';
 import { Plate } from '../../../providers';
 import { BottomTab } from '../../BottomTab';
+import { Logo } from '../../Logo';
+import { Avatar } from '../../Avatar';
+import { ResponsiveVisibility } from '../../ResponsiveVisibility';
 
 interface Layout {
   children: ReactNode;
@@ -52,17 +56,19 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
       <DashboardLayout
         headerComponent={
           <Header
-            centerComponent={<Navbar routes={dashboardRoutes} />}
-            drawerComponent={
-              <Navbar routes={dashboardRoutes} direction="vertical" />
+            leftComponent={<Logo variants={'text'} />}
+            centerComponent={
+              <ResponsiveVisibility device="mobile">
+                <Navbar routes={dashboardRoutes} />
+              </ResponsiveVisibility>
             }
+            rightComponent={<Avatar />}
           />
         }
         leftSidebarComponent={
-          <Navbar
-            direction="vertical"
-            routes={selectedDashboardRouteChildren}
-          />
+          selectedDashboardRouteChildren.length > 0 && (
+            <CollapsibleSidebar routes={selectedDashboardRouteChildren} />
+          )
         }
         bottomComponent={
           <BottomTab routes={dashboardRoutes} activeColor="primary" />

@@ -22,11 +22,6 @@ export const Navbar = observer((props: NavbarProps) => {
     }
   };
 
-  // Route의 active 속성을 직접 사용
-  const isRouteActive = (route: Route): boolean => {
-    return route.active || false;
-  };
-
   if (direction === 'vertical') {
     return (
       <VStack className="gap-2">

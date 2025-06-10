@@ -33,6 +33,18 @@ export interface ContainerProps {
   className?: string;
 }
 
+// Responsive visibility component interface
+export interface ResponsiveVisibilityProps {
+  /** The children components to show/hide */
+  children: React.ReactNode;
+  /** Device type - 'mobile' will hide on mobile, 'pc' will hide on desktop */
+  device: 'mobile' | 'pc';
+  /** Breakpoint for responsive behavior (default: 'xl' - 1280px) */
+  breakpoint?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  /** Additional CSS classes */
+  className?: string;
+}
+
 // Table and data grid related interfaces
 export interface PaginationState {
   skip: number;
@@ -331,11 +343,9 @@ export interface TabsProps<T> extends MobxProps<T> {
 }
 
 export interface HeaderProps {
-  children?: React.ReactNode;
-  content?: React.ReactNode;
+  leftComponent?: React.ReactNode;
   centerComponent?: React.ReactNode;
-  drawerComponent?: React.ReactNode;
-  onMenuOpen?: () => void;
+  rightComponent?: React.ReactNode;
 }
 
 export interface DashboardLayoutProps {
