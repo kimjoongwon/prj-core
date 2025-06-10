@@ -8,7 +8,7 @@ export * from './NavigationSetup';
 export * from './Header';
 export * from './AutoComplete';
 export * from './Avatar';
-// export * from './Breadcrumb';
+export * from './Breadcrumb';
 export * from './Button';
 export * from './ButtonGroup';
 export * from './CalendarInput';

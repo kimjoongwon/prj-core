@@ -1,172 +1,174 @@
-// import React from 'react';
-// import { Route } from '@shared/types';
-// import { BreadcrumbItem, BreadcrumbProps, BreadcrumbBuilderProps } from '@shared/types';
+'use client';
 
-// /**
-//  * 브레드크럼 컴포넌트
-//  * items prop이 없으면 현재 경로의 브레드크럼을 자동으로 생성합니다.
-//  */
-// export function Breadcrumb({
-//   items,
-//   separator = '/',
-//   className = '',
-//   itemClassName = '',
-//   activeItemClassName = '',
-//   separatorClassName = '',
-//   maxItems,
-//   showHomeIcon = false,
-//   homeRouteName = '홈',
-//   onItemClick,
-// }: BreadcrumbProps) {
-//   const { breadcrumbs, navigateByName, getPathByName } = useGlobalNavigation();
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { useLocation } from 'react-router';
+import type { BreadcrumbItem, BreadcrumbProps, BreadcrumbBuilderProps, Route } from '@shared/types';
+import { Plate } from '../../providers/App/AppProvider';
 
-//   // items가 제공되지 않으면 자동으로 현재 경로의 브레드크럼 사용
-//   const breadcrumbItems = items || breadcrumbs;
+/**
+ * Breadcrumb component
+ * If no items prop is provided, breadcrumbs are automatically
+ * generated from the current location using the global navigation service.
+ */
+export const Breadcrumb = observer((props: BreadcrumbProps) => {
+  const {
+    items,
+    separator = '/',
+    className = '',
+    itemClassName = '',
+    activeItemClassName = '',
+    separatorClassName = '',
+    maxItems,
+    showHomeIcon = false,
+    homeRouteName = '홈',
+    onItemClick,
+  } = props;
 
-//   // maxItems가 설정된 경우 아이템 수 제한
-//   const displayItems = maxItems
-//     ? breadcrumbItems.slice(-maxItems)
-//     : breadcrumbItems;
+  const location = useLocation();
 
-//   const handleItemClick = (item: BreadcrumbItem | Route) => {
-//     onItemClick?.(item);
+  const breadcrumbItems = React.useMemo<BreadcrumbItem[]>(() => {
+    if (items) return items;
+    return Plate.navigation.getBreadcrumbPath(location.pathname);
+  }, [items, location.pathname]);
 
-//     // pathname이 있으면 해당 경로로 이동
-//     if ('pathname' in item && item.pathname && !('active' in item && item.active)) {
-//       navigateByName(item.name);
-//     }
-//   };
+  const navigateByName = React.useCallback(
+    (name: string, params?: object, search?: Record<string, string>) => {
+      Plate.navigation.pushByName(name, params, search);
+    },
+    [],
+  );
 
-//   const handleHomeClick = () => {
-//     const homePath = getPathByName(homeRouteName);
-//     if (homePath) {
-//       navigateByName(homeRouteName);
-//     }
-//   };
+  const getPathByName = React.useCallback((name: string) => {
+    return Plate.navigation.getPathByName(name);
+  }, []);
 
-//   if (displayItems.length === 0) {
-//     return null;
-//   }
+  const displayItems = React.useMemo(() => {
+    if (!maxItems) return breadcrumbItems;
+    return breadcrumbItems.slice(-maxItems);
+  }, [breadcrumbItems, maxItems]);
 
-//   return (
-//     <nav className={`breadcrumb ${className}`} aria-label="breadcrumb">
-//       <ol className="flex items-center space-x-2">
-//         {/* 홈 아이콘 표시 */}
-//         {showHomeIcon && (
-//           <>
-//             <li>
-//               <button
-//                 onClick={handleHomeClick}
-//                 className={`breadcrumb-home ${itemClassName}`}
-//                 aria-label="홈으로 이동"
-//               >
-//                 🏠
-//               </button>
-//             </li>
-//             {displayItems.length > 0 && (
-//               <li className={`breadcrumb-separator ${separatorClassName}`}>
-//                 {separator}
-//               </li>
-//             )}
-//           </>
-//         )}
+  const handleItemClick = (item: BreadcrumbItem | Route) => {
+    onItemClick?.(item);
+    if ('pathname' in item && item.pathname && !('active' in item && item.active)) {
+      Plate.navigation.push(item.pathname);
+    }
+  };
 
-//         {/* maxItems 제한으로 인해 생략된 항목이 있을 때 표시 */}
-//         {maxItems && breadcrumbItems.length > maxItems && (
-//           <>
-//             <li className={`breadcrumb-ellipsis ${itemClassName}`}>...</li>
-//             <li className={`breadcrumb-separator ${separatorClassName}`}>
-//               {separator}
-//             </li>
-//           </>
-//         )}
+  const handleHomeClick = () => {
+    const homePath = getPathByName(homeRouteName);
+    if (homePath) {
+      navigateByName(homeRouteName);
+    }
+  };
 
-//         {/* 브레드크럼 아이템들 */}
-//         {displayItems.map((item, index) => {
-//           const isLast = index === displayItems.length - 1;
-//           const isClickable = item.pathname && !item.active && !isLast;
+  if (displayItems.length === 0) {
+    return null;
+  }
 
-//           return (
-//             <React.Fragment key={`${item.name}-${index}`}>
-//               <li>
-//                 {isClickable ? (
-//                   <button
-//                     onClick={() => handleItemClick(item)}
-//                     className={`breadcrumb-item ${itemClassName} hover:underline text-blue-600`}
-//                   >
-//                     {item.name}
-//                   </button>
-//                 ) : (
-//                   <span
-//                     className={`breadcrumb-item ${itemClassName} ${
-//                       isLast || item.active ? activeItemClassName : ''
-//                     } ${isLast ? 'text-gray-500 font-semibold' : ''}`}
-//                   >
-//                     {item.name}
-//                   </span>
-//                 )}
-//               </li>
+  return (
+    <nav
+      className={`overflow-x-auto whitespace-nowrap ${className}`}
+      aria-label="breadcrumb"
+    >
+      <ol className="flex items-center text-sm">
+        {showHomeIcon && (
+          <>
+            <li>
+              <button
+                onClick={handleHomeClick}
+                className={`px-1 ${itemClassName}`}
+                aria-label="홈으로 이동"
+              >
+                🏠
+              </button>
+            </li>
+            {displayItems.length > 0 && (
+              <li className={`mx-1 ${separatorClassName}`}>{separator}</li>
+            )}
+          </>
+        )}
+        {maxItems && breadcrumbItems.length > maxItems && (
+          <>
+            <li className={`mx-1 ${itemClassName}`}>...</li>
+            <li className={`mx-1 ${separatorClassName}`}>{separator}</li>
+          </>
+        )}
+        {displayItems.map((item, index) => {
+          const isLast = index === displayItems.length - 1;
+          const isClickable = item.pathname && !item.active && !isLast;
+          return (
+            <React.Fragment key={`${item.name}-${index}`}>
+              <li>
+                {isClickable ? (
+                  <button
+                    onClick={() => handleItemClick(item)}
+                    className={`hover:underline ${itemClassName}`}
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <span
+                    className={`${itemClassName} ${
+                      isLast || item.active ? activeItemClassName : ''
+                    }`}
+                  >
+                    {item.name}
+                  </span>
+                )}
+              </li>
+              {!isLast && (
+                <li className={`mx-1 ${separatorClassName}`}>{separator}</li>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+});
 
-//               {/* 마지막 아이템이 아닐 때 구분자 표시 */}
-//               {!isLast && (
-//                 <li
-//                   className={`breadcrumb-separator ${separatorClassName} text-gray-400`}
-//                 >
-//                   {separator}
-//                 </li>
-//               )}
-//             </React.Fragment>
-//           );
-//         })}
-//       </ol>
-//     </nav>
-//   );
-// }
+/**
+ * Build breadcrumb items from route names.
+ */
+export const BreadcrumbBuilder = observer((props: BreadcrumbBuilderProps) => {
+  const {
+    routeNames,
+    separator = '/',
+    className = '',
+    itemClassName = '',
+    activeItemClassName = '',
+  } = props;
 
-// /**
-//  * 라우트 이름 배열로 브레드크럼을 생성하는 컴포넌트
-//  */
-// export function BreadcrumbBuilder({
-//   routeNames,
-//   separator = '/',
-//   className = '',
-//   itemClassName = '',
-//   activeItemClassName = '',
-// }: BreadcrumbBuilderProps) {
-//   const { getPathByName } = useGlobalNavigation();
+  const getPathByName = React.useCallback((name: string) => {
+    return Plate.navigation.getPathByName(name);
+  }, []);
 
-//   // 라우트 이름들을 브레드크럼 아이템으로 변환
-//   const items: BreadcrumbItem[] = routeNames.map((routeName, index) => {
-//     const pathname = getPathByName(routeName);
-//     const isLast = index === routeNames.length - 1;
+  const items: BreadcrumbItem[] = React.useMemo(
+    () =>
+      routeNames.map((routeName, index) => {
+        const pathname = getPathByName(routeName);
+        const isLast = index === routeNames.length - 1;
+        return {
+          name: routeName,
+          pathname,
+          active: isLast,
+        };
+      }),
+    [routeNames, getPathByName],
+  );
 
-//     return {
-//       name: routeName,
-//       pathname,
-//       active: isLast,
-//     };
-//   });
+  return (
+    <Breadcrumb
+      items={items}
+      separator={separator}
+      className={className}
+      itemClassName={itemClassName}
+      activeItemClassName={activeItemClassName}
+    />
+  );
+});
 
-//   return (
-//     <Breadcrumb
-//       items={items}
-//       separator={separator}
-//       className={className}
-//       itemClassName={itemClassName}
-//       activeItemClassName={activeItemClassName}
-//     />
-//   );
-// }
+BreadcrumbBuilder.displayName = 'BreadcrumbBuilder';
+Breadcrumb.displayName = 'Breadcrumb';
 
-// BreadcrumbBuilder.displayName = 'BreadcrumbBuilder';
-// Breadcrumb.displayName = 'Breadcrumb';
-
-// // 스타일링을 위한 기본 CSS 클래스 정의 (Tailwind CSS 기준)
-// export const breadcrumbStyles = {
-//   container: 'flex items-center space-x-1 text-sm text-gray-600',
-//   item: 'hover:text-gray-900 transition-colors',
-//   activeItem: 'text-gray-900 font-medium',
-//   separator: 'text-gray-400',
-//   clickableItem:
-//     'text-blue-600 hover:text-blue-800 hover:underline cursor-pointer',
-// };
