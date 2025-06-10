@@ -8,6 +8,7 @@ export * from './NavigationSetup';
 export * from './Header';
 export * from './AutoComplete';
 export * from './Avatar';
+export * from './BottomTab';
 // export * from './Breadcrumb';
 export * from './Button';
 export * from './ButtonGroup';

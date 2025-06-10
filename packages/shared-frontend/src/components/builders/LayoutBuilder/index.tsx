@@ -8,6 +8,7 @@ import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
 import { Navbar } from '../../Navbar';
 import { Plate } from '../../../providers';
+import { BottomTab } from '../../BottomTab';
 
 interface Layout {
   children: ReactNode;
@@ -62,6 +63,9 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
             direction="vertical"
             routes={selectedDashboardRouteChildren}
           />
+        }
+        bottomComponent={
+          <BottomTab routes={dashboardRoutes} activeColor="primary" />
         }
       >
         {children}

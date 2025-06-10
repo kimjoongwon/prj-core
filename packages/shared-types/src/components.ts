@@ -346,6 +346,18 @@ export interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+export interface BottomTabProps {
+  routes: Route[];
+  className?: string;
+  activeColor?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+  inactiveColor?: 'default' | 'secondary';
+  variant?: 'light' | 'solid' | 'bordered' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  showLabels?: boolean;
+  iconSize?: number;
+  onTabPress?: (route: Route) => void;
+}
+
 export interface AppBarProps extends HeaderProps {}
 export interface AppBarViewProps extends HeaderProps {}
 
