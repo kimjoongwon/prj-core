@@ -3,6 +3,14 @@ import { UnifiedNavigationService } from './navigation';
 import { NavigatorService } from './navigator';
 import { type RouteBuilder } from '@shared/types';
 
+// 외부 패키지 모킹
+vi.mock('mobx', () => ({
+  makeAutoObservable: () => {},
+}));
+
+// Node 환경에서 window 객체가 없으므로 간단히 생성
+(global as any).window = {};
+
 // Mock dependencies
 vi.mock('./navigator');
 vi.mock('@shared/utils', () => ({
