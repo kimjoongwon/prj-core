@@ -3,7 +3,12 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useLocation } from 'react-router';
-import type { BreadcrumbItem, BreadcrumbProps, BreadcrumbBuilderProps, Route } from '@shared/types';
+import type {
+  BreadcrumbItem,
+  BreadcrumbProps,
+  BreadcrumbBuilderProps,
+  Route,
+} from '@shared/types';
 import { Plate } from '../../providers/App/AppProvider';
 
 /**
@@ -34,7 +39,7 @@ export const Breadcrumb = observer((props: BreadcrumbProps) => {
 
   const navigateByName = React.useCallback(
     (name: string, params?: object, search?: Record<string, string>) => {
-      Plate.navigation.pushByName(name, params, search);
+      Plate.navigation.getNavigator().pushByName(name, params, search);
     },
     [],
   );
@@ -50,8 +55,12 @@ export const Breadcrumb = observer((props: BreadcrumbProps) => {
 
   const handleItemClick = (item: BreadcrumbItem | Route) => {
     onItemClick?.(item);
-    if ('pathname' in item && item.pathname && !('active' in item && item.active)) {
-      Plate.navigation.push(item.pathname);
+    if (
+      'pathname' in item &&
+      item.pathname &&
+      !('active' in item && item.active)
+    ) {
+      Plate.navigation.getNavigator().push(item.pathname);
     }
   };
 
@@ -171,4 +180,3 @@ export const BreadcrumbBuilder = observer((props: BreadcrumbBuilderProps) => {
 
 BreadcrumbBuilder.displayName = 'BreadcrumbBuilder';
 Breadcrumb.displayName = 'Breadcrumb';
-

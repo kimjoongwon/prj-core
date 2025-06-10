@@ -51,7 +51,7 @@ export const BottomTab = observer((props: BottomTabProps) => {
 
     // 기본 네비게이션 동작
     if (route.pathname) {
-      Plate.navigation.push(route.pathname);
+      Plate.navigation.getNavigator().push(route.pathname);
     }
   };
 

@@ -132,7 +132,11 @@ function AnotherComponent() {
   return (
     <div>
       <p>활성 라우트: {activeRoutes.length}개</p>
-      <button onClick={() => Plate.navigation.pushByName('LOGIN')}>로그인</button>
+      <button
+        onClick={() => Plate.navigation.getNavigator().pushByName('LOGIN')}
+      >
+        로그인
+      </button>
     </div>
   );
 }
