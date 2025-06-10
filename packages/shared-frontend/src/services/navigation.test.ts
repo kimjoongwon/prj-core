@@ -2,6 +2,14 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { UnifiedNavigationService } from './navigation';
 import { type RouteBuilder } from '@shared/types';
 
+// 모킹되지 않은 외부 의존성을 간단히 대체
+vi.mock('mobx', () => ({
+  makeAutoObservable: () => {},
+}));
+
+// Node 환경에서 window 객체가 없으므로 간단히 생성
+(global as any).window = {};
+
 // Mock NavigatorService
 vi.mock('./navigator', () => ({
   NavigatorService: vi.fn().mockImplementation(() => ({

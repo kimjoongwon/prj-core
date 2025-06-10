@@ -24,7 +24,9 @@ export class UnifiedNavigationService {
   constructor(routeBuilders: RouteBuilder[] = []) {
     this.navigator = new NavigatorService();
     this.setRoutes(routeBuilders);
-    this.activateRoute(window.location.pathname);
+    if (typeof window !== 'undefined' && window.location) {
+      this.activateRoute(window.location.pathname);
+    }
     makeAutoObservable(this);
   }
 
@@ -272,10 +274,12 @@ export class UnifiedNavigationService {
       return [];
     }
 
-    // 현재 경로의 부모 라우트 찾기 (브레드크럼에서 마지막에서 두 번째 요소)
-    // 브레드크럼이 [admin, dashboard, analytics]라면 dashboard의 자식들을 반환
+    // 현재 경로의 부모 라우트를 찾는다.
+    // 경로 깊이가 2 이상이라면 마지막에서 두 번째 요소를, 그 외에는 마지막 요소를 사용한다.
     const parentRoute =
-      breadcrumbs.length >= 2 ? breadcrumbs[breadcrumbs.length - 2] : null;
+      breadcrumbs.length > 2
+        ? breadcrumbs[breadcrumbs.length - 2]
+        : breadcrumbs[breadcrumbs.length - 1];
 
     if (parentRoute && parentRoute.children) {
       return parentRoute.children.map(child => ({
