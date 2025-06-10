@@ -18,7 +18,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
   const handleRouteClick = (route: Route) => {
     if (route.pathname) {
-      Plate.navigation.push(route.pathname);
+      Plate.navigation.getNavigator().push(route.pathname);
     }
   };
 

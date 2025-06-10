@@ -124,6 +124,7 @@ export class NavigationService {
     this._routeBuilders = routeBuilders;
     this.generateRoutesFromBuilders();
     this.flattenRoutes(routeBuilders);
+    this.navigator.setRouteNameResolver(this.getPathByName.bind(this));
 
     // 디버깅: flatRoutes 출력
     console.log('🔍 flatRoutes after setRoutes:');
@@ -347,39 +348,7 @@ export class NavigationService {
   }
 
   /**
-   * 경로 네비게이션
-   */
-  push(
-    pathname: string,
-    pathParams?: object,
-    searchParams?: Record<string, string>,
-  ): void {
-    this.navigator.push(pathname, pathParams, searchParams);
-    // 네비게이션 후 현재 경로 업데이트 및 라우트 활성화
-    this.activateRoute(pathname);
-    // 대시보드 라우트가 클릭된 경우 선택된 라우트로 설정
-    this.updateSelectedDashboardRoute(pathname);
-  }
-
-  /**
-   * 이름으로 네비게이션
-   */
-  pushByName(
-    routeName: string,
-    pathParams?: object,
-    searchParams?: Record<string, string>,
-  ): void {
-    const pathname = this.getPathByName(routeName);
-    if (!pathname) {
-      console.warn(`라우트 이름 "${routeName}"을 찾을 수 없습니다.`);
-      return;
-    }
-
-    this.push(pathname, pathParams, searchParams);
-  }
-
-  /**
-   * 조건부 네비게이션
+   * 조건부 네비게이션에 사용할 경로 계산
    */
   getConditionalPath(
     condition: boolean,
@@ -389,20 +358,6 @@ export class NavigationService {
     return condition
       ? this.getPathByName(routeNameIfTrue)
       : this.getPathByName(routeNameIfFalse);
-  }
-
-  /**
-   * 조건부 네비게이션 실행
-   */
-  pushConditional(
-    condition: boolean,
-    routeNameIfTrue: string,
-    routeNameIfFalse: string,
-    pathParams?: object,
-    searchParams?: Record<string, string>,
-  ): void {
-    const routeName = condition ? routeNameIfTrue : routeNameIfFalse;
-    this.pushByName(routeName, pathParams, searchParams);
   }
 
   // ===== 활성 상태 관리 =====
