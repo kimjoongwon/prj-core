@@ -8,6 +8,7 @@ import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header } from '../../Header';
 import { Navbar } from '../../Navbar';
 import { CollapsibleSidebar } from '../../CollapsibleSidebar';
+import { Breadcrumb } from '../../Breadcrumb';
 import { Plate } from '../../../providers';
 import { BottomTab } from '../../BottomTab';
 import { Logo } from '../../Logo';
@@ -77,6 +78,14 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
           )
         }
         bottom={<BottomTab routes={dashboardRoutes} activeColor="primary" />}
+        breadcrumb={
+          <Breadcrumb
+            showHomeIcon={true}
+            homeRouteName="대시보드"
+            maxItems={4}
+            className="text-sm sm:text-base"
+          />
+        }
       >
         {children}
         <Outlet />

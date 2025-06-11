@@ -353,6 +353,7 @@ export interface DashboardLayoutProps {
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
   bottom?: React.ReactNode;
+  breadcrumb?: React.ReactNode;
   children: React.ReactNode;
 }
 

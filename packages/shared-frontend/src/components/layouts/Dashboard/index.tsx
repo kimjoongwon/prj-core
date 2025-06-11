@@ -1,11 +1,13 @@
 import React from 'react';
 import { Card, CardBody } from '@heroui/react';
 import { Text } from '../../Text';
+import { Breadcrumb } from '../../Breadcrumb';
 import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
-  const { header, leftSidebar, rightSidebar, bottom, children } = props;
+  const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } =
+    props;
 
   const renderPlaceholder = (componentName: string) => (
     <Card className="h-full shadow-sm">
@@ -59,7 +61,13 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
           <div className="flex-1 overflow-y-auto scrollbar-thin">
             <div className="p-6">
               <Card className="min-h-full shadow-sm">
-                <CardBody className="p-6">{children}</CardBody>
+                <CardBody className="p-6">
+                  {/* Breadcrumb Navigation */}
+                  {breadcrumb && (
+                    <div className="mb-4 sm:mb-6">{breadcrumb}</div>
+                  )}
+                  {children}
+                </CardBody>
               </Card>
             </div>
           </div>

@@ -29,19 +29,30 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
       console.log(`Navigating to: ${route.fullPath}`);
       Plate.navigation.getNavigator().push(route.fullPath);
     }
-  }; // selectedDashboardRouteChildren의 부모 메뉴 정보 가져오기
-  const parentMenuInfo = useMemo(() => {
-    // selectedDashboardRoute에서 직접 부모 정보 가져오기
-    const selectedDashboardRoute = Plate.navigation.selectedDashboardRoute;
+  };
 
-    if (!selectedDashboardRoute) return null;
+  // selectedDashboardRouteChildren의 부모 메뉴 정보 가져오기
+  const parentMenuInfo = useMemo(() => {
+    // 대시보드 라우트의 자식들을 통해 현재 활성 라우트 찾기
+    const dashboardChildren =
+      Plate.navigation.getSelectedDashboardRouteChildren();
+
+    if (dashboardChildren.length === 0) return null;
+
+    // 대시보드 라우트 찾기
+    const dashboardRoute = Plate.navigation.getRouteByName('대시보드');
+    if (!dashboardRoute) return null;
+
+    // 현재 활성화된 자식 라우트 찾기
+    const activeChild = dashboardChildren.find(child => child.active);
+    const currentParent = activeChild || dashboardRoute;
 
     return {
-      name: selectedDashboardRoute.name,
-      pathname: selectedDashboardRoute.fullPath,
-      icon: selectedDashboardRoute.icon,
+      name: currentParent.name,
+      pathname: currentParent.fullPath,
+      icon: currentParent.icon,
     };
-  }, [Plate.navigation.selectedDashboardRoute]);
+  }, [routes]);
 
   return (
     <div

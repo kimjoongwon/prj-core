@@ -53,6 +53,7 @@ A dashboard layout component with responsive behavior for different screen sizes
 | `leftSidebar`  | `ComponentType`                           | No       | Optional left sidebar component                                                |
 | `rightSidebar` | `ComponentType`                           | No       | Optional right sidebar component                                               |
 | `bottom`       | `ReactNode`                               | No       | Optional bottom component (mobile only - hidden on desktop ≥1280px)            |
+| `breadcrumb`   | `ReactNode`                               | No       | Optional breadcrumb navigation component displayed above main content          |
 
 ## Usage Examples
 
@@ -125,12 +126,22 @@ const MyBottomComponent = () => (
 );
 
 function MyDashboard() {
+  const MyBreadcrumb = () => (
+    <Breadcrumb
+      showHomeIcon={true}
+      homeRouteName="대시보드"
+      maxItems={4}
+      className="text-sm sm:text-base"
+    />
+  );
+
   return (
     <DashboardLayout
       header={MyHeader}
       leftSidebar={MyLeftSidebar}
       rightSidebar={MyRightSidebar}
       bottom={MyBottomComponent}
+      breadcrumb={<MyBreadcrumb />}
     >
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h2>
@@ -184,6 +195,50 @@ function MobileLayout() {
           Note: Bottom navigation is only visible on mobile devices
           (&lt;1280px).
         </p>
+      </div>
+    </DashboardLayout>
+  );
+}
+```
+
+### Layout with Breadcrumb Navigation
+
+```tsx
+import {
+  DashboardLayout,
+  Breadcrumb,
+  BreadcrumbBuilder,
+} from '@shared/frontend';
+
+function DashboardWithBreadcrumb() {
+  // Using Breadcrumb component
+  const MyBreadcrumb = () => (
+    <Breadcrumb
+      showHomeIcon={true}
+      homeRouteName="대시보드"
+      maxItems={4}
+      className="text-sm sm:text-base"
+    />
+  );
+
+  // Or using BreadcrumbBuilder for automatic route-based breadcrumbs
+  const MyBreadcrumbBuilder = () => (
+    <BreadcrumbBuilder
+      routeNames={['대시보드', '사용자 관리', '사용자 목록']}
+      className="text-sm sm:text-base"
+    />
+  );
+
+  return (
+    <DashboardLayout
+      header={<MyHeader />}
+      leftSidebar={<MySidebar />}
+      breadcrumb={<MyBreadcrumb />}
+      // breadcrumb={<MyBreadcrumbBuilder />} // Alternative approach
+    >
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Dashboard Content</h1>
+        <p>The breadcrumb navigation will appear above this content.</p>
       </div>
     </DashboardLayout>
   );
