@@ -51,14 +51,6 @@ export class DashboardPage {
       },
     ];
 
-    const form = {
-      id: 'dashboard',
-      type: 'create',
-      resourceName: 'Dashboard',
-      resourceLabel: '대시보드',
-      sections,
-    };
-
     return {
       name: '대시보드',
       state: {
@@ -67,7 +59,7 @@ export class DashboardPage {
           button: { errorMessages: [] },
         },
       },
-      form,
+      sections,
     };
   }
 }

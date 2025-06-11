@@ -49,6 +49,9 @@ export class AuthService {
     const isPasswordValid = await this.passwordService.validatePassword(password, user?.password);
 
     if (!isPasswordValid) {
+      this.logger.warn(
+        `Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`,
+      );
       throw new UnauthorizedException(
         ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, '패스워드가 일치하지 않습니다.'),
       );

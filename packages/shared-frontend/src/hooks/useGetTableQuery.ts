@@ -1,17 +1,17 @@
 import { APIManager } from '@shared/api-client';
 import { TableBuilder } from '@shared/types';
 import { isEmpty } from 'lodash-es';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
   const searchParams = useSearchParams();
   const query = tableBuilder.query;
-  const searchParamsObject = Object.fromEntries(searchParams.entries());
+  // const searchParamsObject = Object.fromEntries(searchParams.entries());
   const apiArgs: unknown[] = [];
-
+  console.log('query', query);
   let queryParams = {
     ...query?.params,
-    ...searchParamsObject,
+    // ...searchParamsObject,
   };
 
   if (JSON.stringify(queryParams) === '{}') {

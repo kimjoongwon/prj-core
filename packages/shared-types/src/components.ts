@@ -14,7 +14,13 @@ import type {
   ListboxProps as HeroListboxProps,
 } from '@heroui/react';
 import type { HeaderContext } from '@tanstack/react-table';
-import type { Leaves, MobxProps, Route, Option } from './types';
+import type {
+  Leaves,
+  MobxProps,
+  Route,
+  Option,
+  DataGridBuilder,
+} from './types';
 import type { ReactNode } from 'react';
 
 // Form and component props interfaces
@@ -326,6 +332,8 @@ export enum Months {
 }
 
 // Builder related interfaces
+export interface DataGridBuilderProps extends DataGridBuilder {}
+
 export interface InputBuilderProps {
   inputBuilder: any; // InputBuilderInterface
   data?: (unknown & { id: string })[];

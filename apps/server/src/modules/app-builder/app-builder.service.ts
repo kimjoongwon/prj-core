@@ -4,8 +4,8 @@ import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/types';
 import { rawRoutes } from '@shared/vars';
 import { LoginPage } from './components/pages/login.page';
 import { TenantsPage } from './components/pages/tenants.page';
-import { DashboardPage } from './components/pages/dashboard.page';
 import { UsersPage } from './components/pages/users.page';
+import { DashboardPage } from './components/pages/dashboard.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -49,9 +49,7 @@ export class AppBuilderService {
       type: 'Dashboard',
     });
 
-    this.setRoutePageAndLayout('유저', usersPageBuilder, {
-      type: 'Root',
-    });
+    this.setRoutePageAndLayout('유저', usersPageBuilder);
 
     return {
       routes: this.routes,

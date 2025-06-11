@@ -1,6 +1,3 @@
-'use client';
-
-import React from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { SectionBuilderProps } from '@shared/types';

@@ -230,8 +230,7 @@ export interface PageBuilder {
   name?: string;
   state?: any;
   query?: Query;
-  form?: FormBuilder;
-  dataGrid?: DataGridBuilder;
+  sections?: SectionBuilder[];
 }
 
 export interface FilterBuilder {}

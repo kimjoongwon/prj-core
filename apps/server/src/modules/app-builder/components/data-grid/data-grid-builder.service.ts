@@ -20,14 +20,6 @@ export class DataGridBuilderService {
         },
         columns,
       },
-      // buttons: [
-      //   {
-      //     name: '생성',
-      //     // navigator: {
-      //     //   pathname: `new/create`,
-      //     // },
-      //   },
-      // ],
     };
   }
 }

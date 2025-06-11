@@ -270,7 +270,6 @@ export class NavigationService {
    * Route 객체 중심의 처리로 단순화
    */
   activateRoute(currentFullPath: string): void {
-    console.log('currentFullPath', currentFullPath);
     this.updateCurrentPaths(currentFullPath);
 
     // 모든 라우트의 활성 상태 업데이트
