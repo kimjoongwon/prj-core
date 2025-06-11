@@ -1,8 +1,14 @@
 'use client';
 
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Button } from '@heroui/react';
+import { observer, useLocalObservable } from 'mobx-react-lite';
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+} from '@heroui/react';
 import { Route } from '@shared/types';
 import { Plate } from '../../providers/App/AppProvider';
 import { renderLucideIcon } from '../../utils/iconUtils';
@@ -37,7 +43,32 @@ export const BottomTab = observer((props: BottomTabProps) => {
     onTabPress,
   } = props;
 
+  const state = useLocalObservable<{ activeParent: Route | null }>(() => ({
+    activeParent: null,
+  }));
+  const handleChildPress = (route: Route) => {
+    if (onTabPress) {
+      onTabPress(route);
+    }
+
+    if (route.onClick) {
+      route.onClick();
+      state.activeParent = null;
+      return;
+    }
+
+    if (route.pathname) {
+      Plate.navigation.getNavigator().push(route.pathname);
+    }
+
+    state.activeParent = null;
+  };
+
   const handleTabPress = (route: Route) => {
+    if (route.children && route.children.length > 0) {
+      state.activeParent = route;
+      return;
+    }
     // 커스텀 onTabPress 핸들러가 있으면 실행
     if (onTabPress) {
       onTabPress(route);
@@ -125,6 +156,38 @@ export const BottomTab = observer((props: BottomTabProps) => {
           </Button>
         );
       })}
+      {state.activeParent && (
+        <Modal isOpen={true} onClose={() => (state.activeParent = null)} size="full">
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader>{state.activeParent.name}</ModalHeader>
+                <ModalBody>
+                  <div className="grid grid-cols-3 gap-4 p-4">
+                    {state.activeParent.children?.map((child, idx) => (
+                      <Button
+                        key={child.name || child.pathname || idx}
+                        variant="light"
+                        className="flex flex-col items-center justify-center gap-2 border rounded-lg py-3"
+                        onPress={() => handleChildPress(child)}
+                      >
+                        {child.icon && (
+                          <div className="flex items-center justify-center">
+                            {renderLucideIcon(child.icon, 'w-6 h-6', iconSize)}
+                          </div>
+                        )}
+                        <span className="text-sm text-center truncate">
+                          {child.name || child.pathname}
+                        </span>
+                      </Button>
+                    ))}
+                  </div>
+                </ModalBody>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      )}
     </div>
   );
 });

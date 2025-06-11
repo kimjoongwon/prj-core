@@ -8,7 +8,9 @@ const mockPush = vi.fn();
 vi.mock('../../providers/App/AppProvider', () => ({
   Plate: {
     navigation: {
-      push: mockPush,
+      getNavigator: () => ({
+        push: mockPush,
+      }),
     },
   },
 }));
@@ -128,5 +130,31 @@ describe('BottomTab', () => {
     );
 
     expect(container.firstChild).toHaveClass('custom-class');
+  });
+
+  it('opens modal for child routes and navigates on child press', () => {
+    const childRoute: Route = {
+      name: 'Child',
+      pathname: '/child',
+      icon: 'Home',
+      active: false,
+      params: {},
+    };
+
+    const routesWithChildren: Route[] = [
+      {
+        ...mockRoutes[0],
+        children: [childRoute],
+      },
+      ...mockRoutes.slice(1),
+    ];
+
+    render(<BottomTab routes={routesWithChildren} />);
+
+    fireEvent.click(screen.getByText('홈'));
+    expect(screen.getByText('Child')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Child'));
+    expect(mockPush).toHaveBeenCalledWith('/child');
   });
 });
