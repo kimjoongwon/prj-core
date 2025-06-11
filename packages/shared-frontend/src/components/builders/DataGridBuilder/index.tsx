@@ -5,19 +5,14 @@ import { v4 } from 'uuid';
 import { toJS } from 'mobx';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { DataGrid, HStack, useGetTableQuery } from '@shared/frontend';
-import { DataGridBuilder as DataGridBuilderInterface } from '@shared/types';
+import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { usePageState } from '../PageBuilder';
 
-interface DataGridBuilderProps {
-  dataGridBuilder: DataGridBuilderInterface;
-}
-
 export const DataGridBuilder = observer(
-  ({ dataGridBuilder }: DataGridBuilderProps) => {
-    const table = dataGridBuilder?.table;
+  ({ table, buttons }: DataGridBuilderProps) => {
     const pageState = usePageState();
     const { data, isLoading, meta } = useGetTableQuery(table);
     const [skip, setSkip] = useQueryState('skip', parseAsInteger);
@@ -44,7 +39,7 @@ export const DataGridBuilder = observer(
       <>
         <HStack>
           <ButtonGroup size="sm">
-            {dataGridBuilder.buttons?.map(button => {
+            {buttons?.map(button => {
               return <ButtonBuilder key={v4()} {...button} />;
             })}
           </ButtonGroup>

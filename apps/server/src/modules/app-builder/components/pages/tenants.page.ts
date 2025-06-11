@@ -50,20 +50,12 @@ export class TenantsPage {
       },
     ];
 
-    const form = {
-      id: 'tenants',
-      type: 'list',
-      resourceName: 'Tenants',
-      resourceLabel: '테넌트',
-      sections,
-    };
-
     return {
       name: '테넌트',
       state: {
         selectedWorkspace: '',
       },
-      form,
+      sections,
     };
   }
 }

@@ -53,17 +53,13 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     // 선택된 대시보드 라우트의 자식들을 leftSidebar에 표시
     const selectedDashboardRouteChildren =
       Plate.navigation.getSelectedDashboardRouteChildren();
-
+    console.log('selectedDashboardRouteChildren', dashboardRoutes);
     return (
       <DashboardLayout
         header={
           <Header
             left={<Logo variants={'text'} />}
-            center={
-              <ResponsiveVisibility device="mobile">
-                <Navbar routes={dashboardRoutes} />
-              </ResponsiveVisibility>
-            }
+            center={<Navbar routes={dashboardRoutes} />}
             right={
               <div className="flex items-center gap-2">
                 <Avatar />
@@ -87,7 +83,6 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
           />
         }
       >
-        {children}
         <Outlet />
       </DashboardLayout>
     );

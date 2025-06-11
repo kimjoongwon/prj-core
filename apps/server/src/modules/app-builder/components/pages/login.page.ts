@@ -114,18 +114,10 @@ export class LoginPage {
       },
     ];
 
-    const form = {
-      id: 'login',
-      type: 'create',
-      resourceName: 'Auth',
-      resourceLabel: '로그인',
-      sections,
-    };
-
     return {
       name: '로그인',
       state: { form: { inputs: formInputs, button: { errorMessages: [] } } },
-      form,
+      sections,
     };
   }
 }

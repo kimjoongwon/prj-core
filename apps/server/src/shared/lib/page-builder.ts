@@ -44,10 +44,7 @@ export function pageBuilder<T extends object>(
         inputs: defaultObject,
       },
     },
-    form: {
-      name: '정보',
-      sections,
-    },
+    sections,
   };
 
   return page;

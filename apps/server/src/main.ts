@@ -5,10 +5,15 @@ import { AllExceptionsFilter, PrismaClientExceptionFilter } from '@shared';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
   const httpAdapterHost = app.get(HttpAdapterHost);
+
+  // Cookie parser 미들웨어 추가
+  app.use(cookieParser());
+
   app.useLogger(app.get(Logger));
   app.set('query parser', 'extended');
   app.useGlobalFilters(

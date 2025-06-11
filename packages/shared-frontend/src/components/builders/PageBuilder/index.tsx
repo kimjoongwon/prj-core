@@ -6,6 +6,7 @@ import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { v4 } from 'uuid';
 import { observable, isObservable } from 'mobx';
 import { SectionBuilder } from '../SectionBuilder';
+import { APIManager } from '@shared/api-client';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
@@ -24,7 +25,6 @@ const PageContext = createContext<PageBuilderInterface['state']>(
 const PageProvder = observer((props: PageProviderProps) => {
   const [state] = useState(() => {
     const initialState = props.state || {};
-    // state가 이미 observable이면 그대로 사용, 아니면 observable로 만듦
     return isObservable(initialState) ? initialState : observable(initialState);
   });
 
@@ -52,9 +52,9 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
 
   return (
     <PageProvder state={pageBuilder?.state}>
-      {pageBuilder?.form && (
+      {pageBuilder?.sections && (
         <div className="overflow-auto pb-[200px] scrollbar-hide">
-          {pageBuilder?.form?.sections?.map(section => {
+          {pageBuilder?.sections?.map(section => {
             return <SectionBuilder key={v4()} sectionBuilder={section} />;
           })}
         </div>

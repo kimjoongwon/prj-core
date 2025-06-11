@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardBody } from '@heroui/react';
 import { Text } from '../../Text';
-import { Breadcrumb } from '../../Breadcrumb';
 import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 
