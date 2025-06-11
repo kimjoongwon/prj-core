@@ -51,6 +51,7 @@ export * from './Section';
 export * from './Select';
 export * from './Skeleton';
 export * from './Spacer';
+export * from './SplashScreen';
 export * from './SubmitButton';
 export * from './Switch';
 export * from './Tabs';

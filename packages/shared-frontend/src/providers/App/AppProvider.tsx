@@ -10,6 +10,7 @@ import {
 } from '../../services';
 import { observer } from 'mobx-react-lite';
 import { useGetAppBuilder } from '@shared/api-client';
+import { SplashScreen } from '../../components/SplashScreen';
 
 const StoreContext = createContext<PlateService | null>(null);
 
@@ -39,7 +40,7 @@ export const AppProvider = observer((props: StoreProviderProps) => {
   }, [routeBuilders, isInitialized]);
 
   if (!isInitialized) {
-    return <></>;
+    return <SplashScreen />;
   }
 
   return (
