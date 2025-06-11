@@ -85,12 +85,21 @@ export class LoginPage {
             type: 'VStack' as const,
             elements: [
               {
-                name: 'FormButtonBuilder',
+                name: 'ButtonBuilder',
                 props: {
-                  apiKey: 'loginButton',
+                  buttonType: 'form',
+                  mutation: {
+                    name: 'getToken',
+                    path: 'form.inputs',
+                  },
                   children: '로그인',
                   color: 'primary',
                   fullWidth: true,
+                  navigator: {
+                    route: {
+                      name: '테넌츠',
+                    },
+                  },
                 } satisfies ButtonBuilder,
               },
               {

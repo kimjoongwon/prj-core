@@ -1,7 +1,7 @@
 'use client';
 
 import { Button as BaseButton } from '@shared/frontend';
-import { CellButtonBuilder as ButtonBuilderProps } from '@shared/types';
+import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { cloneDeep } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
@@ -26,20 +26,20 @@ export const CellButtonBuilder = observer((props: ButtonProps) => {
     };
 
     try {
-      if (button.apiKey) {
+      if (button.mutation?.name) {
         // APIManager에서 함수 가져오기
         const apiFunction =
-          APIManager[button.apiKey as keyof typeof APIManager];
+          APIManager[button.mutation.name as keyof typeof APIManager];
 
         if (!apiFunction) {
           console.error(
-            `API function with key "${button.apiKey}" not found in APIManager`,
+            `API function with key "${button.mutation.name}" not found in APIManager`,
           );
 
           // 에러 토스트 표시
           addToast({
             title: errorToast.title,
-            description: `API 함수를 찾을 수 없습니다: ${button.apiKey}`,
+            description: `API 함수를 찾을 수 없습니다: ${button.mutation.name}`,
             color: 'danger',
           });
 

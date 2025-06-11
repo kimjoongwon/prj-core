@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { CellBuilderProps } from '@shared/types';
-import { CellButtonBuilder } from '../CellButtonBuilder';
+import { ButtonBuilder } from '../ButtonBuilder';
 import dayjs from 'dayjs';
 
 export const CellBuilder = ({
@@ -26,7 +26,7 @@ export const CellBuilder = ({
     return (
       <div className="flex space-x-1">
         {buttons.map(button => {
-          return <CellButtonBuilder key={v4()} {...button} />;
+          return <ButtonBuilder key={v4()} {...button} buttonType="cell" />;
         })}
       </div>
     );

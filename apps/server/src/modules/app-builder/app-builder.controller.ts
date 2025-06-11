@@ -70,20 +70,9 @@ export class AppBuilderController {
     })
     res: Response,
   ) {
-    // 선택된 워크스페이스 ID를 쿠키에 저장
     res.cookie('workspaceId', selectWorkspaceDto.selectedWorkspace, {
       httpOnly: true,
     });
-
-    const buttonResponse: ButtonResponse = {
-      routeName: '대시보드',
-      toast: {
-        color: 'success',
-        title: '워크스페이스 선택',
-        description: '워크스페이스가 성공적으로 선택되었습니다.',
-      },
-    };
-
-    return new ResponseEntity(200, '성공', buttonResponse);
+    return new ResponseEntity(200, '성공');
   }
 }

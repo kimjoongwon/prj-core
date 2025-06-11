@@ -85,7 +85,7 @@ export type ElementProps<T extends ElementName> = T extends 'Button'
   ? TableProps
   : T extends 'ButtonBuilder'
   ? ButtonProps & {
-      apiKey?: string;
+      mutation?: Mutation;
       color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
     }
   : T extends 'Spacer'
@@ -104,30 +104,17 @@ export interface ButtonResponse {
   };
 }
 
-export interface FormBuilder {
-  name?: string;
-  validations?: Validations;
-  isInValid?: boolean;
-  sections?: SectionBuilder[];
-  button?: ButtonBuilder;
-}
-
 export interface ButtonBuilder extends ButtonProps {
-  apiKey?: string;
+  buttonType?: 'form' | 'cell' | 'general';
+  mutation?: Mutation;
   name?: string;
-  path?: string;
   validation?: ButtonValidation;
-}
-
-export interface CellButtonBuilder {
   icon?: string;
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-  name: string;
-  apiKey?: string;
   toast?: {
     title: string;
     description: string;
   };
+  navigator?: Navigator;
 }
 
 export interface AlertBuilder {
@@ -136,9 +123,10 @@ export interface AlertBuilder {
 
 export interface Navigator {
   type?: 'push' | 'replace' | 'back';
-  fullPath?: string;
-  relativePath?: string;
-  idName?: string;
+  route?: {
+    name: RouteNames;
+    params?: object;
+  };
 }
 
 export interface SuccessOrFailure {
@@ -192,9 +180,8 @@ export interface Query {
 export interface Mutation {
   name: string;
   invalidationKey?: string;
-  id?: string;
   params?: any;
-  payloadPath?: string;
+  path?: string;
 }
 
 export type Key = string | number;
@@ -259,7 +246,7 @@ export interface ColumnBuilder {
 }
 export interface CellBuilder {
   type?: 'date' | 'time' | 'dateTime';
-  buttons?: CellButtonBuilder[];
+  buttons?: ButtonBuilder[];
   expandable?: boolean;
   link?: string;
 }

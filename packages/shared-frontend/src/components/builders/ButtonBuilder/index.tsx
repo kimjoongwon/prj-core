@@ -5,18 +5,26 @@ import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { addToast } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
+import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
 
 export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
-  const { apiKey, validation, path } = props;
+  const { mutation, validation, buttonType, navigator } = props;
   const state = usePageState();
-  const { handleApiCall } = useButtonLogic({ apiKey, state });
+  const { handleApiCall } = useButtonLogic({ mutation, navigator, state });
+
+  // FormButtonBuilder의 에러 처리 로직 (form 타입일 때만)
+  const hasFormErrors =
+    buttonType === 'form' &&
+    state?.form?.button?.errorMessages &&
+    Object.keys(state.form.button.errorMessages).length > 0;
+
   // 버튼 validation 체크 함수
   const validateButton = (): { isValid: boolean; errorMessage?: string } => {
     if (!validation) return { isValid: true };
 
     const { required, patterns } = validation;
-    const value = get(state, path);
+    const value = get(state, mutation?.path);
     // 필수 여부 검증
     if (required?.value && (!value || value === '')) {
       return { isValid: false, errorMessage: required.message };
@@ -42,8 +50,12 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
   };
 
   const validationResult = validateButton();
+  const isButtonDisabled = !validationResult.isValid || hasFormErrors;
 
   const onPress = async () => {
+    // form 에러가 있으면 return (form 타입일 때만)
+    if (hasFormErrors) return;
+
     // validation 체크
     if (!validationResult.isValid) {
       addToast({
@@ -57,20 +69,40 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
     await handleApiCall();
   };
 
+  // 아이콘 처리 로직 (cell 타입일 때만)
+  let buttonChildren: any = props.children || props.name;
+
+  if (props.buttonType === 'cell' && props.icon) {
+    switch (props.icon) {
+      case 'detail':
+        buttonChildren = <List />;
+        break;
+      case 'add':
+        buttonChildren = <Plus />;
+        break;
+      case 'edit':
+        buttonChildren = <Edit />;
+        break;
+      case 'delete':
+        buttonChildren = <Delete />;
+        break;
+      default:
+        buttonChildren = props.name;
+    }
+  }
+
   return (
     <div className="flex flex-col gap-1">
       <BaseButton
         {...props}
         onPress={onPress}
-        isDisabled={!validationResult.isValid}
-        color={!validationResult.isValid ? 'danger' : props.color}
+        isDisabled={isButtonDisabled}
+        color={isButtonDisabled ? 'danger' : props.color}
       >
-        {props.children}
+        {buttonChildren}
       </BaseButton>
       {!validationResult.isValid && validationResult.errorMessage && (
-        <Text variant="error">
-          {validationResult.errorMessage}
-        </Text>
+        <Text variant="error">{validationResult.errorMessage}</Text>
       )}
     </div>
   );

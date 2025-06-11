@@ -28,17 +28,16 @@ export class TenantsPage {
                   title: '워크스페이스 선택',
                   options: workspaceOptions,
                   selectionMode: 'single',
-                  path: 'form.inputs.selectedWorkspace',
+                  path: 'params.selectedWorkspace',
                 } as ListboxProps<any>,
               },
               {
                 name: 'ButtonBuilder',
                 props: {
-                  apiKey: 'selectWorkspace',
+                  mutation: { name: 'selectWorkspace', path: 'selectedWorkspace' },
                   color: 'primary',
                   size: 'md',
                   children: '선택',
-                  path: 'form.inputs.selectedWorkspace',
                   validation: {
                     required: { value: true, message: '테넌트를 추가해주세요.' },
                   },

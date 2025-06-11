@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ColumnBuilder } from '@shared/types';
+import { ColumnBuilder, ButtonBuilder } from '@shared/types';
 import { upperFirst } from 'lodash';
 import Pluaralize from 'pluralize';
 
@@ -8,13 +8,11 @@ export type ColumnName = 'name' | 'label';
 
 @Injectable()
 export class ColumnBuilderService {
-  private resourceName: string;
   public build(
     resourceName: string,
     accessorKeys: string[],
     cellActionNames: CellActionName[],
   ): ColumnBuilder[] {
-    this.resourceName = resourceName;
     const columns: ColumnBuilder[] = accessorKeys.map((accessorKey) => {
       return this.createColumn(accessorKey);
     });
@@ -54,7 +52,7 @@ export class ColumnBuilderService {
     return {
       id: 'action',
       header: { name: '액션' },
-      cell: { buttons: [] },
+      cell: { buttons: this.getCellActionNames(cellActionNames) },
     };
   }
 
@@ -67,70 +65,72 @@ export class ColumnBuilderService {
       },
     };
   }
+
   private createLabelColumn(): ColumnBuilder {
     return {
       accessorKey: 'label',
       header: { name: '라벨' },
     };
   }
-  // private getCellActionNames(cellActionNames: CellActionName[]): ButtonBuilder[] {
-  //   return cellActionNames
-  //     .map((buttonType) => this.createButton(buttonType))
-  //     .filter(Boolean) as ButtonBuilder[];
-  // }
 
-  // private createButton(buttonType: CellActionName): ButtonBuilder | null {
-  //   const buttonCreators: Record<CellActionName, () => ButtonBuilder> = {
-  //     modify: this.getModifyButton.bind(this),
-  //     detail: this.getDetailButton.bind(this),
-  //     remove: this.getRemoveButton.bind(this),
-  //     create: this.getCreateButton.bind(this),
-  //   };
+  private getCellActionNames(cellActionNames: CellActionName[]): ButtonBuilder[] {
+    return cellActionNames
+      .map((buttonType) => this.createButton(buttonType))
+      .filter(Boolean) as ButtonBuilder[];
+  }
 
-  //   return buttonCreators[buttonType]?.();
-  // }
+  private createButton(buttonType: CellActionName): ButtonBuilder | null {
+    const buttonCreators: Record<CellActionName, () => ButtonBuilder> = {
+      modify: this.getModifyButton.bind(this),
+      detail: this.getDetailButton.bind(this),
+      remove: this.getRemoveButton.bind(this),
+      create: this.getCreateButton.bind(this),
+    };
 
-  // private getModifyButton(): ButtonBuilder {
-  //   return {
-  //     color: 'secondary',
-  //     name: '수정',
-  //     // navigator: {
-  //     //   type: 'push',
-  //     //   pathname: ':rowId/modify',
-  //     // },
-  //   };
-  // }
+    return buttonCreators[buttonType]?.();
+  }
 
-  // private getDetailButton(): ButtonBuilder {
-  //   return {
-  //     color: 'primary',
-  //     name: '상세',
-  //     // navigator: {
-  //     //   type: 'push',
-  //     //   pathname: ':rowId/detail',
-  //     // },
-  //   };
-  // }
+  private getModifyButton(): ButtonBuilder {
+    return {
+      color: 'secondary',
+      name: '수정',
+      // navigator: {
+      //   type: 'push',
+      //   pathname: ':rowId/modify',
+      // },
+    };
+  }
 
-  // private getRemoveButton(): ButtonBuilder {
-  //   return {
-  //     color: 'danger',
-  //     name: '삭제',
-  //     // mutation: {
-  //     //   name: `delete${upperFirst(this.resourceName)}`,
-  //     //   invalidationKey: `/api/v1/${Pluaralize(this.resourceName || '')}`,
-  //     // },
-  //   };
-  // }
+  private getDetailButton(): ButtonBuilder {
+    return {
+      color: 'primary',
+      name: '상세',
+      // navigator: {
+      //   type: 'push',
+      //   pathname: ':rowId/detail',
+      // },
+    };
+  }
 
-  // private getCreateButton(): ButtonBuilder {
-  //   return {
-  //     color: 'success',
-  //     name: '추가',
-  //     // navigator: {
-  //     //   type: 'push',
-  //     //   pathname: ':rowId/create',
-  //     // },
-  //   };
-  // }
+  private getRemoveButton(): ButtonBuilder {
+    return {
+      color: 'danger',
+      name: '삭제',
+      // mutation: {
+      //   name: `delete${upperFirst(this.resourceName)}`,
+      //   invalidationKey: `/api/v1/${Pluaralize(this.resourceName || '')}`,
+      // },
+    };
+  }
+
+  private getCreateButton(): ButtonBuilder {
+    return {
+      color: 'success',
+      name: '추가',
+      // navigator: {
+      //   type: 'push',
+      //   pathname: ':rowId/create',
+      // },
+    };
+  }
 }
