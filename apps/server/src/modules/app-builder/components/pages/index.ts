@@ -5,7 +5,16 @@ import { LoginPage } from './login.page';
 import { GroundsPage } from './grounds.page';
 import { TenantsPage } from './tenants.page';
 import { DashboardPage } from './dashboard.page';
-const modules = [CategoriesPage, GroupsPage, LoginPage, GroundsPage, TenantsPage, DashboardPage];
+import { UsersPage } from './users.page';
+const modules = [
+  CategoriesPage,
+  GroupsPage,
+  LoginPage,
+  GroundsPage,
+  TenantsPage,
+  DashboardPage,
+  UsersPage,
+];
 @Global()
 @Module({
   providers: modules,

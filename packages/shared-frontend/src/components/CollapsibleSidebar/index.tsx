@@ -25,8 +25,9 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
   }));
 
   const handleRouteClick = (route: Route) => {
-    if (route.pathname) {
-      Plate.navigation.getNavigator().push(route.pathname);
+    if (route.fullPath) {
+      console.log(`Navigating to: ${route.fullPath}`);
+      Plate.navigation.getNavigator().push(route.fullPath);
     }
   }; // selectedDashboardRouteChildren의 부모 메뉴 정보 가져오기
   const parentMenuInfo = useMemo(() => {
@@ -37,7 +38,7 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
 
     return {
       name: selectedDashboardRoute.name,
-      pathname: selectedDashboardRoute.pathname,
+      pathname: selectedDashboardRoute.fullPath,
       icon: selectedDashboardRoute.icon,
     };
   }, [Plate.navigation.selectedDashboardRoute]);
@@ -101,7 +102,7 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
             {routes.map((route, index) => {
               const buttonContent = sidebarState.isCollapsed
                 ? null
-                : route.name || route.pathname;
+                : route.name || route.fullPath;
 
               return (
                 <Button
@@ -124,7 +125,7 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
                   }
                   title={
                     sidebarState.isCollapsed
-                      ? route.name || route.pathname
+                      ? route.name || route.fullPath
                       : undefined
                   }
                 >

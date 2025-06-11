@@ -136,7 +136,8 @@ export interface AlertBuilder {
 
 export interface Navigator {
   type?: 'push' | 'replace' | 'back';
-  pathname?: string;
+  fullPath?: string;
+  relativePath?: string;
   idName?: string;
 }
 
@@ -173,7 +174,7 @@ export interface LayoutBuilder {
 
 export interface RouteBuilder {
   name?: string;
-  pathname?: string;
+  relativePath?: string;
   layout?: LayoutBuilder;
   page?: PageBuilder;
   params?: object;
@@ -296,9 +297,10 @@ export interface DepotUploaderOptions {
 
 export interface Route {
   name: string;
-  pathname: string;
+  fullPath: string;
+  relativePath: string;
   active?: boolean;
-  params: any;
+  params?: any;
   icon?: string;
   visible?: boolean;
   onClick?: () => void;

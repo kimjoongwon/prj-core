@@ -8,12 +8,20 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 
 /**
  * NavigationService - 통합된 네비게이션 서비스
- * 라우트 관리, 네비게이션, 활성 상태 추적 등 모든 라우팅 관련 기능을 통합
+ *
+ * Route 객체를 원천으로 사용하여 라우트 관리, 네비게이션, 활성 상태 추적을 처리합니다.
+ * fullPath(절대경로)와 relativePath(상대경로)를 명확히 구분하여 경로 혼동을 방지합니다.
+ *
+ * 주요 특징:
+ * - RouteBuilder에서 Route로 변환된 객체를 단일 데이터 소스로 사용
+ * - flatRoutes Map을 통한 효율적인 라우트 검색
+ * - 단순화된 경로 매칭 로직
+ * - fullPath와 relativePath의 명확한 구분
  */
 export class NavigationService {
   private _routes: Route[] = [];
   private _routeBuilders: RouteBuilder[] = [];
-  private flatRoutes: Map<string, RouteBuilder> = new Map();
+  private flatRoutes: Map<string, Route> = new Map();
   private navigator: NavigatorService;
 
   // 현재 경로 추적을 위한 observable 프로퍼티들
@@ -21,20 +29,20 @@ export class NavigationService {
   private _currentRelativePath: string = '';
 
   // 선택된 대시보드 라우트 추적
-  private _selectedDashboardRoute: RouteBuilder | null = null;
+  private _selectedDashboardRoute: Route | null = null;
 
   constructor(routeBuilders: RouteBuilder[] = []) {
     this.navigator = new NavigatorService();
     this.setRoutes(routeBuilders);
-    if (typeof window !== 'undefined' && window.location) {
-      this.activateRoute(window.location.pathname);
-      // 초기화 시에도 대시보드 라우트 선택 상태 설정
-      this.updateSelectedDashboardRoute(window.location.pathname);
+    this.navigator.setActivateRouteCallback(this.activateRoute.bind(this));
+
+    // 초기 경로 설정 (window.location이 있는 경우)
+    if (typeof window !== 'undefined' && window.location?.pathname) {
+      this.updateCurrentPaths(window.location.pathname);
     }
+
     makeAutoObservable(this);
   }
-
-  // ===== 현재 경로 추적 관리 =====
 
   /**
    * 현재 경로들을 업데이트 (절대경로와 상대경로)
@@ -49,7 +57,6 @@ export class NavigationService {
    */
   private extractRelativePath(fullPath: string): string {
     if (!fullPath) return '';
-
     const segments = fullPath.split('/').filter(s => s.length > 0);
     return segments.length > 0 ? segments[segments.length - 1] : '';
   }
@@ -71,35 +78,16 @@ export class NavigationService {
   /**
    * 선택된 대시보드 라우트 반환
    */
-  get selectedDashboardRoute(): RouteBuilder | null {
+  get selectedDashboardRoute(): Route | null {
     return this._selectedDashboardRoute;
   }
 
   /**
    * 대시보드 라우트 선택 설정
    */
-  setSelectedDashboardRoute(route: RouteBuilder | null): void {
+  setSelectedDashboardRoute(route: Route | null): void {
     this._selectedDashboardRoute = route;
   }
-
-  /**
-   * 선택된 대시보드 라우트의 자식 라우트들 반환 (Route 타입)
-   */
-  getSelectedDashboardRouteChildren(): Route[] {
-    if (!this._selectedDashboardRoute) return [];
-    const routeBuilders = this.createChildRoutes(this._selectedDashboardRoute);
-    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
-  }
-
-  /**
-   * 현재 경로 정보를 수동으로 업데이트
-   */
-  setCurrentPath(fullPath: string): void {
-    this.activateRoute(fullPath);
-    this.updateSelectedDashboardRoute(fullPath);
-  }
-
-  // ===== 네비게이션 함수 관리 =====
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
@@ -118,73 +106,76 @@ export class NavigationService {
   // ===== 라우트 데이터 관리 =====
 
   /**
-   * 라우트 빌더 설정 및 초기화
+   * 라우트 빌더 설정 및 초기화 - Route 객체 중심의 처리
    */
   setRoutes(routeBuilders: RouteBuilder[]): void {
     this._routeBuilders = routeBuilders;
-    this.generateRoutesFromBuilders();
-    this.flattenRoutes(routeBuilders);
-    this.navigator.setRouteNameResolver(this.getPathByName.bind(this));
 
-    // 디버깅: flatRoutes 출력
-    console.log('🔍 flatRoutes after setRoutes:');
-    Array.from(this.flatRoutes.entries()).forEach(([name, route]) => {
-      console.log(
-        `  ${name} -> ${route.pathname} (children: ${
-          route.children?.length || 0
-        })`,
-      );
-    });
+    // 1. RouteBuilder → Route 변환
+    this.generateRoutesFromBuilders();
+
+    // 2. Route 트리를 평탄화하여 검색용 맵 생성
+    this.flattenRoutes(this._routes);
+
+    // 3. Navigator에 라우트 이름 검색 함수 설정
+    this.navigator.setRouteNameResolver(this.getFullPathByName.bind(this));
   }
 
   /**
-   * 라우트 빌더에서 라우트 생성
+   * 라우트 빌더에서 라우트 생성 - Route 객체를 원천으로 사용
    */
-  generateRoutesFromBuilders(): void {
+  private generateRoutesFromBuilders(): void {
     const convertRouteBuilderToRoute = (
       routeBuilder: RouteBuilder,
       parentPath: string = '',
     ): Route => {
-      const fullPath = this.combinePaths(
-        parentPath,
-        routeBuilder?.pathname || '',
-      );
+      // RouteBuilder가 pathname 속성을 사용하는 경우 relativePath로 처리 (테스트 호환성)
+      const relativePath =
+        routeBuilder.relativePath || (routeBuilder as any).pathname || '';
 
-      return {
-        name: routeBuilder?.name || '',
-        pathname: fullPath,
-        params: routeBuilder?.params,
+      // fullPath: 절대 경로 (부모 경로와 결합)
+      const fullPath = this.combinePaths(parentPath, relativePath);
+
+      const route: Route = {
+        name: routeBuilder.name || '',
+        fullPath: fullPath,
+        relativePath: relativePath,
+        params: routeBuilder.params,
         active: false,
+        icon: routeBuilder.icon,
         children:
-          routeBuilder?.children?.map(child =>
+          routeBuilder.children?.map(child =>
             convertRouteBuilderToRoute(child, fullPath),
           ) || [],
       };
+
+      return route;
     };
 
-    this._routes =
-      this.routeBuilders?.map(builder => convertRouteBuilderToRoute(builder)) ||
-      [];
+    this._routes = this._routeBuilders.map(builder =>
+      convertRouteBuilderToRoute(builder),
+    );
   }
 
   /**
    * 라우트 트리를 평탄화하여 name을 키로 사용하는 맵 생성
+   * Route 객체를 직접 저장하여 변환 과정 불필요
    */
-  private flattenRoutes(routes: RouteBuilder[], parentPath: string = ''): void {
-    routes.forEach(route => {
-      const fullPath = this.combinePaths(parentPath, route.pathname || '');
+  private flattenRoutes(routes: Route[]): void {
+    this.flatRoutes.clear(); // 기존 데이터 정리
 
+    const addRouteToMap = (route: Route) => {
       if (route.name) {
-        this.flatRoutes.set(route.name, {
-          ...route,
-          pathname: fullPath,
-        });
+        this.flatRoutes.set(route.name, route);
       }
 
-      if (route.children && route.children.length > 0) {
-        this.flattenRoutes(route.children, fullPath);
+      // 자식 라우트들도 재귀적으로 처리
+      if (route.children?.length > 0) {
+        route.children.forEach(addRouteToMap);
       }
-    });
+    };
+
+    routes.forEach(addRouteToMap);
   }
 
   // ===== 라우트 검색 및 조회 =====
@@ -192,97 +183,56 @@ export class NavigationService {
   /**
    * 이름으로 라우트 검색
    */
-  getRouteByName(name: string): RouteBuilder | undefined {
+  getRouteByName(name: string): Route | undefined {
     return this.flatRoutes.get(name);
   }
 
-  // ===== 헬퍼 함수들 (중복 로직 제거) =====
-
   /**
-   * 경로를 정규화 (슬래시 제거 및 통일)
+   * 라우트 이름으로 fullPath 가져오기
    */
-  private normalizePath(pathname: string): string {
-    if (!pathname) return '';
-    return pathname.startsWith('/') ? pathname.slice(1) : pathname;
+  getFullPathByName(name: string): string | undefined {
+    const route = this.getRouteByName(name);
+    return route?.fullPath;
   }
 
   /**
-   * 라우트 경로 매칭 (통합된 매칭 로직)
+   * fullPath로 라우트 검색 - 단순화된 매칭 로직
    */
-  private findRouteByPath(pathname: string): RouteBuilder | undefined {
-    if (!pathname) return undefined;
+  private findRouteByFullPath(fullPath: string): Route | undefined {
+    if (!fullPath) return undefined;
 
-    const normalizedPath = this.normalizePath(pathname);
+    const normalizedPath = this.normalizePath(fullPath);
 
-    return Array.from(this.flatRoutes.values()).find(route => {
-      if (!route.pathname) return false;
+    // 정확한 매칭 우선
+    let exactMatch = Array.from(this.flatRoutes.values()).find(route => {
+      const routeNormalizedPath = this.normalizePath(route.fullPath);
+      return routeNormalizedPath === normalizedPath;
+    });
 
-      const routeNormalizedPath = this.normalizePath(route.pathname);
+    if (exactMatch) return exactMatch;
 
+    // 부분 매칭 (더 구체적인 경로부터)
+    const routes = Array.from(this.flatRoutes.values()).sort(
+      (a, b) => b.fullPath.length - a.fullPath.length,
+    );
+
+    return routes.find(route => {
+      const routeNormalizedPath = this.normalizePath(route.fullPath);
       return (
-        // 정확한 매칭
-        routeNormalizedPath === normalizedPath ||
-        route.pathname === pathname ||
-        // 경로 끝부분 매칭
-        route.pathname?.endsWith(`/${normalizedPath}`) ||
-        routeNormalizedPath?.endsWith(`/${normalizedPath}`) ||
-        // 세그먼트 매칭
-        this.matchesPathSegment(route.pathname, pathname)
+        normalizedPath.startsWith(routeNormalizedPath + '/') ||
+        routeNormalizedPath.startsWith(normalizedPath + '/')
       );
     });
   }
 
   /**
-   * 경로 세그먼트 매칭 헬퍼 함수
-   */
-  private matchesPathSegment(routePath: string, searchPath: string): boolean {
-    if (!routePath || !searchPath) return false;
-
-    if (searchPath.startsWith('/')) {
-      const searchSegments = searchPath.split('/').filter(s => s.length > 0);
-      const routeSegments = routePath.split('/').filter(s => s.length > 0);
-
-      if (searchSegments.length > 0 && routeSegments.length > 0) {
-        return (
-          routeSegments[routeSegments.length - 1] ===
-          searchSegments[searchSegments.length - 1]
-        );
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * 자식 라우트 생성 헬퍼 함수 (중복 제거)
-   */
-  private createChildRoutes(parentRoute: RouteBuilder): RouteBuilder[] {
-    if (!parentRoute?.children) return [];
-
-    return parentRoute.children.map(child => ({
-      ...child,
-      pathname: this.combinePaths(
-        parentRoute.pathname || '',
-        child.pathname || '',
-      ),
-    }));
-  }
-
-  /**
-   * 경로로 직계 자식 라우트들 가져오기 (RouteBuilder 타입 - 내부용)
-   */
-  private getDirectChildrenByPathInternal(pathname: string): RouteBuilder[] {
-    const targetRoute = this.findRouteByPath(pathname);
-    return targetRoute ? this.createChildRoutes(targetRoute) : [];
-  }
-
-  /**
    * 경로로 직계 자식 라우트들 가져오기 (Route 타입)
-   * 절대경로(/admin/dashboard) 또는 상대경로(dashboard) 모두 지원
    */
-  getDirectChildrenByPath(pathname: string): Route[] {
-    const routeBuilders = this.getDirectChildrenByPathInternal(pathname);
-    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
+  getDirectChildrenByPath(fullPath: string): Route[] {
+    const targetRoute = this.findRouteByFullPath(fullPath);
+    if (!targetRoute?.children) return [];
+
+    return targetRoute.children;
   }
 
   /**
@@ -290,94 +240,99 @@ export class NavigationService {
    */
   getDirectChildrenByName(routeName: string): Route[] {
     const targetRoute = this.getRouteByName(routeName);
-    if (!targetRoute) return [];
-    const routeBuilders = this.createChildRoutes(targetRoute);
-    return this.convertRouteBuilderArrayToRoutes(routeBuilders);
+    if (!targetRoute?.children) return [];
+
+    return targetRoute.children;
   }
 
   /**
-   * 라우트 이름으로 경로 가져오기
+   * 라우트 이름으로 경로 가져오기 (테스트 호환성을 위한 별칭)
    */
   getPathByName(name: string): string | undefined {
-    const route = this.getRouteByName(name);
-    return route?.pathname;
+    return this.getFullPathByName(name);
   }
 
   /**
-   * 현재 경로 기준으로 브레드크럼의 마지막 라우트의 직계 자식들 반환 (Route 타입)
+   * 현재 경로 설정 (테스트 및 수동 경로 설정용)
    */
-  getDirectChildrenFromBreadcrumb(currentPathname: string): Route[] {
-    const breadcrumbs = this.getBreadcrumbPath(currentPathname);
+  setCurrentPath(fullPath: string): void {
+    this.updateCurrentPaths(fullPath);
+    this.activateRoute(fullPath);
+  }
 
-    if (breadcrumbs.length === 0) {
-      return [];
+  /**
+   * 스마트 자식 라우트 가져오기 - 경로나 이름으로 자동 판단
+   */
+  getSmartChildRoutes(pathOrName: string): Route[] {
+    if (!pathOrName) return [];
+
+    // 먼저 경로로 시도
+    let children = this.getDirectChildrenByPath(pathOrName);
+
+    // 경로로 찾지 못했으면 이름으로 시도
+    if (children.length === 0) {
+      children = this.getDirectChildrenByName(pathOrName);
     }
 
-    // 현재 경로의 부모 라우트를 찾는다.
-    // 경로 깊이가 2 이상이라면 마지막에서 두 번째 요소를, 그 외에는 마지막 요소를 사용한다.
-    const parentRoute =
-      breadcrumbs.length > 2
-        ? breadcrumbs[breadcrumbs.length - 2]
-        : breadcrumbs[breadcrumbs.length - 1];
-
-    if (parentRoute && parentRoute.children) {
-      return parentRoute.children.map(child => ({
-        name: child.name,
-        pathname: this.combinePaths(
-          parentRoute.pathname || '',
-          child.pathname || '',
-        ),
-        active: child.active || false,
-        children: child.children,
-        params: child.params,
-        icon: child.icon,
-      })) as Route[];
-    }
-
-    return [];
+    return children;
   }
 
   /**
-   * @deprecated getCurrentRoutes 대신 getDirectChildrenFromBreadcrumb 사용
+   * 현재 경로에서 자식 라우트 가져오기
    */
-  getCurrentRoutes(currentPathname: string): Route[] {
-    console.warn(
-      'getCurrentRoutes는 deprecated입니다. getDirectChildrenFromBreadcrumb을 사용하세요.',
-    );
-    return this.getDirectChildrenFromBreadcrumb(currentPathname);
+  getChildRoutesFromCurrentPath(): Route[] {
+    return this.getSmartChildRoutes(this.currentFullPath);
   }
 
   /**
-   * 조건부 네비게이션에 사용할 경로 계산
+   * 선택된 대시보드 라우트의 자식들 가져오기
    */
-  getConditionalPath(
-    condition: boolean,
-    routeNameIfTrue: string,
-    routeNameIfFalse: string,
-  ): string | undefined {
-    return condition
-      ? this.getPathByName(routeNameIfTrue)
-      : this.getPathByName(routeNameIfFalse);
+  getSelectedDashboardRouteChildren(): Route[] {
+    if (!this._selectedDashboardRoute) return [];
+
+    return this._selectedDashboardRoute.children || [];
   }
 
   // ===== 활성 상태 관리 =====
 
   /**
    * 현재 경로에 따라 라우트 활성 상태 업데이트
+   * Route 객체 중심의 처리로 단순화
    */
-  activateRoute(currentPathname: string): void {
-    // 현재 경로 업데이트
-    this.updateCurrentPaths(currentPathname);
+  activateRoute(currentFullPath: string): void {
+    this.updateCurrentPaths(currentFullPath);
 
-    const changeRouteActiveState = (route: Route) => {
-      // 더 정확한 활성화 매칭 로직
-      route.active =
-        currentPathname === route.pathname ||
-        currentPathname.startsWith(route.pathname + '/');
-      route.children?.forEach(changeRouteActiveState);
+    // 모든 라우트의 활성 상태 업데이트
+    const updateActiveState = (route: Route) => {
+      route.active = this.isRouteActive(currentFullPath, route.fullPath);
+      route.children?.forEach(updateActiveState);
     };
 
-    this.routes?.forEach(changeRouteActiveState);
+    this._routes.forEach(updateActiveState);
+
+    // 대시보드 라우트 선택 상태도 함께 업데이트
+    this.updateSelectedDashboardRoute(currentFullPath);
+  }
+
+  /**
+   * 라우트가 현재 경로에 대해 활성 상태인지 확인 - 단순화된 로직
+   */
+  private isRouteActive(
+    currentFullPath: string,
+    routeFullPath: string,
+  ): boolean {
+    if (!currentFullPath || !routeFullPath) return false;
+
+    const normalizedCurrent = this.normalizePath(currentFullPath);
+    const normalizedRoute = this.normalizePath(routeFullPath);
+
+    // 정확한 매칭
+    if (normalizedCurrent === normalizedRoute) {
+      return true;
+    }
+
+    // 하위 경로 매칭 (현재 경로가 라우트 경로의 하위인 경우)
+    return normalizedCurrent.startsWith(normalizedRoute + '/');
   }
 
   /**
@@ -388,14 +343,7 @@ export class NavigationService {
   }
 
   /**
-   * Route 객체 저장
-   */
-  private set routes(routes: Route[]) {
-    this._routes = routes;
-  }
-
-  /**
-   * 현재 활성화된 Route들 반환 (MobX observable)
+   * 현재 활성화된 Route들 반환
    */
   getActiveRoutes(): Route[] {
     const activeRoutes: Route[] = [];
@@ -416,28 +364,22 @@ export class NavigationService {
   }
 
   /**
-   * 이름으로 활성화된 Route 검색
-   */
-  getActiveRouteByName(name: string): Route | undefined {
-    return this.getActiveRoutes().find(route => route.name === name);
-  }
-
-  /**
    * 네비게이션 시 대시보드 라우트 선택 상태 업데이트
+   * Route 객체를 직접 사용하여 단순화
    */
-  private updateSelectedDashboardRoute(pathname: string): void {
-    // 대시보드 라우트들 가져오기 (내부 RouteBuilder 메서드 사용)
-    const dashboardRoutes = this.getDirectChildrenByPathInternal('dashboard');
+  private updateSelectedDashboardRoute(fullPath: string): void {
+    const dashboardRoute = this.getRouteByName('대시보드');
+    if (!dashboardRoute?.children?.length) return;
 
-    // 현재 경로가 대시보드 라우트 중 하나와 매칭되는지 확인
-    const matchingDashboardRoute = dashboardRoutes.find(route => {
-      if (!route.pathname) return false;
-      return pathname.startsWith(route.pathname);
+    const normalizedPath = this.normalizePath(fullPath);
+
+    // 현재 경로와 가장 잘 매치되는 대시보드 자식 라우트 찾기
+    const matchingRoute = dashboardRoute.children.find(child => {
+      const normalizedChildPath = this.normalizePath(child.fullPath);
+      return normalizedPath.startsWith(normalizedChildPath);
     });
 
-    if (matchingDashboardRoute) {
-      this.setSelectedDashboardRoute(matchingDashboardRoute);
-    }
+    this.setSelectedDashboardRoute(matchingRoute || null);
   }
 
   // ===== 유틸리티 메서드 =====
@@ -446,56 +388,21 @@ export class NavigationService {
    * 경로 결합 헬퍼 함수
    */
   private combinePaths(parent: string, child: string): string {
-    if (!parent) return child;
+    if (!parent) return child.startsWith('/') ? child : `/${child}`;
     if (!child) return parent;
 
-    // 중복된 '/' 제거
-    return `${parent.endsWith('/') ? parent.slice(0, -1) : parent}${
-      child.startsWith('/') ? child : `/${child}`
-    }`;
+    const cleanParent = parent.endsWith('/') ? parent.slice(0, -1) : parent;
+    const cleanChild = child.startsWith('/') ? child : `/${child}`;
+
+    return `${cleanParent}${cleanChild}`;
   }
 
   /**
-   * 브레드크럼 경로 생성
+   * 경로를 정규화 (슬래시 제거 및 통일)
    */
-  getBreadcrumbPath(currentPathname: string): Route[] {
-    const breadcrumbs: Route[] = [];
-
-    const findPath = (routes: Route[], targetPath: string): boolean => {
-      for (const route of routes) {
-        // 현재 라우트의 경로가 타겟 경로의 시작 부분과 일치하는지 확인
-        if (
-          targetPath === route.pathname ||
-          targetPath.startsWith(route.pathname + '/')
-        ) {
-          breadcrumbs.push(route);
-
-          // 정확히 일치하면 완료
-          if (targetPath === route.pathname) {
-            return true;
-          }
-
-          // 자식 라우트에서 계속 찾기
-          if (route.children && findPath(route.children, targetPath)) {
-            return true;
-          }
-
-          // 자식에서 찾지 못했으면 현재 라우트를 제거
-          breadcrumbs.pop();
-        }
-      }
-      return false;
-    };
-
-    findPath(this._routes, currentPathname);
-    return breadcrumbs;
-  }
-
-  /**
-   * 디버깅용 플랫 라우트 맵 출력
-   */
-  debugFlatRoutes(): Map<string, RouteBuilder> {
-    return this.flatRoutes;
+  private normalizePath(path: string): string {
+    if (!path) return '';
+    return path.startsWith('/') ? path.slice(1) : path;
   }
 
   /**
@@ -503,303 +410,5 @@ export class NavigationService {
    */
   get routeBuilders(): RouteBuilder[] {
     return this._routeBuilders;
-  }
-
-  /**
-   * 현재 경로의 자식 Route들을 가져오기 (active 상태 포함)
-   */
-  getChildRoutesFromCurrentPath(): Route[] {
-    if (typeof window === 'undefined') return [];
-
-    const currentPath = this._currentFullPath || window.location.pathname;
-    return this.getDirectChildrenByPath(currentPath);
-  }
-
-  /**
-   * 경로로 직계 자식 Route들 가져오기 (active 상태 포함)
-   */
-  getDirectChildRoutesByPath(pathname: string): Route[] {
-    const findRouteInRoutes = (
-      routes: Route[],
-      targetPath: string,
-    ): Route | undefined => {
-      for (const route of routes) {
-        if (
-          route.pathname === targetPath ||
-          targetPath.startsWith(route.pathname + '/')
-        ) {
-          return route;
-        }
-        if (route.children) {
-          const found = findRouteInRoutes(route.children, targetPath);
-          if (found) return found;
-        }
-      }
-      return undefined;
-    };
-
-    const targetRoute = findRouteInRoutes(this._routes, pathname);
-    return targetRoute?.children || [];
-  }
-
-  /**
-   * RouteBuilder를 Route로 변환하여 반환 (active 상태 포함)
-   */
-  convertRouteBuilderToRoute(
-    routeBuilder: RouteBuilder,
-    parentPath: string = '',
-  ): Route {
-    const fullPath = this.combinePaths(
-      parentPath,
-      routeBuilder?.pathname || '',
-    );
-    const currentPath =
-      this._currentFullPath ||
-      (typeof window !== 'undefined' ? window.location.pathname : '');
-
-    return {
-      name: routeBuilder?.name || '',
-      pathname: fullPath,
-      params: routeBuilder?.params,
-      active:
-        currentPath === fullPath || currentPath.startsWith(fullPath + '/'),
-      icon: routeBuilder?.icon,
-      children:
-        routeBuilder?.children?.map(child =>
-          this.convertRouteBuilderToRoute(child, fullPath),
-        ) || [],
-    };
-  }
-
-  /**
-   * RouteBuilder 배열을 Route 배열로 변환 (active 상태 포함)
-   */
-  convertRouteBuilderArrayToRoutes(routeBuilders: RouteBuilder[]): Route[] {
-    return routeBuilders.map(builder =>
-      this.convertRouteBuilderToRoute(builder),
-    );
-  }
-
-  /**
-   * 라우트 배열의 활성화 상태를 업데이트
-   */
-  updateRoutesActiveState(routes: Route[]): Route[] {
-    const currentPath =
-      this._currentFullPath ||
-      (typeof window !== 'undefined' ? window.location.pathname : '');
-
-    const updateActive = (routeList: Route[]): Route[] => {
-      return routeList.map(route => ({
-        ...route,
-        active:
-          currentPath === route.pathname ||
-          currentPath.startsWith(route.pathname + '/'),
-        children: route.children ? updateActive(route.children) : undefined,
-      }));
-    };
-
-    return updateActive(routes);
-  }
-
-  /**
-   * 현재 추적 중인 경로를 기반으로 스마트하게 자식 Route 가져오기
-   */
-  getSmartChildRoutesFromCurrentPath(): Route[] {
-    if (typeof window === 'undefined') return [];
-
-    const currentPath = this._currentFullPath || window.location.pathname;
-    return this.getSmartChildRoutes(currentPath);
-  }
-
-  /**
-   * 현재 경로의 자식 Route들을 스마트하게 가져오기 (Route 타입 반환)
-   * @deprecated getSmartChildRoutes를 사용하세요 (이제 Route를 직접 반환함)
-   */
-  getSmartChildRoutesAsRoute(pathname: string): Route[] {
-    console.warn(
-      'getSmartChildRoutesAsRoute는 deprecated입니다. getSmartChildRoutes를 사용하세요.',
-    );
-    return this.getSmartChildRoutes(pathname);
-  }
-  /**
-   * 현재 경로의 자식 라우트들을 스마트하게 가져오기 (Route 타입)
-   * 여러 단계의 매칭 전략을 통해 가장 적절한 자식 라우트들을 반환
-   */
-  getSmartChildRoutes(pathname: string): Route[] {
-    console.log('🔍 getSmartChildRoutes called with:', pathname);
-    if (!pathname) return [];
-
-    const normalizedPath = this.normalizePath(pathname);
-    console.log('📍 Normalized path:', normalizedPath);
-
-    // 디버깅: 사용 가능한 라우트 출력
-    console.log('🗂️ Available flatRoutes:');
-    Array.from(this.flatRoutes.entries()).forEach(([name, route]) => {
-      console.log(
-        `  ${name}: ${route.pathname} (children: ${
-          route.children?.length || 0
-        })`,
-      );
-    });
-
-    // 1단계: 정확한 경로 매칭
-    const exactMatch = this.tryExactMatch(normalizedPath);
-    if (exactMatch.length > 0)
-      return this.convertRouteBuilderArrayToRoutes(exactMatch);
-
-    // 2단계: 부분 경로 매칭 (접두사 매칭)
-    const partialMatch = this.tryPartialMatch(normalizedPath);
-    if (partialMatch.length > 0)
-      return this.convertRouteBuilderArrayToRoutes(partialMatch);
-
-    // 3단계: 세그먼트 기반 매칭
-    const segmentMatch = this.trySegmentMatch(normalizedPath);
-    if (segmentMatch.length > 0)
-      return this.convertRouteBuilderArrayToRoutes(segmentMatch);
-
-    // 4단계: 폴백 - 내부 RouteBuilder 메서드 사용
-    console.log('🔄 Trying fallback with internal method...');
-    const fallbackResult = this.getDirectChildrenByPathInternal(normalizedPath);
-    if (fallbackResult.length > 0) {
-      console.log(
-        '✅ Found with fallback method:',
-        fallbackResult.map(r => ({ name: r.name, pathname: r.pathname })),
-      );
-      return this.convertRouteBuilderArrayToRoutes(fallbackResult);
-    }
-
-    console.log('❌ No matching routes found');
-    return [];
-  }
-
-  /**
-   * 정확한 경로 매칭 시도
-   */
-  private tryExactMatch(normalizedPath: string): RouteBuilder[] {
-    const exactMatchingRoute = Array.from(this.flatRoutes.values()).find(
-      route => {
-        if (!route.pathname) return false;
-        const routeNormalizedPath = this.normalizePath(route.pathname);
-        const isExactMatch = routeNormalizedPath === normalizedPath;
-        console.log(
-          `  Exact match check: "${routeNormalizedPath}" === "${normalizedPath}" -> ${isExactMatch}`,
-        );
-        return isExactMatch;
-      },
-    );
-
-    if (exactMatchingRoute?.children) {
-      console.log(
-        `✅ Found exact matching route: "${exactMatchingRoute.name}" with ${exactMatchingRoute.children.length} children`,
-      );
-      const children = this.createChildRoutes(exactMatchingRoute);
-      console.log(
-        '🎯 Returning exact match children:',
-        children.map(c => ({ name: c.name, pathname: c.pathname })),
-      );
-      return children;
-    }
-    return [];
-  }
-
-  /**
-   * 부분 경로 매칭 시도 (접두사 매칭)
-   */
-  private tryPartialMatch(normalizedPath: string): RouteBuilder[] {
-    console.log('🔄 Trying partial path matching...');
-
-    const partialMatchingRoutes = Array.from(this.flatRoutes.values()).filter(
-      route => {
-        if (!route.pathname || !route.children?.length) return false;
-
-        const routeNormalizedPath = this.normalizePath(route.pathname);
-        const isPartialMatch =
-          routeNormalizedPath === normalizedPath ||
-          normalizedPath.startsWith(routeNormalizedPath + '/') ||
-          normalizedPath.startsWith(routeNormalizedPath);
-
-        console.log(
-          `  Partial match check: "${normalizedPath}" matches "${routeNormalizedPath}" -> ${isPartialMatch}`,
-        );
-        return isPartialMatch;
-      },
-    );
-
-    if (partialMatchingRoutes.length > 0) {
-      // 가장 긴 매치를 찾기 (가장 구체적인 라우트)
-      const bestMatch = partialMatchingRoutes.reduce((best, current) => {
-        const bestLen = best.pathname?.length || 0;
-        const currentLen = current.pathname?.length || 0;
-        return currentLen > bestLen ? current : best;
-      });
-
-      console.log(
-        `✅ Found best partial matching route: "${bestMatch.name}" with ${bestMatch.children?.length} children`,
-      );
-      const children = this.createChildRoutes(bestMatch);
-      console.log(
-        '🎯 Returning partial match children:',
-        children.map(c => ({ name: c.name, pathname: c.pathname })),
-      );
-      return children;
-    }
-    return [];
-  }
-
-  /**
-   * 세그먼트 기반 매칭 시도
-   */
-  private trySegmentMatch(normalizedPath: string): RouteBuilder[] {
-    console.log('🔄 Trying segment-based matching...');
-    const segments = normalizedPath.split('/').filter(s => s.length > 0);
-    console.log('📍 Path segments:', segments);
-
-    for (let i = segments.length - 1; i >= 0; i--) {
-      const segment = segments[i];
-      console.log(`🔎 Checking segment: "${segment}"`);
-
-      const segmentMatchingRoute = Array.from(this.flatRoutes.values()).find(
-        route => {
-          if (!route.pathname || !route.children?.length) return false;
-
-          const routeNormalizedPath = this.normalizePath(route.pathname);
-          const routeSegments = routeNormalizedPath
-            .split('/')
-            .filter(s => s.length > 0);
-          const lastRouteSegment = routeSegments[routeSegments.length - 1];
-          const isSegmentMatch = lastRouteSegment === segment;
-
-          console.log(
-            `  Route "${route.name}" (${routeNormalizedPath}): lastSegment="${lastRouteSegment}" vs segment="${segment}" -> ${isSegmentMatch}`,
-          );
-          return isSegmentMatch;
-        },
-      );
-
-      if (segmentMatchingRoute) {
-        console.log(
-          `✅ Found segment matching route: "${segmentMatchingRoute.name}" with ${segmentMatchingRoute.children?.length} children`,
-        );
-        const children = this.createChildRoutes(segmentMatchingRoute);
-        console.log(
-          '🎯 Returning segment match children:',
-          children.map(c => ({ name: c.name, pathname: c.pathname })),
-        );
-        return children;
-      }
-    }
-    return [];
-  }
-
-  /**
-   * 경로 세그먼트를 기반으로 가장 적절한 부모 라우트의 직계 자식들 찾기
-   * 예: '/admin/dashboard/users' -> 'dashboard'의 직계 자식들 반환
-   * @deprecated getSmartChildRoutes 사용을 권장합니다.
-   */
-  getDirectChildrenByPathSegments(pathname: string): Route[] {
-    console.warn(
-      'getDirectChildrenByPathSegments는 deprecated입니다. getSmartChildRoutes를 사용하세요.',
-    );
-    return this.getSmartChildRoutes(pathname);
   }
 }

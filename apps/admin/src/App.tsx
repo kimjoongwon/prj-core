@@ -5,12 +5,7 @@ import {
   Outlet,
 } from 'react-router';
 import { type RouteBuilder as IRouteBuilder } from '@shared/types';
-import {
-  DarkModeSwitch,
-  Plate,
-  RouteBuilder,
-  NavigationSetup,
-} from '@shared/frontend';
+import { Plate, RouteBuilder, NavigationSetup } from '@shared/frontend';
 import { observer } from 'mobx-react-lite';
 import { Spinner } from '@heroui/react';
 // Any configurations are optional
@@ -27,7 +22,7 @@ const AppLayout = () => {
 
 // 라우트 객체를 생성하기 위한 헬퍼 함수
 const generateRouteObject = (routeBuilder: IRouteBuilder): RouteObject => ({
-  path: routeBuilder?.pathname,
+  path: routeBuilder?.relativePath,
   Component: () => <RouteBuilder routeBuilder={routeBuilder} />,
   errorElement: <div>오류가 발생했습니다</div>,
   children: routeBuilder?.children?.map(generateRouteObject),

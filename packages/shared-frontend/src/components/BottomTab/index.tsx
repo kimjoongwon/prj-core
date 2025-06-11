@@ -157,30 +157,154 @@ export const BottomTab = observer((props: BottomTabProps) => {
         );
       })}
       {state.activeParent && (
-        <Modal isOpen={true} onClose={() => (state.activeParent = null)} size="full">
+        <Modal
+          isOpen={true}
+          onClose={() => (state.activeParent = null)}
+          size="full"
+          hideCloseButton={true}
+        >
           <ModalContent>
             {() => (
               <>
-                <ModalHeader>{state.activeParent.name}</ModalHeader>
-                <ModalBody>
-                  <div className="grid grid-cols-3 gap-4 p-4">
-                    {state.activeParent.children?.map((child, idx) => (
-                      <Button
-                        key={child.name || child.pathname || idx}
-                        variant="light"
-                        className="flex flex-col items-center justify-center gap-2 border rounded-lg py-3"
-                        onPress={() => handleChildPress(child)}
-                      >
-                        {child.icon && (
-                          <div className="flex items-center justify-center">
-                            {renderLucideIcon(child.icon, 'w-6 h-6', iconSize)}
-                          </div>
-                        )}
-                        <span className="text-sm text-center truncate">
-                          {child.name || child.pathname}
-                        </span>
-                      </Button>
-                    ))}
+                <ModalHeader className="flex items-center justify-between p-4 border-b border-divider bg-content1">
+                  {/* 뒤로가기 버튼 */}
+                  {/* <Button
+                    isIconOnly
+                    variant="light"
+                    size="lg"
+                    className="text-default-600 hover:text-default-800"
+                    onPress={() => (state.activeParent = null)}
+                  >
+                    {renderLucideIcon('ChevronLeft', 'w-6 h-6', 24)}
+                  </Button> */}
+
+                  {/* 메뉴 타이틀 */}
+                  <h2 className="text-lg font-bold text-foreground flex-1 text-center">
+                    {state.activeParent.name}
+                  </h2>
+
+                  {/* X 버튼 (모바일 친화적 크기) */}
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    size="lg"
+                    className="text-default-600 hover:text-default-800 min-w-12 h-12"
+                    onPress={() => (state.activeParent = null)}
+                  >
+                    {renderLucideIcon('X', 'w-6 h-6', 24)}
+                  </Button>
+                </ModalHeader>
+                <ModalBody className="p-0">
+                  <div className="grid grid-cols-2 gap-4 p-6 pt-4">
+                    {state.activeParent.children?.map((child, idx) => {
+                      // 다양한 색상 스킴 배열
+                      const colorSchemes = [
+                        {
+                          bg: 'from-blue-50 to-blue-100',
+                          hoverBg: 'hover:from-blue-100 hover:to-blue-200',
+                          border: 'border-blue-200/50',
+                          iconBg: 'bg-blue-500/10',
+                          iconBorder: 'border-blue-300/30',
+                          iconColor: 'text-blue-600',
+                          textColor: 'text-blue-800',
+                        },
+                        {
+                          bg: 'from-emerald-50 to-emerald-100',
+                          hoverBg:
+                            'hover:from-emerald-100 hover:to-emerald-200',
+                          border: 'border-emerald-200/50',
+                          iconBg: 'bg-emerald-500/10',
+                          iconBorder: 'border-emerald-300/30',
+                          iconColor: 'text-emerald-600',
+                          textColor: 'text-emerald-800',
+                        },
+                        {
+                          bg: 'from-purple-50 to-purple-100',
+                          hoverBg: 'hover:from-purple-100 hover:to-purple-200',
+                          border: 'border-purple-200/50',
+                          iconBg: 'bg-purple-500/10',
+                          iconBorder: 'border-purple-300/30',
+                          iconColor: 'text-purple-600',
+                          textColor: 'text-purple-800',
+                        },
+                        {
+                          bg: 'from-orange-50 to-orange-100',
+                          hoverBg: 'hover:from-orange-100 hover:to-orange-200',
+                          border: 'border-orange-200/50',
+                          iconBg: 'bg-orange-500/10',
+                          iconBorder: 'border-orange-300/30',
+                          iconColor: 'text-orange-600',
+                          textColor: 'text-orange-800',
+                        },
+                        {
+                          bg: 'from-pink-50 to-pink-100',
+                          hoverBg: 'hover:from-pink-100 hover:to-pink-200',
+                          border: 'border-pink-200/50',
+                          iconBg: 'bg-pink-500/10',
+                          iconBorder: 'border-pink-300/30',
+                          iconColor: 'text-pink-600',
+                          textColor: 'text-pink-800',
+                        },
+                        {
+                          bg: 'from-teal-50 to-teal-100',
+                          hoverBg: 'hover:from-teal-100 hover:to-teal-200',
+                          border: 'border-teal-200/50',
+                          iconBg: 'bg-teal-500/10',
+                          iconBorder: 'border-teal-300/30',
+                          iconColor: 'text-teal-600',
+                          textColor: 'text-teal-800',
+                        },
+                      ];
+
+                      // 인덱스에 따라 색상 스킴 선택 (순환)
+                      const colorScheme =
+                        colorSchemes[idx % colorSchemes.length];
+
+                      return (
+                        <Button
+                          key={child.name || child.pathname || idx}
+                          variant="flat"
+                          className={`
+                            flex flex-col items-center justify-center 
+                            gap-3 p-6 h-32
+                            bg-gradient-to-br ${colorScheme.bg}
+                            ${colorScheme.hoverBg}
+                            border-2 ${colorScheme.border}
+                            rounded-2xl shadow-lg hover:shadow-xl
+                            transition-all duration-300 ease-out
+                            transform hover:scale-[1.02]
+                            backdrop-blur-sm
+                          `}
+                          onPress={() => handleChildPress(child)}
+                        >
+                          {child.icon && (
+                            <div
+                              className={`
+                                flex items-center justify-center
+                                w-12 h-12 rounded-xl
+                                ${colorScheme.iconBg} border ${colorScheme.iconBorder}
+                                shadow-inner
+                              `}
+                            >
+                              {renderLucideIcon(
+                                child.icon,
+                                `w-7 h-7 ${colorScheme.iconColor}`,
+                                28,
+                              )}
+                            </div>
+                          )}
+                          <span
+                            className={`
+                              text-sm font-semibold text-center
+                              ${colorScheme.textColor} leading-tight
+                              max-w-full px-1
+                            `}
+                          >
+                            {child.name || child.pathname}
+                          </span>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </ModalBody>
               </>

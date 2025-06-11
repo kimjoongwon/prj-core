@@ -17,8 +17,8 @@ export const Navbar = observer((props: NavbarProps) => {
   const { routes, direction = 'horizontal' } = props;
 
   const handleRouteClick = (route: Route) => {
-    if (route.pathname) {
-      Plate.navigation.getNavigator().push(route.pathname);
+    if (route.fullPath) {
+      Plate.navigation.getNavigator().push(route.fullPath);
     }
   };
 
@@ -37,7 +37,7 @@ export const Navbar = observer((props: NavbarProps) => {
                 : undefined
             }
           >
-            {route.name || route.pathname}
+            {route.name || route.fullPath}
           </Button>
         ))}
       </VStack>
@@ -56,7 +56,7 @@ export const Navbar = observer((props: NavbarProps) => {
             route.icon ? renderLucideIcon(route.icon, 'w-4 h-4', 16) : undefined
           }
         >
-          {route.name || route.pathname}
+          {route.name || route.fullPath}
         </Button>
       ))}
     </HStack>

@@ -1,7 +1,7 @@
 // Local type definition to avoid circular dependency
 type RouteBuilder = {
   name: string;
-  pathname: string;
+  relativePath: string;
   layout?: {
     type: string;
   };
@@ -38,19 +38,19 @@ export const ROUTE_NAMES = {
 export const rawRoutes: RouteBuilder[] = [
   {
     name: ROUTE_NAMES.ADMIN,
-    pathname: 'admin',
+    relativePath: 'admin',
     children: [
       {
         name: ROUTE_NAMES.AUTH,
-        pathname: 'auth',
+        relativePath: 'auth',
         children: [
           {
             name: ROUTE_NAMES.LOGIN,
-            pathname: 'login',
+            relativePath: 'login',
             children: [
               {
                 name: ROUTE_NAMES.TENANTS,
-                pathname: 'tenants',
+                relativePath: 'tenants',
               },
             ],
           },
@@ -58,39 +58,39 @@ export const rawRoutes: RouteBuilder[] = [
       },
       {
         name: ROUTE_NAMES.DASHBOARD,
-        pathname: 'dashboard',
+        relativePath: 'dashboard',
         icon: 'LayoutDashboard',
         children: [
           {
             name: ROUTE_NAMES.USER_SERVICE,
-            pathname: 'user-service',
+            relativePath: 'user-service',
             icon: 'Users',
             children: [
               {
                 name: ROUTE_NAMES.USERS,
-                pathname: 'users',
+                relativePath: 'users',
                 icon: 'User',
               },
             ],
           },
           {
             name: ROUTE_NAMES.SPACE_SERVICE,
-            pathname: 'space-service',
+            relativePath: 'space-service',
             icon: 'MapPin',
             children: [
               {
                 name: ROUTE_NAMES.GROUND_LIST,
-                pathname: 'grounds',
+                relativePath: 'grounds',
                 icon: 'Map',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_DETAIL,
-                    pathname: ':id',
+                    relativePath: ':id',
                     icon: 'MapPin',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_EDIT,
-                        pathname: ':type',
+                        relativePath: ':type',
                         icon: 'Edit',
                       },
                     ],
@@ -99,17 +99,17 @@ export const rawRoutes: RouteBuilder[] = [
               },
               {
                 name: ROUTE_NAMES.GROUND_CATEGORY,
-                pathname: 'categories',
+                relativePath: 'categories',
                 icon: 'Folder',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
-                    pathname: ':id',
+                    relativePath: ':id',
                     icon: 'FolderOpen',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
-                        pathname: ':type',
+                        relativePath: ':type',
                         icon: 'Edit',
                       },
                     ],
@@ -118,17 +118,17 @@ export const rawRoutes: RouteBuilder[] = [
               },
               {
                 name: ROUTE_NAMES.GROUND_GROUP,
-                pathname: 'groups',
+                relativePath: 'groups',
                 icon: 'Group',
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
-                    pathname: ':id',
+                    relativePath: ':id',
                     icon: 'Users',
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_GROUP_EDIT,
-                        pathname: ':type',
+                        relativePath: ':type',
                         icon: 'Edit',
                       },
                     ],

@@ -12,6 +12,7 @@ export class NavigatorService {
   private navigateFunction?: UniversalNavigateFunction;
   private isReactRouter: boolean = false;
   private pathResolver?: (name: string) => string | undefined;
+  private activateRouteCallback?: (pathname: string) => void;
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
@@ -35,6 +36,13 @@ export class NavigatorService {
    */
   setRouteNameResolver(resolver: (name: string) => string | undefined): void {
     this.pathResolver = resolver;
+  }
+
+  /**
+   * 라우트 활성화 콜백 함수 설정
+   */
+  setActivateRouteCallback(callback: (pathname: string) => void): void {
+    this.activateRouteCallback = callback;
   }
 
   /**
@@ -69,6 +77,11 @@ export class NavigatorService {
     );
 
     this.navigateFunction(pathnameWithSearchParams);
+
+    // 네비게이션 후 라우트 활성화 상태 업데이트
+    if (this.activateRouteCallback) {
+      this.activateRouteCallback(normalizedPathname);
+    }
   }
 
   /**
@@ -93,20 +106,6 @@ export class NavigatorService {
     }
 
     this.push(pathname, pathParams, searchParams);
-  }
-
-  /**
-   * 조건부 네비게이션 실행
-   */
-  pushConditional(
-    condition: boolean,
-    routeNameIfTrue: string,
-    routeNameIfFalse: string,
-    pathParams?: object,
-    searchParams?: Record<string, string>,
-  ): void {
-    const routeName = condition ? routeNameIfTrue : routeNameIfFalse;
-    this.pushByName(routeName, pathParams, searchParams);
   }
 
   /**
@@ -180,6 +179,11 @@ export class NavigatorService {
         (this.navigateFunction as (path: string) => void)(
           pathnameWithSearchParams,
         );
+      }
+
+      // 네비게이션 후 라우트 활성화 상태 업데이트
+      if (this.activateRouteCallback) {
+        this.activateRouteCallback(normalizedPathname);
       }
     }
   }

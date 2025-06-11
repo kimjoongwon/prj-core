@@ -5,6 +5,7 @@ import { rawRoutes } from '@shared/vars';
 import { LoginPage } from './components/pages/login.page';
 import { TenantsPage } from './components/pages/tenants.page';
 import { DashboardPage } from './components/pages/dashboard.page';
+import { UsersPage } from './components/pages/users.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -15,6 +16,7 @@ export class AppBuilderService {
     readonly loginPage: LoginPage,
     readonly tenantsPage: TenantsPage,
     readonly dashboardPage: DashboardPage,
+    readonly usersPage: UsersPage,
   ) {
     // rawRoutes를 deep copy하여 초기화
     this.routes = rawRoutes;
@@ -25,6 +27,7 @@ export class AppBuilderService {
     const loginPageBuilder: PageBuilder = this.loginPage.build();
     const tenantsPageBuilder: PageBuilder = await this.tenantsPage.build();
     const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
+    const usersPageBuilder: PageBuilder = this.usersPage.build();
 
     this.setRoutePageAndLayout('관리자', undefined, {
       type: 'Root',
@@ -44,6 +47,10 @@ export class AppBuilderService {
 
     this.setRoutePageAndLayout('대시보드', dashboardPageBuilder, {
       type: 'Dashboard',
+    });
+
+    this.setRoutePageAndLayout('유저', usersPageBuilder, {
+      type: 'Root',
     });
 
     return {

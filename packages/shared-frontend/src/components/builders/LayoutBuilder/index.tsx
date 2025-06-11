@@ -47,7 +47,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   if (layoutBuilder?.type === 'Dashboard') {
     // Dashboard에서는 항상 dashboard의 자식 라우트들을 보여줌
     const dashboardRoutes =
-      Plate.navigation.getDirectChildrenByPath('dashboard');
+      Plate.navigation.getDirectChildrenByName('대시보드');
 
     // 선택된 대시보드 라우트의 자식들을 leftSidebar에 표시
     const selectedDashboardRouteChildren =
