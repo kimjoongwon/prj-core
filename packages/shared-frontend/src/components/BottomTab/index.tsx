@@ -57,8 +57,8 @@ export const BottomTab = observer((props: BottomTabProps) => {
       return;
     }
 
-    if (route.pathname) {
-      Plate.navigation.getNavigator().push(route.pathname);
+    if (route.fullPath) {
+      Plate.navigation.getNavigator().push(route.fullPath);
     }
 
     state.activeParent = null;
@@ -81,8 +81,8 @@ export const BottomTab = observer((props: BottomTabProps) => {
     }
 
     // 기본 네비게이션 동작
-    if (route.pathname) {
-      Plate.navigation.getNavigator().push(route.pathname);
+    if (route.fullPath) {
+      Plate.navigation.getNavigator().push(route.fullPath);
     }
   };
 
@@ -111,7 +111,7 @@ export const BottomTab = observer((props: BottomTabProps) => {
 
         return (
           <Button
-            key={route.name || route.pathname || `tab-${index}`}
+            key={route.name || route.fullPath || `tab-${index}`}
             variant={variant}
             color={buttonColor}
             size={size}
@@ -149,7 +149,7 @@ export const BottomTab = observer((props: BottomTabProps) => {
                   ${isActive ? 'font-semibold' : 'font-normal'}
                 `}
                 >
-                  {route.name || route.pathname}
+                  {route.name || route.fullPath}
                 </span>
               )}
             </div>
@@ -262,7 +262,7 @@ export const BottomTab = observer((props: BottomTabProps) => {
 
                       return (
                         <Button
-                          key={child.name || child.pathname || idx}
+                          key={child.name || child.fullPath || idx}
                           variant="flat"
                           className={`
                             flex flex-col items-center justify-center 
@@ -300,7 +300,7 @@ export const BottomTab = observer((props: BottomTabProps) => {
                               max-w-full px-1
                             `}
                           >
-                            {child.name || child.pathname}
+                            {child.name || child.fullPath}
                           </span>
                         </Button>
                       );
