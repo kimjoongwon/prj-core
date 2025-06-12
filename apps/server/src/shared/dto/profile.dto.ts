@@ -4,11 +4,11 @@ import { User } from '../entity/user.entity';
 import { AbstractDto } from './abstract.dto';
 
 export class ProfileDto extends AbstractDto implements Profile {
+  @UUIDField({ nullable: true })
+  avatarFileId: string | null;
+
   @StringField()
   name: string;
-
-  @UUIDField()
-  depotId: string;
 
   @StringField()
   nickname: string;

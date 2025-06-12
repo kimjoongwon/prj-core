@@ -1,5 +1,4 @@
 import { Global, Module } from '@nestjs/common';
-import { DepotInput } from './depot.input';
 import { DescriptionInput } from './description.input';
 import { EmailInput } from './email.input';
 import { NameInput } from './name.input';
@@ -9,7 +8,6 @@ import { TitleInput } from './title.input';
 import { LabelInput } from './label.input';
 
 export const inputModules = {
-  DepotInput,
   DescriptionInput,
   EmailInput,
   NameInput,

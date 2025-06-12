@@ -18,10 +18,10 @@ export class GroupsService {
         createdAt: 'desc',
       },
     });
+
     const countArgs = query.toCountArgs<Prisma.GroupCountArgs>();
     const groups = await this.repository.findMany(args);
     const totalCount = await this.repository.count(countArgs);
-    console.log('args', args);
     return {
       totalCount,
       groups,

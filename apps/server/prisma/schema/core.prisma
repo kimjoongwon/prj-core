@@ -30,34 +30,23 @@ model Group {
   userAssociations  UserAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
-}
-
-model Ground {
-  id           String    @id @default(uuid())
-  seq          Int       @unique @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime? @db.Timestamptz(6)
-  imageDepotId String?
-  workspaceId  String    @unique
-  imageDepot   Depot?    @relation(fields: [imageDepotId], references: [id])
-  workspace    Workspace @relation(fields: [workspaceId], references: [id])
+  FileAssociation   FileAssociation[]
 }
 
 model Exercise {
-  id           String    @id @default(uuid())
-  seq          Int       @unique @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt    DateTime? @db.Timestamptz(6)
-  duration     Int
-  count        Int
-  taskId       String    @unique
-  description  String?
-  imageDepotId String?
-  name         String
-  videoDepotId String?
-  task         Task      @relation(fields: [taskId], references: [id])
+  id          String    @id @default(uuid())
+  seq         Int       @unique @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt   DateTime? @db.Timestamptz(6)
+  duration    Int
+  count       Int
+  taskId      String    @unique
+  description String?
+  imageFileId String?
+  name        String
+  videoFileId String?
+  task        Task      @relation(fields: [taskId], references: [id])
 }
 
 model Service {
@@ -71,17 +60,16 @@ model Service {
 }
 
 model Profile {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  name      String
-  nickname  String    @unique
-  userId    String
-  depotId   String?
-  depot     Depot?    @relation(fields: [depotId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  id           String    @id @default(uuid())
+  seq          Int       @unique @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt    DateTime? @db.Timestamptz(6)
+  name         String
+  nickname     String    @unique
+  userId       String
+  avatarFileId String?
+  user         User      @relation(fields: [userId], references: [id])
 }
 
 model Tenant {
@@ -92,35 +80,17 @@ model Tenant {
   removedAt   DateTime?    @db.Timestamptz(6)
   userId      String
   spaceId     String
+  roleId      String
   main        Boolean
   assignments Assignment[]
   categories  Category[]
   contents    Content[]
   files       File[]
   groups      Group[]
-  roles       Role[]
+  role        Role         @relation(fields: [roleId], references: [id])
   space       Space        @relation(fields: [spaceId], references: [id])
   user        User         @relation(fields: [userId], references: [id])
   timelines   Timeline[]
-}
-
-model Workspace {
-  id               String    @id @default(uuid())
-  seq              Int       @unique @default(autoincrement())
-  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt        DateTime? @updatedAt @db.Timestamptz(6)
-  removedAt        DateTime? @db.Timestamptz(6)
-  name             String
-  label            String?
-  address          String
-  phone            String
-  email            String
-  businessNo       String    @unique
-  logoImageDepotId String?   @unique
-  spaceId          String    @unique
-  ground           Ground?
-  logoImageDepot   Depot?    @relation(fields: [logoImageDepotId], references: [id])
-  space            Space     @relation(fields: [spaceId], references: [id])
 }
 
 model Timeline {
@@ -268,24 +238,10 @@ model Content {
   description String?
   type        TextTypes @default(Editor)
   text        String?   @db.VarChar(1000)
-  depotId     String?
+  fileId      String?
   tenantId    String
-  depot       Depot?    @relation(fields: [depotId], references: [id])
   tenant      Tenant    @relation(fields: [tenantId], references: [id])
   posts       Post[]
-}
-
-model Depot {
-  id        String     @id @default(uuid())
-  seq       Int        @unique @default(autoincrement())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?  @db.Timestamptz(6)
-  contents  Content[]
-  files     File[]
-  grounds   Ground[]
-  profiles  Profile[]
-  workspace Workspace?
 }
 
 enum SMSStatus {
@@ -377,9 +333,4 @@ enum ServiceNames {
   file
   task
   program
-}
-
-enum DepotTypes {
-  ROOT
-  LEAF
 }

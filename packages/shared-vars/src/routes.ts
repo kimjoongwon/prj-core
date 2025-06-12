@@ -17,7 +17,7 @@ export const ROUTE_NAMES = {
   ADMIN: '관리자',
   AUTH: '인증',
   LOGIN: '로그인',
-  TENANTS: '테넌츠',
+  TENANT_SELECT: '테넌트 선택',
   TENANT: '테넌트',
   DASHBOARD: '대시보드',
   USER_SERVICE: '유저 서비스',
@@ -49,8 +49,8 @@ export const rawRoutes: RouteBuilder[] = [
             relativePath: 'login',
             children: [
               {
-                name: ROUTE_NAMES.TENANTS,
-                relativePath: 'tenants',
+                name: ROUTE_NAMES.TENANT_SELECT,
+                relativePath: 'tenant-select',
               },
             ],
           },

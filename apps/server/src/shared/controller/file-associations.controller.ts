@@ -118,7 +118,7 @@ export class FileAssociationsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK, { isArray: true })
   async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {
-    const { fileAssociations, count } = await this.service.getManyByQuery(query);
+    const { fileAssociations, count } = await this.service.getFileAssociationsByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',

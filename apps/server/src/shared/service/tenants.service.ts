@@ -18,31 +18,6 @@ export class TenantsService extends BaseService<
   TenantInclude
 > {
   constructor(repository: TenantsRepository) {
-    super(repository, {
-      includeMap: {
-        getManyByQuery: {
-          space: {
-            include: {
-              workspace: {
-                include: {
-                  ground: true,
-                },
-              },
-            },
-          },
-        },
-        getById: {
-          space: {
-            include: {
-              workspace: {
-                include: {
-                  ground: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    super(repository);
   }
 }

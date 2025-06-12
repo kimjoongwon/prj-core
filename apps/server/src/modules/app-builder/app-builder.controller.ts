@@ -27,41 +27,6 @@ export class AppBuilderController {
     return new ResponseEntity(200, '성공', app);
   }
 
-  @Post('login-button')
-  async loginButton(
-    @Body() login: LoginPayloadDto,
-    @Res({
-      passthrough: true,
-    })
-    res: Response,
-  ) {
-    const { accessToken, refreshToken, user } = await this.authService.login(login);
-    const tenant = user.tenants?.find((tenant) => tenant.main);
-
-    res.cookie('tenantId', tenant.id, {
-      httpOnly: true,
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-    });
-
-    const buttonResponse: ButtonResponse = {
-      routeName: '테넌츠',
-      toast: {
-        color: 'success',
-        title: '로그인 성공-',
-        description: '로그인에 성공했습니다.',
-      },
-    };
-
-    return new ResponseEntity(200, '성공', buttonResponse);
-  }
-
   @Post('select-workspace')
   async selectWorkspace(
     @Body() selectWorkspaceDto: SelectWorkspaceDto,

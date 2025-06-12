@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { QueryWorkspaceDto, WorkspacesService } from '@shared';
+import { QueryTenantDto, TenantsService } from '@shared';
 import { ButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-export class WorkspaceSelectPage {
-  constructor(readonly workspaceService: WorkspacesService) {}
+export class TenantSelectPage {
+  constructor(readonly tenantService: TenantsService) {}
 
   async build(): Promise<PageBuilder> {
-    const { items } = await this.workspaceService.getManyByQuery(
-      plainToInstance(QueryWorkspaceDto, {}),
-    );
-    const workspaceOptions = items.map((workspace) => ({
-      text: workspace.name,
-      value: workspace.id,
+    const { items } = await this.tenantService.getManyByQuery(plainToInstance(QueryTenantDto, {}));
+    const tenantOptions = items.map((tenant) => ({
+      text: tenant.space.ground.name,
+      value: tenant.id,
     }));
 
     const sections: SectionBuilder[] = [
@@ -25,21 +23,21 @@ export class WorkspaceSelectPage {
               {
                 name: 'Listbox',
                 props: {
-                  title: '워크스페이스 선택',
-                  options: workspaceOptions,
+                  title: '그라운드 선택',
+                  options: tenantOptions,
                   selectionMode: 'single',
-                  path: 'params.selectedWorkspace',
+                  path: 'params.selectedTenantId',
                 } as ListboxProps<any>,
               },
               {
                 name: 'ButtonBuilder',
                 props: {
-                  mutation: { name: 'selectWorkspace', path: 'params' },
+                  mutation: { name: 'selectTenant', path: 'params' },
                   color: 'primary',
                   size: 'md',
                   children: '선택',
                   validation: {
-                    required: { value: true, message: '테넌트를 추가해주세요.' },
+                    required: { value: true, message: '그라운드를 선택해주세요.' },
                   },
                   navigator: {
                     route: {
@@ -57,7 +55,7 @@ export class WorkspaceSelectPage {
     return {
       name: '테넌트',
       state: {
-        selectedWorkspace: '',
+        selectedTenantId: '',
       },
       sections,
     };

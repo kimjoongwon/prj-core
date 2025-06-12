@@ -1,11 +1,12 @@
 model Space {
-  id        String     @id @default(uuid())
-  seq       Int        @unique @default(autoincrement())
-  createdAt DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?  @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?  @db.Timestamptz(6)
-  tenants   Tenant[]
-  workspace Workspace?
+  id              String                @id @default(uuid())
+  seq             Int                   @unique @default(autoincrement())
+  createdAt       DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime?             @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?             @db.Timestamptz(6)
+  tenants         Tenant[]
+  classifications SpaceClassification[]
+  associations    SpaceAssociation[]
 }
 
 model SpaceClassification {
@@ -17,6 +18,7 @@ model SpaceClassification {
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
+  space      Space     @relation(fields: [spaceId], references: [id])
 
   @@unique([categoryId, spaceId])
 }
@@ -30,6 +32,24 @@ model SpaceAssociation {
   spaceId   String
   groupId   String
   group     Group     @relation(fields: [groupId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
 
   @@unique([spaceId, groupId])
+}
+
+model Ground {
+  id              String    @id @default(uuid())
+  seq             Int       @unique @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime? @db.Timestamptz(6)
+  name            String
+  label           String?
+  address         String
+  phone           String
+  email           String
+  businessNo      String    @unique
+  spaceId         String    @unique
+  logoImageFileId String?
+  imageFileId     String?
 }

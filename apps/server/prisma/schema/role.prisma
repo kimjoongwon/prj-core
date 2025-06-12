@@ -4,11 +4,10 @@ model Role {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
   removedAt   DateTime?    @db.Timestamptz(6)
-  name        Roles        @default(USER)
-  tenantId    String
+  name        Roles        @unique @default(USER)
   abilities   Ability[]
   assignments Assignment[]
-  tenant      Tenant       @relation(fields: [tenantId], references: [id])
+  tenants     Tenant[]
 }
 
 model RoleAssociation {

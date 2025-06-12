@@ -1,10 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { LoginPage } from './login.page';
-import { WorkspaceSelectPage } from './workspace-select.page';
+import { TenantSelectPage } from './tenant-select.page';
 import { UsersPage } from './users.page';
 import { DashboardPage } from './dashboard.page';
 
-const modules = [LoginPage, WorkspaceSelectPage, UsersPage, DashboardPage];
+const modules = [LoginPage, TenantSelectPage, UsersPage, DashboardPage];
 @Global()
 @Module({
   providers: modules,

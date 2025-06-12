@@ -3,7 +3,6 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { DepotDto } from './depotDto';
 import type { SpaceDto } from './spaceDto';
 
 export interface GymDto {
@@ -20,7 +19,5 @@ export interface GymDto {
   address: string;
   phone: string;
   email: string;
-  depotId: string;
-  depot?: DepotDto;
   space?: SpaceDto;
 }

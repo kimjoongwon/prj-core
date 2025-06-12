@@ -1,6 +1,6 @@
 import { Tenant } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
-import { UserDto, SpaceDto } from '.';
+import { UserDto, SpaceDto, RoleDto } from '.';
 import { BooleanField, ClassField, StringField, UUIDField } from '../decorator/field.decorators';
 
 export class TenantDto extends AbstractDto implements Tenant {
@@ -21,4 +21,7 @@ export class TenantDto extends AbstractDto implements Tenant {
 
   @ClassField(() => SpaceDto, { required: false })
   space?: SpaceDto;
+
+  @ClassField(() => RoleDto, { required: false })
+  role?: RoleDto;
 }

@@ -1,18 +1,20 @@
 model File {
-  id              String            @id @default(uuid())
-  seq             Int               @unique @default(autoincrement())
+  id              String               @id @default(uuid())
+  seq             Int                  @unique @default(autoincrement())
   name            String
-  depotId         String
   size            Int
+  parentId        String?
   mimeType        String
   url             String
   tenantId        String
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime?         @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?         @db.Timestamptz(6)
-  depot           Depot             @relation(fields: [depotId], references: [id])
-  tenant          Tenant            @relation(fields: [tenantId], references: [id])
-  FileAssociation FileAssociation[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?            @db.Timestamptz(6)
+  tenant          Tenant               @relation(fields: [tenantId], references: [id])
+  associations    FileAssociation[]
+  classifications FileClassification[]
+  parent          File?                @relation("FileParent", fields: [parentId], references: [id])
+  children        File[]               @relation("FileParent")
 }
 
 model FileClassification {
@@ -24,6 +26,7 @@ model FileClassification {
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
+  file       File      @relation(fields: [fileId], references: [id])
 
   @@unique([categoryId, fileId])
 }
@@ -34,9 +37,10 @@ model FileAssociation {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt @db.Timestamptz(6)
   removedAt DateTime? @db.Timestamptz(6)
-  userId    String
   fileId    String
+  groupId   String
   file      File      @relation(fields: [fileId], references: [id])
+  group     Group     @relation(fields: [groupId], references: [id])
 
-  @@unique([userId, fileId])
+  @@unique([groupId, fileId])
 }

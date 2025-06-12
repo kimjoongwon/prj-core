@@ -2,37 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repository/users.repository';
 import { Prisma } from '@prisma/client';
 import { GroundsRepository } from '../repository';
+import { QueryUserDto } from '../dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly repository: UsersRepository,
-    private readonly groundsRepository: GroundsRepository,
-  ) {}
-
-  getGroundsByUserId(userId: string) {
-    return this.groundsRepository.findMany({
-      where: {
-        workspace: {
-          space: {
-            tenants: {
-              some: {
-                userId,
-              },
-            },
-          },
-        },
-        removedAt: null,
-      },
-      include: {
-        workspace: {
-          include: {
-            space: true,
-          },
-        },
-      },
-    });
-  }
+  constructor(private readonly repository: UsersRepository) {}
 
   getUnique(args: Prisma.UserFindUniqueArgs) {
     return this.repository.findUnique(args);
@@ -57,14 +31,16 @@ export class UsersService {
     return this.repository.create(args);
   }
 
-  async getManyByQuery(args: Prisma.UserFindManyArgs) {
+  async getManyByQuery(query: QueryUserDto) {
     const users = await this.repository.findMany({
-      ...args,
+      ...query.toArgs<Prisma.UserFindManyArgs>(),
       include: {
         tenants: true,
+        profiles: true,
       },
     });
-    const count = await this.repository.count(args as Prisma.UserCountArgs);
+
+    const count = await this.repository.count(query.toCountArgs<Prisma.UserCountArgs>());
 
     return { users, count };
   }

@@ -15,7 +15,6 @@ import { ActionsModule } from './actions/actions.module';
 import { AppBuilderModule } from './app-builder/app-builder.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
-import { DepotsModule } from './depots/depots.module';
 import { ExercisesModule } from './exercise/exercises.module';
 import { FileClassificationsModule } from './file-classifications/file-classifications.module';
 import { FilesModule } from './files/files.module';
@@ -34,7 +33,6 @@ import { TenantsModule } from './tenants/tenants.module';
 import { TimelinesModule } from './timelines/timelines.module';
 import { UserClassificationsModule } from './user-classifications/user-classifications.module';
 import { UsersModule } from './users/users.module';
-import { WorkspacesModule } from './workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -61,11 +59,9 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
     SessionsModule,
     ProgramsModule,
     RoutinesModule,
-    DepotsModule,
     ExercisesModule,
     FilesModule,
     TenantsModule,
-    WorkspacesModule,
     RouterModule.register([
       {
         path: 'api',
@@ -152,10 +148,6 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
                 module: RoutinesModule,
               },
               {
-                path: 'depots',
-                module: DepotsModule,
-              },
-              {
                 path: 'exercises',
                 module: ExercisesModule,
               },
@@ -168,10 +160,6 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
                     module: FileClassificationsModule,
                   },
                 ],
-              },
-              {
-                path: 'workspaces',
-                module: WorkspacesModule,
               },
               {
                 path: 'grounds',

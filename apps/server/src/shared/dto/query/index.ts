@@ -17,7 +17,6 @@ export * from './query-session.dto';
 export * from './query-timeline.dto';
 export * from './query-routine.dto';
 export * from './query-program.dto';
-export * from './query-depot.dto';
 export * from './query-task.dto';
 export * from './query-exercise.dto';
 export * from './query-assignment.dto';
