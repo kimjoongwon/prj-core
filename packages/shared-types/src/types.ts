@@ -122,9 +122,11 @@ export interface AlertBuilder {
 }
 
 export interface Navigator {
-  type?: 'push' | 'replace' | 'back';
+  type?: 'push' | 'replace' | 'back' | 'href';
   route?: {
-    name: RouteNames;
+    name?: RouteNames;
+    fullPath?: string;
+    relativePath?: string;
     params?: object;
   };
 }

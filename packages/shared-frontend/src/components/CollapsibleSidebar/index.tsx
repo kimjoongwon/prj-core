@@ -33,35 +33,42 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
 
   // selectedDashboardRouteChildren의 부모 메뉴 정보 가져오기
   const parentMenuInfo = useMemo(() => {
-    // 대시보드 라우트의 자식들을 통해 현재 활성 라우트 찾기
-    const dashboardChildren =
-      Plate.navigation.getSelectedDashboardRouteChildren();
-
-    if (dashboardChildren.length === 0) return null;
-
-    // 대시보드 라우트 찾기
     const dashboardRoute = Plate.navigation.getRouteByName('대시보드');
-    if (!dashboardRoute) return null;
+    if (!dashboardRoute?.children?.length) return null;
 
-    // 현재 활성화된 자식 라우트 찾기
-    const activeChild = dashboardChildren.find(child => child.active);
-    const currentParent = activeChild || dashboardRoute;
+    // 현재 경로와 매칭되는 대시보드 자식 라우트 찾기 (선택된 대시보드 메뉴)
+    const normalizedCurrentPath = Plate.navigation.currentFullPath;
 
+    const selectedDashboardChild = dashboardRoute.children.find(child => {
+      return normalizedCurrentPath.startsWith(child.fullPath);
+    });
+
+    if (selectedDashboardChild) {
+      return {
+        name: selectedDashboardChild.name,
+        pathname: selectedDashboardChild.fullPath,
+        icon: selectedDashboardChild.icon,
+      };
+    }
+
+    // fallback: 대시보드 라우트 자체 사용
     return {
-      name: currentParent.name,
-      pathname: currentParent.fullPath,
-      icon: currentParent.icon,
+      name: dashboardRoute.name,
+      pathname: dashboardRoute.fullPath,
+      icon: dashboardRoute.icon,
     };
   }, [routes]);
 
   return (
     <div
       className={`flex flex-col h-full transition-all duration-300 ${
-        sidebarState.isCollapsed ? 'w-16' : 'w-72'
+        sidebarState.isCollapsed ? 'w-20' : 'w-72'
       }`}
     >
       {/* Header with Parent Menu Info and Toggle */}
-      <div className="flex items-center justify-between p-3 bg-content2/50">
+      <div className={`flex items-center p-3 bg-content2/50 ${
+        sidebarState.isCollapsed ? 'justify-center' : 'justify-between'
+      }`}>
         {!sidebarState.isCollapsed && parentMenuInfo && (
           <div className="flex items-center gap-2 flex-1 min-w-0">
             {parentMenuInfo.icon && (
@@ -123,7 +130,7 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
                   onPress={() => handleRouteClick(route)}
                   className={`transition-all duration-200 ${
                     sidebarState.isCollapsed
-                      ? 'justify-center items-center px-0 min-w-12 w-12 h-12'
+                      ? 'justify-center items-center flex px-0 min-w-12 w-12 h-12 mx-auto'
                       : 'justify-start px-3 w-full'
                   } ${route.active ? 'bg-primary/10' : ''}`}
                   isIconOnly={sidebarState.isCollapsed}

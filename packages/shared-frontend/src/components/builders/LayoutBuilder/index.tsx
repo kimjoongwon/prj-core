@@ -14,7 +14,7 @@ import { BottomTab } from '../../BottomTab';
 import { Logo } from '../../Logo';
 import { Avatar } from '../../Avatar';
 import { DarkModeSwitch } from '../../DarkModeSwitch';
-import { ResponsiveVisibility } from '../../ResponsiveVisibility';
+import { DesktopOnly } from '../../ResponsiveVisibility';
 
 interface Layout {
   children: ReactNode;
@@ -58,8 +58,19 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
       <DashboardLayout
         header={
           <Header
-            left={<Logo variants={'text'} />}
-            center={<Navbar routes={dashboardRoutes} />}
+            left={
+              <Logo
+                variants={'text'}
+                onClick={() =>
+                  Plate.navigation.getNavigator().pushByName('대시보드')
+                }
+              />
+            }
+            center={
+              <div className="hidden xl:block">
+                <Navbar routes={dashboardRoutes} />
+              </div>
+            }
             right={
               <div className="flex items-center gap-2">
                 <Avatar />

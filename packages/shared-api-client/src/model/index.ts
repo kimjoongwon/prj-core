@@ -190,6 +190,7 @@ export * from './roleClassificationDto';
 export * from './roleDto';
 export * from './roles';
 export * from './routineDto';
+export * from './selectTenantDto';
 export * from './selectWorkspaceDto';
 export * from './sessionDto';
 export * from './sessionDtoRecurringDayOfWeek';

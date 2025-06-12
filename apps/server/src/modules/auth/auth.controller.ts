@@ -29,11 +29,6 @@ export class AuthController {
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
 
-    const tenant = user.tenants.find((tenant) => tenant.main);
-
-    res.cookie('tenantId', tenant.id, {
-      httpOnly: true,
-    });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
     });
@@ -48,7 +43,6 @@ export class AuthController {
         accessToken,
         refreshToken,
         user,
-        mainTenantId: tenant?.id,
       }),
     );
   }

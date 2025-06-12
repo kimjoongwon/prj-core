@@ -32,16 +32,42 @@ export const useButtonLogic = ({
 
     if (nav.type === 'back') {
       navigatorService.goBack();
-    } else if (nav.route?.name) {
-      if (nav.type === 'replace') {
-        // For replace navigation
-        const pathname = Plate.navigation.getPathByName(nav.route.name);
-        if (pathname) {
-          navigatorService.replace(pathname, nav.route.params);
+    } else if (nav.type === 'href') {
+      // window.location.href로 이동 (외부 링크 또는 페이지 새로고침을 통한 이동)
+      if (nav.route?.fullPath) {
+        window.location.href = nav.route.fullPath;
+      } else if (nav.route?.relativePath) {
+        window.location.href = nav.route.relativePath;
+      }
+    } else if (nav.route) {
+      // 1. fullPath가 있으면 fullPath를 우선 사용
+      if (nav.route.fullPath) {
+        if (nav.type === 'replace') {
+          navigatorService.replace(nav.route.fullPath, nav.route.params);
+        } else {
+          navigatorService.push(nav.route.fullPath, nav.route.params);
         }
-      } else {
-        // Default to push navigation
-        navigatorService.pushByName(nav.route.name, nav.route.params);
+      }
+      // 2. relativePath가 있으면 relativePath 사용
+      else if (nav.route.relativePath) {
+        if (nav.type === 'replace') {
+          navigatorService.replace(nav.route.relativePath, nav.route.params);
+        } else {
+          navigatorService.push(nav.route.relativePath, nav.route.params);
+        }
+      }
+      // 3. name이 있으면 name으로 라우트 검색
+      else if (nav.route.name) {
+        if (nav.type === 'replace') {
+          // For replace navigation
+          const pathname = Plate.navigation.getPathByName(nav.route.name);
+          if (pathname) {
+            navigatorService.replace(pathname, nav.route.params);
+          }
+        } else {
+          // Default to push navigation
+          navigatorService.pushByName(nav.route.name, nav.route.params);
+        }
       }
     }
   };

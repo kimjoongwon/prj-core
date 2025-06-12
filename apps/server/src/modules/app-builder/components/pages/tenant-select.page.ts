@@ -31,13 +31,13 @@ export class TenantSelectPage {
                   title: '그라운드 선택',
                   options: tenantOptions,
                   selectionMode: 'single',
-                  path: 'params.selectedTenantId',
+                  path: 'selectTenantDto.selectedTenantId',
                 } as ListboxProps<any>,
               },
               {
                 name: 'ButtonBuilder',
                 props: {
-                  mutation: { name: 'selectTenant', path: 'params' },
+                  mutation: { name: 'selectTenant', path: 'selectTenantDto' },
                   color: 'primary',
                   size: 'md',
                   children: '선택',
@@ -45,8 +45,10 @@ export class TenantSelectPage {
                     required: { value: true, message: '그라운드를 선택해주세요.' },
                   },
                   navigator: {
+                    type: 'href',
                     route: {
                       name: '대시보드',
+                      fullPath: '/admin/dashboard',
                     },
                   },
                 } as ButtonBuilder,

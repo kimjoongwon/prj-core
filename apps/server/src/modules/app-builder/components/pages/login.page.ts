@@ -1,6 +1,6 @@
 import { InputProps } from '@heroui/react';
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder, ElementBuilder, PageBuilder, SectionBuilder } from '@shared/types';
+import { ButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 
 interface LoginDto {
   email: string;
@@ -15,9 +15,6 @@ export class LoginPage {
       email: 'plate@gmail.com',
       password: 'rkdmf12!@',
     };
-
-    // 입력 필드 생성
-    const inputs: ElementBuilder[] = [];
 
     // 섹션 구성
     const sections: SectionBuilder[] = [

@@ -161,7 +161,7 @@ import type {
   RemoveUser200AllOf,
   RemoveUserClassification200AllOf,
   RemoveUsers200AllOf,
-  SelectWorkspaceDto,
+  SelectTenantDto,
   SignUpPayloadDto,
   SignUpUser201AllOf,
   TokenDto,
@@ -2832,27 +2832,27 @@ export function useGetAppBuilderSuspenseInfinite<TData = InfiniteData<Awaited<Re
 
 
 
-export const selectWorkspace = (
-    selectWorkspaceDto: BodyType<SelectWorkspaceDto>,
+export const selectTenant = (
+    selectTenantDto: BodyType<SelectTenantDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<void>(
-      {url: `/api/v1/appBuilder/select-workspace`, method: 'POST',
+      {url: `/api/v1/appBuilder/select-tenant`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: selectWorkspaceDto, signal
+      data: selectTenantDto, signal
     },
       options);
     }
   
 
 
-export const getSelectWorkspaceMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext> => {
+export const getSelectTenantMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectTenant>>, TError,{data: BodyType<SelectTenantDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof selectTenant>>, TError,{data: BodyType<SelectTenantDto>}, TContext> => {
     
-const mutationKey = ['selectWorkspace'];
+const mutationKey = ['selectTenant'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -2862,10 +2862,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof selectWorkspace>>, {data: BodyType<SelectWorkspaceDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof selectTenant>>, {data: BodyType<SelectTenantDto>}> = (props) => {
           const {data} = props ?? {};
 
-          return  selectWorkspace(data,requestOptions)
+          return  selectTenant(data,requestOptions)
         }
 
         
@@ -2873,20 +2873,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SelectWorkspaceMutationResult = NonNullable<Awaited<ReturnType<typeof selectWorkspace>>>
-    export type SelectWorkspaceMutationBody = BodyType<SelectWorkspaceDto>
-    export type SelectWorkspaceMutationError = ErrorType<unknown>
+    export type SelectTenantMutationResult = NonNullable<Awaited<ReturnType<typeof selectTenant>>>
+    export type SelectTenantMutationBody = BodyType<SelectTenantDto>
+    export type SelectTenantMutationError = ErrorType<unknown>
 
-    export const useSelectWorkspace = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectWorkspace>>, TError,{data: BodyType<SelectWorkspaceDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useSelectTenant = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof selectTenant>>, TError,{data: BodyType<SelectTenantDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof selectWorkspace>>,
+        Awaited<ReturnType<typeof selectTenant>>,
         TError,
-        {data: BodyType<SelectWorkspaceDto>},
+        {data: BodyType<SelectTenantDto>},
         TContext
       > => {
 
-      const mutationOptions = getSelectWorkspaceMutationOptions(options);
+      const mutationOptions = getSelectTenantMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

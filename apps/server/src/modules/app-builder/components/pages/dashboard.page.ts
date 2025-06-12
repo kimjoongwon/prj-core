@@ -4,7 +4,6 @@ import { PageBuilder, SectionBuilder } from '@shared/types';
 @Injectable()
 export class DashboardPage {
   build(): PageBuilder {
-    // 섹션 구성
     const sections: SectionBuilder[] = [
       {
         stacks: [
@@ -53,12 +52,6 @@ export class DashboardPage {
 
     return {
       name: '대시보드',
-      state: {
-        form: {
-          inputs: {},
-          button: { errorMessages: [] },
-        },
-      },
       sections,
     };
   }

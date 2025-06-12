@@ -30,4 +30,3 @@ export * from './assignment.dto';
 export * from './ground.dto';
 export * from './profile.dto';
 export * from './task.dto';
-export * from './select-workspace.dto';

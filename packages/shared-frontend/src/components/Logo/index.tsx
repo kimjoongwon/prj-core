@@ -12,7 +12,7 @@ export interface LogoProps {
 }
 
 export const Logo = (props: LogoProps) => {
-  const { className } = props;
+  const { className, onClick } = props;
 
   return (
     <HStack className="items-center">
@@ -20,6 +20,7 @@ export const Logo = (props: LogoProps) => {
       <Button
         variant="light"
         className={cn(className, 'font-bold text-2xl p-0')}
+        onPress={onClick}
       >
         플레이트
       </Button>
