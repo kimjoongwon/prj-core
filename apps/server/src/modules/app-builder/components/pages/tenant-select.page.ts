@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { QueryTenantDto, TenantsService } from '@shared';
+import { ContextProvider, QueryTenantDto, TenantsService } from '@shared';
 import { ButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
 import { plainToInstance } from 'class-transformer';
 
@@ -8,10 +8,15 @@ export class TenantSelectPage {
   constructor(readonly tenantService: TenantsService) {}
 
   async build(): Promise<PageBuilder> {
-    const { items } = await this.tenantService.getManyByQuery(plainToInstance(QueryTenantDto, {}));
+    const userId = ContextProvider.getAuthUserId();
+    const query = plainToInstance(QueryTenantDto, {
+      userId,
+    });
+    console.log('query', query);
+    const { items } = await this.tenantService.getManyByQuery(query);
     const tenantOptions = items.map((tenant) => ({
-      text: tenant.space.ground.name,
-      value: tenant.id,
+      text: tenant.space?.ground.name,
+      value: tenant?.id,
     }));
 
     const sections: SectionBuilder[] = [

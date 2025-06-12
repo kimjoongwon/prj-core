@@ -7,6 +7,7 @@ model Space {
   tenants         Tenant[]
   classifications SpaceClassification[]
   associations    SpaceAssociation[]
+  ground          Ground?
 }
 
 model SpaceClassification {
@@ -52,4 +53,5 @@ model Ground {
   spaceId         String    @unique
   logoImageFileId String?
   imageFileId     String?
+  space           Space     @relation(fields: [spaceId], references: [id])
 }

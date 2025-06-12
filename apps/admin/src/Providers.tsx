@@ -1,7 +1,7 @@
 'use client';
 
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
-import { AppProvider, QueryProvider } from '@shared/frontend';
+import { AppProvider, AuthProvider, QueryProvider } from '@shared/frontend';
 import { NuqsAdapter } from 'nuqs/adapters/react';
 
 interface ProvidersProps {
@@ -15,10 +15,12 @@ export const Providers = (props: ProvidersProps) => {
     <QueryProvider>
       <HeroUIProvider>
         <NuqsAdapter>
-          <AppProvider>
-            {children}
-            {/* <ModalMount /> */}
-          </AppProvider>
+          <AuthProvider>
+            <AppProvider>
+              {children}
+              {/* <ModalMount /> */}
+            </AppProvider>
+          </AuthProvider>
           <ToastProvider placement="top-center" />
         </NuqsAdapter>
         {/* <ToastProvider /> */}

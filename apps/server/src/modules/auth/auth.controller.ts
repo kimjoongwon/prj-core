@@ -100,4 +100,18 @@ export class AuthController {
     const isValid = this.tokenService.verifyToken(token);
     return new ResponseEntity(HttpStatus.OK, '토큰 유효성 검증 완료', isValid);
   }
+
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  @ApiResponseEntity(Boolean, HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    // HttpOnly 쿠키들을 삭제
+    res.clearCookie('accessToken', { httpOnly: true });
+    res.clearCookie('refreshToken', { httpOnly: true });
+    res.clearCookie('tenantId', { httpOnly: true });
+    res.clearCookie('workspaceId', { httpOnly: true });
+
+    return new ResponseEntity(HttpStatus.OK, '로그아웃 성공', true);
+  }
 }

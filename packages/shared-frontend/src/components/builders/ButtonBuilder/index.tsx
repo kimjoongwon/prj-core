@@ -24,7 +24,11 @@ export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
     if (!validation) return { isValid: true };
 
     const { required, patterns } = validation;
-    const value = get(state, mutation?.path);
+    // mutation path가 있는 경우에만 get 함수 호출
+    let value;
+    if (mutation?.path) {
+      value = get(state, mutation.path);
+    }
     // 필수 여부 검증
     if (required?.value && (!value || value === '')) {
       return { isValid: false, errorMessage: required.message };
