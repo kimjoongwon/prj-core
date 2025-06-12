@@ -7,7 +7,6 @@ import { Prisma } from '@prisma/client';
 
 // Define the include type for Tenant with proper type inference
 type TenantInclude = Prisma.TenantInclude;
-
 @Injectable()
 export class TenantsService extends BaseService<
   CreateTenantDto,
@@ -18,6 +17,16 @@ export class TenantsService extends BaseService<
   TenantInclude
 > {
   constructor(repository: TenantsRepository) {
-    super(repository);
+    super(repository, {
+      includeMap: {
+        getManyByQuery: {
+          space: {
+            include: {
+              ground: true,
+            },
+          },
+        },
+      },
+    });
   }
 }

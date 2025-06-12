@@ -22,7 +22,6 @@ export * from './Copyright';
 export * from './DataGrid';
 export * from './DatePicker';
 export * from './DateRangePicker';
-export * from './DepotUploader';
 export * from './Dropdown';
 export * from './Email/EmailInput';
 export * from './FileUploader';
