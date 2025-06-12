@@ -2,10 +2,8 @@ import { Controller, Type } from '@nestjs/common';
 import { CreateGroundDto, UpdateGroundDto, GroundDto, QueryGroundDto } from '../dto';
 import { GroundsService } from '../service/grounds.service';
 import { AutoBaseController } from './auto-base.controller';
-import { ApiTags } from '@nestjs/swagger';
 import { CrudController } from './crud.decorator';
 
-@ApiTags('GROUNDS')
 @CrudController({
   entityName: 'Ground',
   tag: 'GROUNDS',
