@@ -1,25 +1,29 @@
-import { Controller } from '@nestjs/common';
-import { GroundDto, CreateGroundDto, QueryGroundDto, UpdateGroundDto } from '../dto';
-import { SmartBaseController, SmartCrudController } from './smart-base.controller';
+import { Controller, Type } from '@nestjs/common';
+import { CreateGroundDto, UpdateGroundDto, GroundDto, QueryGroundDto } from '../dto';
 import { GroundsService } from '../service/grounds.service';
+import { AutoBaseController } from './auto-base.controller';
+import { ApiTags } from '@nestjs/swagger';
+import { CrudController } from './crud.decorator';
 
-@SmartCrudController(GroundDto, {
-  tag: 'GROUNDS',
+@ApiTags('GROUNDS')
+@CrudController({
   entityName: 'Ground',
-  createDto: CreateGroundDto,
-  updateDto: UpdateGroundDto,
+  tag: 'GROUNDS',
 })
 @Controller()
-export class GroundsController extends SmartBaseController<
+export class GroundsController extends AutoBaseController<
   GroundDto,
   CreateGroundDto,
   UpdateGroundDto,
   QueryGroundDto,
   GroundsService
 > {
-  protected readonly dtoClass = GroundDto;
+  protected readonly service: GroundsService;
+  protected readonly dtoClass: Type<GroundDto> = GroundDto;
+  protected readonly entityName: string = 'Ground';
 
-  constructor(protected readonly service: GroundsService) {
+  constructor(service: GroundsService) {
     super();
+    this.service = service;
   }
 }

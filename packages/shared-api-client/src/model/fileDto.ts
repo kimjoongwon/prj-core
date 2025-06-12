@@ -13,9 +13,9 @@ export interface FileDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  parentId: string;
   tenantId: string;
   name: string;
-  depotId: string;
   size: number;
   mimeType: string;
   url: string;

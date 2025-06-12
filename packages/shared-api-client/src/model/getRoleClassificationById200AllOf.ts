@@ -5,7 +5,7 @@
  */
 import type { GroundDto } from './groundDto';
 
-export type Create200AllOf = {
+export type GetRoleClassificationById200AllOf = {
   /** */
   httpStatus?: number;
   /** */

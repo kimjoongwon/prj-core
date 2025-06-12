@@ -11,7 +11,4 @@ export interface SpaceDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  label: string;
-  name: string;
-  tenantId: string;
 }

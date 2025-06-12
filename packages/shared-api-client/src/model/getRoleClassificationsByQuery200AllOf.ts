@@ -4,13 +4,13 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroundDto } from './groundDto';
-import type { GetManyByQuery200AllOfMeta } from './getManyByQuery200AllOfMeta';
+import type { GetRoleClassificationsByQuery200AllOfMeta } from './getRoleClassificationsByQuery200AllOfMeta';
 
-export type GetManyByQuery200AllOf = {
+export type GetRoleClassificationsByQuery200AllOf = {
   /** */
   httpStatus?: number;
   /** */
   message?: string;
   data?: GroundDto[];
-  meta?: GetManyByQuery200AllOfMeta;
+  meta?: GetRoleClassificationsByQuery200AllOfMeta;
 };

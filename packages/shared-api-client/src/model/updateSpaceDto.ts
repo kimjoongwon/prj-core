@@ -4,8 +4,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface UpdateSpaceDto {
-  label?: string;
-  name?: string;
-  tenantId?: string;
-}
+export interface UpdateSpaceDto { [key: string]: unknown }

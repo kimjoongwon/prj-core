@@ -4,8 +4,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateSpaceDto {
-  label: string;
-  name: string;
-  tenantId: string;
-}
+export interface CreateSpaceDto { [key: string]: unknown }

@@ -7,5 +7,4 @@
 export interface UpdateRoutineDto {
   label?: string;
   name?: string;
-  contentId?: string;
 }

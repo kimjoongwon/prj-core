@@ -5,6 +5,7 @@
  */
 
 export interface CreateFileDto {
+  parentId: string;
   tenantId: string;
   name: string;
   size: number;

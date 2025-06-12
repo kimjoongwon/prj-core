@@ -97,7 +97,7 @@ export class LoginPage {
                   fullWidth: true,
                   navigator: {
                     route: {
-                      name: '워크스페이스 선택',
+                      name: '테넌트 선택',
                     },
                   },
                 } satisfies ButtonBuilder,

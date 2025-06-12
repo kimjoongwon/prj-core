@@ -14,8 +14,8 @@ export interface ExerciseDto {
   removedAt: string | null;
   name: string;
   description: string;
-  imageDepotId?: string;
-  videoDepotId?: string;
+  imageFileId?: string;
+  videoFileId?: string;
   taskId: string;
   duration: number;
   count: number;

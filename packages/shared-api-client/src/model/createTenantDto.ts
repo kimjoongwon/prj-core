@@ -3,10 +3,12 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { RoleDto } from './roleDto';
 
 export interface CreateTenantDto {
   main: boolean;
   roleId: string;
   userId: string;
   spaceId: string;
+  role?: RoleDto;
 }

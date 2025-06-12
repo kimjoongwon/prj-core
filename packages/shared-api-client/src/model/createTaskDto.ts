@@ -3,9 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateContentDto } from './createContentDto';
 
 export interface CreateTaskDto {
   tenantId: string;
-  content: CreateContentDto;
 }

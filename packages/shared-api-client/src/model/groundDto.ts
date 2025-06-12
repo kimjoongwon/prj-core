@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroundDtoWorkspace } from './groundDtoWorkspace';
+import type { GroundDtoSpace } from './groundDtoSpace';
 
 export interface GroundDto {
   id: string;
@@ -12,8 +12,18 @@ export interface GroundDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  name: string;
   /** @nullable */
-  workspaceId?: string | null;
+  label?: string | null;
+  address: string;
+  phone: string;
+  email: string;
+  businessNo: string;
   /** @nullable */
-  workspace?: GroundDtoWorkspace;
+  logoImageFileId?: string | null;
+  /** @nullable */
+  imageFileId?: string | null;
+  spaceId: string;
+  /** @nullable */
+  space?: GroundDtoSpace;
 }

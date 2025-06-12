@@ -5,6 +5,7 @@
  */
 import type { UserDto } from './userDto';
 import type { SpaceDto } from './spaceDto';
+import type { RoleDto } from './roleDto';
 
 export interface TenantDto {
   id: string;
@@ -19,4 +20,5 @@ export interface TenantDto {
   spaceId: string;
   user?: UserDto;
   space?: SpaceDto;
+  role?: RoleDto;
 }
