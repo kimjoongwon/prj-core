@@ -1,4 +1,3 @@
-export * from './smart-base.controller';
 export * from './user-associations.controller';
 export * from './role-associations.controller';
 export * from './file-associations.controller';
