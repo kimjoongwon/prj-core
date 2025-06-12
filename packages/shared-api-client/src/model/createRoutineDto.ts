@@ -7,5 +7,4 @@
 export interface CreateRoutineDto {
   label: string;
   name: string;
-  contentId: string;
 }

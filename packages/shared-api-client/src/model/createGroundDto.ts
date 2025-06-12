@@ -3,8 +3,18 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateWorkspaceDto } from './createWorkspaceDto';
 
 export interface CreateGroundDto {
-  workspace: CreateWorkspaceDto;
+  name: string;
+  /** @nullable */
+  label?: string | null;
+  address: string;
+  phone: string;
+  email: string;
+  businessNo: string;
+  /** @nullable */
+  logoImageFileId?: string | null;
+  /** @nullable */
+  imageFileId?: string | null;
+  spaceId: string;
 }

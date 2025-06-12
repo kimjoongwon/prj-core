@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleClassificationDto } from './roleClassificationDto';
+import type { GroundDto } from './groundDto';
 
 export type UpdateById200AllOf = {
   /** */
@@ -11,5 +11,5 @@ export type UpdateById200AllOf = {
   /** */
   message?: string;
   /** @nullable */
-  data?: RoleClassificationDto;
+  data?: GroundDto;
 };

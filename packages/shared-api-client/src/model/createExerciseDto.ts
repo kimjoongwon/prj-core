@@ -7,8 +7,8 @@
 export interface CreateExerciseDto {
   name: string;
   description: string;
-  imageDepotId?: string;
-  videoDepotId?: string;
+  imageFileId?: string;
+  videoFileId?: string;
   duration: number;
   count: number;
   tenantId: string;

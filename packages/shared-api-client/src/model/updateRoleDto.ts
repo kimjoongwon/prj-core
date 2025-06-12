@@ -6,7 +6,6 @@
 import type { Roles } from './roles';
 
 export interface UpdateRoleDto {
-  tenantId?: string;
   name?: Roles;
   serviceId?: string;
   categoryId?: string;
