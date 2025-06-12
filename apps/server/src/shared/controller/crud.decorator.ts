@@ -1,4 +1,4 @@
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SetMetadata } from '@nestjs/common';
 
 export const CRUD_ENTITY_KEY = 'crud_entity';
@@ -28,6 +28,11 @@ export function CrudController(config: CrudConfig) {
 
     // 메타데이터 설정
     SetMetadata(CRUD_CONFIG_KEY, config)(constructor);
+
+    // 클래스 레벨에서 ApiTags 적용
+    if (config.tag) {
+      ApiTags(config.tag)(constructor);
+    }
 
     // 프로토타입에서 메서드를 찾아서 ApiOperation 데코레이터 적용
     const prototype = constructor.prototype;
@@ -75,7 +80,6 @@ export function CrudController(config: CrudConfig) {
         ApiOperation({
           operationId,
           summary,
-          tags: config.tag ? [config.tag] : undefined,
         })(prototype, name, descriptor);
       }
     });

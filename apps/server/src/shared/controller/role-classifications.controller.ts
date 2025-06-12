@@ -8,9 +8,7 @@ import {
 import { RoleClassificationsService } from '../service/role-classifications.service';
 import { AutoBaseController } from './auto-base.controller';
 import { CrudController } from './crud.decorator';
-import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('ROLE_CLASSIFICATIONS')
 @CrudController({
   entityName: 'RoleClassification',
   tag: 'ROLE_CLASSIFICATIONS',
