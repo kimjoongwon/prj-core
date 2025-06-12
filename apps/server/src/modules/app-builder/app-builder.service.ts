@@ -3,7 +3,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { RouteBuilder, PageBuilder, LayoutBuilder } from '@shared/types';
 import { rawRoutes } from '@shared/vars';
 import { LoginPage } from './components/pages/login.page';
-import { WorkspaceSelectPage } from './components/pages/workspace-select.page';
+import { TenantSelectPage } from './components/pages/tenant-select.page';
 import { UsersPage } from './components/pages/users.page';
 import { DashboardPage } from './components/pages/dashboard.page';
 
@@ -14,7 +14,7 @@ export class AppBuilderService {
   constructor(
     readonly prisma: PrismaService,
     readonly loginPage: LoginPage,
-    readonly workspaceSelectPage: WorkspaceSelectPage,
+    readonly tenantSelectPage: TenantSelectPage,
     readonly dashboardPage: DashboardPage,
     readonly usersPage: UsersPage,
   ) {
@@ -25,7 +25,7 @@ export class AppBuilderService {
   async build() {
     // 로그인 페이지 설정
     const loginPageBuilder: PageBuilder = this.loginPage.build();
-    const workspaceSelectPageBuilder: PageBuilder = await this.workspaceSelectPage.build();
+    const tenantSelectPageBuilder: PageBuilder = await this.tenantSelectPage.build();
     const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
     const usersPageBuilder: PageBuilder = this.usersPage.build();
 
@@ -41,7 +41,7 @@ export class AppBuilderService {
       type: 'Root',
     });
 
-    this.setRoutePageAndLayout('워크스페이스 선택', workspaceSelectPageBuilder, {
+    this.setRoutePageAndLayout('그라운드 선택', tenantSelectPageBuilder, {
       type: 'Modal',
     });
 

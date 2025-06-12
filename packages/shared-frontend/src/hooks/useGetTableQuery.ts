@@ -1,17 +1,18 @@
 import { APIManager } from '@shared/api-client';
 import { TableBuilder } from '@shared/types';
 import { isEmpty } from 'lodash-es';
-import { useSearchParams } from 'react-router';
+import { parseAsInteger, useQueryState } from 'nuqs';
 
 export const useGetTableQuery = (tableBuilder: TableBuilder) => {
-  const searchParams = useSearchParams();
   const query = tableBuilder.query;
-  // const searchParamsObject = Object.fromEntries(searchParams.entries());
+  const [skip, setSkip] = useQueryState('skip', parseAsInteger.withDefault(0));
+  const [take, setTake] = useQueryState('take', parseAsInteger.withDefault(10));
   const apiArgs: unknown[] = [];
-  console.log('query', query);
+
   let queryParams = {
     ...query?.params,
-    // ...searchParamsObject,
+    skip,
+    take,
   };
 
   if (JSON.stringify(queryParams) === '{}') {
@@ -46,5 +47,9 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
     data,
     meta: pageMeta,
     isLoading,
+    skip,
+    take,
+    setSkip,
+    setTake,
   };
 };

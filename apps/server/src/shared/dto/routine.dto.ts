@@ -1,7 +1,6 @@
 import { Routine } from '@prisma/client';
 import { AbstractDto } from './abstract.dto';
-import { ClassField, StringField, UUIDField } from '../decorator/field.decorators';
-import { ContentDto } from './content.dto';
+import { StringField } from '../decorator/field.decorators';
 
 export class RoutineDto extends AbstractDto implements Routine {
   @StringField()
@@ -9,10 +8,4 @@ export class RoutineDto extends AbstractDto implements Routine {
 
   @StringField()
   name: string;
-
-  @UUIDField()
-  contentId: string;
-
-  @ClassField(() => ContentDto)
-  content: ContentDto;
 }

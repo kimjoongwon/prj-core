@@ -12,7 +12,6 @@ import {
 import { Auth, ApiResponseEntity } from '../decorator';
 import { CreateFileDto, FileDto } from '../dto';
 import { ResponseEntity } from '../entity/response.entity';
-import { ApiTags } from '@nestjs/swagger';
 import { FilesService } from '../service/files.service';
 import _ from 'lodash';
 import { ApiFile } from '../decorator/swagger.schema';

@@ -4,7 +4,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroundDtoWorkspace } from './groundDtoWorkspace';
-import type { GroundDtoImageDepot } from './groundDtoImageDepot';
 
 export interface GroundDto {
   id: string;
@@ -14,11 +13,7 @@ export interface GroundDto {
   /** @nullable */
   removedAt: string | null;
   /** @nullable */
-  imageDepotId?: string | null;
-  /** @nullable */
   workspaceId?: string | null;
   /** @nullable */
   workspace?: GroundDtoWorkspace;
-  /** @nullable */
-  imageDepot?: GroundDtoImageDepot;
 }

@@ -10,9 +10,9 @@ export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEn
   private _duration: number;
   private _count: number;
   private _taskId: string;
-  private _imageDepotId: string;
-  private _videoDepotId: string;
   private _task: Task;
+  imageFileId: string;
+  videoFileId: string;
 
   constructor(
     name: string,
@@ -20,8 +20,6 @@ export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEn
     duration: number,
     count: number,
     taskId: string,
-    imageDepotId: string,
-    videoDepotId: string,
     task: Task,
   ) {
     super();
@@ -31,8 +29,6 @@ export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEn
     this._count = count;
     this._taskId = taskId;
     this._task = task;
-    this._imageDepotId = imageDepotId;
-    this._videoDepotId = videoDepotId;
   }
 
   get description(): string {

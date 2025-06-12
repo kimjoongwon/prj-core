@@ -2,12 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { FileAssociationsRepository } from '../repository/file-associations.repository';
 import { QueryFileAssociationDto } from '../dto/query/query-file-association.dto';
-import { CreateFileAssociationDto } from '../dto';
+import { CreateFileAssociationDto, UpdateFileAssociationDto } from '../dto';
+import { BaseService } from './base.service';
+import { FileAssociation } from '../entity/file-association.entity';
 
 @Injectable()
-export class FileAssociationsService {
-  constructor(private readonly repository: FileAssociationsRepository) {}
+export class FileAssociationsService extends BaseService<
+  CreateFileAssociationDto,
+  UpdateFileAssociationDto,
+  QueryFileAssociationDto,
+  FileAssociation,
+  FileAssociationsRepository,
+  { file: boolean }
+> {
+  constructor(repository: FileAssociationsRepository) {
+    super(repository, {
+      includeMap: {
+        getManyByQuery: { file: true },
+      },
+    });
+  }
 
+  // 기존 custom 메서드들 유지
   getUnique(args: Prisma.FileAssociationFindUniqueArgs) {
     return this.repository.findUnique(args);
   }
@@ -20,30 +36,6 @@ export class FileAssociationsService {
     return this.repository.updateMany(args);
   }
 
-  deleteById(id: string) {
-    return this.repository.delete({ where: { id } });
-  }
-
-  create(createFileAssociationDto: CreateFileAssociationDto) {
-    return this.repository.create({
-      data: createFileAssociationDto,
-    });
-  }
-
-  async getManyByQuery(query: QueryFileAssociationDto) {
-    const include = {
-      file: true,
-    };
-    const args = query.toArgs({ include });
-    const countArgs = query.toCountArgs();
-    const fileAssociations = await this.repository.findMany(args);
-    const count = await this.repository.count(countArgs);
-    return {
-      fileAssociations,
-      count,
-    };
-  }
-
   update(args: Prisma.FileAssociationUpdateArgs) {
     return this.repository.update(args);
   }
@@ -53,5 +45,14 @@ export class FileAssociationsService {
       where: { id },
       data: { removedAt: new Date() },
     });
+  }
+
+  // 기존 컨트롤러 호환성을 위한 별도 메서드
+  async getFileAssociationsByQuery(query: QueryFileAssociationDto) {
+    const result = await this.getManyByQuery(query);
+    return {
+      fileAssociations: result.items,
+      count: result.count,
+    };
   }
 }

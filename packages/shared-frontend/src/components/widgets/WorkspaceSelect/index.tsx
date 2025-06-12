@@ -14,7 +14,7 @@ export const WorkspaceSelect = observer(() => {
       state={state}
       path="value"
       options={tenants.map(tenant => ({
-        text: tenant.space.name,
+        text: `Space ${tenant.space?.id}`, // 임시로 space id 사용
         value: tenant.id,
       }))}
     />

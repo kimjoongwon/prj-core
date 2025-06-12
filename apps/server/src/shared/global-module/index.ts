@@ -4,7 +4,6 @@ import {
   ActionsService,
   AssignmentsService,
   CategoriesService,
-  DepotsService,
   FileClassificationsService,
   GroundsService,
   ProgramsService,
@@ -17,7 +16,6 @@ import {
   TimelinesService,
   UserClassificationsService,
   UsersService,
-  WorkspacesService,
 } from '../service';
 import {
   AbilitiesRepository,
@@ -38,9 +36,7 @@ import {
   TimelinesRepository,
   UserClassificationsRepository,
   UsersRepository,
-  WorkspacesRepository,
 } from '../repository';
-import { DepotsRepository } from '../repository/depots.repository';
 import { FilesService } from '../service/files.service';
 import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
@@ -58,8 +54,6 @@ const modules = [
   ActionsRepository,
   CategoriesService,
   CategoriesRepository,
-  DepotsService,
-  DepotsRepository,
   FilesService,
   FilesRepository,
   ProgramsService,
@@ -81,8 +75,6 @@ const modules = [
   AwsService,
   ExercisesService,
   ExercisesRepository,
-  DepotsService,
-  DepotsRepository,
   TenantsService,
   TenantsRepository,
   AssignmentsService,
@@ -101,8 +93,6 @@ const modules = [
   SpaceClassificationsService,
   FileClassificationsRepository,
   FileClassificationsService,
-  WorkspacesService,
-  WorkspacesRepository,
 ];
 @Global()
 @Module({

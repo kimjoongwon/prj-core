@@ -4,7 +4,7 @@ import { AbstractDto, FileDto } from '.';
 
 export class FileAssociationDto extends AbstractDto implements FileAssociation {
   @UUIDField()
-  userId: string;
+  groupId: string;
 
   @UUIDField()
   fileId: string;

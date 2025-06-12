@@ -6,7 +6,5 @@
 import type { CreateWorkspaceDto } from './createWorkspaceDto';
 
 export interface CreateGroundDto {
-  /** @nullable */
-  imageDepotId?: string | null;
   workspace: CreateWorkspaceDto;
 }

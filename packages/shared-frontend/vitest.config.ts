@@ -9,5 +9,6 @@ export default defineConfig({
     typecheck: {
       tsconfig: './tsconfig.test.json',
     },
+    setupFiles: [],
   },
 });

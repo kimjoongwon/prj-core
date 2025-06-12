@@ -3,7 +3,6 @@ import { ButtonGroup, Pagination, Spinner } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { toJS } from 'mobx';
-import { parseAsInteger, useQueryState } from 'nuqs';
 import { DataGrid, HStack, useGetTableQuery } from '@shared/frontend';
 import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
@@ -14,9 +13,8 @@ import { usePageState } from '../PageBuilder';
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {
     const pageState = usePageState();
-    const { data, isLoading, meta } = useGetTableQuery(table);
-    const [skip, setSkip] = useQueryState('skip', parseAsInteger);
-    const [take, setTake] = useQueryState('take', parseAsInteger);
+    const { data, isLoading, meta, skip, take, setSkip, setTake } =
+      useGetTableQuery(table);
 
     const columns = table?.columns?.map(column => {
       return {

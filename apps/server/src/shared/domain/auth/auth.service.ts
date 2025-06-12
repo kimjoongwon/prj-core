@@ -12,6 +12,7 @@ import { SignUpPayloadDto } from './dtos/sign-up-payload.dto';
 import { LoginPayloadDto } from './dtos/login-payload.dto';
 import { UsersService } from '../../service/users.service';
 import { TokenService } from '../token/token.service';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
+    private prisma: PrismaService,
   ) {}
 
   async getCurrentUser(accessToken: string) {
@@ -62,6 +64,18 @@ export class AuthService {
 
   async signUp(signUpPayloadDto: SignUpPayloadDto) {
     const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
+
+    // USER 역할 찾기 또는 생성
+    let userRole = await this.prisma.role.findFirst({
+      where: { name: 'USER' },
+    });
+
+    if (!userRole) {
+      userRole = await this.prisma.role.create({
+        data: { name: 'USER' },
+      });
+    }
+
     const { id: userId } = await this.usersService.create({
       data: {
         name,
@@ -71,6 +85,7 @@ export class AuthService {
           create: {
             main: true,
             spaceId,
+            roleId: userRole.id,
           },
         },
         profiles: {

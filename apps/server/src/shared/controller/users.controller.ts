@@ -27,20 +27,6 @@ export class UsersController {
 
   constructor(private readonly service: UsersService) {}
 
-  @Get(':userId/grounds')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(GroundDto, HttpStatus.OK, { isArray: true })
-  async getGroundsByUserId(@Param('userId') userId: string) {
-    const grounds = await this.service.getGroundsByUserId(userId);
-
-    return new ResponseEntity(
-      HttpStatus.OK,
-      'success',
-      grounds.map((ground) => ground.toDto()),
-    );
-  }
-
   @Post()
   @Auth([])
   @HttpCode(HttpStatus.OK)
@@ -105,8 +91,6 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK, { isArray: true })
   async getUsersByQuery(@Query() query: QueryUserDto, @Req() req: Request) {
-    this.logger.log(`getUsersByQuery called with query: ${JSON.stringify(query)}`);
-
     try {
       // 인증 정보 로깅
       const authToken = req.cookies?.accessToken || req.headers?.authorization;

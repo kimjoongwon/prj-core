@@ -1,26 +1,17 @@
 import { Space } from '@prisma/client';
-import { ClassField, StringField, UUIDField } from '../decorator/field.decorators';
+import { ClassField } from '../decorator/field.decorators';
 import { AbstractDto } from './abstract.dto';
-import { SpaceAssociationDto } from './space-association.dto';
-import { SpaceClassificationDto } from './space-classification.dto';
 import { TenantDto } from './tenant.dto';
+import { SpaceClassificationDto } from './space-classification.dto';
+import { SpaceAssociationDto } from './space-association.dto';
 
 export class SpaceDto extends AbstractDto implements Space {
-  @StringField()
-  label: string;
+  @ClassField(() => TenantDto, { required: false, swagger: false, isArray: true })
+  tenants?: TenantDto[];
 
-  @StringField()
-  name: string;
+  @ClassField(() => SpaceClassificationDto, { required: false, swagger: false, isArray: true })
+  spaceClassifications?: SpaceClassificationDto[];
 
-  @UUIDField()
-  tenantId: string;
-
-  @ClassField(() => SpaceClassificationDto, { required: false, swagger: false })
-  classification?: SpaceClassificationDto;
-
-  @ClassField(() => SpaceAssociationDto, { required: false, each: true, swagger: false })
-  associations?: SpaceAssociationDto[];
-
-  @ClassField(() => TenantDto, { required: false, swagger: false })
-  tenant?: TenantDto;
+  @ClassField(() => SpaceAssociationDto, { required: false, swagger: false, isArray: true })
+  spaceAssociations?: SpaceAssociationDto[];
 }

@@ -5,10 +5,10 @@ import { File as FileEntity } from '@prisma/client';
 
 @UseDto(FileDto)
 export class File extends AbstractEntity<FileDto> implements FileEntity {
+  parentId: string;
+  tenantId: string;
   size: number;
   mimeType: string;
   url: string;
-  tenantId: string;
   name: string;
-  depotId: string;
 }
