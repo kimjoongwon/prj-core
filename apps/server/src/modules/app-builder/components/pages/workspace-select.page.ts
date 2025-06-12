@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { QueryDto, QueryWorkspaceDto, WorkspacesService } from '@shared';
+import { QueryWorkspaceDto, WorkspacesService } from '@shared';
 import { ButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
-export class TenantsPage {
+export class WorkspaceSelectPage {
   constructor(readonly workspaceService: WorkspacesService) {}
 
   async build(): Promise<PageBuilder> {
@@ -34,12 +34,17 @@ export class TenantsPage {
               {
                 name: 'ButtonBuilder',
                 props: {
-                  mutation: { name: 'selectWorkspace', path: 'selectedWorkspace' },
+                  mutation: { name: 'selectWorkspace', path: 'params' },
                   color: 'primary',
                   size: 'md',
                   children: '선택',
                   validation: {
                     required: { value: true, message: '테넌트를 추가해주세요.' },
+                  },
+                  navigator: {
+                    route: {
+                      name: '대시보드',
+                    },
                   },
                 } as ButtonBuilder,
               },

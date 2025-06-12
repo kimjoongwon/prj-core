@@ -47,11 +47,11 @@ export const InputValidationBuilder = observer(
 
     const callbacks = timings?.map(timing => {
       if (!validation) return {};
-      
+
       return {
         [timing]: (value: string) => {
           localState.errorMessages = [];
-          
+
           // Required validation
           if (validation.required?.value) {
             validateRule(!value, validation.required.message);
@@ -61,14 +61,14 @@ export const InputValidationBuilder = observer(
           if (validation.minLength?.value) {
             validateRule(
               value?.length < validation.minLength.value,
-              validation.minLength.message
+              validation.minLength.message,
             );
           }
 
           if (validation.maxLength?.value) {
             validateRule(
               value?.length > validation.maxLength.value,
-              validation.maxLength.message
+              validation.maxLength.message,
             );
           }
 
@@ -77,14 +77,14 @@ export const InputValidationBuilder = observer(
           if (validation.min?.value) {
             validateRule(
               numValue < validation.min.value,
-              validation.min.message
+              validation.min.message,
             );
           }
 
           if (validation.max?.value) {
             validateRule(
               numValue > validation.max.value,
-              validation.max.message
+              validation.max.message,
             );
           }
 
@@ -97,14 +97,19 @@ export const InputValidationBuilder = observer(
           // Update states
           localState.isInvalid = localState.errorMessages.length > 0;
           if (state?.form?.button?.errorMessages) {
-            state.form.button.errorMessages = uniq(state.form.button.errorMessages);
+            state.form.button.errorMessages = uniq(
+              state.form.button.errorMessages,
+            );
           }
           localState.errorMessages = uniq(localState.errorMessages);
         },
       };
     });
 
-    const _props = callbacks?.reduce((acc, callback) => ({ ...acc, ...callback }), {});
+    const _props = callbacks?.reduce(
+      (acc, callback) => ({ ...acc, ...callback }),
+      {},
+    );
 
     return cloneElement(children, {
       ...(_props || {}),

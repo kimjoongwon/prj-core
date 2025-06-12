@@ -18,6 +18,10 @@ export class UsersPage {
                     table: {
                       query: {
                         name: 'useGetUsersByQuery',
+                        params: {
+                          skip: 0,
+                          take: 10,
+                        },
                       },
                       columns: [
                         {
