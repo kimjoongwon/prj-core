@@ -5,6 +5,12 @@
  */
 
 export type GetExercisesByQueryParams = {
+/**
+ * 건너뛸 항목 수 (페이징)
+ */
 skip?: number;
+/**
+ * 가져올 항목 수 (페이징)
+ */
 take?: number;
 };

@@ -59,7 +59,7 @@ export class BaseService<
   }
 
   async getManyByQuery(query: QD): Promise<{ items: R[]; count: number }> {
-    const args = query.toArgs() as any;
+    const args = query?.toArgs() as any;
 
     // Apply include if configured for this method
     if (this.options.includeMap?.['getManyByQuery']) {

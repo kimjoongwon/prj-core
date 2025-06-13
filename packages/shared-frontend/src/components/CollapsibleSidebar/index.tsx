@@ -7,7 +7,7 @@ import { Plate } from '../../providers/App/AppProvider';
 import { renderLucideIcon } from '../../utils/iconUtils';
 import { VStack } from '../VStack';
 import { useLocalObservable } from 'mobx-react-lite';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 interface CollapsibleSidebarProps {
   routes: Route[];
@@ -16,13 +16,39 @@ interface CollapsibleSidebarProps {
 export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
   const { routes } = props;
 
-  // Local state for collapsed/expanded
+  // Local state for collapsed/expanded with localStorage persistence
   const sidebarState = useLocalObservable(() => ({
     isCollapsed: false,
     toggle() {
       this.isCollapsed = !this.isCollapsed;
+      // 상태를 localStorage에 저장
+      localStorage.setItem(
+        'sidebarCollapsed',
+        JSON.stringify(this.isCollapsed),
+      );
+    },
+    // localStorage에서 초기 상태 복원
+    initialize() {
+      if (typeof window !== 'undefined') {
+        try {
+          const saved = localStorage.getItem('sidebarCollapsed');
+          if (saved !== null) {
+            this.isCollapsed = JSON.parse(saved);
+          }
+        } catch (error) {
+          console.warn(
+            'Failed to restore sidebar state from localStorage:',
+            error,
+          );
+        }
+      }
     },
   }));
+
+  // 컴포넌트 마운트 시 localStorage에서 상태 복원
+  useEffect(() => {
+    sidebarState.initialize();
+  }, []);
 
   const handleRouteClick = (route: Route) => {
     if (route.fullPath) {
@@ -66,9 +92,11 @@ export const CollapsibleSidebar = observer((props: CollapsibleSidebarProps) => {
       }`}
     >
       {/* Header with Parent Menu Info and Toggle */}
-      <div className={`flex items-center p-3 bg-content2/50 ${
-        sidebarState.isCollapsed ? 'justify-center' : 'justify-between'
-      }`}>
+      <div
+        className={`flex items-center p-3 bg-content2/50 ${
+          sidebarState.isCollapsed ? 'justify-center' : 'justify-between'
+        }`}
+      >
         {!sidebarState.isCollapsed && parentMenuInfo && (
           <div className="flex items-center gap-2 flex-1 min-w-0">
             {parentMenuInfo.icon && (

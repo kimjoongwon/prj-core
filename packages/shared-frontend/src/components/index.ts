@@ -61,6 +61,9 @@ export * from './VStack';
 export * from './VideoUploader';
 export * from './WeekInput';
 
+// Pages
+export * from './NotFound';
+
 // Layouts
 export * from './layouts';
 export * from './widgets';

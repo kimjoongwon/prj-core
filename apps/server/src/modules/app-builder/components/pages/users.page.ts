@@ -30,6 +30,12 @@ export class UsersPage {
                             name: '이름',
                           },
                         },
+                        {
+                          accessorKey: 'phone',
+                          header: {
+                            name: '전화번호',
+                          },
+                        },
                       ],
                     },
                   } satisfies DataGridBuilderProps,

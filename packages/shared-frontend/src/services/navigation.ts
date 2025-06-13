@@ -33,12 +33,42 @@ export class NavigationService {
     this.setRoutes(routeBuilders);
     this.navigator.setActivateRouteCallback(this.activateRoute.bind(this));
 
-    // 초기 경로 설정 (window.location이 있는 경우)
-    if (typeof window !== 'undefined' && window.location?.pathname) {
-      this.updateCurrentPaths(window.location.pathname);
-    }
+    // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
+    this.initializeCurrentPath();
 
     makeAutoObservable(this);
+  }
+
+  /**
+   * 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
+   */
+  private initializeCurrentPath(): void {
+    if (typeof window !== 'undefined') {
+      let initialPath = window.location?.pathname || '';
+
+      // localStorage에서 마지막 경로 복원 시도
+      try {
+        const savedPath = localStorage.getItem('navigationCurrentPath');
+        if (savedPath && savedPath !== '/') {
+          // 저장된 경로가 있고 루트가 아닌 경우, 현재 브라우저 경로와 비교
+          // 브라우저 경로가 루트(/)이고 저장된 경로가 있으면 저장된 경로 사용
+          if (initialPath === '/' || !initialPath) {
+            initialPath = savedPath;
+          }
+        }
+      } catch (error) {
+        console.warn(
+          'Failed to restore navigation path from localStorage:',
+          error,
+        );
+      }
+
+      if (initialPath) {
+        this.updateCurrentPaths(initialPath);
+        // 초기 경로에 대해 활성 상태 설정
+        this.activateRoute(initialPath);
+      }
+    }
   }
 
   /**
@@ -47,6 +77,15 @@ export class NavigationService {
   private updateCurrentPaths(fullPath: string): void {
     this._currentFullPath = fullPath;
     this._currentRelativePath = this.extractRelativePath(fullPath);
+
+    // localStorage에 현재 경로 저장
+    if (typeof window !== 'undefined' && fullPath && fullPath !== '/') {
+      try {
+        localStorage.setItem('navigationCurrentPath', fullPath);
+      } catch (error) {
+        console.warn('Failed to save navigation path to localStorage:', error);
+      }
+    }
   }
 
   /**

@@ -33,13 +33,10 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
 
   const queryName = query?.name as keyof typeof APIManager;
   const getQuery = query?.name
-    ? // @ts-ignore
-      APIManager?.[queryName]?.apply(null, apiArgs)
+    ? APIManager?.[queryName]?.apply(null, apiArgs)
     : undefined;
 
-  // @ts-ignore
   const data = getQuery?.data?.data;
-  // @ts-ignore
   const pageMeta = getQuery?.data?.meta;
   const isLoading = getQuery?.isLoading;
 

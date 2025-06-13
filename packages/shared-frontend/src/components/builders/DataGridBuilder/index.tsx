@@ -9,6 +9,7 @@ import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { usePageState } from '../PageBuilder';
+import { useGetGroundsByQuery } from '@shared/api-client';
 
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {
@@ -26,7 +27,6 @@ export const DataGridBuilder = observer(
         cell: props => <CellBuilder {...props} {...column.cell} />,
       } as ColumnDef<any, any>;
     });
-
     if (isLoading) {
       return <Spinner />;
     }

@@ -1,7 +1,7 @@
 import { NumberFieldOptional } from '../../decorator';
 import { PaginationUtil } from '../../lib/PaginationUtil';
 import { PageMetaDto } from './page-meta.dto';
-import { defaultsDeep, orderBy } from 'lodash';
+import { defaultsDeep } from 'lodash';
 
 export class QueryDto {
   @NumberFieldOptional({
