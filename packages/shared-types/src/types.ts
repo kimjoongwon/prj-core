@@ -214,6 +214,12 @@ export interface DataGridBuilder {
   table: TableBuilder;
 }
 
+export interface ResourceBuilder {
+  resourceName: string;
+  query?: Query;
+  sections?: SectionBuilder[];
+}
+
 export interface PageBuilder {
   type?: 'Outlet' | 'Page';
   name?: string;

@@ -7,6 +7,7 @@ import { TenantSelectPage } from './components/pages/tenant-select.page';
 import { UsersPage } from './components/pages/users.page';
 import { DashboardPage } from './components/pages/dashboard.page';
 import { GroundsPage } from './components/pages/grounds.page';
+import { GroundPage } from './components/pages/ground.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -18,7 +19,8 @@ export class AppBuilderService {
     readonly tenantSelectPage: TenantSelectPage,
     readonly dashboardPage: DashboardPage,
     readonly usersPage: UsersPage,
-    readonly groundsPage: GroundsPage, // Assuming GroundsPage is similar to DashboardPage
+    readonly groundsPage: GroundsPage,
+    readonly groundPage: GroundPage,
   ) {
     // rawRoutes를 deep copy하여 초기화 (null safety 체크)
     this.routes = rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
@@ -32,6 +34,7 @@ export class AppBuilderService {
       const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
       const usersPageBuilder: PageBuilder = this.usersPage.build();
       const groundsPageBuilder: PageBuilder = this.groundsPage.build();
+      const groundPageBuilder: PageBuilder = await this.groundPage.build();
 
       // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
       if (isAuthenticated) {
@@ -81,37 +84,10 @@ export class AppBuilderService {
         this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder, {
           type: 'Root',
         });
-
-        this.setRoutePageAndLayout(
-          '그라운드 편집',
-          {
-            name: '그라운드 편집',
-            sections: [
-              {
-                stacks: [
-                  {
-                    type: 'VStack',
-                    elements: [
-                      {
-                        name: 'Text',
-                        props: {
-                          children: '그라운드 편집 페이지',
-                          fontSize: '2xl',
-                          fontWeight: 'bold',
-                        },
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            type: 'Modal',
-          },
-        );
-        this.setRoutePageAndLayout('그라운드 상세', undefined, {
-          type: 'Root',
+        // 그라운드 관련 페이지들을 동적으로 처리
+        // 실제 사용 시에는 라우트 파라미터를 통해 ID와 타입을 받아야 함
+        this.setRoutePageAndLayout('그라운드 편집', groundPageBuilder, {
+          type: 'Modal',
         });
       }
 

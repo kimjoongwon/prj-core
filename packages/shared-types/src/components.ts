@@ -20,6 +20,7 @@ import type {
   Route,
   Option,
   DataGridBuilder,
+  ResourceBuilder,
 } from './types';
 import type { ReactNode } from 'react';
 
@@ -333,6 +334,8 @@ export enum Months {
 
 // Builder related interfaces
 export interface DataGridBuilderProps extends DataGridBuilder {}
+
+export interface ResourceBuilderProps extends ResourceBuilder {}
 
 export interface InputBuilderProps {
   inputBuilder: any; // InputBuilderInterface

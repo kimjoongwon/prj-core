@@ -6,7 +6,6 @@ import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { v4 } from 'uuid';
 import { observable, isObservable } from 'mobx';
 import { SectionBuilder } from '../SectionBuilder';
-import { APIManager } from '@shared/api-client';
 
 interface PageBuilderProps {
   pageBuilder?: PageBuilderInterface;
