@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ContextProvider, QueryTenantDto, TenantsService } from '@shared';
-import { ButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
+import { IButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class TenantSelectPage {
     console.log('query', query);
     const { items } = await this.tenantService.getManyByQuery(query);
     const tenantOptions = items.map((tenant) => ({
-      text: tenant.space?.ground.name,
+      text: tenant.space?.ground?.name,
       value: tenant?.id,
     }));
 
@@ -51,7 +51,7 @@ export class TenantSelectPage {
                       fullPath: '/admin/dashboard',
                     },
                   },
-                } as ButtonBuilder,
+                } as IButtonBuilder,
               },
             ],
           },

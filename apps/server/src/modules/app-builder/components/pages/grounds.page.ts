@@ -66,12 +66,8 @@ export class GroundsPage {
                             name: '액션',
                           },
                           cell: {
-                            buttons: [
-                              {
-                                type: 'button',
-                                name: 'Edit',
-                              },
-                            ],
+                            type: 'row-actions',
+                            resourceName: 'Ground',
                           },
                         },
                       ],

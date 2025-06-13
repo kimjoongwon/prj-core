@@ -1,14 +1,14 @@
 'use client';
 
 import { Button as BaseButton, usePageState, Text } from '@shared/frontend';
-import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
+import { IButtonBuilder } from '@shared/types';
 import { addToast } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
 
-export const ButtonBuilder = observer((props: ButtonBuilderProps) => {
+export const ButtonBuilder = observer((props: IButtonBuilder) => {
   const { mutation, validation, buttonType, navigator } = props;
   const state = usePageState();
   const { handleApiCall } = useButtonLogic({ mutation, navigator, state });

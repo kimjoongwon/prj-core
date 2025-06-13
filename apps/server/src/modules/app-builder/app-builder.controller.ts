@@ -15,7 +15,6 @@ export class AppBuilderController {
   async getAppBuilder(@Req() req: Request) {
     // 인증 상태 확인 (accessToken 쿠키 존재 여부로 판단)
     const isAuthenticated = !!req.cookies?.accessToken;
-    console.log('isAuthenticated:', isAuthenticated, req.cookies.accessToken);
     const app = await this.appBuilderService.build(isAuthenticated);
     return new ResponseEntity(200, '성공', app);
   }
