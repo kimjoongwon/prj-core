@@ -43,7 +43,7 @@ interface ModalLayoutProps {
 export function ModalLayout({
   children,
   title,
-  size = 'md',
+  size = '4xl',
   placement = 'center',
   backdrop = 'opaque',
   hideCloseButton = false,

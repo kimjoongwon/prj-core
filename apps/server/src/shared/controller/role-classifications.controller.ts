@@ -23,6 +23,7 @@ export class RoleClassificationsController extends AutoBaseController<
 > {
   protected readonly service: RoleClassificationsService;
   protected readonly dtoClass: Type<RoleClassificationDto> = RoleClassificationDto;
+  protected readonly queryDtoClass: Type<QueryRoleClassificationDto> = QueryRoleClassificationDto;
   protected readonly entityName: string = 'RoleClassification';
 
   constructor(service: RoleClassificationsService) {

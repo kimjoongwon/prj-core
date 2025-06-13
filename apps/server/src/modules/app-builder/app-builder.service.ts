@@ -6,6 +6,7 @@ import { LoginPage } from './components/pages/login.page';
 import { TenantSelectPage } from './components/pages/tenant-select.page';
 import { UsersPage } from './components/pages/users.page';
 import { DashboardPage } from './components/pages/dashboard.page';
+import { GroundsPage } from './components/pages/grounds.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -17,6 +18,7 @@ export class AppBuilderService {
     readonly tenantSelectPage: TenantSelectPage,
     readonly dashboardPage: DashboardPage,
     readonly usersPage: UsersPage,
+    readonly groundsPage: GroundsPage, // Assuming GroundsPage is similar to DashboardPage
   ) {
     // rawRoutes를 deep copy하여 초기화
     this.routes = rawRoutes;
@@ -28,6 +30,7 @@ export class AppBuilderService {
     const tenantSelectPageBuilder: PageBuilder = await this.tenantSelectPage.build();
     const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
     const usersPageBuilder: PageBuilder = this.usersPage.build();
+    const groundsPageBuilder: PageBuilder = this.groundsPage.build();
 
     // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
     if (isAuthenticated) {
@@ -65,6 +68,42 @@ export class AppBuilderService {
       });
 
       this.setRoutePageAndLayout('유저', usersPageBuilder);
+
+      this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder, {
+        type: 'Root',
+      });
+
+      this.setRoutePageAndLayout(
+        '그라운드 편집',
+        {
+          name: '그라운드 편집',
+          sections: [
+            {
+              stacks: [
+                {
+                  type: 'VStack',
+                  elements: [
+                    {
+                      name: 'Text',
+                      props: {
+                        children: '그라운드 편집 페이지',
+                        fontSize: '2xl',
+                        fontWeight: 'bold',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'Modal',
+        },
+      );
+      this.setRoutePageAndLayout('그라운드 상세', undefined, {
+        type: 'Root',
+      });
     }
 
     return {

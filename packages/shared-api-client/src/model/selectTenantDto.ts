@@ -6,5 +6,5 @@
 
 export interface SelectTenantDto {
   /** 선택된 테넌트 ID */
-  selectedTenant: string;
+  selectedTenantId: string;
 }

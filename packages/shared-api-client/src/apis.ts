@@ -42,6 +42,7 @@ import type {
   CreateFileClassification200AllOf,
   CreateFileClassificationDto,
   CreateFileDto,
+  CreateGroundDto,
   CreateGroupDto,
   CreateProgram200AllOf,
   CreateProgramDto,
@@ -98,6 +99,8 @@ import type {
   GetFileClassification200AllOf,
   GetFileClassificationsByQuery200AllOf,
   GetFileClassificationsByQueryParams,
+  GetGroundsByQuery200AllOf,
+  GetGroundsByQueryParams,
   GetGroup200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
@@ -177,6 +180,7 @@ import type {
   UpdateFileByIdBody,
   UpdateFileClassification200AllOf,
   UpdateFileClassificationDto,
+  UpdateGroundDto,
   UpdateGroup200AllOf,
   UpdateGroupDto,
   UpdateProgramById200AllOf,
@@ -211,16 +215,18 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * @summary Create ground
+ * @summary 새로운 Ground 생성
  */
 export const createGround = (
-    
+    createGroundDto: BodyType<CreateGroundDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications`, method: 'POST', signal
+      return customInstance<void>(
+      {url: `/api/v1/grounds`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createGroundDto, signal
     },
       options);
     }
@@ -228,8 +234,8 @@ export const createGround = (
 
 
 export const getCreateGroundMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,void, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext> => {
     
 const mutationKey = ['createGround'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -241,10 +247,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGround>>, void> = () => {
-          
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createGround>>, {data: BodyType<CreateGroundDto>}> = (props) => {
+          const {data} = props ?? {};
 
-          return  createGround(requestOptions)
+          return  createGround(data,requestOptions)
         }
 
         
@@ -253,18 +259,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type CreateGroundMutationResult = NonNullable<Awaited<ReturnType<typeof createGround>>>
-    
+    export type CreateGroundMutationBody = BodyType<CreateGroundDto>
     export type CreateGroundMutationError = ErrorType<void>
 
     /**
- * @summary Create ground
+ * @summary 새로운 Ground 생성
  */
 export const useCreateGround = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createGround>>, TError,{data: BodyType<CreateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createGround>>,
         TError,
-        void,
+        {data: BodyType<CreateGroundDto>},
         TContext
       > => {
 
@@ -274,36 +280,37 @@ export const useCreateGround = <TError = ErrorType<void>,
     }
     
 /**
- * @summary Get grounds by query
+ * @summary Ground 목록 조회
  */
 export const getGroundsByQuery = (
-    
+    params?: GetGroundsByQueryParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications`, method: 'GET', signal
+      return customInstance<GetGroundsByQuery200AllOf>(
+      {url: `/api/v1/grounds`, method: 'GET',
+        params, signal
     },
       options);
     }
   
 
-export const getGetGroundsByQueryQueryKey = () => {
-    return [`/api/v1/roles/classifications`] as const;
+export const getGetGroundsByQueryQueryKey = (params?: GetGroundsByQueryParams,) => {
+    return [`/api/v1/grounds`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetGroundsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
@@ -317,7 +324,7 @@ export type GetGroundsByQueryQueryError = ErrorType<void>
 
 
 export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroundsByQuery>>,
           TError,
@@ -327,7 +334,7 @@ export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGround
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getGroundsByQuery>>,
           TError,
@@ -337,19 +344,19 @@ export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGround
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get grounds by query
+ * @summary Ground 목록 조회
  */
 
 export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroundsByQueryQueryOptions(options)
+  const queryOptions = getGetGroundsByQueryQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -360,16 +367,16 @@ export function useGetGroundsByQuery<TData = Awaited<ReturnType<typeof getGround
 
 
 
-export const getGetGroundsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
@@ -383,27 +390,27 @@ export type GetGroundsByQuerySuspenseQueryError = ErrorType<void>
 
 
 export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get grounds by query
+ * @summary Ground 목록 조회
  */
 
 export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof getGroundsByQuery>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroundsByQuerySuspenseQueryOptions(options)
+  const queryOptions = getGetGroundsByQuerySuspenseQueryOptions(params,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -414,16 +421,16 @@ export function useGetGroundsByQuerySuspense<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getGetGroundsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroundsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetGroundsByQueryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroundsByQuery>>> = ({ signal }) => getGroundsByQuery(params, requestOptions, signal);
 
       
 
@@ -437,27 +444,27 @@ export type GetGroundsByQuerySuspenseInfiniteQueryError = ErrorType<void>
 
 
 export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params: undefined |  GetGroundsByQueryParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get grounds by query
+ * @summary Ground 목록 조회
  */
 
 export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundsByQuery>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetGroundsByQueryParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroundsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroundsByQuerySuspenseInfiniteQueryOptions(options)
+  const queryOptions = getGetGroundsByQuerySuspenseInfiniteQueryOptions(params,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -470,7 +477,7 @@ export function useGetGroundsByQuerySuspenseInfinite<TData = InfiniteData<Awaite
 
 
 /**
- * @summary Get ground by ID
+ * @summary ID로 Ground 조회
  */
 export const getGroundById = (
     id: string,
@@ -478,15 +485,15 @@ export const getGroundById = (
 ) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications/${id}`, method: 'GET', signal
+      return customInstance<void>(
+      {url: `/api/v1/grounds/${id}`, method: 'GET', signal
     },
       options);
     }
   
 
 export const getGetGroundByIdQueryKey = (id: string,) => {
-    return [`/api/v1/roles/classifications/${id}`] as const;
+    return [`/api/v1/grounds/${id}`] as const;
     }
 
     
@@ -537,7 +544,7 @@ export function useGetGroundById<TData = Awaited<ReturnType<typeof getGroundById
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get ground by ID
+ * @summary ID로 Ground 조회
  */
 
 export function useGetGroundById<TData = Awaited<ReturnType<typeof getGroundById>>, TError = ErrorType<void>>(
@@ -591,7 +598,7 @@ export function useGetGroundByIdSuspense<TData = Awaited<ReturnType<typeof getGr
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get ground by ID
+ * @summary ID로 Ground 조회
  */
 
 export function useGetGroundByIdSuspense<TData = Awaited<ReturnType<typeof getGroundById>>, TError = ErrorType<void>>(
@@ -645,7 +652,7 @@ export function useGetGroundByIdSuspenseInfinite<TData = InfiniteData<Awaited<Re
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get ground by ID
+ * @summary ID로 Ground 조회
  */
 
 export function useGetGroundByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroundById>>>, TError = ErrorType<void>>(
@@ -666,15 +673,18 @@ export function useGetGroundByIdSuspenseInfinite<TData = InfiniteData<Awaited<Re
 
 
 /**
- * @summary Update ground by ID
+ * @summary ID로 Ground 수정
  */
 export const updateGroundById = (
     id: string,
+    updateGroundDto: BodyType<UpdateGroundDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications/${id}`, method: 'PATCH'
+      return customInstance<void>(
+      {url: `/api/v1/grounds/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateGroundDto
     },
       options);
     }
@@ -682,8 +692,8 @@ export const updateGroundById = (
 
 
 export const getUpdateGroundByIdMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string;data: BodyType<UpdateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string;data: BodyType<UpdateGroundDto>}, TContext> => {
     
 const mutationKey = ['updateGroundById'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -695,10 +705,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroundById>>, {id: string}> = (props) => {
-          const {id} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroundById>>, {id: string;data: BodyType<UpdateGroundDto>}> = (props) => {
+          const {id,data} = props ?? {};
 
-          return  updateGroundById(id,requestOptions)
+          return  updateGroundById(id,data,requestOptions)
         }
 
         
@@ -707,18 +717,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateGroundByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroundById>>>
-    
+    export type UpdateGroundByIdMutationBody = BodyType<UpdateGroundDto>
     export type UpdateGroundByIdMutationError = ErrorType<void>
 
     /**
- * @summary Update ground by ID
+ * @summary ID로 Ground 수정
  */
 export const useUpdateGroundById = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroundById>>, TError,{id: string;data: BodyType<UpdateGroundDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateGroundById>>,
         TError,
-        {id: string},
+        {id: string;data: BodyType<UpdateGroundDto>},
         TContext
       > => {
 
@@ -728,15 +738,15 @@ export const useUpdateGroundById = <TError = ErrorType<void>,
     }
     
 /**
- * @summary Hard delete ground by ID
+ * @summary ID로 Ground 완전 삭제 (hard delete)
  */
 export const deleteGroundById = (
     id: string,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications/${id}`, method: 'DELETE'
+      return customInstance<void>(
+      {url: `/api/v1/grounds/${id}`, method: 'DELETE'
     },
       options);
     }
@@ -773,7 +783,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type DeleteGroundByIdMutationError = ErrorType<void>
 
     /**
- * @summary Hard delete ground by ID
+ * @summary ID로 Ground 완전 삭제 (hard delete)
  */
 export const useDeleteGroundById = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteGroundById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -790,15 +800,15 @@ export const useDeleteGroundById = <TError = ErrorType<void>,
     }
     
 /**
- * @summary Soft delete ground by ID
+ * @summary ID로 Ground 삭제 (soft delete)
  */
 export const removeGroundById = (
     id: string,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<unknown>(
-      {url: `/api/v1/roles/classifications/${id}/removedAt`, method: 'PATCH'
+      return customInstance<void>(
+      {url: `/api/v1/grounds/${id}/removedAt`, method: 'PATCH'
     },
       options);
     }
@@ -835,7 +845,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type RemoveGroundByIdMutationError = ErrorType<void>
 
     /**
- * @summary Soft delete ground by ID
+ * @summary ID로 Ground 삭제 (soft delete)
  */
 export const useRemoveGroundById = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeGroundById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
@@ -1446,6 +1456,653 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
 
       const mutationOptions = getRemoveUserClassificationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * @summary Create roleclassification
+ */
+export const createRoleClassification = (
+    createRoleClassificationBody: BodyType<string>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRoleClassificationBody, signal
+    },
+      options);
+    }
+  
+
+
+export const getCreateRoleClassificationMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoleClassification>>, TError,{data: BodyType<string>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRoleClassification>>, TError,{data: BodyType<string>}, TContext> => {
+    
+const mutationKey = ['createRoleClassification'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRoleClassification>>, {data: BodyType<string>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createRoleClassification(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRoleClassificationMutationResult = NonNullable<Awaited<ReturnType<typeof createRoleClassification>>>
+    export type CreateRoleClassificationMutationBody = BodyType<string>
+    export type CreateRoleClassificationMutationError = ErrorType<void>
+
+    /**
+ * @summary Create roleclassification
+ */
+export const useCreateRoleClassification = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoleClassification>>, TError,{data: BodyType<string>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createRoleClassification>>,
+        TError,
+        {data: BodyType<string>},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateRoleClassificationMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * 쿼리 파라미터를 사용하여 엔티티 목록을 조회합니다. 개별 컨트롤러에서 @ApiQueryDto 데코레이터를 추가하여 Swagger에 쿼리 파라미터를 표시할 수 있습니다.
+ * @summary Get roleclassifications by query
+ */
+export const getRoleClassificationsByQuery = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetRoleClassificationsByQueryQueryKey = () => {
+    return [`/api/v1/roles/classifications`] as const;
+    }
+
+    
+export const getGetRoleClassificationsByQueryQueryOptions = <TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationsByQueryQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>> = ({ signal }) => getRoleClassificationsByQuery(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationsByQueryQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>
+export type GetRoleClassificationsByQueryQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationsByQuery<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleClassificationsByQuery>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleClassificationsByQuery>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuery<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleClassificationsByQuery>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleClassificationsByQuery>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuery<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassifications by query
+ */
+
+export function useGetRoleClassificationsByQuery<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationsByQueryQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetRoleClassificationsByQuerySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationsByQueryQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>> = ({ signal }) => getRoleClassificationsByQuery(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationsByQuerySuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>
+export type GetRoleClassificationsByQuerySuspenseQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassifications by query
+ */
+
+export function useGetRoleClassificationsByQuerySuspense<TData = Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationsByQuerySuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetRoleClassificationsByQuerySuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationsByQueryQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>> = ({ signal }) => getRoleClassificationsByQuery(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationsByQuerySuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>
+export type GetRoleClassificationsByQuerySuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassifications by query
+ */
+
+export function useGetRoleClassificationsByQuerySuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationsByQuery>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationsByQuerySuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Get roleclassification by ID
+ */
+export const getRoleClassificationById = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetRoleClassificationByIdQueryKey = (id: string,) => {
+    return [`/api/v1/roles/classifications/${id}`] as const;
+    }
+
+    
+export const getGetRoleClassificationByIdQueryOptions = <TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationById>>> = ({ signal }) => getRoleClassificationById(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationById>>>
+export type GetRoleClassificationByIdQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationById<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleClassificationById>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleClassificationById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationById<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoleClassificationById>>,
+          TError,
+          Awaited<ReturnType<typeof getRoleClassificationById>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationById<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassification by ID
+ */
+
+export function useGetRoleClassificationById<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationByIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetRoleClassificationByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationById>>> = ({ signal }) => getRoleClassificationById(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationById>>>
+export type GetRoleClassificationByIdSuspenseQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationByIdSuspense<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationByIdSuspense<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationByIdSuspense<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassification by ID
+ */
+
+export function useGetRoleClassificationByIdSuspense<TData = Awaited<ReturnType<typeof getRoleClassificationById>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationByIdSuspenseQueryOptions(id,options)
+
+  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetRoleClassificationByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationById>>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoleClassificationByIdQueryKey(id);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoleClassificationById>>> = ({ signal }) => getRoleClassificationById(id, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoleClassificationByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getRoleClassificationById>>>
+export type GetRoleClassificationByIdSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetRoleClassificationByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationById>>>, TError = ErrorType<void>>(
+ id: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationById>>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoleClassificationByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationById>>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get roleclassification by ID
+ */
+
+export function useGetRoleClassificationByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoleClassificationById>>>, TError = ErrorType<void>>(
+ id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoleClassificationById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoleClassificationByIdSuspenseInfiniteQueryOptions(id,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * @summary Update roleclassification by ID
+ */
+export const updateRoleClassificationById = (
+    id: BodyType<string>,
+    updateRoleClassificationByIdBody: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateRoleClassificationByIdBody
+    },
+      options);
+    }
+  
+
+
+export const getUpdateRoleClassificationByIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoleClassificationById>>, TError,{id: string;data: BodyType<string>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateRoleClassificationById>>, TError,{id: string;data: BodyType<string>}, TContext> => {
+    
+const mutationKey = ['updateRoleClassificationById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateRoleClassificationById>>, {id: string;data: BodyType<string>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateRoleClassificationById(id,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateRoleClassificationByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateRoleClassificationById>>>
+    export type UpdateRoleClassificationByIdMutationBody = BodyType<string>
+    export type UpdateRoleClassificationByIdMutationError = ErrorType<void>
+
+    /**
+ * @summary Update roleclassification by ID
+ */
+export const useUpdateRoleClassificationById = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoleClassificationById>>, TError,{id: string;data: BodyType<string>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateRoleClassificationById>>,
+        TError,
+        {id: string;data: BodyType<string>},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateRoleClassificationByIdMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * @summary Hard delete roleclassification by ID
+ */
+export const deleteRoleClassificationById = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+  
+
+
+export const getDeleteRoleClassificationByIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoleClassificationById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteRoleClassificationById>>, TError,{id: string}, TContext> => {
+    
+const mutationKey = ['deleteRoleClassificationById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteRoleClassificationById>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteRoleClassificationById(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteRoleClassificationByIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteRoleClassificationById>>>
+    
+    export type DeleteRoleClassificationByIdMutationError = ErrorType<void>
+
+    /**
+ * @summary Hard delete roleclassification by ID
+ */
+export const useDeleteRoleClassificationById = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoleClassificationById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteRoleClassificationById>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getDeleteRoleClassificationByIdMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    
+/**
+ * @summary Soft delete roleclassification by ID
+ */
+export const removeRoleClassificationById = (
+    id: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<void>(
+      {url: `/api/v1/roles/classifications/${id}/removedAt`, method: 'PATCH'
+    },
+      options);
+    }
+  
+
+
+export const getRemoveRoleClassificationByIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeRoleClassificationById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof removeRoleClassificationById>>, TError,{id: string}, TContext> => {
+    
+const mutationKey = ['removeRoleClassificationById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removeRoleClassificationById>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  removeRoleClassificationById(id,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemoveRoleClassificationByIdMutationResult = NonNullable<Awaited<ReturnType<typeof removeRoleClassificationById>>>
+    
+    export type RemoveRoleClassificationByIdMutationError = ErrorType<void>
+
+    /**
+ * @summary Soft delete roleclassification by ID
+ */
+export const useRemoveRoleClassificationById = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeRoleClassificationById>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removeRoleClassificationById>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+
+      const mutationOptions = getRemoveRoleClassificationByIdMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

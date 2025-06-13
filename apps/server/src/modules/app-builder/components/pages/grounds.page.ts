@@ -1,41 +1,88 @@
-// import { Injectable } from '@nestjs/common';
-// import { PageBuilder } from '@shared/types';
-// import { ContextProvider } from '../../../../shared/provider/context.provider';
-// import { ColumnBuilderService } from '../column/column-builder.service';
-// import { DataGridBuilderService } from '../data-grid/data-grid-builder.service';
+import { Injectable } from '@nestjs/common';
+import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 
-// @Injectable()
-// export class GroundsPage {
-//   constructor(
-//     private columnBuilderService: ColumnBuilderService,
-//     private dataGridBuilderService: DataGridBuilderService,
-//   ) {}
-
-//   build(): PageBuilder {
-//     const columns = this.columnBuilderService.build(
-//       'ground',
-//       [
-//         'workspace.name',
-//         'workspace.label',
-//         'workspace.address',
-//         'workspace.businessNo',
-//         'workspace.phone',
-//       ],
-//       ['modify', 'detail', 'remove'],
-//     );
-
-//     const dataGrid = this.dataGridBuilderService.build({
-//       queryName: 'useGetGroundsByQuery',
-//       columns,
-//       params: {
-//         skip: 0,
-//         take: 10,
-//       },
-//     });
-
-//     return {
-//       name: '리스트',
-//       dataGrid,
-//     };
-//   }
-// }
+@Injectable()
+export class GroundsPage {
+  build(): PageBuilder {
+    return {
+      name: '그라운드 리스트',
+      sections: [
+        {
+          stacks: [
+            {
+              type: 'VStack' as const,
+              elements: [
+                {
+                  name: 'DataGridBuilder',
+                  props: {
+                    table: {
+                      query: {
+                        name: 'useGetGroundsByQuery',
+                        params: {
+                          skip: 0,
+                          take: 10,
+                        },
+                      },
+                      columns: [
+                        {
+                          accessorKey: 'name',
+                          header: {
+                            name: '사업장명',
+                          },
+                        },
+                        {
+                          accessorKey: 'label',
+                          header: {
+                            name: '라벨',
+                          },
+                        },
+                        {
+                          accessorKey: 'address',
+                          header: {
+                            name: '주소',
+                          },
+                        },
+                        {
+                          accessorKey: 'businessNo',
+                          header: {
+                            name: '사업자등록번호',
+                          },
+                        },
+                        {
+                          accessorKey: 'phone',
+                          header: {
+                            name: '전화번호',
+                          },
+                        },
+                        {
+                          accessorKey: 'email',
+                          header: {
+                            name: '이메일',
+                          },
+                        },
+                        {
+                          accessorKey: 'actions',
+                          header: {
+                            name: '액션',
+                          },
+                          cell: {
+                            buttons: [
+                              {
+                                type: 'button',
+                                name: 'Edit',
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  } satisfies DataGridBuilderProps,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+  }
+}

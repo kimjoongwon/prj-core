@@ -2,6 +2,8 @@ import { v4 } from 'uuid';
 import { CellBuilderProps } from '@shared/types';
 import { ButtonBuilder } from '../ButtonBuilder';
 import dayjs from 'dayjs';
+import { Button } from '@heroui/react';
+import { Plate } from '../../../providers';
 
 export const CellBuilder = ({
   row,
@@ -26,7 +28,21 @@ export const CellBuilder = ({
     return (
       <div className="flex space-x-1">
         {buttons.map(button => {
-          return <ButtonBuilder key={v4()} {...button} buttonType="cell" />;
+          return (
+            <Button
+              key={v4()}
+              {...button}
+              buttonType="cell"
+              onPress={() => {
+                Plate.navigation.getNavigator().pushByName('그라운드 편집', {
+                  id: row.original.id,
+                  type: 'create',
+                });
+              }}
+            >
+              생성
+            </Button>
+          );
         })}
       </div>
     );

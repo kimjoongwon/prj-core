@@ -4,13 +4,12 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroundDto } from './groundDto';
-import type { GetManyByQuery200AllOfMeta } from './getManyByQuery200AllOfMeta';
 
 export type GetManyByQuery200AllOf = {
   /** */
   httpStatus?: number;
   /** */
   message?: string;
-  data?: GroundDto[];
-  meta?: GetManyByQuery200AllOfMeta;
+  /** @nullable */
+  data?: GroundDto;
 };

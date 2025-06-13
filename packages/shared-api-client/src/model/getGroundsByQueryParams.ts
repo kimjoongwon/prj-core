@@ -4,7 +4,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetProgramsByQueryParams = {
+export type GetGroundsByQueryParams = {
 /**
  * 건너뛸 항목 수 (페이징)
  */
@@ -13,4 +13,8 @@ skip?: number;
  * 가져올 항목 수 (페이징)
  */
 take?: number;
+/**
+ * Ground 이름
+ */
+name?: string;
 };

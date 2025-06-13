@@ -38,7 +38,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
 
   if (layoutBuilder?.type === 'Modal') {
     return (
-      <ModalLayout>
+      <ModalLayout title={'타이틀'}>
         {children}
         <Outlet />
       </ModalLayout>

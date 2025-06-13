@@ -6,11 +6,15 @@
 
 export type GetManyByQueryParams = {
 /**
- * Number of records to skip for pagination
+ * 건너뛸 항목 수 (페이징)
  */
 skip?: number;
 /**
- * Number of records to take for pagination
+ * 가져올 항목 수 (페이징)
  */
 take?: number;
+/**
+ * Ground 이름
+ */
+name?: string;
 };

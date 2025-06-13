@@ -35,7 +35,11 @@ export class UsersService {
     const users = await this.repository.findMany({
       ...query.toArgs<Prisma.UserFindManyArgs>(),
       include: {
-        tenants: true,
+        tenants: {
+          include: {
+            role: true,
+          },
+        },
         profiles: true,
       },
     });
