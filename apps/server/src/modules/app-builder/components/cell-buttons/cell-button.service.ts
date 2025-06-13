@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ButtonBuilder } from '@shared/types';
+import { IButtonBuilder } from '@shared/types';
 
 @Injectable()
 export class CellButtonService {
@@ -17,7 +17,7 @@ export class CellButtonService {
     return buttons;
   }
   getModifyButton() {
-    const button: ButtonBuilder = {
+    const button: IButtonBuilder = {
       color: 'primary',
       name: '수정',
       navigator: {
@@ -27,7 +27,7 @@ export class CellButtonService {
     return button;
   }
   getDetailButton() {
-    const button: ButtonBuilder = {
+    const button: IButtonBuilder = {
       name: '상세',
       navigator: {
         route: {
@@ -39,7 +39,7 @@ export class CellButtonService {
     return button;
   }
   getRemoveButton() {
-    const button: ButtonBuilder = {
+    const button: IButtonBuilder = {
       color: 'danger',
       name: '삭제',
     };

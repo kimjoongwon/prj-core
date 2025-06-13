@@ -9,7 +9,6 @@ import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
 import { usePageState } from '../PageBuilder';
-import { useGetGroundsByQuery } from '@shared/api-client';
 
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {
@@ -24,7 +23,10 @@ export const DataGridBuilder = observer(
         header: props => {
           return <HeaderBuilder {...props} {...column.header} />;
         },
-        cell: props => <CellBuilder {...props} {...column.cell} />,
+        cell: props => {
+          console.log('column.cell:', column);
+          return <CellBuilder {...props} {...column.cell} />;
+        },
       } as ColumnDef<any, any>;
     });
     if (isLoading) {

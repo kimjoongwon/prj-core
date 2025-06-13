@@ -4,7 +4,7 @@ import React from 'react';
 import { CellContext } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-export const DateCell = <T extends unknown>(
+export const DateTimeCell = <T extends unknown>(
   cellContext: CellContext<T, unknown>,
 ) => {
   const { getValue } = cellContext;
@@ -13,5 +13,5 @@ export const DateCell = <T extends unknown>(
     return <p>-</p>;
   }
 
-  return <p>{dayjs(getValue() as string).format('YY.MM.DD HH:mm:ss')}</p>;
+  return <p>{dayjs(getValue() as string).format('YYYY.MM.DD HH:mm')}</p>;
 };

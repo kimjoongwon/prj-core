@@ -12,7 +12,7 @@ export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
 export type BuilderOptions = {
   id: string | 'new';
   type: BuilderOptionTypes;
-  button: ButtonBuilder;
+  button: IButtonBuilder;
   sections: SectionBuilder[];
 };
 
@@ -104,7 +104,7 @@ export interface ButtonResponse {
   };
 }
 
-export interface ButtonBuilder extends ButtonProps {
+export interface IButtonBuilder extends ButtonProps {
   buttonType?: 'form' | 'cell' | 'general';
   mutation?: Mutation;
   name?: string;
@@ -209,7 +209,7 @@ export interface TabBuilder {
 }
 
 export interface DataGridBuilder {
-  buttons?: ButtonBuilder[];
+  buttons?: IButtonBuilder[];
   filter?: FilterBuilder;
   table: TableBuilder;
 }
@@ -247,10 +247,17 @@ export interface ColumnBuilder {
   cell?: CellBuilder;
 }
 export interface CellBuilder {
-  type?: 'date' | 'time' | 'dateTime';
-  buttons?: ButtonBuilder[];
-  expandable?: boolean;
+  type?:
+    | 'date'
+    | 'time'
+    | 'dateTime'
+    | 'row-actions'
+    | 'text'
+    | 'number'
+    | 'boolean'
+    | 'expandable';
   link?: string;
+  resourceName?: string;
 }
 export interface Header {
   name: string;
