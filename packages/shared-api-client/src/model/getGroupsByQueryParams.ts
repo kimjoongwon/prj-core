@@ -6,13 +6,7 @@
 import type { Order } from './order';
 
 export type GetGroupsByQueryParams = {
-/**
- * 건너뛸 항목 수 (페이징)
- */
 skip?: number;
-/**
- * 가져올 항목 수 (페이징)
- */
 take?: number;
 name?: string;
 serviceId?: string;

@@ -5,7 +5,7 @@ model Category {
   updatedAt            DateTime?             @updatedAt @db.Timestamptz(6)
   removedAt            DateTime?             @db.Timestamptz(6)
   name                 String                @unique
-  type                 CategoryTypes         @default(ROOT)
+  type                 CategoryTypes         @default(Role)
   parentId             String?
   tenantId             String
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
@@ -321,8 +321,10 @@ enum TextTypes {
 }
 
 enum CategoryTypes {
-  LEAF
-  ROOT
+  Role
+  Space
+  File
+  User
 }
 
 enum ServiceNames {

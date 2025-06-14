@@ -7,13 +7,7 @@ import type { CategoryTypes } from './categoryTypes';
 import type { SortOrder } from './sortOrder';
 
 export type GetCategoriesByQueryParams = {
-/**
- * 건너뛸 항목 수 (페이징)
- */
 skip?: number;
-/**
- * 가져올 항목 수 (페이징)
- */
 take?: number;
 name?: string;
 type?: CategoryTypes;

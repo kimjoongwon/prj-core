@@ -1526,7 +1526,6 @@ export const useCreateRoleClassification = <TError = ErrorType<void>,
     }
     
 /**
- * 쿼리 파라미터를 사용하여 엔티티 목록을 조회합니다. 개별 컨트롤러에서 @ApiQueryDto 데코레이터를 추가하여 Swagger에 쿼리 파라미터를 표시할 수 있습니다.
  * @summary Get roleclassifications by query
  */
 export const getRoleClassificationsByQuery = (

@@ -10,7 +10,7 @@ export class CategoryDto extends AbstractDto implements Category {
   @StringField({ default: '' })
   name: string;
 
-  @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.LEAF })
+  @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.Role })
   type: $Enums.CategoryTypes;
 
   @UUIDField({ nullable: true, default: null })
