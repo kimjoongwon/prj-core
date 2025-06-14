@@ -1,7 +1,6 @@
 import { $Enums, Category } from '@prisma/client';
 import { ClassField, EnumField, StringField, UUIDField } from '../decorator/field.decorators';
 import { AbstractDto } from './abstract.dto';
-import { ServiceDto } from './service.dto';
 
 export class CategoryDto extends AbstractDto implements Category {
   @UUIDField()
