@@ -1,41 +1,85 @@
-// import { Injectable } from '@nestjs/common';
-// import { PageBuilder } from '@shared/types';
-// import { ContextProvider } from '../../../../shared/provider/context.provider';
-// import { ColumnBuilderService } from '../column/column-builder.service';
-// import { DataGridBuilderService } from '../data-grid/data-grid-builder.service';
+import { Injectable } from '@nestjs/common';
+import { ContextProvider } from '@shared';
+import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 
-// @Injectable()
-// export class CategoriesPage {
-//   constructor(
-//     private columnBuilderService: ColumnBuilderService,
-//     private dataGridBuilderService: DataGridBuilderService,
-//   ) {}
-
-//   build(): PageBuilder {
-//     const serviceId = ContextProvider.getServiceId();
-//     const tenantId = ContextProvider.getTenantId();
-
-//     const columns = this.columnBuilderService.build(
-//       'category',
-//       ['name'],
-//       ['modify', 'detail', 'remove', 'create'],
-//     );
-
-//     const dataGrid = this.dataGridBuilderService.build({
-//       queryName: 'useGetCategoriesByQuery',
-//       columns,
-//       params: {
-//         type: 'ROOT',
-//         serviceId,
-//         tenantId,
-//         skip: 0,
-//         take: 10,
-//       },
-//     });
-
-//     return {
-//       name: '리스트',
-//       dataGrid,
-//     };
-//   }
-// }
+@Injectable()
+export class CategoriesPage {
+  build(): PageBuilder {
+    return {
+      name: '카테고리 리스트',
+      sections: [
+        {
+          stacks: [
+            {
+              type: 'VStack' as const,
+              elements: [
+                {
+                  name: 'DataGridBuilder',
+                  props: {
+                    buttons: [
+                      {
+                        children: '생성',
+                        variant: 'solid',
+                        color: 'primary',
+                        size: 'md',
+                        navigator: {
+                          type: 'push',
+                          route: {
+                            fullPath: '/admin/dashboard/space-service/categories/:id/create',
+                            params: {
+                              id: 'new',
+                            },
+                          },
+                        },
+                      },
+                    ],
+                    table: {
+                      query: {
+                        name: 'useGetCategoriesByQuery',
+                        params: {
+                          skip: 0,
+                          take: 10,
+                          tenantId: ContextProvider.getTenantId(),
+                        },
+                      },
+                      columns: [
+                        {
+                          accessorKey: 'name',
+                          header: {
+                            name: '이름',
+                          },
+                        },
+                        {
+                          accessorKey: 'type',
+                          header: {
+                            name: '타입',
+                          },
+                        },
+                        {
+                          accessorKey: 'parent.name',
+                          header: {
+                            name: '상위 카테고리',
+                          },
+                        },
+                        {
+                          accessorKey: 'actions',
+                          header: {
+                            name: '액션',
+                          },
+                          cell: {
+                            type: 'row-actions',
+                            resourceName: 'Category',
+                          },
+                        },
+                      ],
+                    },
+                  } satisfies DataGridBuilderProps,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+  }
+}

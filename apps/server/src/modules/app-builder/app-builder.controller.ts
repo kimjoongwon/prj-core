@@ -27,6 +27,7 @@ export class AppBuilderController {
     })
     res: Response,
   ) {
+    console.log('selectTenantDto', selectTenantDto);
     res.cookie('tenantId', selectTenantDto.selectedTenantId, {
       httpOnly: true,
     });

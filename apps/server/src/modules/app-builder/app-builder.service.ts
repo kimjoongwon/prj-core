@@ -8,6 +8,7 @@ import { UsersPage } from './components/pages/users.page';
 import { DashboardPage } from './components/pages/dashboard.page';
 import { GroundsPage } from './components/pages/grounds.page';
 import { GroundPage } from './components/pages/ground.page';
+import { CategoriesPage } from './components/pages/categories.page';
 import { cloneDeep } from 'lodash';
 
 @Injectable()
@@ -22,6 +23,7 @@ export class AppBuilderService {
     readonly usersPage: UsersPage,
     readonly groundsPage: GroundsPage,
     readonly groundPage: GroundPage,
+    readonly categoriesPage: CategoriesPage,
   ) {
     // rawRoutes를 deep copy하여 초기화 (null safety 체크)
     this.routes = rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
@@ -36,6 +38,7 @@ export class AppBuilderService {
       const usersPageBuilder: PageBuilder = this.usersPage.build();
       const groundsPageBuilder: PageBuilder = this.groundsPage.build();
       const groundPageBuilder: PageBuilder = await this.groundPage.build();
+      const categoriesPageBuilder: PageBuilder = this.categoriesPage.build();
 
       // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
       if (isAuthenticated) {
@@ -68,6 +71,7 @@ export class AppBuilderService {
         this.setRoutePageAndLayout('유저', usersPageBuilder);
         this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder);
         this.setRoutePageAndLayout('그라운드 편집', groundPageBuilder);
+        this.setRoutePageAndLayout('그라운드 카테고리', categoriesPageBuilder);
       }
 
       return {

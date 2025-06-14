@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { StringField } from '../../../decorator/field.decorators';
 
 export const loginPayloadValidations = {
@@ -34,11 +35,13 @@ export class LoginPayloadDto {
     example: 'galaxy@gmail.com',
     pattern: loginPayloadValidations.email.patterns?.[0].value,
   })
+  @Expose()
   email: string;
 
   @StringField({
     example: 'rkdmf12!@',
     pattern: loginPayloadValidations.password.patterns?.[0].value,
   })
+  @Expose()
   password: string;
 }

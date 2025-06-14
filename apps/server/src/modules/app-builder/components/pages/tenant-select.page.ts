@@ -62,7 +62,9 @@ export class TenantSelectPage {
     return {
       name: '테넌트',
       state: {
-        selectedTenantId: '',
+        selectedTenantDto: {
+          selectedTenantId: '',
+        },
       },
       sections,
     };

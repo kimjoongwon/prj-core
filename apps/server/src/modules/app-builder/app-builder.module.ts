@@ -7,6 +7,7 @@ import { UsersPage } from './components/pages/users.page';
 import { TenantSelectPage } from './components/pages/tenant-select.page';
 import { GroundsPage } from './components/pages/grounds.page';
 import { LoginPage } from './components/pages/login.page';
+import { CategoriesPage } from './components/pages/categories.page';
 
 @Module({
   imports: [AuthModule],
@@ -17,6 +18,7 @@ import { LoginPage } from './components/pages/login.page';
     DashboardPage,
     UsersPage,
     GroundsPage,
+    CategoriesPage,
   ],
   controllers: [AppBuilderController],
 })
