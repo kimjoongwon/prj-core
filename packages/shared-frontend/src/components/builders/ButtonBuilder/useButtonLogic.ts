@@ -5,6 +5,7 @@ import { APIManager } from '@shared/api-client';
 import { Plate } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
+import { useParams } from 'react-router';
 
 interface UseButtonLogicProps {
   mutation?: Mutation;
@@ -26,6 +27,7 @@ export const useButtonLogic = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<ButtonResponse | null>(null);
+  const { id } = useParams<{ id: string }>();
   // Handle navigation based on navigator configuration
   const handleNavigation = (nav: Navigator) => {
     const navigatorService = Plate.navigation.getNavigator();
@@ -127,7 +129,16 @@ export const useButtonLogic = ({
           apiParams = localParams;
         }
 
-        const response = await (apiFunction as Function)(apiParams);
+        // API 함수 호출 - useParams에서 id가 있으면 첫 번째 파라미터로 제공
+        const apiArgs: unknown[] = [];
+        if (id) {
+          apiArgs.push(id);
+        }
+        if (apiParams) {
+          apiArgs.push(apiParams);
+        }
+
+        const response = await (apiFunction as Function).apply(null, apiArgs);
 
         // 응답 데이터 추출
         const responseData = response?.data as ButtonResponse;

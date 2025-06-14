@@ -15,6 +15,23 @@ export class GroundsPage {
                 {
                   name: 'DataGridBuilder',
                   props: {
+                    buttons: [
+                      {
+                        children: '생성',
+                        variant: 'solid',
+                        color: 'primary',
+                        size: 'md',
+                        navigator: {
+                          type: 'push',
+                          route: {
+                            fullPath: '/admin/dashboard/space-service/grounds/:id/create',
+                            params: {
+                              id: 'new',
+                            },
+                          },
+                        },
+                      },
+                    ],
                     table: {
                       query: {
                         name: 'useGetGroundsByQuery',

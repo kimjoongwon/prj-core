@@ -8,7 +8,7 @@ import type {
   TextAreaProps,
   TimeInputProps as HeroUiTimeInputProps,
   CheckboxProps as NextUICheckboxProps,
-  InputProps,
+  InputProps as NextUIInputProps,
   AutocompleteProps,
   SelectProps as NextUISelectProps,
   ListboxProps as HeroListboxProps,
@@ -21,6 +21,7 @@ import type {
   Option,
   DataGridBuilder,
   ResourceBuilder,
+  Validation,
 } from './types';
 import type { ReactNode } from 'react';
 
@@ -270,7 +271,7 @@ export interface ListProps<T> {
   placeholder?: ReactNode;
 }
 
-export interface MultiInputProps<T> extends MobxProps<T>, InputProps {}
+export interface MultiInputProps<T> extends MobxProps<T>, NextUIInputProps {}
 
 export type EmailProps<T> = any & {
   validation?: any; // Validation type would be imported
@@ -450,3 +451,30 @@ export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &
         }[]
       | undefined;
   };
+
+export type InputProps<T> = MobxProps<T> &
+  NextUIInputProps & {
+    validation?: Validation;
+  };
+
+  export interface SpacerProps {
+  /**
+   * Size of spacer in Tailwind's spacing units (0.25rem increments)
+   * 1 = 0.25rem (4px)
+   * 2 = 0.5rem (8px)
+   * 3 = 0.75rem (12px)
+   * 4 = 1rem (16px)
+   * and so on...
+   */
+  size?: number;
+
+  /**
+   * Direction of the spacer - horizontal or vertical
+   */
+  direction?: 'horizontal' | 'vertical';
+
+  /**
+   * Optional additional className
+   */
+  className?: string;
+}

@@ -8,6 +8,7 @@ import { UsersPage } from './components/pages/users.page';
 import { DashboardPage } from './components/pages/dashboard.page';
 import { GroundsPage } from './components/pages/grounds.page';
 import { GroundPage } from './components/pages/ground.page';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class AppBuilderService {
@@ -45,22 +46,10 @@ export class AppBuilderService {
         this.routes = this.getAuthRoutes();
       }
 
-      this.setRoutePageAndLayout('관리자', undefined, {
-        type: 'Root',
-      });
-
-      // 인증 관련 페이지 설정 (모든 사용자에게 제공)
-      this.setRoutePageAndLayout('인증', undefined, {
-        type: 'Auth',
-      });
-
-      this.setRoutePageAndLayout('로그인', loginPageBuilder, {
-        type: 'Root',
-      });
-
-      this.setRoutePageAndLayout('테넌트 선택', tenantSelectPageBuilder, {
-        type: 'Modal',
-      });
+      this.setRoutePageAndLayout('관리자', undefined);
+      this.setRoutePageAndLayout('인증', undefined);
+      this.setRoutePageAndLayout('로그인', loginPageBuilder);
+      this.setRoutePageAndLayout('테넌트 선택', tenantSelectPageBuilder);
 
       // 대시보드 관련 페이지 설정 (인증된 사용자 또는 모든 라우트가 포함된 경우에만)
       if (
@@ -75,20 +64,10 @@ export class AppBuilderService {
               route.children.some((child) => child && child.name === '대시보드'),
           ))
       ) {
-        this.setRoutePageAndLayout('대시보드', dashboardPageBuilder, {
-          type: 'Dashboard',
-        });
-
+        this.setRoutePageAndLayout('대시보드', dashboardPageBuilder);
         this.setRoutePageAndLayout('유저', usersPageBuilder);
-
-        this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder, {
-          type: 'Root',
-        });
-        // 그라운드 관련 페이지들을 동적으로 처리
-        // 실제 사용 시에는 라우트 파라미터를 통해 ID와 타입을 받아야 함
-        this.setRoutePageAndLayout('그라운드 편집', groundPageBuilder, {
-          type: 'Modal',
-        });
+        this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder);
+        this.setRoutePageAndLayout('그라운드 편집', groundPageBuilder);
       }
 
       return {
@@ -143,13 +122,8 @@ export class AppBuilderService {
    * Routes 배열에서 name과 일치하는 항목을 찾아 page와 layout을 설정하는 함수
    * @param name - 찾을 route의 name
    * @param pageBuilder - 설정할 PageBuilder 데이터
-   * @param layoutBuilder - 설정할 LayoutBuilder 데이터
    */
-  setRoutePageAndLayout(
-    name: RouteNames,
-    pageBuilder?: PageBuilder,
-    layoutBuilder?: LayoutBuilder,
-  ): void {
+  setRoutePageAndLayout(name: RouteNames, pageBuilder?: PageBuilder): void {
     const findAndSetRoute = (routeList: RouteBuilder[]): boolean => {
       if (!routeList || !Array.isArray(routeList)) {
         return false;
@@ -166,9 +140,7 @@ export class AppBuilderService {
           if (pageBuilder) {
             route.page = pageBuilder;
           }
-          if (layoutBuilder) {
-            route.layout = layoutBuilder;
-          }
+
           return true; // 찾았음을 나타냄
         }
 

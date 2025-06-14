@@ -23,8 +23,7 @@ const cellComponentMap = {
 } as const;
 
 export const CellBuilder = (props: CellBuilderProps) => {
-  const { getValue, type, resourceName } = props;
-  console.log('resourceName:', resourceName);
+  const { getValue, type } = props;
   // type에 따라 적절한 Cell 컴포넌트 사용
   if (type && type in cellComponentMap) {
     const CellComponent =

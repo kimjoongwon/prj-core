@@ -3,9 +3,9 @@ import { ResourceBuilder } from '@shared/types';
 import { useParams } from 'react-router';
 
 export const useGetResourceQuery = (resourceBuilder: ResourceBuilder) => {
-  const { id } = useParams<{ id: string }>();
+  const { id, type } = useParams<{ id: string; type: string }>();
   const query = resourceBuilder.query;
-
+  console.log('id:', id, 'type:', type, 'query:', query);
   const apiArgs: unknown[] = [];
 
   // Resource ID가 있으면 개별 리소스 조회용 함수 호출
@@ -34,6 +34,7 @@ export const useGetResourceQuery = (resourceBuilder: ResourceBuilder) => {
       isLoading,
       error,
       id,
+      type,
     };
   }
 
@@ -42,5 +43,6 @@ export const useGetResourceQuery = (resourceBuilder: ResourceBuilder) => {
     isLoading: false,
     error: null,
     id,
+    type,
   };
 };

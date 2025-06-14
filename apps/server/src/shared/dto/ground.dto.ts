@@ -8,9 +8,11 @@ import {
   UUIDFieldOptional,
 } from '../decorator';
 import { SpaceDto } from './space.dto';
+import { Expose } from 'class-transformer';
 
 export class GroundDto extends AbstractDto implements GroundEntity {
   @StringField()
+  @Expose()
   name: string;
 
   @StringFieldOptional({ nullable: true })

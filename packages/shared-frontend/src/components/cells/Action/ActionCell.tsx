@@ -92,22 +92,6 @@ export const ActionCell = <T extends unknown>({
     <div className="flex space-x-2">
       <div key={v4()} className="flex space-x-1">
         {/* 생성 버튼 */}
-        <Tooltip content="생성" placement="top">
-          <Button
-            size="sm"
-            variant="light"
-            isIconOnly
-            className="min-w-unit-8 w-8 h-8 text-green-600 hover:bg-green-50"
-            onPress={() => {
-              Plate.navigation.getNavigator().pushByName('그라운드 편집', {
-                id: (row.original as any).id,
-                type: 'create',
-              });
-            }}
-          >
-            <CreateIcon size={14} />
-          </Button>
-        </Tooltip>
 
         {/* 상세 버튼 */}
         <Tooltip content="상세보기" placement="top">
@@ -117,8 +101,9 @@ export const ActionCell = <T extends unknown>({
             isIconOnly
             className="min-w-unit-8 w-8 h-8 text-gray-600 hover:bg-gray-50"
             onPress={() => {
-              Plate.navigation.getNavigator().pushByName('그라운드 상세', {
+              Plate.navigation.getNavigator().pushByName('그라운드 편집', {
                 id: (row.original as any).id,
+                type: 'detail',
               });
             }}
           >
@@ -136,7 +121,7 @@ export const ActionCell = <T extends unknown>({
             onPress={() => {
               Plate.navigation.getNavigator().pushByName('그라운드 편집', {
                 id: (row.original as any).id,
-                type: 'edit',
+                type: 'modify',
               });
             }}
           >

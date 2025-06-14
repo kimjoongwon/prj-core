@@ -14,7 +14,6 @@ import { BottomTab } from '../../BottomTab';
 import { Logo } from '../../Logo';
 import { Avatar } from '../../Avatar';
 import { DarkModeSwitch } from '../../DarkModeSwitch';
-import { DesktopOnly } from '../../ResponsiveVisibility';
 
 interface Layout {
   children: ReactNode;
@@ -37,12 +36,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   }
 
   if (layoutBuilder?.type === 'Modal') {
-    return (
-      <ModalLayout title={'타이틀'}>
-        {children}
-        <Outlet />
-      </ModalLayout>
-    );
+    return <ModalLayout title={layoutBuilder.name}>{children}</ModalLayout>;
   }
 
   if (layoutBuilder?.type === 'Dashboard') {
@@ -53,7 +47,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
     // 선택된 대시보드 라우트의 자식들을 leftSidebar에 표시
     const selectedDashboardRouteChildren =
       Plate.navigation.getSelectedDashboardRouteChildren();
-    console.log('selectedDashboardRouteChildren', dashboardRoutes);
+
     return (
       <DashboardLayout
         header={

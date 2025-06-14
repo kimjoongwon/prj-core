@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { InputBuilderProps, PageBuilder, ResourceBuilder, SectionBuilder } from '@shared/types';
-import { ContextProvider } from '../../../../shared/provider/context.provider';
-import { GroundsRepository } from '../../../../shared/repository';
+import { IButtonBuilder, PageBuilder, ResourceBuilder, SpacerProps } from '@shared/types';
+import path from 'path';
 
 @Injectable()
 export class GroundPage {
-  constructor(private readonly groundsRepository: GroundsRepository) {}
-
   build(): PageBuilder {
+    console.log('GroundPage build called');
     // 기존 데이터 로드
     let formInputs = {
       name: '',
@@ -39,7 +37,6 @@ export class GroundPage {
                     resourceName: 'Ground',
                     query: {
                       name: 'useGetGroundById',
-                      params: {},
                     },
                     sections: [
                       {
@@ -47,6 +44,13 @@ export class GroundPage {
                           {
                             type: 'VStack',
                             elements: [
+                              {
+                                name: 'Text',
+                                props: {
+                                  children: '그라운드',
+                                  className: 'text-2xl font-bold mb-4',
+                                },
+                              },
                               {
                                 name: 'Input',
                                 props: {
@@ -60,6 +64,33 @@ export class GroundPage {
                                   label: '주소',
                                   path: 'form.inputs.address',
                                 },
+                              },
+                              {
+                                name: 'Input',
+                                props: {
+                                  label: '전화번호',
+                                  path: 'form.inputs.phone',
+                                },
+                              },
+                              {
+                                name: 'Input',
+                                props: {
+                                  label: '이메일',
+                                  path: 'form.inputs.email',
+                                },
+                              },
+                              {
+                                name: 'ButtonBuilder',
+                                props: {
+                                  children: '저장',
+                                  mutation: {
+                                    name: 'updateGroundById',
+                                    path: 'form.inputs',
+                                  },
+                                  navigator: {
+                                    type: 'back',
+                                  },
+                                } satisfies IButtonBuilder,
                               },
                             ],
                           },

@@ -24,7 +24,6 @@ export const DataGridBuilder = observer(
           return <HeaderBuilder {...props} {...column.header} />;
         },
         cell: props => {
-          console.log('column.cell:', column);
           return <CellBuilder {...props} {...column.cell} />;
         },
       } as ColumnDef<any, any>;

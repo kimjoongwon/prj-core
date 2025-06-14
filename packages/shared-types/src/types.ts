@@ -39,27 +39,75 @@ export type ValidationRecord<T extends object> = Omit<
 >;
 
 export type ElementName =
+  | 'AutoComplete'
+  | 'Avatar'
+  | 'BottomTab'
+  | 'Breadcrumb'
   | 'Button'
-  | 'Input'
-  | 'Card'
-  | 'Table'
-  | 'Spacer'
-  | 'Logo'
-  | 'DateRangePicker'
-  | 'Select'
-  | 'DepotUploader'
-  | 'Text'
-  | 'Checkbox'
-  | 'RadioGroup'
-  | 'Switch'
-  | 'Tabs'
-  | 'Depot'
-  | 'Textarea'
   | 'ButtonBuilder'
+  | 'ButtonGroup'
+  | 'CalendarInput'
+  | 'Card'
+  | 'CategoryCard'
+  | 'Checkbox'
+  | 'Chip'
+  | 'Chips'
+  | 'CollapsibleSidebar'
+  | 'Container'
   | 'Copyright'
-  | 'WorkspaceSelect'
+  | 'DarkModeSwitch'
+  | 'DataGrid'
+  | 'DatePicker'
+  | 'DateRangePicker'
+  | 'DepotUploader'
+  | 'Dropdown'
+  | 'Editor'
+  | 'FileUploader'
   | 'Form'
-  | 'Listbox';
+  | 'FormGroup'
+  | 'Header'
+  | 'HStack'
+  | 'Input'
+  | 'Link'
+  | 'List'
+  | 'Listbox'
+  | 'Logo'
+  | 'Message'
+  | 'Meta'
+  | 'MultiInput'
+  | 'MultiSelect'
+  | 'Navbar'
+  | 'NavbarItem'
+  | 'NavigationSetup'
+  | 'NotFound'
+  | 'PageModal'
+  | 'Pagination'
+  | 'Placeholder'
+  | 'RadioGroup'
+  | 'ResponsiveVisibility'
+  | 'Search'
+  | 'Section'
+  | 'Select'
+  | 'Skeleton'
+  | 'Spacer'
+  | 'SplashScreen'
+  | 'SubmitButton'
+  | 'Switch'
+  | 'Table'
+  | 'Tabs'
+  | 'TenantList'
+  | 'Text'
+  | 'Textarea'
+  | 'TimeInput'
+  | 'TimePicker'
+  | 'User'
+  | 'Videos'
+  | 'VideoUploader'
+  | 'VStack'
+  | 'WeekInput'
+  | 'WorkspaceSelect'
+  | 'DataGridBuilder'
+  | 'ResourceBuilder';
 
 export interface ElementBuilder {
   visibleCondition?: {
@@ -68,7 +116,8 @@ export interface ElementBuilder {
       value: any;
     };
   };
-  name: any;
+  type?: 'input' | 'normal';
+  name: ElementName;
   props?: ElementProps<ElementName>;
   path?: string;
   validation?: Validation;
@@ -151,14 +200,6 @@ export interface Option {
 
 export interface LayoutBuilder {
   name?: string;
-  // type?:
-  //   | 'Outlet'
-  //   | 'Auth'
-  //   | 'Modal'
-  //   | 'Services'
-  //   | 'Service'
-  //   | 'Tab'
-  //   | 'DataGrid';
   type?: string;
 }
 

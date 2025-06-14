@@ -4,10 +4,11 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Card,
 } from '@heroui/react';
-import { ReactNode, useEffect, useState } from 'react';
-import { Plate } from '../../../providers';
+import { ReactNode } from 'react';
 import { useNavigate } from 'react-router';
+import { Plate } from '../../../providers';
 
 interface ModalLayoutProps {
   children: ReactNode;
@@ -49,7 +50,6 @@ export function ModalLayout({
   hideCloseButton = false,
   isDismissable = true,
   isKeyboardDismissDisabled = false,
-  footer,
   className,
   scrollBehavior = 'normal',
 }: ModalLayoutProps) {
@@ -57,7 +57,7 @@ export function ModalLayout({
   return (
     <Modal
       isOpen={true}
-      onClose={() => naviate(-1)}
+      onClose={() => Plate.navigation.getNavigator().goBack()}
       size={size}
       placement={placement}
       backdrop={backdrop}
@@ -68,13 +68,7 @@ export function ModalLayout({
       scrollBehavior={scrollBehavior}
     >
       <ModalContent>
-        {() => (
-          <>
-            {title && <ModalHeader>{title}</ModalHeader>}
-            <ModalBody>{children}</ModalBody>
-            {footer && <ModalFooter>{footer}</ModalFooter>}
-          </>
-        )}
+        <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
   );

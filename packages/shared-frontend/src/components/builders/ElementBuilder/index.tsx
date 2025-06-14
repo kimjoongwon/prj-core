@@ -114,12 +114,15 @@ export const ElementBuilder = observer((props: ElementBuilderProps) => {
 
   try {
     // 6. 컴포넌트 렌더링 중 에러 처리
+    const isReadOnly = state.type === 'detail';
+
     return (
       <InputValidationBuilder validation={elementBuilder.validation}>
         <Component
           key={v4()}
           state={state}
           path={elementBuilder?.path}
+          isReadOnly={isReadOnly}
           {...elementBuilder.props}
         >
           {elementBuilder.props?.children ||

@@ -4,6 +4,7 @@ type RouteBuilder = {
   relativePath: string;
   layout?: {
     type: string;
+    name?: string;
   };
   children?: RouteBuilder[];
   icon?: string;
@@ -60,6 +61,9 @@ export const rawRoutes: RouteBuilder[] = [
         name: ROUTE_NAMES.DASHBOARD,
         relativePath: 'dashboard',
         icon: 'LayoutDashboard',
+        layout: {
+          type: 'Dashboard',
+        },
         children: [
           {
             name: ROUTE_NAMES.USER_SERVICE,
@@ -81,6 +85,9 @@ export const rawRoutes: RouteBuilder[] = [
               {
                 name: ROUTE_NAMES.GROUND_LIST,
                 relativePath: 'grounds',
+                layout: {
+                  type: 'Root',
+                },
                 icon: 'Map',
                 children: [
                   {
@@ -92,6 +99,10 @@ export const rawRoutes: RouteBuilder[] = [
                         name: ROUTE_NAMES.GROUND_EDIT,
                         relativePath: ':type',
                         icon: 'Edit',
+                        layout: {
+                          name: '그라운드',
+                          type: 'Modal',
+                        },
                       },
                     ],
                   },
