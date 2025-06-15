@@ -1,9 +1,8 @@
-import { tv } from 'tailwind-variants';
+import { cva } from 'class-variance-authority';
 import { TextProps } from '@shared/types';
 import React, { forwardRef } from 'react';
 
-const text = tv({
-  base: 'transition-colors duration-200',
+const text = cva('transition-colors duration-200', {
   variants: {
     variant: {
       h1: 'text-4xl font-bold text-foreground dark:text-foreground',
@@ -44,7 +43,9 @@ const text = tv({
 });
 
 // Semantic HTML tag mapping for better accessibility
-const getSemanticTag = (variant: TextProps['variant']): keyof React.JSX.IntrinsicElements => {
+const getSemanticTag = (
+  variant: TextProps['variant'],
+): keyof React.JSX.IntrinsicElements => {
   switch (variant) {
     case 'h1':
       return 'h1';
@@ -69,30 +70,50 @@ const getSemanticTag = (variant: TextProps['variant']): keyof React.JSX.Intrinsi
 /**
  * A versatile text component that provides semantic HTML elements with consistent styling.
  * Supports dark mode and provides appropriate text colors for different contexts.
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage with semantic HTML
  * <Text variant="h1">Main Title</Text>
  * <Text variant="body1">Regular paragraph text</Text>
  * <Text variant="caption">Small caption text</Text>
- * 
+ *
  * // Custom element with 'as' prop
  * <Text as="span" variant="label">Inline label</Text>
  * <Text as="div" variant="title">Title as div</Text>
- * 
+ *
  * // With custom className
  * <Text variant="h2" className="mb-4 text-center">Centered heading</Text>
  * ```
  */
 export const Text = forwardRef<HTMLElement, TextProps>((props, ref) => {
-  const { children, className, variant = 'body1', as, ...rest } = props;
+  const {
+    children,
+    className,
+    variant = 'body1',
+    truncate = false,
+    lineClamp = 'none',
+    as,
+    // DOM에 전달되면 안 되는 커스텀 props들을 제외
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isReadOnly,
+    isInvalid,
+    errorMessage,
+    ...rest
+  } = props as TextProps & {
+    isReadOnly?: boolean;
+    isInvalid?: boolean;
+    errorMessage?: string;
+  };
 
   // Use custom tag if provided, otherwise use semantic tag based on variant
   const Tag = (as || getSemanticTag(variant)) as React.ElementType;
 
+  // Generate classes using cva
+  const classes = text({ variant, truncate, lineClamp });
+
   return (
-    <Tag {...rest} ref={ref} className={text({ className, variant })}>
+    <Tag {...rest} ref={ref} className={`${classes} ${className || ''}`}>
       {children}
     </Tag>
   );

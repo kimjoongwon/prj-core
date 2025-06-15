@@ -1,1 +1,1 @@
-export { FormGroup } from './FormGroup';
+export { FormGroupControl } from './FormGroup';

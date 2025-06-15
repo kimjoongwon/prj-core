@@ -1,6 +1,6 @@
 import { Video } from 'lucide-react';
 
-export default function Videos() {
+export function Videos() {
   const videos = [];
   return (
     <div>

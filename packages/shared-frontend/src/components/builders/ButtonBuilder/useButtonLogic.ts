@@ -6,6 +6,7 @@ import { Plate } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
 import { useParams } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface UseButtonLogicProps {
   mutation?: Mutation;
@@ -28,6 +29,7 @@ export const useButtonLogic = ({
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<ButtonResponse | null>(null);
   const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
   // Handle navigation based on navigator configuration
   const handleNavigation = (nav: Navigator) => {
     const navigatorService = Plate.navigation.getNavigator();
@@ -75,6 +77,8 @@ export const useButtonLogic = ({
   };
 
   const handleApiCall = async () => {
+    console.log('🚀 handleApiCall started');
+    
     // 기본 성공/에러 토스트 설정
     const successToast: ToastConfig = {
       color: 'success',
@@ -92,16 +96,22 @@ export const useButtonLogic = ({
     setResponse(null);
 
     try {
+      console.log('📝 Initial data:', { mutation, navigator, state, id });
+      
       // Handle mutation if provided
       if (mutation?.name) {
+        console.log('🔧 Processing mutation:', mutation.name);
+        
         // APIManager에서 함수 가져오기
+        console.log('🔍 Looking for API function in APIManager...');
         const apiFunction =
           APIManager[mutation.name as keyof typeof APIManager];
 
         if (!apiFunction) {
           console.error(
-            `API function with key "${mutation.name}" not found in APIManager`,
+            `❌ API function with key "${mutation.name}" not found in APIManager`,
           );
+          console.log('Available API functions:', Object.keys(APIManager));
 
           // 에러 토스트 표시
           addToast({
@@ -112,38 +122,92 @@ export const useButtonLogic = ({
 
           return;
         }
+        
+        console.log('✅ API function found:', mutation.name);
 
         // API 함수 호출시 mutation.params와 로컬 state 값을 병합
-        const serverParams = mutation.params;
-        const localParams = mutation.path
+        console.log('📊 Processing parameters...');
+        const serverParams = mutation?.params;
+        const localParams = mutation?.path && state
           ? get(state, mutation.path)
           : undefined;
+          
+        console.log('📋 Parameter details:', {
+          serverParams,
+          localParams,
+          mutationPath: mutation?.path,
+          stateExists: !!state
+        });
 
         // 두 객체를 병합 (서버 파라미터가 우선순위)
         let apiParams;
-        if (serverParams && localParams) {
-          apiParams = { ...localParams, ...serverParams };
-        } else if (serverParams) {
-          apiParams = serverParams;
-        } else if (localParams) {
-          apiParams = localParams;
+        try {
+          if (serverParams && localParams) {
+            console.log('🔄 Merging server and local params');
+            // 둘 다 있으면 병합
+            apiParams = { ...localParams, ...serverParams };
+          } else if (serverParams) {
+            console.log('📤 Using server params only');
+            // 서버 파라미터만 있으면 사용
+            apiParams = serverParams;
+          } else if (localParams) {
+            console.log('📥 Using local params only');
+            // 로컬 파라미터만 있으면 사용
+            apiParams = localParams;
+          } else {
+            console.log('🚫 No params available');
+            // 둘 다 없으면 빈 객체로 초기화 (API 함수가 파라미터를 요구할 수 있음)
+            apiParams = undefined;
+          }
+        } catch (paramError) {
+          console.error('❌ Error processing parameters:', paramError);
+          throw new Error(`Parameter processing failed: ${paramError}`);
         }
+
+        console.log('📋 Final API params:', apiParams);
 
         // API 함수 호출 - useParams에서 id가 있으면 첫 번째 파라미터로 제공
+        console.log('🏗️ Building API arguments...');
         const apiArgs: unknown[] = [];
-        if (id) {
+        if (id && id !== 'new') {
+          console.log('🆔 Adding ID to args:', id);
           apiArgs.push(id);
         }
-        if (apiParams) {
+
+        // apiParams가 있을 때만 추가 (undefined면 추가하지 않음)
+        if (apiParams !== undefined) {
+          console.log('📦 Adding params to args');
           apiArgs.push(apiParams);
         }
+        
+        console.log('🎯 Final API args:', apiArgs);
 
+        console.log('🚀 Calling API function...');
         const response = await (apiFunction as Function).apply(null, apiArgs);
+        console.log('✅ API call successful, response:', response);
 
         // 응답 데이터 추출
+        console.log('📤 Processing response data...');
         const responseData = response?.data as ButtonResponse;
         setResponse(responseData);
+        console.log('📋 Response data:', responseData);
+
+        // 성공적인 뮤테이션 후 queryKey가 있으면 쿼리 무효화
+        if (mutation?.queryKey) {
+          try {
+            console.log(`🔄 Invalidating query with key: ${mutation.queryKey}`);
+            await queryClient.invalidateQueries({
+              queryKey: [mutation.queryKey],
+            });
+            console.log('✅ Query invalidated successfully');
+          } catch (invalidateError) {
+            console.warn('⚠️ Query invalidation failed:', invalidateError);
+          }
+        }
+
+        // 토스트 처리
         if (responseData?.toast) {
+          console.log('🍞 Showing response toast');
           addToast({
             title: responseData.toast.title || successToast.title,
             description:
@@ -154,53 +218,139 @@ export const useButtonLogic = ({
 
         // 라우트 이름이 있으면 해당 경로로 이동
         if (responseData?.routeName) {
+          console.log('🧭 Navigating by route name:', responseData.routeName);
           Plate.navigation.getNavigator().pushByName(responseData.routeName);
         }
 
         if (response?.state) {
+          console.log('💾 Updating state form');
           state.form = response.state.form;
         }
 
         // Handle navigation after successful API call
         if (navigator) {
+          console.log('🧭 Handling navigation after API success');
           handleNavigation(navigator);
         }
       } else if (navigator) {
+        console.log('🧭 Handling navigation without mutation');
         // Handle navigation when there's no mutation
         handleNavigation(navigator);
       }
+      
+      console.log('✅ handleApiCall completed successfully');
     } catch (error: unknown) {
-      console.error('API call error:', error);
+      console.error('❌ API call error occurred:', error);
+      console.error('📍 Error stack:', error instanceof Error ? error.stack : 'No stack available');
 
       let errorMessage = errorToast.description;
 
       // 에러 처리
       if (isAxiosError(error)) {
+        const status = error.response?.status;
         const apiErrorMessage = error.response?.data?.message;
         const errorMessages = error.response?.data?.data?.message;
 
-        if (Array.isArray(errorMessages) && errorMessages.length > 0) {
-          // 에러 메시지들을 문자열로 합쳐서 표시
-          const combinedMessages = errorMessages.join('\n• ');
-          errorMessage = `• ${combinedMessages}`;
-          addToast({
-            title: errorToast.title,
-            description: errorMessage,
-            color: 'danger',
-          });
-        } else if (apiErrorMessage) {
-          errorMessage = apiErrorMessage;
-          addToast({
-            title: errorToast.title,
-            description: errorMessage,
-            color: 'danger',
-          });
-        } else {
-          addToast({
-            title: errorToast.title,
-            description: errorMessage,
-            color: 'danger',
-          });
+        console.log('🔍 Error details:', {
+          status,
+          apiErrorMessage,
+          errorMessages,
+          responseData: error.response?.data
+        });
+
+        // HTTP 상태 코드별 에러 처리
+        switch (status) {
+          case 409:
+            // Conflict 에러 - 중복 데이터나 제약 조건 위반
+            errorMessage = apiErrorMessage || '데이터 충돌이 발생했습니다. 이미 존재하는 데이터이거나 제약 조건에 위반됩니다.';
+            addToast({
+              title: '데이터 충돌',
+              description: errorMessage,
+              color: 'warning',
+            });
+            break;
+          
+          case 400:
+            // Bad Request - 잘못된 요청
+            errorMessage = apiErrorMessage || '잘못된 요청입니다. 입력 데이터를 확인해주세요.';
+            addToast({
+              title: '잘못된 요청',
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
+          
+          case 401:
+            // Unauthorized - 인증 실패
+            errorMessage = '인증이 필요합니다. 로그인을 확인해주세요.';
+            addToast({
+              title: '인증 실패',
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
+          
+          case 403:
+            // Forbidden - 권한 없음
+            errorMessage = '접근 권한이 없습니다.';
+            addToast({
+              title: '권한 없음',
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
+          
+          case 404:
+            // Not Found - 리소스 없음
+            errorMessage = '요청한 데이터를 찾을 수 없습니다.';
+            addToast({
+              title: '데이터 없음',
+              description: errorMessage,
+              color: 'warning',
+            });
+            break;
+          
+          case 422:
+            // Unprocessable Entity - 유효성 검사 실패
+            if (Array.isArray(errorMessages) && errorMessages.length > 0) {
+              const combinedMessages = errorMessages.join('\n• ');
+              errorMessage = `• ${combinedMessages}`;
+            } else {
+              errorMessage = apiErrorMessage || '입력 데이터의 유효성 검사에 실패했습니다.';
+            }
+            addToast({
+              title: '유효성 검사 실패',
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
+          
+          case 500:
+            // Internal Server Error
+            errorMessage = '서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            addToast({
+              title: '서버 오류',
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
+          
+          default:
+            // 기타 에러들
+            if (Array.isArray(errorMessages) && errorMessages.length > 0) {
+              const combinedMessages = errorMessages.join('\n• ');
+              errorMessage = `• ${combinedMessages}`;
+            } else if (apiErrorMessage) {
+              errorMessage = apiErrorMessage;
+            } else {
+              errorMessage = `오류가 발생했습니다 (${status || '알 수 없음'})`;
+            }
+            addToast({
+              title: errorToast.title,
+              description: errorMessage,
+              color: 'danger',
+            });
+            break;
         }
       } else {
         addToast({

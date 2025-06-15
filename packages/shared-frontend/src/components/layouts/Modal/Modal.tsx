@@ -1,11 +1,4 @@
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Card,
-} from '@heroui/react';
+import { Modal, ModalContent, ModalBody } from '@heroui/react';
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { Plate } from '../../../providers';
@@ -60,7 +53,7 @@ export function ModalLayout({
       onClose={() => Plate.navigation.getNavigator().goBack()}
       size={size}
       placement={placement}
-      backdrop={backdrop}
+      backdrop="transparent"
       hideCloseButton={hideCloseButton}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}

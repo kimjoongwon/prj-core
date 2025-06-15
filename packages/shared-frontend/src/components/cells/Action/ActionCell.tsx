@@ -7,6 +7,8 @@ import { v4 } from 'uuid';
 import { IButtonBuilder } from '@shared/types';
 import { Plate } from '../../../providers';
 import { APIManager } from '@shared/api-client';
+import { useNavigate } from 'react-router';
+import { PathUtil } from '@shared/utils';
 
 // 수정 아이콘 컴포넌트
 const EditIcon = ({ size = 16 }: { size?: number }) => (
@@ -88,6 +90,7 @@ export const ActionCell = <T extends unknown>({
   row,
   resourceName,
 }: ActionCellProps<T>) => {
+  const navigate = useNavigate();
   return (
     <div className="flex space-x-2">
       <div key={v4()} className="flex space-x-1">
@@ -101,10 +104,14 @@ export const ActionCell = <T extends unknown>({
             isIconOnly
             className="min-w-unit-8 w-8 h-8 text-gray-600 hover:bg-gray-50"
             onPress={() => {
-              Plate.navigation.getNavigator().pushByName('그라운드 편집', {
-                id: (row.original as any).id,
-                type: 'detail',
-              });
+              const relativePath = PathUtil.getUrlWithParamsAndQueryString(
+                ':id/:type',
+                {
+                  id: (row.original as any).id,
+                  type: 'detail',
+                },
+              );
+              navigate(relativePath);
             }}
           >
             <DetailIcon size={14} />
@@ -119,10 +126,14 @@ export const ActionCell = <T extends unknown>({
             isIconOnly
             className="min-w-unit-8 w-8 h-8 text-blue-600 hover:bg-blue-50"
             onPress={() => {
-              Plate.navigation.getNavigator().pushByName('그라운드 편집', {
-                id: (row.original as any).id,
-                type: 'modify',
-              });
+              const relativePath = PathUtil.getUrlWithParamsAndQueryString(
+                ':id/:type',
+                {
+                  id: (row.original as any).id,
+                  type: 'modify',
+                },
+              );
+              navigate(relativePath);
             }}
           >
             <EditIcon size={14} />

@@ -48,7 +48,7 @@ export class GroupsController {
 
   @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Get(':groupId')
-  async getGroup(@Param('groupId') groupId: string) {
+  async getGroupById(@Param('groupId') groupId: string) {
     const group = await this.groupService.get(groupId);
 
     return new ResponseEntity(
@@ -60,7 +60,7 @@ export class GroupsController {
 
   @ApiResponseEntity(GroupDto, HttpStatus.OK)
   @Patch(':groupId')
-  async updateGroup(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
+  async updateGroupById(@Param('groupId') groupId: string, @Body() updateGroupDto: UpdateGroupDto) {
     const group = await this.groupService.update(groupId, updateGroupDto);
     return new ResponseEntity(
       HttpStatus.OK,

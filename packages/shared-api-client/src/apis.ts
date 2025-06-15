@@ -101,7 +101,7 @@ import type {
   GetFileClassificationsByQueryParams,
   GetGroundsByQuery200AllOf,
   GetGroundsByQueryParams,
-  GetGroup200AllOf,
+  GetGroupById200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
   GetProgramById200AllOf,
@@ -172,7 +172,7 @@ import type {
   UpdateAbilityDto,
   UpdateAction200AllOf,
   UpdateActionDto,
-  UpdateCategory200AllOf,
+  UpdateCategoryById200AllOf,
   UpdateCategoryDto,
   UpdateExercise200AllOf,
   UpdateExerciseDto,
@@ -181,7 +181,7 @@ import type {
   UpdateFileClassification200AllOf,
   UpdateFileClassificationDto,
   UpdateGroundDto,
-  UpdateGroup200AllOf,
+  UpdateGroupById200AllOf,
   UpdateGroupDto,
   UpdateProgramById200AllOf,
   UpdateProgramDto,
@@ -4518,13 +4518,13 @@ export function useGetCategoryByIdSuspenseInfinite<TData = InfiniteData<Awaited<
 
 
 
-export const updateCategory = (
+export const updateCategoryById = (
     categoryId: string,
     updateCategoryDto: BodyType<UpdateCategoryDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<UpdateCategory200AllOf>(
+      return customInstance<UpdateCategoryById200AllOf>(
       {url: `/api/v1/categories/${categoryId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateCategoryDto
@@ -4534,11 +4534,11 @@ export const updateCategory = (
   
 
 
-export const getUpdateCategoryMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext> => {
+export const getUpdateCategoryByIdMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategoryById>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCategoryById>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext> => {
     
-const mutationKey = ['updateCategory'];
+const mutationKey = ['updateCategoryById'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -4548,10 +4548,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategory>>, {categoryId: string;data: BodyType<UpdateCategoryDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategoryById>>, {categoryId: string;data: BodyType<UpdateCategoryDto>}> = (props) => {
           const {categoryId,data} = props ?? {};
 
-          return  updateCategory(categoryId,data,requestOptions)
+          return  updateCategoryById(categoryId,data,requestOptions)
         }
 
         
@@ -4559,20 +4559,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategory>>>
-    export type UpdateCategoryMutationBody = BodyType<UpdateCategoryDto>
-    export type UpdateCategoryMutationError = ErrorType<void>
+    export type UpdateCategoryByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategoryById>>>
+    export type UpdateCategoryByIdMutationBody = BodyType<UpdateCategoryDto>
+    export type UpdateCategoryByIdMutationError = ErrorType<void>
 
-    export const useUpdateCategory = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useUpdateCategoryById = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategoryById>>, TError,{categoryId: string;data: BodyType<UpdateCategoryDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateCategory>>,
+        Awaited<ReturnType<typeof updateCategoryById>>,
         TError,
         {categoryId: string;data: BodyType<UpdateCategoryDto>},
         TContext
       > => {
 
-      const mutationOptions = getUpdateCategoryMutationOptions(options);
+      const mutationOptions = getUpdateCategoryByIdMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }
@@ -4877,77 +4877,77 @@ export function useGetGroupsByQuerySuspenseInfinite<TData = InfiniteData<Awaited
 
 
 
-export const getGroup = (
+export const getGroupById = (
     groupId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<GetGroup200AllOf>(
+      return customInstance<GetGroupById200AllOf>(
       {url: `/api/v1/groups/${groupId}`, method: 'GET', signal
     },
       options);
     }
   
 
-export const getGetGroupQueryKey = (groupId: string,) => {
+export const getGetGroupByIdQueryKey = (groupId: string,) => {
     return [`/api/v1/groups/${groupId}`] as const;
     }
 
     
-export const getGetGroupQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupByIdQueryOptions = <TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupByIdQueryKey(groupId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupById>>> = ({ signal }) => getGroupById(groupId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(groupId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGroupQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupQueryError = ErrorType<unknown>
+export type GetGroupByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupById>>>
+export type GetGroupByIdQueryError = ErrorType<unknown>
 
 
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+export function useGetGroupById<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGroup>>,
+          Awaited<ReturnType<typeof getGroupById>>,
           TError,
-          Awaited<ReturnType<typeof getGroup>>
+          Awaited<ReturnType<typeof getGroupById>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>> & Pick<
+export function useGetGroupById<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getGroup>>,
+          Awaited<ReturnType<typeof getGroupById>>,
           TError,
-          Awaited<ReturnType<typeof getGroup>>
+          Awaited<ReturnType<typeof getGroupById>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupById<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupById<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroupQueryOptions(groupId,options)
+  const queryOptions = getGetGroupByIdQueryOptions(groupId,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -4958,47 +4958,47 @@ export function useGetGroup<TData = Awaited<ReturnType<typeof getGroup>>, TError
 
 
 
-export const getGetGroupSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupByIdQueryKey(groupId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupById>>> = ({ signal }) => getGroupById(groupId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGroupSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupSuspenseQueryError = ErrorType<unknown>
+export type GetGroupByIdSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupById>>>
+export type GetGroupByIdSuspenseQueryError = ErrorType<unknown>
 
 
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspense<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspense<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspense<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspense<TData = Awaited<ReturnType<typeof getGroupById>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroupSuspenseQueryOptions(groupId,options)
+  const queryOptions = getGetGroupByIdSuspenseQueryOptions(groupId,options)
 
   const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -5009,47 +5009,47 @@ export function useGetGroupSuspense<TData = Awaited<ReturnType<typeof getGroup>>
 
 
 
-export const getGetGroupSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetGroupByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getGroupById>>>, TError = ErrorType<unknown>>(groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetGroupQueryKey(groupId);
+  const queryKey =  queryOptions?.queryKey ?? getGetGroupByIdQueryKey(groupId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroup>>> = ({ signal }) => getGroup(groupId, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGroupById>>> = ({ signal }) => getGroupById(groupId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetGroupSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroup>>>
-export type GetGroupSuspenseInfiniteQueryError = ErrorType<unknown>
+export type GetGroupByIdSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getGroupById>>>
+export type GetGroupByIdSuspenseInfiniteQueryError = ErrorType<unknown>
 
 
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupById>>>, TError = ErrorType<unknown>>(
+ groupId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupById>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupById>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroup>>>, TError = ErrorType<unknown>>(
- groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroup>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetGroupByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getGroupById>>>, TError = ErrorType<unknown>>(
+ groupId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getGroupById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetGroupSuspenseInfiniteQueryOptions(groupId,options)
+  const queryOptions = getGetGroupByIdSuspenseInfiniteQueryOptions(groupId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -5061,13 +5061,13 @@ export function useGetGroupSuspenseInfinite<TData = InfiniteData<Awaited<ReturnT
 
 
 
-export const updateGroup = (
+export const updateGroupById = (
     groupId: string,
     updateGroupDto: BodyType<UpdateGroupDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<UpdateGroup200AllOf>(
+      return customInstance<UpdateGroupById200AllOf>(
       {url: `/api/v1/groups/${groupId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateGroupDto
@@ -5077,11 +5077,11 @@ export const updateGroup = (
   
 
 
-export const getUpdateGroupMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext> => {
+export const getUpdateGroupByIdMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroupById>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateGroupById>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext> => {
     
-const mutationKey = ['updateGroup'];
+const mutationKey = ['updateGroupById'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -5091,10 +5091,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroup>>, {groupId: string;data: BodyType<UpdateGroupDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateGroupById>>, {groupId: string;data: BodyType<UpdateGroupDto>}> = (props) => {
           const {groupId,data} = props ?? {};
 
-          return  updateGroup(groupId,data,requestOptions)
+          return  updateGroupById(groupId,data,requestOptions)
         }
 
         
@@ -5102,20 +5102,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateGroupMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroup>>>
-    export type UpdateGroupMutationBody = BodyType<UpdateGroupDto>
-    export type UpdateGroupMutationError = ErrorType<unknown>
+    export type UpdateGroupByIdMutationResult = NonNullable<Awaited<ReturnType<typeof updateGroupById>>>
+    export type UpdateGroupByIdMutationBody = BodyType<UpdateGroupDto>
+    export type UpdateGroupByIdMutationError = ErrorType<unknown>
 
-    export const useUpdateGroup = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroup>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    export const useUpdateGroupById = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateGroupById>>, TError,{groupId: string;data: BodyType<UpdateGroupDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateGroup>>,
+        Awaited<ReturnType<typeof updateGroupById>>,
         TError,
         {groupId: string;data: BodyType<UpdateGroupDto>},
         TContext
       > => {
 
-      const mutationOptions = getUpdateGroupMutationOptions(options);
+      const mutationOptions = getUpdateGroupByIdMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

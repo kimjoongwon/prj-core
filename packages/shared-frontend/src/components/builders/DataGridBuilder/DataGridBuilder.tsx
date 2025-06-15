@@ -8,14 +8,14 @@ import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { usePageState } from '../PageBuilder';
+import { usePageState } from '../PageBuilder/PageBuilder';
 
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {
     const pageState = usePageState();
     const { data, isLoading, meta, skip, take, setSkip, setTake } =
       useGetTableQuery(table);
-
+    console.log('DataGridBuilder data', data, 'meta', meta);
     const columns = table?.columns?.map(column => {
       return {
         id: column.id,
@@ -28,6 +28,7 @@ export const DataGridBuilder = observer(
         },
       } as ColumnDef<any, any>;
     });
+
     if (isLoading) {
       return <Spinner />;
     }

@@ -9,7 +9,10 @@ import { DashboardPage } from './components/pages/dashboard.page';
 import { GroundsPage } from './components/pages/grounds.page';
 import { GroundPage } from './components/pages/ground.page';
 import { CategoriesPage } from './components/pages/categories.page';
+import { GroupsPage } from './components/pages/groups.page';
 import { cloneDeep } from 'lodash';
+import { CategoryPage } from './components/pages/category.page';
+import { GroupPage } from './components/pages/group.page';
 
 @Injectable()
 export class AppBuilderService {
@@ -24,6 +27,9 @@ export class AppBuilderService {
     readonly groundsPage: GroundsPage,
     readonly groundPage: GroundPage,
     readonly categoriesPage: CategoriesPage,
+    readonly groupsPage: GroupsPage,
+    readonly categoryPage: CategoryPage,
+    readonly groupPage: GroupPage,
   ) {
     // rawRoutes를 deep copy하여 초기화 (null safety 체크)
     this.routes = rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
@@ -38,7 +44,10 @@ export class AppBuilderService {
       const usersPageBuilder: PageBuilder = this.usersPage.build();
       const groundsPageBuilder: PageBuilder = this.groundsPage.build();
       const groundPageBuilder: PageBuilder = await this.groundPage.build();
-      const categoriesPageBuilder: PageBuilder = this.categoriesPage.build();
+      const categoriesPageBuilder: PageBuilder = this.categoriesPage.build('Space');
+      const categoryPageBuilder: PageBuilder = await this.categoryPage.build('Space');
+      const groupsPageBuilder: PageBuilder = this.groupsPage.build();
+      const groupPageBuilder: PageBuilder = await this.groupPage.build();
 
       // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
       if (isAuthenticated) {
@@ -72,6 +81,9 @@ export class AppBuilderService {
         this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder);
         this.setRoutePageAndLayout('그라운드 편집', groundPageBuilder);
         this.setRoutePageAndLayout('그라운드 카테고리', categoriesPageBuilder);
+        this.setRoutePageAndLayout('그라운드 그룹', groupsPageBuilder);
+        this.setRoutePageAndLayout('그라운드 카테고리 편집', categoryPageBuilder);
+        this.setRoutePageAndLayout('그라운드 그룹 편집', groupPageBuilder);
       }
 
       return {
