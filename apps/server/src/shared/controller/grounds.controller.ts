@@ -41,6 +41,9 @@ export class GroundsController {
   @ApiParam({ name: 'id', description: 'Ground ID', type: 'string' })
   async getGroundById(@Param('id') id: string): Promise<ResponseEntity<GroundDto>> {
     const ground = await this.groundsService.getById(id);
+    if (!ground) {
+      return new ResponseEntity(HttpStatus.NOT_FOUND, 'Ground를 찾을 수 없습니다.');
+    }
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GroundDto, ground));
   }
 

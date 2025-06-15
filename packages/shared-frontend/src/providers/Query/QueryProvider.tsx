@@ -19,18 +19,12 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         staleTime: 0,
+        refetchOnWindowFocus: true,
+        refetchOnMount: true,
+        gcTime: 0,
       },
     },
   });
-}
-
-export function getQueryClient() {
-  if (isServer) {
-    return makeQueryClient();
-  } else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
-  }
 }
 
 AXIOS_INSTANCE.interceptors.response.use(
@@ -59,7 +53,7 @@ AXIOS_INSTANCE.interceptors.request.use(
 
 export const QueryProvider = (props: InitContainerProps) => {
   const { children } = props;
-  const queryClient = getQueryClient();
+  const queryClient = makeQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>

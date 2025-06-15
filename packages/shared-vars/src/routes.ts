@@ -44,6 +44,9 @@ export const rawRoutes: RouteBuilder[] = [
       {
         name: ROUTE_NAMES.AUTH,
         relativePath: 'auth',
+        layout: {
+          type: 'Auth',
+        },
         children: [
           {
             name: ROUTE_NAMES.LOGIN,
@@ -52,6 +55,9 @@ export const rawRoutes: RouteBuilder[] = [
               {
                 name: ROUTE_NAMES.TENANT_SELECT,
                 relativePath: 'tenant-select',
+                layout: {
+                  type: 'Modal',
+                },
               },
             ],
           },
@@ -117,11 +123,15 @@ export const rawRoutes: RouteBuilder[] = [
                     name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
                     relativePath: ':id',
                     icon: 'FolderOpen',
+
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
                         relativePath: ':type',
                         icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
                       },
                     ],
                   },
@@ -141,6 +151,9 @@ export const rawRoutes: RouteBuilder[] = [
                         name: ROUTE_NAMES.GROUND_GROUP_EDIT,
                         relativePath: ':type',
                         icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
                       },
                     ],
                   },

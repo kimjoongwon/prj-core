@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import Videos from '../Videos';
+import { Videos } from '../Videos';
 import { Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { VideoUploaderProps } from '@shared/types';

@@ -63,7 +63,7 @@ export class CategoriesController {
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Patch(':categoryId')
-  async updateCategory(
+  async updateCategoryById(
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {

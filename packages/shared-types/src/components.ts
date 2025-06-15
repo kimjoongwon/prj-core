@@ -168,6 +168,8 @@ export interface TextProps extends React.HTMLAttributes<HTMLElement> {
     | 'error';
   as?: React.ElementType;
   children?: React.ReactNode;
+  truncate?: boolean;
+  lineClamp?: 1 | 2 | 3 | 4 | 5 | 6 | 'none';
 }
 
 export interface SearchProps<T> extends MobxProps<T> {
@@ -457,7 +459,7 @@ export type InputProps<T> = MobxProps<T> &
     validation?: Validation;
   };
 
-  export interface SpacerProps {
+export interface SpacerProps {
   /**
    * Size of spacer in Tailwind's spacing units (0.25rem increments)
    * 1 = 0.25rem (4px)

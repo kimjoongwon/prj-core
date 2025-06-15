@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { $Enums } from '@prisma/client';
 import { ContextProvider } from '@shared';
 import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 
 @Injectable()
 export class CategoriesPage {
-  build(): PageBuilder {
+  build(categoryTypes: $Enums.CategoryTypes): PageBuilder {
     return {
       name: '카테고리 리스트',
       sections: [
@@ -39,6 +40,7 @@ export class CategoriesPage {
                         params: {
                           skip: 0,
                           take: 10,
+                          type: categoryTypes,
                           tenantId: ContextProvider.getTenantId(),
                         },
                       },
@@ -68,7 +70,7 @@ export class CategoriesPage {
                           },
                           cell: {
                             type: 'row-actions',
-                            resourceName: 'Category',
+                            resourceName: 'category',
                           },
                         },
                       ],

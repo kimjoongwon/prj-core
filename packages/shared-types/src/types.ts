@@ -222,7 +222,8 @@ export interface Query {
 
 export interface Mutation {
   name: string;
-  invalidationKey?: string;
+  // 인벨리데이션을 위한 키
+  queryKey?: string;
   params?: any;
   path?: string;
 }

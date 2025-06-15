@@ -1,12 +1,13 @@
 'use client';
 
-import { Button as BaseButton, usePageState, Text } from '@shared/frontend';
+import { Button as BaseButton, Text } from '@shared/frontend';
 import { IButtonBuilder } from '@shared/types';
 import { addToast } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
+import { usePageState } from '../PageBuilder/PageBuilder';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
   const { mutation, validation, buttonType, navigator } = props;

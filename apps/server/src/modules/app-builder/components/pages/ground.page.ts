@@ -34,7 +34,7 @@ export class GroundPage {
                 {
                   name: 'ResourceBuilder',
                   props: {
-                    resourceName: 'Ground',
+                    resourceName: 'ground',
                     query: {
                       name: 'useGetGroundById',
                     },

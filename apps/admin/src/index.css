@@ -56,3 +56,28 @@ body > [data-overlay-container] {
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--nextui-default-400));
 }
+
+/* Toast z-index 설정 - 모달보다 위에 표시 */
+[data-heroui-toast-container] {
+  z-index: 9999 !important;
+}
+
+/* 추가적으로 개별 toast 요소에도 z-index 설정 */
+[data-heroui-toast] {
+  z-index: 9999 !important;
+}
+
+/* HeroUI modal의 기본 z-index는 1000-1300 정도이므로 더 높은 값으로 설정 */
+/* Toast provider와 관련된 모든 요소들의 z-index 강제 설정 */
+[data-heroui*="toast"], 
+[data-slot="toast"], 
+.heroui-toast,
+.toast-container {
+  z-index: 10000 !important;
+}
+
+/* 포털로 렌더링되는 toast 컨테이너 */
+body > div[data-heroui-toast-container],
+body > div[data-heroui="toast-container"] {
+  z-index: 10000 !important;
+}
