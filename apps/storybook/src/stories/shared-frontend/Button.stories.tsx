@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './index';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '@shared/frontend';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Shared Frontend/Button',
   component: Button,
   parameters: {
     layout: 'padded',

@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Input } from './index';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Input } from '@shared/frontend';
 
 const meta: Meta<typeof Input> = {
-  title: 'Components/Input',
+  title: 'Shared Frontend/Input',
   component: Input,
   parameters: {
     layout: 'padded',
