@@ -1,5 +1,5 @@
 import { type RouteBuilder, type Route } from '@shared/types';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
 import { NavigatorService } from './navigator';
 
@@ -336,8 +336,10 @@ export class NavigationService {
 
     // 모든 라우트의 활성 상태 업데이트
     const updateActiveState = (route: Route) => {
-      route.active = this.isRouteActive(currentFullPath, route.fullPath);
-      route.children?.forEach(updateActiveState);
+      runInAction(() => {
+        route.active = this.isRouteActive(currentFullPath, route.fullPath);
+        route.children?.forEach(updateActiveState);
+      });
     };
 
     this._routes.forEach(updateActiveState);

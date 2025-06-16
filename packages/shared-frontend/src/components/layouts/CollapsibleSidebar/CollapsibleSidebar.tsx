@@ -62,8 +62,7 @@ export const CollapsibleSidebar = observer(
     const handleRouteClick = (route: Route) => {
       if (route.fullPath) {
         console.log(`Setting route path: ${route.fullPath}`);
-        // state에 선택된 route path를 설정
-        localState.value = route.fullPath;
+        localState.setValue(route.fullPath);
       }
     };
 

@@ -21,17 +21,17 @@ type LayoutBuilderProps = Layout;
 
 export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
   const { children, layoutBuilder } = props;
-  const { pushByName, push } = useNavigator();
   const navigation = useNavigation();
+  const navigator = navigation.getNavigator();
 
   // currentRoute 변경을 감지하여 네비게이션 수행
   useEffect(() => {
     const dispose = reaction(
-      () => Plate.navigation.currentFullPath,
+      () => navigation.currentFullPath,
       currentRoute => {
         if (currentRoute) {
           console.log(`Navigation reaction: ${currentRoute}`);
-          push(currentRoute);
+          navigator.push(currentRoute);
         }
       },
     );
@@ -69,7 +69,10 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
         header={
           <Header
             left={
-              <Logo variants={'text'} onClick={() => pushByName('대시보드')} />
+              <Logo
+                variants={'text'}
+                onClick={() => navigator.pushByName('대시보드')}
+              />
             }
             center={<Navbar routes={dashboardRoutes} />}
             right={
@@ -86,7 +89,7 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
               routes={selectedDashboardRouteChildren}
               parentMenuInfo={parentMenuInfo}
               path="currentFullPath"
-              state={Plate.navigation}
+              state={navigation}
             />
           )
         }
