@@ -1,71 +1,8 @@
 export * from './cells';
 export * from './builders';
-
-// All UI Components - Explicit exports for better React DevTools naming
-export * from './NavigationSetup';
-export * from './Header';
-export * from './AutoComplete';
-export * from './Avatar';
-export * from './BottomTab';
-export * from './Breadcrumb';
-export * from './Button';
-export * from './ButtonGroup';
-export * from './CalendarInput';
-export * from './DarkModeSwitch';
-export * from './CategoryCard';
-export * from './Checkbox';
-export * from './Chip';
-export * from './Chips';
-export * from './CollapsibleSidebar';
-export * from './Container';
-export * from './Copyright';
-export * from './DataGrid';
-export * from './DatePicker';
-export * from './DateRangePicker';
-export * from './Dropdown';
-export * from './Email/EmailInput';
-export * from './FileUploader';
-export * from './FormGroup';
-export * from './HStack';
-export * from './Input';
-export * from './List';
-export * from './Listbox';
-export * from './Logo';
-export * from './Message';
-export * from './Meta';
-export * from './MultiInput';
-export * from './MultiSelect';
-export * from './Navbar';
-export * from './NavbarItem';
-export * from './PageModal';
-export * from './Pagination';
-export * from './Placeholder';
-export * from './RadioGroup';
-export * from './ResponsiveVisibility';
-export * from './Search';
-export * from './Section';
-export * from './Select';
-export * from './Skeleton';
-export * from './Spacer';
-export * from './SplashScreen';
-export * from './SubmitButton';
-export * from './Switch';
-export * from './Tabs';
-export * from './Text';
-export * from './Textarea';
-export * from './TimeInput';
-export * from './TimePicker';
-export * from './User';
-export * from './Videos';
-export * from './VStack';
-export * from './VideoUploader';
-export * from './WeekInput';
-
-// Pages
-export * from './NotFound';
-
-// Layouts
+export * from './features';
+export * from './ui';
+export * from './inputs';
 export * from './layouts';
-export * from './widgets';
 
 export { Form } from '@heroui/react';
