@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar } from './index';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Avatar } from '@shared/frontend';
 
 const meta: Meta<typeof Avatar> = {
-  title: 'Components/Avatar',
+  title: 'Shared Frontend/Avatar',
   component: Avatar,
   parameters: {
     layout: 'padded',

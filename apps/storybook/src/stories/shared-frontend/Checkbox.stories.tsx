@@ -1,14 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox } from './index';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Checkbox } from '@shared/frontend';
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Components/Checkbox',
+  title: 'Shared Frontend/Checkbox',
   component: Checkbox,
   parameters: {
     layout: 'padded',
     docs: {
       description: {
-        component: '공통 Checkbox 컴포넌트입니다. NextUI Checkbox를 래핑하여 사용합니다.',
+        component:
+          '공통 Checkbox 컴포넌트입니다. NextUI Checkbox를 래핑하여 사용합니다.',
       },
     },
   },
@@ -18,10 +19,21 @@ const meta: Meta<typeof Checkbox> = {
     isDisabled: { control: 'boolean', description: '비활성화 여부' },
     color: {
       control: 'select',
-      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
+      options: [
+        'default',
+        'primary',
+        'secondary',
+        'success',
+        'warning',
+        'danger',
+      ],
       description: '색상',
     },
-    size: { control: 'select', options: ['sm', 'md', 'lg'], description: '크기' },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: '크기',
+    },
   },
 };
 

@@ -1,9 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Breadcrumb, BreadcrumbBuilder } from './index';
-import type { BreadcrumbItem } from '@shared/types';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Breadcrumb, BreadcrumbBuilder } from '@shared/frontend';
+
+// BreadcrumbItem type definition for stories
+interface BreadcrumbItem {
+  name: string;
+  pathname: string;
+  active: boolean;
+}
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Components/Breadcrumb',
+  title: 'Shared Frontend/Breadcrumb',
   component: Breadcrumb,
   parameters: {
     layout: 'padded',

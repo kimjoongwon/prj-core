@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs } from './index';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Tabs } from '@shared/frontend';
 import { v4 } from 'uuid';
 
 const meta: Meta<typeof Tabs> = {
-  title: 'Components/Tabs',
+  title: 'Shared Frontend/Tabs',
   component: Tabs,
   parameters: {
     layout: 'padded',
