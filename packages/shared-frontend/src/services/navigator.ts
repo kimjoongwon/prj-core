@@ -53,7 +53,7 @@ export class NavigatorService {
     pathParams?: object,
     searchParams?: Record<string, string>,
   ): void {
-    if (!this.navigateFunction) {
+    if (!this?.navigateFunction) {
       console.warn(
         'NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.',
       );

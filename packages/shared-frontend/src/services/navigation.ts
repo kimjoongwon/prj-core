@@ -22,10 +22,11 @@ export class NavigationService {
   private _routes: Route[] = [];
   private navigator: NavigatorService;
   routeBuilders: RouteBuilder[] = [];
+  currentRoute: Route | undefined = undefined;
 
   // 현재 경로 추적을 위한 observable 프로퍼티들
-  private _currentFullPath: string = '';
-  private _currentRelativePath: string = '';
+  currentFullPath: string = '';
+  currentRelativePath: string = '';
 
   constructor(routeBuilders: RouteBuilder[] = []) {
     this.navigator = new NavigatorService();
@@ -75,8 +76,8 @@ export class NavigationService {
    * 현재 경로들을 업데이트 (절대경로와 상대경로)
    */
   private updateCurrentPaths(fullPath: string): void {
-    this._currentFullPath = fullPath;
-    this._currentRelativePath = this.extractRelativePath(fullPath);
+    this.currentFullPath = fullPath;
+    this.currentRelativePath = this.extractRelativePath(fullPath);
 
     // localStorage에 현재 경로 저장
     if (typeof window !== 'undefined' && fullPath && fullPath !== '/') {
@@ -95,20 +96,6 @@ export class NavigationService {
     if (!fullPath) return '';
     const segments = fullPath.split('/').filter(s => s.length > 0);
     return segments.length > 0 ? segments[segments.length - 1] : '';
-  }
-
-  /**
-   * 현재 절대 경로 반환
-   */
-  get currentFullPath(): string {
-    return this._currentFullPath;
-  }
-
-  /**
-   * 현재 상대 경로 반환 (마지막 세그먼트)
-   */
-  get currentRelativePath(): string {
-    return this._currentRelativePath;
   }
 
   /**
@@ -292,7 +279,7 @@ export class NavigationService {
     if (!dashboardRoute?.children?.length) return [];
 
     // 현재 경로와 매칭되는 대시보드 자식 라우트 찾기
-    const normalizedCurrentPath = this.normalizePath(this._currentFullPath);
+    const normalizedCurrentPath = this.normalizePath(this.currentFullPath);
 
     const matchingChild = dashboardRoute.children.find(child => {
       const normalizedChildPath = this.normalizePath(child.fullPath);
@@ -300,6 +287,42 @@ export class NavigationService {
     });
 
     return matchingChild?.children || [];
+  }
+
+  /**
+   * 선택된 대시보드 라우트의 부모 메뉴 정보 가져오기
+   * CollapsibleSidebar에서 사용하는 parentMenuInfo를 계산
+   */
+  getParentMenuInfo(): {
+    name: string;
+    pathname: string;
+    icon?: string;
+  } | null {
+    const dashboardRoute = this.getRouteByName('대시보드');
+    if (!dashboardRoute?.children?.length) return null;
+
+    // 현재 경로와 매칭되는 대시보드 자식 라우트 찾기 (선택된 대시보드 메뉴)
+    const normalizedCurrentPath = this.normalizePath(this.currentFullPath);
+
+    const selectedDashboardChild = dashboardRoute.children.find(child => {
+      const normalizedChildPath = this.normalizePath(child.fullPath);
+      return normalizedCurrentPath.startsWith(normalizedChildPath);
+    });
+
+    if (selectedDashboardChild) {
+      return {
+        name: selectedDashboardChild.name,
+        pathname: selectedDashboardChild.fullPath,
+        icon: selectedDashboardChild.icon,
+      };
+    }
+
+    // fallback: 대시보드 라우트 자체 사용
+    return {
+      name: dashboardRoute.name,
+      pathname: dashboardRoute.fullPath,
+      icon: dashboardRoute.icon,
+    };
   }
 
   // ===== 활성 상태 관리 =====

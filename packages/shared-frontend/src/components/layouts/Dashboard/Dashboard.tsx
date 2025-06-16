@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody } from '@heroui/react';
-import { Text } from '../../Text';
+import { Text } from '../../ui/Text';
 import { DashboardLayoutProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 
@@ -48,7 +48,7 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Only rendered when leftSidebar is provided */}
         {leftSidebar && (
-          <aside className="hidden xl:flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
+          <aside className="flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
             <div className="h-full overflow-y-auto scrollbar-thin">
               {leftSidebar}
             </div>

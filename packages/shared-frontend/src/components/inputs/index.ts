@@ -1,5 +1,4 @@
 export { AutoComplete } from './AutoComplete';
-export { BottomTab } from './BottomTab';
 export { CalendarInput } from './CalendarInput';
 export { Checkbox } from './Checkbox';
 export { Chips } from './Chips';

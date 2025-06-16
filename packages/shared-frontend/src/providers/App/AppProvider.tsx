@@ -6,8 +6,8 @@ import { PlateService, NavigationService } from '../../services';
 import { observer } from 'mobx-react-lite';
 import { observable, runInAction } from 'mobx';
 import { useGetAppBuilder } from '@shared/api-client';
-import { SplashScreen } from '../../components/SplashScreen';
 import { useAuth } from '../Auth/AuthProvider';
+import { SplashScreen } from '../../components/ui/SplashScreen';
 
 const StoreContext = createContext<PlateService | null>(null);
 

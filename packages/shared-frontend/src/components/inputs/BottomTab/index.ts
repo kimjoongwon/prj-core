@@ -1,1 +1,0 @@
-export { BottomTab } from './BottomTab';
