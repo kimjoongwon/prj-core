@@ -1,11 +1,39 @@
 import { APIManager } from '@shared/api-client';
 import { ResourceBuilder } from '@shared/types';
-import { useParams } from 'react-router';
+import { useParams, useLocation } from 'react-router';
 
 export const useGetResourceQuery = (resourceBuilder: ResourceBuilder) => {
-  const { id, type } = useParams<{ id: string; type: string }>();
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const query = resourceBuilder.query;
-  console.log('id:', id, 'type:', type, 'query:', query);
+
+  // 경로를 통해 type 판별
+  const getTypeFromPath = (pathname: string): string => {
+    if (pathname.includes('/create')) {
+      return 'create';
+    } else if (pathname.includes('/modify')) {
+      return 'modify';
+    } else if (pathname.includes('/detail')) {
+      return 'detail';
+    } else if (pathname.includes('/add')) {
+      return 'add';
+    }
+    // 기본값으로 detail 반환 (기존 /:id 형태의 경로)
+    return 'detail';
+  };
+
+  const type = getTypeFromPath(location.pathname);
+
+  console.log(
+    'id:',
+    id,
+    'type:',
+    type,
+    'pathname:',
+    location.pathname,
+    'query:',
+    query,
+  );
   const apiArgs: unknown[] = [];
 
   // Resource ID가 있으면 개별 리소스 조회용 함수 호출
