@@ -4,7 +4,7 @@ import { uniq } from 'lodash-es';
 import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { cloneElement } from 'react';
-import { usePageState } from '../PageBuilder/PageBuilder';
+import { usePageState } from '../../../providers';
 type InputValidationBuilderProps = {
   children: React.ReactElement;
   validation?: Validation;

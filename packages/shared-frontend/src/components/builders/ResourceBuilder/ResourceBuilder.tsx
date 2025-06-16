@@ -6,7 +6,7 @@ import { ResourceBuilderProps, IButtonBuilder } from '@shared/types';
 import { useGetResourceQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { usePageState } from '../PageBuilder/PageBuilder';
+import { usePageState } from '../../../providers';
 import { APIManager } from '@shared/api-client';
 import { capitalize, upperCase } from 'lodash-es';
 import pluralize from 'pluralize';

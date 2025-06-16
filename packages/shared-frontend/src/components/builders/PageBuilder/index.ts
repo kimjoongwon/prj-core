@@ -1,1 +1,2 @@
-export { PageBuilder, usePageState } from './PageBuilder';
+export { PageBuilder } from './PageBuilder';
+export { usePageState } from '../../../providers';
