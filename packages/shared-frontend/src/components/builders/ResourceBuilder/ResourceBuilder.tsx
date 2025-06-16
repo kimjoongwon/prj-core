@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Spinner, Alert } from '@heroui/react';
 import { v4 } from 'uuid';
-import { ResourceBuilderProps, IButtonBuilder } from '@shared/types';
+import { ResourceBuilderProps } from '@shared/types';
 import { useGetResourceQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
-import { ButtonBuilder } from '../ButtonBuilder';
 import { usePageState } from '../../../providers';
-import { APIManager } from '@shared/api-client';
-import { capitalize, upperCase } from 'lodash-es';
-import pluralize from 'pluralize';
+import { capitalize } from 'lodash-es';
 
 export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   const { resourceName: rn, sections } = props;
@@ -47,78 +44,6 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
     }
   }, [type, id, pageState]);
 
-  // 버튼 생성 로직
-  const button: IButtonBuilder | null = useMemo(() => {
-    if (!type || !resourceName) return null;
-
-    // detail 타입은 버튼을 보여주지 않음
-    if (type === 'detail') {
-      return null;
-    }
-
-    // 버튼 기본 속성
-    const baseButton: IButtonBuilder = {
-      buttonType: 'form',
-      color: 'primary',
-      fullWidth: true,
-      navigator: {
-        type: 'back',
-      },
-    };
-
-    // queryKey 함수 안전하게 가져오기
-    let queryKey: string;
-    try {
-      const pluralResourceName = pluralize(resourceName);
-      const queryKeyFunctionName = `getGet${pluralResourceName}ByQueryQueryKey`;
-      const queryKeyFunction = (APIManager as any)[queryKeyFunctionName];
-      if (typeof queryKeyFunction === 'function') {
-        queryKey = queryKeyFunction()[0]; // 배열의 첫 번째 요소가 실제 queryKey
-      } else {
-        queryKey = `get${pluralResourceName}ByQuery`;
-      }
-    } catch (error) {
-      console.warn(
-        `QueryKey function not found for ${resourceName}, using fallback`,
-      );
-      queryKey = `get${resourceName}sByQuery`;
-    }
-
-    switch (type) {
-      case 'add':
-        return {
-          ...baseButton,
-          children: '추가',
-          mutation: {
-            name: `create${resourceName}`,
-            path: 'form.inputs',
-            queryKey: queryKey,
-          },
-        };
-      case 'create':
-        return {
-          ...baseButton,
-          children: '생성',
-          mutation: {
-            name: `create${resourceName}`,
-            path: 'form.inputs',
-            queryKey: queryKey,
-          },
-        };
-      case 'modify':
-        return {
-          ...baseButton,
-          children: '수정',
-          mutation: {
-            name: `update${resourceName}ById`,
-            path: 'form.inputs',
-            queryKey: queryKey,
-          },
-        };
-      default:
-        return null;
-    }
-  }, [type, resourceName]);
   if (isLoading) {
     return <Spinner />;
   }
@@ -154,38 +79,8 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
     );
   }
 
-  // 헤더 제목 생성
-  const getHeaderTitle = () => {
-    // resourceName의 첫 글자를 대문자로 변환
-    const resourceLabel = upperCase(resourceName);
-    switch (type) {
-      case 'add':
-      case 'create':
-        return `${resourceLabel} 생성`;
-      case 'modify':
-        return `${resourceLabel} 수정`;
-      case 'detail':
-        return `${resourceLabel} 상세`;
-      default:
-        return resourceLabel;
-    }
-  };
-
   return (
     <div className="resource-builder-container relative">
-      {/* 헤더 영역 */}
-      <div className="flex justify-between items-center mb-6 pb-4 border-b border-divider">
-        <h1 className="text-2xl font-bold text-foreground">
-          {getHeaderTitle()}
-        </h1>
-        {/* 버튼을 헤더 오른쪽에 배치 */}
-        {button && (
-          <div className="z-10">
-            <ButtonBuilder {...button} />
-          </div>
-        )}
-      </div>
-
       <div className="resource-builder">
         {sections?.map(section => {
           return <SectionBuilder key={v4()} sectionBuilder={section} />;

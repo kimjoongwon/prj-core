@@ -27,13 +27,16 @@ export const ROUTE_NAMES = {
   GROUND: '그라운드',
   GROUND_LIST: '그라운드 리스트',
   GROUND_DETAIL: '그라운드 상세',
-  GROUND_EDIT: '그라운드 편집',
+  GROUND_CREATE: '그라운드 생성',
+  GROUND_MODIFY: '그라운드 수정',
   GROUND_CATEGORY: '그라운드 카테고리',
   GROUND_CATEGORY_DETAIL: '그라운드 카테고리 디테일',
-  GROUND_CATEGORY_EDIT: '그라운드 카테고리 편집',
+  GROUND_CATEGORY_CREATE: '그라운드 카테고리 생성',
+  GROUND_CATEGORY_MODIFY: '그라운드 카테고리 수정',
   GROUND_GROUP: '그라운드 그룹',
   GROUND_GROUP_DETAIL: '그라운드 그룹 디테일',
-  GROUND_GROUP_EDIT: '그라운드 그룹 편집',
+  GROUND_GROUP_CREATE: '그라운드 그룹 생성',
+  GROUND_GROUP_MODIFY: '그라운드 그룹 수정',
 } as const;
 
 export const rawRoutes: RouteBuilder[] = [
@@ -97,13 +100,31 @@ export const rawRoutes: RouteBuilder[] = [
                 icon: 'Map',
                 children: [
                   {
-                    name: ROUTE_NAMES.GROUND_DETAIL,
+                    name: ROUTE_NAMES.GROUND,
                     relativePath: ':id',
                     icon: 'MapPin',
                     children: [
                       {
-                        name: ROUTE_NAMES.GROUND_EDIT,
-                        relativePath: ':type',
+                        name: ROUTE_NAMES.GROUND_CREATE,
+                        relativePath: 'create',
+                        icon: 'Edit',
+                        layout: {
+                          name: '그라운드',
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_DETAIL,
+                        relativePath: 'detail',
+                        icon: 'Edit',
+                        layout: {
+                          name: '그라운드',
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_MODIFY,
+                        relativePath: 'modify',
                         icon: 'Edit',
                         layout: {
                           name: '그라운드',
@@ -120,14 +141,29 @@ export const rawRoutes: RouteBuilder[] = [
                 icon: 'Folder',
                 children: [
                   {
-                    name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
+                    name: ROUTE_NAMES.GROUND_CATEGORY,
                     relativePath: ':id',
                     icon: 'FolderOpen',
-
                     children: [
                       {
-                        name: ROUTE_NAMES.GROUND_CATEGORY_EDIT,
-                        relativePath: ':type',
+                        name: ROUTE_NAMES.GROUND_CATEGORY_CREATE,
+                        relativePath: 'create',
+                        icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
+                        relativePath: 'detail',
+                        icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_CATEGORY_MODIFY,
+                        relativePath: 'modify',
                         icon: 'Edit',
                         layout: {
                           type: 'Modal',
@@ -143,13 +179,29 @@ export const rawRoutes: RouteBuilder[] = [
                 icon: 'Group',
                 children: [
                   {
-                    name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
+                    name: ROUTE_NAMES.GROUND_GROUP,
                     relativePath: ':id',
                     icon: 'Users',
                     children: [
                       {
-                        name: ROUTE_NAMES.GROUND_GROUP_EDIT,
-                        relativePath: ':type',
+                        name: ROUTE_NAMES.GROUND_GROUP_CREATE,
+                        relativePath: 'create',
+                        icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
+                        relativePath: 'detail',
+                        icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_GROUP_MODIFY,
+                        relativePath: 'modify',
                         icon: 'Edit',
                         layout: {
                           type: 'Modal',
