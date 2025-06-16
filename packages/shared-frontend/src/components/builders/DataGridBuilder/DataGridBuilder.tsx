@@ -8,7 +8,7 @@ import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { usePageState } from '../PageBuilder/PageBuilder';
+import { usePageState } from '../../../providers';
 
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {

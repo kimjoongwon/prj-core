@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
-import { usePageState } from '../PageBuilder/PageBuilder';
+import { usePageState } from '../../../providers';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
   const { mutation, validation, buttonType, navigator } = props;

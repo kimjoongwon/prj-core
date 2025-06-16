@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { ElementBuilder as ElementBuilderInterface } from '@shared/types';
 import { ComponentManager } from '../../../../index';
-import { usePageState } from '../PageBuilder/PageBuilder';import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
+import { usePageState } from '../../../providers';
+import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
 import { addToast } from '@heroui/react';
 import { v4 } from 'uuid';
 import { useEffect } from 'react';
