@@ -36,7 +36,9 @@ export class NavigationService {
     // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
     this.initializeCurrentPath();
 
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      routeBuilders: false, // routeBuilders는 외부에서 직접 수정하지 않도록 설정
+    });
   }
 
   /**
@@ -65,8 +67,6 @@ export class NavigationService {
 
       if (initialPath) {
         this.updateCurrentPaths(initialPath);
-        // 초기 경로에 대해 활성 상태 설정
-        this.activateRoute(initialPath);
       }
     }
   }

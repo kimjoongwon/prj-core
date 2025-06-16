@@ -88,10 +88,20 @@ export const AppProvider = observer((props: StoreProviderProps) => {
   );
 });
 
-export const useApp = () => {
+export const usePlate = () => {
   const store = React.useContext(StoreContext);
   if (!store) {
     throw new Error('useApp must be used within a StoreProvider');
   }
   return store;
+};
+
+export const useNavigator = () => {
+  const plate = usePlate();
+  return plate.navigation.getNavigator();
+};
+
+export const useNavigation = () => {
+  const plate = usePlate();
+  return plate.navigation;
 };
