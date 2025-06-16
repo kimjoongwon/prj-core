@@ -12,3 +12,6 @@ server/dist
 public/dist
 .turbo
 out
+
+*storybook.log
+storybook-static
