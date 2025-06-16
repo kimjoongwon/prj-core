@@ -12,7 +12,4 @@ export default defineConfig(option => ({
   },
   external: ['react', 'react-dom'],
   dts: true,
-  esbuildOptions(options) {
-    options.inject?.push('./inject.js');
-  },
 }));
