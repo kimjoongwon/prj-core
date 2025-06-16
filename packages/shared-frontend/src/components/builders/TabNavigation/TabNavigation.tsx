@@ -2,8 +2,8 @@ import { Tabs } from '@shared/frontend';
 import { TabNavigationProps } from '@shared/types';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 export const TabNavigation = observer((props: TabNavigationProps) => {
   const { tabBuilder } = props;
@@ -11,21 +11,20 @@ export const TabNavigation = observer((props: TabNavigationProps) => {
   const state = useLocalObservable(() => ({
     currentPath: tabBuilder.options[0].value,
   }));
-
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    router.replace(state.currentPath);
+    navigate(state.currentPath);
 
     const disposer = reaction(
       () => state.currentPath,
       () => {
-        router.replace(state.currentPath);
+        navigate(state.currentPath);
       },
     );
 
     return disposer;
-  }, [router, state.currentPath]);
+  }, [navigate, state.currentPath]);
 
   return (
     <>

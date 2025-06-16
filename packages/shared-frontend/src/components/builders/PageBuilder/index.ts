@@ -1,1 +1,1 @@
-export { PageBuilder } from './PageBuilder';
+export { PageBuilder, usePageState } from './PageBuilder';

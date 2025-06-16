@@ -45,6 +45,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             {showProgress && (
               <div className="w-full space-y-2">
                 <Progress
+                  aria-label="Loading progress"
                   value={progress !== undefined ? progress : undefined}
                   color="primary"
                   className="max-w-md"

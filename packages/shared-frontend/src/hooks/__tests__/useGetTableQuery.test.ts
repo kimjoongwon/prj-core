@@ -1,4 +1,7 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+/// <reference types="vitest/globals" />
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import type { MockedFunction } from 'vitest';
+import { vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useGetTableQuery } from '../useGetTableQuery';
 
@@ -47,10 +50,8 @@ interface MockQuery {
 describe('useGetTableQuery', () => {
   const mockSetSkip = vi.fn();
   const mockSetTake = vi.fn();
-  const mockUseQueryState = useQueryState as vi.MockedFunction<
-    typeof useQueryState
-  >;
-  const mockIsEmpty = isEmpty as vi.MockedFunction<typeof isEmpty>;
+  const mockUseQueryState = useQueryState as any;
+  const mockIsEmpty = isEmpty as any;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -109,9 +110,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -157,9 +156,7 @@ describe('useGetTableQuery', () => {
         isLoading: true,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -188,9 +185,7 @@ describe('useGetTableQuery', () => {
         error: mockError,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -220,9 +215,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -265,9 +258,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -300,9 +291,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -375,9 +364,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetGroundsByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetGroundsByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -434,9 +421,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       // 이 경우 실제로는 에러가 발생할 수 있으므로 expect.not.toThrow() 제거
       const tableBuilder: TableBuilder = {
@@ -501,9 +486,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [
@@ -533,9 +516,7 @@ describe('useGetTableQuery', () => {
         isLoading: false,
       };
 
-      (APIManager.useGetUsersByQuery as vi.Mock).mockReturnValue(
-        mockApiResponse,
-      );
+      (APIManager.useGetUsersByQuery as any).mockReturnValue(mockApiResponse);
 
       const tableBuilder: TableBuilder = {
         columns: [

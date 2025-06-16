@@ -15,7 +15,7 @@ export const DataGridBuilder = observer(
     const pageState = usePageState();
     const { data, isLoading, meta, skip, take, setSkip, setTake } =
       useGetTableQuery(table);
-    console.log('DataGridBuilder data', data, 'meta', meta);
+
     const columns = table?.columns?.map(column => {
       return {
         id: column.id,

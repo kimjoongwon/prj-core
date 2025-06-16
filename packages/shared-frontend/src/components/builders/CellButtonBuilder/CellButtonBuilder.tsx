@@ -1,7 +1,7 @@
 'use client';
 
 import { Button as BaseButton } from '@shared/frontend';
-import { ButtonBuilder as ButtonBuilderProps } from '@shared/types';
+import { IButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
 import { cloneDeep } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
@@ -9,9 +9,7 @@ import { addToast } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { APIManager } from '@shared/api-client';
 
-interface ButtonProps extends ButtonBuilderProps {}
-
-export const CellButtonBuilder = observer((props: ButtonProps) => {
+export const CellButtonBuilder = observer((props: ButtonBuilderProps) => {
   const { icon, ...rest } = props;
 
   const onPress = async () => {
