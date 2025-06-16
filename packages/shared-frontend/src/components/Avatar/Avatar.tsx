@@ -1,7 +1,7 @@
 import { User, Avatar as HeroUIAvatar, Button, Chip } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { Dropdown, DropdownItemProps } from '../Dropdown';
-import { BrowserUtil } from '@shared/utils';
+import { BrowserUtil, EnvironmentUtil } from '@shared/utils';
 import { useLogout } from '@shared/api-client';
 
 interface AvatarProps {
@@ -11,34 +11,9 @@ interface AvatarProps {
 
 export const Avatar = observer((props: AvatarProps) => {
   const { showInfo = true, onMenuAction } = props;
-
-  // Add logout mutation hook
   const logoutMutation = useLogout();
 
-  // 환경 감지 로직
-  const getEnvironment = () => {
-    const hostname = window.location.hostname;
-    const port = window.location.port;
-
-    // 로컬 개발 환경
-    if (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      port === '5173'
-    ) {
-      return { name: '개발', color: 'success' as const };
-    }
-
-    // 스테이징 환경 (예: staging.example.com)
-    if (hostname.includes('staging') || hostname.includes('stg')) {
-      return { name: '스테이징', color: 'warning' as const };
-    }
-
-    // 운영 환경
-    return { name: '운영', color: 'danger' as const };
-  };
-
-  const environment = getEnvironment();
+  const environment = EnvironmentUtil.getCurrentEnvironment();
 
   const userMenuItems: DropdownItemProps[] = [
     {

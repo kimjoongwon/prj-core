@@ -4,6 +4,7 @@ import Util, {
   PathUtil,
   PaginationUtil,
   ValidationUtil,
+  EnvironmentUtil,
 } from '../../index';
 
 describe('Shared Utils Integration', () => {
@@ -14,6 +15,7 @@ describe('Shared Utils Integration', () => {
       expect(Util.PathUtil).toBeDefined();
       expect(Util.PaginationUtil).toBeDefined();
       expect(Util.ValidationUtil).toBeDefined();
+      expect(Util.EnvironmentUtil).toBeDefined();
     });
 
     it('should have all utility methods available through default export', () => {
@@ -28,6 +30,15 @@ describe('Shared Utils Integration', () => {
       expect(typeof Util.PaginationUtil.toArgs).toBe('function');
       expect(typeof Util.ValidationUtil.validateConfig).toBe('function');
       expect(typeof Util.ValidationUtil.getVariableName).toBe('function');
+      expect(typeof Util.EnvironmentUtil.getCurrentEnvironment).toBe(
+        'function',
+      );
+      expect(typeof Util.EnvironmentUtil.isDevelopment).toBe('function');
+      expect(typeof Util.EnvironmentUtil.isStaging).toBe('function');
+      expect(typeof Util.EnvironmentUtil.isProduction).toBe('function');
+      expect(typeof Util.EnvironmentUtil.getConfigByEnvironment).toBe(
+        'function',
+      );
     });
   });
 
@@ -37,6 +48,7 @@ describe('Shared Utils Integration', () => {
       expect(PathUtil).toBeDefined();
       expect(PaginationUtil).toBeDefined();
       expect(ValidationUtil).toBeDefined();
+      expect(EnvironmentUtil).toBeDefined();
     });
 
     it('should have the same references for default and named exports', () => {
@@ -44,6 +56,7 @@ describe('Shared Utils Integration', () => {
       expect(Util.PathUtil).toBe(PathUtil);
       expect(Util.PaginationUtil).toBe(PaginationUtil);
       expect(Util.ValidationUtil).toBe(ValidationUtil);
+      expect(Util.EnvironmentUtil).toBe(EnvironmentUtil);
     });
   });
 

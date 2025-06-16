@@ -48,7 +48,21 @@ shared-utils 패키지의 포괄적인 테스트 스위트입니다.
   - where 조건 처리
   - 복합 쿼리 처리
 
-### 4. ValidationUtil
+### 4. EnvironmentUtil
+
+- `getCurrentEnvironment()` - 현재 실행 환경 정보 반환
+  - 로컬 개발 환경 감지 (localhost, 127.0.0.1, 포트 5173)
+  - 스테이징 환경 감지 (staging, stg 포함 도메인)
+  - 운영 환경 감지 (기본값)
+  - 환경별 색상 코드 제공
+- `isDevelopment()` - 개발 환경 여부 확인
+- `isStaging()` - 스테이징 환경 여부 확인
+- `isProduction()` - 운영 환경 여부 확인
+- `getConfigByEnvironment()` - 환경별 설정값 반환
+  - 환경별 다른 설정 적용
+  - 기본값 처리 (운영 환경 설정)
+
+### 5. ValidationUtil
 
 - `validateConfig()` - class-validator를 사용한 설정 검증
   - 필수 필드 검증
@@ -96,6 +110,7 @@ pnpm test:ui
 ```
 src/__tests__/
 ├── DateTimeUtil.test.ts      # 날짜/시간 유틸리티 테스트
+├── EnvironmentUtil.test.ts   # 환경 감지 유틸리티 테스트
 ├── PathUtil.test.ts          # 경로 유틸리티 테스트
 ├── PaginationUtil.test.ts    # 페이지네이션 유틸리티 테스트
 ├── ValidationUtil.test.ts    # 검증 유틸리티 테스트
@@ -110,8 +125,8 @@ src/__tests__/
 
 ## 📈 테스트 메트릭
 
-- **총 테스트 케이스**: 52개
-- **테스트 파일**: 5개
+- **총 테스트 케이스**: 68개
+- **테스트 파일**: 6개
 - **실행 시간**: ~400ms
 - **커버리지**: 100%
 
