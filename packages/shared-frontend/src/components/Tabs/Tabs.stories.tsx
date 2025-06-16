@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from './index';
+import { v4 } from 'uuid';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Components/Tabs',
@@ -22,9 +23,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const sampleOptions = [
-  { value: 'one', text: '탭 1' },
-  { value: 'two', text: '탭 2' },
-  { value: 'three', text: '탭 3' },
+  { key: v4(), value: 'one', text: '탭 1' },
+  { key: v4(), value: 'two', text: '탭 2' },
+  { key: v4(), value: 'three', text: '탭 3' },
 ];
 
 export const Default: Story = {
