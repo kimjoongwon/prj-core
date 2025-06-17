@@ -24,16 +24,6 @@ export const useGetResourceQuery = (resourceBuilder: ResourceBuilder) => {
 
   const type = getTypeFromPath(location.pathname);
 
-  console.log(
-    'id:',
-    id,
-    'type:',
-    type,
-    'pathname:',
-    location.pathname,
-    'query:',
-    query,
-  );
   const apiArgs: unknown[] = [];
 
   // Resource ID가 있으면 개별 리소스 조회용 함수 호출

@@ -23,6 +23,7 @@ export class NavigationService {
   private navigator: NavigatorService;
   routeBuilders: RouteBuilder[] = [];
   currentRoute: Route | undefined = undefined;
+  selectedDashboardFullPath: string | undefined = '';
 
   // 현재 경로 추적을 위한 observable 프로퍼티들
   currentFullPath: string = '';

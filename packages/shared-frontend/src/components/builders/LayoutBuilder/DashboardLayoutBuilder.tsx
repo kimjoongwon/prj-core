@@ -22,7 +22,7 @@ export const DashboardLayoutBuilder = observer(
     // currentFullPath가 변경되면 해당 경로로 이동하는 reaction 설정
     useEffect(() => {
       const dispose = reaction(
-        () => navigation.currentFullPath,
+        () => navigation.selectedDashboardFullPath,
         currentFullPath => {
           if (currentFullPath) {
             navigator.push(currentFullPath);
@@ -68,7 +68,7 @@ export const DashboardLayoutBuilder = observer(
             <CollapsibleSidebar
               routes={selectedDashboardRouteChildren}
               parentMenuInfo={parentMenuInfo}
-              path="currentFullPath"
+              path="selectedDashboardFullPath"
               state={navigation}
             />
           )

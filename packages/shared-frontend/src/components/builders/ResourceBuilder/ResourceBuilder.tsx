@@ -20,7 +20,6 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
       if (!pageState.form) {
         pageState.form = {};
       }
-      console.log('ResourceBuilder data', data);
       pageState.form.inputs = data;
     }
   }, [data, pageState, type]);

@@ -106,6 +106,13 @@ export const useButtonLogic = ({
   const handleApiCall = async () => {
     console.log('🚀 handleApiCall started');
 
+    // mutation이 없고 navigator만 있는 경우 바로 네비게이션 처리
+    if (!mutation?.name && navigator) {
+      console.log('🧭 Navigation-only button: handling navigation directly');
+      handleNavigation(navigator);
+      return;
+    }
+
     // 기본 성공/에러 토스트 설정
     const successToast: ToastConfig = {
       color: 'success',
@@ -258,10 +265,9 @@ export const useButtonLogic = ({
           console.log('🧭 Handling navigation after API success');
           handleNavigation(navigator);
         }
-      } else if (navigator) {
-        console.log('🧭 Handling navigation without mutation');
-        // Handle navigation when there's no mutation
-        handleNavigation(navigator);
+      } else {
+        console.log('⚠️ No mutation found, but handleApiCall was called');
+        // mutation이 없는 경우는 이미 위에서 처리되므로 여기 도달하지 않아야 함
       }
 
       console.log('✅ handleApiCall completed successfully');
