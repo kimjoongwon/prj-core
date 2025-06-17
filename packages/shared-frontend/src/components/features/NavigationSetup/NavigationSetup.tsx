@@ -1,7 +1,8 @@
+'use client';
+
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Plate } from '../../../providers';
-import { reaction } from 'mobx';
 
 /**
  * Router 컨텍스트 내부에서 navigation 함수를 설정하는 컴포넌트
@@ -14,26 +15,6 @@ export const NavigationSetup = () => {
     // Plate이 초기화되었을 때 navigation 함수 설정
     if (Plate?.navigation) {
       Plate.navigation.setNavigateFunction(navigate);
-
-      // currentFullPath 변경을 감지하여 실제 네비게이션 수행
-      const navigationReaction = reaction(
-        () => Plate.navigation.currentFullPath,
-        (currentRoute, previousRoute) => {
-          // 순환 호출 방지: 현재 브라우저 경로와 다를 때만 네비게이션 수행
-          const browserPath = window.location.pathname;
-          if (
-            currentRoute &&
-            currentRoute !== browserPath &&
-            currentRoute !== previousRoute
-          ) {
-            console.log(
-              `NavigationSetup: Navigating from ${browserPath} to ${currentRoute}`,
-            );
-            // navigator.push 사용 (navigate 대신)
-            Plate.navigation.getNavigator().push(currentRoute);
-          }
-        },
-      );
 
       // 페이지 새로고침 시 저장된 경로로 리다이렉트 (약간의 지연을 두어 안정성 확보)
       const restoreNavigation = () => {
@@ -61,8 +42,7 @@ export const NavigationSetup = () => {
           });
 
           if (isValidRoute) {
-            // navigator.push 사용 (navigate 대신)
-            Plate.navigation.getNavigator().push(savedPath);
+            navigate(savedPath, { replace: true });
           }
         } else if (currentPath && currentPath !== '/') {
           // 현재 경로가 있으면 네비게이션 서비스에 활성화
@@ -73,10 +53,7 @@ export const NavigationSetup = () => {
       // 약간의 지연을 두어 라우터가 완전히 초기화된 후 실행
       const timeoutId = setTimeout(restoreNavigation, 100);
 
-      return () => {
-        clearTimeout(timeoutId);
-        navigationReaction(); // reaction dispose
-      };
+      return () => clearTimeout(timeoutId);
     }
   }, [navigate]);
 

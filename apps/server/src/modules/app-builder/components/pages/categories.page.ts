@@ -70,7 +70,19 @@ export class CategoriesPage {
                           },
                           cell: {
                             type: 'row-actions',
-                            resourceName: 'category',
+                            buttons: [
+                              {
+                                children: '수정',
+                                variant: 'solid',
+                                navigator: {
+                                  type: 'push',
+                                  route: {
+                                    name: '그라운드 카테고리 수정',
+                                    paramsPath: 'navigator.params',
+                                  },
+                                },
+                              },
+                            ],
                           },
                         },
                       ],

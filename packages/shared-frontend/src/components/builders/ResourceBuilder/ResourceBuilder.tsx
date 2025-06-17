@@ -7,6 +7,7 @@ import { useGetResourceQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
 import { usePageState } from '../../../providers';
 import { capitalize } from 'lodash-es';
+import { APIManager } from '@shared/api-client';
 
 export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   const { resourceName: rn, sections } = props;
@@ -30,7 +31,6 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
       pageState.type = type;
     }
   }, [type, pageState]);
-
   // type이 add인 경우 id를 parentId로 설정
   useEffect(() => {
     if (type === 'add' && id && pageState) {

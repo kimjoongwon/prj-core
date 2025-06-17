@@ -60,7 +60,6 @@ export class GroupsPage {
                           },
                           cell: {
                             type: 'row-actions',
-                            resourceName: 'group',
                           },
                         },
                       ],
