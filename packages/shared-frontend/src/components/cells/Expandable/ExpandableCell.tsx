@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { CellContext } from '@tanstack/react-table';
 
@@ -12,10 +10,7 @@ export const ExpandableCell = <T extends unknown>({
   row,
   getValue,
   expandable = true,
-  ...cellContext
 }: ExpandableCellProps<T>) => {
-  console.log('----------');
-  console.log('row.getIsExpanded()', row.getIsExpanded());
   return (
     <div
       style={{
