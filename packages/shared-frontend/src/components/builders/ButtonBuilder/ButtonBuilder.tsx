@@ -10,7 +10,13 @@ import { useButtonLogic } from './useButtonLogic';
 import { usePageState } from '../../../providers';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
-  const { mutation, validation, buttonType, navigator } = props;
+  const {
+    mutation,
+    validation,
+    buttonType,
+    navigator,
+    onPress: onBeforePress,
+  } = props;
   const state = usePageState();
   const { handleApiCall } = useButtonLogic({ mutation, navigator, state });
 
@@ -100,7 +106,12 @@ export const ButtonBuilder = observer((props: IButtonBuilder) => {
     <div className="flex flex-col gap-1">
       <BaseButton
         {...props}
-        onPress={onPress}
+        onPress={e => {
+          if (onBeforePress) {
+            onBeforePress(e);
+          }
+          onPress();
+        }}
         isDisabled={isButtonDisabled}
         color={isButtonDisabled ? 'danger' : props.color}
       >

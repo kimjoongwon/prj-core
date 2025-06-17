@@ -177,6 +177,7 @@ export interface Navigator {
     fullPath?: string;
     relativePath?: string;
     params?: object;
+    paramsPath?: string;
   };
 }
 
@@ -305,7 +306,7 @@ export interface CellBuilder {
     | 'boolean'
     | 'expandable';
   link?: string;
-  resourceName?: string;
+  buttons?: IButtonBuilder[];
 }
 export interface Header {
   name: string;

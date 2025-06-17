@@ -84,7 +84,6 @@ export class GroundsPage {
                           },
                           cell: {
                             type: 'row-actions',
-                            resourceName: 'ground',
                           },
                         },
                       ],

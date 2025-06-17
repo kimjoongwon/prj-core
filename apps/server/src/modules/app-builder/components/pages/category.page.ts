@@ -54,6 +54,36 @@ export class CategoryPage {
                                   path: 'form.inputs.name',
                                 } as InputProps<any>,
                               },
+                              {
+                                name: 'ButtonBuilder',
+                                props: {
+                                  color: 'primary',
+                                  children: '저장',
+                                  mutation: {
+                                    name: 'createCategory',
+                                    queryKey: '/api/v1/categories',
+                                    path: 'form.inputs',
+                                  },
+                                  navigator: {
+                                    type: 'back',
+                                  },
+                                } satisfies IButtonBuilder,
+                              },
+                              {
+                                name: 'ButtonBuilder',
+                                props: {
+                                  color: 'primary',
+                                  children: '수정',
+                                  mutation: {
+                                    name: 'updateCategoryById',
+                                    queryKey: '/api/v1/categories',
+                                    path: 'form.inputs',
+                                  },
+                                  navigator: {
+                                    type: 'back',
+                                  },
+                                } satisfies IButtonBuilder,
+                              },
                             ],
                           },
                         ],
