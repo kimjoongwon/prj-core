@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { ContextProvider } from '@shared';
-import { DataGridBuilderProps, PageBuilder } from '@shared/types';
+import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
 @Injectable()
 export class CategoriesPage {
@@ -28,10 +28,14 @@ export class CategoriesPage {
                   props: {
                     buttons: [
                       {
-                        children: '생성',
+                        children: '카테고리 생성',
                         variant: 'solid',
                         color: 'primary',
                         size: 'md',
+                        radius: 'lg',
+                        startContent: 'plus-circle',
+                        className:
+                          'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200',
                         navigator: {
                           type: 'push',
                           route: {
@@ -80,7 +84,13 @@ export class CategoriesPage {
                             buttons: [
                               {
                                 children: '상세',
-                                variant: 'solid',
+                                variant: 'light',
+                                size: 'sm',
+                                color: 'primary',
+                                radius: 'sm',
+                                isIconOnly: false,
+                                startContent: 'eye',
+                                className: 'min-w-unit-14 text-xs px-2 py-1',
                                 navigator: {
                                   type: 'push',
                                   route: {
@@ -88,10 +98,16 @@ export class CategoriesPage {
                                     paramsPath: 'navigator.params',
                                   },
                                 },
-                              },
+                              } satisfies IButtonBuilder,
                               {
                                 children: '수정',
-                                variant: 'solid',
+                                variant: 'light',
+                                size: 'sm',
+                                color: 'warning',
+                                radius: 'sm',
+                                isIconOnly: false,
+                                startContent: 'edit',
+                                className: 'min-w-unit-14 text-xs px-2 py-1',
                                 navigator: {
                                   type: 'push',
                                   route: {
@@ -99,10 +115,16 @@ export class CategoriesPage {
                                     paramsPath: 'navigator.params',
                                   },
                                 },
-                              },
+                              } satisfies IButtonBuilder,
                               {
                                 children: '추가',
-                                variant: 'solid',
+                                variant: 'light',
+                                size: 'sm',
+                                color: 'success',
+                                radius: 'sm',
+                                isIconOnly: false,
+                                startContent: 'plus',
+                                className: 'min-w-unit-14 text-xs px-2 py-1',
                                 navigator: {
                                   type: 'push',
                                   route: {
@@ -110,7 +132,7 @@ export class CategoriesPage {
                                     paramsPath: 'navigator.params',
                                   },
                                 },
-                              },
+                              } satisfies IButtonBuilder,
                             ],
                           },
                         },
