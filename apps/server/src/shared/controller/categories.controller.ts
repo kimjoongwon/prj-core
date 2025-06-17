@@ -67,7 +67,7 @@ export class CategoriesController {
     @Param('categoryId') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const category = await this.categoriesService.updateCategory(id, updateCategoryDto);
+    const category = await this.categoriesService.updateById(id, updateCategoryDto);
     return new ResponseEntity(
       HttpStatus.OK,
       'Category updated',
@@ -78,7 +78,7 @@ export class CategoriesController {
   @Auth()
   @ApiResponseEntity(CategoryDto)
   @Delete(':categoryId')
-  async deleteCategory(@Param('categoryId') id: string) {
+  async deleteCategoryById(@Param('categoryId') id: string) {
     await this.categoriesService.deleteById(id);
     return new ResponseEntity(HttpStatus.OK, 'Category deleted');
   }

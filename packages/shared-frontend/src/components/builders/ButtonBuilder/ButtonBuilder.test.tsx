@@ -15,15 +15,19 @@ vi.mock('./useButtonLogic', () => ({
 }));
 
 vi.mock('@shared/frontend', () => ({
-  Text: ({ children, variant }: { children: React.ReactNode; variant?: string }) => (
-    <span className={variant === 'error' ? 'text-red-500' : ''}>{children}</span>
+  Text: ({
+    children,
+    variant,
+  }: {
+    children: React.ReactNode;
+    variant?: string;
+  }) => (
+    <span className={variant === 'error' ? 'text-red-500' : ''}>
+      {children}
+    </span>
   ),
   Button: ({ children, onPress, isDisabled, ...rest }: any) => (
-    <button 
-      onClick={onPress} 
-      disabled={isDisabled}
-      {...rest}
-    >
+    <button onClick={onPress} disabled={isDisabled} {...rest}>
       {children}
     </button>
   ),
@@ -38,7 +42,7 @@ const mockUseButtonLogic = vi.mocked(useButtonLogic);
 
 describe('ButtonBuilder', () => {
   const mockHandleApiCall = vi.fn();
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockUsePageState.mockReturnValue({});
@@ -68,7 +72,7 @@ describe('ButtonBuilder', () => {
       };
 
       render(<ButtonBuilder {...props} />);
-      
+
       const button = screen.getByRole('button', { name: '상세' });
       fireEvent.click(button);
 
@@ -89,7 +93,7 @@ describe('ButtonBuilder', () => {
       };
 
       render(<ButtonBuilder {...props} />);
-      
+
       const button = screen.getByRole('button', { name: '상세보기' });
       fireEvent.click(button);
 
@@ -117,7 +121,7 @@ describe('ButtonBuilder', () => {
       };
 
       render(<ButtonBuilder {...props} />);
-      
+
       const button = screen.getByRole('button', { name: '저장' });
       fireEvent.click(button);
 
@@ -150,7 +154,7 @@ describe('ButtonBuilder', () => {
       });
 
       render(<ButtonBuilder {...props} />);
-      
+
       const button = screen.getByRole('button', { name: '제출' });
       expect(button.hasAttribute('disabled')).toBe(true);
       expect(screen.getByText('필수 입력입니다.')).toBeDefined();
