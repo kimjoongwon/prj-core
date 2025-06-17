@@ -46,8 +46,8 @@ export class AppBuilderService {
       const groundModifyPageBuilder: PageBuilder = this.groundPage.build('modify');
       const groundDetailPageBuilder: PageBuilder = this.groundPage.build('detail');
       const categoriesPageBuilder: PageBuilder = this.categoriesPage.build('Space');
-      const categoryCreatePageBuilder: PageBuilder = this.categoryPage.build('Space');
-      const categoryModifyPageBuilder: PageBuilder = this.categoryPage.build('Space');
+      const categoryCreatePageBuilder: PageBuilder = this.categoryPage.build('create', 'Space');
+      const categoryModifyPageBuilder: PageBuilder = this.categoryPage.build('modify', 'Space');
       const groupsPageBuilder: PageBuilder = this.groupsPage.build();
       const groupCreatePageBuilder: PageBuilder = this.groupPage.build();
       const groupModifyPageBuilder: PageBuilder = this.groupPage.build();
