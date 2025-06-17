@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { SectionBuilderProps } from '@shared/types';
 import { v4 } from 'uuid';
 import { ElementBuilder } from '../ElementBuilder';
-import { VStack } from '../../VStack';
-import { HStack } from '../../HStack';
+import { VStack } from '../../ui/VStack/VStack';
+import { HStack } from '../../ui/HStack/HStack';
 
 export const SectionBuilder = observer((props: SectionBuilderProps) => {
   const { sectionBuilder } = props;

@@ -1,6 +1,5 @@
 /// <reference types="vitest/globals" />
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import type { MockedFunction } from 'vitest';
 import { vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useGetTableQuery } from '../useGetTableQuery';

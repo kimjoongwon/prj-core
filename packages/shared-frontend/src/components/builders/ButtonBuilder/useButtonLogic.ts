@@ -5,8 +5,9 @@ import { APIManager } from '@shared/api-client';
 import { Plate, usePageState } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
+import { PathUtil } from '@shared/utils';
 
 interface UseButtonLogicProps {
   mutation?: Mutation;
@@ -31,6 +32,7 @@ export const useButtonLogic = ({
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const pageState = usePageState();
+  const navigate = useNavigate();
   // Handle navigation based on navigator configuration
   const handleNavigation = (nav: Navigator) => {
     const navigatorService = Plate.navigation.getNavigator();
@@ -78,7 +80,11 @@ export const useButtonLogic = ({
         if (nav.type === 'replace') {
           navigatorService.replace(nav.route.relativePath, paramsToPass);
         } else {
-          navigatorService.push(nav.route.relativePath, paramsToPass);
+          const url = PathUtil.getUrlWithParamsAndQueryString(
+            nav.route.relativePath,
+            paramsToPass,
+          );
+          navigate(url);
         }
       }
       // 3. name이 있으면 name으로 라우트 검색
@@ -189,7 +195,7 @@ export const useButtonLogic = ({
         // API 함수 호출 - useParams에서 id가 있으면 첫 번째 파라미터로 제공
         console.log('🏗️ Building API arguments...');
         const apiArgs: unknown[] = [];
-        if (id && id !== 'new') {
+        if (id && mutation.hasId) {
           console.log('🆔 Adding ID to args:', id);
           apiArgs.push(id);
         }

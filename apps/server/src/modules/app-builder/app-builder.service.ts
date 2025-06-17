@@ -46,11 +46,13 @@ export class AppBuilderService {
       const groundModifyPageBuilder: PageBuilder = this.groundPage.build('modify');
       const groundDetailPageBuilder: PageBuilder = this.groundPage.build('detail');
       const categoriesPageBuilder: PageBuilder = this.categoriesPage.build('Space');
+      const categoryDetailPageBuilder: PageBuilder = this.categoryPage.build('detail', 'Space');
       const categoryCreatePageBuilder: PageBuilder = this.categoryPage.build('create', 'Space');
       const categoryModifyPageBuilder: PageBuilder = this.categoryPage.build('modify', 'Space');
-      const groupsPageBuilder: PageBuilder = this.groupsPage.build();
-      const groupCreatePageBuilder: PageBuilder = this.groupPage.build();
-      const groupModifyPageBuilder: PageBuilder = this.groupPage.build();
+      const categoryAddPageBuilder: PageBuilder = this.categoryPage.build('add', 'Space');
+      const groupsPageBuilder: PageBuilder = this.groupsPage.build('Space');
+      const groupCreatePageBuilder: PageBuilder = this.groupPage.build('create', 'Space');
+      const groupModifyPageBuilder: PageBuilder = this.groupPage.build('modify', 'Space');
 
       // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
       if (isAuthenticated) {
@@ -85,9 +87,14 @@ export class AppBuilderService {
         this.setRoutePageAndLayout('그라운드 생성', groundCreatePageBuilder);
         this.setRoutePageAndLayout('그라운드 수정', groundModifyPageBuilder);
         this.setRoutePageAndLayout('그라운드 상세', groundDetailPageBuilder);
+        this.setRoutePageAndLayout('그라운드 카테고리 디테일', categoryDetailPageBuilder);
         this.setRoutePageAndLayout('그라운드 카테고리', categoriesPageBuilder);
         this.setRoutePageAndLayout('그라운드 카테고리 생성', categoryCreatePageBuilder);
         this.setRoutePageAndLayout('그라운드 카테고리 수정', categoryModifyPageBuilder);
+        this.setRoutePageAndLayout('그라운드 카테고리 추가', categoryAddPageBuilder);
+        this.setRoutePageAndLayout('그라운드 그룹', groupsPageBuilder);
+        this.setRoutePageAndLayout('그라운드 그룹 생성', groupCreatePageBuilder);
+        this.setRoutePageAndLayout('그라운드 그룹 수정', groupModifyPageBuilder);
         // this.setRoutePageAndLayout('그라운드 그룹 편집', groupModifyPageBuilder);
       }
 

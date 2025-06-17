@@ -187,7 +187,7 @@ export interface SuccessOrFailure {
   params?: object & { resourceId: string };
 }
 
-export type PageTypes = 'cretea' | 'modify' | 'detail' | 'add';
+export type PageTypes = 'create' | 'modify' | 'detail' | 'add';
 export interface AppBuilder {
   name: string;
   routes: RouteBuilder[];
@@ -223,6 +223,7 @@ export interface Query {
 
 export interface Mutation {
   name: string;
+  hasId?: boolean; // true면 id가 params에 포함되어야 함
   // 인벨리데이션을 위한 키
   queryKey?: string;
   params?: any;

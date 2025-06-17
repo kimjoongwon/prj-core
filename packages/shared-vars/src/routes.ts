@@ -33,6 +33,7 @@ export const ROUTE_NAMES = {
   GROUND_CATEGORY_DETAIL: '그라운드 카테고리 디테일',
   GROUND_CATEGORY_CREATE: '그라운드 카테고리 생성',
   GROUND_CATEGORY_MODIFY: '그라운드 카테고리 수정',
+  GROUND_CATEGORY_ADD: '그라운드 카테고리 추가',
   GROUND_GROUP: '그라운드 그룹',
   GROUND_GROUP_DETAIL: '그라운드 그룹 디테일',
   GROUND_GROUP_CREATE: '그라운드 그룹 생성',
@@ -164,6 +165,14 @@ export const rawRoutes: RouteBuilder[] = [
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_MODIFY,
                         relativePath: 'modify',
+                        icon: 'Edit',
+                        layout: {
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_CATEGORY_ADD,
+                        relativePath: 'add',
                         icon: 'Edit',
                         layout: {
                           type: 'Modal',

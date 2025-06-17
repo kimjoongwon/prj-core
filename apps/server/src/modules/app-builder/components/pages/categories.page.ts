@@ -8,6 +8,15 @@ export class CategoriesPage {
   build(categoryTypes: $Enums.CategoryTypes): PageBuilder {
     return {
       name: '카테고리 리스트',
+      state: {
+        inputs: {
+          type: categoryTypes,
+          tenantId: ContextProvider.getTenantId(),
+          parentId: null,
+          name: '',
+          label: '',
+        },
+      },
       sections: [
         {
           stacks: [
@@ -48,19 +57,17 @@ export class CategoriesPage {
                         {
                           accessorKey: 'name',
                           header: {
+                            expandable: true,
                             name: '이름',
+                          },
+                          cell: {
+                            type: 'expandable',
                           },
                         },
                         {
                           accessorKey: 'type',
                           header: {
                             name: '타입',
-                          },
-                        },
-                        {
-                          accessorKey: 'parent.name',
-                          header: {
-                            name: '상위 카테고리',
                           },
                         },
                         {
@@ -72,12 +79,34 @@ export class CategoriesPage {
                             type: 'row-actions',
                             buttons: [
                               {
+                                children: '상세',
+                                variant: 'solid',
+                                navigator: {
+                                  type: 'push',
+                                  route: {
+                                    name: '그라운드 카테고리 디테일',
+                                    paramsPath: 'navigator.params',
+                                  },
+                                },
+                              },
+                              {
                                 children: '수정',
                                 variant: 'solid',
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    name: '그라운드 카테고리 수정',
+                                    relativePath: ':id/modify',
+                                    paramsPath: 'navigator.params',
+                                  },
+                                },
+                              },
+                              {
+                                children: '추가',
+                                variant: 'solid',
+                                navigator: {
+                                  type: 'push',
+                                  route: {
+                                    relativePath: ':id/add',
                                     paramsPath: 'navigator.params',
                                   },
                                 },

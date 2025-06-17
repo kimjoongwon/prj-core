@@ -20,16 +20,16 @@ export const ActionCell = <T extends { id?: string }>({
     process.env.REACT_APP_DEBUG === 'true';
 
   // 디버그: 컴포넌트 렌더링 정보
-  useEffect(() => {
-    if (!isDebugMode) return;
+  // useEffect(() => {
+  //   if (!isDebugMode) return;
 
-    console.group('🔧 ActionCell Debug');
-    console.log('📊 Row data:', row);
-    console.log('🔘 Buttons config:', buttons);
-    console.log('📄 Page state:', pageState);
-    console.log('🔢 Buttons count:', buttons?.length || 0);
-    console.groupEnd();
-  }, [row, buttons, pageState, isDebugMode]);
+  //   console.group('🔧 ActionCell Debug');
+  //   console.log('📊 Row data:', row);
+  //   console.log('🔘 Buttons config:', buttons);
+  //   console.log('📄 Page state:', pageState);
+  //   console.log('🔢 Buttons count:', buttons?.length || 0);
+  //   console.groupEnd();
+  // }, [row, buttons, pageState, isDebugMode]);
 
   // 디버그: 버튼이 없는 경우
   if (!buttons || buttons.length === 0) {
@@ -62,6 +62,7 @@ export const ActionCell = <T extends { id?: string }>({
                 pageState.params = row;
                 set(pageState, button.navigator.route.paramsPath, {
                   id: row?.id,
+                  // parentId: row?.id,
                 });
                 console.log('✅ Row selected:', row);
                 console.log(

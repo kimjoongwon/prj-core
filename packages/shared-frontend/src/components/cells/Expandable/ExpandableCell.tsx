@@ -11,9 +11,11 @@ interface ExpandableCellProps<T extends unknown>
 export const ExpandableCell = <T extends unknown>({
   row,
   getValue,
-  expandable = false,
+  expandable = true,
   ...cellContext
 }: ExpandableCellProps<T>) => {
+  console.log('----------');
+  console.log('row.getIsExpanded()', row.getIsExpanded());
   return (
     <div
       style={{

@@ -115,6 +115,7 @@ async function main() {
         data: {
           tenant: { connect: { seq: 1 } },
           name: group.name,
+          type: $Enums.GroupTypes.Space,
         },
       });
     }
@@ -282,7 +283,7 @@ main()
     process.exit(1);
   });
 
-const spaceGroupSeed: CreateGroupDto[] = [
+const spaceGroupSeed: Omit<CreateGroupDto, 'type'>[] = [
   {
     name: GroupNames.TEAM_TRAINING.name,
     label: '',

@@ -19,11 +19,13 @@ export const CellBuilder = (props: CellBuilderProps) => {
     number: NumberCell,
     boolean: BooleanCell,
     expandable: ExpandableCell,
-  } as const;
+  } as Record<string, React.ComponentType<CellBuilderProps>>;
   // type에 따라 적절한 Cell 컴포넌트 사용
+
   if (type && type in cellComponentMap) {
     const CellComponent =
       cellComponentMap[type as keyof typeof cellComponentMap];
+
     return <CellComponent {...props} />;
   }
 

@@ -45,7 +45,7 @@ export class CategoryPage {
           name: 'ButtonBuilder',
           props: {
             color: 'primary',
-            children: '생성',
+            children: pageType === 'create' ? '생성' : '추가',
             mutation: {
               name: 'createCategory',
               queryKey: '/api/v1/categories',
@@ -65,6 +65,7 @@ export class CategoryPage {
             color: 'primary',
             children: '수정',
             mutation: {
+              hasId: true,
               name: 'updateCategoryById',
               queryKey: '/api/v1/categories',
               path: 'form.inputs',

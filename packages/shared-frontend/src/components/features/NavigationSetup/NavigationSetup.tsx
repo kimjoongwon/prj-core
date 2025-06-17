@@ -41,9 +41,9 @@ export const NavigationSetup = () => {
             return checkRoute(route);
           });
 
-          if (isValidRoute) {
-            navigate(savedPath, { replace: true });
-          }
+          // if (isValidRoute) {
+          //   navigate(savedPath, { replace: true });
+          // }
         } else if (currentPath && currentPath !== '/') {
           // 현재 경로가 있으면 네비게이션 서비스에 활성화
           Plate.navigation.activateRoute(currentPath);

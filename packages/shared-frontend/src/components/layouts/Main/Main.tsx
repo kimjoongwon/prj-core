@@ -1,7 +1,5 @@
-'use client';
-
-import { VStack } from '../../VStack';
 import { MainLayoutProps } from '@shared/types';
+import { VStack } from '../../ui/VStack';
 
 export const AdminMainLayout = (props: MainLayoutProps) => {
   const { children } = props;
