@@ -5,7 +5,7 @@ model Category {
   updatedAt            DateTime?             @updatedAt @db.Timestamptz(6)
   removedAt            DateTime?             @db.Timestamptz(6)
   name                 String                @unique
-  type                 CategoryTypes         @default(Role)
+  type                 CategoryTypes         @default(User)
   parentId             String?
   tenantId             String
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
@@ -24,13 +24,14 @@ model Group {
   updatedAt         DateTime?          @updatedAt @db.Timestamptz(6)
   removedAt         DateTime?          @db.Timestamptz(6)
   name              String
+  type              GroupTypes         @default(User)
   label             String?
   tenantId          String
   tenant            Tenant             @relation(fields: [tenantId], references: [id])
   userAssociations  UserAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
-  FileAssociation   FileAssociation[]
+  fileAssociations  FileAssociation[]
 }
 
 model Exercise {
@@ -321,6 +322,13 @@ enum TextTypes {
 }
 
 enum CategoryTypes {
+  Role
+  Space
+  File
+  User
+}
+
+enum GroupTypes {
   Role
   Space
   File

@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
+import { reaction } from 'mobx';
 import { Outlet } from 'react-router';
 import { DashboardLayout } from '../../layouts/Dashboard';
 import { Header, CollapsibleSidebar } from '../../layouts';
@@ -17,6 +18,21 @@ export const DashboardLayoutBuilder = observer(
   (props: DashboardLayoutBuilderProps) => {
     const navigation = useNavigation();
     const navigator = navigation.getNavigator();
+
+    // currentFullPath가 변경되면 해당 경로로 이동하는 reaction 설정
+    useEffect(() => {
+      const dispose = reaction(
+        () => navigation.currentFullPath,
+        currentFullPath => {
+          if (currentFullPath) {
+            navigator.push(currentFullPath);
+          }
+        },
+      );
+
+      // 컴포넌트 언마운트 시 reaction 해제
+      return () => dispose();
+    }, [navigation, navigator]);
 
     // Dashboard에서는 항상 dashboard의 자식 라우트들을 보여줌
     const dashboardRoutes = navigation.getDirectChildrenByName('대시보드');
