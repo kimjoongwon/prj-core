@@ -5,10 +5,23 @@ import { AllExceptionsFilter, PrismaClientExceptionFilter } from '@shared';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import { logConfig } from './shared/config/log.config';
+import { AppLogger } from './shared/utils/app-logger.util';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
+  const startTime = Date.now();
+  const logger = new AppLogger('Bootstrap');
+
+  logger.auth('🚀 Starting server...', {
+    env: process.env.NODE_ENV || 'development',
+    nodeVersion: process.version,
+  });
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+    logger: logConfig.level,
+  });
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   // Cookie parser 미들웨어 추가
@@ -58,7 +71,17 @@ async function bootstrap() {
     ],
     credentials: true,
   });
-  await app.listen(3005);
+
+  const port = 3005;
+  await app.listen(port);
+
+  const bootTime = Date.now() - startTime;
+  logger.success('🎉 Server started successfully!', {
+    port,
+    url: `http://localhost:${port}`,
+    docs: `http://localhost:${port}/api`,
+    bootTime: `${bootTime}ms`,
+  });
 }
 
 bootstrap();

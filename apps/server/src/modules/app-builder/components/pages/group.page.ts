@@ -14,8 +14,6 @@ import {
 @Injectable()
 export class GroupPage {
   build(pageType: PageTypes, type: $Enums.GroupTypes): PageBuilder {
-    console.log('GroupPage build called');
-
     // 기존 데이터 로드
     let formInputs = {
       name: '',

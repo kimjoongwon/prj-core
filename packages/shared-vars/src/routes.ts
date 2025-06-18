@@ -79,6 +79,9 @@ export const rawRoutes: RouteBuilder[] = [
             name: ROUTE_NAMES.USER_SERVICE,
             relativePath: 'user-service',
             icon: 'Users',
+            layout: {
+              type: 'Dashbaord',
+            },
             children: [
               {
                 name: ROUTE_NAMES.USERS,
