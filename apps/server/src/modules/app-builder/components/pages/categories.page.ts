@@ -93,7 +93,7 @@ export class CategoriesPage {
                                   type: 'push',
                                   route: {
                                     name: '그라운드 카테고리 디테일',
-                                    paramPaths: ['navigator.params'],
+                                    paramPaths: ['selectedRow.id'],
                                   },
                                 },
                               } satisfies IButtonBuilder,

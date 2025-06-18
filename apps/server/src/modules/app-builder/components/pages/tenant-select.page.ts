@@ -12,8 +12,8 @@ export class TenantSelectPage {
     const query = plainToInstance(QueryTenantDto, {
       userId,
     });
-    const { items } = await this.tenantService.getManyByQuery(query);
-    const tenantOptions = items.map((tenant) => ({
+    const { tenants } = await this.tenantService.getManyByQuery(query);
+    const tenantOptions = tenants.map((tenant) => ({
       text: tenant.space?.ground?.name,
       value: tenant?.id,
     }));

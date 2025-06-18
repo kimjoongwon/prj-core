@@ -1,7 +1,7 @@
 import { NumberFieldOptional } from '../../decorator';
 import { PaginationUtil } from '../../lib/PaginationUtil';
 import { PageMetaDto } from './page-meta.dto';
-import { defaultsDeep } from 'lodash';
+import { defaultsDeep, merge } from 'lodash';
 
 export class QueryDto {
   @NumberFieldOptional({
@@ -22,13 +22,16 @@ export class QueryDto {
   toArgs<T>(rawArgs?: T) {
     const args = PaginationUtil.toArgs(this);
     const newArgs = defaultsDeep(args, {
-      ...rawArgs,
       orderBy: {
         createdAt: 'desc',
-        // @ts-ignore
-        ...rawArgs?.orderBy,
       },
     });
+
+    // rawArgs가 있으면 newArgs를 rawArgs로 덮어쓰기 (모든 nested depth에서 동작)
+    if (rawArgs) {
+      return merge({}, newArgs, rawArgs) as T;
+    }
+
     return {
       ...newArgs,
     } as T;

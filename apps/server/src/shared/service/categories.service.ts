@@ -78,8 +78,6 @@ export class CategoriesService {
       },
     });
 
-    this.logger.log(`Fetching categories with args: ${JSON.stringify(args)}`, 'getManyByQuery');
-
     const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
     const categories = await this.prisma.category.findMany(args);
     const count = await this.prisma.category.count(countArgs);
