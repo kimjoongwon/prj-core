@@ -6,4 +6,5 @@ export class CreateTenantDto extends OmitType(TenantDto, [
   ...COMMON_ENTITY_FIELDS,
   'space',
   'user',
+  'role',
 ]) {}

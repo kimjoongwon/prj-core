@@ -13,6 +13,15 @@ import { GroupsPage } from './components/pages/groups.page';
 import { CategoryPage } from './components/pages/category.page';
 import { GroupPage } from './components/pages/group.page';
 
+// 라우트 타입 상수
+const ROUTE_TYPES = {
+  ADMIN: '관리자',
+  AUTH: '인증',
+  LOGIN: '로그인',
+  TENANT_SELECT: '테넌트 선택',
+  DASHBOARD: '대시보드',
+} as const;
+
 @Injectable()
 export class AppBuilderService {
   private routes: RouteBuilder[];
@@ -30,72 +39,30 @@ export class AppBuilderService {
     readonly categoryPage: CategoryPage,
     readonly groupPage: GroupPage,
   ) {
-    // rawRoutes를 deep copy하여 초기화 (null safety 체크)
-    this.routes = rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
+    this.routes = this.initializeRoutes();
+  }
+
+  /**
+   * 라우트 초기화 (null safety 보장)
+   */
+  private initializeRoutes(): RouteBuilder[] {
+    return rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
   }
 
   async build(isAuthenticated: boolean = false) {
     try {
-      // 로그인 페이지 설정
-      const loginPageBuilder: PageBuilder = this.loginPage.build();
-      const tenantSelectPageBuilder: PageBuilder = await this.tenantSelectPage.build();
-      const dashboardPageBuilder: PageBuilder = this.dashboardPage.build();
-      const usersPageBuilder: PageBuilder = this.usersPage.build();
-      const groundsPageBuilder: PageBuilder = this.groundsPage.build();
-      const groundCreatePageBuilder: PageBuilder = this.groundPage.build('create');
-      const groundModifyPageBuilder: PageBuilder = this.groundPage.build('modify');
-      const groundDetailPageBuilder: PageBuilder = this.groundPage.build('detail');
-      const categoriesPageBuilder: PageBuilder = this.categoriesPage.build('Space');
-      const categoryDetailPageBuilder: PageBuilder = this.categoryPage.build('detail', 'Space');
-      const categoryCreatePageBuilder: PageBuilder = this.categoryPage.build('create', 'Space');
-      const categoryModifyPageBuilder: PageBuilder = this.categoryPage.build('modify', 'Space');
-      const categoryAddPageBuilder: PageBuilder = this.categoryPage.build('add', 'Space');
-      const groupsPageBuilder: PageBuilder = this.groupsPage.build('Space');
-      const groupCreatePageBuilder: PageBuilder = this.groupPage.build('create', 'Space');
-      const groupModifyPageBuilder: PageBuilder = this.groupPage.build('modify', 'Space');
+      // 인증 상태에 따른 라우트 설정
+      this.setupRoutesBasedOnAuth(isAuthenticated);
 
-      // 인증된 사용자는 모든 라우트 접근 가능, 비인증 사용자는 auth 라우트만
-      if (isAuthenticated) {
-        // 인증된 사용자: 모든 라우트 제공
-        this.routes = rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
-      } else {
-        // 비인증 사용자: auth 라우트만 제공
-        this.routes = this.getAuthRoutes();
-      }
+      // 페이지 빌더 생성
+      const pageBuilders = await this.createPageBuilders();
 
-      this.setRoutePageAndLayout('관리자', undefined);
-      this.setRoutePageAndLayout('인증', undefined);
-      this.setRoutePageAndLayout('로그인', loginPageBuilder);
-      this.setRoutePageAndLayout('테넌트 선택', tenantSelectPageBuilder);
+      // 기본 라우트 설정 (인증 관련)
+      this.setupAuthRoutes(pageBuilders);
 
-      // 대시보드 관련 페이지 설정 (인증된 사용자 또는 모든 라우트가 포함된 경우에만)
-      if (
-        isAuthenticated ||
-        (this.routes &&
-          Array.isArray(this.routes) &&
-          this.routes.some(
-            (route) =>
-              route &&
-              route.children &&
-              Array.isArray(route.children) &&
-              route.children.some((child) => child && child.name === '대시보드'),
-          ))
-      ) {
-        this.setRoutePageAndLayout('대시보드', dashboardPageBuilder);
-        this.setRoutePageAndLayout('유저', usersPageBuilder);
-        this.setRoutePageAndLayout('그라운드 리스트', groundsPageBuilder);
-        this.setRoutePageAndLayout('그라운드 생성', groundCreatePageBuilder);
-        this.setRoutePageAndLayout('그라운드 수정', groundModifyPageBuilder);
-        this.setRoutePageAndLayout('그라운드 상세', groundDetailPageBuilder);
-        this.setRoutePageAndLayout('그라운드 카테고리 디테일', categoryDetailPageBuilder);
-        this.setRoutePageAndLayout('그라운드 카테고리', categoriesPageBuilder);
-        this.setRoutePageAndLayout('그라운드 카테고리 생성', categoryCreatePageBuilder);
-        this.setRoutePageAndLayout('그라운드 카테고리 수정', categoryModifyPageBuilder);
-        this.setRoutePageAndLayout('그라운드 카테고리 추가', categoryAddPageBuilder);
-        this.setRoutePageAndLayout('그라운드 그룹', groupsPageBuilder);
-        this.setRoutePageAndLayout('그라운드 그룹 생성', groupCreatePageBuilder);
-        this.setRoutePageAndLayout('그라운드 그룹 수정', groupModifyPageBuilder);
-        // this.setRoutePageAndLayout('그라운드 그룹 편집', groupModifyPageBuilder);
+      // 대시보드 라우트 설정 (인증된 사용자만)
+      if (this.shouldSetupDashboardRoutes(isAuthenticated)) {
+        this.setupDashboardRoutes(pageBuilders);
       }
 
       return {
@@ -103,7 +70,6 @@ export class AppBuilderService {
       };
     } catch (error) {
       console.error('Error in AppBuilderService.build():', error);
-      // 에러 발생시 기본 라우트 반환
       return {
         routes: this.routes || [],
       };
@@ -111,39 +77,142 @@ export class AppBuilderService {
   }
 
   /**
+   * 인증 상태에 따른 라우트 설정
+   */
+  private setupRoutesBasedOnAuth(isAuthenticated: boolean): void {
+    if (isAuthenticated) {
+      // 인증된 사용자: 모든 라우트 (dashboard 포함)
+      this.routes = this.initializeRoutes();
+    } else {
+      // 비인증 사용자: auth 라우트만
+      this.routes = this.getAuthRoutes();
+    }
+  }
+
+  /**
+   * 페이지 빌더들 생성
+   */
+  private async createPageBuilders() {
+    return {
+      login: this.loginPage.build(),
+      tenantSelect: await this.tenantSelectPage.build(),
+      dashboard: this.dashboardPage.build(),
+      users: this.usersPage.build(),
+      grounds: this.groundsPage.build(),
+      groundCreate: this.groundPage.build('create'),
+      groundModify: this.groundPage.build('modify'),
+      groundDetail: this.groundPage.build('detail'),
+      categories: this.categoriesPage.build('Space'),
+      categoryDetail: this.categoryPage.build('detail', 'Space'),
+      categoryCreate: this.categoryPage.build('create', 'Space'),
+      categoryModify: this.categoryPage.build('modify', 'Space'),
+      categoryAdd: this.categoryPage.build('add', 'Space'),
+      groups: this.groupsPage.build('Space'),
+      groupCreate: this.groupPage.build('create', 'Space'),
+      groupModify: this.groupPage.build('modify', 'Space'),
+    };
+  }
+
+  /**
+   * 인증 관련 라우트 설정
+   */
+  private setupAuthRoutes(pageBuilders: any): void {
+    this.setRoutePageAndLayout(ROUTE_TYPES.ADMIN, undefined);
+    this.setRoutePageAndLayout(ROUTE_TYPES.AUTH, undefined);
+    this.setRoutePageAndLayout(ROUTE_TYPES.LOGIN, pageBuilders.login);
+  }
+
+  /**
+   * 대시보드 라우트 설정 여부 확인
+   */
+  private shouldSetupDashboardRoutes(isAuthenticated: boolean): boolean {
+    return isAuthenticated || this.hasDashboardRoute();
+  }
+
+  /**
+   * 대시보드 라우트 존재 여부 확인
+   */
+  private hasDashboardRoute(): boolean {
+    return (
+      this.routes?.some((route) =>
+        route?.children?.some((child) => child?.name === ROUTE_TYPES.DASHBOARD),
+      ) ?? false
+    );
+  }
+
+  /**
+   * 대시보드 관련 라우트 설정
+   */
+  private setupDashboardRoutes(pageBuilders: any): void {
+    this.setRoutePageAndLayout('대시보드', pageBuilders.dashboard);
+    this.setRoutePageAndLayout('테넌트 선택', pageBuilders.tenantSelect);
+    this.setRoutePageAndLayout('유저', pageBuilders.users);
+    this.setRoutePageAndLayout('그라운드 리스트', pageBuilders.grounds);
+    this.setRoutePageAndLayout('그라운드 생성', pageBuilders.groundCreate);
+    this.setRoutePageAndLayout('그라운드 수정', pageBuilders.groundModify);
+    this.setRoutePageAndLayout('그라운드 상세', pageBuilders.groundDetail);
+    this.setRoutePageAndLayout('그라운드 카테고리 디테일', pageBuilders.categoryDetail);
+    this.setRoutePageAndLayout('그라운드 카테고리', pageBuilders.categories);
+    this.setRoutePageAndLayout('그라운드 카테고리 생성', pageBuilders.categoryCreate);
+    this.setRoutePageAndLayout('그라운드 카테고리 수정', pageBuilders.categoryModify);
+    this.setRoutePageAndLayout('그라운드 카테고리 추가', pageBuilders.categoryAdd);
+    this.setRoutePageAndLayout('그라운드 그룹', pageBuilders.groups);
+    this.setRoutePageAndLayout('그라운드 그룹 생성', pageBuilders.groupCreate);
+    this.setRoutePageAndLayout('그라운드 그룹 수정', pageBuilders.groupModify);
+  }
+
+  /**
    * 인증되지 않은 사용자용 라우트 (auth 경로만)
    */
   private getAuthRoutes(): RouteBuilder[] {
-    if (!rawRoutes || !Array.isArray(rawRoutes)) {
+    if (!this.isValidRawRoutes()) {
       return [];
     }
 
     return rawRoutes
-      .map((route) => {
-        if (!route || !route.name) {
-          return null;
-        }
+      .map((route) => this.filterAdminRouteForAuth(route))
+      .filter((route) => this.isValidAuthRoute(route)) as RouteBuilder[];
+  }
 
-        if (route.name === '관리자') {
-          const filteredChildren =
-            route.children?.filter((child) => child && child.name === '인증') || [];
+  /**
+   * rawRoutes의 유효성 검사
+   */
+  private isValidRawRoutes(): boolean {
+    return rawRoutes && Array.isArray(rawRoutes);
+  }
 
-          return {
-            ...route,
-            children: filteredChildren,
-          };
-        }
-        return route;
-      })
-      .filter((route) => {
-        return (
-          route !== null &&
-          route?.name === '관리자' &&
-          route.children &&
-          Array.isArray(route.children) &&
-          route.children.some((child) => child && child.name === '인증')
-        );
-      }) as RouteBuilder[];
+  /**
+   * 관리자 라우트에서 인증 관련 자식만 필터링
+   */
+  private filterAdminRouteForAuth(route: RouteBuilder): RouteBuilder | null {
+    if (!route?.name) {
+      return null;
+    }
+
+    if (route.name === ROUTE_TYPES.ADMIN) {
+      const authChildren =
+        route.children?.filter((child) => child?.name === ROUTE_TYPES.AUTH) || [];
+
+      return {
+        ...route,
+        children: authChildren,
+      };
+    }
+
+    return route;
+  }
+
+  /**
+   * 유효한 인증 라우트인지 확인
+   */
+  private isValidAuthRoute(route: RouteBuilder | null): boolean {
+    return (
+      route !== null &&
+      route?.name === ROUTE_TYPES.ADMIN &&
+      route.children &&
+      Array.isArray(route.children) &&
+      route.children.some((child) => child?.name === ROUTE_TYPES.AUTH)
+    );
   }
 
   /**
@@ -152,37 +221,64 @@ export class AppBuilderService {
    * @param pageBuilder - 설정할 PageBuilder 데이터
    */
   setRoutePageAndLayout(name: RouteNames, pageBuilder?: PageBuilder): void {
-    const findAndSetRoute = (routeList: RouteBuilder[]): boolean => {
-      if (!routeList || !Array.isArray(routeList)) {
-        return false;
+    this.findAndSetRoute(this.routes, name, pageBuilder);
+  }
+
+  /**
+   * 라우트를 재귀적으로 탐색하여 설정
+   */
+  private findAndSetRoute(
+    routeList: RouteBuilder[],
+    targetName: RouteNames,
+    pageBuilder?: PageBuilder,
+  ): boolean {
+    if (!this.isValidRouteList(routeList)) {
+      return false;
+    }
+
+    for (const route of routeList) {
+      if (!this.isValidRoute(route)) {
+        continue;
       }
 
-      for (const route of routeList) {
-        // route와 route.name이 null/undefined가 아닌지 확인
-        if (!route || !route.name) {
-          continue;
+      // 현재 route의 name이 일치하는 경우
+      if (route.name === targetName) {
+        if (pageBuilder) {
+          route.page = pageBuilder;
         }
+        return true;
+      }
 
-        // 현재 route의 name이 일치하는 경우
-        if (route.name === name) {
-          if (pageBuilder) {
-            route.page = pageBuilder;
-          }
-
-          return true; // 찾았음을 나타냄
-        }
-
-        // children이 있는 경우 재귀적으로 탐색
-        if (route.children && Array.isArray(route.children) && route.children.length > 0) {
-          const found = findAndSetRoute(route.children);
-          if (found) {
-            return true;
-          }
+      // children이 있는 경우 재귀적으로 탐색
+      if (this.hasValidChildren(route)) {
+        const found = this.findAndSetRoute(route.children!, targetName, pageBuilder);
+        if (found) {
+          return true;
         }
       }
-      return false; // 찾지 못함
-    };
+    }
 
-    findAndSetRoute(this.routes);
+    return false;
+  }
+
+  /**
+   * 라우트 리스트의 유효성 검사
+   */
+  private isValidRouteList(routeList: RouteBuilder[]): boolean {
+    return routeList && Array.isArray(routeList);
+  }
+
+  /**
+   * 개별 라우트의 유효성 검사
+   */
+  private isValidRoute(route: RouteBuilder): boolean {
+    return route && !!route.name;
+  }
+
+  /**
+   * 유효한 자식 라우트가 있는지 확인
+   */
+  private hasValidChildren(route: RouteBuilder): boolean {
+    return route.children && Array.isArray(route.children) && route.children.length > 0;
   }
 }

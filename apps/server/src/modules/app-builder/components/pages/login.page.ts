@@ -93,8 +93,9 @@ export class LoginPage {
                   color: 'primary',
                   fullWidth: true,
                   navigator: {
+                    type: 'href',
                     route: {
-                      name: '테넌트 선택',
+                      fullPath: '/admin/tenant-select',
                     },
                   },
                 } satisfies IButtonBuilder,
