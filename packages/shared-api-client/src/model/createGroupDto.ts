@@ -3,10 +3,12 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { GroupTypes } from './groupTypes';
 
 export interface CreateGroupDto {
   name: string;
   /** @nullable */
   label?: string | null;
+  type: GroupTypes;
   tenantId: string;
 }

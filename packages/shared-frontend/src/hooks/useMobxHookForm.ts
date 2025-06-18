@@ -6,9 +6,6 @@ import { get, set } from 'lodash-es';
 export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
   const localState = useLocalObservable(() => ({
     value: initialValue,
-    setValue(newValue: any) {
-      this.value = newValue;
-    },
   }));
 
   useEffect(() => {

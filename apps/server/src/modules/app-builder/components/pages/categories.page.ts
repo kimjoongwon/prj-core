@@ -11,7 +11,6 @@ export class CategoriesPage {
       state: {
         inputs: {
           type: categoryTypes,
-          tenantId: ContextProvider.getTenantId(),
           parentId: null,
           name: '',
           label: '',
@@ -54,7 +53,6 @@ export class CategoriesPage {
                           skip: 0,
                           take: 10,
                           type: categoryTypes,
-                          tenantId: ContextProvider.getTenantId(),
                         },
                       },
                       columns: [
@@ -95,7 +93,7 @@ export class CategoriesPage {
                                   type: 'push',
                                   route: {
                                     name: '그라운드 카테고리 디테일',
-                                    paramsPath: 'navigator.params',
+                                    paramPaths: ['navigator.params'],
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -112,7 +110,7 @@ export class CategoriesPage {
                                   type: 'push',
                                   route: {
                                     relativePath: ':id/modify',
-                                    paramsPath: 'navigator.params',
+                                    paramPaths: ['selectedRow.id'],
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -129,7 +127,7 @@ export class CategoriesPage {
                                   type: 'push',
                                   route: {
                                     relativePath: ':id/add',
-                                    paramsPath: 'navigator.params',
+                                    paramPaths: ['selectedRow.id'],
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -145,6 +143,7 @@ export class CategoriesPage {
                                 mutation: {
                                   name: 'deleteCategoryById',
                                   hasId: true,
+                                  idPath: 'selectedRow.id',
                                   queryKey: '/api/v1/categories',
                                 },
                               } satisfies IButtonBuilder,

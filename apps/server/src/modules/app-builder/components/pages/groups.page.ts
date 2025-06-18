@@ -72,7 +72,7 @@ export class GroupsPage {
                                   type: 'push',
                                   route: {
                                     name: '그라운드 그룹 수정',
-                                    paramsPath: 'navigator.params',
+                                    paramPaths: ['selectedRow.id'],
                                   },
                                 },
                               },

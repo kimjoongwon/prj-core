@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { GroupTypes } from './groupTypes';
 import type { TenantDto } from './tenantDto';
 
 export interface GroupDto {
@@ -15,6 +16,7 @@ export interface GroupDto {
   name: string;
   /** @nullable */
   label?: string | null;
+  type: GroupTypes;
   tenantId: string;
   tenant?: TenantDto;
 }

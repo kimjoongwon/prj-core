@@ -5,9 +5,12 @@ import { UpdateCategoryDto } from '../dto/update/update-category.dto';
 import { QueryCategoryDto } from '../dto/query/query-category.dto';
 import { CategoriesRepository } from '../repository';
 import { Category } from '../entity/category.entity';
+import { AppLogger } from '../utils/app-logger.util';
+import { ContextProvider } from '../provider';
 
 @Injectable()
 export class CategoriesService {
+  private readonly logger = new AppLogger(CategoriesService.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly repository: CategoriesRepository,
@@ -54,9 +57,13 @@ export class CategoriesService {
   }
 
   async getManyByQuery(query: QueryCategoryDto) {
+    const currentTenant = ContextProvider.getTenant();
     const args = query.toArgs<Prisma.CategoryFindManyArgs>({
       where: {
         parent: null,
+        tenant: {
+          spaceId: currentTenant?.spaceId,
+        },
       },
       include: {
         children: {
@@ -70,6 +77,8 @@ export class CategoriesService {
         },
       },
     });
+
+    this.logger.log(`Fetching categories with args: ${JSON.stringify(args)}`, 'getManyByQuery');
 
     const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
     const categories = await this.prisma.category.findMany(args);

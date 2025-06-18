@@ -177,7 +177,7 @@ export interface Navigator {
     fullPath?: string;
     relativePath?: string;
     params?: object;
-    paramsPath?: string;
+    paramPaths?: string[]; // pageState에서 추출할 경로들의 배열
   };
 }
 
@@ -228,6 +228,7 @@ export interface Mutation {
   queryKey?: string;
   params?: any;
   path?: string;
+  idPath?: string; // id가 포함된 경로
 }
 
 export type Key = string | number;

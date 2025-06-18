@@ -68,10 +68,41 @@ export const ActionCell = <T extends { id?: string }>({
                   description: '선택된 행 데이터가 없습니다.',
                   color: 'warning',
                 });
+                console.groupEnd();
                 return;
               }
 
-              // navigator가 있는 경우에만 처리
+              // ActionButton을 누르면 항상 selectedRow 설정
+              if (!pageState) {
+                console.warn('⚠️ PageState is null or undefined');
+                addToast({
+                  title: '상태 업데이트 오류',
+                  description: '페이지 상태를 업데이트할 수 없습니다.',
+                  color: 'danger',
+                });
+                console.groupEnd();
+                return;
+              }
+
+              try {
+                pageState.selectedRow = row;
+                console.log('✅ Row selected:', row);
+                console.log(
+                  '📊 Page state after selection:',
+                  pageState.selectedRow,
+                );
+              } catch (setError) {
+                console.error('❌ Error setting page state:', setError);
+                addToast({
+                  title: '상태 업데이트 오류',
+                  description: '페이지 상태를 업데이트할 수 없습니다.',
+                  color: 'danger',
+                });
+                console.groupEnd();
+                return;
+              }
+
+              // navigator가 있는 경우 추가 검증
               if (button.navigator?.route) {
                 // ID가 없는 경우 처리
                 if (!row.id) {
@@ -81,49 +112,19 @@ export const ActionCell = <T extends { id?: string }>({
                     description: '선택된 항목의 ID가 없습니다.',
                     color: 'warning',
                   });
+                  console.groupEnd();
                   return;
                 }
 
-                // paramsPath가 없는 경우 처리
-                if (!button.navigator.route.paramsPath) {
-                  console.warn('⚠️ Navigator route paramsPath is missing');
+                // paramPaths가 없는 경우 처리
+                if (!button.navigator.route.paramPaths) {
+                  console.warn('⚠️ Navigator route paramPaths is missing');
                   addToast({
                     title: '네비게이션 오류',
                     description: '경로 설정이 올바르지 않습니다.',
                     color: 'warning',
                   });
-                  return;
-                }
-
-                // 페이지 상태 업데이트
-                if (!pageState) {
-                  console.warn('⚠️ PageState is null or undefined');
-                  addToast({
-                    title: '상태 업데이트 오류',
-                    description: '페이지 상태를 업데이트할 수 없습니다.',
-                    color: 'danger',
-                  });
-                  return;
-                }
-
-                try {
-                  pageState.params = row;
-                  set(pageState, button.navigator.route.paramsPath, {
-                    id: row.id,
-                  });
-
-                  console.log('✅ Row selected:', row);
-                  console.log(
-                    '📊 Page state after selection:',
-                    pageState.selectedRow,
-                  );
-                } catch (setError) {
-                  console.error('❌ Error setting page state:', setError);
-                  addToast({
-                    title: '상태 업데이트 오류',
-                    description: '페이지 상태를 업데이트할 수 없습니다.',
-                    color: 'danger',
-                  });
+                  console.groupEnd();
                   return;
                 }
               }

@@ -11,12 +11,14 @@ import { catchError, tap } from 'rxjs/operators';
 import { ContextProvider } from '../provider';
 import { UserDto } from '../dto/user.dto';
 import { AppLogger } from '../utils/app-logger.util';
+import { TenantDto } from '../dto';
 
 interface AuthContext {
   serviceId?: string;
   tenantId?: string;
   user?: UserDto;
   requestId?: string;
+  currentTenant?: TenantDto; // Replace with actual type if available
 }
 
 @Injectable()
@@ -56,11 +58,13 @@ export class AuthUserInterceptor implements NestInterceptor {
       const serviceId = request.cookies?.['serviceId'];
       const tenantId = request.cookies?.['tenantId'];
       const user = request.user as UserDto;
+      const currentTenant = user?.tenants?.find((tenant) => tenant.id === tenantId);
 
       return {
         serviceId,
         tenantId,
         user,
+        currentTenant,
         requestId,
       };
     } catch (error) {
@@ -83,6 +87,10 @@ export class AuthUserInterceptor implements NestInterceptor {
 
       if (authContext.tenantId) {
         ContextProvider.setTenantId(authContext.tenantId);
+      }
+
+      if (authContext.currentTenant) {
+        ContextProvider.setTenant(authContext.currentTenant);
       }
 
       if (this.isValidUser(authContext.user)) {

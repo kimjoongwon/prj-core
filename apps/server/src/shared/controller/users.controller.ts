@@ -43,7 +43,10 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
   async getUser(@Param('userId') userId: string) {
-    const user = await this.service.getUnique({ where: { id: userId } });
+    const user = await this.service.getUnique({
+      where: { id: userId },
+      include: { tenants: true },
+    });
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
   }
 

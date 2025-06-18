@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { renderLucideIcon } from '../../../utils/iconUtils';
 import { VStack } from '../../ui/VStack';
 import { useMobxHookForm } from '../../../hooks';
+import { action } from 'mobx';
 
 interface ParentMenuInfo {
   name: string;
@@ -24,7 +25,6 @@ export const CollapsibleSidebar = observer(
 
     // useMobxHookForm으로 현재 선택된 route path 관리
     const { localState } = useMobxHookForm('', state, path);
-
     // Local state for collapsed/expanded with localStorage persistence
     const sidebarState = useLocalObservable(() => ({
       isCollapsed: false,
@@ -59,12 +59,14 @@ export const CollapsibleSidebar = observer(
       sidebarState.initialize();
     }, []);
 
-    const handleRouteClick = (route: Route) => {
+    const handleRouteClick = action((route: Route) => {
       if (route.fullPath) {
-        console.log(`Setting route path: ${route.fullPath}`);
-        localState.setValue(route.fullPath);
+        // console.log(`Setting route path: ${route.fullPath}`);
+        // console.log('Current localState value:', localState.value);
+        // 선택된 경로를 localState에 저장
+        localState.value = route.fullPath;
       }
-    };
+    });
 
     return (
       <div

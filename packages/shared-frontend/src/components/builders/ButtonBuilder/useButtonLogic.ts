@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { PathUtil } from '@shared/utils';
+import { toJS } from 'mobx';
 
 interface UseButtonLogicProps {
   mutation?: Mutation;
@@ -37,15 +38,26 @@ export const useButtonLogic = ({
   const handleNavigation = (nav: Navigator) => {
     const navigatorService = Plate.navigation.getNavigator();
 
-    // paramsPath와 params를 모두 활용하여 최종 파라미터 구성
+    // paramPaths와 params를 모두 활용하여 최종 파라미터 구성
     let finalParams: object = {};
 
-    // 1. paramsPath가 있으면 pageState에서 값을 추출
-    if (nav.route?.paramsPath) {
-      const paramsFromPath = get(pageState, nav.route.paramsPath);
-      if (paramsFromPath) {
-        finalParams = { ...finalParams, ...paramsFromPath };
+    // 1. paramPaths가 있으면 pageState에서 각 경로의 값을 추출하여 객체 생성
+    if (nav.route?.paramPaths && Array.isArray(nav.route.paramPaths)) {
+      console.log('📋 Processing paramPaths:', nav.route.paramPaths);
+
+      for (const path of nav.route.paramPaths) {
+        const value = get(pageState, path);
+        if (value !== undefined) {
+          // 경로의 마지막 키를 객체의 키로 사용
+          const key = path.split('.').pop() || path;
+          finalParams = { ...finalParams, [key]: value };
+          console.log(`✅ Extracted ${key}: ${value} from path: ${path}`);
+        } else {
+          console.warn(`⚠️ No value found at path: ${path}`);
+        }
       }
+
+      console.log('📦 Params from paths:', finalParams);
     }
 
     // 2. params가 있으면 추가 (params가 우선순위를 가짐)
@@ -130,7 +142,12 @@ export const useButtonLogic = ({
     setResponse(null);
 
     try {
-      console.log('📝 Initial data:', { mutation, navigator, state, id });
+      console.log('📝 Initial data:', {
+        mutation,
+        navigator,
+        state: toJS(state),
+        id,
+      });
 
       // Handle mutation if provided
       if (mutation?.name) {
@@ -202,9 +219,30 @@ export const useButtonLogic = ({
         // API 함수 호출 - useParams에서 id가 있으면 첫 번째 파라미터로 제공
         console.log('🏗️ Building API arguments...');
         const apiArgs: unknown[] = [];
-        if (id && mutation.hasId) {
-          console.log('🆔 Adding ID to args:', id);
-          apiArgs.push(id);
+
+        // ID 처리 로직
+        let finalId: string | undefined;
+
+        if (mutation.idPath) {
+          // idPath가 있으면 pageState에서 해당 경로의 값을 가져옴
+          console.log(
+            '🔍 Getting ID from pageState using idPath:',
+            mutation.idPath,
+          );
+          finalId = get(pageState, mutation.idPath);
+          console.log('🆔 ID from pageState:', finalId);
+        } else if (id && mutation.hasId) {
+          // 기존 로직: useParams에서 id를 가져옴
+          console.log('🆔 Using ID from useParams:', id);
+          finalId = id;
+        }
+
+        // finalId가 있고 mutation.hasId가 true면 첫 번째 파라미터로 추가
+        if (finalId && mutation.hasId) {
+          console.log('✅ Adding ID to args:', finalId);
+          apiArgs.push(finalId);
+        } else if (mutation.hasId && !finalId) {
+          console.warn('⚠️ mutation.hasId is true but no ID found');
         }
 
         // apiParams가 있을 때만 추가 (undefined면 추가하지 않음)
@@ -417,3 +455,51 @@ export const useButtonLogic = ({
     clearResponse: () => setResponse(null),
   };
 };
+
+/**
+ * useButtonLogic Hook
+ *
+ * @description 버튼의 mutation과 navigation 로직을 처리합니다.
+ *
+ * @example
+ * // idPath 사용 예시:
+ * // pageState에 { form: { inputs: { selectedUserId: "123" } } } 가 있을 때
+ * const mutation = {
+ *   name: "deleteUser",
+ *   hasId: true,
+ *   idPath: "form.inputs.selectedUserId", // pageState에서 ID를 가져올 경로
+ *   queryKey: "users"
+ * };
+ *
+ * // 기존 useParams 방식:
+ * const mutationWithParams = {
+ *   name: "updateUser",
+ *   hasId: true, // useParams의 id를 사용
+ *   queryKey: "users"
+ * };
+ */
+
+/**
+ * Navigator Route paramPaths 사용 예시:
+ *
+ * @example
+ * // 기존 방식 (deprecated):
+ * const navigator = {
+ *   route: {
+ *     paramsPath: "form.inputs" // 전체 객체를 가져옴
+ *   }
+ * };
+ *
+ * // 새로운 방식:
+ * const navigator = {
+ *   route: {
+ *     paramPaths: [
+ *       "selectedRow.id",        // → { id: "123" }
+ *       "form.inputs.name",      // → { name: "John" }
+ *       "dataGrid.filter.status" // → { status: "active" }
+ *     ]
+ *   }
+ * };
+ *
+ * // 결과: { id: "123", name: "John", status: "active" }
+ */
