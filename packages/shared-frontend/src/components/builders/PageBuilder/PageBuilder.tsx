@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
@@ -15,7 +13,7 @@ export const PageBuilder = observer((props: PageBuilderProps) => {
   const { pageBuilder } = props;
 
   return (
-    <PageProvider state={pageBuilder?.state}>
+    <PageProvider pageBuilder={pageBuilder || {}}>
       {pageBuilder?.sections && (
         <div className="overflow-auto pb-[200px] scrollbar-hide">
           {pageBuilder?.sections?.map(section => {

@@ -1,30 +1,12 @@
-'use client';
-
-import {
-  isServer,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AXIOS_INSTANCE } from '@shared/api-client';
 
 interface InitContainerProps {
   children: React.ReactNode;
 }
-
-let browserQueryClient: QueryClient | undefined = undefined;
-
 function makeQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 0,
-        refetchOnWindowFocus: true,
-        refetchOnMount: true,
-        gcTime: 0,
-      },
-    },
-  });
+  return new QueryClient();
 }
 
 AXIOS_INSTANCE.interceptors.response.use(

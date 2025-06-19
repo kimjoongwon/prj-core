@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { IButtonBuilder } from '@shared/types';
 import { ButtonBuilder } from '../../builders/ButtonBuilder';
-import { usePageState } from '../../builders';
+import { usePage } from '../../builders';
 import { action } from 'mobx';
 import { set } from 'lodash-es';
 import { addToast } from '@heroui/react';
@@ -15,11 +15,13 @@ export const ActionCell = <T extends { id?: string }>({
   row: { original: row },
   buttons,
 }: ActionCellProps<T>) => {
-  let pageState: any;
+  let page: any;
+  let state: any;
 
   // PageProvider 에러 처리
   try {
-    pageState = usePageState();
+    page = usePage();
+    state = page.state;
   } catch (error) {
     console.error('ActionCell: PageProvider error:', error);
     addToast({
@@ -55,10 +57,7 @@ export const ActionCell = <T extends { id?: string }>({
               console.group('🎯 ActionCell Button Press');
               console.log('📌 Button pressed:', button);
               console.log('🖱️ Press event:', event);
-              console.log(
-                '📊 Row data before selection:',
-                pageState?.selectedRow,
-              );
+              console.log('📊 Row data before selection:', state?.selectedRow);
 
               // 행 데이터가 있는지 확인
               if (!row) {
@@ -73,8 +72,8 @@ export const ActionCell = <T extends { id?: string }>({
               }
 
               // ActionButton을 누르면 항상 selectedRow 설정
-              if (!pageState) {
-                console.warn('⚠️ PageState is null or undefined');
+              if (!state) {
+                console.warn('⚠️ State is null or undefined');
                 addToast({
                   title: '상태 업데이트 오류',
                   description: '페이지 상태를 업데이트할 수 없습니다.',
@@ -85,11 +84,11 @@ export const ActionCell = <T extends { id?: string }>({
               }
 
               try {
-                pageState.selectedRow = row;
+                state.selectedRow = row;
                 console.log('✅ Row selected:', row);
                 console.log(
                   '📊 Page state after selection:',
-                  pageState.selectedRow,
+                  state.selectedRow,
                 );
               } catch (setError) {
                 console.error('❌ Error setting page state:', setError);

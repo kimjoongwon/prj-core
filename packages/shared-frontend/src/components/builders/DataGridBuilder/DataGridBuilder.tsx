@@ -14,11 +14,12 @@ import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
 import { ButtonBuilder } from '../ButtonBuilder';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 
 export const DataGridBuilder = observer(
   ({ table, buttons }: DataGridBuilderProps) => {
-    const pageState = usePageState();
+    const page = usePage();
+    const state = page.state;
     const { data, isLoading, meta, skip, take, setSkip, setTake } =
       useGetTableQuery(table);
 
@@ -43,9 +44,9 @@ export const DataGridBuilder = observer(
 
     return (
       <VStack className="gap-6">
-        {pageState?.name && (
-          <Text variant="h1" className="text-2xl font-bold text-gray-900">
-            {pageState.name}
+        {page?.name && (
+          <Text variant="h1" className="text-xl font-semibold text-gray-800">
+            {page.name}
           </Text>
         )}
         <HStack>
@@ -56,7 +57,7 @@ export const DataGridBuilder = observer(
           </ButtonGroup>
         </HStack>
         <DataGrid
-          state={pageState?.dataGrid}
+          state={state?.dataGrid}
           data={toJS(data || [])}
           columns={toJS(columns) || []}
           selectionMode={table?.selectionMode}

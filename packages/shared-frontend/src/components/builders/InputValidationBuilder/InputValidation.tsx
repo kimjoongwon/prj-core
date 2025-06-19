@@ -4,7 +4,7 @@ import { uniq } from 'lodash-es';
 import { toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { cloneElement } from 'react';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 type InputValidationBuilderProps = {
   children: React.ReactElement;
   validation?: Validation;
@@ -16,7 +16,8 @@ export const InputValidationBuilder = observer(
     const { children } = props;
     const validation = toJS(props.validation);
     const timings = validation?.timings;
-    const state = usePageState();
+    const page = usePage();
+    const state = page.state;
     const localState = useLocalObservable(() => ({
       isInvalid: false,
       errorMessages: [] as string[],

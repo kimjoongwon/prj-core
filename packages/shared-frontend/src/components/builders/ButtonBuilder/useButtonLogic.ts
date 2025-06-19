@@ -2,7 +2,7 @@ import { addToast, ToastProps } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { ButtonResponse, Mutation, Navigator } from '@shared/types';
 import { APIManager } from '@shared/api-client';
-import { Plate, usePageState } from '@shared/frontend';
+import { Plate, usePage } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -32,7 +32,8 @@ export const useButtonLogic = ({
   const [response, setResponse] = useState<ButtonResponse | null>(null);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
-  const pageState = usePageState();
+  const page = usePage();
+  const pageState = page.state;
   const navigate = useNavigate();
   // Handle navigation based on navigator configuration
   const handleNavigation = (nav: Navigator) => {

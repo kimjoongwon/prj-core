@@ -1,1 +1,1 @@
-export { PageProvider, usePageState } from './PageProvider';
+export { PageProvider, usePage } from './PageProvider';

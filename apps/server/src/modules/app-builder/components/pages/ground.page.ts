@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IButtonBuilder, PageBuilder, ResourceBuilder } from '@shared/types';
+import { IButtonBuilder, Mutation, PageBuilder, ResourceBuilder } from '@shared/types';
 import { PageType } from '../types/page.types';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class GroundPage {
     };
 
     // type에 따른 mutation 설정
-    const getMutationConfig = (type: PageType) => {
+    const getMutationConfig = (type: PageType): Mutation => {
       switch (type) {
         case 'create':
           return {
@@ -46,6 +46,7 @@ export class GroundPage {
             name: 'updateGroundById',
             path: 'form.inputs',
             queryKey: 'getGetGroundsByQueryQueryKey',
+            hasId: true,
           };
         default:
           return undefined;

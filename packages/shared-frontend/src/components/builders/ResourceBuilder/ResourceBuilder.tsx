@@ -5,43 +5,44 @@ import { v4 } from 'uuid';
 import { ResourceBuilderProps } from '@shared/types';
 import { useGetResourceQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 import { capitalize } from 'lodash-es';
 import { APIManager } from '@shared/api-client';
 
 export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   const { resourceName: rn, sections } = props;
   const resourceName = capitalize(rn);
-  const pageState = usePageState();
+  const page = usePage();
+  const state = page.state;
   const { data, isLoading, error, id, type } = useGetResourceQuery(props);
-  // data가 있을 때 pageState의 form.inputs에 할당
+  // data가 있을 때 state의 form.inputs에 할당
   useEffect(() => {
-    if (data && pageState && ['modify', 'detail'].includes(type)) {
-      if (!pageState.form) {
-        pageState.form = {};
+    if (data && state && ['modify', 'detail'].includes(type)) {
+      if (!state.form) {
+        state.form = {};
       }
-      pageState.form.inputs = data;
+      state.form.inputs = data;
     }
-  }, [data, pageState, type]);
+  }, [data, state, type]);
 
-  // type을 pageState.type에 설정
+  // type을 state.type에 설정
   useEffect(() => {
-    if (type && pageState) {
-      pageState.type = type;
+    if (type && state) {
+      state.type = type;
     }
-  }, [type, pageState]);
+  }, [type, state]);
   // type이 add인 경우 id를 parentId로 설정
   useEffect(() => {
-    if (type === 'add' && id && pageState) {
-      if (!pageState.form) {
-        pageState.form = {};
+    if (type === 'add' && id && state) {
+      if (!state.form) {
+        state.form = {};
       }
-      if (!pageState.form.inputs) {
-        pageState.form.inputs = {};
+      if (!state.form.inputs) {
+        state.form.inputs = {};
       }
-      pageState.form.inputs.parentId = id;
+      state.form.inputs.parentId = id;
     }
-  }, [type, id, pageState]);
+  }, [type, id, state]);
 
   if (isLoading) {
     return <Spinner />;

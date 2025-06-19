@@ -2,12 +2,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { ButtonBuilder } from './ButtonBuilder';
 import { IButtonBuilder } from '@shared/types';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 import { useButtonLogic } from './useButtonLogic';
 
 // Mock dependencies
 vi.mock('../../../providers', () => ({
-  usePageState: vi.fn(),
+  usePage: vi.fn(),
 }));
 
 vi.mock('./useButtonLogic', () => ({
@@ -37,7 +37,7 @@ vi.mock('@heroui/react', () => ({
   addToast: vi.fn(),
 }));
 
-const mockUsePageState = vi.mocked(usePageState);
+const mockUsePage = vi.mocked(usePage);
 const mockUseButtonLogic = vi.mocked(useButtonLogic);
 
 describe('ButtonBuilder', () => {
@@ -45,7 +45,9 @@ describe('ButtonBuilder', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUsePageState.mockReturnValue({});
+    mockUsePage.mockReturnValue({
+      state: {},
+    });
     mockUseButtonLogic.mockReturnValue({
       handleApiCall: mockHandleApiCall,
       isLoading: false,
@@ -147,9 +149,11 @@ describe('ButtonBuilder', () => {
         },
       };
 
-      mockUsePageState.mockReturnValue({
-        form: {
-          data: '', // 빈 값으로 validation 실패
+      mockUsePage.mockReturnValue({
+        state: {
+          form: {
+            data: '', // 빈 값으로 validation 실패
+          },
         },
       });
 

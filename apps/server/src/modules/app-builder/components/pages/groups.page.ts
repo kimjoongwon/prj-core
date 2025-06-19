@@ -7,13 +7,6 @@ export class GroupsPage {
   build(type: $Enums.GroupTypes): PageBuilder {
     return {
       name: '그룹 리스트',
-      state: {
-        inputs: {
-          type,
-          name: '',
-          label: '',
-        },
-      },
       sections: [
         {
           stacks: [

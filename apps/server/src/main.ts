@@ -36,7 +36,8 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      forbidNonWhitelisted: true,
+      whitelist: true, // DTO에 정의되지 않은 속성 자동 제거
+      // forbidNonWhitelisted: true,
       // whitelist: true, // DTO에 정의되지 않은 속성 자동 제거
       // transformOptions: {
       //   excludeExtraneousValues: true, // class-transformer에서 @Expose()가 없는 속성 제거

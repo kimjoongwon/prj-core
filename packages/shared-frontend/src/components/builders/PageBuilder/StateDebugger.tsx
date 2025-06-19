@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { autorun, isObservable } from 'mobx';
-import { usePageState } from './index';
+import { usePage } from './index';
 
 interface StateLog {
   timestamp: string;
@@ -14,25 +14,26 @@ interface StateLog {
 export const StateDebugger = observer(() => {
   const [isOpen, setIsOpen] = useState(false);
   const [logs, setLogs] = useState<StateLog[]>([]);
-  const pageState = usePageState();
+  const page = usePage();
+  const state = page.state;
 
   // 초기 상태를 로그에 추가
   useEffect(() => {
     const initialLog: StateLog = {
       timestamp: new Date().toLocaleTimeString() + ' (initial)',
-      state: pageState,
+      state: state,
     };
     setLogs([initialLog]);
   }, []);
 
   useEffect(() => {
-    console.log('Setting up autorun for pageState:', pageState);
+    console.log('Setting up autorun for state:', state);
 
     const dispose = autorun(() => {
-      console.log('🔄 Autorun triggered! pageState:', pageState);
+      console.log('🔄 Autorun triggered! state:', state);
 
       // 상태를 직접 사용해서 MobX가 추적하도록 함
-      const stateSnapshot = pageState ? { ...pageState } : {};
+      const stateSnapshot = state ? { ...state } : {};
       console.log('📸 State snapshot:', stateSnapshot);
 
       const timestamp = new Date().toLocaleTimeString();
@@ -58,12 +59,12 @@ export const StateDebugger = observer(() => {
 
   const refreshState = () => {
     console.log('🔄 Manual state refresh triggered');
-    console.log('🔍 Current pageState:', pageState);
+    console.log('🔍 Current state:', state);
 
     const timestamp = new Date().toLocaleTimeString() + ' (manual)';
     const newLog: StateLog = {
       timestamp,
-      state: pageState,
+      state: state,
     };
 
     setLogs(prev => {
@@ -116,38 +117,36 @@ export const StateDebugger = observer(() => {
               </div>
             </div>
             <div className="text-xs text-gray-600">
-              <div>Observable: {isObservable(pageState) ? '✅' : '❌'}</div>
-              <div>State Type: {typeof pageState}</div>
+              <div>Observable: {isObservable(state) ? '✅' : '❌'}</div>
+              <div>State Type: {typeof state}</div>
               <div>Logs: {logs.length}</div>
             </div>
           </div>
 
           {/* Content */}
           <div className="flex-1 overflow-auto p-2 text-xs">
-            {/* Raw PageState Display */}
+            {/* Raw State Display */}
             <div className="mb-4 p-2 bg-green-50 rounded border">
-              <h4 className="font-semibold text-green-800 mb-2">
-                Raw PageState:
-              </h4>
+              <h4 className="font-semibold text-green-800 mb-2">Raw State:</h4>
               <div className="bg-white p-2 rounded border">
                 <div>
-                  <strong>Type:</strong> {typeof pageState}
+                  <strong>Type:</strong> {typeof state}
                 </div>
                 <div>
                   <strong>Is Object:</strong>{' '}
-                  {pageState && typeof pageState === 'object' ? 'Yes' : 'No'}
+                  {state && typeof state === 'object' ? 'Yes' : 'No'}
                 </div>
                 <div>
                   <strong>Keys:</strong>{' '}
-                  {pageState ? Object.keys(pageState).join(', ') : 'None'}
+                  {state ? Object.keys(state).join(', ') : 'None'}
                 </div>
                 <div>
                   <strong>Observable:</strong>{' '}
-                  {isObservable(pageState) ? '✅' : '❌'}
+                  {isObservable(state) ? '✅' : '❌'}
                 </div>
               </div>
               <pre className="bg-white p-2 rounded text-xs overflow-auto max-h-32 border mt-2">
-                {String(pageState)}
+                {String(state)}
               </pre>
             </div>
 
@@ -160,7 +159,7 @@ export const StateDebugger = observer(() => {
                 {(() => {
                   try {
                     return (
-                      JSON.stringify(pageState, null, 2) || 'null or undefined'
+                      JSON.stringify(state, null, 2) || 'null or undefined'
                     );
                   } catch (error) {
                     return `JSON Error: ${error}`;

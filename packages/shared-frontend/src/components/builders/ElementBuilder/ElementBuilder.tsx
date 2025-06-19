@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { ElementBuilder as ElementBuilderInterface } from '@shared/types';
 import { ComponentManager } from '../../../../index';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 import { InputValidationBuilder } from '../InputValidationBuilder/InputValidation';
 import { addToast } from '@heroui/react';
 import { v4 } from 'uuid';
@@ -13,7 +13,8 @@ interface ElementBuilderProps {
 }
 
 export const ElementBuilder = observer((props: ElementBuilderProps) => {
-  const state = usePageState();
+  const page = usePage();
+  const state = page.state;
   const { elementBuilder } = props;
 
   // 에러 처리 및 토스트 알림

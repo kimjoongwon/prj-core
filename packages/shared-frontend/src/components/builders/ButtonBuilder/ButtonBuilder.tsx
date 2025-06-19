@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { get } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
-import { usePageState } from '../../../providers';
+import { usePage } from '../../../providers';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
   const {
@@ -17,7 +17,8 @@ export const ButtonBuilder = observer((props: IButtonBuilder) => {
     navigator,
     onPress: onBeforePress,
   } = props;
-  const state = usePageState();
+  const page = usePage();
+  const state = page.state;
   const { handleApiCall } = useButtonLogic({ mutation, navigator, state });
 
   // FormButtonBuilder의 에러 처리 로직 (form 타입일 때만)

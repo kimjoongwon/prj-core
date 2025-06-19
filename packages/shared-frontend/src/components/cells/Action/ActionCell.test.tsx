@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { ActionCell } from './ActionCell';
-import { usePageState } from '../../builders';
+import { usePage } from '../../builders';
 import { addToast } from '@heroui/react';
 import type { Row } from '@tanstack/react-table';
 
 // Mock dependencies
 vi.mock('../../builders', () => ({
-  usePageState: vi.fn(),
+  usePage: vi.fn(),
 }));
 
 vi.mock('@heroui/react', () => ({
@@ -22,7 +22,7 @@ vi.mock('../../builders/ButtonBuilder', () => ({
   ),
 }));
 
-const mockUsePageState = vi.mocked(usePageState);
+const mockUsePage = vi.mocked(usePage);
 const mockAddToast = vi.mocked(addToast);
 
 describe('ActionCell', () => {
@@ -43,7 +43,9 @@ describe('ActionCell', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUsePageState.mockReturnValue(mockPageState);
+    mockUsePage.mockReturnValue({
+      state: mockPageState,
+    });
     console.warn = vi.fn();
     console.error = vi.fn();
     console.group = vi.fn();
@@ -62,8 +64,8 @@ describe('ActionCell', () => {
       expect(screen.queryByRole('button')).toBeNull();
     });
 
-    it('should show error toast when usePageState fails', () => {
-      mockUsePageState.mockImplementation(() => {
+    it('should show error toast when usePage fails', () => {
+      mockUsePage.mockImplementation(() => {
         throw new Error('PageProvider not found');
       });
 
@@ -185,7 +187,9 @@ describe('ActionCell', () => {
 
     it('should handle lodash set function error gracefully', () => {
       const invalidPageState = null; // set 함수가 실패할 수 있는 상황
-      mockUsePageState.mockReturnValue(invalidPageState as any);
+      mockUsePage.mockReturnValue({
+        state: invalidPageState as any,
+      });
 
       const buttonWithNavigator = {
         key: 'test',
@@ -258,7 +262,7 @@ describe('ActionCell', () => {
       const button = screen.getByRole('button');
       fireEvent.click(button);
 
-      expect(mockPageState.params).toBe(mockRow);
+      expect(mockPageState.selectedRow).toEqual(mockRow);
     });
   });
 });

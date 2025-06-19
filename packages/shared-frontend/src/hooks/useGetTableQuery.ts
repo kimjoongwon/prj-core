@@ -27,10 +27,6 @@ export const useGetTableQuery = (tableBuilder: TableBuilder) => {
     apiArgs.push({
       query: {
         enabled: !!query?.name,
-        staleTime: 0,
-        gcTime: 0,
-        refetchOnWindowFocus: true,
-        refetchOnMount: true,
       },
     });
   }
