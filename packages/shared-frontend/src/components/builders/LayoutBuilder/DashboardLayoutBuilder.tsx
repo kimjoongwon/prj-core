@@ -25,7 +25,6 @@ export const DashboardLayoutBuilder = observer(
         () => navigation.currentFullPath,
         currentFullPath => {
           if (currentFullPath) {
-            console.log('Navigating to:', currentFullPath);
             navigator.push(currentFullPath);
           }
         },

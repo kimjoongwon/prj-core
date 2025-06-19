@@ -107,7 +107,8 @@ export type ElementName =
   | 'WeekInput'
   | 'WorkspaceSelect'
   | 'DataGridBuilder'
-  | 'ResourceBuilder';
+  | 'ResourceBuilder'
+  | 'ListboxBuilder';
 
 export interface ElementBuilder {
   visibleCondition?: {
@@ -217,8 +218,6 @@ export interface RouteBuilder {
 export interface Query {
   name: string;
   params?: any;
-  mapper?: any;
-  idMapper?: any;
 }
 
 export interface Mutation {

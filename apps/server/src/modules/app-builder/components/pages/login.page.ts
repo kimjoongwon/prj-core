@@ -93,9 +93,9 @@ export class LoginPage {
                   color: 'primary',
                   fullWidth: true,
                   navigator: {
-                    type: 'href',
+                    type: 'push',
                     route: {
-                      fullPath: '/admin/tenant-select',
+                      relativePath: 'tenant-select',
                     },
                   },
                 } satisfies IButtonBuilder,

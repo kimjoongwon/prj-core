@@ -99,6 +99,22 @@ export interface MediaUploadProps {
   maxFiles?: number;
 }
 
+export interface ListboxBuilderQuery {
+  apiKey: string;
+  params?: any;
+  valueField: string;
+  labelField: string;
+}
+
+export interface ListboxBuilderProps
+  extends Omit<
+    HeroListboxProps,
+    'options' | 'value' | 'onChange' | 'children'
+  > {
+  path: string;
+  query: ListboxBuilderQuery;
+}
+
 export interface VideoPlayerProps {
   src: string;
 }

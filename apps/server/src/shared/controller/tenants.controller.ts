@@ -73,7 +73,7 @@ export class TenantsController {
   }
 
   @Get()
-  // @Auth([])
+  @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
   async getTenantsByQuery(@Query() query: QueryTenantDto) {

@@ -36,24 +36,18 @@ interface ModalLayoutProps {
 
 export function ModalLayout({
   children,
-  title,
   size = '4xl',
-  placement = 'center',
-  backdrop = 'opaque',
   hideCloseButton = false,
   isDismissable = true,
   isKeyboardDismissDisabled = false,
   className,
   scrollBehavior = 'normal',
 }: ModalLayoutProps) {
-  const naviate = useNavigate();
   return (
     <Modal
       isOpen={true}
       onClose={() => Plate.navigation.getNavigator().goBack()}
       size={size}
-      placement={placement}
-      backdrop="transparent"
       hideCloseButton={hideCloseButton}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}

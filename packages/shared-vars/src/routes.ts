@@ -55,16 +55,19 @@ export const rawRoutes: RouteBuilder[] = [
           {
             name: ROUTE_NAMES.LOGIN,
             relativePath: 'login',
+            children: [
+              {
+                name: ROUTE_NAMES.TENANT_SELECT,
+                relativePath: 'tenant-select',
+                layout: {
+                  type: 'Modal',
+                },
+              },
+            ],
           },
         ],
       },
-      {
-        name: ROUTE_NAMES.TENANT_SELECT,
-        relativePath: 'tenant-select',
-        layout: {
-          type: 'Modal',
-        },
-      },
+
       {
         name: ROUTE_NAMES.DASHBOARD,
         relativePath: 'dashboard',

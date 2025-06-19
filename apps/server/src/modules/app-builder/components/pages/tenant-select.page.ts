@@ -1,23 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ContextProvider, QueryTenantDto, TenantsService } from '@shared';
-import { IButtonBuilder, ListboxProps, PageBuilder, SectionBuilder } from '@shared/types';
-import { plainToInstance } from 'class-transformer';
+import { IButtonBuilder, ListboxBuilderProps, PageBuilder, SectionBuilder } from '@shared/types';
 
 @Injectable()
 export class TenantSelectPage {
-  constructor(readonly tenantService: TenantsService) {}
+  constructor() {}
 
   async build(): Promise<PageBuilder> {
-    const userId = ContextProvider.getAuthUserId();
-    const query = plainToInstance(QueryTenantDto, {
-      userId,
-    });
-    const { tenants } = await this.tenantService.getManyByQuery(query);
-    const tenantOptions = tenants.map((tenant) => ({
-      text: tenant.space?.ground?.name,
-      value: tenant?.id,
-    }));
-
     const sections: SectionBuilder[] = [
       {
         stacks: [
@@ -25,13 +13,17 @@ export class TenantSelectPage {
             type: 'VStack' as const,
             elements: [
               {
-                name: 'Listbox',
+                name: 'ListboxBuilder',
                 props: {
                   title: '그라운드 선택',
-                  options: tenantOptions,
-                  selectionMode: 'single',
                   path: 'selectTenantDto.selectedTenantId',
-                } as ListboxProps<any>,
+                  query: {
+                    apiKey: 'useGetTenantsByQuery',
+                    valueField: 'id',
+                    labelField: 'space.ground.name',
+                  },
+                  selectionMode: 'single',
+                } as ListboxBuilderProps,
               },
               {
                 name: 'ButtonBuilder',

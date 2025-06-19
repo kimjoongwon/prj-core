@@ -1,5 +1,3 @@
-'use client';
-
 import { Listbox as HeroListbox, ListboxItem } from '@heroui/react';
 import { get, set } from 'lodash-es';
 import { observer, useLocalObservable } from 'mobx-react-lite';
@@ -80,7 +78,7 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
 
 export const ListboxWrapper = observer(
   ({ children }: { children: ReactNode }) => (
-    <div className="w-full max-w-2xl border-small px-2 py-2 rounded-small border-default-200 dark:border-default-100">
+    <div className="w-full border-small px-2 py-2 rounded-small border-default-200 dark:border-default-100">
       {children}
     </div>
   ),
