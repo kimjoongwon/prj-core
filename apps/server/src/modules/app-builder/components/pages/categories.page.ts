@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
-import { ContextProvider } from '@shared';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
 @Injectable()

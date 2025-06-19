@@ -3,7 +3,13 @@ import { ButtonGroup, Pagination, Spinner } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
 import { toJS } from 'mobx';
-import { DataGrid, HStack, useGetTableQuery } from '@shared/frontend';
+import {
+  DataGrid,
+  HStack,
+  VStack,
+  Text,
+  useGetTableQuery,
+} from '@shared/frontend';
 import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
 import { HeaderBuilder } from '../HeaderBuilder';
@@ -36,7 +42,12 @@ export const DataGridBuilder = observer(
     const currentPage = Math.floor((skip || 0) / (take || 10)) + 1;
 
     return (
-      <>
+      <VStack className="gap-6">
+        {pageState?.name && (
+          <Text variant="h1" className="text-2xl font-bold text-gray-900">
+            {pageState.name}
+          </Text>
+        )}
         <HStack>
           <ButtonGroup size="sm">
             {buttons?.map(button => {
@@ -61,7 +72,7 @@ export const DataGridBuilder = observer(
             }}
           />
         )}
-      </>
+      </VStack>
     );
   },
 );
