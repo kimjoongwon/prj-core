@@ -12,6 +12,7 @@ import { CategoriesPage } from './components/pages/categories.page';
 import { GroupsPage } from './components/pages/groups.page';
 import { CategoryPage } from './components/pages/category.page';
 import { GroupPage } from './components/pages/group.page';
+import { group } from 'console';
 
 // 라우트 타입 상수
 const ROUTE_TYPES = {
@@ -110,6 +111,7 @@ export class AppBuilderService {
       groups: this.groupsPage.build('Space'),
       groupCreate: this.groupPage.build('create', 'Space'),
       groupModify: this.groupPage.build('modify', 'Space'),
+      groupDetail: this.groupPage.build('detail', 'Space'),
     };
   }
 
@@ -159,6 +161,7 @@ export class AppBuilderService {
     this.setRoutePageAndLayout('그라운드 그룹', pageBuilders.groups);
     this.setRoutePageAndLayout('그라운드 그룹 생성', pageBuilders.groupCreate);
     this.setRoutePageAndLayout('그라운드 그룹 수정', pageBuilders.groupModify);
+    this.setRoutePageAndLayout('그라운드 그룹 디테일', pageBuilders.groupDetail);
   }
 
   /**

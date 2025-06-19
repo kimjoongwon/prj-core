@@ -24,7 +24,7 @@ export const DashboardLayoutBuilder = observer(
       const dispose = reaction(
         () => navigation.currentFullPath,
         currentFullPath => {
-          if (currentFullPath) {
+          if (currentFullPath && currentFullPath.split('/').length < 6) {
             navigator.push(currentFullPath);
           }
         },
