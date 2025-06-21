@@ -107,8 +107,11 @@ export class AuthService {
         profiles: true,
         tenants: {
           include: {
-            space: true,
-            user: true,
+            space: {
+              include: {
+                ground: true,
+              },
+            },
           },
         },
       },

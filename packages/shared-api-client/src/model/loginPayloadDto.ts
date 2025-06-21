@@ -5,8 +5,6 @@
  */
 
 export interface LoginPayloadDto {
-  /** @pattern ^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$ */
   email: string;
-  /** @pattern ^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$ */
   password: string;
 }

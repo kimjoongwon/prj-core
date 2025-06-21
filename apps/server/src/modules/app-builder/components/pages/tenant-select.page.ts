@@ -39,7 +39,7 @@ export class TenantSelectPage {
                     type: 'href',
                     route: {
                       name: '대시보드',
-                      fullPath: '/admin/dashboard',
+                      fullPath: '/admin/dashboard/user-service/users',
                     },
                   },
                 } as IButtonBuilder,

@@ -58,6 +58,44 @@ export class CategoriesService {
 
   async getManyByQuery(query: QueryCategoryDto) {
     const currentTenant = ContextProvider.getTenant();
+    this.logger.debug('getManyByQuery - Current Tenant:', {
+      tenantId: currentTenant?.id?.slice(-8) || 'null',
+      spaceId: currentTenant?.spaceId?.slice(-8) || 'null',
+      timestamp: new Date().toISOString(),
+    });
+    if (!currentTenant) {
+      this.logger.warn('getManyByQuery - No tenant found in context');
+      throw new Error('Tenant information not found in context. Please log in again.');
+    }
+    if (!currentTenant.spaceId) {
+      this.logger.warn('getManyByQuery - No spaceId in tenant:', {
+        tenantId: currentTenant.id?.slice(-8),
+        hasSpaceId: !!currentTenant.spaceId,
+      });
+      throw new Error('Space ID is missing from tenant information. Please select a space.');
+    }
+    this.logger.debug('getManyByQuery - Query Args:', {
+      args: query.toArgs<Prisma.CategoryFindManyArgs>({
+        where: {
+          parent: null,
+          tenant: {
+            spaceId: currentTenant.spaceId,
+          },
+        },
+        include: {
+          children: {
+            include: {
+              children: {
+                include: {
+                  children: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      countArgs: query.toCountArgs<Prisma.CategoryCountArgs>(),
+    });
     const args = query.toArgs<Prisma.CategoryFindManyArgs>({
       where: {
         parent: null,

@@ -83,6 +83,8 @@ export * from './getCategoriesByQuery200AllOf';
 export * from './getCategoriesByQuery200AllOfMeta';
 export * from './getCategoriesByQueryParams';
 export * from './getCategoryById200AllOf';
+export * from './getCurrentSpace200AllOf';
+export * from './getCurrentSpaces200AllOf';
 export * from './getExercise200AllOf';
 export * from './getExercisesByQuery200AllOf';
 export * from './getExercisesByQuery200AllOfMeta';

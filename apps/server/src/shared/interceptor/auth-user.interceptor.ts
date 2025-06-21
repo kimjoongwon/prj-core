@@ -60,6 +60,17 @@ export class AuthUserInterceptor implements NestInterceptor {
       const user = request.user as UserDto;
       const currentTenant = user?.tenants?.find((tenant) => tenant.id === tenantId);
 
+      // 디버깅을 위한 상세한 로깅
+      this.logger.dev('Auth context extraction', {
+        reqId: requestId.slice(-8),
+        hasUser: !!user,
+        userId: user?.id?.slice(-8),
+        tenantId: tenantId?.slice(-8),
+        tenantsCount: user?.tenants?.length || 0,
+        hasTenant: !!currentTenant,
+        currentTenantSpaceId: currentTenant?.spaceId?.slice(-8),
+      });
+
       return {
         serviceId,
         tenantId,
@@ -91,6 +102,22 @@ export class AuthUserInterceptor implements NestInterceptor {
 
       if (authContext.currentTenant) {
         ContextProvider.setTenant(authContext.currentTenant);
+        // spaceId도 별도로 설정
+        if (authContext.currentTenant.spaceId) {
+          ContextProvider.setSpaceId(authContext.currentTenant.spaceId);
+        }
+        this.logger.dev('Tenant context set', {
+          reqId: authContext.requestId?.slice(-8),
+          tenantId: authContext.currentTenant.id?.slice(-8),
+          spaceId: authContext.currentTenant.spaceId?.slice(-8),
+        });
+      } else if (authContext.tenantId) {
+        this.logger.warn('Tenant ID exists but tenant not found', {
+          reqId: authContext.requestId?.slice(-8),
+          tenantId: authContext.tenantId?.slice(-8),
+          hasUser: !!authContext.user,
+          userTenantsCount: authContext.user?.tenants?.length || 0,
+        });
       }
 
       if (this.isValidUser(authContext.user)) {

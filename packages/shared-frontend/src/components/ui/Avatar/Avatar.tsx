@@ -201,7 +201,6 @@ export const Avatar = observer((props: AvatarProps) => {
     );
   }
 
-  // Mobile: Show only avatar image with dropdown
   return (
     <Dropdown
       dropdownItems={userMenuItems}

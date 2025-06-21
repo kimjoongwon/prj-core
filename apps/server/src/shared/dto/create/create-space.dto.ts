@@ -7,4 +7,5 @@ export class CreateSpaceDto extends OmitType(SpaceDto, [
   'tenants',
   'spaceClassifications',
   'spaceAssociations',
+  'ground',
 ]) {}

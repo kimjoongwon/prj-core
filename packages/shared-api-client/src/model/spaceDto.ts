@@ -3,6 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
+import type { GroundDto } from './groundDto';
 
 export interface SpaceDto {
   id: string;
@@ -11,4 +12,5 @@ export interface SpaceDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  ground?: GroundDto;
 }

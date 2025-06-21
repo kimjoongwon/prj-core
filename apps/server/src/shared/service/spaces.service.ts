@@ -64,4 +64,13 @@ export class SpacesService {
       spaces,
     };
   }
+
+  getCurrentSpace(spaceId: string) {
+    return this.repository.findUnique({
+      where: { id: spaceId },
+      include: {
+        ground: true,
+      },
+    });
+  }
 }

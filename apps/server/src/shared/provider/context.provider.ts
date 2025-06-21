@@ -81,8 +81,8 @@ export class ContextProvider {
     return ContextProvider.get('userId');
   }
 
-  static getTenant(): UserDto | undefined {
-    return ContextProvider.get<UserDto>(ContextProvider.tenantKey);
+  static getTenant(): TenantDto | undefined {
+    return ContextProvider.get<TenantDto>(ContextProvider.tenantKey);
   }
 
   static setToken(token: string): void {
