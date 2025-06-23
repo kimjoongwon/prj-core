@@ -5,21 +5,21 @@ import { type NavigateFunction } from 'react-router';
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 
 /**
- * 네비게이션 서비스 인터페이스
+ * 네비게이션 스토어 인터페이스
  */
-export interface INavigationService {
+export interface INavigationStore {
   activateRoute(pathname: string): void;
 }
 
 /**
- * NavigatorService - 네비게이션 전용 서비스
+ * NavigatorStore - 네비게이션 전용 스토어
  * 실제 네비게이션 함수 관리와 실행을 담당
  */
-export class NavigatorService {
+export class NavigatorStore {
   private navigateFunction?: UniversalNavigateFunction;
   private isReactRouter: boolean = false;
   private pathResolver?: (name: string) => string | undefined;
-  private navigationService?: INavigationService;
+  private navigationStore?: INavigationStore;
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
@@ -46,19 +46,19 @@ export class NavigatorService {
   }
 
   /**
-   * 네비게이션 서비스 설정 (의존성 주입)
+   * 네비게이션 스토어 설정 (의존성 주입)
    */
-  setNavigationService(navigationService: INavigationService): void {
-    this.navigationService = navigationService;
+  setNavigationStore(navigationStore: INavigationStore): void {
+    this.navigationStore = navigationStore;
   }
 
   /**
    * 라우트 활성화 콜백 함수 설정 (하위 호환성을 위해 유지)
-   * @deprecated setNavigationService를 사용하세요
+   * @deprecated setNavigationStore를 사용하세요
    */
   setActivateRouteCallback(callback: (pathname: string) => void): void {
     // 하위 호환성을 위해 래퍼 객체 생성
-    this.navigationService = {
+    this.navigationStore = {
       activateRoute: callback
     };
   }
@@ -97,8 +97,8 @@ export class NavigatorService {
     this.navigateFunction(pathnameWithSearchParams);
 
     // 네비게이션 후 라우트 활성화 상태 업데이트
-    if (this.navigationService) {
-      this.navigationService.activateRoute(normalizedPathname);
+    if (this.navigationStore) {
+      this.navigationStore.activateRoute(normalizedPathname);
     }
   }
 
@@ -200,8 +200,8 @@ export class NavigatorService {
       }
 
       // 네비게이션 후 라우트 활성화 상태 업데이트
-      if (this.navigationService) {
-        this.navigationService.activateRoute(normalizedPathname);
+      if (this.navigationStore) {
+        this.navigationStore.activateRoute(normalizedPathname);
       }
     }
   }

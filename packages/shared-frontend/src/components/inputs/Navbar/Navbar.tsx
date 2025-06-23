@@ -14,7 +14,7 @@ export const Navbar = observer((props: NavbarProps) => {
 
   const handleRouteClick = (route: Route) => {
     if (route.fullPath) {
-      // NavigationService의 setCurrentPath를 통해 경로 변경
+      // NavigationStore의 setCurrentPath를 통해 경로 변경
       // 실제 네비게이션 로직은 DashboardLayoutBuilder의 reaction에서 처리
       Plate.navigation.setCurrentPath(route.fullPath);
     }

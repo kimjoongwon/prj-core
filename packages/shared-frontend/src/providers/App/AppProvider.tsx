@@ -2,21 +2,21 @@
 
 import React, { useEffect, createContext } from 'react';
 import type { RouteBuilder } from '@shared/types';
-import { PlateService, NavigationService } from '../../store';
+import { PlateStore, NavigationStore } from '../../store';
 import { observer } from 'mobx-react-lite';
 import { observable, runInAction } from 'mobx';
 import { useGetAppBuilder } from '@shared/api-client';
 import { useAuth } from '../Auth/AuthProvider';
 import { SplashScreen } from '../../components/ui/SplashScreen';
 
-const StoreContext = createContext<PlateService | null>(null);
+const StoreContext = createContext<PlateStore | null>(null);
 
 interface StoreProviderProps {
   children: React.ReactNode;
 }
 
 // Define Plate as a global variable that will be initialized by AppProvider
-export let Plate: PlateService;
+export let Plate: PlateStore;
 
 // MobX observable state
 const appProvider = observable(
@@ -33,8 +33,8 @@ const appProvider = observable(
     },
 
     initializePlate(routeBuilders: RouteBuilder[]) {
-      const navigationService = new NavigationService(routeBuilders);
-      Plate = new PlateService(navigationService);
+      const navigationStore = new NavigationStore(routeBuilders);
+      Plate = new PlateStore(navigationStore);
       Plate.isInitialized = true;
       this.isInitialized = true;
     },

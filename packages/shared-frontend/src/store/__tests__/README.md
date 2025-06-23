@@ -1,16 +1,16 @@
 # Navigation & Navigator Services 테스트
 
-이 문서는 `NavigationService`와 `NavigatorService`에 대한 테스트 코드를 설명합니다.
+이 문서는 `NavigationStore`와 `NavigatorStore`에 대한 테스트 코드를 설명합니다.
 
 ## 테스트 파일 구조
 
 ```
 src/services/__tests__/
-├── navigation.test.ts    # NavigationService 테스트
-└── navigator.test.ts     # NavigatorService 테스트
+├── navigation.test.ts    # NavigationStore 테스트
+└── navigator.test.ts     # NavigatorStore 테스트
 ```
 
-## NavigationService 테스트 (navigation.test.ts)
+## NavigationStore 테스트 (navigation.test.ts)
 
 ### 테스트 커버리지
 
@@ -57,7 +57,7 @@ src/services/__tests__/
 
 #### 7. Navigator Service 통합 (2 테스트)
 
-- NavigatorService 인스턴스 반환
+- NavigatorStore 인스턴스 반환
 - navigate 함수 설정
 
 #### 8. 경로 정규화 및 매칭 (2 테스트)
@@ -71,7 +71,7 @@ src/services/__tests__/
 - legacy pathname 속성 지원
 - 잘못된 경로 형식 처리
 
-## NavigatorService 테스트 (navigator.test.ts)
+## NavigatorStore 테스트 (navigator.test.ts)
 
 ### 테스트 커버리지
 
@@ -146,13 +146,13 @@ pnpm test src/services/__tests__
 
 ## Mock 사용
 
-### NavigationService 테스트
+### NavigationStore 테스트
 
 - RouteBuilder 인터페이스를 직접 정의하여 순환 종속성 방지
 - window.location mock 설정
 - 실제 라우트 구조와 유사한 mock 데이터 사용
 
-### NavigatorService 테스트
+### NavigatorStore 테스트
 
 - @shared/utils의 PathUtil mock
 - window.history API mock
@@ -162,7 +162,7 @@ pnpm test src/services/__tests__
 
 ✅ **58개 테스트 모두 통과**
 
-- NavigationService: 29개 테스트
-- NavigatorService: 29개 테스트
+- NavigationStore: 29개 테스트
+- NavigatorStore: 29개 테스트
 
 모든 주요 기능과 엣지 케이스가 검증되어 서비스의 안정성을 보장합니다.

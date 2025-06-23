@@ -1,13 +1,13 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
-import { NavigatorService, type INavigationService } from './navigatorStore';
+import { NavigatorStore, type INavigationStore } from './navigatorStore';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
 
 /**
- * NavigationService - 통합된 네비게이션 서비스
+ * NavigationStore - 통합된 네비게이션 스토어
  *
  * Route 객체를 원천으로 사용하여 라우트 관리, 네비게이션, 활성 상태 추적을 처리합니다.
  * fullPath(절대경로)와 relativePath(상대경로)를 명확히 구분하여 경로 혼동을 방지합니다.
@@ -17,11 +17,11 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
  * - routes 배열을 통한 직접적인 라우트 검색
  * - 단순화된 경로 매칭 로직
  * - fullPath와 relativePath의 명확한 구분
- * - NavigatorService에 의존성 주입 방식으로 연결
+ * - NavigatorStore에 의존성 주입 방식으로 연결
  */
-export class NavigationService implements INavigationService {
+export class NavigationStore implements INavigationStore {
   private _routes: Route[] = [];
-  private navigator: NavigatorService;
+  private navigator: NavigatorStore;
   routeBuilders: RouteBuilder[] = [];
   currentRoute: Route | undefined = undefined;
   selectedDashboardFullPath: string | undefined = '';
@@ -31,12 +31,10 @@ export class NavigationService implements INavigationService {
   currentRelativePath: string = '';
 
   constructor(routeBuilders: RouteBuilder[] = []) {
-    this.navigator = new NavigatorService();
+    this.navigator = new NavigatorStore();
     this.routeBuilders = routeBuilders;
     this.setRoutes(routeBuilders);
-    
-    // 의존성 주입: NavigatorService에 현재 NavigationService 인스턴스 주입
-    this.navigator.setNavigationService(this);
+    this.navigator.setNavigationStore(this);
 
     // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
     this.initializeCurrentPath();
@@ -110,9 +108,9 @@ export class NavigationService implements INavigationService {
   }
 
   /**
-   * NavigatorService 인스턴스 반환
+   * NavigatorStore 인스턴스 반환
    */
-  getNavigator(): NavigatorService {
+  getNavigator(): NavigatorStore {
     return this.navigator;
   }
 

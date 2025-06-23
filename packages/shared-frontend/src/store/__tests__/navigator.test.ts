@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { NavigatorService, type INavigationService } from '../navigatorStore';
+import { NavigatorStore, type INavigationStore } from '../navigatorStore';
 
 // PathUtil mock
 vi.mock('@shared/utils', () => ({
@@ -26,17 +26,17 @@ vi.mock('@shared/utils', () => ({
   },
 }));
 
-describe('NavigatorService', () => {
-  let navigatorService: NavigatorService;
+describe('NavigatorStore', () => {
+  let navigatorStore: NavigatorStore;
   let mockNavigateFunction: ReturnType<typeof vi.fn>;
   let mockRouteResolver: ReturnType<typeof vi.fn>;
-  let mockNavigationService: INavigationService;
+  let mockNavigationStore: INavigationStore;
 
   beforeEach(() => {
-    navigatorService = new NavigatorService();
+    navigatorStore = new NavigatorStore();
     mockNavigateFunction = vi.fn();
     mockRouteResolver = vi.fn();
-    mockNavigationService = {
+    mockNavigationStore = {
       activateRoute: vi.fn(),
     };
 
@@ -53,21 +53,21 @@ describe('NavigatorService', () => {
 
   describe('초기화 및 설정', () => {
     it('초기 상태에서는 네비게이션 함수가 설정되지 않아야 한다', () => {
-      expect(navigatorService.isNavigateFunctionSet()).toBe(false);
+      expect(navigatorStore.isNavigateFunctionSet()).toBe(false);
     });
 
     it('네비게이션 함수를 설정할 수 있어야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      expect(navigatorService.isNavigateFunctionSet()).toBe(true);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      expect(navigatorStore.isNavigateFunctionSet()).toBe(true);
     });
 
     it('라우트 이름 리졸버를 설정할 수 있어야 한다', () => {
-      navigatorService.setRouteNameResolver(mockRouteResolver);
+      navigatorStore.setRouteNameResolver(mockRouteResolver);
       // private 속성이므로 직접 테스트는 불가능하지만, pushByName에서 간접적으로 확인
     });
 
     it('네비게이션 서비스를 설정할 수 있어야 한다', () => {
-      navigatorService.setNavigationService(mockNavigationService);
+      navigatorStore.setNavigationStore(mockNavigationStore);
       // private 속성이므로 직접 테스트는 불가능하지만, push에서 간접적으로 확인
     });
   });
@@ -81,7 +81,7 @@ describe('NavigatorService', () => {
         configurable: true,
       });
 
-      navigatorService.setNavigateFunction(reactRouterNavigate);
+      navigatorStore.setNavigateFunction(reactRouterNavigate);
       // isReactRouter는 private이므로 replace 동작으로 간접 확인
     });
 
@@ -89,39 +89,39 @@ describe('NavigatorService', () => {
       // 일반 함수는 length가 1
       const nextRouterPush = vi.fn();
 
-      navigatorService.setNavigateFunction(nextRouterPush);
+      navigatorStore.setNavigateFunction(nextRouterPush);
       // isReactRouter는 private이므로 replace 동작으로 간접 확인
     });
   });
 
   describe('경로 네비게이션 (push)', () => {
     beforeEach(() => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.setNavigationService(mockNavigationService);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigationStore(mockNavigationStore);
     });
 
     it('기본 경로로 네비게이션해야 한다', () => {
-      navigatorService.push('/dashboard');
+      navigatorStore.push('/dashboard');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard');
-      expect(mockNavigationService.activateRoute).toHaveBeenCalledWith('/dashboard');
+      expect(mockNavigationStore.activateRoute).toHaveBeenCalledWith('/dashboard');
     });
 
     it('상대 경로를 절대 경로로 정규화해야 한다', () => {
-      navigatorService.push('dashboard');
+      navigatorStore.push('dashboard');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard');
-      expect(mockNavigationService.activateRoute).toHaveBeenCalledWith('/dashboard');
+      expect(mockNavigationStore.activateRoute).toHaveBeenCalledWith('/dashboard');
     });
 
     it('pathParams를 포함하여 네비게이션해야 한다', () => {
-      navigatorService.push('/users/:id', { id: 123 });
+      navigatorStore.push('/users/:id', { id: 123 });
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/users/123');
     });
 
     it('searchParams를 포함하여 네비게이션해야 한다', () => {
-      navigatorService.push('/users', undefined, { page: '1', size: '10' });
+      navigatorStore.push('/users', undefined, { page: '1', size: '10' });
 
       expect(mockNavigateFunction).toHaveBeenCalledWith(
         '/users?page=1&size=10',
@@ -129,7 +129,7 @@ describe('NavigatorService', () => {
     });
 
     it('pathParams와 searchParams를 모두 포함하여 네비게이션해야 한다', () => {
-      navigatorService.push('/users/:id', { id: 123 }, { tab: 'details' });
+      navigatorStore.push('/users/:id', { id: 123 }, { tab: 'details' });
 
       expect(mockNavigateFunction).toHaveBeenCalledWith(
         '/users/123?tab=details',
@@ -138,7 +138,7 @@ describe('NavigatorService', () => {
 
     it('네비게이션 함수가 설정되지 않았으면 경고를 출력해야 한다', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const unsetNavigator = new NavigatorService();
+      const unsetNavigator = new NavigatorStore();
 
       unsetNavigator.push('/dashboard');
 
@@ -152,25 +152,25 @@ describe('NavigatorService', () => {
 
   describe('라우트 이름으로 네비게이션 (pushByName)', () => {
     beforeEach(() => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.setRouteNameResolver(mockRouteResolver);
-      navigatorService.setNavigationService(mockNavigationService);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setRouteNameResolver(mockRouteResolver);
+      navigatorStore.setNavigationStore(mockNavigationStore);
     });
 
     it('라우트 이름으로 네비게이션해야 한다', () => {
       mockRouteResolver.mockReturnValue('/dashboard/users');
 
-      navigatorService.pushByName('사용자 목록');
+      navigatorStore.pushByName('사용자 목록');
 
       expect(mockRouteResolver).toHaveBeenCalledWith('사용자 목록');
       expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/users');
-      expect(mockNavigationService.activateRoute).toHaveBeenCalledWith('/dashboard/users');
+      expect(mockNavigationStore.activateRoute).toHaveBeenCalledWith('/dashboard/users');
     });
 
     it('라우트 이름으로 pathParams와 함께 네비게이션해야 한다', () => {
       mockRouteResolver.mockReturnValue('/users/:id');
 
-      navigatorService.pushByName('사용자 상세', { id: 456 });
+      navigatorStore.pushByName('사용자 상세', { id: 456 });
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/users/456');
     });
@@ -178,7 +178,7 @@ describe('NavigatorService', () => {
     it('라우트 이름으로 searchParams와 함께 네비게이션해야 한다', () => {
       mockRouteResolver.mockReturnValue('/users');
 
-      navigatorService.pushByName('사용자 목록', undefined, {
+      navigatorStore.pushByName('사용자 목록', undefined, {
         filter: 'active',
       });
 
@@ -189,7 +189,7 @@ describe('NavigatorService', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       mockRouteResolver.mockReturnValue(undefined);
 
-      navigatorService.pushByName('존재하지않는라우트');
+      navigatorStore.pushByName('존재하지않는라우트');
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '라우트 이름 "존재하지않는라우트"을 찾을 수 없습니다.',
@@ -201,7 +201,7 @@ describe('NavigatorService', () => {
 
     it('라우트 리졸버가 설정되지 않았으면 경고를 출력해야 한다', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const noResolverNavigator = new NavigatorService();
+      const noResolverNavigator = new NavigatorStore();
       noResolverNavigator.setNavigateFunction(mockNavigateFunction);
 
       noResolverNavigator.pushByName('테스트라우트');
@@ -216,17 +216,17 @@ describe('NavigatorService', () => {
 
   describe('히스토리 네비게이션', () => {
     it('뒤로가기를 실행해야 한다', () => {
-      navigatorService.goBack();
+      navigatorStore.goBack();
       expect(window.history.back).toHaveBeenCalled();
     });
 
     it('앞으로가기를 실행해야 한다', () => {
-      navigatorService.goForward();
+      navigatorStore.goForward();
       expect(window.history.forward).toHaveBeenCalled();
     });
 
     it('특정 단계로 이동해야 한다', () => {
-      navigatorService.go(-2);
+      navigatorStore.go(-2);
       expect(window.history.go).toHaveBeenCalledWith(-2);
     });
 
@@ -235,9 +235,9 @@ describe('NavigatorService', () => {
       delete (global as any).window;
 
       expect(() => {
-        navigatorService.goBack();
-        navigatorService.goForward();
-        navigatorService.go(-1);
+        navigatorStore.goBack();
+        navigatorStore.goForward();
+        navigatorStore.go(-1);
       }).not.toThrow();
 
       global.window = originalWindow;
@@ -254,36 +254,36 @@ describe('NavigatorService', () => {
         configurable: true,
       });
 
-      navigatorService.setNavigateFunction(reactRouterNavigate);
-      navigatorService.setNavigationService(mockNavigationService);
+      navigatorStore.setNavigateFunction(reactRouterNavigate);
+      navigatorStore.setNavigationStore(mockNavigationStore);
 
-      navigatorService.replace('/dashboard');
+      navigatorStore.replace('/dashboard');
 
       expect(reactRouterNavigate).toHaveBeenCalledWith('/dashboard', {
         replace: true,
       });
-      expect(mockNavigationService.activateRoute).toHaveBeenCalledWith('/dashboard');
+      expect(mockNavigationStore.activateRoute).toHaveBeenCalledWith('/dashboard');
     });
 
     it('pathParams와 searchParams를 포함하여 replace해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
 
-      navigatorService.replace('/users/:id', { id: 789 }, { edit: 'true' });
+      navigatorStore.replace('/users/:id', { id: 789 }, { edit: 'true' });
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/users/789?edit=true');
     });
 
     it('상대 경로를 절대 경로로 정규화해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
 
-      navigatorService.replace('settings');
+      navigatorStore.replace('settings');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/settings');
     });
 
     it('네비게이션 함수가 설정되지 않았으면 경고를 출력해야 한다', () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const unsetNavigator = new NavigatorService();
+      const unsetNavigator = new NavigatorStore();
 
       unsetNavigator.replace('/dashboard');
 
@@ -298,8 +298,8 @@ describe('NavigatorService', () => {
   describe('PathUtil 통합', () => {
     it('PathUtil.getUrlWithParamsAndQueryString을 올바르게 호출해야 한다', () => {
       // PathUtil이 mock되어 있으므로 함수 호출 확인
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.push('/users/:id', { id: 123 }, { tab: 'profile' });
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.push('/users/:id', { id: 123 }, { tab: 'profile' });
 
       // 결과만 확인 (PathUtil의 실제 호출은 mock에서 처리됨)
       expect(mockNavigateFunction).toHaveBeenCalledWith(
@@ -310,69 +310,69 @@ describe('NavigatorService', () => {
 
   describe('엣지 케이스', () => {
     it('빈 경로로 네비게이션해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
 
-      navigatorService.push('');
+      navigatorStore.push('');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/');
     });
 
     it('이미 절대 경로인 경우 그대로 사용해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
 
-      navigatorService.push('/already/absolute');
+      navigatorStore.push('/already/absolute');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/already/absolute');
     });
 
     it('undefined pathParams와 searchParams를 처리해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
 
-      navigatorService.push('/test', undefined, undefined);
+      navigatorStore.push('/test', undefined, undefined);
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/test');
     });
   });
 
   describe('의존성 주입 (Dependency Injection)', () => {
-    it('INavigationService를 통한 의존성 주입이 올바르게 동작해야 한다', () => {
-      const customNavigationService: INavigationService = {
+    it('INavigationStore를 통한 의존성 주입이 올바르게 동작해야 한다', () => {
+      const customNavigationStore: INavigationStore = {
         activateRoute: vi.fn(),
       };
 
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.setNavigationService(customNavigationService);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setNavigationStore(customNavigationStore);
 
-      navigatorService.push('/test-path');
+      navigatorStore.push('/test-path');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/test-path');
-      expect(customNavigationService.activateRoute).toHaveBeenCalledWith('/test-path');
+      expect(customNavigationStore.activateRoute).toHaveBeenCalledWith('/test-path');
     });
 
     it('하위 호환성: setActivateRouteCallback도 여전히 동작해야 한다', () => {
       const legacyCallback = vi.fn();
       
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.setActivateRouteCallback(legacyCallback);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setActivateRouteCallback(legacyCallback);
 
-      navigatorService.push('/legacy-path');
+      navigatorStore.push('/legacy-path');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/legacy-path');
       expect(legacyCallback).toHaveBeenCalledWith('/legacy-path');
     });
 
-    it('NavigationService가 설정되지 않았을 때도 네비게이션은 정상 동작해야 한다', () => {
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      // NavigationService 설정하지 않음
+    it('NavigationStore가 설정되지 않았을 때도 네비게이션은 정상 동작해야 한다', () => {
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      // NavigationStore 설정하지 않음
 
-      navigatorService.push('/no-service-path');
+      navigatorStore.push('/no-service-path');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/no-service-path');
       // activateRoute는 호출되지 않아야 함
     });
 
     it('replace 메서드에서도 의존성 주입이 올바르게 동작해야 한다', () => {
-      const testNavigationService: INavigationService = {
+      const testNavigationStore: INavigationStore = {
         activateRoute: vi.fn(),
       };
 
@@ -382,30 +382,30 @@ describe('NavigatorService', () => {
         configurable: true,
       });
 
-      navigatorService.setNavigateFunction(reactRouterNavigate);
-      navigatorService.setNavigationService(testNavigationService);
+      navigatorStore.setNavigateFunction(reactRouterNavigate);
+      navigatorStore.setNavigationStore(testNavigationStore);
 
-      navigatorService.replace('/replace-path');
+      navigatorStore.replace('/replace-path');
 
       expect(reactRouterNavigate).toHaveBeenCalledWith('/replace-path', { replace: true });
-      expect(testNavigationService.activateRoute).toHaveBeenCalledWith('/replace-path');
+      expect(testNavigationStore.activateRoute).toHaveBeenCalledWith('/replace-path');
     });
 
     it('pushByName에서도 의존성 주입이 올바르게 동작해야 한다', () => {
-      const testNavigationService: INavigationService = {
+      const testNavigationStore: INavigationStore = {
         activateRoute: vi.fn(),
       };
 
-      navigatorService.setNavigateFunction(mockNavigateFunction);
-      navigatorService.setRouteNameResolver(mockRouteResolver);
-      navigatorService.setNavigationService(testNavigationService);
+      navigatorStore.setNavigateFunction(mockNavigateFunction);
+      navigatorStore.setRouteNameResolver(mockRouteResolver);
+      navigatorStore.setNavigationStore(testNavigationStore);
 
       mockRouteResolver.mockReturnValue('/resolved-path');
 
-      navigatorService.pushByName('test-route');
+      navigatorStore.pushByName('test-route');
 
       expect(mockNavigateFunction).toHaveBeenCalledWith('/resolved-path');
-      expect(testNavigationService.activateRoute).toHaveBeenCalledWith('/resolved-path');
+      expect(testNavigationStore.activateRoute).toHaveBeenCalledWith('/resolved-path');
     });
   });
 });
