@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { NavigationService } from '../navigation';
+import { NavigationService } from '../navigationStore';
 
 // RouteBuilder interface를 직접 정의 (circular dependency 방지)
 interface RouteBuilder {
@@ -336,6 +336,197 @@ describe('NavigationService', () => {
       expect(navigationService.routes).toHaveLength(1);
       expect(navigationService.getRouteByName('새 라우트')).toBeDefined();
       expect(navigationService.getRouteByName('홈')).toBeUndefined();
+    });
+  });
+
+  describe('NavigatorService 의존성 주입', () => {
+    it('NavigatorService에 NavigationService가 올바르게 주입되어야 한다', () => {
+      const navigator = navigationService.getNavigator();
+
+      // 실제 네비게이션 함수를 Mock
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      // push 호출 시 NavigationService의 activateRoute가 호출되는지 확인
+      const activateRouteSpy = vi.spyOn(navigationService, 'activateRoute');
+
+      navigator.push('/test-path');
+
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/test-path');
+      expect(activateRouteSpy).toHaveBeenCalledWith('/test-path');
+
+      activateRouteSpy.mockRestore();
+    });    it('replace 메서드도 올바르게 activateRoute를 호출해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      
+      // 실제 네비게이션 함수를 Mock (React Router 스타일)
+      const mockNavigateFunction = vi.fn((path: string, options?: { replace?: boolean }) => {});
+      // React Router의 navigate 함수처럼 length를 2로 설정
+      Object.defineProperty(mockNavigateFunction, 'length', { value: 2 });
+      navigator.setNavigateFunction(mockNavigateFunction);
+      
+      const activateRouteSpy = vi.spyOn(navigationService, 'activateRoute');
+      
+      navigator.replace('/test-path');
+      
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/test-path', { replace: true });
+      expect(activateRouteSpy).toHaveBeenCalledWith('/test-path');
+      
+      activateRouteSpy.mockRestore();
+    });
+
+    it('pushByName 메서드도 올바르게 동작해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      const activateRouteSpy = vi.spyOn(navigationService, 'activateRoute');
+
+      navigator.pushByName('홈');
+
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/home');
+      expect(activateRouteSpy).toHaveBeenCalledWith('/home');
+
+      activateRouteSpy.mockRestore();
+    });
+
+    it('라우트 이름으로 네비게이션 시 경로 매개변수와 쿼리 문자열이 올바르게 처리되어야 한다', () => {
+      const navigator = navigationService.getNavigator();
+
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      const pathParams = { id: '123' };
+      const searchParams = { tab: 'profile', filter: 'active' };
+
+      navigator.pushByName('사용자 상세', pathParams, searchParams);
+
+      // PathUtil.getUrlWithParamsAndQueryString의 결과를 예상
+      expect(mockNavigateFunction).toHaveBeenCalledWith(
+        expect.stringContaining('/dashboard/user-service/users/123'),
+      );
+      expect(mockNavigateFunction).toHaveBeenCalledWith(
+        expect.stringContaining('tab=profile'),
+      );
+      expect(mockNavigateFunction).toHaveBeenCalledWith(
+        expect.stringContaining('filter=active'),
+      );
+    });
+
+    it('NavigateFunction이 설정되지 않았을 때 경고 메시지를 출력해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      navigator.push('/test-path');
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.',
+      );
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('상단 메뉴 네비게이션', () => {
+    it('자식이 있는 라우트의 경우 첫 번째 자식으로 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      // "사용자 서비스"를 클릭했을 때 첫 번째 자식인 "사용자 목록"으로 이동
+      navigationService.navigateToRouteOrFirstChild('사용자 서비스');
+
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/user-service/users');
+    });
+
+    it('자식이 없는 라우트의 경우 해당 라우트로 직접 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      navigationService.navigateToRouteOrFirstChild('홈');
+
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/home');
+    });
+
+    it('존재하지 않는 라우트 이름의 경우 경고를 출력해야 한다', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      navigationService.navigateToRouteOrFirstChild('존재하지않는라우트');
+
+      expect(consoleSpy).toHaveBeenCalledWith('라우트 "존재하지않는라우트"을 찾을 수 없습니다.');
+      
+      consoleSpy.mockRestore();
+    });
+
+    it('중첩된 자식이 있는 경우 가장 깊은 첫 번째 자식을 찾아야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      navigationService.navigateToRouteOrFirstChild('사용자 서비스');
+
+      // "사용자 서비스"의 첫 번째 자식인 "사용자 목록"으로 이동 (가장 깊은 자식)
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/user-service/users');
+    });
+
+    it('한 단계 자식만 있는 경우 해당 자식으로 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      navigationService.navigateToRouteOrFirstChild('공간 서비스');
+
+      // "공간 서비스"의 첫 번째 자식인 "공간 목록"으로 이동
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/space-service/spaces');
+    });
+  });
+
+  describe('NavigateToRouteOrFirstChildByPath', () => {
+    it('자식이 있는 라우트의 첫 번째 자식으로만 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      navigationService.navigateToRouteOrFirstChildByPath('/dashboard');
+
+      // 대시보드의 첫 번째 자식인 '사용자 서비스'로 이동
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/user-service');
+    });
+
+    it('자식이 없는 라우트는 해당 경로로 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      // '사용자 목록'은 자식이 없음
+      navigationService.navigateToRouteOrFirstChildByPath('/dashboard/user-service/users');
+
+      // 자식이 없으므로 해당 경로로 직접 이동
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/user-service/users');
+    });
+
+    it('존재하지 않는 라우트는 해당 경로로 직접 이동해야 한다', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      navigationService.navigateToRouteOrFirstChildByPath('/nonexistent');
+
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/nonexistent');
+    });
+
+    it('중첩된 자식이 있어도 첫 번째 자식으로만 이동해야 한다 (깊이 탐색 안함)', () => {
+      const navigator = navigationService.getNavigator();
+      const mockNavigateFunction = vi.fn();
+      navigator.setNavigateFunction(mockNavigateFunction);
+
+      // 사용자 서비스에는 자식이 있지만, 첫 번째 자식으로만 이동
+      navigationService.navigateToRouteOrFirstChildByPath('/dashboard/user-service');
+
+      // 첫 번째 자식인 '사용자 목록'으로 이동 (users가 첫 번째)
+      expect(mockNavigateFunction).toHaveBeenCalledWith('/dashboard/user-service/users');
     });
   });
 });

@@ -25,7 +25,7 @@ export const DashboardLayoutBuilder = observer(
         () => navigation.currentFullPath,
         currentFullPath => {
           if (currentFullPath && currentFullPath.split('/').length < 6) {
-            navigator.push(currentFullPath);
+            navigation.navigateToRouteOrFirstChildByPath(currentFullPath);
           }
         },
       );

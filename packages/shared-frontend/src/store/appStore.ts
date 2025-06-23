@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { NavigationService } from './navigation';
+import { NavigationService } from './navigationStore';
 
 export class PlateService {
   name: string = 'PROTOTYPE';

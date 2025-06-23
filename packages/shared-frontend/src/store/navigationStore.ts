@@ -1,7 +1,7 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
-import { NavigatorService } from './navigator';
+import { NavigatorService, type INavigationService } from './navigatorStore';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -17,8 +17,9 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
  * - routes 배열을 통한 직접적인 라우트 검색
  * - 단순화된 경로 매칭 로직
  * - fullPath와 relativePath의 명확한 구분
+ * - NavigatorService에 의존성 주입 방식으로 연결
  */
-export class NavigationService {
+export class NavigationService implements INavigationService {
   private _routes: Route[] = [];
   private navigator: NavigatorService;
   routeBuilders: RouteBuilder[] = [];
@@ -33,7 +34,9 @@ export class NavigationService {
     this.navigator = new NavigatorService();
     this.routeBuilders = routeBuilders;
     this.setRoutes(routeBuilders);
-    this.navigator.setActivateRouteCallback(this.activateRoute.bind(this));
+    
+    // 의존성 주입: NavigatorService에 현재 NavigationService 인스턴스 주입
+    this.navigator.setNavigationService(this);
 
     // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
     this.initializeCurrentPath();
@@ -201,36 +204,18 @@ export class NavigationService {
     const normalizedPath = this.normalizePath(fullPath);
 
     const findRoute = (routes: Route[]): Route | undefined => {
-      // 정확한 매칭 우선
       for (const route of routes) {
         const routeNormalizedPath = this.normalizePath(route.fullPath);
         if (routeNormalizedPath === normalizedPath) {
           return route;
         }
+        // 자식 라우트에서도 검색
+        if (route.children?.length > 0) {
+          const found = findRoute(route.children);
+          if (found) return found;
+        }
       }
-
-      // 부분 매칭 (더 구체적인 경로부터)
-      const allRoutes: Route[] = [];
-      const collectAllRoutes = (routes: Route[]) => {
-        routes.forEach(route => {
-          allRoutes.push(route);
-          if (route.children?.length > 0) {
-            collectAllRoutes(route.children);
-          }
-        });
-      };
-      collectAllRoutes(routes);
-
-      // 경로 길이로 정렬 (더 구체적인 경로부터)
-      allRoutes.sort((a, b) => b.fullPath.length - a.fullPath.length);
-
-      return allRoutes.find(route => {
-        const routeNormalizedPath = this.normalizePath(route.fullPath);
-        return (
-          normalizedPath.startsWith(routeNormalizedPath + '/') ||
-          routeNormalizedPath.startsWith(normalizedPath + '/')
-        );
-      });
+      return undefined;
     };
 
     return findRoute(this._routes);
@@ -416,5 +401,48 @@ export class NavigationService {
   private normalizePath(path: string): string {
     if (!path) return '';
     return path.startsWith('/') ? path.slice(1) : path;
+  }
+
+  /**
+   * 상단 메뉴 클릭 시 첫 번째 자식으로 네비게이션
+   * 자식이 없으면 해당 라우트로 직접 이동
+   */
+  navigateToRouteOrFirstChild(routeName: string): void {
+    const route = this.getRouteByName(routeName);
+    if (!route) {
+      console.warn(`라우트 "${routeName}"을 찾을 수 없습니다.`);
+      return;
+    }
+
+    // 자식이 있으면 첫 번째 자식으로만 이동 (깊이 탐색 안함)
+    if (route.children && route.children.length > 0) {
+      const firstChild = route.children[0];
+      this.navigator.push(firstChild.fullPath);
+    } else {
+      // 자식이 없으면 해당 라우트로 직접 이동
+      this.navigator.push(route.fullPath);
+    }
+  }
+
+  /**
+   * 라우트 클릭 시 해당 라우트로 이동하거나 첫 번째 자식으로 이동
+   * 자식이 있는 경우 첫 번째 자식으로, 없는 경우 해당 경로로 이동
+   */
+  navigateToRouteOrFirstChildByPath(fullPath: string): void {
+    const targetRoute = this.findRouteByFullPath(fullPath);
+    if (!targetRoute) {
+      // 라우트를 찾을 수 없으면 해당 경로로 직접 이동
+      this.navigator.push(fullPath);
+      return;
+    }
+
+    // 자식이 있으면 첫 번째 자식으로만 이동 (깊이 탐색 안함)
+    if (targetRoute.children && targetRoute.children.length > 0) {
+      const firstChild = targetRoute.children[0];
+      this.navigator.push(firstChild.fullPath);
+    } else {
+      // 자식이 없으면 해당 라우트로 직접 이동
+      this.navigator.push(targetRoute.fullPath);
+    }
   }
 }

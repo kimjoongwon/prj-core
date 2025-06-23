@@ -2,7 +2,7 @@
 
 import React, { useEffect, createContext } from 'react';
 import type { RouteBuilder } from '@shared/types';
-import { PlateService, NavigationService } from '../../services';
+import { PlateService, NavigationService } from '../../store';
 import { observer } from 'mobx-react-lite';
 import { observable, runInAction } from 'mobx';
 import { useGetAppBuilder } from '@shared/api-client';
