@@ -2,6 +2,7 @@ import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
 import { type INavigationStore } from './navigatorStore';
+import { type PlateStore } from './plateStore';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -21,7 +22,7 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
  */
 export class NavigationStore implements INavigationStore {
   private _routes: Route[] = [];
-  private plateStore: any; // PlateStore 타입은 순환 참조 방지를 위해 any 사용
+  private plateStore: PlateStore;
   routeBuilders: RouteBuilder[] = [];
   currentRoute: Route | undefined = undefined;
   selectedDashboardFullPath: string | undefined = '';
@@ -30,7 +31,7 @@ export class NavigationStore implements INavigationStore {
   currentFullPath: string = '';
   currentRelativePath: string = '';
 
-  constructor(plateStore: any, routeBuilders: RouteBuilder[] = []) {
+  constructor(plateStore: PlateStore, routeBuilders: RouteBuilder[] = []) {
     this.plateStore = plateStore;
     this.routeBuilders = routeBuilders;
     this.setRoutes(routeBuilders);
