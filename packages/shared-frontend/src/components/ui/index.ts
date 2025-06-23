@@ -23,3 +23,4 @@ export * from './Text';
 export * from './User';
 export * from './VStack';
 export * from './Videos';
+export * from './DataGrid';
