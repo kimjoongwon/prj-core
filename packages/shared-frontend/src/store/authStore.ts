@@ -1,11 +1,12 @@
 import { makeAutoObservable } from 'mobx';
 import { BrowserUtil } from '@shared/utils';
+import { type PlateStore } from './plateStore';
 
 export class AuthStore {
-  private plateStore: any; // PlateStore 타입은 순환 참조 방지를 위해 any 사용
+  private plateStore: PlateStore;
   isLoggingOut = false;
 
-  constructor(plateStore: any) {
+  constructor(plateStore: PlateStore) {
     this.plateStore = plateStore;
     makeAutoObservable(this);
   }

@@ -1,5 +1,6 @@
 import { PathUtil } from '@shared/utils';
 import { type NavigateFunction } from 'react-router';
+import { type PlateStore } from './plateStore';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -19,9 +20,9 @@ export class NavigatorStore {
   private navigateFunction?: UniversalNavigateFunction;
   private isReactRouter: boolean = false;
   private pathResolver?: (name: string) => string | undefined;
-  private plateStore: any; // PlateStore 타입은 순환 참조 방지를 위해 any 사용
+  private plateStore: PlateStore;
 
-  constructor(plateStore: any) {
+  constructor(plateStore: PlateStore) {
     this.plateStore = plateStore;
   }
 
