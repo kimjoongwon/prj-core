@@ -33,8 +33,7 @@ const appProvider = observable(
     },
 
     initializePlate(routeBuilders: RouteBuilder[]) {
-      const navigationStore = new NavigationStore(routeBuilders);
-      Plate = new PlateStore(navigationStore);
+      Plate = new PlateStore(routeBuilders);
       Plate.isInitialized = true;
       this.isInitialized = true;
     },

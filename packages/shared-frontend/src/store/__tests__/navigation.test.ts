@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NavigationStore } from '../navigationStore';
+import { PlateStore } from '../plateStore';
 
 // RouteBuilder interface를 직접 정의 (circular dependency 방지)
 interface RouteBuilder {
@@ -62,6 +63,7 @@ const mockRouteBuilders: RouteBuilder[] = [
 
 describe('NavigationStore', () => {
   let navigationStore: NavigationStore;
+  let plateStore: PlateStore;
 
   beforeEach(() => {
     // window 객체 mock 설정
@@ -72,7 +74,9 @@ describe('NavigationStore', () => {
       writable: true,
     });
 
-    navigationStore = new NavigationStore(mockRouteBuilders);
+    // 실제 PlateStore를 생성하여 모든 스토어들이 제대로 연결되도록 함
+    plateStore = new PlateStore(mockRouteBuilders);
+    navigationStore = plateStore.navigation;
   });
 
   describe('초기화', () => {
@@ -293,7 +297,7 @@ describe('NavigationStore', () => {
 
   describe('특수 케이스 및 에러 처리', () => {
     it('빈 RouteBuilder 배열로 초기화해도 정상 동작해야 한다', () => {
-      const emptyNavigation = new NavigationStore([]);
+      const emptyNavigation = new PlateStore([]).navigation;
       expect(emptyNavigation.routes).toEqual([]);
       expect(emptyNavigation.getRouteByName('test')).toBeUndefined();
     });
@@ -307,7 +311,7 @@ describe('NavigationStore', () => {
         },
       ] as any;
 
-      const legacyNavigation = new NavigationStore(legacyRouteBuilders);
+      const legacyNavigation = new PlateStore(legacyRouteBuilders).navigation;
       const route = legacyNavigation.getRouteByName('레거시 라우트');
       expect(route?.fullPath).toBe('/legacy');
     });

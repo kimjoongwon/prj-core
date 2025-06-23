@@ -1,7 +1,7 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
-import { NavigatorStore, type INavigationStore } from './navigatorStore';
+import { type INavigationStore } from './navigatorStore';
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -17,11 +17,11 @@ type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
  * - routes 배열을 통한 직접적인 라우트 검색
  * - 단순화된 경로 매칭 로직
  * - fullPath와 relativePath의 명확한 구분
- * - NavigatorStore에 의존성 주입 방식으로 연결
+ * - PlateStore를 통해 NavigatorStore에 접근
  */
 export class NavigationStore implements INavigationStore {
   private _routes: Route[] = [];
-  private navigator: NavigatorStore;
+  private plateStore: any; // PlateStore 타입은 순환 참조 방지를 위해 any 사용
   routeBuilders: RouteBuilder[] = [];
   currentRoute: Route | undefined = undefined;
   selectedDashboardFullPath: string | undefined = '';
@@ -30,11 +30,10 @@ export class NavigationStore implements INavigationStore {
   currentFullPath: string = '';
   currentRelativePath: string = '';
 
-  constructor(routeBuilders: RouteBuilder[] = []) {
-    this.navigator = new NavigatorStore();
+  constructor(plateStore: any, routeBuilders: RouteBuilder[] = []) {
+    this.plateStore = plateStore;
     this.routeBuilders = routeBuilders;
     this.setRoutes(routeBuilders);
-    this.navigator.setNavigationStore(this);
 
     // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
     this.initializeCurrentPath();
@@ -104,14 +103,14 @@ export class NavigationStore implements INavigationStore {
    * React Router의 navigate 함수 또는 Next.js router.push 설정
    */
   setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
-    this.navigator.setNavigateFunction(navigateFunction);
+    this.plateStore.navigator.setNavigateFunction(navigateFunction);
   }
 
   /**
    * NavigatorStore 인스턴스 반환
    */
-  getNavigator(): NavigatorStore {
-    return this.navigator;
+  getNavigator() {
+    return this.plateStore.navigator;
   }
 
   // ===== 라우트 데이터 관리 =====
@@ -124,7 +123,7 @@ export class NavigationStore implements INavigationStore {
     this.generateRoutesFromBuilders(routeBuilders);
 
     // 2. Navigator에 라우트 이름 검색 함수 설정
-    this.navigator.setRouteNameResolver(this.getFullPathByName.bind(this));
+    this.plateStore.navigator.setRouteNameResolver(this.getFullPathByName.bind(this));
   }
 
   /**
@@ -415,10 +414,10 @@ export class NavigationStore implements INavigationStore {
     // 자식이 있으면 첫 번째 자식으로만 이동 (깊이 탐색 안함)
     if (route.children && route.children.length > 0) {
       const firstChild = route.children[0];
-      this.navigator.push(firstChild.fullPath);
+      this.plateStore.navigator.push(firstChild.fullPath);
     } else {
       // 자식이 없으면 해당 라우트로 직접 이동
-      this.navigator.push(route.fullPath);
+      this.plateStore.navigator.push(route.fullPath);
     }
   }
 
@@ -430,17 +429,17 @@ export class NavigationStore implements INavigationStore {
     const targetRoute = this.findRouteByFullPath(fullPath);
     if (!targetRoute) {
       // 라우트를 찾을 수 없으면 해당 경로로 직접 이동
-      this.navigator.push(fullPath);
+      this.plateStore.navigator.push(fullPath);
       return;
     }
 
     // 자식이 있으면 첫 번째 자식으로만 이동 (깊이 탐색 안함)
     if (targetRoute.children && targetRoute.children.length > 0) {
       const firstChild = targetRoute.children[0];
-      this.navigator.push(firstChild.fullPath);
+      this.plateStore.navigator.push(firstChild.fullPath);
     } else {
       // 자식이 없으면 해당 라우트로 직접 이동
-      this.navigator.push(targetRoute.fullPath);
+      this.plateStore.navigator.push(targetRoute.fullPath);
     }
   }
 }

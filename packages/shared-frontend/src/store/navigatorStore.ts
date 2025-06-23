@@ -19,7 +19,11 @@ export class NavigatorStore {
   private navigateFunction?: UniversalNavigateFunction;
   private isReactRouter: boolean = false;
   private pathResolver?: (name: string) => string | undefined;
-  private navigationStore?: INavigationStore;
+  private plateStore: any; // PlateStore 타입은 순환 참조 방지를 위해 any 사용
+
+  constructor(plateStore: any) {
+    this.plateStore = plateStore;
+  }
 
   /**
    * React Router의 navigate 함수 또는 Next.js router.push 설정
@@ -43,24 +47,6 @@ export class NavigatorStore {
    */
   setRouteNameResolver(resolver: (name: string) => string | undefined): void {
     this.pathResolver = resolver;
-  }
-
-  /**
-   * 네비게이션 스토어 설정 (의존성 주입)
-   */
-  setNavigationStore(navigationStore: INavigationStore): void {
-    this.navigationStore = navigationStore;
-  }
-
-  /**
-   * 라우트 활성화 콜백 함수 설정 (하위 호환성을 위해 유지)
-   * @deprecated setNavigationStore를 사용하세요
-   */
-  setActivateRouteCallback(callback: (pathname: string) => void): void {
-    // 하위 호환성을 위해 래퍼 객체 생성
-    this.navigationStore = {
-      activateRoute: callback
-    };
   }
 
   /**
@@ -97,8 +83,8 @@ export class NavigatorStore {
     this.navigateFunction(pathnameWithSearchParams);
 
     // 네비게이션 후 라우트 활성화 상태 업데이트
-    if (this.navigationStore) {
-      this.navigationStore.activateRoute(normalizedPathname);
+    if (this.plateStore?.navigation) {
+      this.plateStore.navigation.activateRoute(normalizedPathname);
     }
   }
 
@@ -200,8 +186,8 @@ export class NavigatorStore {
       }
 
       // 네비게이션 후 라우트 활성화 상태 업데이트
-      if (this.navigationStore) {
-        this.navigationStore.activateRoute(normalizedPathname);
+      if (this.plateStore?.navigation) {
+        this.plateStore.navigation.activateRoute(normalizedPathname);
       }
     }
   }
