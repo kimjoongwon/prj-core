@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Avatar } from '../Avatar';
 import { EnvironmentUtil } from '@shared/utils';
-import * as AppProvider from '../../../../providers/App/AppProvider';
+import * as AppProvider from '../../../../provider/AppProvider/AppProvider';
 
 // Mock dependencies
 vi.mock('@shared/utils', () => ({

@@ -2,7 +2,7 @@ import { User, Avatar as HeroUIAvatar, Button, Chip } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
 import { EnvironmentUtil } from '@shared/utils';
 import { Dropdown, DropdownItemProps } from '../../inputs/Dropdown';
-import { usePlate } from '../../../providers/App/AppProvider';
+import { usePlate } from '../../../provider/AppProvider/AppProvider';
 
 interface AvatarProps {
   showInfo?: boolean;

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Input, InputProps } from '../Input';
 import { Validation } from '@shared/types';
-import { InputValidationBuilder } from '../../builders/InputValidationBuilder/InputValidation';
+import { InputValidationBuilder } from '../../builder/InputValidationBuilder/InputValidation';
 
 type EmailProps<T> = InputProps<T> & {
   validation?: Validation;

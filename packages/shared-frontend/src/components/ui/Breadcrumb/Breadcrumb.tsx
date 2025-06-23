@@ -14,7 +14,7 @@ import type {
   BreadcrumbBuilderProps,
   Route,
 } from '@shared/types';
-import { Plate } from '../../../providers';
+import { Plate } from '../../../provider';
 
 /**
  * HeroUI-based Breadcrumb component with responsive design

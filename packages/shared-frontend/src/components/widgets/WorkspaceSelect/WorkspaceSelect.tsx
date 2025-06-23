@@ -1,6 +1,6 @@
 import { useGetTenantsByQuery } from '@shared/api-client';
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import { Listbox } from '../../Listbox';
+import { Listbox } from '../../inputs/Listbox';
 
 export const WorkspaceSelect = observer(() => {
   const { data: getTenantsByQueryResponse } = useGetTenantsByQuery();

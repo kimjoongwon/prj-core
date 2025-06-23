@@ -24,3 +24,4 @@ export * from './User';
 export * from './VStack';
 export * from './Videos';
 export * from './DataGrid';
+export * from './ResponsiveVisibility';

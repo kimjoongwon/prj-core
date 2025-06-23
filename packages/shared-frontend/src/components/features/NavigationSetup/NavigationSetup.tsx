@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Plate } from '../../../providers';
+import { Plate } from '../../../provider';
 
 /**
  * Router 컨텍스트 내부에서 navigation 함수를 설정하는 컴포넌트

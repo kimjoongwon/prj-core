@@ -1,8 +1,8 @@
-export * from './cells';
+export * from './cell';
 export * from './features';
 export * from './ui';
 export * from './inputs';
-export * from './layouts';
-export * from './builders';
+export * from './layout';
+export * from './builder';
 
 export { Form } from '@heroui/react';
