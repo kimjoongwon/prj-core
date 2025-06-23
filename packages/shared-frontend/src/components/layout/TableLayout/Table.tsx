@@ -1,4 +1,4 @@
-'use client';
+
 
 import { observer } from 'mobx-react-lite';
 import { TableLayoutProps } from '@shared/types';

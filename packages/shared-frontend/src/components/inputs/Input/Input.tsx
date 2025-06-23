@@ -1,4 +1,4 @@
-'use client';
+
 
 import { ChangeEventHandler } from 'react';
 import { useMobxHookForm } from '../../../..';

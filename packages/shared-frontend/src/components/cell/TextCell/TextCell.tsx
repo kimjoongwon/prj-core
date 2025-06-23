@@ -1,4 +1,4 @@
-'use client';
+
 
 import React from 'react';
 import { CellContext } from '@tanstack/react-table';

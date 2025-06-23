@@ -1,4 +1,4 @@
-'use client';
+
 
 import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';

@@ -1,4 +1,4 @@
-'use client';
+
 
 import { WeekInputView } from './WeekInputView';
 import { get } from 'lodash-es';

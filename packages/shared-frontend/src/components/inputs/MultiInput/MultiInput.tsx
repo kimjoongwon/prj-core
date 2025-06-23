@@ -1,4 +1,4 @@
-'use client';
+
 
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { MultiInputProps } from '@shared/types';

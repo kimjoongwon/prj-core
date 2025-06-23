@@ -1,4 +1,4 @@
-'use client';
+
 
 import { Button } from '@heroui/react';
 import { useTheme } from '@heroui/use-theme';

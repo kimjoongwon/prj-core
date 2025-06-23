@@ -1,4 +1,4 @@
-'use client';
+
 
 import React, { useEffect, createContext } from 'react';
 import type { RouteBuilder } from '@shared/types';

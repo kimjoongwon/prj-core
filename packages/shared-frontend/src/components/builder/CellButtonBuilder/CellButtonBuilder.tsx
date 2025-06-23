@@ -1,5 +1,3 @@
-'use client';
-
 import { Button as BaseButton } from '@shared/frontend';
 import { IButtonBuilder as ButtonBuilderProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';

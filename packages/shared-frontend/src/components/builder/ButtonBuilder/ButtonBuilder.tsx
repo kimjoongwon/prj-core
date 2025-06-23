@@ -1,5 +1,3 @@
-'use client';
-
 import { Button as BaseButton, Text } from '@shared/frontend';
 import { IButtonBuilder } from '@shared/types';
 import { addToast } from '@heroui/react';
