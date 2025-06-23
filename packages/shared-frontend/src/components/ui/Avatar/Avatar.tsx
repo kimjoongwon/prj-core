@@ -1,7 +1,8 @@
 import { User, Avatar as HeroUIAvatar, Button, Chip } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-import { BrowserUtil, EnvironmentUtil } from '@shared/utils';
+import { EnvironmentUtil } from '@shared/utils';
 import { useLogout } from '@shared/api-client';
+import { usePlate } from '../../../providers/App/AppProvider';
 import { Dropdown, DropdownItemProps } from '../../inputs/Dropdown';
 
 interface AvatarProps {
@@ -11,6 +12,7 @@ interface AvatarProps {
 
 export const Avatar = observer((props: AvatarProps) => {
   const { showInfo = true, onMenuAction } = props;
+  const plate = usePlate();
   const logoutMutation = useLogout();
 
   const environment = EnvironmentUtil.getCurrentEnvironment();
@@ -152,26 +154,7 @@ export const Avatar = observer((props: AvatarProps) => {
   };
 
   const handleLogout = async () => {
-    try {
-      console.log('로그아웃 처리 중...');
-
-      // Call backend logout API to clear HttpOnly cookies
-      await logoutMutation.mutateAsync();
-
-      // Clear client-side storage
-      BrowserUtil.clearLocalStorage();
-      BrowserUtil.clearSessionStorage();
-
-      // Navigate to login page
-      BrowserUtil.navigateTo('/admin/auth/login', true);
-    } catch (error) {
-      console.error('로그아웃 중 오류가 발생했습니다:', error);
-
-      // Even if API call fails, clear client storage and redirect
-      BrowserUtil.clearLocalStorage();
-      BrowserUtil.clearSessionStorage();
-      BrowserUtil.navigateTo('/admin/auth/login', true);
-    }
+    await plate.auth.logout(() => logoutMutation.mutateAsync());
   };
 
   if (showInfo) {
