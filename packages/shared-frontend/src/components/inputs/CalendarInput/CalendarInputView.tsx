@@ -1,4 +1,4 @@
-'use client';
+
 
 import { DaysOfWeek } from './DaysOfWeek';
 import { CalendarInputPropsView } from '@shared/types';
