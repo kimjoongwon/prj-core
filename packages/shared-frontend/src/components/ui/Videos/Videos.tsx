@@ -4,7 +4,7 @@ export function Videos() {
   const videos = [];
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
+      <h2 className="text-2xl font-semibold mb-4 text-foreground">
         업로드된 비디오
       </h2>
       {videos.length === 0 ? (

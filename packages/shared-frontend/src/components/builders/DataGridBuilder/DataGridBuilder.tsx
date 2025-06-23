@@ -45,7 +45,7 @@ export const DataGridBuilder = observer(
     return (
       <VStack className="gap-6">
         {page?.name && (
-          <Text variant="h1" className="text-xl font-semibold text-gray-800">
+          <Text variant="h1" className="text-xl font-semibold text-foreground">
             {page.name}
           </Text>
         )}

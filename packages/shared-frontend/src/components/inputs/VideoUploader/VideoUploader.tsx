@@ -60,7 +60,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
   };
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-8 text-center text-gray-800 dark:text-white">
+      <h1 className="text-2xl font-bold mb-8 text-center text-foreground">
         {label}
       </h1>
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
