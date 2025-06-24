@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { IButtonBuilder, Mutation, PageBuilder, ResourceBuilder } from '@shared/types';
-import { PageType } from '../types/page.types';
+import type {
+  IButtonBuilder,
+  InputProps,
+  Mutation,
+  PageBuilder,
+  ResourceBuilder,
+} from '@shared/types';
+import { type PageType } from '../types/page.types';
+import { FormProps } from '@heroui/react';
 
 @Injectable()
 export class GroundPage {
@@ -84,27 +91,22 @@ export class GroundPage {
     // elements 배열 구성
     const baseElements = [
       {
-        name: 'Text' as const,
-        props: {
-          children: getPageTitle(type),
-          className: 'text-2xl font-bold mb-4',
-        },
-      },
-      {
         name: 'Input' as const,
         props: {
           label: '이름',
           path: 'form.inputs.name',
           isReadOnly: isReadonly,
-        },
+          variant: 'underlined',
+        } as InputProps<any>,
       },
       {
         name: 'Input' as const,
         props: {
-          label: '주소',
-          path: 'form.inputs.address',
+          label: '라벨',
+          path: 'form.inputs.label',
           isReadOnly: isReadonly,
-        },
+          variant: 'underlined',
+        } as InputProps<any>,
       },
       {
         name: 'Input' as const,
@@ -112,7 +114,8 @@ export class GroundPage {
           label: '전화번호',
           path: 'form.inputs.phone',
           isReadOnly: isReadonly,
-        },
+          variant: 'underlined',
+        } as InputProps<any>,
       },
       {
         name: 'Input' as const,
@@ -120,29 +123,34 @@ export class GroundPage {
           label: '이메일',
           path: 'form.inputs.email',
           isReadOnly: isReadonly,
-        },
+          variant: 'underlined',
+        } as InputProps<any>,
+      },
+      {
+        name: 'Input' as const,
+        props: {
+          label: '주소',
+          path: 'form.inputs.address',
+          isReadOnly: isReadonly,
+          variant: 'underlined',
+        } as InputProps<any>,
+      },
+      {
+        name: 'Input' as const,
+        props: {
+          label: '사업자번호',
+          path: 'form.inputs.businessNo',
+          isReadOnly: isReadonly,
+          variant: 'underlined',
+        } as InputProps<any>,
       },
     ];
 
     // detail 모드가 아닐 때만 버튼 추가
-    const elements =
-      type !== 'detail'
-        ? [
-            ...baseElements,
-            {
-              name: 'ButtonBuilder' as const,
-              props: {
-                children: getButtonText(type),
-                mutation: mutationConfig,
-                navigator: {
-                  type: 'back',
-                },
-              } satisfies IButtonBuilder,
-            },
-          ]
-        : baseElements;
+    const elements = type !== 'detail' ? [...baseElements] : baseElements;
 
     return {
+      name: getPageTitle(type),
       state: {
         form: {
           inputs: formInputs,
@@ -164,7 +172,59 @@ export class GroundPage {
                         stacks: [
                           {
                             type: 'VStack',
-                            elements,
+                            elements: [
+                              {
+                                name: 'Form',
+                                props: {
+                                  className: 'space-y-4',
+                                } as FormProps,
+                                children: [
+                                  {
+                                    name: 'VStack',
+                                    props: {
+                                      className: 'space-y-4',
+                                    },
+                                    children: elements,
+                                  },
+                                  {
+                                    name: 'HStack',
+                                    children: [
+                                      {
+                                        name: 'FileUploader' as const,
+                                        props: {
+                                          label: '로고 이미지 파일 ID',
+                                          path: 'form.inputs.logoImageFileId',
+                                          isReadOnly: isReadonly,
+                                          variant: 'underlined',
+                                        } as InputProps<any>,
+                                      },
+                                      {
+                                        name: 'FileUploader' as const,
+                                        props: {
+                                          label: '이미지 파일 ID',
+                                          path: 'form.inputs.imageFileId',
+                                          isReadOnly: isReadonly,
+                                          variant: 'underlined',
+                                        } as InputProps<any>,
+                                      },
+                                    ],
+                                  },
+                                  type !== 'detail' && {
+                                    name: 'ButtonBuilder' as const,
+                                    props: {
+                                      children: getButtonText(type),
+                                      mutation: mutationConfig,
+                                      navigator: {
+                                        type: 'back',
+                                      },
+                                      style: {
+                                        position: 'sticky',
+                                      },
+                                    } satisfies IButtonBuilder,
+                                  },
+                                ],
+                              },
+                            ],
                           },
                         ],
                       },
