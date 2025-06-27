@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { RouteBuilder, PageBuilder, LayoutBuilder, RouteNames } from '@shared/types';
+import { RouteBuilder, PageBuilder, RouteNames } from '@shared/types';
 import { rawRoutes } from '@shared/vars';
 import { LoginPage } from './components/pages/login.page';
 import { TenantSelectPage } from './components/pages/tenant-select.page';
@@ -12,7 +12,6 @@ import { CategoriesPage } from './components/pages/categories.page';
 import { GroupsPage } from './components/pages/groups.page';
 import { CategoryPage } from './components/pages/category.page';
 import { GroupPage } from './components/pages/group.page';
-import { group } from 'console';
 
 // 라우트 타입 상수
 const ROUTE_TYPES = {
@@ -172,9 +171,8 @@ export class AppBuilderService {
       return [];
     }
 
-    return rawRoutes
-      .map((route) => this.filterAdminRouteForAuth(route))
-      .filter((route) => this.isValidAuthRoute(route)) as RouteBuilder[];
+    return rawRoutes.map((route) => this.filterAdminRouteForAuth(route));
+    // .filter((route) => this.isValidAuthRoute(route)) as RouteBuilder[];
   }
 
   /**
