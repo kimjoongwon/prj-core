@@ -87,7 +87,19 @@ export class LoginPage {
                   buttonType: 'form',
                   mutation: {
                     name: 'getToken',
-                    path: 'form.inputs',
+                    validationFields: {
+                      'form.inputs.email': {
+                        required: { value: true, message: '이메일은 필수입니다' },
+                        patterns: [{
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: '올바른 이메일 형식이 아닙니다'
+                        }]
+                      },
+                      'form.inputs.password': {
+                        required: { value: true, message: '비밀번호는 필수입니다' },
+                        minLength: { value: 6, message: '비밀번호는 최소 6자 이상이어야 합니다' }
+                      }
+                    },
                   },
                   children: '로그인',
                   color: 'primary',

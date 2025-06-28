@@ -17,8 +17,6 @@ export type BuilderOptions = {
   sections: SectionBuilder[];
 };
 
-export type Validations = Record<string, any>;
-
 export type Validation = {
   timings?: ('onBlur' | 'onChange' | 'onFocus')[];
   required?: { value: boolean; message: string };
@@ -29,6 +27,7 @@ export type Validation = {
   patterns?: { value: RegExp | string; message: string }[];
 };
 
+/** @deprecated ButtonValidation은 하위 호환성을 위해 유지되지만 Mutation.validationFields 사용을 권장합니다 */
 export type ButtonValidation = {
   required?: { value: boolean; message: string };
   patterns?: { value: RegExp | string; message: string }[];
@@ -159,7 +158,6 @@ export interface IButtonBuilder extends ButtonProps {
   buttonType?: 'form' | 'cell' | 'general';
   mutation?: Mutation;
   name?: string;
-  validation?: ButtonValidation;
   icon?: string;
   toast?: {
     title: string;
@@ -224,8 +222,8 @@ export interface Mutation {
   data?: Record<string, string>; // { tenantId: 'params.id', userId: 'params.userId' }
   // 🛣️ 경로 파라미터: PageState에서 값을 추출하여 mutation 인자로 사용
   pathParams?: Record<string, string>; // { groundId: 'id', testId: 'id' }
-  body?: any;
-  path?: string;
+  // ✅ 필드별 validation 규칙 (각 키는 pageState의 전체 경로)
+  validationFields?: Record<string, Validation>; // 예: { 'form.inputs.name': {...}, 'form.inputs.email': {...} }
 }
 
 export type Key = string | number;

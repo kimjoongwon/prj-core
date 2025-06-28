@@ -28,6 +28,7 @@ export class AuthController {
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+    const mainTenantId = user.tenants.find((tenant) => tenant.main)?.id;
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,

@@ -16,7 +16,7 @@ export class TenantSelectPage {
                 name: 'ListboxBuilder',
                 props: {
                   title: '그라운드 선택',
-                  path: 'selectTenantDto.selectedTenantId',
+                  path: 'selectedTenantId',
                   query: {
                     type: 'list',
                     query: {
@@ -33,13 +33,27 @@ export class TenantSelectPage {
               {
                 name: 'ButtonBuilder',
                 props: {
-                  mutation: { name: 'selectTenant', path: 'selectTenantDto' },
+                  mutation: {
+                    name: 'selectTenant',
+                    data: {
+                      selectedTenantId: 'selectedTenantId',
+                    },
+                    // 새로운 validationFields 방식 (권장)
+                    validationFields: {
+                      selectedTenantId: {
+                        required: { value: true, message: '그라운드를 선택해주세요.' },
+                      },
+                    },
+                    // 기존 방식 (하위 호환성을 위해 유지, 하지만 validationFields가 우선)
+                    // validationPath: 'selectedTenantId'
+                  },
                   color: 'primary',
                   size: 'md',
                   children: '선택',
-                  validation: {
-                    required: { value: true, message: '그라운드를 선택해주세요.' },
-                  },
+                  // validation 속성은 validationFields로 대체됨
+                  // validation: {
+                  //   required: { value: true, message: '그라운드를 선택해주세요.' },
+                  // },
                   navigator: {
                     type: 'href',
                     route: {
@@ -58,8 +72,10 @@ export class TenantSelectPage {
     return {
       name: '테넌트',
       state: {
-        selectedTenantDto: {
-          selectedTenantId: '',
+        form: {
+          inputs: {
+            selectedTenantId: '',
+          },
         },
       },
       sections,

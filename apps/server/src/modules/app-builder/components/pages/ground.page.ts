@@ -46,14 +46,40 @@ export class GroundPage {
         case 'create':
           return {
             name: 'createGround',
-            path: 'form.inputs',
             queryKey: '/api/v1/grounds',
+            validationFields: {
+              'form.inputs.name': {
+                required: { value: true, message: '그라운드 이름은 필수입니다' }
+              },
+              'form.inputs.label': {
+                required: { value: true, message: '라벨은 필수입니다' }
+              },
+              'form.inputs.email': {
+                patterns: [{
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '올바른 이메일 형식이 아닙니다'
+                }]
+              }
+            },
           };
         case 'modify':
           return {
             name: 'updateGroundById',
-            path: 'form.inputs',
             queryKey: '/api/v1/grounds',
+            validationFields: {
+              'form.inputs.name': {
+                required: { value: true, message: '그라운드 이름은 필수입니다' }
+              },
+              'form.inputs.label': {
+                required: { value: true, message: '라벨은 필수입니다' }
+              },
+              'form.inputs.email': {
+                patterns: [{
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: '올바른 이메일 형식이 아닙니다'
+                }]
+              }
+            },
             pathParams: {
               groundId: 'params.groundId', // pageState.groundId에서 ID를 가져옴
             },

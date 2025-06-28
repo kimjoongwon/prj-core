@@ -50,7 +50,14 @@ export class GroupPage {
             mutation: {
               name: 'createGroup',
               queryKey: '/api/v1/groups',
-              path: 'form.inputs',
+              validationFields: {
+                'form.inputs.name': {
+                  required: { value: true, message: '그룹 이름은 필수입니다' }
+                },
+                'form.inputs.label': {
+                  required: { value: true, message: '라벨은 필수입니다' }
+                }
+              },
             },
             navigator: {
               type: 'back',
@@ -68,7 +75,14 @@ export class GroupPage {
             mutation: {
               name: 'updateGroupById',
               queryKey: '/api/v1/groups',
-              path: 'form.inputs',
+              validationFields: {
+                'form.inputs.name': {
+                  required: { value: true, message: '그룹 이름은 필수입니다' }
+                },
+                'form.inputs.label': {
+                  required: { value: true, message: '라벨은 필수입니다' }
+                }
+              },
             },
             navigator: {
               type: 'back',

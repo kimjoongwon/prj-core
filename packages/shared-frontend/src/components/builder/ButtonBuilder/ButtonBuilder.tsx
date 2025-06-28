@@ -2,18 +2,20 @@ import { Button as BaseButton, Text } from '@shared/frontend';
 import { IButtonBuilder } from '@shared/types';
 import { addToast } from '@heroui/react';
 import { observer } from 'mobx-react-lite';
-import { get } from 'lodash-es';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
 import { usePage } from '../../../provider';
+import { validateFields } from '../../../utils/validation';
+import { toJS } from 'mobx';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
   const {
     mutation,
-    validation,
     buttonType,
     navigator,
     onPress: onBeforePress,
+    // @ts-ignore
+    isReadOnly,
   } = props;
   const page = usePage();
   const state = page.state;
@@ -27,35 +29,13 @@ export const ButtonBuilder = observer((props: IButtonBuilder) => {
 
   // 버튼 validation 체크 함수
   const validateButton = (): { isValid: boolean; errorMessage?: string } => {
-    if (!validation) return { isValid: true };
-
-    const { required, patterns } = validation;
-    // mutation path가 있는 경우에만 get 함수 호출
-    let value;
-    if (mutation?.path) {
-      value = get(state, mutation.path);
-    }
-    // 필수 여부 검증
-    if (required?.value && (!value || value === '')) {
-      return { isValid: false, errorMessage: required.message };
+    // validationFields가 있으면 개별 필드 검증 사용
+    console.log('toJs mobx page state', toJS(state));
+    if (mutation?.validationFields) {
+      return validateFields(state, mutation.validationFields);
     }
 
-    // 정규표현식 검증
-    if (patterns && patterns.length > 0) {
-      for (const pattern of patterns) {
-        if (pattern.value instanceof RegExp) {
-          if (!pattern.value.test(String(value))) {
-            return { isValid: false, errorMessage: pattern.message };
-          }
-        } else {
-          // pattern.value가 RegExp가 아닌 경우를 처리 (예: string)
-          if (!new RegExp(pattern.value).test(String(value))) {
-            return { isValid: false, errorMessage: pattern.message };
-          }
-        }
-      }
-    }
-
+    // validationFields가 없으면 검증하지 않음
     return { isValid: true };
   };
 

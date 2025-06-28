@@ -49,7 +49,11 @@ export class CategoryPage {
             mutation: {
               name: 'createCategory',
               queryKey: '/api/v1/categories',
-              path: 'form.inputs',
+              validationFields: {
+                'form.inputs.name': {
+                  required: { value: true, message: '카테고리 이름은 필수입니다' }
+                }
+              },
             },
             navigator: {
               type: 'back',
@@ -67,7 +71,11 @@ export class CategoryPage {
             mutation: {
               name: 'updateCategoryById',
               queryKey: '/api/v1/categories',
-              path: 'form.inputs',
+              validationFields: {
+                'form.inputs.name': {
+                  required: { value: true, message: '카테고리 이름은 필수입니다' }
+                }
+              },
               pathParams: {
                 categoryId: 'categoryId', // pageState.categoryId에서 ID를 가져옴
               },

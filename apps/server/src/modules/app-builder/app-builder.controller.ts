@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Res, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, Req, Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth, ResponseEntity } from '@shared';
 import { AppBuilderService } from './app-builder.service';
@@ -24,6 +24,7 @@ const COOKIE_CONFIG = {
 @ApiTags('BUILDER')
 @Controller()
 export class AppBuilderController {
+  private readonly logger = new Logger(AppBuilderController.name);
   constructor(private readonly appBuilderService: AppBuilderService) {}
 
   @Get()
@@ -39,6 +40,11 @@ export class AppBuilderController {
     @Body() selectTenantDto: SelectTenantDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    this.logger.log('테넌트 선택 요청:', selectTenantDto);
+    if (!selectTenantDto.selectedTenantId) {
+      this.logger.warn('선택된 테넌트 ID가 없습니다.');
+      return new ResponseEntity(400, '테넌트를 선택해주세요.');
+    }
     this.setTenantCookie(res, selectTenantDto.selectedTenantId);
     return new ResponseEntity(200, RESPONSE_MESSAGES.SUCCESS);
   }

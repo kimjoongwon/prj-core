@@ -59,7 +59,6 @@ export const processMutation = (
     mutationName: mutation.name,
     hasPathParams: !!mutation.pathParams,
     hasData: !!mutation.data,
-    hasBody: !!mutation.body,
     pageStateExists: !!pageState,
   });
 
@@ -144,26 +143,25 @@ export const processMutation = (
       });
     }
 
-    // 🔗 3. 요청 바디 구성 - form.inputs + extractedData + mutation.body 병합
+    // 🔗 3. 요청 바디 구성 - form.inputs + extractedData 병합
     let requestBody: any = {};
 
     try {
-      // form.inputs에서 기본 데이터 가져오기
+      // form.inputs에서 기본 데이터 가져오기 (고정)
       const formInputs = pageState?.form?.inputs || {};
       logger.debug('📝 Form inputs retrieved', {
         hasFormInputs: Object.keys(formInputs).length > 0,
         formKeys: Object.keys(formInputs),
       });
 
-      // 우선순위: form.inputs < extractedData < mutation.body
-      requestBody = merge({}, formInputs, extractedData, mutation.body || {});
+      // 우선순위: formInputs < extractedData
+      requestBody = merge({}, formInputs, extractedData);
 
       logger.success('🔗 Request body assembled', {
         finalBodyKeys: Object.keys(requestBody),
         sources: {
           fromFormInputs: Object.keys(formInputs).length,
           fromExtractedData: Object.keys(extractedData).length,
-          fromMutationBody: Object.keys(mutation.body || {}).length,
         },
       });
     } catch (bodyError) {
@@ -176,7 +174,7 @@ export const processMutation = (
     }
 
     // 📤 4. API 인자에 요청 바디 추가 (pathParams 다음에 추가)
-    if (Object.keys(requestBody).length > 0 || mutation.body !== undefined) {
+    if (Object.keys(requestBody).length > 0) {
       apiArgs.push(requestBody);
       logger.debug('📤 Request body added to API args');
     }
