@@ -108,7 +108,9 @@ describe('ListboxBuilder', () => {
 
   it('should handle loading state', async () => {
     // Mock loading state
-    vi.mocked(require('@shared/api-client').APIManager.tenants.apply).mockReturnValueOnce({
+    vi.mocked(
+      require('@shared/api-client').APIManager.tenants.apply,
+    ).mockReturnValueOnce({
       data: null,
       isLoading: true,
     });
@@ -145,7 +147,9 @@ describe('ListboxBuilder', () => {
 
   it('should handle error state', async () => {
     // Mock error state
-    vi.mocked(require('@shared/api-client').APIManager.tenants.apply).mockReturnValueOnce({
+    vi.mocked(
+      require('@shared/api-client').APIManager.tenants.apply,
+    ).mockReturnValueOnce({
       data: null,
       isLoading: false,
       error: new Error('Network error'),
@@ -177,12 +181,16 @@ describe('ListboxBuilder', () => {
 
     render(<TestComponent />);
 
-    expect(screen.getByText('데이터를 불러오는 중 오류가 발생했습니다.')).toBeDefined();
+    expect(
+      screen.getByText('데이터를 불러오는 중 오류가 발생했습니다.'),
+    ).toBeDefined();
   });
 
   it('should handle empty state', async () => {
     // Mock empty data
-    vi.mocked(require('@shared/api-client').APIManager.tenants.apply).mockReturnValueOnce({
+    vi.mocked(
+      require('@shared/api-client').APIManager.tenants.apply,
+    ).mockReturnValueOnce({
       data: {
         data: [],
       },
