@@ -105,7 +105,7 @@ export type ElementName =
   | 'VideoUploader'
   | 'VStack'
   | 'WeekInput'
-  | 'WorkspaceSelect'
+  | 'TenantAutoComplete'
   | 'DataGridBuilder'
   | 'ResourceBuilder'
   | 'ListboxBuilder';

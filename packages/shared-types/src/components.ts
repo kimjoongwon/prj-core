@@ -400,6 +400,15 @@ export interface BaseAutoCompleteProps<T>
   }[];
 }
 
+// TenantAutoComplete component types
+export interface TenantAutoCompleteProps
+  extends Omit<AutocompleteProps, 'children' | 'selectedKey' | 'onSelectionChange'> {
+  /** Additional CSS classes */
+  className?: string;
+  /** Callback function called when a tenant is selected */
+  onTenantSelect?: (tenantId: string) => void;
+}
+
 export interface ButtonGroupProps {
   leftButtons?: GroupButton[];
   rightButtons?: GroupButton[];

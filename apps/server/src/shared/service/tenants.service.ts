@@ -112,4 +112,19 @@ export class TenantsService {
       count,
     };
   }
+
+  getManyByUserId(userId: string): Promise<Tenant[]> {
+    return this.tenantsRepository.findMany({
+      where: { userId },
+      include: {
+        space: {
+          include: {
+            ground: true,
+          },
+        },
+        user: true,
+        role: true,
+      },
+    });
+  }
 }

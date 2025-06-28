@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Delete, Edit, List, Plus } from 'lucide-react';
 import { useButtonLogic } from './useButtonLogic';
 import { usePage } from '../../../provider';
-import { validateFields } from '../../../utils/validation';
+import { FormValidationUtil } from '@shared/utils';
 import { toJS } from 'mobx';
 
 export const ButtonBuilder = observer((props: IButtonBuilder) => {
@@ -32,7 +32,7 @@ export const ButtonBuilder = observer((props: IButtonBuilder) => {
     // validationFields가 있으면 개별 필드 검증 사용
     console.log('toJs mobx page state', toJS(state));
     if (mutation?.validationFields) {
-      return validateFields(state, mutation.validationFields);
+      return FormValidationUtil.validateFields(state, mutation.validationFields);
     }
 
     // validationFields가 없으면 검증하지 않음

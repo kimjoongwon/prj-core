@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { validateSingleField, validateFields } from '../validation';
+import { FormValidationUtil } from '@shared/utils';
+
+const { validateSingleField, validateFields } = FormValidationUtil;
 import type { Validation } from '@shared/types';
 
 describe('validateSingleField', () => {
