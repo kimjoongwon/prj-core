@@ -218,12 +218,14 @@ export interface Query {
 
 export interface Mutation {
   name: string;
-  hasId?: boolean; // true면 id가 body에 포함되어야 함
   // 인벨리데이션을 위한 키
   queryKey?: string;
+  // 📦 데이터 매핑: PageState.params에서 값을 추출하여 form.inputs에 병합
+  data?: Record<string, string>; // { tenantId: 'params.id', userId: 'params.userId' }
+  // 🛣️ 경로 파라미터: PageState에서 값을 추출하여 mutation 인자로 사용
+  pathParams?: Record<string, string>; // { groundId: 'id', testId: 'id' }
   body?: any;
   path?: string;
-  idPath?: string; // id가 포함된 경로
 }
 
 export type Key = string | number;

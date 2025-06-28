@@ -21,9 +21,9 @@ export const PageProvider = observer((props: PageProviderProps) => {
     ...props.pageBuilder,
     state: {
       ...props.pageBuilder.state,
+      params,
       setState: (newState: any) => defaultTo(page.state, newState),
     },
-    params,
   }));
 
   return (

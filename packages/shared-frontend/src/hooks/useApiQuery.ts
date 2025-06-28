@@ -2,29 +2,13 @@ import { APIManager } from '@shared/api-client';
 import { ApiQueryBuilder, ApiQueryResult } from '@shared/types';
 import { isEmpty, get } from 'lodash-es';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { useParams, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { addToast } from '@heroui/react';
+import { LoggerUtil } from '@shared/utils';
 import { usePage } from '../provider';
 
 // 🎯 Debug logger utility for useApiQuery
-const logPrefix = '[useApiQuery]';
-const logger = {
-  info: (message: string, data?: any) => {
-    console.log(`🔍 ${logPrefix} ${message}`, data || '');
-  },
-  success: (message: string, data?: any) => {
-    console.log(`✅ ${logPrefix} ${message}`, data || '');
-  },
-  warning: (message: string, data?: any) => {
-    console.warn(`⚠️ ${logPrefix} ${message}`, data || '');
-  },
-  error: (message: string, data?: any) => {
-    console.error(`❌ ${logPrefix} ${message}`, data || '');
-  },
-  debug: (message: string, data?: any) => {
-    console.debug(`🐛 ${logPrefix} ${message}`, data || '');
-  },
-};
+const logger = LoggerUtil.create('[useApiQuery]');
 
 // 🚨 Toast notification utility
 const showToast = {
@@ -168,7 +152,7 @@ export const useTableQuery = (builder: ApiQueryBuilder): ApiQueryResult => {
 
   try {
     const page = usePage();
-    const params = useParams();
+    const params = page.state?.params; // PageProvider의 state.params 사용
     const query = builder.query;
     const initialSkip = query?.params?.skip || 0;
     const initialTake = builder.pagination?.defaultTake || query?.params?.take || 10;
@@ -287,7 +271,7 @@ export const useListQuery = (builder: ApiQueryBuilder): ApiQueryResult => {
 
   try {
     const page = usePage();
-    const params = useParams();
+    const params = page.state?.params; // PageProvider의 state.params 사용
     const query = builder.query;
     const { valueField, labelField } = builder.listOptions || {
       valueField: '',
@@ -406,7 +390,7 @@ export const useResourceQuery = (builder: ApiQueryBuilder): ApiQueryResult => {
   try {
     const page = usePage();
     const location = useLocation();
-    const params = useParams();
+    const params = page.state?.params; // PageProvider의 state.params 사용
     const query = builder.query;
 
     logger.debug('🗂️ Resource query context', {
@@ -562,7 +546,8 @@ export const useResourceQuery = (builder: ApiQueryBuilder): ApiQueryResult => {
     logger.error('💥 Resource query execution failed', error);
     showToast.error('리소스 쿼리 실패', error instanceof Error ? error.message : '알 수 없는 오류');
     
-    const params = useParams();
+    const page = usePage();
+    const params = page.state?.params; // PageProvider의 state.params 사용
     const location = useLocation();
     const getTypeFromPath = (pathname: string): string => {
       if (pathname.includes('/create')) return 'create';

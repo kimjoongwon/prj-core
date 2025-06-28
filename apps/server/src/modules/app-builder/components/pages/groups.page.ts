@@ -122,7 +122,9 @@ export class GroupsPage {
                                 className: 'min-w-unit-14 text-xs px-2 py-1',
                                 mutation: {
                                   name: 'deleteGroupById',
-                                  hasId: true,
+                                  pathParams: {
+                                    groupId: 'selectedRow.id', // pageState.selectedRow.id에서 ID를 가져옴
+                                  },
                                   queryKey: '/api/v1/groups',
                                 },
                               } satisfies IButtonBuilder,

@@ -54,6 +54,58 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
     });
   }, [data, isLoading, error, id, type]);
 
+  // 🆔 Query pathParams를 기반으로 URL params의 값들을 pageState에 설정
+  // 이렇게 설정된 값들은 나중에 mutation pathParams에서 참조됨
+  useEffect(() => {
+    logger.debug('🔍 Query PathParams processing started', {
+      hasState: !!state,
+      hasParams: !!state?.params,
+      hasQueryPathParams: !!props.query?.pathParams,
+      stateParams: state?.params,
+      queryPathParams: props.query?.pathParams
+    });
+
+    if (state?.params?.id && state.params.id !== 'new' && props.query?.pathParams) {
+      try {
+        // Query pathParams 설정에 따라 pageState에 URL params 값 설정
+        Object.entries(props.query.pathParams).forEach(([paramKey, statePath]) => {
+          // URL params의 id 값을 statePath 위치에 설정
+          const urlParamId = state.params.id;
+          
+          logger.debug(`🎯 Setting query pathParam ${paramKey} -> ${statePath}`, {
+            paramKey,
+            statePath,
+            urlParamId,
+            allParams: state.params
+          });
+          
+          // 해당 statePath에 URL params의 id 값 설정
+          // 예: pathParams: { groundId: 'groundId' } → pageState.groundId = urlParams.id
+          state[statePath] = urlParamId;
+          
+          logger.success(`✅ Query PathParam ${paramKey} set in pageState`, {
+            paramKey,
+            statePath,
+            urlParamId,
+            pageStateValue: state[statePath]
+          });
+        });
+        
+        logger.success('🆔 All query pathParams processed', {
+          queryPathParams: props.query.pathParams,
+          urlParams: state.params,
+          finalPageState: Object.keys(props.query.pathParams).reduce((acc, key) => {
+            const statePath = props.query.pathParams![key];
+            acc[statePath] = state[statePath];
+            return acc;
+          }, {} as any)
+        });
+      } catch (err) {
+        logger.error('🆔 Failed to process pathParams', err);
+      }
+    }
+  }, [state?.params?.id, state, props.query?.pathParams]);
+
   // 📝 Form inputs 초기화 - modify/detail 타입일 때 데이터를 form.inputs에 할당
   useEffect(() => {
     if (data && state && type && ['modify', 'detail'].includes(type)) {

@@ -136,8 +136,9 @@ export class GroundsPage {
                                 className: 'min-w-unit-14 text-xs px-2 py-1',
                                 mutation: {
                                   name: 'deleteGroundById',
-                                  hasId: true,
-                                  idPath: 'selectedRow.id',
+                                  pathParams: {
+                                    groundId: 'selectedRow.id', // pageState.selectedRow.id에서 ID를 가져옴
+                                  },
                                   queryKey: '/api/v1/grounds',
                                 },
                               } satisfies IButtonBuilder,

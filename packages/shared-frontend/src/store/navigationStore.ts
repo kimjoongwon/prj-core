@@ -1,8 +1,11 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type NavigateFunction } from 'react-router';
+import { LoggerUtil } from '@shared/utils';
 import { type INavigationStore } from './navigatorStore';
 import { type PlateStore } from './plateStore';
+
+const logger = LoggerUtil.create('[NavigationStore]');
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -62,7 +65,7 @@ export class NavigationStore implements INavigationStore {
           }
         }
       } catch (error) {
-        console.warn(
+        logger.warning(
           'Failed to restore navigation path from localStorage:',
           error,
         );
@@ -86,7 +89,7 @@ export class NavigationStore implements INavigationStore {
       try {
         localStorage.setItem('navigationCurrentPath', fullPath);
       } catch (error) {
-        console.warn('Failed to save navigation path to localStorage:', error);
+        logger.warning('Failed to save navigation path to localStorage:', error);
       }
     }
   }
@@ -408,7 +411,7 @@ export class NavigationStore implements INavigationStore {
   navigateToRouteOrFirstChild(routeName: string): void {
     const route = this.getRouteByName(routeName);
     if (!route) {
-      console.warn(`라우트 "${routeName}"을 찾을 수 없습니다.`);
+      logger.warning(`라우트 "${routeName}"을 찾을 수 없습니다.`);
       return;
     }
 

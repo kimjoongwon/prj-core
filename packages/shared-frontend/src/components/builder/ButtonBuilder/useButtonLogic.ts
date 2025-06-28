@@ -1,14 +1,17 @@
 import { addToast, ToastProps } from '@heroui/react';
 import { isAxiosError } from 'axios';
 import { ButtonResponse, Mutation, Navigator } from '@shared/types';
-import { APIManager } from '@shared/api-client';
 import { Plate, usePage } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { PathUtil } from '@shared/utils';
+import { PathUtil, LoggerUtil } from '@shared/utils';
 import { toJS } from 'mobx';
+import { executeMutation } from '../../../hooks/useMutation';
+
+// 🎯 Debug logger utility for useButtonLogic
+const logger = LoggerUtil.create('[useButtonLogic]');
 
 interface UseButtonLogicProps {
   mutation?: Mutation;
@@ -27,16 +30,23 @@ export const useButtonLogic = ({
   navigator,
   state,
 }: UseButtonLogicProps) => {
+  logger.info('🎬 Initializing useButtonLogic', {
+    hasMutation: !!mutation,
+    hasNavigator: !!navigator,
+    hasState: !!state,
+    mutationName: mutation?.name
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<ButtonResponse | null>(null);
-  const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const page = usePage();
   const pageState = page.state;
   const navigate = useNavigate();
   // Handle navigation based on navigator configuration
   const handleNavigation = (nav: Navigator) => {
+    logger.info('🧭 Starting navigation handling');
     const navigatorService = Plate.navigation.getNavigator();
 
     let finalParams: object = {};
@@ -44,12 +54,12 @@ export const useButtonLogic = ({
 
     // 1. pathParams가 있으면 라우트 패턴 파싱 및 파라미터 치환 처리
     if (nav.route?.pathParams && nav.route?.relativePath) {
-      console.log('🔄 Processing pathParams:', nav.route.pathParams);
-      console.log('📍 Route pattern:', nav.route.relativePath);
+      logger.debug('🔄 Processing pathParams', nav.route.pathParams);
+      logger.debug('📍 Route pattern', nav.route.relativePath);
 
       // 라우트 패턴에서 파라미터 키 추출 (예: :groundId, :tenantId)
       const paramKeys = nav.route.relativePath.match(/:(\w+)/g)?.map(param => param.slice(1)) || [];
-      console.log('� Extracted param keys from route:', paramKeys);
+      logger.debug('🔍 Extracted param keys from route', paramKeys);
 
       let processedPath = nav.route.relativePath;
 
@@ -61,17 +71,17 @@ export const useButtonLogic = ({
           if (value !== undefined) {
             // 라우트 패턴에서 :paramKey를 실제 값으로 치환
             processedPath = processedPath.replace(`:${paramKey}`, String(value));
-            console.log(`✅ Replaced :${paramKey} with ${value} from path: ${pageStatePath}`);
+            logger.success(`✅ Replaced :${paramKey} with ${value} from path: ${pageStatePath}`);
           } else {
-            console.warn(`⚠️ No value found at path: ${pageStatePath} for param: ${paramKey}`);
+            logger.warning(`⚠️ No value found at path: ${pageStatePath} for param: ${paramKey}`);
           }
         } else {
-          console.warn(`⚠️ No pathParams mapping found for param: ${paramKey}`);
+          logger.warning(`⚠️ No pathParams mapping found for param: ${paramKey}`);
         }
       }
 
       finalPath = processedPath;
-      console.log('🎯 Final processed path:', finalPath);
+      logger.success('🎯 Final processed path', finalPath);
     }
     // 2. 기존 방식: params가 있으면 추가
     else if (nav.route?.params) {
@@ -81,42 +91,52 @@ export const useButtonLogic = ({
     // 파라미터가 빈 객체가 아닌 경우에만 전달
     const hasParams = Object.keys(finalParams).length > 0;
     const paramsToPass = hasParams ? finalParams : undefined;
-    console.log('📦 Final navigation params:', paramsToPass);
+    logger.debug('📦 Final navigation params', paramsToPass);
+    
     if (nav.type === 'back') {
+      logger.info('🔙 Navigating back');
       navigatorService.goBack();
     } else if (nav.type === 'href') {
       // window.location.href로 이동 (외부 링크 또는 페이지 새로고침을 통한 이동)
       if (nav.route?.fullPath) {
+        logger.info('🌐 Navigating to external URL (fullPath)', nav.route.fullPath);
         window.location.href = nav.route.fullPath;
       } else if (nav.route?.relativePath) {
+        logger.info('🌐 Navigating to external URL (relativePath)', nav.route.relativePath);
         window.location.href = nav.route.relativePath;
       }
     } else if (nav.route) {
       // 1. finalPath가 있으면 finalPath를 우선 사용 (pathParams 처리 결과)
       if (finalPath) {
         if (nav.type === 'replace') {
+          logger.info('🔄 Replacing with finalPath', finalPath);
           navigatorService.replace(finalPath, paramsToPass);
         } else {
+          logger.info('➡️ Navigating to finalPath', finalPath);
           navigate(finalPath);
         }
       }
       // 2. fullPath가 있으면 fullPath 사용
       else if (nav.route.fullPath) {
         if (nav.type === 'replace') {
+          logger.info('🔄 Replacing with fullPath', nav.route.fullPath);
           navigatorService.replace(nav.route.fullPath, paramsToPass);
         } else {
+          logger.info('➡️ Navigating to fullPath', nav.route.fullPath);
           navigatorService.push(nav.route.fullPath, paramsToPass);
         }
       }
       // 3. relativePath가 있으면 relativePath 사용
       else if (nav.route.relativePath) {
         if (nav.type === 'replace') {
+          logger.info('🔄 Replacing with relativePath', nav.route.relativePath);
           navigatorService.replace(nav.route.relativePath, paramsToPass);
         } else {
           const url = PathUtil.getUrlWithParamsAndQueryString(
             nav.route.relativePath,
             paramsToPass,
           );
+          logger.info('➡️ Navigating to processed relativePath', url);
           navigate(url);
         }
       }
@@ -126,10 +146,12 @@ export const useButtonLogic = ({
           // For replace navigation
           const pathname = Plate.navigation.getPathByName(nav.route.name);
           if (pathname) {
+            logger.info('🔄 Replacing with route name', { name: nav.route.name, pathname });
             navigatorService.replace(pathname, paramsToPass);
           }
         } else {
           // Default to push navigation
+          logger.info('➡️ Navigating by route name', nav.route.name);
           navigatorService.pushByName(nav.route.name, paramsToPass);
         }
       }
@@ -137,11 +159,11 @@ export const useButtonLogic = ({
   };
 
   const handleApiCall = async () => {
-    console.log('🚀 handleApiCall started');
+    logger.info('🚀 API call started');
 
     // mutation이 없고 navigator만 있는 경우 바로 네비게이션 처리
     if (!mutation?.name && navigator) {
-      console.log('🧭 Navigation-only button: handling navigation directly');
+      logger.info('🧭 Navigation-only button: handling navigation directly');
       handleNavigation(navigator);
       return;
     }
@@ -163,178 +185,82 @@ export const useButtonLogic = ({
     setResponse(null);
 
     try {
-      console.log('📝 Initial data:', {
+      logger.debug('📝 Initial data', {
         mutation,
         navigator,
         state: toJS(state),
-        id,
+        pageState: toJS(pageState),
       });
 
       // Handle mutation if provided
       if (mutation?.name) {
-        console.log('🔧 Processing mutation:', mutation.name);
+        logger.info('🔧 Processing mutation with improved handler', mutation.name);
 
-        // APIManager에서 함수 가져오기
-        console.log('🔍 Looking for API function in APIManager...');
-        const apiFunction =
-          APIManager[mutation.name as keyof typeof APIManager];
-
-        if (!apiFunction) {
-          console.error(
-            `❌ API function with key "${mutation.name}" not found in APIManager`,
-          );
-          console.log('Available API functions:', Object.keys(APIManager));
-
-          // 에러 토스트 표시
-          addToast({
-            title: errorToast.title,
-            description: `API 함수를 찾을 수 없습니다: ${mutation.name}`,
-            color: 'danger',
-          });
-
-          return;
-        }
-
-        console.log('✅ API function found:', mutation.name);
-
-        // API 함수 호출시 mutation.body와 로컬 state 값을 병합
-        console.log('📊 Processing parameters...');
-        const serverBody = mutation?.body;
-        const localParams =
-          mutation?.path && state ? get(state, mutation.path) : undefined;
-
-        console.log('📋 Parameter details:', {
-          serverBody,
-          localParams,
-          mutationPath: mutation?.path,
-          stateExists: !!state,
-        });
-
-        // 두 객체를 병합 (서버 바디가 우선순위)
-        let apiParams;
         try {
-          if (serverBody && localParams) {
-            console.log('🔄 Merging server and local params');
-            // 둘 다 있으면 병합
-            apiParams = { ...localParams, ...serverBody };
-          } else if (serverBody) {
-            console.log('📤 Using server body only');
-            // 서버 바디만 있으면 사용
-            apiParams = serverBody;
-          } else if (localParams) {
-            console.log('📥 Using local params only');
-            // 로컬 파라미터만 있으면 사용
-            apiParams = localParams;
-          } else {
-            console.log('🚫 No params available');
-            // 둘 다 없으면 빈 객체로 초기화 (API 함수가 파라미터를 요구할 수 있음)
-            apiParams = undefined;
+          // 🚀 새로운 mutation 처리 함수 사용 (URL params 없이 pageState만 사용)
+          const response = await executeMutation(mutation, pageState);
+          
+          logger.success('✅ Mutation executed successfully', response);
+
+          // 응답 데이터 추출
+          const responseData = response?.data as ButtonResponse;
+          setResponse(responseData);
+
+          // 성공적인 뮤테이션 후 queryKey가 있으면 쿼리 무효화
+          if (mutation?.queryKey) {
+            try {
+              logger.info('🔄 Invalidating query with key', mutation.queryKey);
+              await queryClient.invalidateQueries({
+                queryKey: [mutation.queryKey],
+              });
+              logger.success('✅ Query invalidated successfully');
+            } catch (invalidateError) {
+              logger.warning('⚠️ Query invalidation failed', invalidateError);
+            }
           }
-        } catch (paramError) {
-          console.error('❌ Error processing parameters:', paramError);
-          throw new Error(`Parameter processing failed: ${paramError}`);
-        }
 
-        console.log('📋 Final API params:', apiParams);
-
-        // API 함수 호출 - useParams에서 id가 있으면 첫 번째 파라미터로 제공
-        console.log('🏗️ Building API arguments...');
-        const apiArgs: unknown[] = [];
-
-        // ID 처리 로직
-        let finalId: string | undefined;
-
-        if (mutation.idPath) {
-          // idPath가 있으면 pageState에서 해당 경로의 값을 가져옴
-          console.log(
-            '🔍 Getting ID from pageState using idPath:',
-            mutation.idPath,
-          );
-          finalId = get(pageState, mutation.idPath);
-          console.log('🆔 ID from pageState:', finalId);
-        } else if (id && mutation.hasId) {
-          // 기존 로직: useParams에서 id를 가져옴
-          console.log('🆔 Using ID from useParams:', id);
-          finalId = id;
-        }
-
-        // finalId가 있고 mutation.hasId가 true면 첫 번째 파라미터로 추가
-        if (finalId && mutation.hasId) {
-          console.log('✅ Adding ID to args:', finalId);
-          apiArgs.push(finalId);
-        } else if (mutation.hasId && !finalId) {
-          console.warn('⚠️ mutation.hasId is true but no ID found');
-        }
-
-        // apiParams가 있을 때만 추가 (undefined면 추가하지 않음)
-        if (apiParams !== undefined) {
-          console.log('📦 Adding params to args');
-          apiArgs.push(apiParams);
-        }
-
-        console.log('🎯 Final API args:', apiArgs);
-
-        console.log('🚀 Calling API function...');
-        const response = await (apiFunction as Function).apply(null, apiArgs);
-        console.log('✅ API call successful, response:', response);
-
-        // 응답 데이터 추출
-        console.log('📤 Processing response data...');
-        const responseData = response?.data as ButtonResponse;
-        setResponse(responseData);
-        console.log('📋 Response data:', responseData);
-
-        // 성공적인 뮤테이션 후 queryKey가 있으면 쿼리 무효화
-        if (mutation?.queryKey) {
-          try {
-            console.log(`🔄 Invalidating query with key: ${mutation.queryKey}`);
-            await queryClient.invalidateQueries({
-              queryKey: [mutation.queryKey],
+          // 토스트 처리
+          if (responseData?.toast) {
+            logger.debug('🍞 Showing response toast');
+            addToast({
+              title: responseData.toast.title || successToast.title,
+              description:
+                responseData.toast.description || successToast.description,
+              color: responseData.toast.color || successToast.color,
             });
-            console.log('✅ Query invalidated successfully');
-          } catch (invalidateError) {
-            console.warn('⚠️ Query invalidation failed:', invalidateError);
           }
-        }
 
-        // 토스트 처리
-        if (responseData?.toast) {
-          console.log('🍞 Showing response toast');
-          addToast({
-            title: responseData.toast.title || successToast.title,
-            description:
-              responseData.toast.description || successToast.description,
-            color: responseData.toast.color || successToast.color,
-          });
-        }
+          // 라우트 이름이 있으면 해당 경로로 이동
+          if (responseData?.routeName) {
+            logger.info('🧭 Navigating by route name', responseData.routeName);
+            Plate.navigation.getNavigator().pushByName(responseData.routeName);
+          }
 
-        // 라우트 이름이 있으면 해당 경로로 이동
-        if (responseData?.routeName) {
-          console.log('🧭 Navigating by route name:', responseData.routeName);
-          Plate.navigation.getNavigator().pushByName(responseData.routeName);
-        }
+          if (response?.state) {
+            logger.info('💾 Updating state form');
+            state.form = response.state.form;
+          }
 
-        if (response?.state) {
-          console.log('💾 Updating state form');
-          state.form = response.state.form;
-        }
-
-        // Handle navigation after successful API call
-        if (navigator) {
-          console.log('🧭 Handling navigation after API success');
-          handleNavigation(navigator);
+          // Handle navigation after successful API call
+          if (navigator) {
+            logger.info('🧭 Handling navigation after API success');
+            handleNavigation(navigator);
+          }
+          
+        } catch (mutationError) {
+          logger.error('❌ Mutation execution failed', mutationError);
+          // 에러는 executeMutation에서 이미 처리됨 (토스트 표시 등)
+          throw mutationError;
         }
       } else {
-        console.log('⚠️ No mutation found, but handleApiCall was called');
-        // mutation이 없는 경우는 이미 위에서 처리되므로 여기 도달하지 않아야 함
+        logger.warning('⚠️ No mutation found, but handleApiCall was called');
       }
 
-      console.log('✅ handleApiCall completed successfully');
+      logger.success('✅ API call completed successfully');
     } catch (error: unknown) {
-      console.error('❌ API call error occurred:', error);
-      console.error(
-        '📍 Error stack:',
-        error instanceof Error ? error.stack : 'No stack available',
+      logger.error('❌ API call error occurred', error);
+      logger.error('📍 Error stack', 
+        error instanceof Error ? error.stack : 'No stack available'
       );
 
       let errorMessage = errorToast.description;
@@ -345,7 +271,7 @@ export const useButtonLogic = ({
         const apiErrorMessage = error.response?.data?.message;
         const errorMessages = error.response?.data?.data?.message;
 
-        console.log('🔍 Error details:', {
+        logger.debug('🔍 Error details', {
           status,
           apiErrorMessage,
           errorMessages,
@@ -483,20 +409,24 @@ export const useButtonLogic = ({
  * @description 버튼의 mutation과 navigation 로직을 처리합니다.
  *
  * @example
- * // idPath 사용 예시:
- * // pageState에 { form: { inputs: { selectedUserId: "123" } } } 가 있을 때
+ * // pathParams 사용 예시:
+ * // pageState에 { groundId: "123", tenantId: "456" } 가 있을 때
  * const mutation = {
- *   name: "deleteUser",
- *   hasId: true,
- *   idPath: "form.inputs.selectedUserId", // pageState에서 ID를 가져올 경로
- *   queryKey: "users"
+ *   name: "updateGround",
+ *   pathParams: {
+ *     groundId: 'groundId' // pageState.groundId에서 값을 가져옴
+ *   },
+ *   queryKey: "grounds"
  * };
  *
- * // 기존 useParams 방식:
- * const mutationWithBody = {
- *   name: "updateUser",
- *   hasId: true, // useParams의 id를 사용
- *   queryKey: "users"
+ * // 복수 pathParams 예시:
+ * const mutationWithMultipleParams = {
+ *   name: "updateTenant",
+ *   pathParams: {
+ *     groundId: 'selectedRow.groundId',  // pageState.selectedRow.groundId
+ *     tenantId: 'selectedRow.id'         // pageState.selectedRow.id
+ *   },
+ *   queryKey: "tenants"
  * };
  */
 

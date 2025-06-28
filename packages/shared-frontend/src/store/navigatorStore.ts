@@ -1,6 +1,8 @@
-import { PathUtil } from '@shared/utils';
+import { PathUtil, LoggerUtil } from '@shared/utils';
 import { type NavigateFunction } from 'react-router';
 import { type PlateStore } from './plateStore';
+
+const logger = LoggerUtil.create('[NavigatorStore]');
 
 // Next.js와 React Router 모두 지원하기 위한 타입
 type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
@@ -59,7 +61,7 @@ export class NavigatorStore {
     searchParams?: Record<string, string>,
   ): void {
     if (!this?.navigateFunction) {
-      console.warn(
+      logger.warning(
         'NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.',
       );
       return;
@@ -98,7 +100,7 @@ export class NavigatorStore {
     searchParams?: Record<string, string>,
   ): void {
     if (!this.pathResolver) {
-      console.warn(
+      logger.warning(
         'Route name resolver가 설정되지 않았습니다. setRouteNameResolver를 먼저 호출하세요.',
       );
       return;
@@ -106,7 +108,7 @@ export class NavigatorStore {
 
     const pathname = this.pathResolver(routeName);
     if (!pathname) {
-      console.warn(`라우트 이름 "${routeName}"을 찾을 수 없습니다.`);
+      logger.warning(`라우트 이름 "${routeName}"을 찾을 수 없습니다.`);
       return;
     }
 
@@ -149,7 +151,7 @@ export class NavigatorStore {
     searchParams?: Record<string, string>,
   ): void {
     if (!this.navigateFunction) {
-      console.warn(
+      logger.warning(
         'NavigateFunction이 설정되지 않았습니다. setNavigateFunction을 먼저 호출하세요.',
       );
       return;

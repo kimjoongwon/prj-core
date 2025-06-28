@@ -47,14 +47,16 @@ export class GroundPage {
           return {
             name: 'createGround',
             path: 'form.inputs',
-            queryKey: 'getGetGroundsByQueryQueryKey',
+            queryKey: '/api/v1/grounds',
           };
         case 'modify':
           return {
             name: 'updateGroundById',
             path: 'form.inputs',
-            queryKey: 'getGetGroundsByQueryQueryKey',
-            hasId: true,
+            queryKey: '/api/v1/grounds',
+            pathParams: {
+              groundId: 'params.groundId', // pageState.groundId에서 ID를 가져옴
+            },
           };
         default:
           return undefined;
@@ -69,7 +71,7 @@ export class GroundPage {
           query: {
             name: 'useGetGroundById',
             pathParams: {
-              groundId: 'groundId',
+              groundId: 'params.groundId',
             },
           },
           resourceName: 'ground',

@@ -78,7 +78,7 @@ describe('CategoriesPage', () => {
       expect(deleteButton.color).toBe('danger');
       expect(deleteButton.startContent).toBe('trash');
       expect(deleteButton.mutation?.name).toBe('deleteCategory');
-      expect(deleteButton.mutation?.hasId).toBe(true);
+      expect(deleteButton.mutation?.pathParams?.categoryId).toBe('selectedRow.id');
       expect(deleteButton.mutation?.queryKey).toBe('useGetCategoriesByQuery');
     });
 

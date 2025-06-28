@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx';
-import { BrowserUtil } from '@shared/utils';
+import { BrowserUtil, LoggerUtil } from '@shared/utils';
 import { type PlateStore } from './plateStore';
+
+const logger = LoggerUtil.create('[AuthStore]');
 
 export class AuthStore {
   private plateStore: PlateStore;
@@ -14,7 +16,7 @@ export class AuthStore {
   async logout(logoutApi?: () => Promise<any>) {
     try {
       this.isLoggingOut = true;
-      console.log('로그아웃 처리 중...');
+      logger.info('로그아웃 처리 중...');
 
       // Call backend logout API to clear HttpOnly cookies if provided
       if (logoutApi) {
@@ -28,7 +30,7 @@ export class AuthStore {
       // Navigate to login page
       BrowserUtil.navigateTo('/admin/auth/login', true);
     } catch (error) {
-      console.error('로그아웃 중 오류가 발생했습니다:', error);
+      logger.error('로그아웃 중 오류가 발생했습니다:', error);
 
       // Even if API call fails, clear client storage and redirect
       BrowserUtil.clearLocalStorage();

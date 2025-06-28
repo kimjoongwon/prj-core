@@ -65,10 +65,12 @@ export class CategoryPage {
             color: 'primary',
             children: '수정',
             mutation: {
-              hasId: true,
               name: 'updateCategoryById',
               queryKey: '/api/v1/categories',
               path: 'form.inputs',
+              pathParams: {
+                categoryId: 'categoryId', // pageState.categoryId에서 ID를 가져옴
+              },
             },
             navigator: {
               type: 'back',

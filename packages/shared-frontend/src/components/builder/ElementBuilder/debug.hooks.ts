@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { ElementBuilder as ElementBuilderInterface } from '@shared/types';
+import { LoggerUtil } from '@shared/utils';
 import { isDevelopment } from './debug.utils';
+
+const logger = LoggerUtil.create('[ElementBuilder:Debug]');
 
 /**
  * ElementBuilder 디버깅을 위한 React Hook
@@ -15,7 +18,7 @@ export const useRenderCount = (elementName: string) => {
   useEffect(() => {
     renderCount.current += 1;
     if (isDevelopment) {
-      console.log(`🔄 ${elementName} rendered ${renderCount.current} times`);
+      logger.debug(`🔄 ${elementName} rendered ${renderCount.current} times`);
     }
   });
 
@@ -45,14 +48,15 @@ export const usePropsChanges = (elementName: string, props: any) => {
       });
 
       if (changedProps.length > 0) {
-        console.group(`📝 ${elementName} props changed`);
-        changedProps.forEach(key => {
-          console.log(`${key}:`, {
-            from: previous[key],
-            to: current[key],
+        if (isDevelopment) {
+          logger.debug(`📝 ${elementName} props changed`);
+          changedProps.forEach(key => {
+            logger.debug(`${key}:`, {
+              from: previous[key],
+              to: current[key],
+            });
           });
-        });
-        console.groupEnd();
+        }
       }
     }
 
@@ -73,26 +77,26 @@ export const useElementLifecycle = (
     if (!isDevelopment) return;
 
     mountTime.current = performance.now();
-    console.log(`🚀 ${elementName} mounted`);
+    logger.info(`🚀 ${elementName} mounted`);
 
     return () => {
       const unmountTime = performance.now();
       const lifespan = mountTime.current ? unmountTime - mountTime.current : 0;
-      console.log(`💀 ${elementName} unmounted after ${lifespan.toFixed(2)}ms`);
+      logger.info(`💀 ${elementName} unmounted after ${lifespan.toFixed(2)}ms`);
     };
   }, [elementName]);
 
   // path나 name이 변경되면 로깅
   useEffect(() => {
     if (!isDevelopment) return;
-    console.log(`🔗 ${elementName} path updated:`, elementBuilder.path);
+    logger.debug(`🔗 ${elementName} path updated:`, elementBuilder.path);
   }, [elementBuilder.path, elementName]);
 
   // validation이 변경되면 로깅
   useEffect(() => {
     if (!isDevelopment) return;
     if (elementBuilder.validation) {
-      console.log(
+      logger.debug(
         `✅ ${elementName} validation updated:`,
         elementBuilder.validation,
       );

@@ -152,8 +152,9 @@ export class CategoriesPage {
                                 className: 'min-w-unit-14 text-xs px-2 py-1',
                                 mutation: {
                                   name: 'deleteCategoryById',
-                                  hasId: true,
-                                  idPath: 'selectedRow.id',
+                                  pathParams: {
+                                    categoryId: 'selectedRow.id', // pageState.selectedRow.id에서 ID를 가져옴
+                                  },
                                   queryKey: '/api/v1/categories',
                                 },
                               } satisfies IButtonBuilder,
