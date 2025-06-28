@@ -99,6 +99,7 @@ export class GroupPage {
                   name: 'ResourceBuilder',
                   props: {
                     resourceName: 'group',
+                    type: 'resource' as const,
                     query: {
                       name: 'useGetGroupById',
                     },

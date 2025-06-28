@@ -35,7 +35,7 @@ const mockRouteBuilders: RouteBuilder[] = [
           },
           {
             name: '사용자 상세',
-            relativePath: 'users/:id',
+            relativePath: 'users/:userId',
             icon: 'UserDetail',
           },
         ],

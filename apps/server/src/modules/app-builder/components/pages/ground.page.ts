@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type {
+  ApiQueryBuilder,
   IButtonBuilder,
   InputProps,
   Mutation,
@@ -61,10 +62,17 @@ export class GroundPage {
     };
 
     // type에 따른 query 설정
-    const getQueryConfig = (type: PageType) => {
+    const getQueryConfig = (type: PageType): ApiQueryBuilder => {
       if (type === 'detail' || type === 'modify') {
         return {
-          name: 'useGetGroundById',
+          type: 'resource' as const,
+          query: {
+            name: 'useGetGroundById',
+            pathParams: {
+              groundId: 'groundId',
+            },
+          },
+          resourceName: 'ground',
         };
       }
       return undefined;
@@ -86,7 +94,7 @@ export class GroundPage {
     const isReadonly = type === 'detail';
 
     const mutationConfig = getMutationConfig(type);
-    const queryConfig = getQueryConfig(type);
+    const queryConfig: ApiQueryBuilder = getQueryConfig(type);
 
     // elements 배열 구성
     const baseElements = [
@@ -166,7 +174,11 @@ export class GroundPage {
                   name: 'ResourceBuilder',
                   props: {
                     resourceName: 'ground',
-                    query: queryConfig,
+                    ...(queryConfig || {
+                      type: 'resource' as const,
+                      query: { name: 'useGetGroundById' },
+                      resourceName: 'ground',
+                    }),
                     sections: [
                       {
                         stacks: [

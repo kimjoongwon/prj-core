@@ -99,6 +99,7 @@ export class CategoryPage {
                   name: 'ResourceBuilder',
                   props: {
                     resourceName: 'category',
+                    type: 'resource' as const,
                     query: {
                       name: 'useGetCategoryById',
                     },

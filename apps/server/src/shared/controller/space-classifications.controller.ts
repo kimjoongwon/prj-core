@@ -27,88 +27,88 @@ import {
 export class SpaceClassificationsController {
   constructor(private readonly service: SpaceClassificationsService) {}
 
-  @Post()
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async createSpaceClassification(
-    @Body() createSpaceClassificationDto: CreateSpaceClassificationDto,
-  ) {
-    const spaceClassification = await this.service.create(createSpaceClassificationDto);
+  // @Post()
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
+  // async createSpaceClassification(
+  //   @Body() createSpaceClassificationDto: CreateSpaceClassificationDto,
+  // ) {
+  //   const spaceClassification = await this.service.create(createSpaceClassificationDto);
 
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, spaceClassification),
-    );
-  }
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, spaceClassification),
+  //   );
+  // }
 
-  @Get(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async getSpaceClassification(@Param('id') id: string) {
-    const spaceClassification = await this.service.getById(id);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, spaceClassification),
-    );
-  }
+  // @Get(':spaceClassification')
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
+  // async getSpaceClassification(@Param('id') id: string) {
+  //   const spaceClassification = await this.service.getById(id);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, spaceClassification),
+  //   );
+  // }
 
-  @Patch(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async updateSpaceClassification(
-    @Param('id') id: string,
-    @Body() updateSpaceClassificationDto: UpdateSpaceClassificationDto,
-  ) {
-    const spaceClassification = await this.service.updateById(id, updateSpaceClassificationDto);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, spaceClassification),
-    );
-  }
+  // @Patch(':spaceClassificationId')
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
+  // async updateSpaceClassification(
+  //   @Param('id') id: string,
+  //   @Body() updateSpaceClassificationDto: UpdateSpaceClassificationDto,
+  // ) {
+  //   const spaceClassification = await this.service.updateById(id, updateSpaceClassificationDto);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, spaceClassification),
+  //   );
+  // }
 
-  @Patch(':id/removedAt')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async removeSpaceClassification(@Param('id') id: string) {
-    const spaceClassification = await this.service.removeById(id);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, spaceClassification),
-    );
-  }
+  // @Patch(':spaceClassificationId/removedAt')
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
+  // async removeSpaceClassification(@Param('id') id: string) {
+  //   const spaceClassification = await this.service.removeById(id);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, spaceClassification),
+  //   );
+  // }
 
-  @Delete(':id')
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
-  async deleteSpaceClassification(@Param('id') id: string) {
-    const spaceClassification = await this.service.deleteById(id);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, spaceClassification),
-    );
-  }
+  // @Delete(':spaceClassificationId')
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
+  // async deleteSpaceClassification(@Param('id') id: string) {
+  //   const spaceClassification = await this.service.deleteById(id);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, spaceClassification),
+  //   );
+  // }
 
-  @Get()
-  @Auth([])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK, { isArray: true })
-  async getSpaceClassificationsByQuery(@Query() query: QuerySpaceClassificationDto) {
-    const { items, count } = await this.service.getManyByQuery(query);
-    return new ResponseEntity(
-      HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceClassificationDto, items),
-      query.toPageMetaDto(count),
-    );
-  }
+  // @Get()
+  // @Auth([])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK, { isArray: true })
+  // async getSpaceClassificationsByQuery(@Query() query: QuerySpaceClassificationDto) {
+  //   const { items, count } = await this.service.getManyByQuery(query);
+  //   return new ResponseEntity(
+  //     HttpStatus.OK,
+  //     '성공',
+  //     plainToInstance(SpaceClassificationDto, items),
+  //     query.toPageMetaDto(count),
+  //   );
+  // }
 }

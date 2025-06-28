@@ -14,15 +14,7 @@ import type {
   ListboxProps as HeroListboxProps,
 } from '@heroui/react';
 import type { HeaderContext } from '@tanstack/react-table';
-import type {
-  Leaves,
-  MobxProps,
-  Route,
-  Option,
-  DataGridBuilder,
-  ResourceBuilder,
-  Validation,
-} from './types';
+import type { Leaves, MobxProps, Route, Option, Validation } from './builders';
 import type { ReactNode } from 'react';
 
 // Form and component props interfaces
@@ -97,22 +89,6 @@ export interface SortableMediaProps {
 export interface MediaUploadProps {
   mode: 'single' | 'multiple';
   maxFiles?: number;
-}
-
-export interface ListboxBuilderQuery {
-  apiKey: string;
-  params?: any;
-  valueField: string;
-  labelField: string;
-}
-
-export interface ListboxBuilderProps
-  extends Omit<
-    HeroListboxProps,
-    'options' | 'value' | 'onChange' | 'children'
-  > {
-  path: string;
-  query: ListboxBuilderQuery;
 }
 
 export interface VideoPlayerProps {
@@ -246,14 +222,6 @@ export interface BreadcrumbProps {
   onItemClick?: (item: BreadcrumbItem | Route) => void;
 }
 
-export interface BreadcrumbBuilderProps {
-  routeNames: string[];
-  separator?: string | React.ReactNode;
-  className?: string;
-  itemClassName?: string;
-  activeItemClassName?: string;
-}
-
 export interface CategoryCardProps {
   category: any; // CategoryDto type would be imported from model
   selected?: boolean;
@@ -352,15 +320,6 @@ export enum Months {
 }
 
 // Builder related interfaces
-export interface DataGridBuilderProps extends DataGridBuilder {}
-
-export interface ResourceBuilderProps extends ResourceBuilder {}
-
-export interface InputBuilderProps {
-  inputBuilder: any; // InputBuilderInterface
-  data?: (unknown & { id: string })[];
-}
-
 export interface VideoUploaderProps {
   label?: string;
 }
@@ -495,4 +454,15 @@ export interface SpacerProps {
    * Optional additional className
    */
   className?: string;
+}
+
+export interface CalendarState {
+  calendarInput: {
+    header: {
+      date: Date;
+      increaseMonth: () => void;
+      decreaseMonth: () => void;
+    };
+    dates: any[]; // Using any to avoid DateModel conflicts
+  };
 }

@@ -28,15 +28,13 @@ export class GroundsPage {
                         navigator: {
                           type: 'push',
                           route: {
-                            relativePath: ':id/create',
-                            params: {
-                              id: 'new',
-                            },
+                            relativePath: 'new/create',
                           },
                         },
                       },
                     ],
                     table: {
+                      type: 'table' as const,
                       query: {
                         name: 'useGetGroundsByQuery',
                         params: {
@@ -101,8 +99,10 @@ export class GroundsPage {
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    relativePath: ':id/detail',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':groundId/detail',
+                                    pathParams: {
+                                      groundId: 'selectedRow.id',
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -118,8 +118,10 @@ export class GroundsPage {
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    relativePath: ':id/modify',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':groundId/modify',
+                                    pathParams: {
+                                      groundId: 'selectedRow.id',
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,

@@ -8,7 +8,7 @@ import {
   HStack,
   VStack,
   Text,
-  useGetTableQuery,
+  useApiQuery,
 } from '@shared/frontend';
 import { DataGridBuilderProps } from '@shared/types';
 import { CellBuilder } from '../CellBuilder';
@@ -21,7 +21,24 @@ export const DataGridBuilder = observer(
     const page = usePage();
     const state = page.state;
     const { data, isLoading, meta, skip, take, setSkip, setTake } =
-      useGetTableQuery(table);
+      useApiQuery({
+        type: 'table',
+        query: table.query || { name: '', params: {} },
+        pagination: {
+          enabled: true,
+          defaultTake: table.query?.params?.take || 10,
+        },
+      });
+
+    console.log('[DataGridBuilder] Query result:', { 
+      dataCount: data?.length, 
+      meta, 
+      skip, 
+      take, 
+      isLoading,
+      queryName: table.query?.name,
+      queryParams: table.query?.params
+    });
 
     const columns = table?.columns?.map(column => {
       return {
@@ -41,6 +58,14 @@ export const DataGridBuilder = observer(
     }
 
     const currentPage = Math.floor((skip || 0) / (take || 10)) + 1;
+
+    console.log('[DataGridBuilder] Pagination info:', { 
+      currentPage, 
+      skip, 
+      take, 
+      pageCount: meta?.pageCount,
+      showPagination: !!(take && meta?.pageCount && meta.pageCount > 1)
+    });
 
     return (
       <VStack className="gap-6">
@@ -62,14 +87,14 @@ export const DataGridBuilder = observer(
           columns={toJS(columns) || []}
           selectionMode={table?.selectionMode}
         />
-        {table?.query?.params?.take && (
+        {(take && meta?.pageCount && meta.pageCount > 1) && (
           <Pagination
             total={meta?.pageCount ?? 1}
             initialPage={currentPage}
             page={currentPage}
             onChange={async page => {
-              setSkip((page - 1) * (take || 10));
-              setTake(take || 10);
+              setSkip?.((page - 1) * (take || 10));
+              setTake?.(take || 10);
             }}
           />
         )}

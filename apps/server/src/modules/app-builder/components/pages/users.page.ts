@@ -16,12 +16,17 @@ export class UsersPage {
                   name: 'DataGridBuilder',
                   props: {
                     table: {
+                      type: 'table' as const,
                       query: {
                         name: 'useGetUsersByQuery',
                         params: {
                           skip: 0,
                           take: 10,
                         },
+                      },
+                      pagination: {
+                        enabled: true,
+                        defaultTake: 10,
                       },
                       columns: [
                         {

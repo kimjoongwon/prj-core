@@ -18,9 +18,14 @@ export class TenantSelectPage {
                   title: '그라운드 선택',
                   path: 'selectTenantDto.selectedTenantId',
                   query: {
-                    apiKey: 'useGetTenantsByQuery',
-                    valueField: 'id',
-                    labelField: 'space.ground.name',
+                    type: 'list',
+                    query: {
+                      name: 'useGetTenantsByQuery',
+                    },
+                    listOptions: {
+                      valueField: 'id',
+                      labelField: 'space.ground.name',
+                    },
                   },
                   selectionMode: 'single',
                 } as ListboxBuilderProps,

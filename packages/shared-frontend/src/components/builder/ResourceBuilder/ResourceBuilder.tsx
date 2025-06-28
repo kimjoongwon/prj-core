@@ -3,21 +3,22 @@ import { observer } from 'mobx-react-lite';
 import { Spinner, Alert } from '@heroui/react';
 import { v4 } from 'uuid';
 import { ResourceBuilderProps } from '@shared/types';
-import { useGetResourceQuery } from '../../../hooks';
+import { useApiQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
 import { usePage } from '../../../provider';
 import { capitalize } from 'lodash-es';
-import { APIManager } from '@shared/api-client';
 
 export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   const { resourceName: rn, sections } = props;
   const resourceName = capitalize(rn);
   const page = usePage();
   const state = page.state;
-  const { data, isLoading, error, id, type } = useGetResourceQuery(props);
+  
+  // props 자체가 ApiQueryBuilder를 확장하므로 그대로 사용
+  const { data, isLoading, error, id, type } = useApiQuery(props);
   // data가 있을 때 state의 form.inputs에 할당
   useEffect(() => {
-    if (data && state && ['modify', 'detail'].includes(type)) {
+    if (data && state && type && ['modify', 'detail'].includes(type)) {
       if (!state.form) {
         state.form = {};
       }

@@ -37,7 +37,7 @@ describe('CategoriesPage', () => {
       expect(createButton.children).toBe('카테고리 생성');
       expect(createButton.color).toBe('primary');
       expect(createButton.navigator?.route?.fullPath).toBe(
-        '/admin/dashboard/space-service/categories/:id/create',
+        '/admin/dashboard/space-service/categories/:categoryId/create',
       );
 
       // 테이블 컬럼 확인
@@ -63,14 +63,14 @@ describe('CategoriesPage', () => {
       expect(editButton.children).toBe('수정');
       expect(editButton.color).toBe('warning');
       expect(editButton.startContent).toBe('edit');
-      expect(editButton.navigator?.route?.relativePath).toBe(':id/modify');
+      expect(editButton.navigator?.route?.relativePath).toBe(':categoryId/modify');
 
       // 추가 버튼
       const addButton = actionButtons[2];
       expect(addButton.children).toBe('추가');
       expect(addButton.color).toBe('success');
       expect(addButton.startContent).toBe('plus');
-      expect(addButton.navigator?.route?.relativePath).toBe(':id/add');
+      expect(addButton.navigator?.route?.relativePath).toBe(':categoryId/add');
 
       // 삭제 버튼
       const deleteButton = actionButtons[3];

@@ -42,7 +42,6 @@ import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
-import { DataGridBuilderService } from '../../modules/app-builder/components/data-grid/data-grid-builder.service';
 import { ElementBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
 import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
 
@@ -79,7 +78,6 @@ const modules = [
   AssignmentsService,
   AssignmentsRepository,
   ElementBuilderService,
-  DataGridBuilderService,
   GroundsService,
   GroundsRepository,
   ResourceConfigService,

@@ -115,16 +115,24 @@ export const ActionCell = <T extends { id?: string }>({
                   return;
                 }
 
-                // paramPaths가 없는 경우 처리
-                if (!button.navigator.route.paramPaths) {
-                  console.warn('⚠️ Navigator route paramPaths is missing');
-                  addToast({
-                    title: '네비게이션 오류',
-                    description: '경로 설정이 올바르지 않습니다.',
-                    color: 'warning',
-                  });
-                  console.groupEnd();
-                  return;
+                // pathParams가 있는 경우 검증
+                if (button.navigator.route.pathParams && button.navigator.route.relativePath) {
+                  // 라우트 패턴에서 파라미터 키 추출
+                  const paramKeys = button.navigator.route.relativePath.match(/:(\w+)/g)?.map(param => param.slice(1)) || [];
+                  
+                  // pathParams에 모든 필요한 매핑이 있는지 확인
+                  for (const paramKey of paramKeys) {
+                    if (!button.navigator.route.pathParams[paramKey]) {
+                      console.warn(`⚠️ Missing pathParams mapping for param: ${paramKey}`);
+                      addToast({
+                        title: '네비게이션 오류',
+                        description: `경로 파라미터 매핑이 누락되었습니다: ${paramKey}`,
+                        color: 'warning',
+                      });
+                      console.groupEnd();
+                      return;
+                    }
+                  }
                 }
               }
 

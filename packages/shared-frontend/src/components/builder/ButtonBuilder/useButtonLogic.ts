@@ -39,31 +39,43 @@ export const useButtonLogic = ({
   const handleNavigation = (nav: Navigator) => {
     const navigatorService = Plate.navigation.getNavigator();
 
-    // paramPaths와 params를 모두 활용하여 최종 파라미터 구성
     let finalParams: object = {};
+    let finalPath: string | undefined;
 
-    // 1. paramPaths가 있으면 pageState에서 각 경로의 값을 추출하여 객체 생성
-    if (nav.route?.paramPaths && Array.isArray(nav.route.paramPaths)) {
-      console.log('📋 Processing paramPaths:', nav.route.paramPaths);
+    // 1. pathParams가 있으면 라우트 패턴 파싱 및 파라미터 치환 처리
+    if (nav.route?.pathParams && nav.route?.relativePath) {
+      console.log('🔄 Processing pathParams:', nav.route.pathParams);
+      console.log('📍 Route pattern:', nav.route.relativePath);
 
-      for (const path of nav.route.paramPaths) {
-        const value = get(pageState, path);
-        if (value !== undefined) {
-          // 경로의 마지막 키를 객체의 키로 사용
-          const key = path.split('.').pop() || path;
-          finalParams = { ...finalParams, [key]: value };
-          console.log(`✅ Extracted ${key}: ${value} from path: ${path}`);
+      // 라우트 패턴에서 파라미터 키 추출 (예: :groundId, :tenantId)
+      const paramKeys = nav.route.relativePath.match(/:(\w+)/g)?.map(param => param.slice(1)) || [];
+      console.log('� Extracted param keys from route:', paramKeys);
+
+      let processedPath = nav.route.relativePath;
+
+      // 각 파라미터 키에 대해 pathParams 매핑을 확인하고 값 치환
+      for (const paramKey of paramKeys) {
+        const pageStatePath = nav.route.pathParams[paramKey];
+        if (pageStatePath) {
+          const value = get(pageState, pageStatePath);
+          if (value !== undefined) {
+            // 라우트 패턴에서 :paramKey를 실제 값으로 치환
+            processedPath = processedPath.replace(`:${paramKey}`, String(value));
+            console.log(`✅ Replaced :${paramKey} with ${value} from path: ${pageStatePath}`);
+          } else {
+            console.warn(`⚠️ No value found at path: ${pageStatePath} for param: ${paramKey}`);
+          }
         } else {
-          console.warn(`⚠️ No value found at path: ${path}`);
+          console.warn(`⚠️ No pathParams mapping found for param: ${paramKey}`);
         }
       }
 
-      console.log('📦 Params from paths:', finalParams);
+      finalPath = processedPath;
+      console.log('🎯 Final processed path:', finalPath);
     }
-
-    // 2. params가 있으면 추가 (params가 우선순위를 가짐)
-    if (nav.route?.params) {
-      finalParams = { ...finalParams, ...nav.route.params };
+    // 2. 기존 방식: params가 있으면 추가
+    else if (nav.route?.params) {
+      finalParams = { ...nav.route.params };
     }
 
     // 파라미터가 빈 객체가 아닌 경우에만 전달
@@ -80,15 +92,23 @@ export const useButtonLogic = ({
         window.location.href = nav.route.relativePath;
       }
     } else if (nav.route) {
-      // 1. fullPath가 있으면 fullPath를 우선 사용
-      if (nav.route.fullPath) {
+      // 1. finalPath가 있으면 finalPath를 우선 사용 (pathParams 처리 결과)
+      if (finalPath) {
+        if (nav.type === 'replace') {
+          navigatorService.replace(finalPath, paramsToPass);
+        } else {
+          navigate(finalPath);
+        }
+      }
+      // 2. fullPath가 있으면 fullPath 사용
+      else if (nav.route.fullPath) {
         if (nav.type === 'replace') {
           navigatorService.replace(nav.route.fullPath, paramsToPass);
         } else {
           navigatorService.push(nav.route.fullPath, paramsToPass);
         }
       }
-      // 2. relativePath가 있으면 relativePath 사용
+      // 3. relativePath가 있으면 relativePath 사용
       else if (nav.route.relativePath) {
         if (nav.type === 'replace') {
           navigatorService.replace(nav.route.relativePath, paramsToPass);
@@ -100,7 +120,7 @@ export const useButtonLogic = ({
           navigate(url);
         }
       }
-      // 3. name이 있으면 name으로 라우트 검색
+      // 4. name이 있으면 name으로 라우트 검색
       else if (nav.route.name) {
         if (nav.type === 'replace') {
           // For replace navigation
@@ -177,30 +197,30 @@ export const useButtonLogic = ({
 
         console.log('✅ API function found:', mutation.name);
 
-        // API 함수 호출시 mutation.params와 로컬 state 값을 병합
+        // API 함수 호출시 mutation.body와 로컬 state 값을 병합
         console.log('📊 Processing parameters...');
-        const serverParams = mutation?.params;
+        const serverBody = mutation?.body;
         const localParams =
           mutation?.path && state ? get(state, mutation.path) : undefined;
 
         console.log('📋 Parameter details:', {
-          serverParams,
+          serverBody,
           localParams,
           mutationPath: mutation?.path,
           stateExists: !!state,
         });
 
-        // 두 객체를 병합 (서버 파라미터가 우선순위)
+        // 두 객체를 병합 (서버 바디가 우선순위)
         let apiParams;
         try {
-          if (serverParams && localParams) {
+          if (serverBody && localParams) {
             console.log('🔄 Merging server and local params');
             // 둘 다 있으면 병합
-            apiParams = { ...localParams, ...serverParams };
-          } else if (serverParams) {
-            console.log('📤 Using server params only');
-            // 서버 파라미터만 있으면 사용
-            apiParams = serverParams;
+            apiParams = { ...localParams, ...serverBody };
+          } else if (serverBody) {
+            console.log('📤 Using server body only');
+            // 서버 바디만 있으면 사용
+            apiParams = serverBody;
           } else if (localParams) {
             console.log('📥 Using local params only');
             // 로컬 파라미터만 있으면 사용
@@ -473,7 +493,7 @@ export const useButtonLogic = ({
  * };
  *
  * // 기존 useParams 방식:
- * const mutationWithParams = {
+ * const mutationWithBody = {
  *   name: "updateUser",
  *   hasId: true, // useParams의 id를 사용
  *   queryKey: "users"
@@ -481,26 +501,28 @@ export const useButtonLogic = ({
  */
 
 /**
- * Navigator Route paramPaths 사용 예시:
+ * Navigator Route pathParams 사용 예시:
  *
  * @example
- * // 기존 방식 (deprecated):
+ * // 새로운 pathParams 방식:
  * const navigator = {
  *   route: {
- *     paramsPath: "form.inputs" // 전체 객체를 가져옴
+ *     relativePath: ':groundId/detail/tenants/:tenantId',
+ *     pathParams: {
+ *       'groundId': 'selectedRow.groundId',  // 라우트의 :groundId 파라미터
+ *       'tenantId': 'selectedRow.id'         // 라우트의 :tenantId 파라미터
+ *     }
  *   }
  * };
  *
- * // 새로운 방식:
- * const navigator = {
- *   route: {
- *     paramPaths: [
- *       "selectedRow.id",        // → { id: "123" }
- *       "form.inputs.name",      // → { name: "John" }
- *       "dataGrid.filter.status" // → { status: "active" }
- *     ]
+ * // page.state 예시:
+ * {
+ *   selectedRow: {
+ *     id: '123',
+ *     groundId: '456',
+ *     name: 'My Tenant'
  *   }
- * };
+ * }
  *
- * // 결과: { id: "123", name: "John", status: "active" }
+ * // 결과: '456/detail/tenants/123'
  */

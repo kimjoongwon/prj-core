@@ -38,6 +38,7 @@ export class GroupsPage {
                       },
                     ],
                     table: {
+                      type: 'table' as const,
                       query: {
                         name: 'useGetGroupsByQuery',
                         params: {
@@ -45,6 +46,10 @@ export class GroupsPage {
                           take: 10,
                           type,
                         },
+                      },
+                      pagination: {
+                        enabled: true,
+                        defaultTake: 10,
                       },
                       columns: [
                         {
@@ -80,7 +85,10 @@ export class GroupsPage {
                                   type: 'push',
                                   route: {
                                     name: '그라운드 그룹 디테일',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':groupId/detail',
+                                    pathParams: {
+                                      groupId: 'selectedRow.id',
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -96,8 +104,10 @@ export class GroupsPage {
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    relativePath: ':id/modify',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':groupId/modify',
+                                    pathParams: {
+                                      groupId: 'selectedRow.id',
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -113,7 +123,6 @@ export class GroupsPage {
                                 mutation: {
                                   name: 'deleteGroupById',
                                   hasId: true,
-                                  idPath: 'selectedRow.id',
                                   queryKey: '/api/v1/groups',
                                 },
                               } satisfies IButtonBuilder,

@@ -4,6 +4,7 @@ import type {
   CardProps,
   InputProps,
   TableProps,
+  ListboxProps as HeroListboxProps,
 } from '@heroui/react';
 import { RouteNames } from './routes';
 
@@ -178,14 +179,8 @@ export interface Navigator {
     fullPath?: string;
     relativePath?: string;
     params?: object;
-    paramPaths?: string[]; // pageState에서 추출할 경로들의 배열
+    pathParams?: Record<string, string>; // 라우트 파라미터 키와 pageState 경로의 매핑
   };
-}
-
-export interface SuccessOrFailure {
-  link: string;
-  message?: string;
-  params?: object & { resourceId: string };
 }
 
 export type PageTypes = 'create' | 'modify' | 'detail' | 'add';
@@ -217,15 +212,16 @@ export interface RouteBuilder {
 
 export interface Query {
   name: string;
+  pathParams?: Record<string, string>; // { groundId: 'id', testId: 'id' }
   params?: any;
 }
 
 export interface Mutation {
   name: string;
-  hasId?: boolean; // true면 id가 params에 포함되어야 함
+  hasId?: boolean; // true면 id가 body에 포함되어야 함
   // 인벨리데이션을 위한 키
   queryKey?: string;
-  params?: any;
+  body?: any;
   path?: string;
   idPath?: string; // id가 포함된 경로
 }
@@ -246,6 +242,7 @@ export interface PageState<CDO> {
     filter?: any;
     sortings?: any;
   };
+  params?: Record<string, string>; // 라우트 파라미터 키와 pageState 경로의 매핑
 }
 
 export interface TabBuilder {
@@ -254,13 +251,11 @@ export interface TabBuilder {
 
 export interface DataGridBuilder {
   buttons?: IButtonBuilder[];
-  filter?: FilterBuilder;
   table: TableBuilder;
 }
 
-export interface ResourceBuilder {
+export interface ResourceBuilder extends ApiQueryBuilder {
   resourceName: string;
-  query?: Query;
   sections?: SectionBuilder[];
 }
 
@@ -272,7 +267,48 @@ export interface PageBuilder {
   sections?: SectionBuilder[];
 }
 
-export interface FilterBuilder {}
+// 통합 API 쿼리 시스템
+export type QueryType = 'table' | 'list' | 'resource';
+
+export interface ApiQueryBuilder {
+  type: QueryType;
+  query: Query;
+
+  // 테이블 전용 옵션
+  pagination?: {
+    enabled: boolean;
+    defaultTake?: number;
+  };
+
+  // 리스트 전용 옵션
+  listOptions?: {
+    valueField: string;
+    labelField: string;
+  };
+
+  // 리소스 전용 옵션
+  resourceName?: string;
+}
+
+export interface ApiQueryResult {
+  data?: any;
+  isLoading: boolean;
+  error?: any;
+
+  // 테이블 전용 반환값
+  meta?: any;
+  skip?: number;
+  take?: number;
+  setSkip?: (value: number) => void;
+  setTake?: (value: number) => void;
+
+  // 리스트 전용 반환값
+  options?: Array<{ value: any; text: string }>;
+
+  // 리소스 전용 반환값
+  id?: string;
+  type?: 'create' | 'modify' | 'detail' | 'add';
+}
 
 export interface TableState {
   filter?: unknown;
@@ -283,9 +319,8 @@ export interface TableState {
   };
 }
 
-export interface TableBuilder extends TableProps {
+export interface TableBuilder extends TableProps, ApiQueryBuilder {
   state?: TableState;
-  query?: Query;
   selection?: Key[] | 'all';
   columns: ColumnBuilder[];
 }
@@ -431,4 +466,38 @@ export interface SectionBuilderProps {
 }
 export interface TabNavigationProps {
   tabBuilder: TabBuilder;
+}
+
+// Builder interfaces moved from components.ts
+export interface ListboxBuilderQuery {
+  apiKey: string;
+  params?: any;
+  valueField: string;
+  labelField: string;
+}
+
+export interface ListboxBuilderProps
+  extends Omit<
+    HeroListboxProps,
+    'options' | 'value' | 'onChange' | 'children'
+  > {
+  path: string;
+  query: ApiQueryBuilder;
+}
+
+export interface BreadcrumbBuilderProps {
+  routeNames: string[];
+  separator?: string | React.ReactNode;
+  className?: string;
+  itemClassName?: string;
+  activeItemClassName?: string;
+}
+
+export interface DataGridBuilderProps extends DataGridBuilder {}
+
+export interface ResourceBuilderProps extends ResourceBuilder {}
+
+export interface InputBuilderProps {
+  inputBuilder: any; // InputBuilderInterface
+  data?: (unknown & { id: string })[];
 }

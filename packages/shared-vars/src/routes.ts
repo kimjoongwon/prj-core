@@ -103,7 +103,7 @@ export const rawRoutes: RouteBuilder[] = [
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND,
-                    relativePath: ':id',
+                    relativePath: ':groundId',
                     icon: 'MapPin',
                     children: [
                       {
@@ -144,7 +144,7 @@ export const rawRoutes: RouteBuilder[] = [
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_CATEGORY,
-                    relativePath: ':id',
+                    relativePath: ':categoryId',
                     icon: 'FolderOpen',
                     children: [
                       {
@@ -190,7 +190,7 @@ export const rawRoutes: RouteBuilder[] = [
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_GROUP,
-                    relativePath: ':id',
+                    relativePath: ':groupId',
                     icon: 'Users',
                     children: [
                       {

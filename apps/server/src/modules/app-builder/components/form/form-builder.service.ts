@@ -34,10 +34,9 @@ export class FormBuilderService {
     tenantId: string;
     mutationId?: string;
     payloadPath?: string;
-    params?: Record<string, any>;
+    body?: Record<string, any>;
   }): IButtonBuilder {
-    const { isUpdate, resourceName, serviceId, tenantId, mutationId, payloadPath, params } =
-      options;
+    const { isUpdate, resourceName, serviceId, tenantId, mutationId, payloadPath, body } = options;
 
     const mutationName = isUpdate ? `update${resourceName}` : `create${resourceName}`;
     const buttonName = isUpdate ? '수정' : '생성';
@@ -49,11 +48,11 @@ export class FormBuilderService {
     const mutation: any = {
       name: mutationName,
       invalidationKey: `/api/v1/${resourceName.toLowerCase()}s`,
-      params: {
+      body: {
         parentId: undefined,
         serviceId,
         tenantId,
-        ...params,
+        ...body,
       },
     };
     if (mutationId) mutation.id = mutationId;

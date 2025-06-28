@@ -3,6 +3,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { PageBuilder as PageBuilderInterface } from '@shared/types';
 import { v4 } from 'uuid';
 import { defaultTo } from 'lodash-es';
+import { useParams } from 'react-router';
 
 interface PageProviderProps {
   pageBuilder: PageBuilderInterface;
@@ -15,12 +16,14 @@ const PageContext = createContext<PageBuilderInterface>(
 );
 
 export const PageProvider = observer((props: PageProviderProps) => {
+  const params = useParams();
   const page = useLocalObservable(() => ({
     ...props.pageBuilder,
     state: {
       ...props.pageBuilder.state,
       setState: (newState: any) => defaultTo(page.state, newState),
     },
+    params,
   }));
 
   return (

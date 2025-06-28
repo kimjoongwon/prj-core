@@ -37,7 +37,7 @@ export class CategoriesPage {
                         navigator: {
                           type: 'push',
                           route: {
-                            fullPath: '/admin/dashboard/space-service/categories/:id/create',
+                            fullPath: '/admin/dashboard/space-service/categories/:categoryId/create',
                             params: {
                               id: 'new',
                             },
@@ -46,6 +46,7 @@ export class CategoriesPage {
                       },
                     ],
                     table: {
+                      type: 'table' as const,
                       query: {
                         name: 'useGetCategoriesByQuery',
                         params: {
@@ -53,6 +54,10 @@ export class CategoriesPage {
                           take: 10,
                           type: categoryTypes,
                         },
+                      },
+                      pagination: {
+                        enabled: true,
+                        defaultTake: 10,
                       },
                       columns: [
                         {
@@ -92,7 +97,9 @@ export class CategoriesPage {
                                   type: 'push',
                                   route: {
                                     name: '그라운드 카테고리 디테일',
-                                    paramPaths: ['selectedRow.id'],
+                                    pathParams: {
+                                      'categoryId': 'selectedRow.id'
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -108,8 +115,10 @@ export class CategoriesPage {
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    relativePath: ':id/modify',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':categoryId/modify',
+                                    pathParams: {
+                                      'categoryId': 'selectedRow.id'
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
@@ -125,8 +134,10 @@ export class CategoriesPage {
                                 navigator: {
                                   type: 'push',
                                   route: {
-                                    relativePath: ':id/add',
-                                    paramPaths: ['selectedRow.id'],
+                                    relativePath: ':categoryId/add',
+                                    pathParams: {
+                                      'categoryId': 'selectedRow.id'
+                                    },
                                   },
                                 },
                               } satisfies IButtonBuilder,
