@@ -93,6 +93,7 @@ import type {
   GetGroupById200AllOf,
   GetGroupsByQuery200AllOf,
   GetGroupsByQueryParams,
+  GetMyTenants200AllOf,
   GetProgramById200AllOf,
   GetProgramsByQuery200AllOf,
   GetProgramsByQueryParams,
@@ -10892,6 +10893,190 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(mutationOptions , queryClient);
     }
     
+export const getMyTenants = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GetMyTenants200AllOf>(
+      {url: `/api/v1/tenants/my`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+export const getGetMyTenantsQueryKey = () => {
+    return [`/api/v1/tenants/my`] as const;
+    }
+
+    
+export const getGetMyTenantsQueryOptions = <TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyTenantsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyTenants>>> = ({ signal }) => getMyTenants(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyTenantsQueryResult = NonNullable<Awaited<ReturnType<typeof getMyTenants>>>
+export type GetMyTenantsQueryError = ErrorType<void>
+
+
+export function useGetMyTenants<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyTenants>>,
+          TError,
+          Awaited<ReturnType<typeof getMyTenants>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenants<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyTenants>>,
+          TError,
+          Awaited<ReturnType<typeof getMyTenants>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenants<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetMyTenants<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyTenantsQueryOptions(options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetMyTenantsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyTenantsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyTenants>>> = ({ signal }) => getMyTenants(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyTenantsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyTenants>>>
+export type GetMyTenantsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetMyTenantsSuspense<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenantsSuspense<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenantsSuspense<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetMyTenantsSuspense<TData = Awaited<ReturnType<typeof getMyTenants>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyTenantsSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions , queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetMyTenantsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMyTenants>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyTenantsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyTenants>>> = ({ signal }) => getMyTenants(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyTenantsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMyTenants>>>
+export type GetMyTenantsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetMyTenantsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyTenants>>>, TError = ErrorType<void>>(
+  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenantsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyTenants>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTenantsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyTenants>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetMyTenantsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyTenants>>>, TError = ErrorType<void>>(
+  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyTenants>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyTenantsSuspenseInfiniteQueryOptions(options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions , queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 export const createTenant = (
     createTenantDto: BodyType<CreateTenantDto>,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal

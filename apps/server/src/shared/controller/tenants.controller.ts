@@ -17,11 +17,22 @@ import { PageMetaDto } from '../dto/query/page-meta.dto';
 import { ResponseEntity } from '../entity/response.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { TenantsService } from '../service/tenants.service';
+import { ContextProvider } from '../provider/context.provider';
 
 @ApiTags('TENANTS')
 @Controller()
 export class TenantsController {
   constructor(private readonly service: TenantsService) {}
+
+  @Get('my')
+  @Auth([])
+  @HttpCode(HttpStatus.OK)
+  @ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
+  async getMyTenants() {
+    const userId = ContextProvider.getAuthUserId();
+    const tenants = await this.service.getManyByUserId(userId);
+    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(TenantDto, tenants));
+  }
 
   @Post()
   @Auth([])

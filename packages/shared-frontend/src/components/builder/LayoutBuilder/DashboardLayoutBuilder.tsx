@@ -8,6 +8,7 @@ import { Header, CollapsibleSidebar } from '../../layout';
 import { useNavigation } from '../../../provider';
 import { Navbar } from '../../inputs';
 import { Logo, DarkModeSwitch, Breadcrumb, Avatar } from '../../ui';
+import { TenantAutoComplete } from '../../widgets';
 
 interface DashboardLayoutBuilderProps {
   children: ReactNode;
@@ -57,8 +58,15 @@ export const DashboardLayoutBuilder = observer(
             center={<Navbar routes={dashboardRoutes} />}
             right={
               <div className="flex items-center gap-2">
-                <Avatar />
-                <DarkModeSwitch position="inline" size="sm" />
+                <div className="flex-shrink-0">
+                  <TenantAutoComplete />
+                </div>
+                <div className="flex-shrink-0">
+                  <Avatar />
+                </div>
+                <div className="flex-shrink-0">
+                  <DarkModeSwitch position="inline" size="sm" />
+                </div>
               </div>
             }
           />

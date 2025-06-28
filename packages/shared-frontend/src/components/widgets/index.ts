@@ -1,1 +1,1 @@
-export * from './WorkspaceSelect';
+export * from './TenantAutoComplete';
