@@ -1,9 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
-@Injectable()
-export class GroundsPage {
-  build(): PageBuilder {
+export const getGroundsPage = (): PageBuilder => {
     return {
       name: '그라운드 리스트',
       sections: [
@@ -155,5 +152,4 @@ export class GroundsPage {
         },
       ],
     };
-  }
-}
+};

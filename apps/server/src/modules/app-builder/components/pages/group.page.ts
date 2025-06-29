@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { ContextProvider } from '@shared';
 import {
@@ -11,9 +10,7 @@ import {
   TextProps,
 } from '@shared/types';
 
-@Injectable()
-export class GroupPage {
-  build(pageType: PageTypes, type: $Enums.GroupTypes): PageBuilder {
+export const getGroupPage = (pageType: PageTypes, type: $Enums.GroupTypes): PageBuilder => {
     // 기존 데이터 로드
     let formInputs = {
       name: '',
@@ -167,5 +164,4 @@ export class GroupPage {
         },
       ],
     };
-  }
-}
+};

@@ -198,6 +198,7 @@ export interface Option {
 export interface LayoutBuilder {
   name?: string;
   type?: string;
+  tabs?: TabBuilder;
 }
 
 export interface RouteBuilder {

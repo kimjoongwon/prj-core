@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { ContextProvider } from '@shared';
 import {
@@ -11,9 +10,7 @@ import {
 } from '@shared/types';
 import { PageType } from '../types/page.types';
 
-@Injectable()
-export class CategoryPage {
-  build(pageType: PageType, type: $Enums.CategoryTypes): PageBuilder {
+export const getCategoryPage = (pageType: PageType, type: $Enums.CategoryTypes): PageBuilder => {
     let formInputs = {
       name: '',
       type,
@@ -155,5 +152,4 @@ export class CategoryPage {
         },
       ],
     };
-  }
-}
+};

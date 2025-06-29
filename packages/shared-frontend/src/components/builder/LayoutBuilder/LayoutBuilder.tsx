@@ -5,6 +5,7 @@ import { Outlet } from 'react-router';
 import { AuthLayout } from '../../layout/AuthLayout';
 import { ModalLayout } from '../../layout/ModalLayout';
 import { DashboardLayoutBuilder } from './DashboardLayoutBuilder';
+import { TabNavigation } from '../TabNavigation/TabNavigation';
 
 interface Layout {
   children: ReactNode;
@@ -35,6 +36,15 @@ export const LayoutBuilder = observer((props: LayoutBuilderProps) => {
       <DashboardLayoutBuilder layoutBuilder={layoutBuilder}>
         {children}
       </DashboardLayoutBuilder>
+    );
+  }
+
+  if (layoutBuilder?.type === 'Tab') {
+    return (
+      <div>
+        {layoutBuilder.tabs && <TabNavigation tabBuilder={layoutBuilder.tabs} />}
+        <Outlet />
+      </div>
     );
   }
 

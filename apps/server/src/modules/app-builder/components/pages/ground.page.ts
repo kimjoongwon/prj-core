@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import type {
   ApiQueryBuilder,
   IButtonBuilder,
@@ -11,9 +10,7 @@ import type {
 import { type PageType } from '../types/page.types';
 import { FormProps } from '@heroui/react';
 
-@Injectable()
-export class GroundPage {
-  build(type: PageType): PageBuilder {
+export const getGroundPage = (type: PageType): PageBuilder => {
     // type에 따른 기본 데이터 설정
     let formInputs = {
       name: '',
@@ -297,5 +294,4 @@ export class GroundPage {
         },
       ],
     };
-  }
-}
+};
