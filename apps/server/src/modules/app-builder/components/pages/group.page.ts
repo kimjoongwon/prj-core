@@ -52,11 +52,11 @@ export class GroupPage {
               queryKey: '/api/v1/groups',
               validationFields: {
                 'form.inputs.name': {
-                  required: { value: true, message: '그룹 이름은 필수입니다' }
+                  required: { value: true, message: '그룹 이름은 필수입니다' },
                 },
                 'form.inputs.label': {
-                  required: { value: true, message: '라벨은 필수입니다' }
-                }
+                  required: { value: true, message: '라벨은 필수입니다' },
+                },
               },
             },
             navigator: {
@@ -77,11 +77,11 @@ export class GroupPage {
               queryKey: '/api/v1/groups',
               validationFields: {
                 'form.inputs.name': {
-                  required: { value: true, message: '그룹 이름은 필수입니다' }
+                  required: { value: true, message: '그룹 이름은 필수입니다' },
                 },
                 'form.inputs.label': {
-                  required: { value: true, message: '라벨은 필수입니다' }
-                }
+                  required: { value: true, message: '라벨은 필수입니다' },
+                },
               },
             },
             navigator: {

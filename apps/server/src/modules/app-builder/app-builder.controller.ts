@@ -14,9 +14,7 @@ const RESPONSE_MESSAGES = {
 const COOKIE_CONFIG = {
   TENANT_ID: {
     name: 'tenantId',
-    options: {
-      httpOnly: true,
-    },
+    options: {},
   },
   ACCESS_TOKEN: 'accessToken',
 } as const;

@@ -28,7 +28,6 @@ export class AuthController {
   @Post('token')
   async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
-    const mainTenantId = user.tenants.find((tenant) => tenant.main)?.id;
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -104,7 +103,7 @@ export class AuthController {
     // HttpOnly 쿠키들을 삭제
     res.clearCookie('accessToken', { httpOnly: true });
     res.clearCookie('refreshToken', { httpOnly: true });
-    res.clearCookie('tenantId', { httpOnly: true });
+    res.clearCookie('tenantId');
     res.clearCookie('workspaceId', { httpOnly: true });
 
     return new ResponseEntity(HttpStatus.OK, '로그아웃 성공', true);

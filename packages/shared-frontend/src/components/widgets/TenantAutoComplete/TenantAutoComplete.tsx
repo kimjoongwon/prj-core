@@ -19,7 +19,7 @@ export const TenantAutoComplete = observer(
   ({ className = 'max-w-xs', onTenantSelect, ...rest }: Props) => {
     const { data: getMyTenantsResponse } = useGetMyTenants();
     const tenants = getMyTenantsResponse?.data || [];
-
+    console.log('haha', getTenantIdFromCookie()), document.cookie;
     const state = useLocalObservable(() => ({
       selectedKey: getTenantIdFromCookie(),
       setSelectedKey(key: string) {

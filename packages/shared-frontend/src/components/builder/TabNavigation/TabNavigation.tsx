@@ -26,9 +26,5 @@ export const TabNavigation = observer((props: TabNavigationProps) => {
     return disposer;
   }, [navigate, state.currentPath]);
 
-  return (
-    <>
-      <Tabs state={state} options={tabBuilder.options} path="currentPath" />
-    </>
-  );
+  return <Tabs state={state} options={tabBuilder.options} path="currentPath" />;
 });

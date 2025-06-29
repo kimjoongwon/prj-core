@@ -12,6 +12,7 @@ import { CategoriesPage } from './components/pages/categories.page';
 import { GroupsPage } from './components/pages/groups.page';
 import { CategoryPage } from './components/pages/category.page';
 import { GroupPage } from './components/pages/group.page';
+import { GroundMembersPage } from './components/pages/ground-members.page';
 
 // 라우트 타입 상수
 const ROUTE_TYPES = {
@@ -33,11 +34,12 @@ export class AppBuilderService {
     readonly dashboardPage: DashboardPage,
     readonly usersPage: UsersPage,
     readonly groundsPage: GroundsPage,
-    readonly groundPage: GroundPage,
     readonly categoriesPage: CategoriesPage,
     readonly groupsPage: GroupsPage,
     readonly categoryPage: CategoryPage,
     readonly groupPage: GroupPage,
+    readonly groundPage: GroundPage,
+    readonly groundMembersPage: GroundMembersPage, // Assuming this is a page for ground members
   ) {
     this.routes = this.initializeRoutes();
   }
@@ -102,6 +104,7 @@ export class AppBuilderService {
       groundCreate: this.groundPage.build('create'),
       groundModify: this.groundPage.build('modify'),
       groundDetail: this.groundPage.build('detail'),
+      groundMemberList: this.groundMembersPage.build(),
       categories: this.categoriesPage.build('Space'),
       categoryDetail: this.categoryPage.build('detail', 'Space'),
       categoryCreate: this.categoryPage.build('create', 'Space'),
@@ -161,6 +164,7 @@ export class AppBuilderService {
     this.setRoutePageAndLayout('그라운드 그룹 생성', pageBuilders.groupCreate);
     this.setRoutePageAndLayout('그라운드 그룹 수정', pageBuilders.groupModify);
     this.setRoutePageAndLayout('그라운드 그룹 디테일', pageBuilders.groupDetail);
+    this.setRoutePageAndLayout('그라운드 멤버 리스트', pageBuilders.groundMemberList);
   }
 
   /**

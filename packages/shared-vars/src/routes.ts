@@ -38,6 +38,8 @@ export const ROUTE_NAMES = {
   GROUND_GROUP_DETAIL: '그라운드 그룹 디테일',
   GROUND_GROUP_CREATE: '그라운드 그룹 생성',
   GROUND_GROUP_MODIFY: '그라운드 그룹 수정',
+  GROUND_GROUP_LIST: '그라운드 그룹 리스트',
+  GROUND_MEMBER_LIST: '그라운드 멤버 리스트',
 } as const;
 
 export const rawRoutes: RouteBuilder[] = [
@@ -121,6 +123,14 @@ export const rawRoutes: RouteBuilder[] = [
                         icon: 'Edit',
                         layout: {
                           name: '그라운드',
+                          type: 'Modal',
+                        },
+                      },
+                      {
+                        name: ROUTE_NAMES.GROUND_MEMBER_LIST,
+                        relativePath: 'members',
+                        layout: {
+                          name: '그라운드 멤버',
                           type: 'Modal',
                         },
                       },

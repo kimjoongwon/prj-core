@@ -93,6 +93,7 @@ export type ElementName =
   | 'SplashScreen'
   | 'SubmitButton'
   | 'Switch'
+  | 'TabNavigation'
   | 'Table'
   | 'Tabs'
   | 'TenantList'
@@ -108,7 +109,8 @@ export type ElementName =
   | 'TenantAutoComplete'
   | 'DataGridBuilder'
   | 'ResourceBuilder'
-  | 'ListboxBuilder';
+  | 'ListboxBuilder'
+  | 'Outlet';
 
 export interface ElementBuilder {
   visibleCondition?: {

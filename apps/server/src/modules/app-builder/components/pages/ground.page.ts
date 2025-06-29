@@ -6,6 +6,7 @@ import type {
   Mutation,
   PageBuilder,
   ResourceBuilder,
+  TabNavigationProps,
 } from '@shared/types';
 import { type PageType } from '../types/page.types';
 import { FormProps } from '@heroui/react';
@@ -49,17 +50,19 @@ export class GroundPage {
             queryKey: '/api/v1/grounds',
             validationFields: {
               'form.inputs.name': {
-                required: { value: true, message: '그라운드 이름은 필수입니다' }
+                required: { value: true, message: '그라운드 이름은 필수입니다' },
               },
               'form.inputs.label': {
-                required: { value: true, message: '라벨은 필수입니다' }
+                required: { value: true, message: '라벨은 필수입니다' },
               },
               'form.inputs.email': {
-                patterns: [{
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: '올바른 이메일 형식이 아닙니다'
-                }]
-              }
+                patterns: [
+                  {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: '올바른 이메일 형식이 아닙니다',
+                  },
+                ],
+              },
             },
           };
         case 'modify':
@@ -68,17 +71,19 @@ export class GroundPage {
             queryKey: '/api/v1/grounds',
             validationFields: {
               'form.inputs.name': {
-                required: { value: true, message: '그라운드 이름은 필수입니다' }
+                required: { value: true, message: '그라운드 이름은 필수입니다' },
               },
               'form.inputs.label': {
-                required: { value: true, message: '라벨은 필수입니다' }
+                required: { value: true, message: '라벨은 필수입니다' },
               },
               'form.inputs.email': {
-                patterns: [{
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: '올바른 이메일 형식이 아닙니다'
-                }]
-              }
+                patterns: [
+                  {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: '올바른 이메일 형식이 아닙니다',
+                  },
+                ],
+              },
             },
             pathParams: {
               groundId: 'params.groundId', // pageState.groundId에서 ID를 가져옴
@@ -213,6 +218,21 @@ export class GroundPage {
                           {
                             type: 'VStack',
                             elements: [
+                              {
+                                name: 'ButtonBuilder',
+                                props: {
+                                  navigator: {
+                                    type: 'push',
+                                    route: {
+                                      fullPath:
+                                        '/admin/dashboard/space-service/grounds/:groundId/members',
+                                      pathParams: {
+                                        groundId: 'params.groundId',
+                                      },
+                                    },
+                                  },
+                                } as IButtonBuilder,
+                              },
                               {
                                 name: 'Form',
                                 props: {

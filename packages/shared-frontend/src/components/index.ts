@@ -6,3 +6,4 @@ export * from './layout';
 export * from './builder';
 
 export { Form } from '@heroui/react';
+export { Outlet } from 'react-router';
