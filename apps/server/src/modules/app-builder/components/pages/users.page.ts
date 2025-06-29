@@ -1,9 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 
-@Injectable()
-export class UsersPage {
-  build(): PageBuilder {
+export const getUsersPage = (): PageBuilder => {
     return {
       name: '사용자 리스트',
       sections: [
@@ -51,5 +48,4 @@ export class UsersPage {
         },
       ],
     };
-  }
-}
+};

@@ -1,5 +1,4 @@
 import { InputProps } from '@heroui/react';
-import { Injectable } from '@nestjs/common';
 import { IButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
 
 interface LoginDto {
@@ -7,9 +6,7 @@ interface LoginDto {
   password: string;
 }
 
-@Injectable()
-export class LoginPage {
-  build(): PageBuilder {
+export const getLoginPage = (): PageBuilder => {
     // 기본 로그인 데이터
     const formInputs: LoginDto = {
       email: 'plate@gmail.com',
@@ -138,5 +135,4 @@ export class LoginPage {
       state: { form: { inputs: formInputs, button: { errorMessages: [] } } },
       sections,
     };
-  }
-}
+};

@@ -20,7 +20,6 @@ import { FileClassificationsModule } from './file-classifications/file-classific
 import { FilesModule } from './files/files.module';
 import { GroundsModule } from './grounds/ground.module';
 import { GroupsModule } from './groups/groups.module';
-import { PagesModule } from './app-builder/components';
 import { ProgramsModule } from './programs/programs.module';
 import { RoleClassificationsModule } from './role-classifications/role-classifications.module';
 import { RolesModule } from './roles/roles.module';
@@ -37,7 +36,6 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ...libModules,
-    PagesModule,
     GlobalModule,
     GroundsModule,
     CaslModule,

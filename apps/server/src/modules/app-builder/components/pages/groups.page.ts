@@ -1,10 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
-@Injectable()
-export class GroupsPage {
-  build(type: $Enums.GroupTypes): PageBuilder {
+export const getGroupsPage = (type: $Enums.GroupTypes): PageBuilder => {
     return {
       name: '그룹 리스트',
       sections: [
@@ -141,5 +138,4 @@ export class GroupsPage {
         },
       ],
     };
-  }
-}
+};

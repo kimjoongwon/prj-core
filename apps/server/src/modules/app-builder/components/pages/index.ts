@@ -1,32 +1,12 @@
-import { Global, Module } from '@nestjs/common';
-import { LoginPage } from './login.page';
-import { TenantSelectPage } from './tenant-select.page';
-import { UsersPage } from './users.page';
-import { DashboardPage } from './dashboard.page';
-import { GroundsPage } from './grounds.page';
-import { GroundPage } from './ground.page';
-import { CategoriesPage } from './categories.page';
-import { CategoryPage } from './category.page';
-import { GroupsPage } from './groups.page';
-import { GroupPage } from './group.page';
-import { GroundMembersPage } from './ground-members.page';
-
-const modules = [
-  LoginPage,
-  TenantSelectPage,
-  UsersPage,
-  DashboardPage,
-  GroundsPage,
-  GroundPage,
-  CategoriesPage,
-  CategoryPage,
-  GroupsPage,
-  GroupPage,
-  GroundMembersPage,
-];
-@Global()
-@Module({
-  providers: modules,
-  exports: modules,
-})
-export class PagesModule {}
+// Page functions exports
+export { getLoginPage } from './login.page';
+export { getTenantSelectPage } from './tenant-select.page';
+export { getUsersPage } from './users.page';
+export { getDashboardPage } from './dashboard.page';
+export { getGroundsPage } from './grounds.page';
+export { getGroundPage } from './ground.page';
+export { getCategoriesPage } from './categories.page';
+export { getCategoryPage } from './category.page';
+export { getGroupsPage } from './groups.page';
+export { getGroupPage } from './group.page';
+export { getGroundMembersPage } from './ground-members.page';

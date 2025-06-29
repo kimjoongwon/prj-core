@@ -1,9 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { PageBuilder, SectionBuilder } from '@shared/types';
 
-@Injectable()
-export class DashboardPage {
-  build(): PageBuilder {
+export const getDashboardPage = (): PageBuilder => {
     const sections: SectionBuilder[] = [
       {
         stacks: [
@@ -54,5 +51,4 @@ export class DashboardPage {
       name: '대시보드',
       sections,
     };
-  }
-}
+};

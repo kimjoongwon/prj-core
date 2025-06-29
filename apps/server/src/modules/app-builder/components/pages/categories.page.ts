@@ -1,10 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
-@Injectable()
-export class CategoriesPage {
-  build(categoryTypes: $Enums.CategoryTypes): PageBuilder {
+export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuilder => {
     return {
       name: '카테고리 리스트',
       state: {
@@ -171,5 +168,4 @@ export class CategoriesPage {
         },
       ],
     };
-  }
-}
+};

@@ -1,9 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
-@Injectable()
-export class GroundMembersPage {
-  build(): PageBuilder {
+export const getGroundMembersPage = (): PageBuilder => {
     return {
       name: '그라운드 멤버 리스트',
       sections: [
@@ -37,7 +34,7 @@ export class GroundMembersPage {
                       type: 'table' as const,
                       query: {
                         // TODO: 쿼리명을 적절히 변경해주세요
-                        name: 'useGetGroundMembersByQuery',
+                        name: 'useGetTenantsByQuery',
                         params: {
                           skip: 0,
                           take: 10,
@@ -159,5 +156,4 @@ export class GroundMembersPage {
         },
       ],
     };
-  }
-}
+};

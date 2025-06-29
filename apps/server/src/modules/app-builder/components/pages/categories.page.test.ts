@@ -1,4 +1,4 @@
-import { CategoriesPage } from './categories.page';
+import { getCategoriesPage } from './categories.page';
 import { $Enums } from '@prisma/client';
 import { ContextProvider } from '@shared';
 
@@ -10,18 +10,16 @@ jest.mock('@shared', () => ({
 }));
 
 describe('CategoriesPage', () => {
-  let categoriesPage: CategoriesPage;
   const mockTenantId = 'test-tenant-id';
 
   beforeEach(() => {
-    categoriesPage = new CategoriesPage();
     (ContextProvider.getTenantId as jest.Mock).mockReturnValue(mockTenantId);
   });
 
   describe('build', () => {
     it('should create page configuration with all required buttons including delete', () => {
       const categoryType = $Enums.CategoryTypes.Role;
-      const result = categoriesPage.build(categoryType);
+      const result = getCategoriesPage(categoryType);
 
       expect(result.name).toBe('카테고리 리스트');
       expect(result.state.inputs.type).toBe(categoryType);
@@ -84,7 +82,7 @@ describe('CategoriesPage', () => {
 
     it('should configure query with correct parameters', () => {
       const categoryType = $Enums.CategoryTypes.Space;
-      const result = categoriesPage.build(categoryType);
+      const result = getCategoriesPage(categoryType);
 
       const dataGridElement = result.sections[0].stacks[0].elements[0];
       const queryConfig = dataGridElement.props.table.query;
@@ -97,7 +95,7 @@ describe('CategoriesPage', () => {
     });
 
     it('should have proper styling for all action buttons', () => {
-      const result = categoriesPage.build($Enums.CategoryTypes.User);
+      const result = getCategoriesPage($Enums.CategoryTypes.User);
       const actionButtons =
         result.sections[0].stacks[0].elements[0].props.table.columns[2].cell.buttons;
 

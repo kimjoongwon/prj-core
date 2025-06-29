@@ -1,11 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { IButtonBuilder, ListboxBuilderProps, PageBuilder, SectionBuilder } from '@shared/types';
 
-@Injectable()
-export class TenantSelectPage {
-  constructor() {}
-
-  async build(): Promise<PageBuilder> {
+export const getTenantSelectPage = (): PageBuilder => {
     const sections: SectionBuilder[] = [
       {
         stacks: [
@@ -80,5 +75,4 @@ export class TenantSelectPage {
       },
       sections,
     };
-  }
-}
+};
