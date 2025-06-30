@@ -119,11 +119,12 @@ export const rawRoutes: RouteBuilder[] = [
                         layout: {
                           type: 'Tab',
                           tabs: {
+                            defaultTab: 'info',
                             options: [
                               {
-                                key: 'detail',
+                                key: 'info',
                                 text: '상세',
-                                value: 'detail',
+                                value: 'info',
                               },
                               {
                                 key: 'members',
@@ -135,7 +136,7 @@ export const rawRoutes: RouteBuilder[] = [
                         },
                         children: [
                           {
-                            name: ROUTE_NAMES.GROUND_DETAIL,
+                            name: ROUTE_NAMES.GROUND_DETAIL_INFO,
                             relativePath: 'info',
                             page: getGroundPage('detail'),
                           },

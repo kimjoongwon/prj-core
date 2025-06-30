@@ -15,6 +15,7 @@ export const ROUTE_NAMES = {
   GROUND: '그라운드',
   GROUND_LIST: '그라운드 리스트',
   GROUND_DETAIL: '그라운드 상세',
+  GROUND_DETAIL_INFO: '그라운드 상세 정보',
   GROUND_CREATE: '그라운드 생성',
   GROUND_MODIFY: '그라운드 수정',
   GROUND_CATEGORY: '그라운드 카테고리',

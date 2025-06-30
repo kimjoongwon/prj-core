@@ -250,6 +250,7 @@ export interface PageState<CDO> {
 
 export interface TabBuilder {
   options: Option[];
+  defaultTab?: string;
 }
 
 export interface DataGridBuilder {
