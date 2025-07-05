@@ -25,7 +25,7 @@ export class RecurringDayOfWeek extends EnumType<RecurringDayOfWeek>() {
     return this._name;
   }
 
-  static findName(code: string): string {
+  static findName(code: string): string | undefined {
     return this.values().find((e) => e.equals(code))?.name;
   }
 

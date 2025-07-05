@@ -1,2 +1,2 @@
 // Export all decorators
-// Add decorators as needed
+export * from './public-route.decorator';

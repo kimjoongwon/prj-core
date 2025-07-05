@@ -19,7 +19,7 @@ export class PageMetaDto {
   @BooleanField()
   readonly hasNextPage: boolean;
 
-  constructor(skip?: number, take?: number, totalCount: number = 0) {
+  constructor(skip: number = 0, take: number = 10, totalCount: number = 0) {
     const page = PaginationUtil.getPage({ skip, take });
     this.skip = skip;
     this.take = take;

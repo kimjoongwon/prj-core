@@ -18,7 +18,7 @@ export class SessionTypes extends EnumType<SessionTypes>() {
   get name(): string {
     return this._name;
   }
-  static findName(code: string): string {
+  static findName(code: string): string | undefined {
     return this.values().find((e) => e.equals(code))?.name;
   }
 

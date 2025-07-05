@@ -1,6 +1,10 @@
-// Re-export all Prisma types and client
-export * from "@prisma/client";
+// Re-export Prisma types and client
 export { PrismaClient } from "@prisma/client";
+export type {
+  // Prisma utility types
+  Prisma,
+  // User-defined types that don't conflict
+} from "@prisma/client";
 
 // Re-export types
 export * from "./types";
@@ -11,11 +15,14 @@ export * from "./client";
 // Re-export DTOs
 export * from "./dto";
 
-// Re-export entities
+// Re-export entities (custom entity classes, not Prisma models)
 export * from "./entity";
 
-// Re-export enums
+// Re-export enums (custom enums, not Prisma enums)
 export * from "./enum";
 
 // Re-export constants
 export * from "./constant";
+
+// Re-export lib utilities
+export { PaginationUtil } from "./lib/PaginationUtil";

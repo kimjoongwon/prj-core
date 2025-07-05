@@ -15,20 +15,20 @@ import { ResponseExcludedField } from '../constant';
 
 export class UserDto extends AbstractDto implements User {
   @UUIDField()
-  spaceId: string;
+  spaceId!: string;
 
   @EmailField()
-  email: string;
+  email!: string;
 
   @StringField()
-  name: string;
+  name!: string;
 
   @StringField()
-  phone: string;
+  phone!: string;
 
   @Exclude()
   @PasswordField({ description: ResponseExcludedField })
-  password: string;
+  password!: string;
 
   @ClassField(() => ProfileDto, { each: true, required: false, swagger: false })
   profiles?: ProfileDto[];

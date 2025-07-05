@@ -33,7 +33,7 @@ export class ResponseEntity<T> {
     httpStatus: HttpStatus,
     message: string,
     data?: T | null,
-  ): ResponseEntity<T> {
+  ): ResponseEntity<T | null> {
     return new ResponseEntity(httpStatus, message || '실패', data);
   }
 

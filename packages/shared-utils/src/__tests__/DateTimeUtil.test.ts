@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import dayjs from 'dayjs';
 import { DateTimeUtil } from '../DateTimeUtil';
 
 describe('DateTimeUtil', () => {

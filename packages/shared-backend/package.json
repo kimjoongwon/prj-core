@@ -35,7 +35,7 @@
     "@nestjs/throttler": "^6.4.0",
     "@casl/ability": "^6.7.3",
     "@casl/prisma": "^1.5.1",
-    "@shared/prisma": "workspace:*",
+    "@shared/schema": "workspace:*",
     "@aws-sdk/client-s3": "^3.750.0",
     "@shared/utils": "workspace:*",
     "@shared/vars": "workspace:*",
@@ -78,7 +78,7 @@
   "peerDependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
-    "@shared/prisma": "workspace:*",
+    "@shared/schema": "workspace:*",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0"
   }

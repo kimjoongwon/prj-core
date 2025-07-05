@@ -38,7 +38,7 @@ export class QueryDto {
   }
 
   toCountArgs<T>(includeRemovedItems = false) {
-    const args = PaginationUtil.toArgs(this);
+    const args = PaginationUtil.toArgs(this) as any;
     delete args.include;
     delete args.skip;
     delete args.take;

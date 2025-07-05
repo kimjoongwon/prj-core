@@ -6,6 +6,7 @@ import {
   EnumFieldOptional,
   NumberFieldOptional,
   StringField,
+  UUIDField,
   UUIDFieldOptional,
 } from '../decorator/field.decorators';
 import { Transform } from 'class-transformer';
@@ -29,8 +30,8 @@ export class SessionDto extends AbstractDto implements Session {
   @DateFieldOptional()
   endDateTime: Date | null;
 
-  @UUIDFieldOptional({ nullable: true })
-  timelineId: string | null;
+  @UUIDField()
+  timelineId: string;
 
   @EnumFieldOptional(() => $Enums.RepeatCycleTypes, { nullable: true })
   @Transform(({ value }) => RepeatCycleTypes.findName(value))

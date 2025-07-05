@@ -2,17 +2,17 @@ import { DateField, NumberField, UUIDField } from '../decorator/field.decorators
 
 export class AbstractDto {
   @UUIDField()
-  id: string;
+  id!: string;
 
   @NumberField()
-  seq: number;
+  seq!: number;
 
   @DateField()
-  createdAt: Date;
+  createdAt!: Date;
 
   @DateField()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @DateField({ nullable: true })
-  removedAt: Date;
+  removedAt!: Date;
 }

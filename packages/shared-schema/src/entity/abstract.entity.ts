@@ -12,6 +12,9 @@ export class AbstractEntity<DTO extends AbstractDto, O = never> {
   private dtoClass?: Constructor<any, any>;
 
   toDto?(options?: O): DTO {
-    return plainToInstance(this.dtoClass, this, options);
+    if (!this.dtoClass) {
+      throw new Error('DTO class is not defined');
+    }
+    return plainToInstance(this.dtoClass, this, options as any) as DTO;
   }
 }

@@ -20,7 +20,7 @@
     "types": ["node"],
     "baseUrl": "./",
     "paths": {
-      "@shared/prisma": ["../../packages/shared-prisma/src"],
+      "@shared/schema": ["../../packages/shared-schema/src"],
       "@shared/utils": ["../../packages/shared-utils/src"],
       "@shared/vars": ["../../packages/shared-vars/src"],
       "@shared/types": ["../../packages/shared-types/src"]

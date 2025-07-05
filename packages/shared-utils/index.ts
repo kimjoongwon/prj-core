@@ -1,6 +1,5 @@
 import { DateTimeUtil } from './src/DateTimeUtil';
 import { PathUtil } from './src/PathUtil';
-import { PaginationUtil } from './src/PaginationUtil';
 import { ValidationUtil } from './src/ValidationUtil';
 import { FormValidationUtil } from './src/FormValidationUtil';
 import { BrowserUtil } from './src/BrowserUtil';
@@ -10,7 +9,6 @@ import { LoggerUtil } from './src/LoggerUtil';
 const Util = {
   DateTimeUtil,
   PathUtil,
-  PaginationUtil,
   ValidationUtil,
   FormValidationUtil,
   BrowserUtil,
@@ -21,7 +19,6 @@ const Util = {
 export {
   DateTimeUtil,
   PathUtil,
-  PaginationUtil,
   ValidationUtil,
   FormValidationUtil,
   BrowserUtil,
