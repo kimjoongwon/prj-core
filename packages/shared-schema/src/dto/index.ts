@@ -11,7 +11,6 @@ export * from './role-classification.dto';
 export * from './space-classification.dto';
 export * from './file-classification.dto';
 export * from './category.dto';
-export * from './service.dto';
 export * from './tenant.dto';
 export * from './action.dto';
 export * from './create';

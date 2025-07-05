@@ -11,7 +11,6 @@ export * from './role-classification.entity';
 export * from './space-classification.entity';
 export * from './file-classification.entity';
 export * from './category.entity';
-export * from './service.entity';
 export * from './tenant.entity';
 export * from './profile.entity';
 export * from './role.entity';

@@ -5,28 +5,6 @@ import { hash } from 'bcrypt';
 import { userSeedData, groundSeedData, userGroundMapping } from './seed-data';
 const prisma = new PrismaClient();
 async function main() {
-  const createServices = async () => {
-    return await Promise.all(
-      [
-        { name: 'user', label: '이용자', seq: 1 },
-        { name: 'space', label: '공간', seq: 2 },
-        { name: 'role', label: '역할', seq: 3 },
-        { name: 'timeline', label: '타임라인', seq: 4 },
-        { name: 'file', label: '파일', seq: 5 },
-        { name: 'task', label: '타스크', seq: 6 },
-        { name: 'program', label: '프로그램', seq: 7 },
-      ].map(async (seedService: { name: string; label: string; seq: number }) => {
-        const service = await prisma.service.findUnique({ where: { name: seedService.name } });
-        if (!service) {
-          return prisma.service.create({ data: seedService });
-        } else {
-          return service;
-        }
-      }),
-    );
-  };
-
-  await createServices();
   const hashedPassword = await hash('rkdmf12!@', 10);
 
   // 먼저 Role들을 생성
@@ -106,7 +84,7 @@ async function main() {
   //   },
   // });
 
-  spaceGroupSeed.forEach(async (group) => {
+  spaceGroupSeed.forEach(async group => {
     const existGroup = await prisma.group.findFirst({
       where: { name: group.name },
     });
@@ -222,7 +200,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
         // 유저가 소속될 그라운드들
         const userGrounds = [];
         for (const groundIndex of userMapping.groundIndices) {
-          const groundInfo = createdGrounds.find((g) => g.index === groundIndex);
+          const groundInfo = createdGrounds.find(g => g.index === groundIndex);
           if (groundInfo) {
             userGrounds.push(groundInfo);
           }
@@ -277,31 +255,32 @@ main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
+  .catch(async e => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
   });
 
-const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> = [
-  {
-    name: GroupNames.TEAM_TRAINING.name,
-    label: '',
-    tenantId: '',
-  },
-  {
-    name: GroupNames.PERSONAL_TRAINNING.name,
-    label: '',
-    tenantId: '',
-  },
-  {
-    name: GroupNames.GROUND.name,
-    label: '',
-    tenantId: '',
-  },
-  {
-    name: GroupNames.PILATES.name,
-    label: '',
-    tenantId: '',
-  },
-];
+const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> =
+  [
+    {
+      name: GroupNames.TEAM_TRAINING.name,
+      label: '',
+      tenantId: '',
+    },
+    {
+      name: GroupNames.PERSONAL_TRAINNING.name,
+      label: '',
+      tenantId: '',
+    },
+    {
+      name: GroupNames.GROUND.name,
+      label: '',
+      tenantId: '',
+    },
+    {
+      name: GroupNames.PILATES.name,
+      label: '',
+      tenantId: '',
+    },
+  ];

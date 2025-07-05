@@ -12,7 +12,11 @@
   "scripts": {
     "build": "pnpm run generate && tsup",
     "dev": "pnpm run generate && tsup --watch",
+    "start:dev": "pnpm run generate:safe && npx concurrently \"tsc --noEmit --watch\" \"tsup --watch\"",
+    "start:dev:simple": "npx concurrently \"tsc --noEmit --watch\" \"tsup --watch\"",
+    "type-check": "tsc --noEmit",
     "generate": "prisma generate",
+    "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
     "db:push": "prisma db push",
     "db:pull": "prisma db pull",
     "db:studio": "prisma studio",
@@ -28,23 +32,24 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@shared/types": "workspace:*",
     "@prisma/client": "^6.4.1",
-    "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "@nestjs/common": "^11.0.10",
     "@nestjs/swagger": "^11.0.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "reflect-metadata": "^0.1.13",
-    "@shared/types": "workspace:*",
     "ts-jenum": "^2.2.2",
     "lodash": "^4.17.21",
     "libphonenumber-js": "^1.11.14",
     "remeda": "^2.14.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^22.13.5",
     "@types/lodash": "^4.17.13",
+    "concurrently": "^8.2.2",
     "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
     "tsup": "^8.3.0",

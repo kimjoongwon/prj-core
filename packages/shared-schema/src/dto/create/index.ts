@@ -6,7 +6,6 @@ export * from './create-group.dto';
 export * from './create-space.dto';
 export * from './create-tenant.dto';
 export * from './create-user.dto';
-export * from './create-service.dto';
 export * from './create-category.dto';
 export * from './create-user-classification.dto';
 export * from './create-role-classification.dto';

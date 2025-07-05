@@ -50,16 +50,6 @@ model Exercise {
   task        Task      @relation(fields: [taskId], references: [id])
 }
 
-model Service {
-  id        String       @id @default(uuid())
-  seq       Int          @unique @default(autoincrement())
-  createdAt DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt DateTime?    @db.Timestamptz(6)
-  label     String
-  name      ServiceNames @unique
-}
-
 model Profile {
   id           String    @id @default(uuid())
   seq          Int       @unique @default(autoincrement())
@@ -333,14 +323,4 @@ enum GroupTypes {
   Space
   File
   User
-}
-
-enum ServiceNames {
-  user
-  role
-  space
-  timeline
-  file
-  task
-  program
 }
