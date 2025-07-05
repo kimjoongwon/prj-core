@@ -4,7 +4,6 @@ export * from './update-file-association.dto';
 export * from './update-space-association.dto';
 export * from './update-category.dto';
 export * from './update-group.dto';
-export * from './update-service.dto';
 export * from './update-tenant.dto';
 export * from './update-space.dto';
 export * from './update-user.dto';

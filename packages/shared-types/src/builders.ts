@@ -318,7 +318,6 @@ export interface ApiQueryResult {
 
 export interface TableState {
   filter?: unknown;
-  selection?: Selection;
   pagination?: {
     take: number;
     skip: number;
