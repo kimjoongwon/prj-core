@@ -12,15 +12,17 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
+  ResponseEntity,
+  UserClassificationDto,
+  CreateUserClassificationDto,
+  UpdateUserClassificationDto,
+  QueryUserClassificationDto,
+} from '@shared/schema';
+import {
   ApiResponseEntity,
   Auth,
-  CreateUserClassificationDto,
-  ResponseEntity,
-  UpdateUserClassificationDto,
-  UserClassificationDto,
-  QueryUserClassificationDto,
-  UserClassificationsService,
-} from '@shared/backend';
+} from '../decorator';
+import { UserClassificationsService } from '../service/user-classifications.service';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('USER-CLASSIFICATIONS')
