@@ -1,0 +1,46 @@
+model File {
+  id              String               @id @default(uuid())
+  seq             Int                  @unique @default(autoincrement())
+  name            String
+  size            Int
+  parentId        String?
+  mimeType        String
+  url             String
+  tenantId        String
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt       DateTime?            @db.Timestamptz(6)
+  tenant          Tenant               @relation(fields: [tenantId], references: [id])
+  associations    FileAssociation[]
+  classifications FileClassification[]
+  parent          File?                @relation("FileParent", fields: [parentId], references: [id])
+  children        File[]               @relation("FileParent")
+}
+
+model FileClassification {
+  id         String    @id @default(uuid())
+  seq        Int       @unique @default(autoincrement())
+  categoryId String
+  fileId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt  DateTime? @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  file       File      @relation(fields: [fileId], references: [id])
+
+  @@unique([categoryId, fileId])
+}
+
+model FileAssociation {
+  id        String    @id @default(uuid())
+  seq       Int       @unique @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
+  removedAt DateTime? @db.Timestamptz(6)
+  fileId    String
+  groupId   String
+  file      File      @relation(fields: [fileId], references: [id])
+  group     Group     @relation(fields: [groupId], references: [id])
+
+  @@unique([groupId, fileId])
+}

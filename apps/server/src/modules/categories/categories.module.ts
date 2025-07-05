@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CategoriesController } from '@shared';
+import { CategoriesController } from '@shared/backend';
 
 @Module({
   controllers: [CategoriesController],

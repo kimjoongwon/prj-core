@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SpacesController, SpacesRepository, SpacesService } from '@shared';
+import { SpacesController, SpacesRepository, SpacesService } from '@shared/backend';
 
 @Module({
   providers: [SpacesService, SpacesRepository],

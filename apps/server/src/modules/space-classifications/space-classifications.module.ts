@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SpaceClassificationsController } from '@shared';
+import { SpaceClassificationsController } from '@shared/backend';
 
 @Module({
   controllers: [SpaceClassificationsController],

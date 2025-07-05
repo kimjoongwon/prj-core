@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RolesController } from '@shared';
+import { RolesController } from '@shared/backend';
 
 @Module({
   controllers: [RolesController],

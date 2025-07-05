@@ -1,0 +1,16 @@
+import { Profile, Tenant, UserAssociation, User as UserEntity } from '@prisma/client';
+import { AbstractEntity } from './abstract.entity';
+import { UseDto } from '../decorator/use-dto.decorator';
+import { UserDto } from '../dto';
+
+@UseDto(UserDto)
+export class User extends AbstractEntity<UserDto> implements UserEntity {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+
+  profiles?: Profile[];
+  tenants?: Tenant[];
+  associations?: UserAssociation[];
+}

@@ -12,7 +12,7 @@ import {
   TokenDto,
   TokenService,
   UserDto,
-} from '@shared';
+} from '@shared/backend';
 import { plainToInstance } from 'class-transformer';
 import { Response, Request } from 'express';
 

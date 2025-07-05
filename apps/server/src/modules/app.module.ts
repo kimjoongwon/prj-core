@@ -6,7 +6,7 @@ import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
 
 // Shared imports
-import { JwtStrategy, LoggerMiddleware, GlobalModule } from '@shared';
+import { JwtStrategy, LoggerMiddleware, GlobalModule } from '@shared/backend';
 import { libModules } from '../main.config';
 
 // Feature modules

@@ -7,7 +7,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "npm run db:generate && npm run db:push && nest start --watch",
+    "start:dev": "pnpm run db:generate && pnpm run db:push && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -16,13 +16,13 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:generate": "npx prisma generate",
-    "db:push": "npx prisma db push",
-    "db:prod:generate": "dotenv -e .env.prod npx prisma db pull",
+    "db:generate": "cd ../packages/shared-prisma && pnpm run generate",
+    "db:push": "cd ../packages/shared-prisma && pnpm run db:push",
+    "db:prod:generate": "cd ../packages/shared-prisma && dotenv -e .env.prod pnpm run generate",
     "clean": "rm -rf dist && rm -rf node_modules"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "cd ../packages/shared-prisma && ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.750.0",
@@ -39,6 +39,8 @@
     "@nestjs/swagger": "^11.0.5",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
+    "@shared/backend": "workspace:*",
+    "@shared/prisma": "workspace:*",
     "@shared/utils": "workspace:*",
     "@shared/vars": "workspace:*",
     "@types/express": "^5.0.0",
@@ -77,7 +79,6 @@
     "@nestjs/cli": "^11.0.4",
     "@nestjs/schematics": "^11.0.1",
     "@nestjs/testing": "^11.0.10",
-    "@prisma/client": "6.4.1",
     "@shared/types": "workspace:*",
     "@types/cookie-parser": "^1.4.8",
     "@types/jest": "^29.5.14",
@@ -95,7 +96,6 @@
     "eslint-plugin-prettier": "^5.2.3",
     "jest": "^29.7.0",
     "prettier": "^3.5.2",
-    "prisma": "^6.4.1",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.3.3",

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FilesController } from '@shared';
+import { FilesController } from '@shared/backend';
 
 @Module({
   controllers: [FilesController],

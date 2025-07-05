@@ -1,14 +1,13 @@
 import { ClsModule } from 'nestjs-cls';
-import { CaslModule } from './shared/casl/casl.module';
+import { CaslModule } from '@shared/backend';
 import { Logger } from '@nestjs/common';
-import { appConfig, AuthConfig, authConfig, awsConfig, corsConfig } from '@shared';
+import { appConfig, AuthConfig, authConfig, awsConfig, corsConfig } from '@shared/backend';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import smtpConfig from './shared/config/smtp.config';
-import { logConfig } from './shared/config/log.config';
+import { logConfig } from '@shared/backend';
 import pino from 'pino';
 
 export const adminModules = [];

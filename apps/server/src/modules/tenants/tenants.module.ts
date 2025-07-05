@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TenantsController } from '@shared';
+import { TenantsController } from '@shared/backend';
 
 @Module({
   controllers: [TenantsController],

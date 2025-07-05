@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AssignmentsController, AssignmentsRepository, AssignmentsService } from '@shared';
+import { AssignmentsController, AssignmentsRepository, AssignmentsService } from '@shared/backend';
 
 @Module({
   providers: [AssignmentsService, AssignmentsRepository],

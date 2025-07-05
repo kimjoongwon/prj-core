@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RoleAssociationsController, RoleAssociationsRepository, RoleAssociationsService } from '@shared';
+import { RoleAssociationsController, RoleAssociationsRepository, RoleAssociationsService } from '@shared/backend';
 
 @Module({
   controllers: [RoleAssociationsController],

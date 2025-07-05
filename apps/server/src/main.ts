@@ -1,12 +1,10 @@
 import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { AllExceptionsFilter, PrismaClientExceptionFilter } from '@shared';
+import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig, AppLogger } from '@shared/backend';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
-import { logConfig } from './shared/config/log.config';
-import { AppLogger } from './shared/utils/app-logger.util';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {

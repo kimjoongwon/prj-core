@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { AuthService, LocalStrategy, PasswordService, TokenService } from '@shared';
+import { AuthService, LocalStrategy, PasswordService, TokenService } from '@shared/backend';
 
 @Module({
   providers: [AuthService, PasswordService, TokenService, LocalStrategy],

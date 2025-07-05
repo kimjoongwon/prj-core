@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Res, Req, Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth, ResponseEntity } from '@shared';
+import { Auth, ResponseEntity } from '@shared/backend';
 import { AppBuilderService } from './app-builder.service';
 import { Response, Request } from 'express';
 import { SelectTenantDto } from './dto/select-tenant.dto';

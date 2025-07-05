@@ -1,6 +1,6 @@
 import { getCategoriesPage } from './categories.page';
 import { $Enums } from '@prisma/client';
-import { ContextProvider } from '@shared';
+import { ContextProvider } from '@shared/backend';
 
 // Mock ContextProvider
 jest.mock('@shared', () => ({
