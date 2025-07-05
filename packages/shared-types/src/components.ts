@@ -95,12 +95,6 @@ export interface VideoPlayerProps {
   src: string;
 }
 
-export interface FileUploaderProps {
-  onUpload?: (files: UploadedMedia[]) => void;
-  maxFiles?: number;
-  accept?: string;
-}
-
 // Stack component interfaces
 export interface VStackProps {
   children: React.ReactNode;
@@ -232,21 +226,20 @@ export interface CategoryCardProps {
   onClickCreate?: (category: any) => void;
 }
 
-export interface FileUploaderProps {
-  onUpload?: (files: UploadedMedia[]) => void;
-  maxFiles?: number;
-  accept?: string;
+export interface FileUploaderProps<T = any> extends MobxProps<T> {
+  label?: string;
+  type: 'image' | 'video' | 'all';
+  onFilesChange?: (
+    type: FileUploaderProps<T>['type'],
+    fileDtos: Partial<any>[],
+  ) => void;
+  onFileRemove?: (fileDto: Partial<any>) => void;
 }
 
 export interface SelectProps<T>
   extends Omit<NextUISelectProps, 'children'>,
     MobxProps<T> {
   options?: Option[];
-}
-
-export interface DepotProps<T> extends MobxProps<T> {
-  uploadPath: string;
-  maxFiles?: number;
 }
 
 export interface ListProps<T> {
@@ -416,7 +409,7 @@ export interface ButtonGroupProps {
 
 export interface DepotProps<T>
   extends MobxProps<T>,
-    Omit<FileUploaderProps, 'onFilesChange' | 'value'> {}
+    Omit<FileUploaderProps<T>, 'onFilesChange'> {}
 
 export type RecurringDayOfTheWeek =
   | 'MONDAY'
