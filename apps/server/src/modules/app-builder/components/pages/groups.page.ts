@@ -4,15 +4,10 @@ import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types
 export const getGroupsPage = (type: $Enums.GroupTypes): PageBuilder => {
     return {
       name: '그룹 리스트',
-      sections: [
+      elements: [
         {
-          stacks: [
-            {
-              type: 'VStack' as const,
-              elements: [
-                {
-                  name: 'DataGridBuilder',
-                  props: {
+          name: 'DataGridBuilder',
+          props: {
                     buttons: [
                       {
                         children: '그룹 생성',
@@ -133,9 +128,5 @@ export const getGroupsPage = (type: $Enums.GroupTypes): PageBuilder => {
                   } satisfies DataGridBuilderProps,
                 },
               ],
-            },
-          ],
-        },
-      ],
     };
 };

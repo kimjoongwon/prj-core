@@ -1,5 +1,5 @@
 import { InputProps } from '@heroui/react';
-import { IButtonBuilder, PageBuilder, SectionBuilder } from '@shared/types';
+import { IButtonBuilder, PageBuilder } from '@shared/types';
 
 interface LoginDto {
   email: string;
@@ -13,126 +13,97 @@ export const getLoginPage = (): PageBuilder => {
       password: 'rkdmf12!@',
     };
 
-    // 섹션 구성
-    const sections: SectionBuilder[] = [
-      {
-        stacks: [
-          {
-            type: 'VStack' as const,
-            elements: [
-              {
-                name: 'Logo',
+    return {
+      name: '로그인',
+      state: {
+        form: {
+          inputs: formInputs,
+        },
+      },
+      elements: [
+        {
+          name: 'VStack',
+          props: {
+            className: 'space-y-4 max-w-md mx-auto mt-16'
+          },
+          children: [
+            {
+              name: 'Logo',
+            },
+            {
+              name: 'Spacer',
+              props: {
+                size: '4',
               },
-              {
-                name: 'Spacer',
-                props: {
-                  size: '4',
-                },
+            },
+            {
+              name: 'Text',
+              props: {
+                children: '로그인',
+                variant: 'h1',
+                className: 'text-center text-2xl font-bold mb-6',
               },
-              {
-                name: 'Form',
-                children: [
-                  {
-                    name: 'Input',
-                    props: {
-                      label: '이메일',
-                      placeholder: '이메일을 입력하세요',
-                      type: 'email',
-                    } as InputProps,
-                    path: 'form.inputs.email',
-                    validation: {
-                      timings: ['onBlur', 'onChange'],
-                      required: { value: true, message: '이메일을 입력해주세요' },
+            },
+            {
+              name: 'Input',
+              props: {
+                label: '이메일',
+                path: 'form.inputs.email',
+                type: 'email',
+                variant: 'bordered',
+              } as InputProps,
+            },
+            {
+              name: 'Input',
+              props: {
+                label: '비밀번호',
+                path: 'form.inputs.password',
+                type: 'password',
+                variant: 'bordered',
+              } as InputProps,
+            },
+            {
+              name: 'Spacer',
+              props: {
+                size: '2',
+              },
+            },
+            {
+              name: 'ButtonBuilder',
+              props: {
+                children: '로그인',
+                color: 'primary',
+                size: 'lg',
+                variant: 'solid',
+                className: 'w-full',
+                mutation: {
+                  name: 'getToken',
+                  validationFields: {
+                    'form.inputs.email': {
+                      required: { value: true, message: '이메일은 필수입니다' },
                       patterns: [
                         {
-                          value: '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$',
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                           message: '올바른 이메일 형식이 아닙니다',
                         },
                       ],
                     },
-                  },
-                  {
-                    name: 'Input',
-                    props: {
-                      label: '비밀번호',
-                      placeholder: '비밀번호를 입력하세요',
-                      type: 'password',
-                    },
-                    path: 'form.inputs.password',
-                    validation: {
-                      timings: ['onBlur', 'onChange'],
-                      required: { value: true, message: '비밀번호를 입력해주세요' },
-                      minLength: { value: 8, message: '비밀번호는 최소 8자 이상이어야 합니다' },
+                    'form.inputs.password': {
+                      required: { value: true, message: '비밀번호는 필수입니다' },
+                      minLength: { value: 6, message: '비밀번호는 최소 6자 이상이어야 합니다' },
                     },
                   },
-                ],
-              },
-              {
-                name: 'Spacer',
-                props: {
-                  size: '4',
                 },
-              },
-            ],
-          },
-          {
-            type: 'VStack' as const,
-            elements: [
-              {
-                name: 'ButtonBuilder',
-                props: {
-                  buttonType: 'form',
-                  mutation: {
-                    name: 'getToken',
-                    validationFields: {
-                      'form.inputs.email': {
-                        required: { value: true, message: '이메일은 필수입니다' },
-                        patterns: [{
-                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                          message: '올바른 이메일 형식이 아닙니다'
-                        }]
-                      },
-                      'form.inputs.password': {
-                        required: { value: true, message: '비밀번호는 필수입니다' },
-                        minLength: { value: 6, message: '비밀번호는 최소 6자 이상이어야 합니다' }
-                      }
-                    },
+                navigator: {
+                  type: 'push',
+                  route: {
+                    fullPath: '/admin/tenant-select',
                   },
-                  children: '로그인',
-                  color: 'primary',
-                  fullWidth: true,
-                  navigator: {
-                    type: 'push',
-                    route: {
-                      relativePath: 'tenant-select',
-                    },
-                  },
-                } satisfies IButtonBuilder,
-              },
-              {
-                name: 'ButtonBuilder',
-                props: {
-                  variant: 'light',
-                  children: '회원가입',
-                  color: 'secondary',
-                  fullWidth: true,
-                } satisfies IButtonBuilder,
-              },
-              {
-                name: 'Copyright',
-                props: {
-                  companyName: 'Plate',
                 },
-              },
-            ],
-          },
-        ],
-      },
-    ];
-
-    return {
-      name: '로그인',
-      state: { form: { inputs: formInputs, button: { errorMessages: [] } } },
-      sections,
+              } satisfies IButtonBuilder,
+            },
+          ],
+        },
+      ],
     };
 };
