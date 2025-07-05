@@ -26,7 +26,7 @@ export class FilesController {
   @ApiResponseEntity(FileDto, HttpStatus.OK)
   async getFileById(@Param('fileId') fileId: string) {
     const file = await this.service.getById(fileId);
-    return new ResponseEntity(HttpStatus.OK, '성공', file.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', file?.toDto?.() ?? file);
   }
 
   @Post()
@@ -35,7 +35,7 @@ export class FilesController {
   @ApiResponseEntity(FileDto, HttpStatus.CREATED)
   async createFile(@Body() createFileDto: CreateFileDto) {
     const file = await this.service.create(createFileDto);
-    return new ResponseEntity(HttpStatus.CREATED, 'success', file.toDto());
+    return new ResponseEntity(HttpStatus.CREATED, 'success', file?.toDto?.() ?? file);
   }
 
   @Patch(':fileId/removedAt')
@@ -44,7 +44,7 @@ export class FilesController {
   @ApiResponseEntity(FileDto, HttpStatus.OK)
   async removeFileById(@Param('fileId') fileId: string) {
     const fileEntity = await this.service.removeById(fileId);
-    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity.toDto());
+    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity?.toDto?.() ?? fileEntity);
   }
 
   @Patch(':fileId')
@@ -61,9 +61,9 @@ export class FilesController {
   )
   async updateFileById(
     @Param('fileId') fileId: string,
-    @UploadedFiles() { files }: { files: Express.Multer.File[] },
+    @UploadedFiles() { files }: { files: any[] },
   ) {
     const fileEntity = await this.service.updateById(fileId, files?.[0]);
-    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity.toDto());
+    return new ResponseEntity(HttpStatus.OK, 'success', fileEntity?.toDto?.() ?? fileEntity);
   }
 }

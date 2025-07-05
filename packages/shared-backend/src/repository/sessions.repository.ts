@@ -20,7 +20,7 @@ export class SessionsRepository extends BaseRepository<
   Prisma.SessionFindFirstArgs,
   Prisma.SessionFindUniqueArgs,
   Prisma.SessionGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.SessionCreateManyAndReturnArgs,
   Session
 > {
   constructor(prisma: PrismaService) {

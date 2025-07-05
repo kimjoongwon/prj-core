@@ -109,11 +109,11 @@ export class UsersController {
       return new ResponseEntity(
         HttpStatus.OK,
         'success',
-        users.map((user) => user.toDto()),
+        users.map((user) => user?.toDto?.() ?? user),
         query.toPageMetaDto(count),
       );
     } catch (error) {
-      this.logger.error(`Error in getUsersByQuery: ${error.message}`, error.stack);
+      this.logger.error(`Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`, error instanceof Error ? error.stack : '');
       throw error;
     }
   }

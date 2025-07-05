@@ -49,7 +49,7 @@ export class RolesService {
     };
   }
 
-  update(roleId, updateRoleDto: UpdateRoleDto) {
+  update(roleId: string, updateRoleDto: UpdateRoleDto) {
     return this.repository.update({
       where: { id: roleId },
       data: updateRoleDto,

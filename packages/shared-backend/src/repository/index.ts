@@ -12,7 +12,6 @@ export * from './role-associations.repository';
 export * from './role-classifications.repository';
 export * from './role.repository';
 export * from './routines.repository';
-export * from './services.repository';
 export * from './sessions.repository';
 export * from './space-associations.repository';
 export * from './space-classifications.repository';

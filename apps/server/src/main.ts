@@ -1,15 +1,11 @@
 import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from 'nestjs-pino';
-import {
-  AllExceptionsFilter,
-  PrismaClientExceptionFilter,
-  logConfig,
-} from '@shared/backend';
+import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from '@shared/backend';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe, Logger as NestLogger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const startTime = Date.now();
@@ -19,7 +15,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
-    logger: logConfig.level,
+    // logger: logConfig.level,
   });
   const httpAdapterHost = app.get(HttpAdapterHost);
 
@@ -27,7 +23,6 @@ async function bootstrap() {
   // @ts-ignore
   app.use(cookieParser());
 
-  // @ts-ignore
   app.useLogger(app.get(Logger));
   // @ts-ignore
   app.set('query parser', 'extended');

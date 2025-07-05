@@ -20,7 +20,7 @@ export class ProgramsRepository extends BaseRepository<
   Prisma.ProgramFindFirstArgs,
   Prisma.ProgramFindUniqueArgs,
   Prisma.ProgramGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.ProgramCreateManyAndReturnArgs,
   Program
 > {
   constructor(prisma: PrismaService) {

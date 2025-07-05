@@ -20,7 +20,7 @@ export class RolesRepository extends BaseRepository<
   Prisma.RoleFindFirstArgs,
   Prisma.RoleFindUniqueArgs,
   Prisma.RoleGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.RoleCreateManyAndReturnArgs,
   Role
 > {
   constructor(prisma: PrismaService) {

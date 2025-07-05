@@ -20,7 +20,7 @@ export class TenantsRepository extends BaseRepository<
   Prisma.TenantFindFirstArgs,
   Prisma.TenantFindUniqueArgs,
   Prisma.TenantGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.TenantCreateManyAndReturnArgs,
   Tenant
 > {
   constructor(prisma: PrismaService) {

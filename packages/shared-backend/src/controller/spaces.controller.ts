@@ -88,11 +88,11 @@ export class SpacesController {
         duration: `${duration}ms`,
       });
 
-      return new ResponseEntity(HttpStatus.OK, '성공', space.toDto());
+      return new ResponseEntity(HttpStatus.OK, '성공', space?.toDto?.());
     } catch (error) {
       const duration = Date.now() - startTime;
       this.logger.error('getCurrentSpace - Error:', {
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         spaceId: tenant.spaceId?.slice(-8),
         duration: `${duration}ms`,
       });
@@ -154,7 +154,7 @@ export class SpacesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      spaces.map((space) => space.toDto()),
+      spaces.map((space) => space?.toDto?.() ?? space),
       query.toPageMetaDto(count),
     );
   }

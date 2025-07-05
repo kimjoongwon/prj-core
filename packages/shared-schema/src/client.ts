@@ -1,9 +1,9 @@
-import { PrismaClient as BasePrismaClient } from "@prisma/client";
+import { PrismaClient as BasePrismaClient } from '@prisma/client';
 
 export class PrismaClient extends BasePrismaClient {
   constructor() {
     super({
-      log: ["query", "info", "warn", "error"],
+      log: ['query', 'info', 'warn', 'error'],
     });
   }
 

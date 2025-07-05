@@ -12,3 +12,4 @@ export * from './lib';
 export * from './domain';
 export * from './pipe';
 export * from './global-module';
+export * from './common';

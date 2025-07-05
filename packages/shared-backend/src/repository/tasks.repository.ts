@@ -20,7 +20,7 @@ export class TasksRepository extends BaseRepository<
   Prisma.TaskFindFirstArgs,
   Prisma.TaskFindUniqueArgs,
   Prisma.TaskGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.TaskCreateManyAndReturnArgs,
   Task
 > {
   constructor(prisma: PrismaService) {

@@ -34,7 +34,7 @@ importers:
         version: 4.1.0(mobx@6.13.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nuqs:
         specifier: ^2.4.0
-        version: 2.4.0(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.4.0(next@15.3.0(@babel/core@7.26.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       pluralize:
         specifier: ^8.0.0
         version: 8.0.0
@@ -144,6 +144,9 @@ importers:
       '@nestjs/throttler':
         specifier: ^6.4.0
         version: 6.4.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)
+      '@prisma/client':
+        specifier: ^6.4.1
+        version: 6.4.1(prisma@6.4.1(typescript@5.7.3))(typescript@5.7.3)
       '@shared/backend':
         specifier: workspace:*
         version: link:../../packages/shared-backend
@@ -529,8 +532,8 @@ importers:
         specifier: ^4.4.0
         version: 4.4.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(pino-http@10.5.0)(pino@9.6.0)(rxjs@7.8.2)
       nestjs-prisma:
-        specifier: ^0.24.0
-        version: 0.24.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@prisma/client@6.4.1(prisma@6.4.1(typescript@5.8.3))(typescript@5.8.3))(chokidar@3.6.0)(prisma@6.4.1(typescript@5.8.3))
+        specifier: ^0.25.0
+        version: 0.25.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@prisma/client@6.4.1(prisma@6.4.1(typescript@5.8.3))(typescript@5.8.3))(chokidar@3.6.0)(prisma@6.4.1(typescript@5.8.3))
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -651,7 +654,7 @@ importers:
         version: 4.1.0(mobx@6.13.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nuqs:
         specifier: ^2.4.0
-        version: 2.4.0(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 2.4.0(next@15.3.0(@babel/core@7.26.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       path-parser:
         specifier: 6.1.0
         version: 6.1.0
@@ -779,6 +782,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      nestjs-prisma:
+        specifier: ^0.25.0
+        version: 0.25.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@prisma/client@6.4.1(prisma@6.4.1(typescript@5.8.3))(typescript@5.8.3))(chokidar@3.6.0)(prisma@6.4.1(typescript@5.8.3))
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -10205,13 +10211,6 @@ packages:
       pino: ^7.5.0 || ^8.0.0 || ^9.0.0
       pino-http: ^6.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
       rxjs: ^7.1.0
-
-  nestjs-prisma@0.24.0:
-    resolution: {integrity: sha512-5lxWsQMD49PTB7c3y9QrawwTqRPs/rX4ix4JIDSSYLgH1TAF3s7VC65xAXm26teZUvcvNerTbO6PBt2o8RZF1g==}
-    peerDependencies:
-      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
-      '@prisma/client': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
-      prisma: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
 
   nestjs-prisma@0.25.0:
     resolution: {integrity: sha512-Dgc6rFgT81nT1Rfu8gQ8MxkzDFTtu8S+prmErMWki8ncXpPF+LPG90P4m2cNfL8gBiQqHicWTNdnGxsUaAINeQ==}
@@ -27131,7 +27130,7 @@ snapshots:
       pino-http: 10.5.0
       rxjs: 7.8.2
 
-  nestjs-prisma@0.24.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@prisma/client@6.4.1(prisma@6.4.1(typescript@5.8.3))(typescript@5.8.3))(chokidar@3.6.0)(prisma@6.4.1(typescript@5.8.3)):
+  nestjs-prisma@0.25.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@prisma/client@6.4.1(prisma@6.4.1(typescript@5.8.3))(typescript@5.8.3))(chokidar@3.6.0)(prisma@6.4.1(typescript@5.8.3)):
     dependencies:
       '@angular-devkit/core': 13.3.11(chokidar@3.6.0)
       '@angular-devkit/schematics': 13.3.11(chokidar@3.6.0)
@@ -27279,7 +27278,7 @@ snapshots:
       boolbase: 1.0.0
     optional: true
 
-  nuqs@2.4.0(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
+  nuqs@2.4.0(next@15.3.0(@babel/core@7.26.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router-dom@7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-router@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0

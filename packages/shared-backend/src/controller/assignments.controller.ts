@@ -39,7 +39,7 @@ export class AssignmentsController {
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
   async getAssignment(@Param('assignmentId') assignmentId: string) {
     const assignment = await this.service.getById(assignmentId);
-    return new ResponseEntity(HttpStatus.OK, '성공', assignment.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', assignment?.toDto?.() ?? assignment);
   }
 
   @Patch('removedAt')
@@ -78,7 +78,7 @@ export class AssignmentsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      assignments.map((assignment) => assignment.toDto()),
+      assignments.map((assignment) => assignment?.toDto?.() ?? assignment),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

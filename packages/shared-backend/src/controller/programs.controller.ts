@@ -39,7 +39,7 @@ export class ProgramsController {
   @ApiResponseEntity(ProgramDto, HttpStatus.OK)
   async getProgramById(@Param('programId') programId: string) {
     const program = await this.service.getById(programId);
-    return new ResponseEntity(HttpStatus.OK, '성공', program.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', program?.toDto?.() ?? program);
   }
 
   @Patch(':programId')
@@ -81,7 +81,7 @@ export class ProgramsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      items.map((program) => program.toDto()),
+      items.map((program) => program?.toDto?.() ?? program),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

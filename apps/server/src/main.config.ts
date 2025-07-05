@@ -1,8 +1,13 @@
 import { ClsModule } from 'nestjs-cls';
-// import { CaslModule } from '@shared/backend';
-import { Logger } from '@nestjs/common';
-import { appConfig, authConfig, awsConfig, corsConfig, smtpConfig, AuthConfig } from '@shared/backend';
-import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
+import {
+  appConfig,
+  authConfig,
+  awsConfig,
+  corsConfig,
+  smtpConfig,
+  AuthConfig,
+} from '@shared/backend';
+import { PrismaModule } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,9 +15,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { logConfig } from '@shared/backend';
 import pino from 'pino';
 
-export const adminModules = [];
-
-export const libModules = [
+export const libModules: any[] = [
   MailerModule.forRootAsync({
     useFactory: async (config: ConfigService) => {
       const smtpConfig = await config.get('smtp');
@@ -33,7 +36,6 @@ export const libModules = [
     },
     inject: [ConfigService],
   }),
-  // CaslModule,
   ClsModule.forRoot({
     global: true,
     middleware: {
@@ -53,34 +55,10 @@ export const libModules = [
   }),
   PrismaModule.forRoot({
     isGlobal: true,
-    prismaServiceOptions: {
-      middlewares: [
-        loggingMiddleware({
-          logger: new Logger('🗄️ Prisma'),
-          logLevel: process.env.NODE_ENV === 'production' ? 'warn' : 'log',
-          logMessage: (query: QueryInfo) => {
-            const isProduction = process.env.NODE_ENV === 'production';
-            const emoji = query.executionTime > 500 ? '🐌' : '⚡';
-
-            if (isProduction && query.executionTime <= 1000) {
-              return null; // 빠른 쿼리는 로깅하지 않음
-            }
-
-            return isProduction
-              ? `${emoji} Slow query: ${query.model}.${query.action} (${query.executionTime}ms)`
-              : `${emoji} ${query.model}.${query.action} (${query.executionTime}ms)`;
-          },
-        }),
-        async (params, next) => {
-          const result = await next(params);
-          return result;
-        },
-      ],
-    },
   }),
   LoggerModule.forRoot({
     pinoHttp: {
-      level: logConfig.prettyPrint ? 'debug' : 'info',
+      // level: logConfig.prettyPrint ? 'debug' : 'info',
       customProps: () => ({
         context: 'HTTP',
       }),
@@ -89,23 +67,23 @@ export const libModules = [
         minLength: 4096,
         sync: false,
       }),
-      transport: logConfig.prettyPrint
-        ? {
-            target: 'pino-pretty',
-            options: {
-              colorize: logConfig.colorize,
-              translateTime: 'yyyy-mm-dd HH:MM:ss',
-              ignore:
-                'pid,hostname,req.remoteAddress,req.remotePort,res.headers,req.headers.host,req.headers.connection',
-              singleLine: false,
-              hideObject: false,
-              messageFormat: logConfig.context ? '🚀 [{context}] {msg}' : '🚀 {msg}',
-              levelFirst: true,
-              customColors: 'info:blue,warn:yellow,error:red',
-              useOnlyCustomProps: false,
-            },
-          }
-        : undefined,
+      // transport: logConfig.prettyPrint
+      //   ? {
+      //       target: 'pino-pretty',
+      //       options: {
+      //         colorize: logConfig.colorize,
+      //         translateTime: 'yyyy-mm-dd HH:MM:ss',
+      //         ignore:
+      //           'pid,hostname,req.remoteAddress,req.remotePort,res.headers,req.headers.host,req.headers.connection',
+      //         singleLine: false,
+      //         hideObject: false,
+      //         messageFormat: logConfig.context ? '🚀 [{context}] {msg}' : '🚀 {msg}',
+      //         levelFirst: true,
+      //         customColors: 'info:blue,warn:yellow,error:red',
+      //         useOnlyCustomProps: false,
+      //       },
+      //     }
+      //   : undefined,
       formatters: {
         level: (label) => ({ level: label }),
         log: (object) => {

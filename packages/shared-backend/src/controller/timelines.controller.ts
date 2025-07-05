@@ -97,7 +97,7 @@ export class TimelinesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      timelines.map((timeline) => timeline.toDto()),
+      timelines.map((timeline) => timeline?.toDto?.() ?? timeline),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

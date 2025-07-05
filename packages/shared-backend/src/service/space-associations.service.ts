@@ -34,7 +34,7 @@ export class SpaceAssociationsService {
       group: true,
     };
     const args = query.toArgs({ include });
-    const countArgs = query.toCountArgs<Prisma.SpaceCountArgs>();
+    const countArgs = query.toCountArgs<Prisma.SpaceAssociationCountArgs>();
     const spaceAssociations = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

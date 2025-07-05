@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ContextProvider } from '../../../../shared/provider';
+import { ContextProvider } from '@shared/backend';
 import { DepotUploaderOptions, ElementBuilder } from '@shared/types';
 import { defaultsDeep } from 'lodash';
 

@@ -19,7 +19,7 @@ export class ExercisesRepository extends BaseRepository<
   Prisma.ExerciseFindFirstArgs,
   Prisma.ExerciseFindUniqueArgs,
   Prisma.ExerciseGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.ExerciseCreateManyAndReturnArgs,
   Exercise
 > {
   constructor(prisma: PrismaService) {

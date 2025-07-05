@@ -99,7 +99,7 @@ export class SubjectsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      subjects.map((subject) => subject.toDto()),
+      subjects.map((subject) => subject?.toDto?.() ?? subject),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

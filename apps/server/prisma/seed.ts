@@ -1,33 +1,8 @@
-import { $Enums, PrismaClient } from '@prisma/client';
-import { CreateGroupDto } from '@shared';
-import { GroupNames } from '../src/shared/enum/group-names.enum';
+import { $Enums, PrismaClient, CreateGroupDto, GroupNames } from '@shared/schema';
 import { hash } from 'bcrypt';
 import { userSeedData, groundSeedData, userGroundMapping } from './seed-data';
 const prisma = new PrismaClient();
 async function main() {
-  const createServices = async () => {
-    return await Promise.all(
-      [
-        { name: $Enums.ServiceNames.user, label: '이용자', seq: 1 },
-        { name: $Enums.ServiceNames.space, label: '공간', seq: 2 },
-        { name: $Enums.ServiceNames.role, label: '역할', seq: 3 },
-        { name: $Enums.ServiceNames.timeline, label: '타임라인', seq: 4 },
-        { name: $Enums.ServiceNames.file, label: '파일', seq: 5 },
-        { name: $Enums.ServiceNames.task, label: '타스크', seq: 6 },
-        { name: $Enums.ServiceNames.program, label: '프로그램', seq: 7 },
-      ].map(async (seedService: { name: $Enums.ServiceNames; label: string }) => {
-        const service = await prisma.service.findUnique({ where: { name: seedService.name } });
-        if (!service) {
-          return prisma.service.create({ data: seedService });
-        } else {
-          return service;
-        }
-      }),
-    );
-  };
-
-  await createServices();
-  const hashedPassword = await hash('rkdmf12!@', 10);
 
   // 먼저 Role들을 생성
   const superAdminRole = await prisma.role.upsert({
@@ -47,6 +22,9 @@ async function main() {
     update: {},
     create: { name: 'USER' },
   });
+
+  // 패스워드 해싱
+  const hashedPassword = await hash('1234', 10);
 
   // Super Admin 유저 생성
   const superAdminUser = await prisma.user.upsert({
@@ -131,7 +109,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
   console.log('일반 유저들과 그라운드 생성 시작...');
 
   // 각 그라운드 생성
-  const createdGrounds = [];
+  const createdGrounds: Array<{ ground: any; index: number; spaceId: string }> = [];
   for (let i = 0; i < groundSeedData.length; i++) {
     const groundData = groundSeedData[i];
 
@@ -220,7 +198,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
         const hashedPassword = await hash(userData.password, 10);
 
         // 유저가 소속될 그라운드들
-        const userGrounds = [];
+        const userGrounds: Array<{ ground: any; index: number; spaceId: string }> = [];
         for (const groundIndex of userMapping.groundIndices) {
           const groundInfo = createdGrounds.find((g) => g.index === groundIndex);
           if (groundInfo) {
@@ -283,7 +261,7 @@ main()
     process.exit(1);
   });
 
-const spaceGroupSeed: Omit<CreateGroupDto, 'type'>[] = [
+const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> = [
   {
     name: GroupNames.TEAM_TRAINING.name,
     label: '',

@@ -20,7 +20,7 @@ export class GroupsRepository extends BaseRepository<
   Prisma.GroupFindFirstArgs,
   Prisma.GroupFindUniqueArgs,
   Prisma.GroupGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.GroupCreateManyAndReturnArgs,
   Group
 > {
   constructor(prisma: PrismaService) {
