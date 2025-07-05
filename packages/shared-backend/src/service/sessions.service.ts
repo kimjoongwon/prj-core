@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { SessionsRepository } from '../repository/sessions.repository';
-import { QuerySessionDto } from '../dto/query/query-session.dto';
-import { CreateSessionDto } from '../dto';
+import { QuerySessionDto, CreateSessionDto } from '@shared/schema';
 
 @Injectable()
 export class SessionsService {
@@ -31,8 +30,8 @@ export class SessionsService {
   }
 
   async getManyByQuery(query: QuerySessionDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+    const args = query.toArgs<Prisma.SessionFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.SessionCountArgs>();
     const sessions = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

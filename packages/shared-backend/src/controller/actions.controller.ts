@@ -12,9 +12,14 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ActionDto, CreateActionDto, UpdateActionDto, QueryActionDto } from '../dto';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
-import { ResponseEntity } from '../entity/response.entity';
+import {
+  ActionDto,
+  CreateActionDto,
+  UpdateActionDto,
+  QueryActionDto,
+} from '@shared/schema';
+import { PageMetaDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { ActionsService } from '../service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -30,7 +35,11 @@ export class ActionsController {
   async createAction(@Body() createActionDto: CreateActionDto) {
     const action = await this.service.create(createActionDto);
 
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ActionDto, action));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(ActionDto, action),
+    );
   }
 
   @Get(':actionId')
@@ -41,7 +50,11 @@ export class ActionsController {
     const action = await this.service.getUnique({
       where: { id: actionId },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ActionDto, action));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(ActionDto, action),
+    );
   }
 
   @Patch('removedAt')
@@ -66,9 +79,13 @@ export class ActionsController {
   ) {
     const action = await this.service.update({
       where: { id: actionId },
-      data: updateActionDto,
+      data: updateActionDto as any,
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ActionDto, action));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(ActionDto, action),
+    );
   }
 
   @Patch(':actionId/removedAt')
@@ -77,7 +94,11 @@ export class ActionsController {
   @ApiResponseEntity(ActionDto, HttpStatus.OK)
   async removeAction(@Param('actionId') actionId: string) {
     const action = await this.service.remove(actionId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ActionDto, action));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(ActionDto, action),
+    );
   }
 
   @Delete(':actionId')
@@ -86,7 +107,11 @@ export class ActionsController {
   @ApiResponseEntity(ActionDto, HttpStatus.OK)
   async deleteAction(@Param('actionId') actionId: string) {
     const action = await this.service.deleteById(actionId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ActionDto, action));
+    return new ResponseEntity(
+      HttpStatus.OK,
+      '성공',
+      plainToInstance(ActionDto, action),
+    );
   }
 
   @Get()
@@ -99,7 +124,7 @@ export class ActionsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      actions.map((action) => action.toDto()),
+      actions.map(action => action.toDto()),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

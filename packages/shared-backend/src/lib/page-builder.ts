@@ -1,7 +1,7 @@
 import { getAllMetadata } from '../decorator/error-message.decorator';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { FormTypeKey, SectionNameKey } from '../decorator/field.decorators';
-import { CreateExerciseDto } from '../dto';
+import { CreateExerciseDto } from '@shared/schema';
 import { groupBy } from 'lodash';
 import { PageBuilder, SectionBuilder } from '@shared/types';
 

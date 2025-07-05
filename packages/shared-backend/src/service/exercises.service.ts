@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@shared/schema';
 import { ExercisesRepository } from '../repository';
-import { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '../dto';
+import { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '@shared/schema';
 import { ContextProvider } from '../provider/context.provider';
 
 @Injectable()
@@ -27,8 +28,8 @@ export class ExercisesService {
     return exercise;
   }
   async getManyByQuery(query: QueryExerciseDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+    const args = query.toArgs<Prisma.ExerciseFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.ExerciseCountArgs>();
     const exercises = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
 

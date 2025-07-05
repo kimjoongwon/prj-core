@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { PrismaService } from 'nestjs-prisma';
 import { UseEntity } from '../decorator/use-dto.decorator';
 import { BaseRepository } from '../common/base.repository';
-import { Assignment } from '../entity';
+import { Assignment } from '@shared/schema';
 
 @Injectable()
 @UseEntity(Assignment)

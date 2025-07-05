@@ -13,14 +13,14 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { FileAssociationsService } from '../service/file-associations.service';
-import { CreateFileAssociationDto } from '../dto/create/create-file-association.dto';
-import { UpdateFileAssociationDto } from '../dto/update/update-file-association.dto';
-import { QueryFileAssociationDto } from '../dto/query/query-file-association.dto';
-import { FileAssociationDto } from '../dto/file-association.dto';
+import { CreateFileAssociationDto } from '@shared/schema';
+import { UpdateFileAssociationDto } from '@shared/schema';
+import { QueryFileAssociationDto } from '@shared/schema';
+import { FileAssociationDto } from '@shared/schema';
 import { Auth } from '../decorator/auth.decorator';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { ResponseEntity } from '../entity';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
+import { ResponseEntity } from '@shared/schema';
+import { PageMetaDto } from '@shared/schema';
 
 @ApiTags('FILE-ASSOCIATIONS')
 @Controller()

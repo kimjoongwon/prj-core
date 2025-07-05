@@ -14,8 +14,7 @@ import {
 import { ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth } from '../decorator';
-import { ResponseEntity } from '../entity';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
+import { ResponseEntity, PageMetaDto } from '@shared/schema';
 
 /**
  * 자동으로 고유한 함수명을 생성하는 오토 베이스 컨트롤러

@@ -13,13 +13,13 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { SpaceAssociationsService } from '../service/space-associations.service';
-import { CreateSpaceAssociationDto } from '../dto/create/create-space-association.dto';
-import { UpdateSpaceAssociationDto } from '../dto/update/update-space-association.dto';
-import { QuerySpaceAssociationDto } from '../dto/query/query-space-association.dto';
-import { SpaceAssociationDto } from '../dto/space-association.dto';
+import { CreateSpaceAssociationDto } from '@shared/schema';
+import { UpdateSpaceAssociationDto } from '@shared/schema';
+import { QuerySpaceAssociationDto } from '@shared/schema';
+import { SpaceAssociationDto } from '@shared/schema';
 import { Auth } from '../decorator/auth.decorator';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { ResponseEntity } from '../entity';
+import { ResponseEntity } from '@shared/schema';
 
 @ApiTags('SPACE-ASSOCIATIONS')
 @Controller()

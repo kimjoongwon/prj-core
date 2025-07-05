@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { PaginationUtil } from '@shared/schema';
 import { SpacesRepository } from '../repository/spaces.repository';
 import { UpdateSpaceDto } from '../dto/update/update-space.dto';

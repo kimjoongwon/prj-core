@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { AbilitiesRepository } from '../repository/abilities.repository';
-import { QueryAbilityDto } from '../dto/query/query-ability.dto';
-import { CreateAbilityDto } from '../dto';
+import { QueryAbilityDto, CreateAbilityDto } from '@shared/schema';
 
 @Injectable()
 export class AbilitiesService {
@@ -26,13 +25,13 @@ export class AbilitiesService {
 
   create(createAbilityDto: CreateAbilityDto) {
     return this.repository.create({
-      data: createAbilityDto,
+      data: createAbilityDto as any,
     });
   }
 
   async getManyByQuery(query: QueryAbilityDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+    const args = query.toArgs<Prisma.AbilityFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.AbilityCountArgs>();
     const abilities = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

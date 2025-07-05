@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SpaceClassificationsRepository } from '../repository/space-classifications.repository';
 import { BaseService } from './base.service';
-import { CreateSpaceClassificationDto, UpdateSpaceClassificationDto } from '../dto';
+import { CreateSpaceClassificationDto, UpdateSpaceClassificationDto } from '@shared/schema';
 import { SpaceClassification } from '../entity';
 
 @Injectable()

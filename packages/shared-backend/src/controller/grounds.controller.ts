@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiParam, ApiBody, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { CreateGroundDto, UpdateGroundDto, GroundDto, QueryGroundDto } from '../dto';
+import { CreateGroundDto, UpdateGroundDto, GroundDto, QueryGroundDto } from '@shared/schema';
 import { GroundsService } from '../service/grounds.service';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ResponseEntity } from '../entity';
+import { ResponseEntity } from '@shared/schema';
 
 @ApiTags('GROUNDS')
 @Controller()

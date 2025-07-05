@@ -4,16 +4,16 @@ import { IsString } from 'class-validator';
 import { ValidationUtil } from '@shared/utils';
 class EnvironmentVariablesValidator {
   @IsString()
-  AUTH_JWT_SECRET: string;
+  AUTH_JWT_SECRET!: string;
 
   @IsString()
-  AUTH_JWT_TOKEN_EXPIRES_IN: string;
+  AUTH_JWT_TOKEN_EXPIRES_IN!: string;
 
   @IsString()
-  AUTH_JWT_TOKEN_REFRESH_IN: string;
+  AUTH_JWT_TOKEN_REFRESH_IN!: string;
 
   @IsString()
-  AUTH_JWT_SALT_ROUNDS: string;
+  AUTH_JWT_SALT_ROUNDS!: string;
 }
 
 export default registerAs<AuthConfig>('auth', () => {

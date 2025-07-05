@@ -1,6 +1,6 @@
 import { applyDecorators, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiCookieAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { RoleType } from '../constant';
+import { RoleType } from '@shared/schema';
 import { AuthUserInterceptor } from '../interceptor';
 import { Roles } from './roles.decorator';
 import { PublicRoute } from './public-route.decorator';

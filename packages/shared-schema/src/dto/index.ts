@@ -17,7 +17,6 @@ export * from './create';
 export * from './update';
 export * from './query';
 export * from './role.dto';
-export * from './ability.dto';
 export * from './subject.dto';
 export * from './session.dto';
 export * from './timeline.dto';

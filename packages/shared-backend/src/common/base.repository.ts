@@ -1,5 +1,5 @@
 import { PrismaService } from 'nestjs-prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { Constructor } from '../decorator/use-dto.decorator';
 import { Logger } from '@nestjs/common';

@@ -1,6 +1,5 @@
 import { Global, Module } from '@nestjs/common';
 import {
-  AbilitiesService,
   ActionsService,
   AssignmentsService,
   CategoriesService,
@@ -18,7 +17,6 @@ import {
   UsersService,
 } from '../service';
 import {
-  AbilitiesRepository,
   ActionsRepository,
   AssignmentsRepository,
   CategoriesRepository,
@@ -42,12 +40,10 @@ import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
-import { ElementBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
-import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
+// import { ElementBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
+// import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
 
 const modules = [
-  AbilitiesService,
-  AbilitiesRepository,
   ActionsService,
   ActionsRepository,
   CategoriesService,
@@ -77,10 +73,10 @@ const modules = [
   TenantsRepository,
   AssignmentsService,
   AssignmentsRepository,
-  ElementBuilderService,
+  // ElementBuilderService,
   GroundsService,
   GroundsRepository,
-  ResourceConfigService,
+  // ResourceConfigService,
   RoleClassificationsRepository,
   RoleClassificationsService,
   UserClassificationsRepository,

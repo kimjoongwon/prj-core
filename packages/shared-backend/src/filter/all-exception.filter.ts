@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import { ResponseEntity } from '../entity/response.entity';
+import { ResponseEntity } from '@shared/schema';
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {

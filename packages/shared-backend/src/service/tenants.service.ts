@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from '../repository';
-import { CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '../dto';
+import { CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '@shared/schema';
 import { Tenant } from '../entity';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { Logger } from 'nestjs-pino';
 import { ContextProvider } from '../provider';
 

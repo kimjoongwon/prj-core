@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RoutinesRepository } from '../repository/routines.repository';
-import { CreateRoutineDto, UpdateRoutineDto } from '../dto';
+import { CreateRoutineDto, UpdateRoutineDto } from '@shared/schema';
 import { BaseService } from './base.service';
 import { Routine } from '../entity/routine.entity';
 

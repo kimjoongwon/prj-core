@@ -20,7 +20,7 @@ export type AwsConfig = {
 
 export type SMTPConfig = {
   username: string;
-  password;
+  password: string;
   port: number;
   host: string;
   sender: string;

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { $Enums, Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@shared/schema';
 import { PrismaService } from 'nestjs-prisma';
 import { UseEntity } from '../decorator/use-dto.decorator';
 import { BaseRepository } from '../common/base.repository';
-import { Category } from '../entity/category.entity';
+import { Category } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class CategoriesRepository extends BaseRepository<
     super(prisma, 'Category');
   }
 
-  async findLastLeafCategoriesByServiceName(serviceName: $Enums.ServiceNames) {
+  async findLastLeafCategoriesByServiceName() {
     const categories = await this.prisma.category.findMany({
       where: {
         children: {
@@ -47,6 +47,6 @@ export class CategoriesRepository extends BaseRepository<
       },
     });
 
-    return categories.map((category) => plainToInstance(Category, category));
+    return categories.map(category => plainToInstance(Category, category));
   }
 }

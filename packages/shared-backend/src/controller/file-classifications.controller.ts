@@ -13,14 +13,14 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ResponseEntity } from '../entity';
+import { ResponseEntity } from '@shared/schema';
 import { FileClassificationsService } from '../service/file-classifications.service';
 import {
   CreateFileClassificationDto,
   UpdateFileClassificationDto,
   FileClassificationDto,
   QueryFileClassificationDto,
-} from '../dto';
+} from '@shared/schema';
 
 @ApiTags('FILE-CLASSIFICATIONS')
 @Controller()

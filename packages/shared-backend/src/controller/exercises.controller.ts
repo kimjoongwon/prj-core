@@ -13,9 +13,14 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { ExerciseDto, CreateExerciseDto, UpdateExerciseDto, QueryExerciseDto } from '../dto';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { 
+  ExerciseDto, 
+  CreateExerciseDto, 
+  UpdateExerciseDto, 
+  QueryExerciseDto,
+  PageMetaDto,
+  ResponseEntity 
+} from '@shared/schema';
 import { ExercisesService } from '../service/exercises.service';
 import { ApiTags } from '@nestjs/swagger';
 

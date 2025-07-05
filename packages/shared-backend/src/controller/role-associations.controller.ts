@@ -13,13 +13,13 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { RoleAssociationsService } from '../service/role-associations.service';
-import { CreateRoleAssociationDto } from '../dto/create/create-role-association.dto';
-import { UpdateRoleAssociationDto } from '../dto/update/update-role-association.dto';
-import { QueryRoleAssociationDto } from '../dto/query/query-role-association.dto';
-import { RoleAssociationDto } from '../dto/role-association.dto';
+import { CreateRoleAssociationDto } from '@shared/schema';
+import { UpdateRoleAssociationDto } from '@shared/schema';
+import { QueryRoleAssociationDto } from '@shared/schema';
+import { RoleAssociationDto } from '@shared/schema';
 import { Auth } from '../decorator/auth.decorator';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { ResponseEntity } from '../entity';
+import { ResponseEntity } from '@shared/schema';
 
 @ApiTags('ROLE-ASSOCIATIONS')
 @Controller()

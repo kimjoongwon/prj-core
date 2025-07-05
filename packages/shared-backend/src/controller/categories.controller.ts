@@ -12,8 +12,8 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { CategoryDto, QueryCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '../dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { CategoryDto, QueryCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { CategoriesService } from '../service';
 
 @ApiTags('CATEGORIES')

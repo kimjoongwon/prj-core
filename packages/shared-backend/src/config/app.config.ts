@@ -11,31 +11,31 @@ enum Environment {
 
 class EnvironmentVariablesValidator {
   @IsEnum(Environment)
-  NODE_ENV: Environment;
+  NODE_ENV!: Environment;
 
   @IsString()
-  APP_NAME: string;
+  APP_NAME!: string;
 
   @IsEmail()
-  APP_ADMIN_EMAIL: string;
+  APP_ADMIN_EMAIL!: string;
 
   @IsNumber()
-  APP_PORT: number;
+  APP_PORT!: number;
 
   @IsString()
-  API_PREFIX: string;
+  API_PREFIX!: string;
 
   @IsUrl()
-  FRONTEND_DOMAIN: string;
+  FRONTEND_DOMAIN!: string;
 
   @IsUrl()
-  BACKEND_DOMAIN: string;
+  BACKEND_DOMAIN!: string;
 
   @IsString()
-  APP_FALLBACK_LANGUAGE: string;
+  APP_FALLBACK_LANGUAGE!: string;
 
   @IsString()
-  APP_HEADER_LANGUAGE: string;
+  APP_HEADER_LANGUAGE!: string;
 }
 
 export default registerAs<AppConfig>('app', () => {

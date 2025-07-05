@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { GroundsRepository } from '../repository/grounds.repository';
-import { CreateGroundDto, QueryGroundDto, UpdateGroundDto } from '../dto';
-import { Ground } from '../entity';
-import { Prisma } from '@prisma/client';
+import {
+  CreateGroundDto,
+  Ground,
+  QueryGroundDto,
+  UpdateGroundDto,
+} from '@shared/schema';
+import { Prisma } from '@shared/schema';
 import { Logger } from 'nestjs-pino';
 
 @Injectable()
@@ -33,7 +37,10 @@ export class GroundsService {
     return this.groundsRepository.findUnique(args);
   }
 
-  async updateById(id: string, updateGroundDto: UpdateGroundDto): Promise<Ground> {
+  async updateById(
+    id: string,
+    updateGroundDto: UpdateGroundDto,
+  ): Promise<Ground> {
     const args = {
       where: { id },
       data: updateGroundDto,
@@ -61,14 +68,16 @@ export class GroundsService {
     });
   }
 
-  async getManyByQuery(query: QueryGroundDto): Promise<{ grounds: Ground[]; count: number }> {
+  async getManyByQuery(
+    query: QueryGroundDto,
+  ): Promise<{ grounds: Ground[]; count: number }> {
     const args = query?.toArgs() as Prisma.GroundFindManyArgs;
 
     args.include = {
       space: true,
     } as Prisma.GroundInclude;
 
-    const countArgs = query.toCountArgs();
+    const countArgs = query.toCountArgs<Prisma.GroundCountArgs>();
     const grounds = await this.groundsRepository.findMany(args);
     const count = await this.groundsRepository.count(countArgs);
 

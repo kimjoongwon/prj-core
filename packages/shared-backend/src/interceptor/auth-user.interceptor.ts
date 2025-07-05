@@ -11,7 +11,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { ContextProvider } from '../provider';
 import { UserDto } from '../dto/user.dto';
 import { AppLogger } from '../utils/app-logger.util';
-import { TenantDto } from '../dto';
+import { TenantDto } from '@shared/schema';
 
 interface AuthContext {
   serviceId?: string;

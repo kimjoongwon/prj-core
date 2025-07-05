@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import _ from 'lodash';
 
 import { UserDto } from '../dto/user.dto';
-import { $Enums } from '@prisma/client';
+import { $Enums } from '@shared/schema';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

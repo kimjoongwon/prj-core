@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { $Enums, Prisma } from '@prisma/client';
-import { UpdateCategoryDto } from '../dto/update/update-category.dto';
-import { QueryCategoryDto } from '../dto/query/query-category.dto';
+import {
+  $Enums,
+  Prisma,
+  QueryCategoryDto,
+  UpdateCategoryDto,
+} from '@shared/schema';
 import { CategoriesRepository } from '../repository';
-import { Category } from '../entity/category.entity';
 import { AppLogger } from '../utils/app-logger.util';
 import { ContextProvider } from '../provider';
 
@@ -65,14 +67,18 @@ export class CategoriesService {
     });
     if (!currentTenant) {
       this.logger.warn('getManyByQuery - No tenant found in context');
-      throw new Error('Tenant information not found in context. Please log in again.');
+      throw new Error(
+        'Tenant information not found in context. Please log in again.',
+      );
     }
     if (!currentTenant.spaceId) {
       this.logger.warn('getManyByQuery - No spaceId in tenant:', {
         tenantId: currentTenant.id?.slice(-8),
         hasSpaceId: !!currentTenant.spaceId,
       });
-      throw new Error('Space ID is missing from tenant information. Please select a space.');
+      throw new Error(
+        'Space ID is missing from tenant information. Please select a space.',
+      );
     }
     this.logger.debug('getManyByQuery - Query Args:', {
       args: query.toArgs<Prisma.CategoryFindManyArgs>({
@@ -124,52 +130,5 @@ export class CategoriesService {
       categories,
       count,
     };
-  }
-
-  async getLastLeafCategoryOptionsBy(serviceName: $Enums.ServiceNames) {
-    const categories = await this.getCategoryHierarchyNames(serviceName);
-    const options = categories.map((category) => {
-      return {
-        key: category[category.length - 1].id,
-        text: category.map((c) => c.name).join(' > '),
-        value: category[category.length - 1].id,
-      };
-    });
-
-    return options;
-  }
-
-  async getCategoryHierarchyNames(serviceName: $Enums.ServiceNames) {
-    const categories = await this.repository.findLastLeafCategoriesByServiceName(serviceName);
-
-    let hierarchy = [];
-
-    categories.forEach((category) => {
-      let hierarchyCategories = [];
-      if (category.parent) {
-        const result = this.buildCategoryHierarchyName(category);
-        hierarchyCategories = hierarchyCategories.concat(result);
-      } else {
-        hierarchyCategories.push(category);
-      }
-
-      hierarchy.push(hierarchyCategories.reverse());
-    });
-
-    hierarchy.map((hierarchy) => {
-      hierarchy;
-    });
-
-    return hierarchy;
-  }
-
-  private buildCategoryHierarchyName(category: Category, hierarchy: Category[] = []) {
-    hierarchy.push(category);
-
-    if (category.parent) {
-      return this.buildCategoryHierarchyName(category.parent, hierarchy);
-    }
-
-    return hierarchy;
   }
 }

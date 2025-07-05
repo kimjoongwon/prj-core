@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { UserAssociationsRepository } from '../repository/user-associations.repository';
 import { QueryUserAssociationDto } from '../dto/query/query-user-association.dto';
-import { CreateUserAssociationDto } from '../dto';
+import { CreateUserAssociationDto } from '@shared/schema';
 
 @Injectable()
 export class UserAssociationsService {

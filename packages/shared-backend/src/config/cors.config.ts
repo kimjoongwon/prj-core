@@ -5,7 +5,7 @@ import { ValidationUtil } from '@shared/utils';
 
 class EnvironmentVariablesValidator {
   @IsBoolean()
-  CORS_ENABLED: boolean;
+  CORS_ENABLED!: boolean;
 }
 
 export default registerAs<CorsConfig>('cors', () => {

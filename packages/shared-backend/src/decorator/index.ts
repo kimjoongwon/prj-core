@@ -47,7 +47,9 @@ export {
 
 export { ApiQueryDto } from './api-query-dto.decorator';
 export { SimpleApiQueryDto } from './simple-api-query-dto.decorator';
-export { AutoApiQuery } from './auto-api-query.decorator';
 export { AutoSwaggerQuery } from './auto-swagger-query.decorator';
-export { ApplyQueryDtoDecorators, setupAutoQueryDecorators } from './query-dto-helper.decorator';
+export {
+  ApplyQueryDtoDecorators,
+  setupAutoQueryDecorators,
+} from './query-dto-helper.decorator';
 export { AutoQueryMetadata } from './auto-query-metadata.decorator';

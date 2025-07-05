@@ -4,7 +4,7 @@ import {
   UpdateRoleClassificationDto,
   RoleClassificationDto,
   QueryRoleClassificationDto,
-} from '../dto';
+} from '@shared/schema';
 import { RoleClassificationsService } from '../service/role-classifications.service';
 import { AutoBaseController } from './auto-base.controller';
 import { CrudController } from './crud.decorator';

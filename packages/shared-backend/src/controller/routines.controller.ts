@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { RoutineDto, CreateRoutineDto, UpdateRoutineDto, QueryRoutineDto } from '../dto';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { RoutineDto, CreateRoutineDto, UpdateRoutineDto, QueryRoutineDto } from '@shared/schema';
+import { PageMetaDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { RoutinesService } from '../service/routines.service';
 import { ApiTags } from '@nestjs/swagger';
 

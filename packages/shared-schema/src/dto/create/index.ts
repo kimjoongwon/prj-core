@@ -13,7 +13,6 @@ export * from './create-space-classification.dto';
 export * from './create-file-classification.dto';
 export * from './create-role.dto';
 export * from './create-action.dto';
-export * from './create-ability.dto';
 export * from './create-subject.dto';
 export * from './create-session.dto';
 export * from './create-timeline.dto';

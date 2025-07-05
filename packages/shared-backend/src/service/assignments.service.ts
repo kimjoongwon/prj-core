@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@shared/schema';
 import { AssignmentsRepository } from '../repository/assignments.repository';
-import { CreateAssignmentDto, QueryAssignmentDto, UpdateAssignmentDto } from '../dto';
+import { CreateAssignmentDto, QueryAssignmentDto, UpdateAssignmentDto } from '@shared/schema';
 
 @Injectable()
 export class AssignmentsService {
@@ -37,8 +38,8 @@ export class AssignmentsService {
   }
 
   async getManyByQuery(query: QueryAssignmentDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+    const args = query.toArgs<Prisma.AssignmentFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.AssignmentCountArgs>();
     const assignments = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

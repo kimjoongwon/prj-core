@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto, GroundDto } from '../dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto, GroundDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { UsersService } from '../service';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';

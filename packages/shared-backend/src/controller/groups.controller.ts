@@ -12,8 +12,8 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { Auth, Public, ApiResponseEntity } from '../decorator';
-import { GroupDto, CreateGroupDto, QueryGroupDto, UpdateGroupDto } from '../dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { GroupDto, CreateGroupDto, QueryGroupDto, UpdateGroupDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { GroupsService } from '../service';
 
 @ApiTags('GROUPS')

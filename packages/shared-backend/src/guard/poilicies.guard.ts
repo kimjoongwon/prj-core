@@ -1,6 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory/casl-ability.factory';
+// import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory/casl-ability.factory';
+
+// Temporary type definition
+type AppAbility = any;
 
 export const CHECK_POLICIES_KEY = 'check_policy';
 
@@ -19,25 +22,24 @@ export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 export class PoliciesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private caslAbilityFactory: CaslAbilityFactory,
+    // private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const policyHandlers =
-      this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
+    // const policyHandlers =
+    //   this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
 
-    const { user } = context.switchToHttp().getRequest();
+    // const { user } = context.switchToHttp().getRequest();
     // const ability = await this.caslAbilityFactory.createForUser(user);
 
     // return policyHandlers.every((handler) => this.execPolicyHandler(handler, ability));
-
-    return true;
+    return true; // Temporary: allow all access
   }
 
-  private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
-    if (typeof handler === 'function') {
-      return handler(ability);
-    }
-    return handler.handle(ability);
-  }
+  // private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
+  //   if (typeof handler === 'function') {
+  //     return handler(ability);
+  //   }
+  //   return handler.handle(ability);
+  // }
 }

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { ActionsRepository } from '../repository/actions.repository';
-import { QueryActionDto } from '../dto/query/query-action.dto';
-import { CreateActionDto } from '../dto';
+import { QueryActionDto, CreateActionDto } from '@shared/schema';
 
 @Injectable()
 export class ActionsService {
@@ -26,13 +25,13 @@ export class ActionsService {
 
   create(createActionDto: CreateActionDto) {
     return this.repository.create({
-      data: createActionDto,
+      data: createActionDto as any,
     });
   }
 
   async getManyByQuery(query: QueryActionDto) {
-    const args = query.toArgs();
-    const countArgs = query.toCountArgs();
+    const args = query.toArgs<Prisma.ActionFindManyArgs>();
+    const countArgs = query.toCountArgs<Prisma.ActionCountArgs>();
     const actions = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

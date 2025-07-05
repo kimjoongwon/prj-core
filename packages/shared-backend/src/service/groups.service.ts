@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import {
+  CreateGroupDto,
+  Prisma,
+  QueryGroupDto,
+  UpdateGroupDto,
+} from '@shared/schema';
 import { GroupsRepository } from '../repository/groups.repository';
-import { CreateGroupDto } from '../dto/create/create-group.dto';
-import { QueryGroupDto } from '../dto/query/query-group.dto';
-import { UpdateGroupDto } from '../dto/update/update-group.dto';
 
 @Injectable()
 export class GroupsService {

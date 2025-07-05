@@ -13,13 +13,13 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { UserAssociationsService } from '../service/user-associations.service';
-import { CreateUserAssociationDto } from '../dto/create/create-user-association.dto';
-import { UpdateUserAssociationDto } from '../dto/update/update-user-association.dto';
-import { QueryUserAssociationDto } from '../dto/query/query-user-association.dto';
-import { UserAssociationDto } from '../dto/user-association.dto';
+import { CreateUserAssociationDto } from '@shared/schema';
+import { UpdateUserAssociationDto } from '@shared/schema';
+import { QueryUserAssociationDto } from '@shared/schema';
+import { UserAssociationDto } from '@shared/schema';
 import { Auth } from '../decorator/auth.decorator';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { ResponseEntity } from '../entity';
+import { ResponseEntity } from '@shared/schema';
 
 @ApiTags('USER-ASSOCIATIONS')
 @Controller()

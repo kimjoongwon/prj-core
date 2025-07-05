@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repository/users.repository';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@shared/schema';
 import { GroundsRepository } from '../repository';
-import { QueryUserDto } from '../dto';
+import { QueryUserDto } from '@shared/schema';
 
 @Injectable()
 export class UsersService {

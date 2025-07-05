@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '../dto';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
-import { ResponseEntity } from '../entity/response.entity';
+import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '@shared/schema';
+import { PageMetaDto } from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
 import { AssignmentsService } from '../service/assignments.service';
 import { ApiTags } from '@nestjs/swagger';
 
