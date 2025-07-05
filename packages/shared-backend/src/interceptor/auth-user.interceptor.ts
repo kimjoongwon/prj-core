@@ -9,7 +9,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ContextProvider } from '../provider';
-import { UserDto } from '../dto/user.dto';
+import { UserDto } from '@shared/schema';
 import { AppLogger } from '../utils/app-logger.util';
 import { TenantDto } from '@shared/schema';
 

@@ -1,7 +1,7 @@
 import { ClsModule } from 'nestjs-cls';
-import { CaslModule } from '@shared/backend';
+// import { CaslModule } from '@shared/backend';
 import { Logger } from '@nestjs/common';
-import { appConfig, AuthConfig, authConfig, awsConfig, corsConfig } from '@shared/backend';
+import { appConfig, authConfig, awsConfig, corsConfig, smtpConfig, AuthConfig } from '@shared/backend';
 import { loggingMiddleware, PrismaModule, QueryInfo } from 'nestjs-prisma';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -33,7 +33,7 @@ export const libModules = [
     },
     inject: [ConfigService],
   }),
-  CaslModule,
+  // CaslModule,
   ClsModule.forRoot({
     global: true,
     middleware: {

@@ -5,16 +5,18 @@ import {
   Auth,
   AuthService,
   ContextProvider,
-  LoginPayloadDto,
   Public,
-  ResponseEntity,
-  SignUpPayloadDto,
-  TokenDto,
   TokenService,
-  UserDto,
 } from '@shared/backend';
 import { plainToInstance } from 'class-transformer';
 import { Response, Request } from 'express';
+import {
+  LoginPayloadDto,
+  SignUpPayloadDto,
+  UserDto,
+  ResponseEntity,
+  TokenDto,
+} from '@shared/schema';
 
 @ApiTags('AUTH')
 @Controller()
