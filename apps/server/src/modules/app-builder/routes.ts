@@ -44,7 +44,6 @@ export const rawRoutes: RouteBuilder[] = [
           },
         ],
       },
-
       {
         name: ROUTE_NAMES.DASHBOARD,
         relativePath: 'dashboard',
@@ -90,18 +89,9 @@ export const rawRoutes: RouteBuilder[] = [
                       type: 'Modal',
                     },
                     page: {
-                      sections: [
+                      elements: [
                         {
-                          stacks: [
-                            {
-                              type: 'VStack',
-                              elements: [
-                                {
-                                  name: 'Outlet',
-                                },
-                              ],
-                            },
-                          ],
+                          name: 'Outlet',
                         },
                       ],
                     },

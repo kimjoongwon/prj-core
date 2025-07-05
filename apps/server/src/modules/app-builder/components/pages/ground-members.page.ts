@@ -3,15 +3,10 @@ import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types
 export const getGroundMembersPage = (): PageBuilder => {
     return {
       name: '그라운드 멤버 리스트',
-      sections: [
+      elements: [
         {
-          stacks: [
-            {
-              type: 'VStack' as const,
-              elements: [
-                {
-                  name: 'DataGridBuilder',
-                  props: {
+          name: 'DataGridBuilder',
+          props: {
                     buttons: [
                       {
                         children: '멤버 추가',
@@ -151,9 +146,5 @@ export const getGroundMembersPage = (): PageBuilder => {
                   } satisfies DataGridBuilderProps,
                 },
               ],
-            },
-          ],
-        },
-      ],
     };
 };

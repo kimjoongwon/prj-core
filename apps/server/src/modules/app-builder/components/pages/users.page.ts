@@ -3,15 +3,10 @@ import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 export const getUsersPage = (): PageBuilder => {
     return {
       name: '사용자 리스트',
-      sections: [
+      elements: [
         {
-          stacks: [
-            {
-              type: 'VStack' as const,
-              elements: [
-                {
-                  name: 'DataGridBuilder',
-                  props: {
+          name: 'DataGridBuilder',
+          props: {
                     table: {
                       type: 'table' as const,
                       query: {
@@ -43,9 +38,5 @@ export const getUsersPage = (): PageBuilder => {
                   } satisfies DataGridBuilderProps,
                 },
               ],
-            },
-          ],
-        },
-      ],
     };
 };

@@ -10,6 +10,7 @@ export class ValidationUtil {
     const validatedConfig = plainToClass(envVariablesClass, config, {
       enableImplicitConversion: true,
     });
+
     const errors = validateSync(validatedConfig, {
       skipMissingProperties: false,
     });

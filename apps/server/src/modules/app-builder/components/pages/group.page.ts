@@ -1,5 +1,5 @@
 import { $Enums } from '@prisma/client';
-import { ContextProvider } from '@shared';
+import { ContextProvider } from '../../../../shared/provider/context.provider';
 import {
   IButtonBuilder,
   InputProps,
@@ -49,11 +49,11 @@ export const getGroupPage = (pageType: PageTypes, type: $Enums.GroupTypes): Page
               queryKey: '/api/v1/groups',
               validationFields: {
                 'form.inputs.name': {
-                  required: { value: true, message: '그룹 이름은 필수입니다' },
+                  required: { value: true, message: '그룹 이름은 필수입니다' }
                 },
                 'form.inputs.label': {
-                  required: { value: true, message: '라벨은 필수입니다' },
-                },
+                  required: { value: true, message: '그룹 라벨은 필수입니다' }
+                }
               },
             },
             navigator: {
@@ -74,11 +74,14 @@ export const getGroupPage = (pageType: PageTypes, type: $Enums.GroupTypes): Page
               queryKey: '/api/v1/groups',
               validationFields: {
                 'form.inputs.name': {
-                  required: { value: true, message: '그룹 이름은 필수입니다' },
+                  required: { value: true, message: '그룹 이름은 필수입니다' }
                 },
                 'form.inputs.label': {
-                  required: { value: true, message: '라벨은 필수입니다' },
-                },
+                  required: { value: true, message: '그룹 라벨은 필수입니다' }
+                }
+              },
+              pathParams: {
+                groupId: 'groupId',
               },
             },
             navigator: {
@@ -100,67 +103,56 @@ export const getGroupPage = (pageType: PageTypes, type: $Enums.GroupTypes): Page
           inputs: formInputs,
         },
       },
-      sections: [
+      elements: [
         {
-          stacks: [
-            {
-              type: 'VStack',
-              elements: [
-                {
-                  name: 'ResourceBuilder',
-                  props: {
-                    resourceName: 'group',
-                    type: 'resource' as const,
-                    query: {
-                      name: 'useGetGroupById',
-                    },
-                    sections: [
-                      {
-                        stacks: [
-                          {
-                            type: 'VStack',
-                            elements: [
-                              {
-                                name: 'Text',
-                                props: {
-                                  children: getPageTitle(),
-                                  className: 'text-2xl font-bold mb-4',
-                                  variant: 'title',
-                                } satisfies TextProps,
-                              },
-                              {
-                                name: 'Input',
-                                props: {
-                                  label: '이름',
-                                  path: 'form.inputs.name',
-                                  isReadOnly,
-                                } as InputProps<any>,
-                              },
-                              {
-                                name: 'Input',
-                                props: {
-                                  label: '라벨',
-                                  path: 'form.inputs.label',
-                                  isReadOnly,
-                                } as InputProps<any>,
-                              },
-                              {
-                                name: 'Spacer',
-                                props: {
-                                  size: 4,
-                                } satisfies SpacerProps,
-                              },
-                              ...getActionButtons(),
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  } satisfies ResourceBuilder,
-                },
-              ],
+          name: 'ResourceBuilder',
+          props: {
+            resourceName: 'group',
+            type: 'resource' as const,
+            query: {
+              name: 'useGetGroupById',
             },
-          ],
+            elements: [
+              {
+                name: 'VStack',
+                props: {
+                  className: 'space-y-4'
+                },
+                children: [
+                  {
+                    name: 'Text',
+                    props: {
+                      children: getPageTitle(),
+                      variant: 'title',
+                    } satisfies TextProps,
+                  },
+                  {
+                    name: 'Input',
+                    props: {
+                      label: '이름',
+                      path: 'form.inputs.name',
+                      isReadOnly,
+                    } as InputProps<any>,
+                  },
+                  {
+                    name: 'Input',
+                    props: {
+                      label: '라벨',
+                      path: 'form.inputs.label',
+                      isReadOnly,
+                    } as InputProps<any>,
+                  },
+                  {
+                    name: 'Spacer',
+                    props: {
+                      size: 4,
+                    } satisfies SpacerProps,
+                  },
+                  ...getActionButtons(),
+                ],
+              },
+            ],
+          } satisfies ResourceBuilder,
         },
       ],
     };

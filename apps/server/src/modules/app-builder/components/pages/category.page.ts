@@ -1,5 +1,5 @@
 import { $Enums } from '@prisma/client';
-import { ContextProvider } from '@shared';
+import { ContextProvider } from '../../../../shared/provider/context.provider';
 import {
   IButtonBuilder,
   InputProps,
@@ -96,59 +96,48 @@ export const getCategoryPage = (pageType: PageType, type: $Enums.CategoryTypes):
           inputs: formInputs,
         },
       },
-      sections: [
+      elements: [
         {
-          stacks: [
-            {
-              type: 'VStack',
-              elements: [
-                {
-                  name: 'ResourceBuilder',
-                  props: {
-                    resourceName: 'category',
-                    type: 'resource' as const,
-                    query: {
-                      name: 'useGetCategoryById',
-                    },
-                    sections: [
-                      {
-                        stacks: [
-                          {
-                            type: 'VStack',
-                            elements: [
-                              {
-                                name: 'Text',
-                                props: {
-                                  children: getPageTitle(),
-                                  className: 'text-2xl font-bold mb-4',
-                                  variant: 'title',
-                                } satisfies TextProps,
-                              },
-                              {
-                                name: 'Input',
-                                props: {
-                                  label: '이름',
-                                  path: 'form.inputs.name',
-                                  isReadOnly,
-                                } as InputProps<any>,
-                              },
-                              {
-                                name: 'Spacer',
-                                props: {
-                                  size: 4,
-                                } satisfies SpacerProps,
-                              },
-                              ...getActionButtons(),
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  } satisfies ResourceBuilder,
-                },
-              ],
+          name: 'ResourceBuilder',
+          props: {
+            resourceName: 'category',
+            type: 'resource' as const,
+            query: {
+              name: 'useGetCategoryById',
             },
-          ],
+            elements: [
+              {
+                name: 'VStack',
+                props: {
+                  className: 'space-y-4'
+                },
+                children: [
+                  {
+                    name: 'Text',
+                    props: {
+                      children: getPageTitle(),
+                      variant: 'title',
+                    } satisfies TextProps,
+                  },
+                  {
+                    name: 'Input',
+                    props: {
+                      label: '이름',
+                      path: 'form.inputs.name',
+                      isReadOnly,
+                    } as InputProps<any>,
+                  },
+                  {
+                    name: 'Spacer',
+                    props: {
+                      size: 4,
+                    } satisfies SpacerProps,
+                  },
+                  ...getActionButtons(),
+                ],
+              },
+            ],
+          } satisfies ResourceBuilder,
         },
       ],
     };
