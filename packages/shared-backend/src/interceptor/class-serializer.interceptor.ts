@@ -8,7 +8,7 @@ import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor {
-  serialize(response, options): PlainLiteralObject | PlainLiteralObject[] {
+  serialize(response: any, options: ClassSerializerContextOptions): PlainLiteralObject | PlainLiteralObject[] {
     const isArray = Array.isArray(response);
     const isObject = response !== null && typeof response === 'object';
     if (!isArray && !isObject) {

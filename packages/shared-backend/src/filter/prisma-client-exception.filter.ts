@@ -30,7 +30,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
    * Error codes definition for Prisma Client (Query Engine)
    * @see https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
    */
-  private readonly defaultMapping = {
+  private readonly defaultMapping: Record<string, HttpStatus> = {
     P2000: HttpStatus.BAD_REQUEST,
     P2002: HttpStatus.CONFLICT,
     P2025: HttpStatus.NOT_FOUND,

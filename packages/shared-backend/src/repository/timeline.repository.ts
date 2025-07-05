@@ -20,7 +20,7 @@ export class TimelinesRepository extends BaseRepository<
   Prisma.TimelineFindFirstArgs,
   Prisma.TimelineFindUniqueArgs,
   Prisma.TimelineGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.TimelineCreateManyAndReturnArgs,
   Timeline
 > {
   constructor(prisma: PrismaService) {

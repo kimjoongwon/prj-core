@@ -58,7 +58,7 @@ export class TokenService {
         throw new BadRequestException('토큰 미사용');
       }
 
-      throw new InternalServerErrorException(`알 수 없는 에러: ${error?.message}`);
+      throw new InternalServerErrorException(`알 수 없는 에러: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

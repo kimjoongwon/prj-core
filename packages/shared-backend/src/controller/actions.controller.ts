@@ -124,7 +124,7 @@ export class ActionsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      actions.map(action => action.toDto()),
+      actions.map(action => action?.toDto?.() ?? action),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

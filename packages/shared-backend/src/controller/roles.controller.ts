@@ -46,7 +46,7 @@ export class RolesController {
   @ApiResponseEntity(RoleDto, HttpStatus.OK)
   async updateRole(@Param('roleId') roleId: string, @Body() updateRoleDto: UpdateRoleDto) {
     const role = await this.service.update(roleId, updateRoleDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', role.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', role?.toDto?.() ?? role);
   }
 
   @Patch(':roleId/removedAt')
@@ -77,7 +77,7 @@ export class RolesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      roles.map((role) => role.toDto()),
+      roles.map((role) => role?.toDto?.() ?? role),
       query.toPageMetaDto(count),
     );
   }

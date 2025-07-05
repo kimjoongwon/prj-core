@@ -80,8 +80,8 @@ export class AuthUserInterceptor implements NestInterceptor {
       };
     } catch (error) {
       this.logger.error(
-        `Failed to extract auth context for request ${requestId}: ${error.message}`,
-        error.stack,
+        `Failed to extract auth context for request ${requestId}: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? error.stack : '',
       );
       throw new HttpException(
         'Failed to process authentication context',
@@ -120,7 +120,7 @@ export class AuthUserInterceptor implements NestInterceptor {
         });
       }
 
-      if (this.isValidUser(authContext.user)) {
+      if (authContext.user && this.isValidUser(authContext.user)) {
         ContextProvider.setAuthUser(authContext.user);
         ContextProvider.setAuthUserId(authContext.user.id);
         this.logger.user('User authenticated', {
@@ -136,7 +136,7 @@ export class AuthUserInterceptor implements NestInterceptor {
       }
     } catch (error) {
       this.logger.error(
-        `Context setup failed: ${error.message}`,
+        `Context setup failed: ${error instanceof Error ? error.message : String(error)}`,
         `req:${authContext.requestId?.slice(-8)}`,
       );
       throw new HttpException(
@@ -147,7 +147,7 @@ export class AuthUserInterceptor implements NestInterceptor {
   }
 
   private isValidUser(user: UserDto): boolean {
-    return user && user.id && user.tenants && Array.isArray(user.tenants);
+    return !!(user && user.id && user.tenants && Array.isArray(user.tenants));
   }
 
   private logRequestStart(authContext: AuthContext, requestId: string): void {

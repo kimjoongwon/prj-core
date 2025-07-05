@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Logger, Module } from '@nestjs/common';
 import {
   ActionsService,
   AssignmentsService,
@@ -40,10 +40,14 @@ import { RolesRepository } from '../repository/role.repository';
 import { AwsService } from '../domain/aws/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
-// import { ElementBuilderService } from '../../modules/app-builder/components/Input/Input-builder.service';
-// import { ResourceConfigService } from '../../modules/app-builder/components/services/resource-config.service';
+import { PrismaService } from 'nestjs-prisma';
+import { ConfigService } from '@nestjs/config';
+import { LoggerModule } from 'nestjs-pino/LoggerModule';
 
 const modules = [
+  LoggerModule,
+  ConfigService,
+  PrismaService,
   ActionsService,
   ActionsRepository,
   CategoriesService,

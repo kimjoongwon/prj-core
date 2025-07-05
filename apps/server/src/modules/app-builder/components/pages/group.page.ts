@@ -1,5 +1,5 @@
-import { $Enums } from '@prisma/client';
-import { ContextProvider } from '../../../../shared/provider/context.provider';
+import { $Enums } from '@shared/schema';
+import { ContextProvider } from '@shared/backend';
 import {
   IButtonBuilder,
   InputProps,

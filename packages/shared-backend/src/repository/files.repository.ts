@@ -20,7 +20,7 @@ export class FilesRepository extends BaseRepository<
   Prisma.FileFindFirstArgs,
   Prisma.FileFindUniqueArgs,
   Prisma.FileGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.FileCreateManyAndReturnArgs,
   File
 > {
   constructor(prisma: PrismaService) {

@@ -50,7 +50,7 @@ export class TenantsController {
   @ApiResponseEntity(TenantDto, HttpStatus.OK)
   async getTenantById(@Param('tenantId') tenantId: string) {
     const tenant = await this.service.getById(tenantId);
-    return new ResponseEntity(HttpStatus.OK, '성공', tenant.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', tenant?.toDto?.() ?? tenant);
   }
 
   @Patch(':tenantId')
@@ -92,7 +92,7 @@ export class TenantsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      tenants.map((tenant) => tenant.toDto()),
+      tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

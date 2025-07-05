@@ -39,6 +39,7 @@
     "@nestjs/swagger": "^11.0.5",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
+    "@prisma/client": "^6.4.1",
     "@shared/backend": "workspace:*",
     "@shared/schema": "workspace:*",
     "@shared/utils": "workspace:*",

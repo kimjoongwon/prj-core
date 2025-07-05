@@ -38,7 +38,7 @@ export class ExercisesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      exercises.map((exercise) => exercise.toDto()),
+      exercises.map((exercise) => exercise?.toDto?.() ?? exercise),
       new PageMetaDto(query.skip, query.take, count),
     );
   }
@@ -49,7 +49,7 @@ export class ExercisesController {
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
   async createExercise(@Body() createExerciseDto: CreateExerciseDto) {
     const exercise = await this.service.create(createExerciseDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', exercise?.toDto?.() ?? exercise);
   }
 
   @Get(':exerciseId')
@@ -58,7 +58,7 @@ export class ExercisesController {
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
   async getExercise(@Param('exerciseId') exerciseId: string) {
     const exercise = await this.service.getById(exerciseId);
-    return new ResponseEntity(HttpStatus.OK, '성공', exercise.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', exercise?.toDto?.() ?? exercise);
   }
 
   @Patch(':exerciseId')

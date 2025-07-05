@@ -98,7 +98,7 @@ export class SessionsController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      sessions.map((session) => session.toDto()),
+      sessions.map((session) => session?.toDto?.() ?? session),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

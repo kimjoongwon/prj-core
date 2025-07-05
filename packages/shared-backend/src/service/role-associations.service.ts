@@ -34,7 +34,7 @@ export class RoleAssociationsService {
       group: true,
     };
     const args = query.toArgs({ include });
-    const countArgs = query.toCountArgs();
+    const countArgs = query.toCountArgs<Prisma.RoleAssociationCountArgs>();
     const roleAssociations = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

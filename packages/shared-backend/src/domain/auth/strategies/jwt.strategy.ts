@@ -62,7 +62,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           }
         },
       ]),
-      secretOrKey: authConfig?.secret,
+      secretOrKey: authConfig?.secret || 'fallback-secret',
     });
   }
 
@@ -85,7 +85,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // user 객체를 직접 반환 ({ user } 래핑하지 않음)
       return user;
     } catch (error) {
-      this.logger.error(`Error in JWT validate: ${error.message}`, error.stack);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : '';
+      this.logger.error(`Error in JWT validate: ${errorMessage}`, errorStack);
       throw error;
     }
   }

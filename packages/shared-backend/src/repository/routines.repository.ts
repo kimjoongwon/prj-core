@@ -20,7 +20,7 @@ export class RoutinesRepository extends BaseRepository<
   Prisma.RoutineFindFirstArgs,
   Prisma.RoutineFindUniqueArgs,
   Prisma.RoutineGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.RoutineCreateManyAndReturnArgs,
   Routine
 > {
   constructor(prisma: PrismaService) {

@@ -7,15 +7,11 @@ import {
   Tenant,
 } from '@shared/schema';
 import { Prisma } from '@shared/schema';
-import { Logger } from 'nestjs-pino';
 import { ContextProvider } from '../provider';
 
 @Injectable()
 export class TenantsService {
-  constructor(
-    private readonly tenantsRepository: TenantsRepository,
-    readonly logger: Logger,
-  ) {}
+  constructor(private readonly tenantsRepository: TenantsRepository) {}
 
   async create(createTenantDto: CreateTenantDto): Promise<Tenant> {
     return this.tenantsRepository.create({
@@ -45,7 +41,6 @@ export class TenantsService {
         role: true,
       },
     };
-    this.logger.log(`Fetching tenant with ID: ${id}`, 'TenantsService');
     return this.tenantsRepository.findUnique(args);
   }
 

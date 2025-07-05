@@ -31,9 +31,9 @@ export class SubjectsService {
 
   async getManyByQuery(query?: QuerySubjectDto) {
     const args = query?.toArgs();
-    const countArgs = query?.toCountArgs();
-    const subjects = await this.repository.findMany(args);
-    const count = await this.repository.count(countArgs);
+    const countArgs = query?.toCountArgs<Prisma.SubjectCountArgs>();
+    const subjects = args ? await this.repository.findMany(args) : [];
+    const count = countArgs ? await this.repository.count(countArgs) : 0;
     return {
       subjects,
       count,

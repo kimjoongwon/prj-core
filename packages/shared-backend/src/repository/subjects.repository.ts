@@ -20,7 +20,7 @@ export class SubjectsRepository extends BaseRepository<
   Prisma.SubjectFindFirstArgs,
   Prisma.SubjectFindUniqueArgs,
   Prisma.SubjectGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.SubjectCreateManyAndReturnArgs,
   Subject
 > {
   constructor(prisma: PrismaService) {

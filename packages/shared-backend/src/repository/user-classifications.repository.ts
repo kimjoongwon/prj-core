@@ -20,7 +20,7 @@ export class UserClassificationsRepository extends BaseRepository<
   Prisma.UserClassificationFindFirstArgs,
   Prisma.UserClassificationFindUniqueArgs,
   Prisma.UserClassificationGroupByArgs,
-  Prisma.GroupCreateManyArgs,
+  Prisma.UserClassificationCreateManyAndReturnArgs,
   UserClassification
 > {
   constructor(prisma: PrismaService) {

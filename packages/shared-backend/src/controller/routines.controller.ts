@@ -29,7 +29,7 @@ export class RoutinesController {
   @ApiResponseEntity(RoutineDto, HttpStatus.OK)
   async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
     const routine = await this.service.create(createRoutineDto);
-    return new ResponseEntity(HttpStatus.OK, '성공', routine.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', routine?.toDto?.() ?? routine);
   }
 
   @Get(':routineId')
@@ -38,7 +38,7 @@ export class RoutinesController {
   @ApiResponseEntity(RoutineDto, HttpStatus.OK)
   async getRoutine(@Param('routineId') routineId: string) {
     const routine = await this.service.getById(routineId);
-    return new ResponseEntity(HttpStatus.OK, '성공', routine.toDto());
+    return new ResponseEntity(HttpStatus.OK, '성공', routine?.toDto?.() ?? routine);
   }
 
   @Patch(':routineId')
@@ -80,7 +80,7 @@ export class RoutinesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'success',
-      items.map((item) => item.toDto()),
+      items.map((item) => item?.toDto?.() ?? item),
       new PageMetaDto(query.skip, query.take, count),
     );
   }

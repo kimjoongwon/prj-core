@@ -41,7 +41,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
-      groups.map((group) => group.toDto()),
+      groups.map((group) => group?.toDto?.() ?? group),
       query.toPageMetaDto(totalCount),
     );
   }

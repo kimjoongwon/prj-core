@@ -14,7 +14,7 @@ export class PasswordService {
   hashPassword(password: string): Promise<string> {
     const authConfig = this.configService.get<AuthConfig>('auth');
 
-    return hash(password, authConfig?.bcryptSaltOrRound);
+    return hash(password, authConfig?.bcryptSaltOrRound || 10);
   }
 
   /**
