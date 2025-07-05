@@ -1,11 +1,6 @@
 // Re-export Prisma types and client
 export { PrismaClient } from '@prisma/client';
-export {
-  // Prisma utility types
-  Prisma,
-  $Enums,
-  // User-defined types that don't conflict
-} from '@prisma/client';
+export { Prisma, $Enums } from '@prisma/client';
 
 // Re-export types
 export * from './types';

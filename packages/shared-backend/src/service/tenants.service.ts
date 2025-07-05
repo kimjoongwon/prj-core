@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { TenantsRepository } from '../repository';
-import { CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '@shared/schema';
-import { Tenant } from '../entity';
+import {
+  CreateTenantDto,
+  UpdateTenantDto,
+  QueryTenantDto,
+  Tenant,
+} from '@shared/schema';
 import { Prisma } from '@shared/schema';
 import { Logger } from 'nestjs-pino';
 import { ContextProvider } from '../provider';
@@ -45,7 +49,10 @@ export class TenantsService {
     return this.tenantsRepository.findUnique(args);
   }
 
-  async updateById(id: string, updateTenantDto: UpdateTenantDto): Promise<Tenant> {
+  async updateById(
+    id: string,
+    updateTenantDto: UpdateTenantDto,
+  ): Promise<Tenant> {
     const args: any = {
       where: { id },
       data: updateTenantDto,
@@ -85,7 +92,9 @@ export class TenantsService {
     });
   }
 
-  async getManyByQuery(query: QueryTenantDto): Promise<{ tenants: Tenant[]; count: number }> {
+  async getManyByQuery(
+    query: QueryTenantDto,
+  ): Promise<{ tenants: Tenant[]; count: number }> {
     const currentUser = ContextProvider.getAuthUser();
     console.log('Current User:', currentUser);
     const args = query?.toArgs({
@@ -103,7 +112,7 @@ export class TenantsService {
       },
     }) as Prisma.TenantFindManyArgs;
 
-    const countArgs = query.toCountArgs();
+    const countArgs = query.toCountArgs<Prisma.TenantCountArgs>();
     const tenants = await this.tenantsRepository.findMany(args);
     const count = await this.tenantsRepository.count(countArgs);
 

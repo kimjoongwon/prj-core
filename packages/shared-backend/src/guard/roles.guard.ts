@@ -2,7 +2,7 @@ import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/com
 import { Reflector } from '@nestjs/core';
 import _ from 'lodash';
 
-import { UserDto } from '../dto/user.dto';
+import { UserDto } from '@shared/schema';
 import { $Enums } from '@shared/schema';
 
 @Injectable()

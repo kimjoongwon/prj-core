@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
+import { Prisma, QuerySpaceAssociationDto } from '@shared/schema';
 import { SpaceAssociationsRepository } from '../repository/space-associations.repository';
-import { QuerySpaceAssociationDto } from '../dto/query/query-space-association.dto';
 import { CreateSpaceAssociationDto } from '@shared/schema';
 
 @Injectable()
@@ -35,7 +34,7 @@ export class SpaceAssociationsService {
       group: true,
     };
     const args = query.toArgs({ include });
-    const countArgs = query.toCountArgs();
+    const countArgs = query.toCountArgs<Prisma.SpaceCountArgs>();
     const spaceAssociations = await this.repository.findMany(args);
     const count = await this.repository.count(countArgs);
     return {

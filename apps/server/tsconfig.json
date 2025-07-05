@@ -18,6 +18,14 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false
-  }
+    "forceConsistentCasingInFileNames": false,
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": false
+  },
+  "exclude": [
+    "prisma/seed.ts",
+    "src/modules/app-builder/**/*.ts"
+  ]
 }

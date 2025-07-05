@@ -26,3 +26,4 @@ export * from './assignment.entity';
 export * from './ground.entity';
 export * from './exercise.entity';
 export * from './file.entity';
+export * from './routine.entity';

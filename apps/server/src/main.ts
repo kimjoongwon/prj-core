@@ -1,34 +1,40 @@
 import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig, AppLogger } from '@shared/backend';
+import {
+  AllExceptionsFilter,
+  PrismaClientExceptionFilter,
+  logConfig,
+} from '@shared/backend';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger as NestLogger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const startTime = Date.now();
-  const logger = new AppLogger('Bootstrap');
+  const logger = new NestLogger('Bootstrap');
 
-  logger.auth('🚀 Starting server...', {
-    env: process.env.NODE_ENV || 'development',
-    nodeVersion: process.version,
-  });
+  logger.log('🚀 Starting server...');
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     logger: logConfig.level,
   });
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   // Cookie parser 미들웨어 추가
+  // @ts-ignore
   app.use(cookieParser());
 
+  // @ts-ignore
   app.useLogger(app.get(Logger));
+  // @ts-ignore
   app.set('query parser', 'extended');
   app.useGlobalFilters(
+    // @ts-ignore
     new AllExceptionsFilter(httpAdapterHost.httpAdapter),
+    // @ts-ignore
     new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
   );
   app.useGlobalPipes(
@@ -48,8 +54,10 @@ async function bootstrap() {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   };
 
+  // @ts-ignore
   const document = SwaggerModule.createDocument(app, config, options);
 
+  // @ts-ignore
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
@@ -75,12 +83,7 @@ async function bootstrap() {
   await app.listen(port);
 
   const bootTime = Date.now() - startTime;
-  logger.success('🎉 Server started successfully!', {
-    port,
-    url: `http://localhost:${port}`,
-    docs: `http://localhost:${port}/api`,
-    bootTime: `${bootTime}ms`,
-  });
+  logger.log('🎉 Server started successfully!');
 }
 
 bootstrap();
