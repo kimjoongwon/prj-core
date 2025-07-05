@@ -194,88 +194,78 @@ export const getGroundPage = (type: PageType): PageBuilder => {
         inputs: formInputs,
       },
     },
-    sections: [
+    elements: [
       {
-        stacks: [
-          {
-            type: 'VStack',
-            elements: [
-              {
-                name: 'ResourceBuilder',
-                props: {
-                  resourceName: 'ground',
-                  ...(queryConfig || {
-                    type: 'resource' as const,
-                    query: { name: 'useGetGroundById' },
-                    resourceName: 'ground',
-                  }),
-                  sections: [
+        name: 'ResourceBuilder',
+        props: {
+          resourceName: 'ground',
+          ...(queryConfig || {
+            type: 'resource' as const,
+            query: { name: 'useGetGroundById' },
+            resourceName: 'ground',
+          }),
+          elements: [
+            {
+              name: 'VStack',
+              props: {
+                className: 'space-y-4'
+              },
+              children: [
+                {
+                  name: 'Form',
+                  props: {
+                    className: 'space-y-4',
+                  } as FormProps,
+                  children: [
                     {
-                      stacks: [
+                      name: 'VStack',
+                      props: {
+                        className: 'space-y-4',
+                      },
+                      children: elements,
+                    },
+                    {
+                      name: 'HStack',
+                      children: [
                         {
-                          type: 'VStack',
-                          elements: [
-                            {
-                              name: 'Form',
-                              props: {
-                                className: 'space-y-4',
-                              } as FormProps,
-                              children: [
-                                {
-                                  name: 'VStack',
-                                  props: {
-                                    className: 'space-y-4',
-                                  },
-                                  children: elements,
-                                },
-                                {
-                                  name: 'HStack',
-                                  children: [
-                                    {
-                                      name: 'FileUploader' as const,
-                                      props: {
-                                        label: '로고 이미지 파일 ID',
-                                        path: 'form.inputs.logoImageFileId',
-                                        isReadOnly: isReadonly,
-                                        variant: 'underlined',
-                                      } as InputProps<any>,
-                                    },
-                                    {
-                                      name: 'FileUploader' as const,
-                                      props: {
-                                        label: '이미지 파일 ID',
-                                        path: 'form.inputs.imageFileId',
-                                        isReadOnly: isReadonly,
-                                        variant: 'underlined',
-                                      } as InputProps<any>,
-                                    },
-                                  ],
-                                },
-                                type !== 'detail' && {
-                                  name: 'ButtonBuilder' as const,
-                                  props: {
-                                    children: getButtonText(type),
-                                    mutation: mutationConfig,
-                                    navigator: {
-                                      type: 'back',
-                                    },
-                                    style: {
-                                      position: 'sticky',
-                                    },
-                                  } satisfies IButtonBuilder,
-                                },
-                              ],
-                            },
-                          ],
+                          name: 'FileUploader' as const,
+                          props: {
+                            label: '로고 이미지 파일 ID',
+                            path: 'form.inputs.logoImageFileId',
+                            isReadOnly: isReadonly,
+                            variant: 'underlined',
+                          } as InputProps<any>,
+                        },
+                        {
+                          name: 'FileUploader' as const,
+                          props: {
+                            label: '이미지 파일 ID',
+                            path: 'form.inputs.imageFileId',
+                            isReadOnly: isReadonly,
+                            variant: 'underlined',
+                          } as InputProps<any>,
                         },
                       ],
                     },
+                    ...(type !== 'detail' ? [{
+                      name: 'ButtonBuilder' as const,
+                      props: {
+                        children: getButtonText(type),
+                        mutation: mutationConfig,
+                        navigator: {
+                          type: 'back',
+                        },
+                        style: {
+                          position: 'sticky',
+                        },
+                      } satisfies IButtonBuilder,
+                    }] : []),
                   ],
-                } satisfies ResourceBuilder,
-              },
-            ],
-          },
-        ],
+                },
+              ],
+            },
+          ],
+        } satisfies ResourceBuilder,
       },
     ],
   };

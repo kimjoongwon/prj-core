@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { ResourceBuilderProps } from '@shared/types';
 import { useApiQuery } from '../../../hooks';
 import { SectionBuilder } from '../SectionBuilder';
+import { ElementBuilder } from '../ElementBuilder';
 import { usePage } from '../../../provider';
 import { capitalize } from 'lodash-es';
 
@@ -29,7 +30,7 @@ const logger = {
 };
 
 export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
-  const { resourceName: rn, sections } = props;
+  const { resourceName: rn, sections, elements } = props;
   const resourceName = capitalize(rn);
   const page = usePage();
   const state = page.state;
@@ -37,7 +38,8 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   logger.info('🚀 Initializing ResourceBuilder', {
     resourceName,
     sectionsCount: sections?.length || 0,
-    props: { ...props, sections: sections ? `${sections.length} sections` : 'no sections' }
+    elementsCount: elements?.length || 0,
+    props: { ...props, sections: sections ? `${sections.length} sections` : 'no sections', elements: elements ? `${elements.length} elements` : 'no elements' }
   });
 
   // props 자체가 ApiQueryBuilder를 확장하므로 그대로 사용
@@ -205,8 +207,9 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   }
 
   // ✅ 정상 렌더링
-  logger.success('✅ Rendering ResourceBuilder with sections', {
+  logger.success('✅ Rendering ResourceBuilder', {
     sectionsCount: sections?.length || 0,
+    elementsCount: elements?.length || 0,
     resourceName,
     hasData: !!data
   });
@@ -214,7 +217,22 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
   return (
     <div className="resource-builder-container relative">
       <div className="resource-builder space-y-4">
-        {sections?.map((section, index) => {
+        {/* 새로운 ElementBuilder 구조 지원 */}
+        {elements?.map((element, index) => {
+          logger.debug(`🏗️ Rendering element ${index + 1}/${elements.length}`, {
+            elementName: element.name || `Element ${index + 1}`,
+          });
+          
+          return (
+            <ElementBuilder 
+              key={v4()} 
+              elementBuilder={element} 
+            />
+          );
+        })}
+        
+        {/* 기존 SectionBuilder 구조 하위 호환성 지원 */}
+        {sections && !elements && sections?.map((section, index) => {
           logger.debug(`🏗️ Rendering section ${index + 1}/${sections.length}`, {
             sectionName: section.name || `Section ${index + 1}`,
             stacksCount: section.stacks?.length || 0
@@ -228,11 +246,11 @@ export const ResourceBuilder = observer((props: ResourceBuilderProps) => {
           );
         })}
         
-        {(!sections || sections.length === 0) && (
+        {(!sections || sections.length === 0) && (!elements || elements.length === 0) && (
           <Alert
             color="default"
-            title="📄 섹션 없음"
-            description={`${resourceName}에 표시할 섹션이 없습니다.`}
+            title="📄 콘텐츠 없음"
+            description={`${resourceName}에 표시할 콘텐츠가 없습니다.`}
             variant="flat"
             className="m-4"
           />

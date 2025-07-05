@@ -260,7 +260,8 @@ export interface DataGridBuilder {
 
 export interface ResourceBuilder extends ApiQueryBuilder {
   resourceName: string;
-  sections?: SectionBuilder[];
+  elements?: ElementBuilder[]; // sections 대신 elements 사용
+  sections?: SectionBuilder[]; // 하위 호환성을 위해 임시 유지
 }
 
 export interface PageBuilder {
@@ -268,7 +269,8 @@ export interface PageBuilder {
   name?: string;
   state?: any;
   query?: Query;
-  sections?: SectionBuilder[];
+  elements?: ElementBuilder[]; // sections 대신 elements 사용
+  sections?: SectionBuilder[]; // 하위 호환성을 위해 임시 유지
 }
 
 // 통합 API 쿼리 시스템
