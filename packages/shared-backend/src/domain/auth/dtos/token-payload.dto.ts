@@ -1,4 +1,4 @@
-import { NumberField, StringField } from '@shared/backend';
+import { NumberField, StringField } from '../../../decorator/field.decorators';
 
 export class TokenPayloadDto {
   @NumberField()

@@ -1,4 +1,5 @@
-import { ClassField, StringField, UserDto, UUIDField } from '@shared/backend';
+import { ClassField, StringField, UUIDField } from '../../../decorator/field.decorators';
+import { UserDto } from '@shared/schema';
 
 export class TokenDto {
   @StringField()
