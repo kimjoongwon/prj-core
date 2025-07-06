@@ -7,14 +7,10 @@ import {
   UpdateGroundDto,
 } from '@shared/schema';
 import { Prisma } from '@shared/schema';
-import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class GroundsService {
-  constructor(
-    private readonly groundsRepository: GroundsRepository,
-    readonly logger: Logger,
-  ) {}
+  constructor(private readonly groundsRepository: GroundsRepository) {}
 
   async create(createGroundDto: CreateGroundDto): Promise<Ground> {
     const args = {
@@ -33,7 +29,6 @@ export class GroundsService {
         space: true,
       },
     };
-    this.logger.log(`Fetching ground with ID: ${id}`, 'GroundsService');
     return this.groundsRepository.findUnique(args);
   }
 

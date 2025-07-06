@@ -1,15 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   ResponseEntity,
@@ -18,10 +7,7 @@ import {
   UpdateUserClassificationDto,
   QueryUserClassificationDto,
 } from '@shared/schema';
-import {
-  ApiResponseEntity,
-  Auth,
-} from '../decorator';
+import { ApiResponseEntity, Auth } from '../decorator';
 import { UserClassificationsService } from '../service/user-classifications.service';
 import { plainToInstance } from 'class-transformer';
 
@@ -35,14 +21,12 @@ export class UserClassificationsController {
   // @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
   // async createUserClassification(@Body() createUserClassificationDto: CreateUserClassificationDto) {
   //   const userClassification = await this.service.create(createUserClassificationDto);
-
   //   return new ResponseEntity(
   //     HttpStatus.OK,
   //     '성공',
   //     plainToInstance(UserClassificationDto, userClassification),
   //   );
   // }
-
   // @Get(':userClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -55,7 +39,6 @@ export class UserClassificationsController {
   //     plainToInstance(UserClassificationDto, userClassification),
   //   );
   // }
-
   // @Patch(':userClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -71,7 +54,6 @@ export class UserClassificationsController {
   //     plainToInstance(UserClassificationDto, userClassification),
   //   );
   // }
-
   // @Patch(':userClassificationId/removedAt')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -84,7 +66,6 @@ export class UserClassificationsController {
   //     plainToInstance(UserClassificationDto, userClassification),
   //   );
   // }
-
   // @Delete(':userClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -97,7 +78,6 @@ export class UserClassificationsController {
   //     plainToInstance(UserClassificationDto, userClassification),
   //   );
   // }
-
   // @Get()
   // @Auth([])
   // @HttpCode(HttpStatus.OK)

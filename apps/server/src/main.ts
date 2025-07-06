@@ -3,9 +3,8 @@ import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/
 import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from '@shared/backend';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { ValidationPipe, Logger as NestLogger } from '@nestjs/common';
+import { ValidationPipe, Logger as NestLogger, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const startTime = Date.now();
@@ -23,7 +22,7 @@ async function bootstrap() {
   // @ts-ignore
   app.use(cookieParser());
 
-  app.useLogger(app.get(Logger));
+  // app.useLogger(app.get(Logger));
   // @ts-ignore
   app.set('query parser', 'extended');
   app.useGlobalFilters(

@@ -5,7 +5,6 @@ import { AuthUserInterceptor } from '../interceptor';
 import { Roles } from './roles.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { RolesGuard } from '../guard/roles.guard';
-import { PoliciesGuard } from '../guard/poilicies.guard';
 import { JwtAuthGuard } from '../guard';
 
 export function Auth(
@@ -24,7 +23,7 @@ export function Auth(
   decorators.push(UseInterceptors(AuthUserInterceptor));
 
   if (!isPublicRoute) {
-    decorators.push(UseGuards(JwtAuthGuard, PoliciesGuard, RolesGuard));
+    decorators.push(UseGuards(JwtAuthGuard));
   }
 
   return applyDecorators(...decorators);

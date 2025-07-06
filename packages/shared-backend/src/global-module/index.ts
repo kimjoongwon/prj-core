@@ -42,16 +42,18 @@ import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
 import { PrismaService } from 'nestjs-prisma';
 import { ConfigService } from '@nestjs/config';
-import { LoggerModule } from 'nestjs-pino/LoggerModule';
+// import { LoggerModule } from 'nestjs-pino/LoggerModule';
+import { JwtService } from '@nestjs/jwt';
 
 const modules = [
-  LoggerModule,
+  // LoggerModule,
   ConfigService,
   PrismaService,
   ActionsService,
   ActionsRepository,
   CategoriesService,
   CategoriesRepository,
+  JwtService,
   FilesService,
   FilesRepository,
   ProgramsService,
