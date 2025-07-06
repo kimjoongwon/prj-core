@@ -32,7 +32,6 @@ import { TimelinesModule } from './timelines/timelines.module';
 import { UserClassificationsModule } from './user-classifications/user-classifications.module';
 import { UsersModule } from './users/users.module';
 import { modules } from '../main.config';
-import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
