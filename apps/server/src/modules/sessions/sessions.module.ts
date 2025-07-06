@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SessionsController } from '@shared/backend';
+import { SessionsController } from '../../shared';
 
 @Module({
   controllers: [SessionsController],

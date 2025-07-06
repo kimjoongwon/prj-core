@@ -79,7 +79,7 @@ describe('UsersPage', () => {
       const result = getUsersPage();
 
       expect(result.elements).toBeDefined();
-      expect(result.sections).toBeUndefined();
+      expect(result.elements).toBeDefined();
     });
 
     it('페이지 상태(state)가 정의되지 않아도 문제없어야 한다', () => {

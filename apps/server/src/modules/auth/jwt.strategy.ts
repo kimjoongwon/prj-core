@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Global, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { UsersService, AuthConfig, ContextProvider } from '@shared/backend';
+import { UsersService, AuthConfig, ContextProvider } from '../../shared';
 
 @Global()
 @Injectable()

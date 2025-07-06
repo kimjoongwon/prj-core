@@ -37,7 +37,7 @@ import {
 } from '../repository';
 import { FilesService } from '../service/files.service';
 import { RolesRepository } from '../repository/role.repository';
-import { AwsService } from '../../../../apps/server/src/modules/auth/aws.service';
+import { AwsService } from '../../modules/auth/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
 import { PrismaService } from 'nestjs-prisma';

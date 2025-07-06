@@ -8,7 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ResponseEntity, SignUpPayloadDto, LoginPayloadDto } from '@shared/schema';
 import { PrismaService } from 'nestjs-prisma';
-import { UsersService } from '@shared/backend';
+import { UsersService } from '../../shared';
 import { PasswordService } from './password.service';
 import { TokenService } from './token.service';
 

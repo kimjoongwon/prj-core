@@ -6,7 +6,7 @@ import {
 import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from '@shared/backend/src/config/config.type';
+import { AuthConfig } from '../../../../shared/config/config.type';
 
 export const Token = {
   ACCESS: 'accessToken',

@@ -4,13 +4,13 @@ import type {
   InputProps,
   Mutation,
   PageBuilder,
+  PageTypes,
   ResourceBuilder,
   TabNavigationProps,
 } from '@shared/types';
-import { type PageType } from '../types/page.types';
 import { FormProps } from '@heroui/react';
 
-export const getGroundPage = (type: PageType): PageBuilder => {
+export const getGroundPage = (type: PageTypes): PageBuilder => {
   // type에 따른 기본 데이터 설정
   let formInputs = {
     name: '',
@@ -25,7 +25,7 @@ export const getGroundPage = (type: PageType): PageBuilder => {
   };
 
   // type에 따른 페이지 제목 설정
-  const getPageTitle = (type: PageType): string => {
+  const getPageTitle = (type: PageTypes): string => {
     switch (type) {
       case 'create':
         return '그라운드 생성';
@@ -39,7 +39,7 @@ export const getGroundPage = (type: PageType): PageBuilder => {
   };
 
   // type에 따른 mutation 설정
-  const getMutationConfig = (type: PageType): Mutation => {
+  const getMutationConfig = (type: PageTypes): Mutation => {
     switch (type) {
       case 'create':
         return {
@@ -92,7 +92,7 @@ export const getGroundPage = (type: PageType): PageBuilder => {
   };
 
   // type에 따른 query 설정
-  const getQueryConfig = (type: PageType): ApiQueryBuilder => {
+  const getQueryConfig = (type: PageTypes): ApiQueryBuilder => {
     if (type === 'detail' || type === 'modify') {
       return {
         type: 'resource' as const,
@@ -109,7 +109,7 @@ export const getGroundPage = (type: PageType): PageBuilder => {
   };
 
   // type에 따른 버튼 텍스트 설정
-  const getButtonText = (type: PageType): string => {
+  const getButtonText = (type: PageTypes): string => {
     switch (type) {
       case 'create':
         return '생성';

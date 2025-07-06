@@ -1,5 +1,5 @@
 import { $Enums } from '@shared/schema';
-import { ContextProvider } from '@shared/backend';
+import { ContextProvider } from '../../../../shared';
 import {
   IButtonBuilder,
   InputProps,

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserAssociationsController, UserAssociationsRepository, UserAssociationsService } from '@shared/backend';
+import { UserAssociationsController, UserAssociationsRepository, UserAssociationsService } from '../../shared';
 
 @Module({
   controllers: [UserAssociationsController],

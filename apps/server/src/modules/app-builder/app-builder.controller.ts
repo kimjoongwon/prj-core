@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Res, Req, Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared/backend';
+import { Auth } from '../../shared';
 import { ResponseEntity } from '@shared/schema';
 import { AppBuilderService } from './app-builder.service';
 import { Response, Request } from 'express';

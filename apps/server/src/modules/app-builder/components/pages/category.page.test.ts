@@ -2,7 +2,7 @@ import { getCategoryPage } from './category.page';
 import { $Enums } from '@prisma/client';
 
 // Mock ContextProvider
-jest.mock('@shared', () => ({
+jest.mock('../../../../shared', () => ({
   ContextProvider: {
     getTenantId: jest.fn(() => 'test-tenant-id'),
   },

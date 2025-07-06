@@ -6,7 +6,6 @@ import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
 
 // Shared imports
-import { LoggerMiddleware, GlobalModule } from '@shared/backend';
 
 // Feature modules
 import { AbilitiesModule } from './abilities/abilities.module';
@@ -32,6 +31,7 @@ import { TimelinesModule } from './timelines/timelines.module';
 import { UserClassificationsModule } from './user-classifications/user-classifications.module';
 import { UsersModule } from './users/users.module';
 import { modules } from '../main.config';
+import { GlobalModule, LoggerMiddleware } from '@shared';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TimelinesController } from '@shared/backend';
+import { TimelinesController } from '../../shared';
 
 @Module({
   controllers: [TimelinesController],

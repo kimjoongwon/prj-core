@@ -1,4 +1,4 @@
-import { UUIDField } from '@shared/backend';
+import { UUIDField } from '../../shared';
 import { Expose } from 'class-transformer';
 
 export class SelectTenantDto {

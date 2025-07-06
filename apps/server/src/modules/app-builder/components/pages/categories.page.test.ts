@@ -1,11 +1,10 @@
 import { getCategoriesPage } from './categories.page';
 import { $Enums } from '@prisma/client';
-import { ContextProvider } from '@shared/backend';
 
 // Mock ContextProvider
-jest.mock('@shared', () => ({
+jest.mock('../../../../shared', () => ({
   ContextProvider: {
-    getTenantId: jest.fn(),
+    getTenantId: jest.fn().mockReturnValue('test-tenant-id'),
   },
 }));
 
@@ -13,7 +12,8 @@ describe('CategoriesPage', () => {
   const mockTenantId = 'test-tenant-id';
 
   beforeEach(() => {
-    (ContextProvider.getTenantId as jest.Mock).mockReturnValue(mockTenantId);
+    // Reset mock before each test
+    require('../../../../shared').ContextProvider.getTenantId.mockReturnValue(mockTenantId);
   });
 
   describe('build', () => {
@@ -25,9 +25,8 @@ describe('CategoriesPage', () => {
       expect(result.state.inputs.type).toBe(categoryType);
       expect(result.state.inputs.tenantId).toBe(mockTenantId);
 
-      // 테이블 설정 확인
-      const dataGridSection = result.sections[0];
-      const dataGridElement = dataGridSection.stacks[0].elements[0];
+      // 테이블 설정 확인 - elements 구조 사용
+      const dataGridElement = result.elements[0];
       expect(dataGridElement.name).toBe('DataGridBuilder');
 
       // 생성 버튼 확인
@@ -35,7 +34,7 @@ describe('CategoriesPage', () => {
       expect(createButton.children).toBe('카테고리 생성');
       expect(createButton.color).toBe('primary');
       expect(createButton.navigator?.route?.fullPath).toBe(
-        '/admin/dashboard/space-service/categories/:categoryId/create',
+        '/admin/dashboard/space-service/categories/new/create',
       );
 
       // 테이블 컬럼 확인
@@ -84,7 +83,7 @@ describe('CategoriesPage', () => {
       const categoryType = $Enums.CategoryTypes.Space;
       const result = getCategoriesPage(categoryType);
 
-      const dataGridElement = result.sections[0].stacks[0].elements[0];
+      const dataGridElement = result.elements[0];
       const queryConfig = dataGridElement.props.table.query;
 
       expect(queryConfig.name).toBe('useGetCategoriesByQuery');
@@ -97,7 +96,7 @@ describe('CategoriesPage', () => {
     it('should have proper styling for all action buttons', () => {
       const result = getCategoriesPage($Enums.CategoryTypes.User);
       const actionButtons =
-        result.sections[0].stacks[0].elements[0].props.table.columns[2].cell.buttons;
+        result.elements[0].props.table.columns[2].cell.buttons;
 
       actionButtons.forEach((button) => {
         expect(button.variant).toBe('light');
