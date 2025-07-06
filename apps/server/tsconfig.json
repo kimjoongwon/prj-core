@@ -24,8 +24,5 @@
     "noUnusedParameters": false,
     "strict": false
   },
-  "exclude": [
-    "prisma/seed.ts",
-    "src/modules/app-builder/**/*.ts"
-  ]
+  "exclude": ["prisma/seed.ts", "src/modules/app-builder/**/*.ts", "dist/**/*", "node_modules/**/*"]
 }
