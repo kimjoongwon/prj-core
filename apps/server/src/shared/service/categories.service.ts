@@ -7,7 +7,7 @@ import {
   UpdateCategoryDto,
 } from '@shared/schema';
 import { CategoriesRepository } from '../repository';
-import { AppLogger } from '../utils/app-logger.util';
+import { AppLogger } from '../util/app-logger.util';
 import { ContextProvider } from '../provider';
 
 @Injectable()

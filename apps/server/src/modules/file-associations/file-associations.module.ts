@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FileAssociationsController, FileAssociationsRepository, FileAssociationsService } from '@shared/backend';
+import { FileAssociationsController, FileAssociationsRepository, FileAssociationsService } from '../../shared';
 
 @Module({
   controllers: [FileAssociationsController],

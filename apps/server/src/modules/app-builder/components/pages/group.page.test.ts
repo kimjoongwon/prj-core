@@ -1,13 +1,11 @@
 import { getGroupPage } from './group.page';
 import { $Enums } from '@prisma/client';
 
-// Mock ContextProvider with relative path
-const mockContextProvider = {
-  getTenantId: jest.fn(() => 'test-tenant-id'),
-};
-
-jest.mock('../../../../shared/provider/context.provider', () => ({
-  ContextProvider: mockContextProvider,
+// Mock ContextProvider
+jest.mock('../../../../shared', () => ({
+  ContextProvider: {
+    getTenantId: jest.fn().mockReturnValue('test-tenant-id'),
+  },
 }));
 
 describe('GroupPage', () => {

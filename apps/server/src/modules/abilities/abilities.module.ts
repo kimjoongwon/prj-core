@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-// import { AbilitiesController } from '@shared/backend';
+// import { AbilitiesController } from '../../shared';
 
 @Module({
   controllers: [], // [AbilitiesController],

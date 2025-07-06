@@ -1,5 +1,6 @@
 import { $Enums } from '@prisma/client';
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
+import { ContextProvider } from '../../../../shared';
 
 export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuilder => {
   return {
@@ -10,6 +11,7 @@ export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuil
         parentId: null,
         name: '',
         label: '',
+        tenantId: ContextProvider.getTenantId(),
       },
     },
     elements: [
@@ -42,6 +44,7 @@ export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuil
                 skip: 0,
                 take: 10,
                 type: categoryTypes,
+                tenantId: ContextProvider.getTenantId(),
               },
             },
             pagination: {
@@ -140,11 +143,11 @@ export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuil
                       startContent: 'trash',
                       className: 'min-w-unit-14 text-xs px-2 py-1',
                       mutation: {
-                        name: 'deleteCategoryById',
+                        name: 'deleteCategory',
                         pathParams: {
                           categoryId: 'selectedRow.id', // pageState.selectedRow.id에서 ID를 가져옴
                         },
-                        queryKey: '/api/v1/categories',
+                        queryKey: 'useGetCategoriesByQuery',
                       },
                     } satisfies IButtonBuilder,
                   ],

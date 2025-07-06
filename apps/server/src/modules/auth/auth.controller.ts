@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiResponseEntity, Auth, ContextProvider, Public } from '@shared/backend';
+import { ApiResponseEntity, Auth, ContextProvider, Public } from '../../shared';
 import { plainToInstance } from 'class-transformer';
 import { Response, Request } from 'express';
 import { AuthService } from './auth.service';

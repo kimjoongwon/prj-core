@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserClassificationsController } from '@shared/backend';
+import { UserClassificationsController } from '../../shared';
 
 @Module({
   controllers: [UserClassificationsController],

@@ -10,7 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ContextProvider } from '../provider';
 import { UserDto } from '@shared/schema';
-import { AppLogger } from '../utils/app-logger.util';
+import { AppLogger } from '../util/app-logger.util';
 import { TenantDto } from '@shared/schema';
 
 interface AuthContext {

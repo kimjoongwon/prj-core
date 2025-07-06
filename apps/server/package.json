@@ -40,7 +40,6 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@prisma/client": "^6.4.1",
-    "@shared/backend": "workspace:*",
     "@shared/schema": "workspace:*",
     "@shared/utils": "workspace:*",
     "@shared/vars": "workspace:*",
@@ -104,20 +103,6 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "^5.7.3"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "rootDir": "src",
-    "testMatch": [
-      "**/*.test.ts"
-    ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "maxWorkers": 1,
-    "testTimeout": 5000,
-    "forceExit": true
   },
   "packageManager": "pnpm@9.6.0"
 }

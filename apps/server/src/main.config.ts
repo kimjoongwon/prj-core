@@ -6,7 +6,7 @@ import {
   awsConfig,
   corsConfig,
   smtpConfig,
-} from '@shared/backend';
+} from './shared';
 import { PrismaModule } from 'nestjs-prisma';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';

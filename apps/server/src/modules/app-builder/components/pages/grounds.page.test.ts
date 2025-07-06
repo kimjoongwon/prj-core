@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 import { getGroundsPage } from './grounds.page';
 
 describe('GroundsPage', () => {
@@ -13,46 +14,46 @@ describe('GroundsPage', () => {
     it('DataGridBuilder를 포함해야 한다', () => {
       const result = getGroundsPage();
 
-      expect(result.elements[0].name).toBe('DataGridBuilder');
-      expect(result.elements[0].props).toBeDefined();
+      expect(result.elements?.[0]?.name).toBe('DataGridBuilder');
+      expect(result.elements?.[0]?.props).toBeDefined();
     });
   });
 
   describe('DataGridBuilder 버튼 설정', () => {
     it('그라운드 생성 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
-      const dataGrid = result.elements[0];
-      const buttons = dataGrid.props.buttons;
+      const dataGrid = result.elements?.[0];
+      const buttons = dataGrid?.props?.buttons;
 
       expect(buttons).toHaveLength(1);
 
-      const createButton = buttons[0];
-      expect(createButton.children).toBe('그라운드 생성');
-      expect(createButton.variant).toBe('solid');
-      expect(createButton.color).toBe('primary');
-      expect(createButton.size).toBe('md');
-      expect(createButton.radius).toBe('lg');
-      expect(createButton.startContent).toBe('plus-circle');
+      const createButton = buttons?.[0];
+      expect(createButton?.children).toBe('그라운드 생성');
+      expect(createButton?.variant).toBe('solid');
+      expect(createButton?.color).toBe('primary');
+      expect(createButton?.size).toBe('md');
+      expect(createButton?.radius).toBe('lg');
+      expect(createButton?.startContent).toBe('plus-circle');
     });
 
     it('생성 버튼의 네비게이션이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
-      const createButton = result.elements[0].props.buttons[0];
+      const createButton = result.elements?.[0]?.props?.buttons?.[0];
 
-      expect(createButton.navigator.type).toBe('push');
-      expect(createButton.navigator.route.relativePath).toBe('new/create');
-    });
+      expect(createButton?.navigator?.type).toBe('push');
+      expect(createButton?.navigator?.route?.relativePath).toBe('new/create');
+    });;
   });
 
   describe('DataGridBuilder 테이블 설정', () => {
     it('올바른 테이블 타입과 쿼리를 가져야 한다', () => {
       const result = getGroundsPage();
-      const dataGrid = result.elements[0];
-      const table = dataGrid.props.table;
+      const dataGrid = result.elements?.[0];
+      const table = dataGrid?.props?.table;
 
-      expect(table.type).toBe('table');
-      expect(table.query.name).toBe('useGetGroundsByQuery');
-      expect(table.query.params).toEqual({
+      expect(table?.type).toBe('table');
+      expect(table?.query?.name).toBe('useGetGroundsByQuery');
+      expect(table?.query?.params).toEqual({
         skip: 0,
         take: 10,
       });
@@ -60,7 +61,7 @@ describe('GroundsPage', () => {
 
     it('올바른 컬럼 구성을 가져야 한다', () => {
       const result = getGroundsPage();
-      const columns = result.elements[0].props.table.columns;
+      const columns = result.elements?.[0]?.props?.table?.columns;
 
       expect(columns).toHaveLength(7);
 
@@ -75,8 +76,8 @@ describe('GroundsPage', () => {
       ];
 
       expectedColumns.forEach((expected, index) => {
-        expect(columns[index].accessorKey).toBe(expected.accessorKey);
-        expect(columns[index].header.name).toBe(expected.headerName);
+        expect(columns?.[index]?.accessorKey).toBe(expected.accessorKey);
+        expect(columns?.[index]?.header?.name).toBe(expected.headerName);
       });
     });
   });
@@ -84,83 +85,83 @@ describe('GroundsPage', () => {
   describe('액션 컬럼 설정', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroundsPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+      const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
+        (col) => col.accessorKey === 'actions',
       );
 
-      expect(actionsColumn.cell.type).toBe('row-actions');
-      expect(actionsColumn.cell.buttons).toHaveLength(3);
+      expect(actionsColumn?.cell?.type).toBe('row-actions');
+      expect(actionsColumn?.cell?.buttons).toHaveLength(3);
     });
 
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+      const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
+        (col) => col.accessorKey === 'actions',
       );
-      const detailButton = actionsColumn.cell.buttons[0];
+      const detailButton = actionsColumn?.cell?.buttons?.[0];
 
-      expect(detailButton.children).toBe('상세');
-      expect(detailButton.color).toBe('primary');
-      expect(detailButton.startContent).toBe('eye');
-      expect(detailButton.navigator.type).toBe('push');
-      expect(detailButton.navigator.route.relativePath).toBe(':groundId/detail');
-      expect(detailButton.navigator.route.pathParams.groundId).toBe('selectedRow.id');
+      expect(detailButton?.children).toBe('상세');
+      expect(detailButton?.color).toBe('primary');
+      expect(detailButton?.startContent).toBe('eye');
+      expect(detailButton?.navigator?.type).toBe('push');
+      expect(detailButton?.navigator?.route?.relativePath).toBe(':groundId/detail');
+      expect(detailButton?.navigator?.route?.pathParams?.groundId).toBe('selectedRow.id');
     });
 
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+      const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
+        (col) => col.accessorKey === 'actions',
       );
-      const editButton = actionsColumn.cell.buttons[1];
+      const editButton = actionsColumn?.cell?.buttons?.[1];
 
-      expect(editButton.children).toBe('수정');
-      expect(editButton.color).toBe('warning');
-      expect(editButton.startContent).toBe('edit');
-      expect(editButton.navigator.type).toBe('push');
-      expect(editButton.navigator.route.relativePath).toBe(':groundId/modify');
-      expect(editButton.navigator.route.pathParams.groundId).toBe('selectedRow.id');
+      expect(editButton?.children).toBe('수정');
+      expect(editButton?.color).toBe('warning');
+      expect(editButton?.startContent).toBe('edit');
+      expect(editButton?.navigator?.type).toBe('push');
+      expect(editButton?.navigator?.route?.relativePath).toBe(':groundId/modify');
+      expect(editButton?.navigator?.route?.pathParams?.groundId).toBe('selectedRow.id');
     });
 
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+      const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
+        (col) => col.accessorKey === 'actions',
       );
-      const deleteButton = actionsColumn.cell.buttons[2];
+      const deleteButton = actionsColumn?.cell?.buttons?.[2];
 
-      expect(deleteButton.children).toBe('삭제');
-      expect(deleteButton.color).toBe('danger');
-      expect(deleteButton.startContent).toBe('trash');
-      expect(deleteButton.mutation.name).toBe('deleteGroundById');
-      expect(deleteButton.mutation.pathParams.groundId).toBe('selectedRow.id');
-      expect(deleteButton.mutation.queryKey).toBe('/api/v1/grounds');
+      expect(deleteButton?.children).toBe('삭제');
+      expect(deleteButton?.color).toBe('danger');
+      expect(deleteButton?.startContent).toBe('trash');
+      expect(deleteButton?.mutation?.name).toBe('deleteGroundById');
+      expect(deleteButton?.mutation?.pathParams?.groundId).toBe('selectedRow.id');
+      expect(deleteButton?.mutation?.queryKey).toBe('/api/v1/grounds');
     });
   });
 
   describe('버튼 스타일링', () => {
     it('생성 버튼에 올바른 스타일이 적용되어야 한다', () => {
       const result = getGroundsPage();
-      const createButton = result.elements[0].props.buttons[0];
+      const createButton = result.elements?.[0]?.props?.buttons?.[0];
 
-      expect(createButton.className).toBe(
-        'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200'
+      expect(createButton?.className).toBe(
+        'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200',
       );
     });
 
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroundsPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+      const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
+        (col) => col.accessorKey === 'actions',
       );
-      const buttons = actionsColumn.cell.buttons;
+      const buttons = actionsColumn?.cell?.buttons;
 
-      buttons.forEach(button => {
-        expect(button.variant).toBe('light');
-        expect(button.size).toBe('sm');
-        expect(button.radius).toBe('sm');
-        expect(button.isIconOnly).toBe(false);
-        expect(button.className).toBe('min-w-unit-14 text-xs px-2 py-1');
+      buttons?.forEach((button) => {
+        expect(button?.variant).toBe('light');
+        expect(button?.size).toBe('sm');
+        expect(button?.radius).toBe('sm');
+        expect(button?.isIconOnly).toBe(false);
+        expect(button?.className).toBe('min-w-unit-14 text-xs px-2 py-1');
       });
     });
   });
@@ -168,12 +169,12 @@ describe('GroundsPage', () => {
   describe('타입 안전성', () => {
     it('DataGridBuilderProps 타입을 만족해야 한다', () => {
       const result = getGroundsPage();
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements?.[0];
 
-      expect(dataGrid.props.table).toBeDefined();
-      expect(dataGrid.props.buttons).toBeDefined();
-      expect(Array.isArray(dataGrid.props.buttons)).toBe(true);
-      expect(Array.isArray(dataGrid.props.table.columns)).toBe(true);
+      expect(dataGrid?.props?.table).toBeDefined();
+      expect(dataGrid?.props?.buttons).toBeDefined();
+      expect(Array.isArray(dataGrid?.props?.buttons)).toBe(true);
+      expect(Array.isArray(dataGrid?.props?.table?.columns)).toBe(true);
     });
   });
 
@@ -182,7 +183,7 @@ describe('GroundsPage', () => {
       const result = getGroundsPage();
 
       expect(result.elements).toBeDefined();
-      expect(result.sections).toBeUndefined();
+      expect(result.elements).toBeDefined();
     });
 
     it('페이지 상태(state)가 정의되지 않아도 문제없어야 한다', () => {

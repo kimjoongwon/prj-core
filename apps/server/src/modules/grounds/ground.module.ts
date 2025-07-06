@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GroundsController, GroundsRepository, GroundsService } from '@shared/backend';
+import { GroundsController, GroundsRepository, GroundsService } from '../../shared';
 
 @Module({
   providers: [GroundsService, GroundsRepository],

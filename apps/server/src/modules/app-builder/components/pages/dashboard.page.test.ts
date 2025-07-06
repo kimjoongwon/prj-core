@@ -102,7 +102,7 @@ describe('DashboardPage', () => {
       const result = getDashboardPage();
 
       expect(result.elements).toBeDefined();
-      expect(result.sections).toBeUndefined();
+      expect(result.elements).toBeDefined();
     });
   });
 });

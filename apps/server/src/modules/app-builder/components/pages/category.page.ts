@@ -1,5 +1,5 @@
 import { $Enums } from '@shared/schema';
-import { ContextProvider } from '@shared/backend';
+import { ContextProvider } from '../../../../shared';
 import {
   IButtonBuilder,
   InputProps,
@@ -8,9 +8,9 @@ import {
   SpacerProps,
   TextProps,
 } from '@shared/types';
-import { PageType } from '../types/page.types';
+import { PageTypes } from '@shared/types';
 
-export const getCategoryPage = (pageType: PageType, type: $Enums.CategoryTypes): PageBuilder => {
+export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes): PageBuilder => {
     let formInputs = {
       name: '',
       type,

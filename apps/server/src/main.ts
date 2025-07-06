@@ -1,9 +1,10 @@
 import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from '@shared/backend';
+import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from './shared';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger as NestLogger, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const startTime = Date.now();
@@ -11,23 +12,19 @@ async function bootstrap() {
 
   logger.log('🚀 Starting server...');
 
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
-    // logger: logConfig.level,
+    logger: logConfig.level,
   });
   const httpAdapterHost = app.get(HttpAdapterHost);
 
   // Cookie parser 미들웨어 추가
-  // @ts-ignore
   app.use(cookieParser());
 
-  // app.useLogger(app.get(Logger));
-  // @ts-ignore
+  app.useLogger(app.get(Logger));
   app.set('query parser', 'extended');
   app.useGlobalFilters(
-    // @ts-ignore
     new AllExceptionsFilter(httpAdapterHost.httpAdapter),
-    // @ts-ignore
     new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
   );
 

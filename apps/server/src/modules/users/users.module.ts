@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsersController, UsersRepository, UsersService } from '@shared/backend';
+import { UsersController, UsersRepository, UsersService } from '../../shared';
 
 @Module({
   providers: [UsersService, UsersRepository],
