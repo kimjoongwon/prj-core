@@ -1,15 +1,13 @@
-const nodeEnv = process.env.NODE_ENV || 'development';
-const isProduction = nodeEnv === 'production';
-const isDevelopment = nodeEnv === 'development';
+import { defineConfig } from 'tsup';
 
-export default {
+export default defineConfig(option => ({
   entry: ['src/index.ts', 'src/client.ts', 'src/types.ts'],
   format: ['cjs', 'esm'],
   dts: true,
-  clean: false,
-  splitting: false,
-  sourcemap: !isProduction,
-  minify: isProduction,
-  watch: isDevelopment,
+  clean: option.watch ? false : true,
+  splitting: option.watch ? false : true,
+  sourcemap: option.watch ? true : false,
+  minify: !option.watch,
+  watch: option.watch,
   external: ['@prisma/client'],
-};
+}));

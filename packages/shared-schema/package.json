@@ -12,8 +12,7 @@
   "scripts": {
     "build": "pnpm run generate && tsup",
     "dev": "pnpm run generate && NODE_ENV=development tsup",
-    "start:dev": "NODE_ENV=development pnpm run generate:safe && NODE_ENV=development npx concurrently \"tsc --noEmit --watch\" \"tsup\"",
-    "start:dev:simple": "NODE_ENV=development npx concurrently \"tsc --noEmit --watch\" \"tsup\"",
+    "start:dev": "pnpm run generate:safe && tsup --watch",
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
     "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
