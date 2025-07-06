@@ -1,4 +1,4 @@
-import { AppModule } from './modules/app.module';
+import { AppModule } from './module/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from './shared';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';

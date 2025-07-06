@@ -14,7 +14,7 @@ import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
 import { CategoryDto, QueryCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { CategoriesService } from '../service';
+import { CategoriesService } from '../service/services';
 
 @ApiTags('CATEGORIES')
 @Controller()

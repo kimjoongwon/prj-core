@@ -16,9 +16,9 @@ import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
 import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto, GroundDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { UsersService } from '../service';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { UsersService } from '../service/users.service';
 
 @ApiTags('USERS')
 @Controller()
@@ -113,7 +113,10 @@ export class UsersController {
         query.toPageMetaDto(count),
       );
     } catch (error) {
-      this.logger.error(`Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`, error instanceof Error ? error.stack : '');
+      this.logger.error(
+        `Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`,
+        error instanceof Error ? error.stack : '',
+      );
       throw error;
     }
   }

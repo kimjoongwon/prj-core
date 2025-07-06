@@ -15,7 +15,7 @@ import { Auth, ApiResponseEntity } from '../decorator';
 import { SessionDto, CreateSessionDto, UpdateSessionDto, QuerySessionDto } from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { SessionsService } from '../service';
+import { SessionsService } from '../service/services';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('SESSION')

@@ -1,2 +1,2 @@
-export * from './remeda';
-export * from './dateTimeUtil';
+export { DateTimeUtil } from './data-time.util';
+export { R } from './r.util';

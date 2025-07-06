@@ -12,13 +12,19 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
-import { TimelineDto, CreateTimelineDto, UpdateTimelineDto, QueryTimelineDto } from '@shared/schema';
+import {
+  TimelineDto,
+  CreateTimelineDto,
+  UpdateTimelineDto,
+  QueryTimelineDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { TimelinesService } from '../service';
 import { ApiTags } from '@nestjs/swagger';
+import { TimelinesService } from '../service/timelines.service';
 
-@ApiTags('TIMELINE') @Controller()
+@ApiTags('TIMELINE')
+@Controller()
 export class TimelinesController {
   constructor(private readonly service: TimelinesService) {}
 

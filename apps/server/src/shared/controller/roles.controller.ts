@@ -15,7 +15,7 @@ import { plainToInstance } from 'class-transformer';
 import { Auth, ApiResponseEntity } from '../decorator';
 import { RoleDto, CreateRoleDto, UpdateRoleDto, QueryRoleDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { RolesService } from '../service';
+import { RolesService } from '../service/services';
 
 @ApiTags('SPACES')
 @Controller()

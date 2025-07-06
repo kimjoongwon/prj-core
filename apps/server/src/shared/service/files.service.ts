@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { FilesRepository } from '../repository';
 import { BaseService } from './base.service';
 import { CreateFileDto, UpdateFileDto, File } from '@shared/schema';
+import { FilesRepository } from '../repository/files.repository';
 
 @Injectable()
 export class FilesService extends BaseService<

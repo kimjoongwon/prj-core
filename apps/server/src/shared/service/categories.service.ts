@@ -1,17 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
-import { $Enums, Prisma, QueryCategoryDto, UpdateCategoryDto } from '@shared/schema';
-import { CategoriesRepository } from '../repository';
+import { Prisma, QueryCategoryDto, UpdateCategoryDto } from '@shared/schema';
 import { AppLogger } from '../util/app-logger.util';
 import { ContextProvider } from '../provider';
+import { CategoriesRepository } from '../repository/categories.repository';
 
 @Injectable()
 export class CategoriesService {
   private readonly logger = new AppLogger(CategoriesService.name);
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly repository: CategoriesRepository,
-  ) {}
+  constructor(private readonly repository: CategoriesRepository) {}
 
   async create(args: Prisma.CategoryCreateArgs) {
     const services = await this.repository.create(args);
