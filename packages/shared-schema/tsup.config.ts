@@ -3,13 +3,13 @@ const isProduction = nodeEnv === 'production';
 const isDevelopment = nodeEnv === 'development';
 
 export default {
-  entry: ["src/index.ts", "src/client.ts", "src/types.ts"],
-  format: ["cjs", "esm"],
+  entry: ['src/index.ts', 'src/client.ts', 'src/types.ts'],
+  format: ['cjs', 'esm'],
   dts: true,
   clean: true,
   splitting: false,
   sourcemap: !isProduction,
   minify: isProduction,
   watch: isDevelopment,
-  external: ["@prisma/client"],
+  external: ['@prisma/client'],
 };

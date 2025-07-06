@@ -97,7 +97,7 @@ export const getLoginPage = (): PageBuilder => {
                 navigator: {
                   type: 'push',
                   route: {
-                    fullPath: '/admin/tenant-select',
+                    fullPath: '/admin/auth/login/tenant-select',
                   },
                 },
               } satisfies IButtonBuilder,

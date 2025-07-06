@@ -14,17 +14,6 @@ export const getTenantSelectPage = (): PageBuilder => {
         },
         children: [
           {
-            name: 'Logo',
-          },
-          {
-            name: 'Text',
-            props: {
-              children: '그라운드 선택',
-              variant: 'h1',
-              className: 'text-center text-2xl font-bold mb-6',
-            },
-          },
-          {
             name: 'ListboxBuilder',
             props: {
               title: '그라운드 선택',
