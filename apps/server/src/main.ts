@@ -21,7 +21,7 @@ async function bootstrap() {
   // Cookie parser 미들웨어 추가
   app.use(cookieParser());
 
-  app.useLogger(app.get(Logger));
+  // app.useLogger(app.get(Logger));
   app.set('query parser', 'extended');
   app.useGlobalFilters(
     new AllExceptionsFilter(httpAdapterHost.httpAdapter),

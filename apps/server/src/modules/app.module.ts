@@ -9,7 +9,6 @@ import { CaslModule } from 'nest-casl';
 
 // Feature modules
 import { AbilitiesModule } from './abilities/abilities.module';
-import { ActionsModule } from './actions/actions.module';
 import { AppBuilderModule } from './app-builder/app-builder.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
@@ -50,7 +49,6 @@ import { GlobalModule, LoggerMiddleware } from '@shared';
     UsersModule,
     AuthModule,
     RolesModule,
-    ActionsModule,
     AbilitiesModule,
     SubjectsModule,
     TimelinesModule,
@@ -116,10 +114,6 @@ import { GlobalModule, LoggerMiddleware } from '@shared';
                     module: RoleClassificationsModule,
                   },
                 ],
-              },
-              {
-                path: 'actions',
-                module: ActionsModule,
               },
               {
                 path: 'abilities',

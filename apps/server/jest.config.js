@@ -4,6 +4,14 @@ module.exports = {
   rootDir: './src',
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleNameMapper: {
+    '^@shared/(.*)$': '<rootDir>/shared/$1',
+    '^@shared$': '<rootDir>/shared/index',
+    '^@shared/types$': '<rootDir>/../../packages/shared-types/src',
+    '^@shared/schema$': '<rootDir>/../../packages/shared-schema/src',
+    '^@shared/utils$': '<rootDir>/../../packages/shared-utils/src',
+    '^@shared/vars$': '<rootDir>/../../packages/shared-vars/src',
+  },
   transform: {
     '^.+\\.ts$': ['ts-jest', {
       tsconfig: {
@@ -17,7 +25,12 @@ module.exports = {
         skipLibCheck: true,
         strict: false,
         paths: {
-          "@shared": ["./shared/index"]
+          "@shared": ["./shared/index"],
+          "@shared/*": ["./shared/*"],
+          "@shared/types": ["../../packages/shared-types/src"],
+          "@shared/schema": ["../../packages/shared-schema/src"],
+          "@shared/utils": ["../../packages/shared-utils/src"],
+          "@shared/vars": ["../../packages/shared-vars/src"]
         }
       }
     }],

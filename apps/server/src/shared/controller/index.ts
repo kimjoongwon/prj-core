@@ -1,4 +1,3 @@
-export * from './actions.controller';
 export * from './assignments.controller';
 export * from './auto-base.controller';
 export * from './categories.controller';

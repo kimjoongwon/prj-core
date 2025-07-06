@@ -29,3 +29,4 @@ export * from './ground.dto';
 export * from './profile.dto';
 export * from './task.dto';
 export * from './auth';
+export * from './select-tenant.dto';

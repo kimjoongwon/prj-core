@@ -1,10 +1,9 @@
 import { Body, Controller, Get, Post, Res, Req, Logger } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from '../../shared';
-import { ResponseEntity } from '@shared/schema';
+import { Auth } from '@shared';
+import { ResponseEntity, SelectTenantDto } from '@shared/schema';
 import { AppBuilderService } from './app-builder.service';
 import { Response, Request } from 'express';
-import { SelectTenantDto } from './dto/select-tenant.dto';
 
 // 응답 메시지 상수
 const RESPONSE_MESSAGES = {

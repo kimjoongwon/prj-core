@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from '../../../../shared/config/config.type';
+import { AuthConfig } from '@shared';
 
 export const Token = {
   ACCESS: 'accessToken',

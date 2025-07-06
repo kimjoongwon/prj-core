@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import {
-  $Enums,
-  Prisma,
-  QueryCategoryDto,
-  UpdateCategoryDto,
-} from '@shared/schema';
+import { $Enums, Prisma, QueryCategoryDto, UpdateCategoryDto } from '@shared/schema';
 import { CategoriesRepository } from '../repository';
 import { AppLogger } from '../util/app-logger.util';
 import { ContextProvider } from '../provider';
@@ -19,41 +14,33 @@ export class CategoriesService {
   ) {}
 
   async create(args: Prisma.CategoryCreateArgs) {
-    const services = await this.prisma.category.create(args);
+    const services = await this.repository.create(args);
     return services;
   }
 
   getFirst(args: Prisma.CategoryFindFirstArgs) {
-    return this.prisma.category.findFirst(args);
-  }
-
-  createMany(args: Prisma.CategoryCreateManyArgs) {
-    return this.prisma.category.createMany(args);
+    return this.repository.findFirst(args);
   }
 
   getUnique(args: Prisma.CategoryFindUniqueArgs) {
-    return this.prisma.category.findUnique(args);
+    return this.repository.findUnique(args);
   }
 
   findCategoryById(id: string) {
-    return this.prisma.category.findUnique({
+    return this.repository.findUnique({
       where: { id },
     });
   }
 
   updateById(id: string, updateCategoryDto: UpdateCategoryDto) {
-    return this.prisma.category.update({
+    return this.repository.update({
       where: { id },
       data: updateCategoryDto,
     });
   }
 
-  getMany(args: Prisma.CategoryFindManyArgs) {
-    return this.prisma.category.findMany(args);
-  }
-
   deleteById(categoryId: string) {
-    return this.prisma.category.delete({
+    return this.repository.delete({
       where: { id: categoryId },
     });
   }
@@ -67,18 +54,14 @@ export class CategoriesService {
     });
     if (!currentTenant) {
       this.logger.warn('getManyByQuery - No tenant found in context');
-      throw new Error(
-        'Tenant information not found in context. Please log in again.',
-      );
+      throw new Error('Tenant information not found in context. Please log in again.');
     }
     if (!currentTenant.spaceId) {
       this.logger.warn('getManyByQuery - No spaceId in tenant:', {
         tenantId: currentTenant.id?.slice(-8),
         hasSpaceId: !!currentTenant.spaceId,
       });
-      throw new Error(
-        'Space ID is missing from tenant information. Please select a space.',
-      );
+      throw new Error('Space ID is missing from tenant information. Please select a space.');
     }
     this.logger.debug('getManyByQuery - Query Args:', {
       args: query.toArgs<Prisma.CategoryFindManyArgs>({
@@ -123,8 +106,8 @@ export class CategoriesService {
     });
 
     const countArgs = query.toCountArgs<Prisma.CategoryCountArgs>();
-    const categories = await this.prisma.category.findMany(args);
-    const count = await this.prisma.category.count(countArgs);
+    const categories = await this.repository.findMany(args);
+    const count = await this.repository.count(countArgs);
 
     return {
       categories,

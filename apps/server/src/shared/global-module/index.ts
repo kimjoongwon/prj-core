@@ -1,6 +1,5 @@
-import { Global, Logger, Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
-  ActionsService,
   AssignmentsService,
   CategoriesService,
   FileClassificationsService,
@@ -17,7 +16,6 @@ import {
   UsersService,
 } from '../service';
 import {
-  ActionsRepository,
   AssignmentsRepository,
   CategoriesRepository,
   ExercisesRepository,
@@ -48,8 +46,6 @@ const modules = [
   PrismaService,
   JwtService,
   ConfigService,
-  ActionsService,
-  ActionsRepository,
   CategoriesService,
   CategoriesRepository,
   FilesService,

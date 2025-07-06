@@ -1,4 +1,3 @@
-export * from './actions.repository';
 export * from './assignments.repository';
 export * from './categories.repository';
 export * from './exercises.repository';
