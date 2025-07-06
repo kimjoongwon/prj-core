@@ -1,5 +1,6 @@
-const isProduction = process.env.NODE_ENV === 'production';
-const isDevelopment = process.env.NODE_ENV === 'development';
+const nodeEnv = process.env.NODE_ENV || 'development';
+const isProduction = nodeEnv === 'production';
+const isDevelopment = nodeEnv === 'development';
 
 export default {
   entry: ["src/index.ts"],
