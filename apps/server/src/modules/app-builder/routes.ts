@@ -2,17 +2,17 @@
 import { ROUTE_NAMES } from '@shared/vars';
 
 // Import page functions
-import { getLoginPage } from './components/pages/login.page';
-import { getTenantSelectPage } from './components/pages/tenant-select.page';
-import { getDashboardPage } from './components/pages/dashboard.page';
-import { getUsersPage } from './components/pages/users.page';
-import { getGroundsPage } from './components/pages/grounds.page';
-import { getGroundPage } from './components/pages/ground.page';
-import { getCategoriesPage } from './components/pages/categories.page';
-import { getGroupsPage } from './components/pages/groups.page';
-import { getCategoryPage } from './components/pages/category.page';
-import { getGroupPage } from './components/pages/group.page';
-import { getGroundMembersPage } from './components/pages/ground-members.page';
+import { getLoginPage } from '../../pages/login.page';
+import { getTenantSelectPage } from '../../pages/tenant-select.page';
+import { getDashboardPage } from '../../pages/dashboard.page';
+import { getUsersPage } from '../../pages/users.page';
+import { getGroundsPage } from '../../pages/grounds.page';
+import { getGroundPage } from '../../pages/ground.page';
+import { getCategoriesPage } from '../../pages/categories.page';
+import { getGroupsPage } from '../../pages/groups.page';
+import { getCategoryPage } from '../../pages/category.page';
+import { getGroupPage } from '../../pages/group.page';
+import { getGroundMembersPage } from '../../pages/ground-members.page';
 import { RouteBuilder } from '@shared/types';
 
 export const rawRoutes: RouteBuilder[] = [
