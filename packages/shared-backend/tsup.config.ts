@@ -1,11 +1,15 @@
+const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default {
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
   dts: true,
   clean: true,
   splitting: false,
-  sourcemap: true,
-  minify: false,
+  sourcemap: !isProduction,
+  minify: isProduction,
+  watch: isDevelopment,
   external: [
     "@nestjs/common",
     "@nestjs/core",

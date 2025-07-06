@@ -12,7 +12,6 @@ export class Tenant extends AbstractEntity<TenantDto> implements TenantEntity {
   spaceId: string;
   userId: string;
   roleId: string;
-
   space?: Space;
   user?: User;
   role?: Role;

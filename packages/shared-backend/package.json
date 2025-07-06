@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "start:dev": "tsup --watch",
+    "start:dev": "NODE_ENV=development tsup",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "clean": "rm -rf dist"

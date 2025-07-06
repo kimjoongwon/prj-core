@@ -2,10 +2,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Global, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from '../../../config/config.type';
-import { ContextProvider } from '../../../provider/context.provider';
-import { UsersService } from '../../../service/users.service';
 import { Request } from 'express';
+import { UsersService, AuthConfig, ContextProvider } from '@shared/backend';
 
 @Global()
 @Injectable()

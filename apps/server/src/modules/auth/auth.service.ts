@@ -6,11 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PasswordService } from '../password/password.service';
 import { ResponseEntity, SignUpPayloadDto, LoginPayloadDto } from '@shared/schema';
-import { UsersService } from '../../service/users.service';
-import { TokenService } from '../token/token.service';
 import { PrismaService } from 'nestjs-prisma';
+import { UsersService } from '@shared/backend';
+import { PasswordService } from './password.service';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthService {
@@ -127,7 +127,9 @@ export class AuthService {
       throw new BadRequestException('비밀번호가 일치하지 않습니다.');
     }
 
-    const { accessToken, refreshToken } = this.tokenService.generateTokens({ userId: user.id });
+    const { accessToken, refreshToken } = this.tokenService.generateTokens({
+      userId: user.id,
+    });
 
     return {
       accessToken,

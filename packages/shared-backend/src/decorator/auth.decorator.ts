@@ -4,7 +4,6 @@ import { RoleType } from '@shared/schema';
 import { AuthUserInterceptor } from '../interceptor';
 import { Roles } from './roles.decorator';
 import { PublicRoute } from './public-route.decorator';
-import { RolesGuard } from '../guard/roles.guard';
 import { JwtAuthGuard } from '../guard';
 
 export function Auth(

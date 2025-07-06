@@ -1,20 +1,24 @@
 import { ClsModule } from 'nestjs-cls';
 import {
   appConfig,
+  AuthConfig,
   authConfig,
   awsConfig,
   corsConfig,
   smtpConfig,
-  AuthConfig,
 } from '@shared/backend';
 import { PrismaModule } from 'nestjs-prisma';
-// import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-// import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import pino from 'pino';
+import { JwtModule } from '@nestjs/jwt';
+import { DynamicModule } from '@nestjs/common';
 
-export const libModules: any[] = [
+export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
+  ConfigModule.forRoot({
+    isGlobal: true,
+    load: [authConfig, appConfig, corsConfig, smtpConfig, awsConfig],
+    envFilePath: '.env',
+  }),
   MailerModule.forRootAsync({
     useFactory: async (config: ConfigService) => {
       const smtpConfig = await config.get('smtp');
@@ -41,17 +45,26 @@ export const libModules: any[] = [
       mount: true,
     },
   }),
-  // JwtModule.registerAsync({
-  //   global: true,
-  //   useFactory: async (config: ConfigService) => {
-  //     const authConfig = await config.get<AuthConfig>('auth');
-  //     return {
-  //       secret: authConfig?.secret,
-  //       signOptions: { expiresIn: authConfig?.expires },
-  //     };
-  //   },
-  //   inject: [ConfigService],
-  // }),
+  JwtModule.registerAsync({
+    global: true,
+    useFactory: async (config: ConfigService) => {
+      const authConfig = await config.get<AuthConfig>('auth');
+      if (!authConfig?.secret) {
+        throw new Error('JWT secret is not defined in the configuration.');
+      }
+      if (!authConfig?.expires) {
+        throw new Error('JWT expiration time is not defined in the configuration.');
+      }
+      return {
+        global: true,
+        // secret: authConfig?.secret || 'default',
+        // privateKey: authConfig?.secret,
+        signOptions: { expiresIn: authConfig?.expires },
+        secretOrPrivateKey: authConfig?.secret,
+      };
+    },
+    inject: [ConfigService],
+  }),
   PrismaModule.forRoot({
     isGlobal: true,
   }),
@@ -115,9 +128,4 @@ export const libModules: any[] = [
   //     },
   //   },
   // }),
-  ConfigModule.forRoot({
-    isGlobal: true,
-    load: [authConfig, appConfig, corsConfig, smtpConfig, awsConfig],
-    envFilePath: '.env',
-  }),
 ];

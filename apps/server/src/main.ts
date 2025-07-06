@@ -2,7 +2,6 @@ import { AppModule } from './modules/app.module';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from '@shared/backend';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe, Logger as NestLogger, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
@@ -31,6 +30,7 @@ async function bootstrap() {
     // @ts-ignore
     new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
   );
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

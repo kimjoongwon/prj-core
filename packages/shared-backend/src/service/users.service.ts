@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repository/users.repository';
-import { Prisma } from '@shared/schema';
-import { GroundsRepository } from '../repository';
-import { QueryUserDto } from '@shared/schema';
+import { QueryUserDto, Prisma } from '@shared/schema';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +42,9 @@ export class UsersService {
       },
     });
 
-    const count = await this.repository.count(query.toCountArgs<Prisma.UserCountArgs>());
+    const count = await this.repository.count(
+      query.toCountArgs<Prisma.UserCountArgs>(),
+    );
 
     return { users, count };
   }

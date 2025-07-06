@@ -17,7 +17,6 @@ export function ApiQueryDto<T>(queryDtoClass: Type<T>) {
   const queries: any[] = [];
 
   try {
-    // Swagger metadata에서 속성 정보를 추출
     const properties =
       Reflect.getMetadata(DECORATORS.API_MODEL_PROPERTIES_ARRAY, queryDtoClass) || [];
     const propertiesMap = Reflect.getMetadata(DECORATORS.API_MODEL_PROPERTIES, queryDtoClass) || {};

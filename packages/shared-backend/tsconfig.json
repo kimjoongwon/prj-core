@@ -27,7 +27,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "../../apps/server/src/domain", "../../apps/server/src/modules/auth/auth.service.ts", "../../apps/server/src/modules/auth/jwt.strategy.ts", "../../apps/server/src/modules/auth/local.strategy.ts", "../../apps/server/src/modules/auth/aws.service.ts"  ],
   "exclude": [
     "node_modules",
     "dist",

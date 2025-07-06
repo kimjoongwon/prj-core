@@ -1,21 +1,12 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
-import {
-  AuthService,
-  JwtStrategy,
-  LocalStrategy,
-  PasswordService,
-  TokenService,
-} from '@shared/backend';
+import { AuthService } from './auth.service';
+import { LocalStrategy } from './local.strategy';
+import { PasswordService } from './password.service';
+import { TokenService } from './token.service';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      global: true,
-    }),
-  ],
-  providers: [AuthService, PasswordService, TokenService, LocalStrategy, JwtStrategy, JwtService],
+  providers: [AuthService, PasswordService, TokenService, LocalStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

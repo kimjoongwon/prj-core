@@ -6,8 +6,7 @@ import { RouterModule } from '@nestjs/core';
 import { CaslModule } from 'nest-casl';
 
 // Shared imports
-import { JwtStrategy, LoggerMiddleware, GlobalModule } from '@shared/backend';
-import { libModules } from '../main.config';
+import { LoggerMiddleware, GlobalModule } from '@shared/backend';
 
 // Feature modules
 import { AbilitiesModule } from './abilities/abilities.module';
@@ -32,10 +31,12 @@ import { TenantsModule } from './tenants/tenants.module';
 import { TimelinesModule } from './timelines/timelines.module';
 import { UserClassificationsModule } from './user-classifications/user-classifications.module';
 import { UsersModule } from './users/users.module';
+import { modules } from '../main.config';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
-    ...libModules,
+    ...modules,
     GlobalModule,
     GroundsModule,
     CaslModule,
@@ -169,7 +170,6 @@ import { UsersModule } from './users/users.module';
       },
     ]),
   ],
-  providers: [JwtStrategy],
 })
 export class AppModule implements OnModuleInit {
   logger = new Logger(AppModule.name);

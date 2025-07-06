@@ -37,23 +37,21 @@ import {
 } from '../repository';
 import { FilesService } from '../service/files.service';
 import { RolesRepository } from '../repository/role.repository';
-import { AwsService } from '../domain/aws/aws.service';
+import { AwsService } from '../../../../apps/server/src/modules/auth/aws.service';
 import { ExercisesService } from '../service/exercises.service';
 import { TenantsService } from '../service/tenants.service';
 import { PrismaService } from 'nestjs-prisma';
 import { ConfigService } from '@nestjs/config';
-// import { LoggerModule } from 'nestjs-pino/LoggerModule';
 import { JwtService } from '@nestjs/jwt';
 
 const modules = [
-  // LoggerModule,
-  ConfigService,
   PrismaService,
+  JwtService,
+  ConfigService,
   ActionsService,
   ActionsRepository,
   CategoriesService,
   CategoriesRepository,
-  JwtService,
   FilesService,
   FilesRepository,
   ProgramsService,

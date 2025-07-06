@@ -28,6 +28,4 @@ export * from './assignment.dto';
 export * from './ground.dto';
 export * from './profile.dto';
 export * from './task.dto';
-export * from './auth/login-payload.dto';
-export * from './auth/sign-up-payload.dto';
-export * from './auth/token.dto';
+export * from './auth';

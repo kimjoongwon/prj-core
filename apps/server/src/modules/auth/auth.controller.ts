@@ -1,22 +1,17 @@
 import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  ApiResponseEntity,
-  Auth,
-  AuthService,
-  ContextProvider,
-  Public,
-  TokenService,
-} from '@shared/backend';
+import { ApiResponseEntity, Auth, ContextProvider, Public } from '@shared/backend';
 import { plainToInstance } from 'class-transformer';
 import { Response, Request } from 'express';
+import { AuthService } from './auth.service';
 import {
-  LoginPayloadDto,
-  SignUpPayloadDto,
-  UserDto,
-  ResponseEntity,
   TokenDto,
+  LoginPayloadDto,
+  ResponseEntity,
+  UserDto,
+  SignUpPayloadDto,
 } from '@shared/schema';
+import { TokenService } from './token.service';
 
 @ApiTags('AUTH')
 @Controller()
