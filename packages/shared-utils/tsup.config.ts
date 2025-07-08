@@ -11,4 +11,12 @@ export default defineConfig(option => ({
   },
   sourcemap: true,
   dts: true,
+  external: [
+    'class-transformer',
+    'class-validator',
+    'dayjs',
+    'path-parser',
+    'remeda',
+    'reflect-metadata',
+  ],
 }));
