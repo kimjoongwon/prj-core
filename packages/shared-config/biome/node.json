@@ -20,7 +20,9 @@
         "noNodejsModules": "off"
       },
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noBannedTypes": "warn",
+        "noStaticOnlyClass": "warn"
       },
       "nursery": {
         "useSortedClasses": "off"
@@ -36,6 +38,16 @@
     "lineWidth": 100,
     "attributePosition": "auto"
   },
+  "overrides": [
+    {
+      "include": ["**/*.ts"],
+      "javascript": {
+        "parser": {
+          "unsafeParameterDecoratorsEnabled": true
+        }
+      }
+    }
+  ],
   "javascript": {
     "formatter": {
       "quoteProperties": "asNeeded",
