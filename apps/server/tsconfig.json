@@ -1,15 +1,6 @@
 {
+  "extends": "@shared/config/typescript/node",
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
     "paths": {
       "@shared": ["./src/shared/index"],
       "@shared/types": ["../packages/shared-types/src"],
@@ -17,8 +8,6 @@
       "@shared/utils": ["../packages/shared-utils/src"],
       "@shared/vars": ["../packages/shared-vars/src"]
     },
-    "incremental": true,
-    "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,

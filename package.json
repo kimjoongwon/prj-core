@@ -8,7 +8,9 @@
     "build:memory-safe": "NODE_OPTIONS='--max_old_space_size=4096' turbo build",
     "clean": "turbo clean",
     "start:dev": "turbo start:dev --no-cache  --continue",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
     "test": "turbo test"
   },
   "packageManager": "pnpm@9.6.0"
