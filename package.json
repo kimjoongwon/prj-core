@@ -11,8 +11,5 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "turbo test"
   },
-  "packageManager": "pnpm@9.6.0",
-  "dependencies": {
-    "lucide-react": "^0.476.0"
-  }
+  "packageManager": "pnpm@9.6.0"
 }

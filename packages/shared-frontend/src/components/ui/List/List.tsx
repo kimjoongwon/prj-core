@@ -1,29 +1,13 @@
-
-
 import { ReactNode } from 'react';
-import { HStack } from '../HStack';
-import { VStack } from '../VStack';
 import { observer } from 'mobx-react-lite';
 import { v4 } from 'uuid';
-import { tv } from 'tailwind-variants';
 import { ListProps } from '@shared/types';
-
-const listView = tv({});
 
 export const List = observer(<T extends any>(props: ListProps<T>) => {
   const { data, renderItem, className, placeholder } = props;
 
   const renderContainer = (children: ReactNode) => {
-    return (
-      <div
-        key={v4()}
-        className={listView({
-          className,
-        })}
-      >
-        {children}
-      </div>
-    );
+    return <div key={v4()}>{children}</div>;
   };
 
   if (data.length === 0) {
