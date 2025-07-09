@@ -1,25 +1,56 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    // 출력 설정
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["dom", "dom.iterable", "esnext"],
+
+    // 개발 시에는 emit 하지 않음
+    "noEmit": true,
+
+    // React 설정
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    // 모듈 해결
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
+    "strict": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": false,
-    "types": ["vitest/globals"],
+
+    // 타입 체크 옵션 (메모리 최적화)
+    "exactOptionalPropertyTypes": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+    "noUncheckedIndexedAccess": false,
+
+    // 경로 매핑
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    // 타입 정의
+    "types": ["vitest/globals", "node"],
+
+    // 플러그인
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["index.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
 }

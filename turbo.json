@@ -10,9 +10,14 @@
         "!.next/cache/**",
         "storybook-static/**"
       ],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": ["NODE_ENV"],
+      "passThroughEnv": ["NODE_OPTIONS"]
     },
-    "packages/shared-frontend#build": {},
+    "packages/shared-frontend#build": {
+      "env": ["NODE_ENV"],
+      "passThroughEnv": ["NODE_OPTIONS"]
+    },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []

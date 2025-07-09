@@ -2,6 +2,15 @@
   "name": "@shared/api-client",
   "version": "1.0.0",
   "description": "Generated API client and types from OpenAPI specs",
+  "keywords": [
+    "api-client",
+    "openapi",
+    "react-query",
+    "typescript",
+    "axios"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "publishConfig": {
@@ -17,31 +26,57 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.mjs",
       "require": "./dist/types.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
+    "build:prod": "NODE_ENV=production tsup",
+    "dev": "tsup --watch",
     "start:dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "clean:dist": "rm -rf dist",
     "codegen:dev": "orval --config orval.dev.config.js",
     "codegen:stg": "orval --config orval.stg.config.js",
     "codegen:prod": "orval --config orval.prod.config.js",
-    "codegen": "npm run codegen:dev"
+    "codegen": "npm run codegen:dev",
+    "prebuild": "npm run clean:dist",
+    "prepack": "npm run build:prod"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "axios": ">=1.0.0",
+    "react": ">=18.0.0"
   },
   "dependencies": {
     "@tanstack/react-query": "5.66.9",
     "axios": "^1.7.9"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^22.0.0",
     "orval": "^7.8.0",
     "tsup": "^8.0.0",
     "typescript": "^5.6.0"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "author": "kimjoongwon",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/prj-core.git",
+    "directory": "packages/shared-api-client"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/prj-core/issues"
+  },
+  "homepage": "https://github.com/your-org/prj-core/tree/main/packages/shared-api-client#readme"
 }
