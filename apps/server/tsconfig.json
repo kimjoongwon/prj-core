@@ -2,11 +2,21 @@
   "extends": "@shared/config/typescript/node",
   "compilerOptions": {
     "paths": {
-      "@shared": ["./src/shared/index"],
-      "@shared/types": ["../packages/shared-types/src"],
-      "@shared/schema": ["../packages/shared-schema/src"],
-      "@shared/utils": ["../packages/shared-utils/src"],
-      "@shared/vars": ["../packages/shared-vars/src"]
+      "@shared": [
+        "./src/shared/index"
+      ],
+      "@shared/types": [
+        "../../packages/shared-types/src"
+      ],
+      "@shared/schema": [
+        "../../packages/shared-schema/src"
+      ],
+      "@shared/utils": [
+        "../../packages/shared-utils/src"
+      ],
+      "@shared/vars": [
+        "../../packages/shared-vars/src"
+      ]
     },
     "strictNullChecks": false,
     "noImplicitAny": false,
@@ -17,5 +27,12 @@
     "noUnusedParameters": false,
     "strict": false
   },
-  "exclude": ["prisma/seed.ts", "dist/**/*", "node_modules/**/*"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "prisma/seed.ts",
+    "dist/**/*",
+    "node_modules/**/*"
+  ]
 }
