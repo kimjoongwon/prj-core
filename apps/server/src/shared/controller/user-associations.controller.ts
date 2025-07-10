@@ -1,25 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { UserAssociationsService } from '../service/user-associations.service';
-import { CreateUserAssociationDto } from '@shared/schema';
-import { UpdateUserAssociationDto } from '@shared/schema';
-import { QueryUserAssociationDto } from '@shared/schema';
+import type { CreateUserAssociationDto } from '@shared/schema';
+import type { UpdateUserAssociationDto } from '@shared/schema';
+import type { QueryUserAssociationDto } from '@shared/schema';
 import { UserAssociationDto } from '@shared/schema';
-import { Auth } from '../decorator/auth.decorator';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { ResponseEntity } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
+import { Auth } from '../decorator/auth.decorator';
+import type { UserAssociationsService } from '../service/user-associations.service';
 
 @ApiTags('USER-ASSOCIATIONS')
 @Controller()
@@ -36,7 +36,7 @@ export class UserAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(UserAssociationDto, userAssociation),
+      plainToInstance(UserAssociationDto, userAssociation)
     );
   }
 
@@ -51,7 +51,7 @@ export class UserAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(UserAssociationDto, userAssociation),
+      plainToInstance(UserAssociationDto, userAssociation)
     );
   }
 
@@ -73,7 +73,7 @@ export class UserAssociationsController {
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
   async updateUserAssociation(
     @Param('userAssociationId') userAssociationId: string,
-    @Body() updateUserAssociationDto: UpdateUserAssociationDto,
+    @Body() updateUserAssociationDto: UpdateUserAssociationDto
   ) {
     const userAssociation = await this.service.update({
       where: { id: userAssociationId },
@@ -82,7 +82,7 @@ export class UserAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(UserAssociationDto, userAssociation),
+      plainToInstance(UserAssociationDto, userAssociation)
     );
   }
 
@@ -95,7 +95,7 @@ export class UserAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(UserAssociationDto, userAssociation),
+      plainToInstance(UserAssociationDto, userAssociation)
     );
   }
 
@@ -108,7 +108,7 @@ export class UserAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(UserAssociationDto, userAssociation),
+      plainToInstance(UserAssociationDto, userAssociation)
     );
   }
 
@@ -122,7 +122,7 @@ export class UserAssociationsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(UserAssociationDto, userAssociations),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

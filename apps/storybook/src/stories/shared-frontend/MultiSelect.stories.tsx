@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MultiSelect } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { v4 } from 'uuid';
 
 const meta: Meta<typeof MultiSelect> = {
@@ -31,14 +31,7 @@ const meta: Meta<typeof MultiSelect> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     selectionMode: {

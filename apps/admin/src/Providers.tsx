@@ -3,24 +3,24 @@ import { AppProvider, AuthProvider, QueryProvider } from '@shared/frontend';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 
 interface ProvidersProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const Providers = (props: ProvidersProps) => {
-	const { children } = props;
+  const { children } = props;
 
-	return (
-		<>
-			<QueryProvider>
-				<HeroUIProvider>
-					<NuqsAdapter>
-						<AuthProvider>
-							<AppProvider>{children}</AppProvider>
-						</AuthProvider>
-						<ToastProvider placement="bottom-center" />
-					</NuqsAdapter>
-				</HeroUIProvider>
-			</QueryProvider>
-		</>
-	);
+  return (
+    <>
+      <QueryProvider>
+        <HeroUIProvider>
+          <NuqsAdapter>
+            <AuthProvider>
+              <AppProvider>{children}</AppProvider>
+            </AuthProvider>
+            <ToastProvider placement="bottom-center" />
+          </NuqsAdapter>
+        </HeroUIProvider>
+      </QueryProvider>
+    </>
+  );
 };

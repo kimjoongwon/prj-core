@@ -106,7 +106,7 @@ describe('UsersPage', () => {
     it('컬럼 accessorKey가 유효한 값이어야 한다', () => {
       const result = getUsersPage();
       const columns = result.elements[0].props.table.columns;
-      const accessorKeys = columns.map(col => col.accessorKey);
+      const accessorKeys = columns.map((col) => col.accessorKey);
 
       expect(accessorKeys).toContain('name');
       expect(accessorKeys).toContain('phone');

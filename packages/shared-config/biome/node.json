@@ -22,7 +22,7 @@
       "complexity": {
         "noForEach": "off",
         "noBannedTypes": "warn",
-        "noStaticOnlyClass": "warn"
+        "noStaticOnlyClass": "off"
       },
       "nursery": {
         "useSortedClasses": "off"
@@ -40,7 +40,9 @@
   },
   "overrides": [
     {
-      "include": ["**/*.ts"],
+      "include": [
+        "**/*.ts"
+      ],
       "javascript": {
         "parser": {
           "unsafeParameterDecoratorsEnabled": true
@@ -64,7 +66,10 @@
     }
   },
   "files": {
-    "include": ["**/*.ts", "**/*.js"],
+    "include": [
+      "**/*.ts",
+      "**/*.js"
+    ],
     "ignore": [
       "dist/**",
       "build/**",

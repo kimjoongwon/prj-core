@@ -1,22 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { SubjectDto, CreateSubjectDto, UpdateSubjectDto, QuerySubjectDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateSubjectDto,
+  type QuerySubjectDto,
+  SubjectDto,
+  type UpdateSubjectDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { ApiTags } from '@nestjs/swagger';
-import { SubjectsService } from '../service/subjects.service';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { SubjectsService } from '../service/subjects.service';
 
 @ApiTags('SUBJECTS')
 @Controller()
@@ -62,7 +67,7 @@ export class SubjectsController {
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
   async updateSubject(
     @Param('subjectId') subjectId: string,
-    @Body() updateSubjectDto: UpdateSubjectDto,
+    @Body() updateSubjectDto: UpdateSubjectDto
   ) {
     const subject = await this.service.update({
       where: { id: subjectId },
@@ -100,7 +105,7 @@ export class SubjectsController {
       HttpStatus.OK,
       'success',
       subjects.map((subject) => subject?.toDto?.() ?? subject),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

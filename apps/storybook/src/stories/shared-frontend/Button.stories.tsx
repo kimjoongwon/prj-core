@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Button> = {
   title: 'Shared Frontend/Button',
@@ -8,35 +8,19 @@ const meta: Meta<typeof Button> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          '공통 Button 컴포넌트입니다. NextUI Button을 래핑하여 사용합니다.',
+        component: '공통 Button 컴포넌트입니다. NextUI Button을 래핑하여 사용합니다.',
       },
     },
   },
   argTypes: {
     variant: {
       control: 'select',
-      options: [
-        'solid',
-        'bordered',
-        'light',
-        'flat',
-        'faded',
-        'shadow',
-        'ghost',
-      ],
+      options: ['solid', 'bordered', 'light', 'flat', 'faded', 'shadow', 'ghost'],
       description: '버튼 스타일 variant',
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '버튼 색상',
     },
     size: {

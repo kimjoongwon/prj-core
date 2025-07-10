@@ -1,20 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, Public, ApiResponseEntity } from '../decorator';
-import { GroupDto, CreateGroupDto, QueryGroupDto, UpdateGroupDto } from '@shared/schema';
+import {
+  type CreateGroupDto,
+  GroupDto,
+  type QueryGroupDto,
+  type UpdateGroupDto,
+} from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { GroupsService } from '../service/services';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth, Public } from '../decorator';
+import type { GroupsService } from '../service/services';
 
 @ApiTags('GROUPS')
 @Controller()
@@ -42,7 +47,7 @@ export class GroupsController {
       HttpStatus.OK,
       '그룹 페이지 데이터 리턴 성공',
       groups.map((group) => group?.toDto?.() ?? group),
-      query.toPageMetaDto(totalCount),
+      query.toPageMetaDto(totalCount)
     );
   }
 
@@ -54,7 +59,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 데이터 리턴 성공',
-      group ? plainToInstance(GroupDto, group) : null,
+      group ? plainToInstance(GroupDto, group) : null
     );
   }
 
@@ -65,7 +70,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 데이터 업데이트 성공',
-      plainToInstance(GroupDto, group),
+      plainToInstance(GroupDto, group)
     );
   }
 
@@ -83,7 +88,7 @@ export class GroupsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '그룹 데이터 삭제 성공',
-      plainToInstance(GroupDto, group),
+      plainToInstance(GroupDto, group)
     );
   }
 }

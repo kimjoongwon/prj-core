@@ -1,12 +1,12 @@
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
+import type { ClassConstructor } from 'class-transformer/types/interfaces';
 import { validateSync } from 'class-validator';
-import { ClassConstructor } from 'class-transformer/types/interfaces';
 
 export class ValidationUtil {
   static validateConfig<T extends object>(
     config: Record<string, unknown>,
-    envVariablesClass: ClassConstructor<T>,
+    envVariablesClass: ClassConstructor<T>
   ) {
     const validatedConfig = plainToClass(envVariablesClass, config, {
       enableImplicitConversion: true,
@@ -40,13 +40,13 @@ export function ApiBooleanProperty(options: ApiPropertyOptions = {}): PropertyDe
 }
 
 export function ApiBooleanPropertyOptional(
-  options: Omit<ApiPropertyOptions, 'type' | 'required'> = {},
+  options: Omit<ApiPropertyOptions, 'type' | 'required'> = {}
 ): PropertyDecorator {
   return ApiBooleanProperty({ required: false, ...options });
 }
 
 export function ApiUUIDProperty(
-  options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
+  options: ApiPropertyOptions & Partial<{ each: boolean }> = {}
 ): PropertyDecorator {
   return ApiProperty({
     type: options.each ? [String] : 'string',
@@ -58,14 +58,14 @@ export function ApiUUIDProperty(
 
 export function ApiUUIDPropertyOptional(
   options: Omit<ApiPropertyOptions, 'type' | 'format' | 'required'> &
-    Partial<{ each: boolean }> = {},
+    Partial<{ each: boolean }> = {}
 ): PropertyDecorator {
   return ApiUUIDProperty({ required: false, ...options });
 }
 
 export function ApiEnumProperty<TEnum>(
   getEnum: () => TEnum,
-  options: ApiPropertyOptions & { each?: boolean } = {},
+  options: ApiPropertyOptions & { each?: boolean } = {}
 ): PropertyDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const enumValue = getEnum() as any;
@@ -83,7 +83,7 @@ export function ApiEnumPropertyOptional<TEnum>(
   getEnum: () => TEnum,
   options: Omit<ApiPropertyOptions, 'type' | 'required'> & {
     each?: boolean;
-  } = {},
+  } = {}
 ): PropertyDecorator {
   return ApiEnumProperty(getEnum, { required: false, ...options });
 }

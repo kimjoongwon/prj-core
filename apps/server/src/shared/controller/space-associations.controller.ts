@@ -1,25 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { SpaceAssociationsService } from '../service/space-associations.service';
-import { CreateSpaceAssociationDto } from '@shared/schema';
-import { UpdateSpaceAssociationDto } from '@shared/schema';
-import { QuerySpaceAssociationDto } from '@shared/schema';
+import type { CreateSpaceAssociationDto } from '@shared/schema';
+import type { UpdateSpaceAssociationDto } from '@shared/schema';
+import type { QuerySpaceAssociationDto } from '@shared/schema';
 import { SpaceAssociationDto } from '@shared/schema';
-import { Auth } from '../decorator/auth.decorator';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { ResponseEntity } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
+import { Auth } from '../decorator/auth.decorator';
+import type { SpaceAssociationsService } from '../service/space-associations.service';
 
 @ApiTags('SPACE-ASSOCIATIONS')
 @Controller()
@@ -36,7 +36,7 @@ export class SpaceAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation),
+      plainToInstance(SpaceAssociationDto, spaceAssociation)
     );
   }
 
@@ -51,7 +51,7 @@ export class SpaceAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation),
+      plainToInstance(SpaceAssociationDto, spaceAssociation)
     );
   }
 
@@ -73,7 +73,7 @@ export class SpaceAssociationsController {
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
   async updateSpaceAssociation(
     @Param('spaceAssociationId') spaceAssociationId: string,
-    @Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto,
+    @Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto
   ) {
     const spaceAssociation = await this.service.update({
       where: { id: spaceAssociationId },
@@ -82,7 +82,7 @@ export class SpaceAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation),
+      plainToInstance(SpaceAssociationDto, spaceAssociation)
     );
   }
 
@@ -95,7 +95,7 @@ export class SpaceAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation),
+      plainToInstance(SpaceAssociationDto, spaceAssociation)
     );
   }
 
@@ -108,7 +108,7 @@ export class SpaceAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation),
+      plainToInstance(SpaceAssociationDto, spaceAssociation)
     );
   }
 
@@ -122,7 +122,7 @@ export class SpaceAssociationsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(SpaceAssociationDto, spaceAssociations),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

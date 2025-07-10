@@ -43,7 +43,7 @@ export class AppLogger extends Logger {
     if (this.isDevelopment) {
       const emoji = EMOJIS.debug;
       const coloredMessage = `${COLORS.cyan}${emoji} ${message}${COLORS.reset}`;
-      
+
       if (data) {
         const prettyData = this.prettifyData(data);
         super.debug(`${coloredMessage} ${prettyData}`, context);
@@ -59,7 +59,7 @@ export class AppLogger extends Logger {
   auth(message: string, data?: Record<string, any>, context?: string): void {
     const emoji = EMOJIS.auth;
     const coloredMessage = `${COLORS.magenta}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (data) {
       const prettyData = this.prettifyData(data);
       super.log(`${coloredMessage} ${prettyData}`, context);
@@ -74,7 +74,7 @@ export class AppLogger extends Logger {
   success(message: string, data?: Record<string, any>, context?: string): void {
     const emoji = EMOJIS.success;
     const coloredMessage = `${COLORS.green}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (data) {
       const prettyData = this.prettifyData(data);
       super.log(`${coloredMessage} ${prettyData}`, context);
@@ -106,7 +106,7 @@ export class AppLogger extends Logger {
     }
 
     const message = `${color}${emoji} ${operation} ${COLORS.dim}(${duration}ms)${COLORS.reset}`;
-    
+
     if (level === 'warn' || (this.isDevelopment && level === 'debug')) {
       super[level](message, context);
     }
@@ -118,7 +118,7 @@ export class AppLogger extends Logger {
   request(message: string, data?: Record<string, any>, context?: string): void {
     const emoji = EMOJIS.request;
     const coloredMessage = `${COLORS.blue}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (this.isDevelopment) {
       if (data) {
         const prettyData = this.prettifyData(data);
@@ -135,7 +135,7 @@ export class AppLogger extends Logger {
   errorWithStack(message: string, error: Error, context?: string): void {
     const emoji = EMOJIS.error;
     const coloredMessage = `${COLORS.red}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (this.isDevelopment) {
       super.error(`${coloredMessage}: ${error.message}`, error.stack, context);
     } else {
@@ -149,7 +149,7 @@ export class AppLogger extends Logger {
   database(message: string, data?: Record<string, any>, context?: string): void {
     const emoji = EMOJIS.database;
     const coloredMessage = `${COLORS.cyan}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (data) {
       const prettyData = this.prettifyData(data);
       super.log(`${coloredMessage} ${prettyData}`, context);
@@ -164,12 +164,16 @@ export class AppLogger extends Logger {
   user(message: string, data?: Record<string, any>, context?: string): void {
     const emoji = EMOJIS.user;
     const coloredMessage = `${COLORS.yellow}${emoji} ${message}${COLORS.reset}`;
-    
+
     if (data) {
       const prettyData = this.prettifyData(data);
-      this.isDevelopment ? super.debug(`${coloredMessage} ${prettyData}`, context) : super.log(coloredMessage, context);
+      this.isDevelopment
+        ? super.debug(`${coloredMessage} ${prettyData}`, context)
+        : super.log(coloredMessage, context);
     } else {
-      this.isDevelopment ? super.debug(coloredMessage, context) : super.log(coloredMessage, context);
+      this.isDevelopment
+        ? super.debug(coloredMessage, context)
+        : super.log(coloredMessage, context);
     }
   }
 
@@ -201,12 +205,12 @@ export class AppLogger extends Logger {
 
   private simplifyObject(obj: Record<string, any>): Record<string, any> {
     const simplified: Record<string, any> = {};
-    
+
     for (const [key, value] of Object.entries(obj)) {
       if (value === null || value === undefined) {
         continue;
       }
-      
+
       if (typeof value === 'string' && value.length > 100) {
         simplified[key] = `${value.substring(0, 50)}...`;
       } else if (Array.isArray(value)) {
@@ -217,7 +221,7 @@ export class AppLogger extends Logger {
         simplified[key] = value;
       }
     }
-    
+
     return simplified;
   }
 }

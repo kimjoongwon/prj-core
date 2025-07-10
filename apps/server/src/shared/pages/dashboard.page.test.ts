@@ -73,7 +73,7 @@ describe('DashboardPage', () => {
   describe('Spacer 컴포넌트 설정', () => {
     it('모든 Spacer가 올바른 크기를 가져야 한다', () => {
       const result = getDashboardPage();
-      const spacers = result.elements[0].children.filter(child => child.name === 'Spacer');
+      const spacers = result.elements[0].children.filter((child) => child.name === 'Spacer');
 
       expect(spacers).toHaveLength(3);
       expect(spacers[0].props.size).toBe('4');

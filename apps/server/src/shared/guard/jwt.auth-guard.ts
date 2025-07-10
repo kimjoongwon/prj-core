@@ -1,5 +1,5 @@
-import { ExecutionContext, Injectable, UnauthorizedException, Logger } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { type ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import type { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { PUBLIC_ROUTE_KEY } from '../decorator/public-route.decorator';
 
@@ -30,7 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err: any, user: any, info: any) {
     this.logger.log(
-      `JWT handleRequest - err: ${!!err}, user: ${!!user}, info: ${JSON.stringify(info)}`,
+      `JWT handleRequest - err: ${!!err}, user: ${!!user}, info: ${JSON.stringify(info)}`
     );
 
     if (err) {

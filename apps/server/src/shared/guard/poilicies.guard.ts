@@ -1,5 +1,5 @@
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { type CanActivate, type ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
+import type { Reflector } from '@nestjs/core';
 // import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory/casl-ability.factory';
 
 // Temporary type definition
@@ -21,7 +21,7 @@ export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 @Injectable()
 export class PoliciesGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
+    private reflector: Reflector
     // private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 

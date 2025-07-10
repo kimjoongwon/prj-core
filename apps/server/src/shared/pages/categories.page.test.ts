@@ -1,5 +1,5 @@
-import { getCategoriesPage } from './categories.page';
 import { $Enums } from '@prisma/client';
+import { getCategoriesPage } from './categories.page';
 
 // Mock ContextProvider
 jest.mock('../../../../shared', () => ({
@@ -34,7 +34,7 @@ describe('CategoriesPage', () => {
       expect(createButton.children).toBe('카테고리 생성');
       expect(createButton.color).toBe('primary');
       expect(createButton.navigator?.route?.fullPath).toBe(
-        '/admin/dashboard/space-service/categories/new/create',
+        '/admin/dashboard/space-service/categories/new/create'
       );
 
       // 테이블 컬럼 확인
@@ -95,8 +95,7 @@ describe('CategoriesPage', () => {
 
     it('should have proper styling for all action buttons', () => {
       const result = getCategoriesPage($Enums.CategoryTypes.User);
-      const actionButtons =
-        result.elements[0].props.table.columns[2].cell.buttons;
+      const actionButtons = result.elements[0].props.table.columns[2].cell.buttons;
 
       actionButtons.forEach((button) => {
         expect(button.variant).toBe('light');

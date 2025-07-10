@@ -11,11 +11,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { RoleDto, CreateRoleDto, UpdateRoleDto, QueryRoleDto } from '@shared/schema';
+import { type CreateRoleDto, type QueryRoleDto, RoleDto, type UpdateRoleDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { RolesService } from '../service/services';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { RolesService } from '../service/services';
 
 @ApiTags('SPACES')
 @Controller()
@@ -78,7 +78,7 @@ export class RolesController {
       HttpStatus.OK,
       'success',
       roles.map((role) => role?.toDto?.() ?? role),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

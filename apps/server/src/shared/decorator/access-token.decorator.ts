@@ -1,8 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { type ExecutionContext, createParamDecorator } from '@nestjs/common';
 
 export const AccessToken = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
-  const bearerToken = request.headers['Authorization'];
+  const bearerToken = request.headers.Authorization;
   if (!bearerToken) {
     return null;
   }

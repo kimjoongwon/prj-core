@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Res, Req, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Req, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity, SelectTenantDto } from '@shared/schema';
-import { AppBuilderService } from '../service/app-builder.service';
-import { Response, Request } from 'express';
 import { Auth } from '@shared';
+import { ResponseEntity, type SelectTenantDto } from '@shared/schema';
+import type { Request, Response } from 'express';
+import type { AppBuilderService } from '../service/app-builder.service';
 
 // 응답 메시지 상수
 const RESPONSE_MESSAGES = {
@@ -36,7 +36,7 @@ export class AppBuilderController {
   @Post('select-tenant')
   async selectTenant(
     @Body() selectTenantDto: SelectTenantDto,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: Response
   ) {
     this.logger.log('테넌트 선택 요청:', selectTenantDto);
     if (!selectTenantDto.selectedTenantId) {

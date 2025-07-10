@@ -1,20 +1,20 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
+  Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Patch,
+  Post,
   UploadedFiles,
 } from '@nestjs/common';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { CreateFileDto, FileDto } from '@shared/schema';
+import { type CreateFileDto, FileDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { FilesService } from '../service/files.service';
 import _ from 'lodash';
+import { ApiResponseEntity, Auth } from '../decorator';
 import { ApiFile } from '../decorator/swagger.schema';
+import type { FilesService } from '../service/files.service';
 
 @Controller()
 export class FilesController {
@@ -57,11 +57,11 @@ export class FilesController {
     },
     {
       isRequired: false,
-    },
+    }
   )
   async updateFileById(
     @Param('fileId') fileId: string,
-    @UploadedFiles() { files }: { files: any[] },
+    @UploadedFiles() { files }: { files: any[] }
   ) {
     const fileEntity = await this.service.updateById(fileId, files?.[0]);
     return new ResponseEntity(HttpStatus.OK, 'success', fileEntity?.toDto?.() ?? fileEntity);

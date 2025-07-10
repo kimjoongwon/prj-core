@@ -1,3 +1,4 @@
+import type { FormProps } from '@heroui/react';
 import type {
   ApiQueryBuilder,
   IButtonBuilder,
@@ -8,11 +9,10 @@ import type {
   ResourceBuilder,
   TabNavigationProps,
 } from '@shared/types';
-import { FormProps } from '@heroui/react';
 
 export const getGroundPage = (type: PageTypes): PageBuilder => {
   // type에 따른 기본 데이터 설정
-  let formInputs = {
+  const formInputs = {
     name: '',
     label: '',
     phone: '',
@@ -208,7 +208,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
             {
               name: 'VStack',
               props: {
-                className: 'space-y-4'
+                className: 'space-y-4',
               },
               children: [
                 {
@@ -247,19 +247,23 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
                         },
                       ],
                     },
-                    ...(type !== 'detail' ? [{
-                      name: 'ButtonBuilder' as const,
-                      props: {
-                        children: getButtonText(type),
-                        mutation: mutationConfig,
-                        navigator: {
-                          type: 'back',
-                        },
-                        style: {
-                          position: 'sticky',
-                        },
-                      } satisfies IButtonBuilder,
-                    }] : []),
+                    ...(type !== 'detail'
+                      ? [
+                          {
+                            name: 'ButtonBuilder' as const,
+                            props: {
+                              children: getButtonText(type),
+                              mutation: mutationConfig,
+                              navigator: {
+                                type: 'back',
+                              },
+                              style: {
+                                position: 'sticky',
+                              },
+                            } satisfies IButtonBuilder,
+                          },
+                        ]
+                      : []),
                   ],
                 },
               ],

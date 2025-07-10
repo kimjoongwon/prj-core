@@ -1,5 +1,5 @@
 // NestJS core imports
-import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
+import { Logger, type MiddlewareConsumer, Module, type OnModuleInit } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 // Third-party imports
@@ -7,15 +7,16 @@ import { CaslModule } from 'nest-casl';
 
 // Shared imports
 
+import { LoggerMiddleware } from '@shared';
 // Feature modules
 import { modules } from '../main.config';
-import { LoggerMiddleware } from '@shared';
 import { AppBuilderModule } from './app-builder.module';
 import { AuthModule } from './auth.module';
 import { CategoriesModule } from './categories.module';
 import { ExercisesModule } from './exercises.module';
 import { FileClassificationsModule } from './file-classifications.module';
 import { FilesModule } from './files.module';
+import { GlobalModule } from './global.module';
 import { GroundsModule } from './ground.module';
 import { GroupsModule } from './groups.module';
 import { ProgramsModule } from './programs.module';
@@ -30,7 +31,6 @@ import { TenantsModule } from './tenants.module';
 import { TimelinesModule } from './timelines.module';
 import { UserClassificationsModule } from './user-classifications.module';
 import { UsersModule } from './users.module';
-import { GlobalModule } from './global.module';
 
 @Module({
   imports: [

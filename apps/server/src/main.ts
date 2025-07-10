@@ -1,10 +1,10 @@
-import { AppModule } from './module/app.module';
-import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from './shared';
+import { Logger, Logger as NestLogger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger as NestLogger, Logger } from '@nestjs/common';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, type SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { AppModule } from './module/app.module';
+import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from './shared';
 
 async function bootstrap() {
   const startTime = Date.now();
@@ -25,7 +25,7 @@ async function bootstrap() {
   app.set('query parser', 'extended');
   app.useGlobalFilters(
     new AllExceptionsFilter(httpAdapterHost.httpAdapter),
-    new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
+    new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter)
   );
 
   app.useGlobalPipes(
@@ -37,7 +37,7 @@ async function bootstrap() {
       // transformOptions: {
       //   excludeExtraneousValues: true, // class-transformer에서 @Expose()가 없는 속성 제거
       // },
-    }),
+    })
   );
   const config = new DocumentBuilder().setVersion('1.0.0').addBearerAuth().build();
 

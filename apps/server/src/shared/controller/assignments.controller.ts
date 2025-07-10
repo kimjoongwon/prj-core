@@ -1,22 +1,22 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import { AssignmentDto, type CreateAssignmentDto, type QueryAssignmentDto } from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { AssignmentsService } from '../service/assignments.service';
-import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { AssignmentsService } from '../service/assignments.service';
 
 @ApiTags('ASSIGNMENTS')
 @Controller()
@@ -79,7 +79,7 @@ export class AssignmentsController {
       HttpStatus.OK,
       'success',
       assignments.map((assignment) => assignment?.toDto?.() ?? assignment),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

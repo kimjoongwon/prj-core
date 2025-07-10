@@ -1,27 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
+import { ApiTags } from '@nestjs/swagger';
 import {
+  type CreateTimelineDto,
+  type QueryTimelineDto,
   TimelineDto,
-  CreateTimelineDto,
-  UpdateTimelineDto,
-  QueryTimelineDto,
+  type UpdateTimelineDto,
 } from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { ApiTags } from '@nestjs/swagger';
-import { TimelinesService } from '../service/timelines.service';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { TimelinesService } from '../service/timelines.service';
 
 @ApiTags('TIMELINE')
 @Controller()
@@ -67,7 +67,7 @@ export class TimelinesController {
   @ApiResponseEntity(TimelineDto, HttpStatus.OK)
   async updateTimeline(
     @Param('timelineId') timelineId: string,
-    @Body() updateTimelineDto: UpdateTimelineDto,
+    @Body() updateTimelineDto: UpdateTimelineDto
   ) {
     const timeline = await this.service.update({
       where: { id: timelineId },
@@ -104,7 +104,7 @@ export class TimelinesController {
       HttpStatus.OK,
       'success',
       timelines.map((timeline) => timeline?.toDto?.() ?? timeline),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

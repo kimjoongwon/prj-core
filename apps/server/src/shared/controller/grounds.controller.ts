@@ -10,12 +10,12 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiParam, ApiBody, ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { CreateGroundDto, UpdateGroundDto, GroundDto, QueryGroundDto } from '@shared/schema';
-import { GroundsService } from '../service/grounds.service';
-import { Auth, ApiResponseEntity } from '../decorator';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateGroundDto, GroundDto, type QueryGroundDto, UpdateGroundDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { GroundsService } from '../service/grounds.service';
 
 @ApiTags('GROUNDS')
 @Controller()
@@ -56,7 +56,7 @@ export class GroundsController {
   @ApiBody({ type: UpdateGroundDto, description: '수정할 Ground 데이터' })
   async updateGroundById(
     @Param('groundId') id: string,
-    @Body() updateGroundDto: UpdateGroundDto,
+    @Body() updateGroundDto: UpdateGroundDto
   ): Promise<ResponseEntity<GroundDto>> {
     const ground = await this.groundsService.updateById(id, updateGroundDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(GroundDto, ground));
@@ -95,7 +95,7 @@ export class GroundsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(GroundDto, grounds),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

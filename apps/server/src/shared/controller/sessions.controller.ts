@@ -1,22 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { SessionDto, CreateSessionDto, UpdateSessionDto, QuerySessionDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateSessionDto,
+  type QuerySessionDto,
+  SessionDto,
+  type UpdateSessionDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { SessionsService } from '../service/services';
-import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { SessionsService } from '../service/services';
 
 @ApiTags('SESSION')
 @Controller()
@@ -62,7 +67,7 @@ export class SessionsController {
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async updateSession(
     @Param('sessionId') sessionId: string,
-    @Body() updateSessionDto: UpdateSessionDto,
+    @Body() updateSessionDto: UpdateSessionDto
   ) {
     const session = await this.service.update({
       where: { id: sessionId },
@@ -99,7 +104,7 @@ export class SessionsController {
       HttpStatus.OK,
       'success',
       sessions.map((session) => session?.toDto?.() ?? session),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Message } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Message> = {
   title: 'Shared Frontend/Message',
@@ -8,8 +8,7 @@ const meta: Meta<typeof Message> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          'Message 알림 컴포넌트입니다. 사용자에게 메시지를 표시할 때 사용합니다.',
+        component: 'Message 알림 컴포넌트입니다. 사용자에게 메시지를 표시할 때 사용합니다.',
       },
     },
   },
@@ -19,14 +18,7 @@ const meta: Meta<typeof Message> = {
     description: { control: 'text', description: '메시지 설명' },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     variant: {

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Input } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Input> = {
   title: 'Shared Frontend/Input',
@@ -8,8 +8,7 @@ const meta: Meta<typeof Input> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          '공통 Input 컴포넌트입니다. NextUI Input을 래핑하여 사용합니다.',
+        component: '공통 Input 컴포넌트입니다. NextUI Input을 래핑하여 사용합니다.',
       },
     },
   },

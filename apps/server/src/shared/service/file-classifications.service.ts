@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { FileClassificationsRepository } from '../repository/file-classifications.repository';
-import { BaseService } from './base.service';
-import {
+import type {
   CreateFileClassificationDto,
   FileClassification,
   UpdateFileClassificationDto,
 } from '@shared/schema';
+import type { FileClassificationsRepository } from '../repository/file-classifications.repository';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class FileClassificationsService extends BaseService<

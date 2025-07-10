@@ -1,4 +1,4 @@
-import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
+import { type ArgumentMetadata, ValidationPipe } from '@nestjs/common';
 
 export class CustomValidationPipe extends ValidationPipe {
   constructor() {
@@ -12,7 +12,7 @@ export class CustomValidationPipe extends ValidationPipe {
   }
 
   async transform(value: any, metadata: ArgumentMetadata) {
-    if (value && value.content) {
+    if (value?.content) {
       const { content, ...rest } = value;
       const result = await super.transform(rest, metadata);
       return { ...result, content: JSON.parse(content) };

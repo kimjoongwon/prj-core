@@ -1,5 +1,5 @@
-import { getGroundPage } from './ground.page';
 import { PageTypes } from '@shared/types';
+import { getGroundPage } from './ground.page';
 
 describe('GroundPage', () => {
   describe('페이지 기본 구성', () => {
@@ -58,7 +58,7 @@ describe('GroundPage', () => {
 
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
-      
+
       expect(formElement.name).toBe('Form');
       expect(formElement.children).toBeDefined();
       expect(Array.isArray(formElement.children)).toBe(true);
@@ -70,7 +70,7 @@ describe('GroundPage', () => {
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
       const hStackElement = formElement.children[1];
-      
+
       expect(hStackElement.name).toBe('HStack');
       expect(hStackElement.children).toHaveLength(2);
       expect(hStackElement.children[0].name).toBe('FileUploader');
@@ -85,7 +85,7 @@ describe('GroundPage', () => {
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
       const buttonElement = formElement.children[2];
-      
+
       expect(buttonElement.name).toBe('ButtonBuilder');
       expect(buttonElement.props.mutation.name).toBe('createGround');
       expect(buttonElement.props.mutation.queryKey).toBe('/api/v1/grounds');
@@ -97,7 +97,7 @@ describe('GroundPage', () => {
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
       const buttonElement = formElement.children[2];
-      
+
       expect(buttonElement.name).toBe('ButtonBuilder');
       expect(buttonElement.props.mutation.name).toBe('updateGroundById');
       expect(buttonElement.props.mutation.pathParams.groundId).toBe('params.groundId');
@@ -108,7 +108,7 @@ describe('GroundPage', () => {
 
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
-      
+
       // detail 모드에서는 버튼이 없어야 함
       expect(formElement.children).toHaveLength(2);
       expect(formElement.children[2]).toBeUndefined();
@@ -123,7 +123,7 @@ describe('GroundPage', () => {
       const formElement = resourceBuilder.props.elements[0].children[0];
       const buttonElement = formElement.children[2];
       const validation = buttonElement.props.mutation.validationFields;
-      
+
       expect(validation['form.inputs.name'].required.value).toBe(true);
       expect(validation['form.inputs.label'].required.value).toBe(true);
     });
@@ -135,7 +135,7 @@ describe('GroundPage', () => {
       const formElement = resourceBuilder.props.elements[0].children[0];
       const buttonElement = formElement.children[2];
       const validation = buttonElement.props.mutation.validationFields;
-      
+
       expect(validation['form.inputs.email'].patterns).toBeDefined();
       expect(validation['form.inputs.email'].patterns[0].value).toBeInstanceOf(RegExp);
     });
@@ -148,7 +148,7 @@ describe('GroundPage', () => {
       const resourceBuilder = result.elements[0];
       const formElement = resourceBuilder.props.elements[0].children[0];
       const vStackElement = formElement.children[0];
-      
+
       vStackElement.children.forEach((element: any) => {
         if (element.name === 'Input') {
           expect(element.props.isReadOnly).toBe(true);
@@ -164,7 +164,7 @@ describe('GroundPage', () => {
         const resourceBuilder = result.elements[0];
         const formElement = resourceBuilder.props.elements[0].children[0];
         const vStackElement = formElement.children[0];
-        
+
         vStackElement.children.forEach((element: any) => {
           if (element.name === 'Input') {
             expect(element.props.isReadOnly).toBe(false);

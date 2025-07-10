@@ -1,22 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { ProgramDto, CreateProgramDto, UpdateProgramDto, QueryProgramDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateProgramDto,
+  ProgramDto,
+  type QueryProgramDto,
+  type UpdateProgramDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { ProgramsService } from '../service/programs.service';
-import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { ProgramsService } from '../service/programs.service';
 
 @ApiTags('PROGRAM')
 @Controller()
@@ -48,7 +53,7 @@ export class ProgramsController {
   @ApiResponseEntity(ProgramDto, HttpStatus.OK)
   async updateProgramById(
     @Param('programId') programId: string,
-    @Body() updateProgramDto: UpdateProgramDto,
+    @Body() updateProgramDto: UpdateProgramDto
   ) {
     const program = await this.service.updateById(programId, updateProgramDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ProgramDto, program));
@@ -82,7 +87,7 @@ export class ProgramsController {
       HttpStatus.OK,
       'success',
       items.map((program) => program?.toDto?.() ?? program),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

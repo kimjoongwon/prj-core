@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { $Enums, Prisma } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { UseEntity } from '../decorator/use-dto.decorator';
-import { BaseRepository } from '../common/base.repository';
+import { $Enums, type Prisma } from '@shared/schema';
 import { Category } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
+import type { PrismaService } from 'nestjs-prisma';
+import { BaseRepository } from '../common/base.repository';
+import { UseEntity } from '../decorator/use-dto.decorator';
 
 @Injectable()
 @UseEntity(Category)
@@ -47,6 +47,6 @@ export class CategoriesRepository extends BaseRepository<
       },
     });
 
-    return categories.map(category => plainToInstance(Category, category));
+    return categories.map((category) => plainToInstance(Category, category));
   }
 }

@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpStatus,
   HttpException,
+  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -13,13 +13,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { CreateSpaceDto, UpdateSpaceDto, QuerySpaceDto } from '@shared/schema';
+import type { CreateSpaceDto, QuerySpaceDto, UpdateSpaceDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { SpacesService } from '../service/services';
 import { SpaceDto } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
 import { ContextProvider } from '../provider';
+import type { SpacesService } from '../service/services';
 
 @ApiTags('SPACES')
 @Controller()
@@ -56,7 +56,7 @@ export class SpacesController {
       this.logger.warn('getCurrentSpace - No tenant found in context');
       throw new HttpException(
         'Tenant information not found.! Please log in again.',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.UNAUTHORIZED
       );
     }
 
@@ -67,7 +67,7 @@ export class SpacesController {
       });
       throw new HttpException(
         'Space ID is missing from tenant information. Please select a space.',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
@@ -155,7 +155,7 @@ export class SpacesController {
       HttpStatus.OK,
       'success',
       spaces.map((space) => space?.toDto?.() ?? space),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

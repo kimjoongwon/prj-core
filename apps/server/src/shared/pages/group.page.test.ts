@@ -1,5 +1,5 @@
+import type { $Enums } from '@prisma/client';
 import { getGroupPage } from './group.page';
-import { $Enums } from '@prisma/client';
 
 // Mock ContextProvider
 jest.mock('../../../../shared', () => ({
@@ -132,7 +132,7 @@ describe('GroupPage', () => {
     it('create 타입일 때 생성 버튼을 포함해야 한다', () => {
       const result = getGroupPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('생성');
@@ -143,7 +143,7 @@ describe('GroupPage', () => {
     it('add 타입일 때 생성 버튼을 포함해야 한다', () => {
       const result = getGroupPage('add', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('생성');
@@ -153,7 +153,7 @@ describe('GroupPage', () => {
     it('modify 타입일 때 수정 버튼을 포함해야 한다', () => {
       const result = getGroupPage('modify', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('수정');
@@ -164,7 +164,7 @@ describe('GroupPage', () => {
     it('detail 타입일 때 버튼이 없어야 한다', () => {
       const result = getGroupPage('detail', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeUndefined();
     });
@@ -174,7 +174,7 @@ describe('GroupPage', () => {
     it('create/add 버튼에 올바른 validation이 설정되어야 한다', () => {
       const result = getGroupPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
         value: true,
@@ -190,7 +190,7 @@ describe('GroupPage', () => {
     it('modify 버튼에 올바른 validation과 pathParams가 설정되어야 한다', () => {
       const result = getGroupPage('modify', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
         value: true,
@@ -210,7 +210,7 @@ describe('GroupPage', () => {
     it('버튼에 back 네비게이션이 설정되어야 한다', () => {
       const result = getGroupPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.navigator.type).toBe('back');
     });
@@ -234,7 +234,7 @@ describe('GroupPage', () => {
     it('Spacer가 올바른 크기로 설정되어야 한다', () => {
       const result = getGroupPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const spacer = vstack.children.find(child => child.name === 'Spacer');
+      const spacer = vstack.children.find((child) => child.name === 'Spacer');
 
       expect(spacer).toBeDefined();
       expect(spacer.props.size).toBe(4);

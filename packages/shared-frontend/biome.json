@@ -1,11 +1,11 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
-  
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "a11y": {
+        "useButtonType": "off",
         "recommended": true
       },
       "style": {
@@ -43,10 +43,15 @@
     }
   },
   "files": {
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    "include": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx"
+    ],
     "ignore": [
       "dist/**",
-      "build/**", 
+      "build/**",
       "node_modules/**",
       "coverage/**",
       ".next/**",

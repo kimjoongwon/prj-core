@@ -1,22 +1,27 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { RoutineDto, CreateRoutineDto, UpdateRoutineDto, QueryRoutineDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateRoutineDto,
+  type QueryRoutineDto,
+  RoutineDto,
+  type UpdateRoutineDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { RoutinesService } from '../service/routines.service';
-import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { RoutinesService } from '../service/routines.service';
 
 @ApiTags('ROUTINE')
 @Controller()
@@ -47,7 +52,7 @@ export class RoutinesController {
   @ApiResponseEntity(RoutineDto, HttpStatus.OK)
   async updateRoutine(
     @Param('routineId') routineId: string,
-    @Body() updateRoutineDto: UpdateRoutineDto,
+    @Body() updateRoutineDto: UpdateRoutineDto
   ) {
     const routine = await this.service.updateById(routineId, updateRoutineDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(RoutineDto, routine));
@@ -81,7 +86,7 @@ export class RoutinesController {
       HttpStatus.OK,
       'success',
       items.map((item) => item?.toDto?.() ?? item),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

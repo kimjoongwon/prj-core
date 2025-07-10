@@ -1,24 +1,24 @@
-import { Controller, Post, Body, HttpStatus, HttpCode, Get, Res, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ApiResponseEntity, Auth, ContextProvider, Public } from '..';
-import { plainToInstance } from 'class-transformer';
-import { Response, Request } from 'express';
-import { AuthService } from '../service/auth.service';
 import {
-  TokenDto,
-  LoginPayloadDto,
+  type LoginPayloadDto,
   ResponseEntity,
-  UserDto,
-  SignUpPayloadDto,
+  type SignUpPayloadDto,
+  TokenDto,
+  type UserDto,
 } from '@shared/schema';
-import { TokenService } from '../service/token.service';
+import { plainToInstance } from 'class-transformer';
+import type { Request, Response } from 'express';
+import { ApiResponseEntity, Auth, ContextProvider, Public } from '..';
+import type { AuthService } from '../service/auth.service';
+import type { TokenService } from '../service/token.service';
 
 @ApiTags('AUTH')
 @Controller()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly tokenService: TokenService,
+    private readonly tokenService: TokenService
   ) {}
 
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
@@ -40,7 +40,7 @@ export class AuthController {
         accessToken,
         refreshToken,
         user,
-      }),
+      })
     );
   }
 
@@ -49,9 +49,9 @@ export class AuthController {
   @Get('new-token')
   async getNewToken(
     @Req() req: Request & { user: UserDto },
-    @Res({ passthrough: true }) res,
+    @Res({ passthrough: true }) res
   ): Promise<TokenDto> {
-    const refreshToken = req.cookies['refreshToken'];
+    const refreshToken = req.cookies.refreshToken;
     const { newAccessToken, newRefreshToken } = await this.authService.getNewToken(refreshToken);
 
     const user = req.user;
@@ -78,7 +78,7 @@ export class AuthController {
     return new ResponseEntity(
       HttpStatus.CREATED,
       '회원가입 성공',
-      await this.authService.signUp(signUpDto),
+      await this.authService.signUp(signUpDto)
     );
   }
 
