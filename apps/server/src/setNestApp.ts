@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, INestApplication } from '@nestjs/common';
+import { ClassSerializerInterceptor, type INestApplication } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 // import { CustomClassSerializerInterceptor } from './shared';
 

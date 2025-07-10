@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ExecutionContext, CallHandler, HttpException, HttpStatus } from '@nestjs/common';
+import { type CallHandler, type ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { of, throwError } from 'rxjs';
-import { AuthUserInterceptor } from './auth-user.interceptor';
+import type { UserDto } from '../dto/user.dto';
 import { ContextProvider } from '../provider';
-import { UserDto } from '../dto/user.dto';
+import { AuthUserInterceptor } from './auth-user.interceptor';
 
 // Mock ContextProvider
 jest.mock('../provider', () => ({

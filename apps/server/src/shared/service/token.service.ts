@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
-import { Request, Response } from 'express';
-import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from '@shared';
+import type { ConfigService } from '@nestjs/config';
+import { type JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
+import type { AuthConfig } from '@shared';
+import type { Request, Response } from 'express';
 
 export const Token = {
   ACCESS: 'accessToken',
@@ -15,7 +15,7 @@ type TokenValues = (typeof Token)[keyof typeof Token];
 export class TokenService {
   constructor(
     private jwtService: JwtService,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {}
 
   getTokenFromRequest(req: Request, key?: TokenValues): string {
@@ -58,7 +58,7 @@ export class TokenService {
         throw new BadRequestException('토큰 미사용');
       }
 
-      throw new InternalServerErrorException(`알 수 없는 에러`);
+      throw new InternalServerErrorException('알 수 없는 에러');
     }
   }
 

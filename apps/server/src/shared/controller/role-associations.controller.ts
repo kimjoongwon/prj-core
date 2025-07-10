@@ -1,25 +1,25 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { RoleAssociationsService } from '../service/role-associations.service';
-import { CreateRoleAssociationDto } from '@shared/schema';
-import { UpdateRoleAssociationDto } from '@shared/schema';
-import { QueryRoleAssociationDto } from '@shared/schema';
+import type { CreateRoleAssociationDto } from '@shared/schema';
+import type { UpdateRoleAssociationDto } from '@shared/schema';
+import type { QueryRoleAssociationDto } from '@shared/schema';
 import { RoleAssociationDto } from '@shared/schema';
-import { Auth } from '../decorator/auth.decorator';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { ResponseEntity } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
+import { Auth } from '../decorator/auth.decorator';
+import type { RoleAssociationsService } from '../service/role-associations.service';
 
 @ApiTags('ROLE-ASSOCIATIONS')
 @Controller()
@@ -36,7 +36,7 @@ export class RoleAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation),
+      plainToInstance(RoleAssociationDto, roleAssociation)
     );
   }
 
@@ -51,7 +51,7 @@ export class RoleAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation),
+      plainToInstance(RoleAssociationDto, roleAssociation)
     );
   }
 
@@ -73,7 +73,7 @@ export class RoleAssociationsController {
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
   async updateRoleAssociation(
     @Param('roleAssociationId') roleAssociationId: string,
-    @Body() updateRoleAssociationDto: UpdateRoleAssociationDto,
+    @Body() updateRoleAssociationDto: UpdateRoleAssociationDto
   ) {
     const roleAssociation = await this.service.update({
       where: { id: roleAssociationId },
@@ -82,7 +82,7 @@ export class RoleAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation),
+      plainToInstance(RoleAssociationDto, roleAssociation)
     );
   }
 
@@ -95,7 +95,7 @@ export class RoleAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation),
+      plainToInstance(RoleAssociationDto, roleAssociation)
     );
   }
 
@@ -108,7 +108,7 @@ export class RoleAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation),
+      plainToInstance(RoleAssociationDto, roleAssociation)
     );
   }
 
@@ -122,7 +122,7 @@ export class RoleAssociationsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(RoleAssociationDto, roleAssociations),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

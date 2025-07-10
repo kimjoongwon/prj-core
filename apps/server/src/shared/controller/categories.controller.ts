@@ -1,20 +1,25 @@
 import {
-  Controller,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
+  Delete,
   Get,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
-  Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { CategoryDto, QueryCategoryDto, CreateCategoryDto, UpdateCategoryDto } from '@shared/schema';
+import {
+  CategoryDto,
+  type CreateCategoryDto,
+  type QueryCategoryDto,
+  type UpdateCategoryDto,
+} from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { CategoriesService } from '../service/services';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { CategoriesService } from '../service/services';
 
 @ApiTags('CATEGORIES')
 @Controller()
@@ -29,7 +34,7 @@ export class CategoriesController {
       HttpStatus.OK,
       'Successfully fetched categories',
       categories.map((category) => plainToInstance(CategoryDto, category)),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 
@@ -43,7 +48,7 @@ export class CategoriesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'Category created',
-      plainToInstance(CategoryDto, category),
+      plainToInstance(CategoryDto, category)
     );
   }
 
@@ -56,7 +61,7 @@ export class CategoriesController {
     return new ResponseEntity(
       HttpStatus.OK,
       'Category found',
-      plainToInstance(CategoryDto, category),
+      plainToInstance(CategoryDto, category)
     );
   }
 
@@ -65,13 +70,13 @@ export class CategoriesController {
   @Patch(':categoryId')
   async updateCategoryById(
     @Param('categoryId') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
+    @Body() updateCategoryDto: UpdateCategoryDto
   ) {
     const category = await this.categoriesService.updateById(id, updateCategoryDto);
     return new ResponseEntity(
       HttpStatus.OK,
       'Category updated',
-      plainToInstance(CategoryDto, category),
+      plainToInstance(CategoryDto, category)
     );
   }
 

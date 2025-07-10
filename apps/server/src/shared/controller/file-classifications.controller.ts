@@ -11,36 +11,33 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
 import { ResponseEntity } from '@shared/schema';
-import { FileClassificationsService } from '../service/file-classifications.service';
 import {
   CreateFileClassificationDto,
-  UpdateFileClassificationDto,
   FileClassificationDto,
   QueryFileClassificationDto,
+  UpdateFileClassificationDto,
 } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import { FileClassificationsService } from '../service/file-classifications.service';
 
 @ApiTags('FILE-CLASSIFICATIONS')
 @Controller()
 export class FileClassificationsController {
   // constructor(private readonly service: FileClassificationsService) {}
-
   // @Post()
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
   // @ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
   // async createFileClassification(@Body() createFileClassificationDto: CreateFileClassificationDto) {
   //   const fileClassification = await this.service.create(createFileClassificationDto);
-
   //   return new ResponseEntity(
   //     HttpStatus.OK,
   //     '성공',
   //     plainToInstance(FileClassificationDto, fileClassification),
   //   );
   // }
-
   // @Get(':fileClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -53,7 +50,6 @@ export class FileClassificationsController {
   //     plainToInstance(FileClassificationDto, fileClassification),
   //   );
   // }
-
   // @Patch(':fileClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -69,7 +65,6 @@ export class FileClassificationsController {
   //     plainToInstance(FileClassificationDto, fileClassification),
   //   );
   // }
-
   // @Patch(':fileClassificationId/removedAt')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -82,7 +77,6 @@ export class FileClassificationsController {
   //     plainToInstance(FileClassificationDto, fileClassification),
   //   );
   // }
-
   // @Delete(':fileClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -95,7 +89,6 @@ export class FileClassificationsController {
   //     plainToInstance(FileClassificationDto, fileClassification),
   //   );
   // }
-
   // @Get()
   // @Auth([])
   // @HttpCode(HttpStatus.OK)

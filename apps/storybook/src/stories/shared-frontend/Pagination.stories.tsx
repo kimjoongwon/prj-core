@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Pagination> = {
   title: 'Shared Frontend/Pagination',
@@ -36,14 +36,7 @@ const meta: Meta<typeof Pagination> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     radius: {

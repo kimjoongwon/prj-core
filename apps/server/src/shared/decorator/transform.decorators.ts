@@ -43,7 +43,7 @@ export function ToBoolean(): PropertyDecorator {
         }
       }
     },
-    { toClassOnly: true },
+    { toClassOnly: true }
   );
 }
 
@@ -63,7 +63,7 @@ export function ToInt(): PropertyDecorator {
 
       return Number.parseInt(value, 10);
     },
-    { toClassOnly: true },
+    { toClassOnly: true }
   );
 }
 
@@ -86,7 +86,7 @@ export function ToArray(): PropertyDecorator {
 
       return castArray(value);
     },
-    { toClassOnly: true },
+    { toClassOnly: true }
   );
 }
 
@@ -107,7 +107,7 @@ export function ToLowerCase(): PropertyDecorator {
     },
     {
       toClassOnly: true,
-    },
+    }
   );
 }
 
@@ -128,7 +128,7 @@ export function ToUpperCase(): PropertyDecorator {
     },
     {
       toClassOnly: true,
-    },
+    }
   );
 }
 

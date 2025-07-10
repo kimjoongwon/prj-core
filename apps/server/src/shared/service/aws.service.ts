@@ -1,8 +1,8 @@
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 // aws.service.ts
 import { Global, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { AwsConfig } from '@shared';
+import type { ConfigService } from '@nestjs/config';
+import type { AwsConfig } from '@shared';
 
 @Global()
 @Injectable()
@@ -26,7 +26,7 @@ export class AwsService {
   async uploadToS3(
     fileName: string, // 업로드될 파일의 이름
     file: Express.Multer.File, // 업로드할 파일
-    ext: string, // 파일 확장자
+    ext: string // 파일 확장자
   ) {
     // AWS S3에 이미지 업로드 명령을 생성합니다. 파일 이름, 파일 버퍼, 파일 접근 권한, 파일 타입 등을 설정합니다.
     const command = new PutObjectCommand({

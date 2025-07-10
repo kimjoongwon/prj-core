@@ -1,5 +1,5 @@
+import type { $Enums } from '@prisma/client';
 import { getGroupsPage } from './groups.page';
-import { $Enums } from '@prisma/client';
 
 describe('GroupsPage', () => {
   const spaceType: $Enums.GroupTypes = 'Space';
@@ -104,7 +104,7 @@ describe('GroupsPage', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroupsPage(spaceType);
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
 
       expect(actionsColumn.cell.type).toBe('row-actions');
@@ -114,7 +114,7 @@ describe('GroupsPage', () => {
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const detailButton = actionsColumn.cell.buttons[0];
 
@@ -130,7 +130,7 @@ describe('GroupsPage', () => {
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const editButton = actionsColumn.cell.buttons[1];
 
@@ -145,7 +145,7 @@ describe('GroupsPage', () => {
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const deleteButton = actionsColumn.cell.buttons[2];
 
@@ -162,11 +162,11 @@ describe('GroupsPage', () => {
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroupsPage(spaceType);
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const buttons = actionsColumn.cell.buttons;
 
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button.variant).toBe('light');
         expect(button.size).toBe('sm');
         expect(button.radius).toBe('sm');

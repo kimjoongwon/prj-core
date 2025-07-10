@@ -11,16 +11,16 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
 import { ResponseEntity } from '@shared/schema';
-import { SpaceClassificationsService } from '../service/space-classifications.service';
 import {
   CreateSpaceClassificationDto,
-  UpdateSpaceClassificationDto,
-  SpaceClassificationDto,
   QuerySpaceClassificationDto,
+  SpaceClassificationDto,
+  UpdateSpaceClassificationDto,
 } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { SpaceClassificationsService } from '../service/space-classifications.service';
 
 @ApiTags('SPACE-CLASSIFICATIONS')
 @Controller()

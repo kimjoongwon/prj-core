@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatePicker } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Shared Frontend/DatePicker',
@@ -29,14 +29,7 @@ const meta: Meta<typeof DatePicker> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     granularity: {

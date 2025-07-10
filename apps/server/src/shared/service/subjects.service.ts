@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { SubjectsRepository } from '../repository/subjects.repository';
-import { CreateSubjectDto, QuerySubjectDto } from '@shared/schema';
+import type { Prisma } from '@shared/schema';
+import type { CreateSubjectDto, QuerySubjectDto } from '@shared/schema';
+import type { SubjectsRepository } from '../repository/subjects.repository';
 
 @Injectable()
 export class SubjectsService {

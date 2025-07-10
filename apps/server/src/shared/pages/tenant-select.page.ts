@@ -1,4 +1,4 @@
-import { IButtonBuilder, ListboxBuilderProps, PageBuilder } from '@shared/types';
+import type { IButtonBuilder, ListboxBuilderProps, PageBuilder } from '@shared/types';
 
 export const getTenantSelectPage = (): PageBuilder => {
   return {

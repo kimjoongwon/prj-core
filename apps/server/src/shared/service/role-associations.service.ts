@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, QueryRoleAssociationDto } from '@shared/schema';
-import { RoleAssociationsRepository } from '../repository/role-associations.repository';
-import { CreateRoleAssociationDto } from '@shared/schema';
+import type { Prisma, QueryRoleAssociationDto } from '@shared/schema';
+import type { CreateRoleAssociationDto } from '@shared/schema';
+import type { RoleAssociationsRepository } from '../repository/role-associations.repository';
 
 @Injectable()
 export class RoleAssociationsService {

@@ -5,12 +5,12 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ResponseEntity, SignUpPayloadDto, LoginPayloadDto } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { PasswordService } from './password.service';
-import { TokenService } from './token.service';
-import { UsersService } from './users.service';
+import type { JwtService } from '@nestjs/jwt';
+import { type LoginPayloadDto, ResponseEntity, type SignUpPayloadDto } from '@shared/schema';
+import type { PrismaService } from 'nestjs-prisma';
+import type { PasswordService } from './password.service';
+import type { TokenService } from './token.service';
+import type { UsersService } from './users.service';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
-    private prisma: PrismaService,
+    private prisma: PrismaService
   ) {}
 
   async getCurrentUser(accessToken: string) {
@@ -50,10 +50,10 @@ export class AuthService {
 
     if (!isPasswordValid) {
       this.logger.warn(
-        `Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`,
+        `Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`
       );
       throw new UnauthorizedException(
-        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, '패스워드가 일치하지 않습니다.'),
+        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, '패스워드가 일치하지 않습니다.')
       );
     }
 

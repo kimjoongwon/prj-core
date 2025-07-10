@@ -42,7 +42,7 @@ describe('GroundsPage', () => {
 
       expect(createButton?.navigator?.type).toBe('push');
       expect(createButton?.navigator?.route?.relativePath).toBe('new/create');
-    });;
+    });
   });
 
   describe('DataGridBuilder 테이블 설정', () => {
@@ -86,7 +86,7 @@ describe('GroundsPage', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroundsPage();
       const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
-        (col) => col.accessorKey === 'actions',
+        (col) => col.accessorKey === 'actions'
       );
 
       expect(actionsColumn?.cell?.type).toBe('row-actions');
@@ -96,7 +96,7 @@ describe('GroundsPage', () => {
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
       const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
-        (col) => col.accessorKey === 'actions',
+        (col) => col.accessorKey === 'actions'
       );
       const detailButton = actionsColumn?.cell?.buttons?.[0];
 
@@ -111,7 +111,7 @@ describe('GroundsPage', () => {
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
       const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
-        (col) => col.accessorKey === 'actions',
+        (col) => col.accessorKey === 'actions'
       );
       const editButton = actionsColumn?.cell?.buttons?.[1];
 
@@ -126,7 +126,7 @@ describe('GroundsPage', () => {
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundsPage();
       const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
-        (col) => col.accessorKey === 'actions',
+        (col) => col.accessorKey === 'actions'
       );
       const deleteButton = actionsColumn?.cell?.buttons?.[2];
 
@@ -145,14 +145,14 @@ describe('GroundsPage', () => {
       const createButton = result.elements?.[0]?.props?.buttons?.[0];
 
       expect(createButton?.className).toBe(
-        'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200',
+        'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200'
       );
     });
 
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroundsPage();
       const actionsColumn = result.elements?.[0]?.props?.table?.columns?.find(
-        (col) => col.accessorKey === 'actions',
+        (col) => col.accessorKey === 'actions'
       );
       const buttons = actionsColumn?.cell?.buttons;
 

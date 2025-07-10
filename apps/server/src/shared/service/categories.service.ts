@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, QueryCategoryDto, UpdateCategoryDto } from '@shared/schema';
-import { AppLogger } from '../util/app-logger.util';
+import type { Prisma, QueryCategoryDto, UpdateCategoryDto } from '@shared/schema';
 import { ContextProvider } from '../provider';
-import { CategoriesRepository } from '../repository/categories.repository';
+import type { CategoriesRepository } from '../repository/categories.repository';
+import { AppLogger } from '../util/app-logger.util';
 
 @Injectable()
 export class CategoriesService {

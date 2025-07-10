@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, QuerySpaceAssociationDto } from '@shared/schema';
-import { SpaceAssociationsRepository } from '../repository/space-associations.repository';
-import { CreateSpaceAssociationDto } from '@shared/schema';
+import type { Prisma, QuerySpaceAssociationDto } from '@shared/schema';
+import type { CreateSpaceAssociationDto } from '@shared/schema';
+import type { SpaceAssociationsRepository } from '../repository/space-associations.repository';
 
 @Injectable()
 export class SpaceAssociationsService {

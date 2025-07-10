@@ -93,7 +93,7 @@ describe('GroundMembersPage', () => {
     it('가입일 컬럼이 date 타입이어야 한다', () => {
       const result = getGroundMembersPage();
       const joinedAtColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'joinedAt'
+        (col) => col.accessorKey === 'joinedAt'
       );
 
       expect(joinedAtColumn.cell.type).toBe('date');
@@ -104,7 +104,7 @@ describe('GroundMembersPage', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroundMembersPage();
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
 
       expect(actionsColumn.cell.type).toBe('row-actions');
@@ -114,7 +114,7 @@ describe('GroundMembersPage', () => {
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const detailButton = actionsColumn.cell.buttons[0];
 
@@ -129,7 +129,7 @@ describe('GroundMembersPage', () => {
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const editButton = actionsColumn.cell.buttons[1];
 
@@ -144,7 +144,7 @@ describe('GroundMembersPage', () => {
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const deleteButton = actionsColumn.cell.buttons[2];
 
@@ -161,11 +161,11 @@ describe('GroundMembersPage', () => {
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroundMembersPage();
       const actionsColumn = result.elements[0].props.table.columns.find(
-        col => col.accessorKey === 'actions'
+        (col) => col.accessorKey === 'actions'
       );
       const buttons = actionsColumn.cell.buttons;
 
-      buttons.forEach(button => {
+      buttons.forEach((button) => {
         expect(button.variant).toBe('light');
         expect(button.size).toBe('sm');
         expect(button.radius).toBe('sm');
@@ -180,9 +180,9 @@ describe('GroundMembersPage', () => {
       const result = getGroundMembersPage();
       const columns = result.elements[0].props.table.columns;
 
-      const nameColumn = columns.find(col => col.accessorKey === 'user.name');
-      const emailColumn = columns.find(col => col.accessorKey === 'user.email');
-      const phoneColumn = columns.find(col => col.accessorKey === 'user.phone');
+      const nameColumn = columns.find((col) => col.accessorKey === 'user.name');
+      const emailColumn = columns.find((col) => col.accessorKey === 'user.email');
+      const phoneColumn = columns.find((col) => col.accessorKey === 'user.phone');
 
       expect(nameColumn).toBeDefined();
       expect(emailColumn).toBeDefined();
@@ -199,8 +199,8 @@ describe('GroundMembersPage', () => {
       const result = getGroundMembersPage();
       const columns = result.elements[0].props.table.columns;
 
-      const roleColumn = columns.find(col => col.accessorKey === 'role');
-      const statusColumn = columns.find(col => col.accessorKey === 'status');
+      const roleColumn = columns.find((col) => col.accessorKey === 'role');
+      const statusColumn = columns.find((col) => col.accessorKey === 'status');
 
       expect(roleColumn).toBeDefined();
       expect(statusColumn).toBeDefined();

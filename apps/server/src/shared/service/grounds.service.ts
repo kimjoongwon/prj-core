@@ -1,12 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { GroundsRepository } from '../repository/grounds.repository';
-import {
-  CreateGroundDto,
-  Ground,
-  QueryGroundDto,
-  UpdateGroundDto,
-} from '@shared/schema';
-import { Prisma } from '@shared/schema';
+import type { CreateGroundDto, Ground, QueryGroundDto, UpdateGroundDto } from '@shared/schema';
+import type { Prisma } from '@shared/schema';
+import type { GroundsRepository } from '../repository/grounds.repository';
 
 @Injectable()
 export class GroundsService {
@@ -32,10 +27,7 @@ export class GroundsService {
     return this.groundsRepository.findUnique(args);
   }
 
-  async updateById(
-    id: string,
-    updateGroundDto: UpdateGroundDto,
-  ): Promise<Ground> {
+  async updateById(id: string, updateGroundDto: UpdateGroundDto): Promise<Ground> {
     const args = {
       where: { id },
       data: updateGroundDto,
@@ -63,9 +55,7 @@ export class GroundsService {
     });
   }
 
-  async getManyByQuery(
-    query: QueryGroundDto,
-  ): Promise<{ grounds: Ground[]; count: number }> {
+  async getManyByQuery(query: QueryGroundDto): Promise<{ grounds: Ground[]; count: number }> {
     const args = query?.toArgs() as Prisma.GroundFindManyArgs;
 
     args.include = {

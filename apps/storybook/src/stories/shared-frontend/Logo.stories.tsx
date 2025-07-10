@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Logo } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Logo> = {
   title: 'Shared Frontend/Logo',
@@ -182,9 +182,7 @@ export const LogoVariants: Story = {
 export const ResponsiveLogo: Story = {
   render: () => (
     <div className="space-y-4">
-      <p className="text-sm text-gray-600">
-        화면 크기에 따라 로고가 달라집니다
-      </p>
+      <p className="text-sm text-gray-600">화면 크기에 따라 로고가 달라집니다</p>
       <div className="border p-4 rounded">
         <div className="block sm:hidden">
           <Logo variant="icon-only" size="sm" />

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RadioGroup } from '@shared/frontend';
 import { Radio } from '@heroui/react';
+import { RadioGroup } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof RadioGroup> = {
   title: 'Shared Frontend/RadioGroup',
@@ -9,8 +9,7 @@ const meta: Meta<typeof RadioGroup> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          'RadioGroup 컴포넌트입니다. 여러 옵션 중 하나를 선택할 때 사용합니다.',
+        component: 'RadioGroup 컴포넌트입니다. 여러 옵션 중 하나를 선택할 때 사용합니다.',
       },
     },
   },
@@ -23,14 +22,7 @@ const meta: Meta<typeof RadioGroup> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     orientation: {
@@ -57,7 +49,7 @@ export const Default: Story = {
     color: 'primary',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="red">빨강</Radio>
       <Radio value="blue">파랑</Radio>
@@ -73,7 +65,7 @@ export const Horizontal: Story = {
     color: 'primary',
     orientation: 'horizontal',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="male">남성</Radio>
       <Radio value="female">여성</Radio>
@@ -90,7 +82,7 @@ export const WithDescription: Story = {
     color: 'primary',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="all">모든 알림</Radio>
       <Radio value="important">중요한 알림만</Radio>
@@ -107,7 +99,7 @@ export const Required: Story = {
     color: 'primary',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="agree">동의합니다</Radio>
       <Radio value="disagree">동의하지 않습니다</Radio>
@@ -125,7 +117,7 @@ export const Invalid: Story = {
     color: 'danger',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="option1">옵션 1</Radio>
       <Radio value="option2">옵션 2</Radio>
@@ -142,7 +134,7 @@ export const Disabled: Story = {
     color: 'default',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="option1">옵션 1</Radio>
       <Radio value="option2">옵션 2</Radio>
@@ -158,7 +150,7 @@ export const Small: Story = {
     color: 'secondary',
     orientation: 'horizontal',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="xs">XS</Radio>
       <Radio value="s">S</Radio>
@@ -175,7 +167,7 @@ export const Large: Story = {
     color: 'success',
     orientation: 'vertical',
   },
-  render: args => (
+  render: (args) => (
     <RadioGroup {...args}>
       <Radio value="beginner">초급</Radio>
       <Radio value="intermediate">중급</Radio>

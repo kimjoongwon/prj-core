@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Switch } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof Switch> = {
   title: 'Shared Frontend/Switch',
@@ -8,8 +8,7 @@ const meta: Meta<typeof Switch> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          '공통 Switch 컴포넌트입니다. NextUI Switch를 래핑하여 사용합니다.',
+        component: '공통 Switch 컴포넌트입니다. NextUI Switch를 래핑하여 사용합니다.',
       },
     },
   },
@@ -23,14 +22,7 @@ const meta: Meta<typeof Switch> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상',
     },
   },

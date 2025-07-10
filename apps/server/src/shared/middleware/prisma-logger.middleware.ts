@@ -1,4 +1,4 @@
-import { Prisma } from '@shared/schema';
+import type { Prisma } from '@shared/schema';
 
 export function loggingMiddleware(): Prisma.Middleware {
   return async (params, next) => {
@@ -8,9 +8,7 @@ export function loggingMiddleware(): Prisma.Middleware {
 
     const after = Date.now();
 
-    console.log(
-      `Query ${params.model}.${params.action} took ${after - before}ms`,
-    );
+    console.log(`Query ${params.model}.${params.action} took ${after - before}ms`);
 
     return result;
   };

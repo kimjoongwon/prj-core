@@ -1,5 +1,5 @@
+import type { $Enums } from '@prisma/client';
 import { getCategoryPage } from './category.page';
-import { $Enums } from '@prisma/client';
 
 // Mock ContextProvider
 jest.mock('../../../../shared', () => ({
@@ -124,7 +124,7 @@ describe('CategoryPage', () => {
     it('create 타입일 때 생성 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('생성');
@@ -135,7 +135,7 @@ describe('CategoryPage', () => {
     it('add 타입일 때 추가 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('add', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('추가');
@@ -145,7 +145,7 @@ describe('CategoryPage', () => {
     it('modify 타입일 때 수정 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('modify', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
       expect(button.props.children).toBe('수정');
@@ -156,7 +156,7 @@ describe('CategoryPage', () => {
     it('detail 타입일 때 버튼이 없어야 한다', () => {
       const result = getCategoryPage('detail', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeUndefined();
     });
@@ -166,7 +166,7 @@ describe('CategoryPage', () => {
     it('create/add 버튼에 올바른 validation이 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
         value: true,
@@ -177,7 +177,7 @@ describe('CategoryPage', () => {
     it('modify 버튼에 올바른 validation과 pathParams가 설정되어야 한다', () => {
       const result = getCategoryPage('modify', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
         value: true,
@@ -191,7 +191,7 @@ describe('CategoryPage', () => {
     it('버튼에 back 네비게이션이 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const button = vstack.children.find(child => child.name === 'ButtonBuilder');
+      const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.navigator.type).toBe('back');
     });
@@ -215,7 +215,7 @@ describe('CategoryPage', () => {
     it('Spacer가 올바른 크기로 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
       const vstack = result.elements[0].props.elements[0];
-      const spacer = vstack.children.find(child => child.name === 'Spacer');
+      const spacer = vstack.children.find((child) => child.name === 'Spacer');
 
       expect(spacer).toBeDefined();
       expect(spacer.props.size).toBe(4);

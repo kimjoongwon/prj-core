@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { v4 } from 'uuid';
 
 const meta: Meta<typeof Tabs> = {

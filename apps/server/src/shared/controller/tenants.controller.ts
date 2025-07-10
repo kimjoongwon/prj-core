@@ -1,23 +1,28 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { TenantDto, CreateTenantDto, UpdateTenantDto, QueryTenantDto } from '@shared/schema';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateTenantDto,
+  type QueryTenantDto,
+  TenantDto,
+  type UpdateTenantDto,
+} from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
-import { ApiTags } from '@nestjs/swagger';
-import { TenantsService } from '../service/tenants.service';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
 import { ContextProvider } from '../provider/context.provider';
+import type { TenantsService } from '../service/tenants.service';
 
 @ApiTags('TENANTS')
 @Controller()
@@ -59,7 +64,7 @@ export class TenantsController {
   @ApiResponseEntity(TenantDto, HttpStatus.OK)
   async updateTenantById(
     @Param('tenantId') tenantId: string,
-    @Body() updateTenantDto: UpdateTenantDto,
+    @Body() updateTenantDto: UpdateTenantDto
   ) {
     const tenant = await this.service.updateById(tenantId, updateTenantDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(TenantDto, tenant));
@@ -93,7 +98,7 @@ export class TenantsController {
       HttpStatus.OK,
       'success',
       tenants.map((tenant) => tenant?.toDto?.() ?? tenant),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 }

@@ -1,5 +1,5 @@
+import { Button, ButtonGroup } from '@shared/frontend';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ButtonGroup, Button } from '@shared/frontend';
 
 const meta: Meta<typeof ButtonGroup> = {
   title: 'Shared Frontend/ButtonGroup',
@@ -8,8 +8,7 @@ const meta: Meta<typeof ButtonGroup> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          'ButtonGroup 컴포넌트입니다. 여러 버튼을 그룹으로 묶어서 표시합니다.',
+        component: 'ButtonGroup 컴포넌트입니다. 여러 버튼을 그룹으로 묶어서 표시합니다.',
       },
     },
   },
@@ -21,27 +20,12 @@ const meta: Meta<typeof ButtonGroup> = {
     },
     variant: {
       control: 'select',
-      options: [
-        'solid',
-        'bordered',
-        'light',
-        'flat',
-        'faded',
-        'shadow',
-        'ghost',
-      ],
+      options: ['solid', 'bordered', 'light', 'flat', 'faded', 'shadow', 'ghost'],
       description: '스타일 variant',
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     radius: {
@@ -64,7 +48,7 @@ export const Default: Story = {
     variant: 'solid',
     color: 'default',
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>첫 번째</Button>
       <Button>두 번째</Button>
@@ -79,7 +63,7 @@ export const Primary: Story = {
     variant: 'solid',
     color: 'primary',
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>옵션 1</Button>
       <Button>옵션 2</Button>
@@ -94,7 +78,7 @@ export const Bordered: Story = {
     variant: 'bordered',
     color: 'primary',
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>저장</Button>
       <Button>취소</Button>
@@ -109,7 +93,7 @@ export const Small: Story = {
     variant: 'solid',
     color: 'secondary',
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>S</Button>
       <Button>M</Button>
@@ -125,7 +109,7 @@ export const Large: Story = {
     variant: 'flat',
     color: 'success',
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>승인</Button>
       <Button>거절</Button>
@@ -140,7 +124,7 @@ export const Disabled: Story = {
     color: 'default',
     isDisabled: true,
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>비활성화</Button>
       <Button>버튼</Button>
@@ -156,7 +140,7 @@ export const FullWidth: Story = {
     color: 'primary',
     fullWidth: true,
   },
-  render: args => (
+  render: (args) => (
     <ButtonGroup {...args}>
       <Button>좌측</Button>
       <Button>중앙</Button>

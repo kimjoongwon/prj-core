@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Dropdown } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { v4 } from 'uuid';
 
 const meta: Meta<typeof Dropdown> = {
@@ -32,14 +32,7 @@ const meta: Meta<typeof Dropdown> = {
     },
     color: {
       control: 'select',
-      options: [
-        'default',
-        'primary',
-        'secondary',
-        'success',
-        'warning',
-        'danger',
-      ],
+      options: ['default', 'primary', 'secondary', 'success', 'warning', 'danger'],
       description: '색상 테마',
     },
     variant: {

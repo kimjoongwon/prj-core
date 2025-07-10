@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { UseEntity } from '../decorator/use-dto.decorator';
-import { BaseRepository } from '../common/base.repository';
+import type { Prisma } from '@shared/schema';
 import { RoleClassification } from '@shared/schema';
+import type { PrismaService } from 'nestjs-prisma';
+import { BaseRepository } from '../common/base.repository';
+import { UseEntity } from '../decorator/use-dto.decorator';
 
 @Injectable()
 @UseEntity(RoleClassification)

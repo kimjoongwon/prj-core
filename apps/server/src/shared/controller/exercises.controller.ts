@@ -1,28 +1,28 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
+  Patch,
+  Post,
   Query,
   UploadedFiles,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { 
-  ExerciseDto, 
-  CreateExerciseDto, 
-  UpdateExerciseDto, 
-  QueryExerciseDto,
-  PageMetaDto,
-  ResponseEntity 
-} from '@shared/schema';
-import { ExercisesService } from '../service/exercises.service';
 import { ApiTags } from '@nestjs/swagger';
+import {
+  type CreateExerciseDto,
+  ExerciseDto,
+  PageMetaDto,
+  type QueryExerciseDto,
+  ResponseEntity,
+  type UpdateExerciseDto,
+} from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { ExercisesService } from '../service/exercises.service';
 
 @ApiTags('EXERCISES')
 @Controller()
@@ -39,7 +39,7 @@ export class ExercisesController {
       HttpStatus.OK,
       'success',
       exercises.map((exercise) => exercise?.toDto?.() ?? exercise),
-      new PageMetaDto(query.skip, query.take, count),
+      new PageMetaDto(query.skip, query.take, count)
     );
   }
 
@@ -67,7 +67,7 @@ export class ExercisesController {
   @ApiResponseEntity(ExerciseDto, HttpStatus.OK)
   async updateExercise(
     @Param('exerciseId') exerciseId: string,
-    @Body() updateExerciseDto: UpdateExerciseDto,
+    @Body() updateExerciseDto: UpdateExerciseDto
   ) {
     const exercise = await this.service.updateById(exerciseId, updateExerciseDto);
     return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(ExerciseDto, exercise));

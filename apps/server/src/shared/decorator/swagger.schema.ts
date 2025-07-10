@@ -1,14 +1,14 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
 import type { Type } from '@nestjs/common';
-import { applyDecorators, UseInterceptors } from '@nestjs/common';
+import { UseInterceptors, applyDecorators } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import type {
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { castArray, Many, mapValues } from 'lodash';
+import { type Many, castArray, mapValues } from 'lodash';
 
 export interface IApiFile {
   name: string;
@@ -34,7 +34,7 @@ function explore(instance: object, propertyKey: string | symbol) {
   const types: Array<Type<unknown>> = Reflect.getMetadata(
     PARAMTYPES_METADATA,
     instance,
-    propertyKey,
+    propertyKey
   );
   const routeArgsMetadata =
     Reflect.getMetadata(ROUTE_ARGS_METADATA, instance.constructor, propertyKey) || {};
@@ -66,7 +66,7 @@ function RegisterModels(): MethodDecorator {
 
 function ApiFileDecorator(
   files: IApiFile[] = [],
-  options: Partial<{ isRequired: boolean }> = {},
+  options: Partial<{ isRequired: boolean }> = {}
 ): MethodDecorator {
   return (target, propertyKey, descriptor: PropertyDescriptor) => {
     const { isRequired = false } = options;
@@ -111,7 +111,7 @@ function ApiFileDecorator(
 
 export function ApiFile(
   files: Many<IApiFile>,
-  options: Partial<{ isRequired: boolean }> = {},
+  options: Partial<{ isRequired: boolean }> = {}
 ): MethodDecorator {
   const filesArray = castArray(files);
   const fileNames = filesArray.map((file) => ({ name: file.name }));
@@ -120,6 +120,6 @@ export function ApiFile(
     RegisterModels(),
     ApiConsumes('multipart/form-data'),
     ApiFileDecorator(filesArray, options),
-    UseInterceptors(FileFieldsInterceptor(fileNames)),
+    UseInterceptors(FileFieldsInterceptor(fileNames))
   );
 }

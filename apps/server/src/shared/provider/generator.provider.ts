@@ -6,7 +6,7 @@ export class GeneratorProvider {
   }
 
   static fileName(ext: string): string {
-    return GeneratorProvider.uuid() + '.' + ext;
+    return `${GeneratorProvider.uuid()}.${ext}`;
   }
 
   static getS3PublicUrl(key: string): string {
@@ -23,7 +23,7 @@ export class GeneratorProvider {
     }
 
     const exec = new RegExp(
-      `(?<=https://s3.${process.env.AWS_S3_BUCKET_NAME_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/).*`,
+      `(?<=https://s3.${process.env.AWS_S3_BUCKET_NAME_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/).*`
     ).exec(publicUrl);
 
     if (!exec) {

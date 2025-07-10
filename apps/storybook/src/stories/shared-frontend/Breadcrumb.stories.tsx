@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumb, BreadcrumbBuilder } from '@shared/frontend';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // BreadcrumbItem type definition for stories
 interface BreadcrumbItem {
@@ -112,8 +112,7 @@ export const MaxItems: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          '긴 경로에서 maxItems를 사용하여 표시할 아이템 수를 제한할 수 있습니다.',
+        story: '긴 경로에서 maxItems를 사용하여 표시할 아이템 수를 제한할 수 있습니다.',
       },
     },
   },
@@ -152,8 +151,7 @@ export const LongItemNames: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          '긴 아이템 이름은 자동으로 잘리고 hover 시 전체 이름을 볼 수 있습니다.',
+        story: '긴 아이템 이름은 자동으로 잘리고 hover 시 전체 이름을 볼 수 있습니다.',
       },
     },
   },
@@ -178,22 +176,21 @@ export const MobileResponsive: Story = {
 
 // BreadcrumbBuilder Stories
 export const BuilderDefault: StoryObj<typeof BreadcrumbBuilder> = {
-  render: args => <BreadcrumbBuilder {...args} />,
+  render: (args) => <BreadcrumbBuilder {...args} />,
   args: {
     routeNames: ['홈', '제품', '카테고리', '상세정보'],
   },
   parameters: {
     docs: {
       description: {
-        story:
-          'BreadcrumbBuilder는 라우트 이름 배열로부터 자동으로 breadcrumb을 생성합니다.',
+        story: 'BreadcrumbBuilder는 라우트 이름 배열로부터 자동으로 breadcrumb을 생성합니다.',
       },
     },
   },
 };
 
 export const BuilderWithCustomSeparator: StoryObj<typeof BreadcrumbBuilder> = {
-  render: args => <BreadcrumbBuilder {...args} />,
+  render: (args) => <BreadcrumbBuilder {...args} />,
   args: {
     routeNames: ['홈', '제품', '카테고리', '상세정보'],
     separator: '•',
@@ -205,7 +202,7 @@ export const Interactive: Story = {
   args: {
     items: mockItems,
     showHomeIcon: true,
-    onItemClick: item => {
+    onItemClick: (item) => {
       console.log('Clicked item:', item);
       alert(`클릭된 아이템: ${item.name}`);
     },

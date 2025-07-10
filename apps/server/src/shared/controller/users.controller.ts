@@ -1,31 +1,37 @@
 import {
-  Controller,
-  Post,
   Body,
-  HttpStatus,
-  Patch,
+  Controller,
   Delete,
   Get,
   HttpCode,
-  Param,
-  Query,
+  HttpStatus,
   Logger,
+  Param,
+  Patch,
+  Post,
+  Query,
   Req,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { Auth, ApiResponseEntity } from '../decorator';
-import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto, GroundDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
 import { ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
-import { UsersService } from '../service/users.service';
+import {
+  type CreateUserDto,
+  GroundDto,
+  type QueryUserDto,
+  type UpdateUserDto,
+  UserDto,
+} from '@shared/schema';
+import { ResponseEntity } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import type { Request } from 'express';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { UsersService } from '../service/users.service';
 
 @ApiTags('USERS')
 @Controller()
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly service: UsersService) { }
+  constructor(private readonly service: UsersService) {}
 
   @Post()
   @Auth([])
@@ -110,12 +116,12 @@ export class UsersController {
         HttpStatus.OK,
         'success',
         users.map((user) => user?.toDto?.() ?? user),
-        query.toPageMetaDto(count),
+        query.toPageMetaDto(count)
       );
     } catch (error) {
       this.logger.error(
         `Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`,
-        error instanceof Error ? error.stack : '',
+        error instanceof Error ? error.stack : ''
       );
       throw error;
     }

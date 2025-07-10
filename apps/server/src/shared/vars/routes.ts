@@ -1,19 +1,19 @@
+import type { RouteBuilder } from '@shared/types';
 // Import RㅇUTE_NAMES from shared vars
 import { ROUTE_NAMES } from '@shared/vars';
-import { RouteBuilder } from '@shared/types';
 
+import { getCategoriesPage } from '../pages/categories.page';
+import { getCategoryPage } from '../pages/category.page';
+import { getDashboardPage } from '../pages/dashboard.page';
+import { getGroundMembersPage } from '../pages/ground-members.page';
+import { getGroundPage } from '../pages/ground.page';
+import { getGroundsPage } from '../pages/grounds.page';
+import { getGroupPage } from '../pages/group.page';
+import { getGroupsPage } from '../pages/groups.page';
 // Import page functions
 import { getLoginPage } from '../pages/login.page';
 import { getTenantSelectPage } from '../pages/tenant-select.page';
-import { getDashboardPage } from '../pages/dashboard.page';
 import { getUsersPage } from '../pages/users.page';
-import { getGroundsPage } from '../pages/grounds.page';
-import { getGroundPage } from '../pages/ground.page';
-import { getCategoriesPage } from '../pages/categories.page';
-import { getGroupsPage } from '../pages/groups.page';
-import { getCategoryPage } from '../pages/category.page';
-import { getGroupPage } from '../pages/group.page';
-import { getGroundMembersPage } from '../pages/ground-members.page';
 
 export const rawRoutes: RouteBuilder[] = [
   {

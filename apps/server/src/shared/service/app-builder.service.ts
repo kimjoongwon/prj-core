@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
-import { RouteBuilder } from '@shared/types';
+import type { RouteBuilder } from '@shared/types';
+import type { PrismaService } from 'nestjs-prisma';
 import { rawRoutes } from '../vars/routes';
 
 // 라우트 타입 상수
@@ -27,7 +27,7 @@ export class AppBuilderService {
     return rawRoutes && Array.isArray(rawRoutes) ? [...rawRoutes] : [];
   }
 
-  async build(isAuthenticated: boolean = false) {
+  async build(isAuthenticated = false) {
     try {
       // 인증 상태에 따른 라우트 설정
       this.setupRoutesBasedOnAuth(isAuthenticated);

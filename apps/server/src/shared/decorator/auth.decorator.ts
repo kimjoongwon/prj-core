@@ -1,14 +1,14 @@
-import { applyDecorators, UseGuards, UseInterceptors } from '@nestjs/common';
+import { UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
 import { ApiCookieAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { RoleType } from '@shared/schema';
-import { AuthUserInterceptor } from '../interceptor';
-import { Roles } from './roles.decorator';
-import { PublicRoute } from './public-route.decorator';
+import type { RoleType } from '@shared/schema';
 import { JwtAuthGuard } from '../guard';
+import { AuthUserInterceptor } from '../interceptor';
+import { PublicRoute } from './public-route.decorator';
+import { Roles } from './roles.decorator';
 
 export function Auth(
   roles: RoleType[] = [],
-  options?: Partial<{ public: boolean }>,
+  options?: Partial<{ public: boolean }>
 ): MethodDecorator {
   const isPublicRoute = options?.public;
 

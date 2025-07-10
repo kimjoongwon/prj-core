@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BaseRepository } from '../common/base.repository';
-import { AbstractEntity, QueryDto } from '@shared/schema';
+import type { AbstractEntity, QueryDto } from '@shared/schema';
+import type { BaseRepository } from '../common/base.repository';
 
 // Method names that can have include configurations
-type BaseServiceMethodNames =
-  | 'getManyByQuery'
-  | 'getById'
-  | 'create'
-  | 'updateById';
+type BaseServiceMethodNames = 'getManyByQuery' | 'getById' | 'create' | 'updateById';
 
 // Helper type to ensure type safety for include options
 export interface BaseServiceOptions<TInclude = any> {
@@ -45,7 +41,7 @@ export class BaseService<
 
   constructor(
     protected readonly repository: TRepository,
-    options: BaseServiceOptions<TInclude> = {},
+    options: BaseServiceOptions<TInclude> = {}
   ) {
     this.options = options;
   }
@@ -54,8 +50,8 @@ export class BaseService<
     const args: any = { data: createDto };
 
     // Apply include if configured for this method
-    if (this.options.includeMap?.['create']) {
-      args.include = this.options.includeMap['create'];
+    if (this.options.includeMap?.create) {
+      args.include = this.options.includeMap.create;
     }
 
     return this.repository.create(args) as Promise<R>;
@@ -65,8 +61,8 @@ export class BaseService<
     const args = query?.toArgs() as any;
 
     // Apply include if configured for this method
-    if (this.options.includeMap?.['getManyByQuery']) {
-      args.include = this.options.includeMap['getManyByQuery'];
+    if (this.options.includeMap?.getManyByQuery) {
+      args.include = this.options.includeMap.getManyByQuery;
     }
 
     const countArgs = query.toCountArgs();
@@ -85,8 +81,8 @@ export class BaseService<
     };
 
     // Apply include if configured for this method
-    if (this.options.includeMap?.['updateById']) {
-      args.include = this.options.includeMap['updateById'];
+    if (this.options.includeMap?.updateById) {
+      args.include = this.options.includeMap.updateById;
     }
 
     return this.repository.update(args) as Promise<R>;
@@ -96,8 +92,8 @@ export class BaseService<
     const args: any = { where: { id } };
 
     // Apply include if configured for this method
-    if (this.options.includeMap?.['getById']) {
-      args.include = this.options.includeMap['getById'];
+    if (this.options.includeMap?.getById) {
+      args.include = this.options.includeMap.getById;
     }
 
     return this.repository.findUnique(args) as Promise<R>;

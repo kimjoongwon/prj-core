@@ -1,26 +1,26 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { FileAssociationsService } from '../service/file-associations.service';
-import { CreateFileAssociationDto } from '@shared/schema';
-import { UpdateFileAssociationDto } from '@shared/schema';
-import { QueryFileAssociationDto } from '@shared/schema';
+import type { CreateFileAssociationDto } from '@shared/schema';
+import type { UpdateFileAssociationDto } from '@shared/schema';
+import type { QueryFileAssociationDto } from '@shared/schema';
 import { FileAssociationDto } from '@shared/schema';
-import { Auth } from '../decorator/auth.decorator';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { ResponseEntity } from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
+import { Auth } from '../decorator/auth.decorator';
+import type { FileAssociationsService } from '../service/file-associations.service';
 
 @ApiTags('FILE-ASSOCIATIONS')
 @Controller()
@@ -37,7 +37,7 @@ export class FileAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(FileAssociationDto, fileAssociation),
+      plainToInstance(FileAssociationDto, fileAssociation)
     );
   }
 
@@ -52,7 +52,7 @@ export class FileAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(FileAssociationDto, fileAssociation),
+      plainToInstance(FileAssociationDto, fileAssociation)
     );
   }
 
@@ -74,7 +74,7 @@ export class FileAssociationsController {
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
   async updateFileAssociation(
     @Param('fileAssociationId') fileAssociationId: string,
-    @Body() updateFileAssociationDto: UpdateFileAssociationDto,
+    @Body() updateFileAssociationDto: UpdateFileAssociationDto
   ) {
     const fileAssociation = await this.service.update({
       where: { id: fileAssociationId },
@@ -83,7 +83,7 @@ export class FileAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(FileAssociationDto, fileAssociation),
+      plainToInstance(FileAssociationDto, fileAssociation)
     );
   }
 
@@ -96,7 +96,7 @@ export class FileAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(FileAssociationDto, fileAssociation),
+      plainToInstance(FileAssociationDto, fileAssociation)
     );
   }
 
@@ -109,7 +109,7 @@ export class FileAssociationsController {
     return new ResponseEntity(
       HttpStatus.OK,
       '성공',
-      plainToInstance(FileAssociationDto, fileAssociation),
+      plainToInstance(FileAssociationDto, fileAssociation)
     );
   }
 
@@ -123,7 +123,7 @@ export class FileAssociationsController {
       HttpStatus.OK,
       '성공',
       plainToInstance(FileAssociationDto, fileAssociations),
-      query.toPageMetaDto(count),
+      query.toPageMetaDto(count)
     );
   }
 }

@@ -1,6 +1,6 @@
+import type { LanguageCode, TenantDto, UserDto } from '@shared/schema';
+import type { PageTypes } from '@shared/types';
 import { ClsServiceManager } from 'nestjs-cls';
-import { PageTypes } from '@shared/types';
-import { UserDto, TenantDto, LanguageCode } from '@shared/schema';
 
 export class ContextProvider {
   private static readonly nameSpace = 'request';

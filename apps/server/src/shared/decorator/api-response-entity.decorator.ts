@@ -1,11 +1,11 @@
-import { HttpCode, HttpStatus, Type, applyDecorators } from '@nestjs/common';
+import { HttpCode, HttpStatus, type Type, applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { ResponseEntity } from '@shared/schema';
 
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   dataDto: DataDto,
   httpStatus: HttpStatus = HttpStatus.OK,
-  options?: { isArray?: boolean },
+  options?: { isArray?: boolean }
 ) => {
   const properties = {
     httpStatus: {
@@ -55,6 +55,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
         allOf,
       },
     }),
-    HttpCode(httpStatus),
+    HttpCode(httpStatus)
   );
 };

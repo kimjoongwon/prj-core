@@ -1,5 +1,5 @@
-import { $Enums } from '@prisma/client';
-import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
+import type { $Enums } from '@prisma/client';
+import type { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 import { ContextProvider } from '../provider/context.provider';
 
 export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuilder => {

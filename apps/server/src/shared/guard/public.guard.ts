@@ -1,5 +1,5 @@
 import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import type { Reflector } from '@nestjs/core';
 import _ from 'lodash';
 import { PUBLIC_ROUTE_KEY } from '../decorator/public-route.decorator';
 

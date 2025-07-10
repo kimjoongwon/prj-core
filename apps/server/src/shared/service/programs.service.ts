@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProgramsRepository } from '../repository/programs.repository';
-import { CreateProgramDto, QueryProgramDto, UpdateProgramDto, Program } from '@shared/schema';
+import type { CreateProgramDto, Program, QueryProgramDto, UpdateProgramDto } from '@shared/schema';
+import type { ProgramsRepository } from '../repository/programs.repository';
 import { BaseService } from './base.service';
 
 @Injectable()
