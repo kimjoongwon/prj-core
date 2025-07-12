@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { $Enums, Prisma } from '@shared/schema';
-import { Category } from '@shared/schema';
+import { $Enums, Category, Prisma } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'nestjs-prisma';
 import { BaseRepository } from '../common/base.repository';

@@ -5,7 +5,7 @@ try {
   const result = execSync('npx jest src/simple.test.ts --no-cache --runInBand', {
     cwd: process.cwd(),
     timeout: 5000,
-    stdio: 'pipe'
+    stdio: 'pipe',
   });
   console.log('Jest output:', result.toString());
 } catch (error) {

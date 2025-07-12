@@ -1,8 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
   "linter": {
     "enabled": true,
     "rules": {
@@ -58,19 +55,5 @@
     "formatter": {
       "enabled": true
     }
-  },
-  "files": {
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-    "ignore": [
-      "dist/**",
-      "build/**",
-      "node_modules/**",
-      "coverage/**",
-      ".next/**",
-      ".nuxt/**",
-      ".vite/**",
-      "*.config.js",
-      "*.config.ts"
-    ]
   }
 }

@@ -2,7 +2,9 @@ import { Logger, Logger as NestLogger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
+
 import cookieParser = require('cookie-parser');
+
 import { AppModule } from './module/app.module';
 import { AllExceptionsFilter, PrismaClientExceptionFilter, logConfig } from './shared';
 

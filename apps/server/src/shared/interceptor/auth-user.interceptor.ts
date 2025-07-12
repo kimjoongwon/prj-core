@@ -6,8 +6,7 @@ import {
   Injectable,
   type NestInterceptor,
 } from '@nestjs/common';
-import { UserDto } from '@shared/schema';
-import { TenantDto } from '@shared/schema';
+import { TenantDto, UserDto } from '@shared/schema';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ContextProvider } from '../provider';

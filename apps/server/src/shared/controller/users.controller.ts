@@ -16,10 +16,10 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   type CreateUserDto,
   type QueryUserDto,
+  ResponseEntity,
   type UpdateUserDto,
   UserDto,
 } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { Request } from 'express';
 import { ApiResponseEntity, Auth } from '../decorator';
@@ -30,7 +30,7 @@ import { UsersService } from '../service/users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly service: UsersService) { }
+  constructor(private readonly service: UsersService) {}
 
   @Post()
   @Auth([])

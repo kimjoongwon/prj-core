@@ -16,7 +16,7 @@ export class TokenService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService
-  ) { }
+  ) {}
 
   getTokenFromRequest(req: Request, key?: TokenValues): string {
     const token = req.cookies[key || Token.ACCESS];

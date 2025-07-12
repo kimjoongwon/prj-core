@@ -11,10 +11,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity } from '@shared/schema';
 import {
   CreateSpaceClassificationDto,
   QuerySpaceClassificationDto,
+  ResponseEntity,
   SpaceClassificationDto,
   UpdateSpaceClassificationDto,
 } from '@shared/schema';

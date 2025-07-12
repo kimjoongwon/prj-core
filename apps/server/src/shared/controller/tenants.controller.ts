@@ -13,12 +13,12 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
   type CreateTenantDto,
+  PageMetaDto,
   type QueryTenantDto,
+  ResponseEntity,
   TenantDto,
   type UpdateTenantDto,
 } from '@shared/schema';
-import { PageMetaDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { ContextProvider } from '../provider/context.provider';

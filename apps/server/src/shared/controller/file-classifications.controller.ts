@@ -11,11 +11,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseEntity } from '@shared/schema';
 import {
   CreateFileClassificationDto,
   FileClassificationDto,
   QueryFileClassificationDto,
+  ResponseEntity,
   UpdateFileClassificationDto,
 } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';

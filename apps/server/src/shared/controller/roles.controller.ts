@@ -11,8 +11,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateRoleDto, QueryRoleDto, RoleDto, UpdateRoleDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
+import {
+  CreateRoleDto,
+  QueryRoleDto,
+  ResponseEntity,
+  RoleDto,
+  UpdateRoleDto,
+} from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { RolesService } from '../service/services';

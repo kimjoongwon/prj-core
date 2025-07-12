@@ -1,17 +1,10 @@
-import { ClsModule } from 'nestjs-cls';
-import {
-  appConfig,
-  AuthConfig,
-  authConfig,
-  awsConfig,
-  corsConfig,
-  smtpConfig,
-} from './shared';
-import { PrismaModule } from 'nestjs-prisma';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { JwtModule } from '@nestjs/jwt';
 import { DynamicModule } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { ClsModule } from 'nestjs-cls';
+import { PrismaModule } from 'nestjs-prisma';
+import { AuthConfig, appConfig, authConfig, awsConfig, corsConfig, smtpConfig } from './shared';
 
 export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
   ConfigModule.forRoot({

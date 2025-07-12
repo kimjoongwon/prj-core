@@ -7,7 +7,7 @@ import { AppLogger } from '../util/app-logger.util';
 @Injectable()
 export class CategoriesService {
   private readonly logger = new AppLogger(CategoriesService.name);
-  constructor(private readonly repository: CategoriesRepository) { }
+  constructor(private readonly repository: CategoriesRepository) {}
 
   async create(args: Prisma.CategoryCreateArgs) {
     const services = await this.repository.create(args);

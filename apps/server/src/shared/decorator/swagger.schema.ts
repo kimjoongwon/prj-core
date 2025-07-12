@@ -1,7 +1,6 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
-import { Type } from '@nestjs/common';
-import { UseInterceptors, applyDecorators } from '@nestjs/common';
+import { Type, UseInterceptors, applyDecorators } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import {
@@ -79,9 +78,9 @@ function ApiFileDecorator(
     for (const file of files) {
       properties[file.name] = file.isArray
         ? {
-          type: 'array',
-          items: fileSchema,
-        }
+            type: 'array',
+            items: fileSchema,
+          }
         : fileSchema;
     }
 

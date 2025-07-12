@@ -11,9 +11,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '@shared/schema';
-import { PageMetaDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
+import {
+  AssignmentDto,
+  CreateAssignmentDto,
+  PageMetaDto,
+  QueryAssignmentDto,
+  ResponseEntity,
+} from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { AssignmentsService } from '../service/assignments.service';

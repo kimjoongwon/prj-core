@@ -64,7 +64,9 @@ export class AppBuilderService {
       return [];
     }
 
-    return rawRoutes.map((route) => this.filterAdminRouteForAuth(route)).filter((route): route is RouteBuilder => route !== null);
+    return rawRoutes
+      .map((route) => this.filterAdminRouteForAuth(route))
+      .filter((route): route is RouteBuilder => route !== null);
   }
 
   /**

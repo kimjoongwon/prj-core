@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, QueryRoleAssociationDto } from '@shared/schema';
-import { CreateRoleAssociationDto } from '@shared/schema';
+import { CreateRoleAssociationDto, Prisma, QueryRoleAssociationDto } from '@shared/schema';
 import { RoleAssociationsRepository } from '../repository/role-associations.repository';
 
 @Injectable()

@@ -95,5 +95,5 @@ export const userGroundMapping: { userIndex: number; groundIndices: number[] }[]
       userIndex,
       groundIndices,
     };
-  },
+  }
 );

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { CreateSubjectDto, QuerySubjectDto } from '@shared/schema';
+import { CreateSubjectDto, Prisma, QuerySubjectDto } from '@shared/schema';
 import { SubjectsRepository } from '../repository/subjects.repository';
 
 @Injectable()

@@ -1,5 +1,8 @@
+import { InputProps } from '@heroui/react';
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
+import { Constructor } from '@shared/schema';
+import { ElementBuilder } from '@shared/types';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -20,10 +23,7 @@ import {
   NotEquals,
   ValidateNested,
 } from 'class-validator';
-
-import { InputProps } from '@heroui/react';
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
-
 import {
   PhoneNumberSerializer,
   ToArray,
@@ -31,9 +31,6 @@ import {
   ToLowerCase,
   ToUpperCase,
 } from './transform.decorators';
-
-import { Constructor } from '@shared/schema';
-import { ElementBuilder } from '@shared/types';
 import {
   IsNullable,
   IsPassword,
