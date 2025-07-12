@@ -21,7 +21,7 @@ import {
 } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { Auth } from '../decorator';
-import type { RoleClassificationsService } from '../service/role-classifications.service';
+import { RoleClassificationsService } from '../service/role-classifications.service';
 
 @ApiTags('ROLE_CLASSIFICATIONS')
 @Controller()

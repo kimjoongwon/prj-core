@@ -1,4 +1,4 @@
-import type { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
+import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
 export const getGroundsPage = (): PageBuilder => {
   return {

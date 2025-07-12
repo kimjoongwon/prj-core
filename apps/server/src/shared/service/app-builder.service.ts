@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { RouteBuilder } from '@shared/types';
-import type { PrismaService } from 'nestjs-prisma';
+import { RouteBuilder } from '@shared/types';
+import { PrismaService } from 'nestjs-prisma';
 import { rawRoutes } from '../vars/routes';
 
 // 라우트 타입 상수
@@ -64,7 +64,7 @@ export class AppBuilderService {
       return [];
     }
 
-    return rawRoutes.map((route) => this.filterAdminRouteForAuth(route));
+    return rawRoutes.map((route) => this.filterAdminRouteForAuth(route)).filter((route): route is RouteBuilder => route !== null);
   }
 
   /**
@@ -98,11 +98,11 @@ export class AppBuilderService {
   /**
    * 유효한 인증 라우트인지 확인
    */
-  private isValidAuthRoute(route: RouteBuilder | null): boolean {
+  private isValidAuthRoute(route: RouteBuilder | null): route is RouteBuilder {
     return (
       route !== null &&
       route?.name === ROUTE_TYPES.ADMIN &&
-      route.children &&
+      route.children !== undefined &&
       Array.isArray(route.children) &&
       route.children.some((child) => child?.name === ROUTE_TYPES.AUTH)
     );

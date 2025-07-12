@@ -9,12 +9,12 @@ import {
   Post,
   UploadedFiles,
 } from '@nestjs/common';
-import { type CreateFileDto, FileDto } from '@shared/schema';
+import { CreateFileDto, FileDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import _ from 'lodash';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { ApiFile } from '../decorator/swagger.schema';
-import type { FilesService } from '../service/files.service';
+import { FilesService } from '../service/files.service';
 
 @Controller()
 export class FilesController {

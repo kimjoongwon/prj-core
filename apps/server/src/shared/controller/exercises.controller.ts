@@ -22,7 +22,7 @@ import {
 } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { ExercisesService } from '../service/exercises.service';
+import { ExercisesService } from '../service/exercises.service';
 
 @ApiTags('EXERCISES')
 @Controller()

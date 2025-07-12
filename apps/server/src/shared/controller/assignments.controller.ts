@@ -11,12 +11,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AssignmentDto, type CreateAssignmentDto, type QueryAssignmentDto } from '@shared/schema';
+import { AssignmentDto, CreateAssignmentDto, QueryAssignmentDto } from '@shared/schema';
 import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { AssignmentsService } from '../service/assignments.service';
+import { AssignmentsService } from '../service/assignments.service';
 
 @ApiTags('ASSIGNMENTS')
 @Controller()

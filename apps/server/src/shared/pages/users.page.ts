@@ -1,4 +1,4 @@
-import type { DataGridBuilderProps, PageBuilder } from '@shared/types';
+import { DataGridBuilderProps, PageBuilder } from '@shared/types';
 
 export const getUsersPage = (): PageBuilder => {
   return {

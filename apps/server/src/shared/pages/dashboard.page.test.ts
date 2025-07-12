@@ -6,25 +6,25 @@ describe('DashboardPage', () => {
       const result = getDashboardPage();
 
       expect(result.name).toBe('대시보드');
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toHaveLength(1);
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toHaveLength(1);
     });
 
     it('elements 구조를 가져야 한다', () => {
       const result = getDashboardPage();
 
-      expect(result.elements[0].name).toBe('VStack');
-      expect(result.elements[0].props.className).toBe('space-y-4');
+      expect(result.elements![0].name).toBe('VStack');
+      expect(result.elements![0].props.className).toBe('space-y-4');
     });
 
     it('VStack 내부에 필요한 컴포넌트들을 포함해야 한다', () => {
       const result = getDashboardPage();
-      const vstack = result.elements[0];
+      const vstack = result.elements![0];
 
       expect(vstack.children).toBeDefined();
       expect(vstack.children).toHaveLength(5);
 
-      const [spacer1, welcomeText, spacer2, descriptionText, spacer3] = vstack.children;
+      const [spacer1, welcomeText, spacer2, descriptionText, spacer3] = vstack.children!;
 
       // 첫 번째 Spacer
       expect(spacer1.name).toBe('Spacer');
@@ -53,7 +53,7 @@ describe('DashboardPage', () => {
   describe('텍스트 컴포넌트 설정', () => {
     it('환영 메시지가 올바르게 설정되어야 한다', () => {
       const result = getDashboardPage();
-      const welcomeText = result.elements[0].children[1];
+      const welcomeText = result.elements![0].children![1];
 
       expect(welcomeText.props.children).toBe('대시보드에 오신 것을 환영합니다!');
       expect(welcomeText.props.variant).toBe('h1');
@@ -62,7 +62,7 @@ describe('DashboardPage', () => {
 
     it('설명 텍스트가 올바르게 설정되어야 한다', () => {
       const result = getDashboardPage();
-      const descriptionText = result.elements[0].children[3];
+      const descriptionText = result.elements![0].children![3];
 
       expect(descriptionText.props.children).toBe('워크스페이스가 성공적으로 선택되었습니다.');
       expect(descriptionText.props.variant).toBe('body1');
@@ -73,7 +73,7 @@ describe('DashboardPage', () => {
   describe('Spacer 컴포넌트 설정', () => {
     it('모든 Spacer가 올바른 크기를 가져야 한다', () => {
       const result = getDashboardPage();
-      const spacers = result.elements[0].children.filter((child) => child.name === 'Spacer');
+      const spacers = result.elements![0].children!.filter((child) => child.name === 'Spacer');
 
       expect(spacers).toHaveLength(3);
       expect(spacers[0].props.size).toBe('4');
@@ -85,7 +85,7 @@ describe('DashboardPage', () => {
   describe('스타일링 설정', () => {
     it('VStack에 올바른 className을 가져야 한다', () => {
       const result = getDashboardPage();
-      const vstack = result.elements[0];
+      const vstack = result.elements![0];
 
       expect(vstack.props.className).toBe('space-y-4');
     });
@@ -101,8 +101,8 @@ describe('DashboardPage', () => {
     it('elements 기반 구조를 사용해야 한다', () => {
       const result = getDashboardPage();
 
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toBeDefined();
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toBeDefined();
     });
   });
 });

@@ -21,7 +21,7 @@ import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { ProgramsService } from '../service/programs.service';
+import { ProgramsService } from '../service/programs.service';
 
 @ApiTags('PROGRAM')
 @Controller()

@@ -22,9 +22,9 @@ import {
 } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { UsersService } from '../service/users.service';
+import { UsersService } from '../service/users.service';
 
 @ApiTags('USERS')
 @Controller()

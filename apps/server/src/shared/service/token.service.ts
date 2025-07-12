@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
-import { type JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
-import type { AuthConfig } from '@shared';
-import type { Request, Response } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
+import { AuthConfig } from '@shared';
+import { Request, Response } from 'express';
 
 export const Token = {
   ACCESS: 'accessToken',
@@ -16,7 +16,7 @@ export class TokenService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService
-  ) {}
+  ) { }
 
   getTokenFromRequest(req: Request, key?: TokenValues): string {
     const token = req.cookies[key || Token.ACCESS];

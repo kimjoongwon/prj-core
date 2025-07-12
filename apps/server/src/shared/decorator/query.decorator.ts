@@ -1,4 +1,4 @@
-import { type ExecutionContext, createParamDecorator } from '@nestjs/common';
+import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
 export const QueryWithTenant = createParamDecorator((value: any, ctx: ExecutionContext) => {

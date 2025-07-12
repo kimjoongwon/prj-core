@@ -1,4 +1,4 @@
-import type { $Enums } from '@shared/schema';
+import { $Enums } from '@shared/schema';
 import { getCategoryPage } from './category.page';
 
 // Mock ContextProvider
@@ -46,28 +46,28 @@ describe('CategoryPage', () => {
   describe('페이지 제목 설정', () => {
     it('create 타입일 때 올바른 제목을 가져야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const titleElement = result.elements[0].props.elements[0].children[0];
+      const titleElement = result.elements![0].props.elements[0].children[0];
 
       expect(titleElement.props.children).toBe('카테고리 생성');
     });
 
     it('modify 타입일 때 올바른 제목을 가져야 한다', () => {
       const result = getCategoryPage('modify', spaceType);
-      const titleElement = result.elements[0].props.elements[0].children[0];
+      const titleElement = result.elements![0].props.elements[0].children[0];
 
       expect(titleElement.props.children).toBe('카테고리 수정');
     });
 
     it('detail 타입일 때 올바른 제목을 가져야 한다', () => {
       const result = getCategoryPage('detail', spaceType);
-      const titleElement = result.elements[0].props.elements[0].children[0];
+      const titleElement = result.elements![0].props.elements[0].children[0];
 
       expect(titleElement.props.children).toBe('카테고리 상세');
     });
 
     it('add 타입일 때 올바른 제목을 가져야 한다', () => {
       const result = getCategoryPage('add', spaceType);
-      const titleElement = result.elements[0].props.elements[0].children[0];
+      const titleElement = result.elements![0].props.elements[0].children[0];
 
       expect(titleElement.props.children).toBe('카테고리 생성');
     });
@@ -76,7 +76,7 @@ describe('CategoryPage', () => {
   describe('ResourceBuilder 설정', () => {
     it('올바른 ResourceBuilder 설정을 가져야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const resourceBuilder = result.elements[0];
+      const resourceBuilder = result.elements![0];
 
       expect(resourceBuilder.name).toBe('ResourceBuilder');
       expect(resourceBuilder.props.resourceName).toBe('category');
@@ -86,7 +86,7 @@ describe('CategoryPage', () => {
 
     it('VStack 구조를 포함해야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
 
       expect(vstack.name).toBe('VStack');
       expect(vstack.props.className).toBe('space-y-4');
@@ -97,7 +97,7 @@ describe('CategoryPage', () => {
   describe('Input 필드 설정', () => {
     it('이름 입력 필드가 올바르게 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const inputElement = result.elements[0].props.elements[0].children[1];
+      const inputElement = result.elements![0].props.elements[0].children[1];
 
       expect(inputElement.name).toBe('Input');
       expect(inputElement.props.label).toBe('이름');
@@ -107,14 +107,14 @@ describe('CategoryPage', () => {
 
     it('detail 타입일 때 Input이 읽기 전용이어야 한다', () => {
       const result = getCategoryPage('detail', spaceType);
-      const inputElement = result.elements[0].props.elements[0].children[1];
+      const inputElement = result.elements![0].props.elements[0].children[1];
 
       expect(inputElement.props.isReadOnly).toBe(true);
     });
 
     it('create 타입일 때 Input이 편집 가능해야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const inputElement = result.elements[0].props.elements[0].children[1];
+      const inputElement = result.elements![0].props.elements[0].children[1];
 
       expect(inputElement.props.isReadOnly).toBe(false);
     });
@@ -123,7 +123,7 @@ describe('CategoryPage', () => {
   describe('버튼 구성', () => {
     it('create 타입일 때 생성 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
@@ -134,7 +134,7 @@ describe('CategoryPage', () => {
 
     it('add 타입일 때 추가 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('add', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
@@ -144,7 +144,7 @@ describe('CategoryPage', () => {
 
     it('modify 타입일 때 수정 버튼을 포함해야 한다', () => {
       const result = getCategoryPage('modify', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeDefined();
@@ -155,7 +155,7 @@ describe('CategoryPage', () => {
 
     it('detail 타입일 때 버튼이 없어야 한다', () => {
       const result = getCategoryPage('detail', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button).toBeUndefined();
@@ -165,7 +165,7 @@ describe('CategoryPage', () => {
   describe('Validation 설정', () => {
     it('create/add 버튼에 올바른 validation이 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
@@ -176,7 +176,7 @@ describe('CategoryPage', () => {
 
     it('modify 버튼에 올바른 validation과 pathParams가 설정되어야 한다', () => {
       const result = getCategoryPage('modify', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.mutation.validationFields['form.inputs.name'].required).toEqual({
@@ -190,7 +190,7 @@ describe('CategoryPage', () => {
   describe('Navigation 설정', () => {
     it('버튼에 back 네비게이션이 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const button = vstack.children.find((child) => child.name === 'ButtonBuilder');
 
       expect(button.props.navigator.type).toBe('back');
@@ -214,7 +214,7 @@ describe('CategoryPage', () => {
   describe('Spacer 설정', () => {
     it('Spacer가 올바른 크기로 설정되어야 한다', () => {
       const result = getCategoryPage('create', spaceType);
-      const vstack = result.elements[0].props.elements[0];
+      const vstack = result.elements![0].props.elements[0];
       const spacer = vstack.children.find((child) => child.name === 'Spacer');
 
       expect(spacer).toBeDefined();

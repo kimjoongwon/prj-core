@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { AbstractEntity, QueryDto } from '@shared/schema';
-import type { BaseRepository } from '../common/base.repository';
+import { AbstractEntity, QueryDto } from '@shared/schema';
+import { BaseRepository } from '../common/base.repository';
 
 // Method names that can have include configurations
 type BaseServiceMethodNames = 'getManyByQuery' | 'getById' | 'create' | 'updateById';

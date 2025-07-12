@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
-import type { Prisma } from '@shared/schema';
+import { Prisma } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
-import type { PrismaService } from 'nestjs-prisma';
-import type { Constructor } from '../decorator/use-dto.decorator';
+import { PrismaService } from 'nestjs-prisma';
+import { Constructor } from '../decorator/use-dto.decorator';
 
 export class BaseRepository<
   CreateArgs,

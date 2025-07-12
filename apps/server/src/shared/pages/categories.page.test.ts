@@ -26,7 +26,8 @@ describe('CategoriesPage', () => {
       expect(result.state.inputs.tenantId).toBe(mockTenantId);
 
       // 테이블 설정 확인 - elements 구조 사용
-      const dataGridElement = result.elements[0];
+      expect(result.elements).toBeDefined();
+      const dataGridElement = result.elements![0];
       expect(dataGridElement.name).toBe('DataGridBuilder');
 
       // 생성 버튼 확인
@@ -83,7 +84,7 @@ describe('CategoriesPage', () => {
       const categoryType = $Enums.CategoryTypes.Space;
       const result = getCategoriesPage(categoryType);
 
-      const dataGridElement = result.elements[0];
+      const dataGridElement = result.elements![0];
       const queryConfig = dataGridElement.props.table.query;
 
       expect(queryConfig.name).toBe('useGetCategoriesByQuery');
@@ -95,7 +96,7 @@ describe('CategoriesPage', () => {
 
     it('should have proper styling for all action buttons', () => {
       const result = getCategoriesPage($Enums.CategoryTypes.User);
-      const actionButtons = result.elements[0].props.table.columns[2].cell.buttons;
+      const actionButtons = result.elements![0].props.table.columns[2].cell.buttons;
 
       actionButtons.forEach((button) => {
         expect(button.variant).toBe('light');

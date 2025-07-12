@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma } from '@shared/schema';
-import type { CreateSessionDto, QuerySessionDto } from '@shared/schema';
-import type { SessionsRepository } from '../repository/sessions.repository';
+import { Prisma } from '@shared/schema';
+import { CreateSessionDto, QuerySessionDto } from '@shared/schema';
+import { SessionsRepository } from '../repository/sessions.repository';
 
 @Injectable()
 export class SessionsService {

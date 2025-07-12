@@ -1,4 +1,4 @@
-import type { PageBuilder } from '@shared/types';
+import { PageBuilder } from '@shared/types';
 
 export const getDashboardPage = (): PageBuilder => {
   return {

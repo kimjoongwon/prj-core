@@ -1,5 +1,5 @@
-import type { $Enums } from '@shared/schema';
-import type { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
+import { $Enums } from '@shared/schema';
+import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 import { ContextProvider } from '../provider/context.provider';
 
 export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuilder => {

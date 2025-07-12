@@ -1,8 +1,8 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 // aws.service.ts
 import { Global, Injectable } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
-import type { AwsConfig } from '@shared';
+import { ConfigService } from '@nestjs/config';
+import { AwsConfig } from '@shared';
 
 @Global()
 @Injectable()
@@ -12,6 +12,9 @@ export class AwsService {
 
   constructor(private configService: ConfigService) {
     const aws = this.configService.get<AwsConfig>('aws');
+    if (!aws) {
+      throw new Error('AWS configuration is missing');
+    }
     this.aws = aws;
     // AWS S3 클라이언트 초기화. 환경 설정 정보를 사용하여 AWS 리전, Access Key, Secret Key를 설정.
     this.s3Client = new S3Client({

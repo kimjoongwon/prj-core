@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
-import type { AuthConfig } from '@shared';
+import { ConfigService } from '@nestjs/config';
+import { AuthConfig } from '@shared';
 import { compare, hash, hashSync } from 'bcrypt';
 
 @Injectable()

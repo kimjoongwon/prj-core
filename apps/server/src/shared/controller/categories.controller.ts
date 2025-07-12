@@ -19,7 +19,7 @@ import {
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { CategoriesService } from '../service/services';
+import { CategoriesService } from '../service/services';
 
 @ApiTags('CATEGORIES')
 @Controller()

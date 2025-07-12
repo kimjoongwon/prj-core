@@ -1,4 +1,4 @@
-import type { $Enums } from '@shared/schema';
+import { $Enums } from '@shared/schema';
 import { getGroupsPage } from './groups.page';
 
 describe('GroupsPage', () => {
@@ -10,22 +10,22 @@ describe('GroupsPage', () => {
       const result = getGroupsPage(spaceType);
 
       expect(result.name).toBe('그룹 리스트');
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toHaveLength(1);
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toHaveLength(1);
     });
 
     it('DataGridBuilder를 포함해야 한다', () => {
       const result = getGroupsPage(spaceType);
 
-      expect(result.elements[0].name).toBe('DataGridBuilder');
-      expect(result.elements[0].props).toBeDefined();
+      expect(result.elements![0].name).toBe('DataGridBuilder');
+      expect(result.elements![0].props).toBeDefined();
     });
   });
 
   describe('DataGridBuilder 버튼 설정', () => {
     it('그룹 생성 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
       const buttons = dataGrid.props.buttons;
 
       expect(buttons).toHaveLength(1);
@@ -41,7 +41,7 @@ describe('GroupsPage', () => {
 
     it('생성 버튼의 네비게이션이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const createButton = result.elements[0].props.buttons[0];
+      const createButton = result.elements![0].props.buttons[0];
 
       expect(createButton.navigator.type).toBe('push');
       expect(createButton.navigator.route.relativePath).toBe(':id/create');
@@ -50,7 +50,7 @@ describe('GroupsPage', () => {
 
     it('생성 버튼에 올바른 스타일이 적용되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const createButton = result.elements[0].props.buttons[0];
+      const createButton = result.elements![0].props.buttons[0];
 
       expect(createButton.className).toBe(
         'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200'
@@ -61,7 +61,7 @@ describe('GroupsPage', () => {
   describe('DataGridBuilder 테이블 설정', () => {
     it('올바른 테이블 타입과 쿼리를 가져야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
       const table = dataGrid.props.table;
 
       expect(table.type).toBe('table');
@@ -75,7 +75,7 @@ describe('GroupsPage', () => {
 
     it('페이지네이션이 활성화되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const table = result.elements[0].props.table;
+      const table = result.elements![0].props.table;
 
       expect(table.pagination.enabled).toBe(true);
       expect(table.pagination.defaultTake).toBe(10);
@@ -83,7 +83,7 @@ describe('GroupsPage', () => {
 
     it('올바른 컬럼 구성을 가져야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const columns = result.elements[0].props.table.columns;
+      const columns = result.elements![0].props.table.columns;
 
       expect(columns).toHaveLength(3);
 
@@ -103,7 +103,7 @@ describe('GroupsPage', () => {
   describe('액션 컬럼 설정', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
 
@@ -113,7 +113,7 @@ describe('GroupsPage', () => {
 
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const detailButton = actionsColumn.cell.buttons[0];
@@ -129,7 +129,7 @@ describe('GroupsPage', () => {
 
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const editButton = actionsColumn.cell.buttons[1];
@@ -144,7 +144,7 @@ describe('GroupsPage', () => {
 
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const deleteButton = actionsColumn.cell.buttons[2];
@@ -161,7 +161,7 @@ describe('GroupsPage', () => {
   describe('액션 버튼 공통 스타일링', () => {
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const buttons = actionsColumn.cell.buttons;
@@ -179,14 +179,14 @@ describe('GroupsPage', () => {
   describe('그룹 타입별 처리', () => {
     it('User 타입 그룹 쿼리가 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(userType);
-      const table = result.elements[0].props.table;
+      const table = result.elements![0].props.table;
 
       expect(table.query.params.type).toBe('User');
     });
 
     it('Space 타입 그룹 쿼리가 올바르게 설정되어야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const table = result.elements[0].props.table;
+      const table = result.elements![0].props.table;
 
       expect(table.query.params.type).toBe('Space');
     });
@@ -195,7 +195,7 @@ describe('GroupsPage', () => {
   describe('타입 안전성', () => {
     it('DataGridBuilderProps 타입을 만족해야 한다', () => {
       const result = getGroupsPage(spaceType);
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
 
       expect(dataGrid.props.table).toBeDefined();
       expect(dataGrid.props.buttons).toBeDefined();
@@ -208,8 +208,8 @@ describe('GroupsPage', () => {
     it('elements 기반 구조를 사용해야 한다', () => {
       const result = getGroupsPage(spaceType);
 
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toBeDefined();
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toBeDefined();
     });
 
     it('페이지 상태(state)가 정의되지 않아도 문제없어야 한다', () => {

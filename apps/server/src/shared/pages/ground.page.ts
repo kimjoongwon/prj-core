@@ -1,5 +1,5 @@
-import type { FormProps } from '@heroui/react';
-import type {
+import { FormProps } from '@heroui/react';
+import {
   ApiQueryBuilder,
   IButtonBuilder,
   InputProps,
@@ -39,7 +39,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
   };
 
   // type에 따른 mutation 설정
-  const getMutationConfig = (type: PageTypes): Mutation => {
+  const getMutationConfig = (type: PageTypes): Mutation | undefined => {
     switch (type) {
       case 'create':
         return {
@@ -92,7 +92,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
   };
 
   // type에 따른 query 설정
-  const getQueryConfig = (type: PageTypes): ApiQueryBuilder => {
+  const getQueryConfig = (type: PageTypes): ApiQueryBuilder | undefined => {
     if (type === 'detail' || type === 'modify') {
       return {
         type: 'resource' as const,
@@ -124,7 +124,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
   const isReadonly = type === 'detail';
 
   const mutationConfig = getMutationConfig(type);
-  const queryConfig: ApiQueryBuilder = getQueryConfig(type);
+  const queryConfig = getQueryConfig(type);
 
   // elements 배열 구성
   const baseElements = [

@@ -21,7 +21,7 @@ import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { SessionsService } from '../service/services';
+import { SessionsService } from '../service/services';
 
 @ApiTags('SESSION')
 @Controller()

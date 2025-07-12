@@ -15,19 +15,19 @@ describe('LoginPage', () => {
     it('elements 구조를 가져야 한다', () => {
       const result = getLoginPage();
 
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toHaveLength(1);
-      expect(result.elements[0].name).toBe('VStack');
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toHaveLength(1);
+      expect(result.elements![0].name).toBe('VStack');
     });
 
     it('VStack 내부에 필요한 컴포넌트들을 포함해야 한다', () => {
       const result = getLoginPage();
-      const vstack = result.elements[0];
+      const vstack = result.elements![0];
 
       expect(vstack.children).toBeDefined();
       expect(vstack.children).toHaveLength(7);
 
-      const [logo, spacer1, title, emailInput, passwordInput, spacer2, button] = vstack.children;
+      const [logo, spacer1, title, emailInput, passwordInput, spacer2, button] = vstack.children!;
 
       // Logo 컴포넌트
       expect(logo.name).toBe('Logo');
@@ -64,7 +64,7 @@ describe('LoginPage', () => {
   describe('입력 필드 설정', () => {
     it('이메일 입력 필드가 올바르게 설정되어야 한다', () => {
       const result = getLoginPage();
-      const emailInput = result.elements[0].children[3];
+      const emailInput = result.elements![0].children![3];
 
       expect(emailInput.props.label).toBe('이메일');
       expect(emailInput.props.path).toBe('form.inputs.email');
@@ -74,7 +74,7 @@ describe('LoginPage', () => {
 
     it('비밀번호 입력 필드가 올바르게 설정되어야 한다', () => {
       const result = getLoginPage();
-      const passwordInput = result.elements[0].children[4];
+      const passwordInput = result.elements![0].children![4];
 
       expect(passwordInput.props.label).toBe('비밀번호');
       expect(passwordInput.props.path).toBe('form.inputs.password');
@@ -86,7 +86,7 @@ describe('LoginPage', () => {
   describe('ButtonBuilder 설정', () => {
     it('올바른 기본 속성을 가져야 한다', () => {
       const result = getLoginPage();
-      const button = result.elements[0].children[6];
+      const button = result.elements![0].children![6];
 
       expect(button.props.children).toBe('로그인');
       expect(button.props.color).toBe('primary');
@@ -97,14 +97,14 @@ describe('LoginPage', () => {
 
     it('올바른 mutation 설정을 가져야 한다', () => {
       const result = getLoginPage();
-      const button = result.elements[0].children[6];
+      const button = result.elements![0].children![6];
 
       expect(button.props.mutation.name).toBe('getToken');
     });
 
     it('이메일 validation 설정이 올바르게 되어야 한다', () => {
       const result = getLoginPage();
-      const button = result.elements[0].children[6];
+      const button = result.elements![0].children![6];
       const emailValidation = button.props.mutation.validationFields['form.inputs.email'];
 
       expect(emailValidation.required).toEqual({
@@ -119,7 +119,7 @@ describe('LoginPage', () => {
 
     it('비밀번호 validation 설정이 올바르게 되어야 한다', () => {
       const result = getLoginPage();
-      const button = result.elements[0].children[6];
+      const button = result.elements![0].children![6];
       const passwordValidation = button.props.mutation.validationFields['form.inputs.password'];
 
       expect(passwordValidation.required).toEqual({
@@ -135,7 +135,7 @@ describe('LoginPage', () => {
 
     it('올바른 navigator 설정을 가져야 한다', () => {
       const result = getLoginPage();
-      const button = result.elements[0].children[6];
+      const button = result.elements![0].children![6];
 
       expect(button.props.navigator.type).toBe('push');
       expect(button.props.navigator.route.fullPath).toBe('/admin/tenant-select');
@@ -145,14 +145,14 @@ describe('LoginPage', () => {
   describe('스타일링 설정', () => {
     it('VStack에 올바른 className을 가져야 한다', () => {
       const result = getLoginPage();
-      const vstack = result.elements[0];
+      const vstack = result.elements![0];
 
       expect(vstack.props.className).toBe('space-y-4 max-w-md mx-auto mt-16');
     });
 
     it('제목에 올바른 className을 가져야 한다', () => {
       const result = getLoginPage();
-      const title = result.elements[0].children[2];
+      const title = result.elements![0].children![2];
 
       expect(title.props.className).toBe('text-center text-2xl font-bold mb-6');
     });

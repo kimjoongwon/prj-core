@@ -1,14 +1,14 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
-import type { Type } from '@nestjs/common';
+import { Type } from '@nestjs/common';
 import { UseInterceptors, applyDecorators } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
-import type {
+import {
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { type Many, castArray, mapValues } from 'lodash';
+import { Many, castArray, mapValues } from 'lodash';
 
 export interface IApiFile {
   name: string;

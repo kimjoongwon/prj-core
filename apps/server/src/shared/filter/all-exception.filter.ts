@@ -1,4 +1,4 @@
-import { type ArgumentsHost, Catch, HttpException } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { ResponseEntity } from '@shared/schema';
 

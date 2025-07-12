@@ -11,11 +11,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { type CreateRoleDto, type QueryRoleDto, RoleDto, type UpdateRoleDto } from '@shared/schema';
+import { CreateRoleDto, QueryRoleDto, RoleDto, UpdateRoleDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { RolesService } from '../service/services';
+import { RolesService } from '../service/services';
 
 @ApiTags('SPACES')
 @Controller()

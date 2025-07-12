@@ -1,5 +1,5 @@
 // NestJS core imports
-import { Logger, type MiddlewareConsumer, Module, type OnModuleInit } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, OnModuleInit } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 // Third-party imports

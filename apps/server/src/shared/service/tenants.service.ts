@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import type { CreateTenantDto, QueryTenantDto, Tenant, UpdateTenantDto } from '@shared/schema';
-import type { Prisma } from '@shared/schema';
+import { CreateTenantDto, QueryTenantDto, Tenant, UpdateTenantDto } from '@shared/schema';
+import { Prisma } from '@shared/schema';
 import { ContextProvider } from '../provider';
-import type { TenantsRepository } from '../repository/tenants.repository';
+import { TenantsRepository } from '../repository/tenants.repository';
 
 @Injectable()
 export class TenantsService {

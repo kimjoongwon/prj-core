@@ -8,10 +8,10 @@ import {
   type UserDto,
 } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { ApiResponseEntity, Auth, ContextProvider, Public } from '..';
-import type { AuthService } from '../service/auth.service';
-import type { TokenService } from '../service/token.service';
+import { AuthService } from '../service/auth.service';
+import { TokenService } from '../service/token.service';
 
 @ApiTags('AUTH')
 @Controller()
@@ -56,16 +56,16 @@ export class AuthController {
 
     const user = req.user;
 
-    const tenant = user.tenants.find((tenant) => tenant.main);
+    const tenant = user.tenants?.find((tenant) => tenant.main);
 
     res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
     res.cookie('accessToken', newAccessToken, { httpOnly: true });
-    res.cookie('mainTenantId', tenant.id);
+    res.cookie('mainTenantId', tenant?.id);
 
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
-      mainTenantId: tenant.id,
+      mainTenantId: tenant?.id || '',
       user: req.user,
     };
   }

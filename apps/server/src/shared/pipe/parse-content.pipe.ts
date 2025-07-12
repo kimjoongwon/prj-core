@@ -18,10 +18,12 @@ export class ParseContentPipe implements PipeTransform {
       }
     }
 
-    const object = plainToClass(metadata.metatype, value);
-    const errors = await validate(object);
-    if (errors.length > 0) {
-      throw new BadRequestException(errors);
+    if (metadata.metatype) {
+      const object = plainToClass(metadata.metatype, value);
+      const errors = await validate(object);
+      if (errors.length > 0) {
+        throw new BadRequestException(errors);
+      }
     }
     return value;
   }

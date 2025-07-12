@@ -1,6 +1,6 @@
 import { ContextProvider } from '@shared';
-import type { $Enums } from '@shared/schema';
-import type {
+import { $Enums } from '@shared/schema';
+import {
   IButtonBuilder,
   InputProps,
   PageBuilder,
@@ -8,7 +8,7 @@ import type {
   SpacerProps,
   TextProps,
 } from '@shared/types';
-import type { PageTypes } from '@shared/types';
+import { PageTypes } from '@shared/types';
 
 export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes): PageBuilder => {
   const formInputs = {
@@ -34,7 +34,7 @@ export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes)
 
   // pageType에 따른 버튼 구성
   const getActionButtons = () => {
-    const buttons = [];
+    const buttons: any[] = [];
 
     if (pageType === 'create' || pageType === 'add') {
       buttons.push({

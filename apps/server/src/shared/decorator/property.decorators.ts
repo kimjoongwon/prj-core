@@ -1,6 +1,6 @@
-import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
-import type { ClassConstructor } from 'class-transformer/types/interfaces';
+import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { validateSync } from 'class-validator';
 
 export class ValidationUtil {

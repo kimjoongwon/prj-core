@@ -1,5 +1,5 @@
-import type { LanguageCode, TenantDto, UserDto } from '@shared/schema';
-import type { PageTypes } from '@shared/types';
+import { LanguageCode, TenantDto, UserDto } from '@shared/schema';
+import { PageTypes } from '@shared/types';
 import { ClsServiceManager } from 'nestjs-cls';
 
 export class ContextProvider {

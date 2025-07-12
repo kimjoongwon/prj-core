@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import type {
+import {
   CreateFileAssociationDto,
   FileAssociation,
   Prisma,
   QueryFileAssociationDto,
   UpdateFileAssociationDto,
 } from '@shared/schema';
-import type { FileAssociationsRepository } from '../repository/file-associations.repository';
+import { FileAssociationsRepository } from '../repository/file-associations.repository';
 import { BaseService } from './base.service';
 
 @Injectable()

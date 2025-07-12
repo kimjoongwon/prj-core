@@ -1,5 +1,5 @@
-import type { InputProps } from '@heroui/react';
-import type { IButtonBuilder, PageBuilder } from '@shared/types';
+import { InputProps } from '@heroui/react';
+import { IButtonBuilder, PageBuilder } from '@shared/types';
 
 interface LoginDto {
   email: string;

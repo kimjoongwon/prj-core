@@ -22,7 +22,7 @@ import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { ContextProvider } from '../provider/context.provider';
-import type { TenantsService } from '../service/tenants.service';
+import { TenantsService } from '../service/tenants.service';
 
 @ApiTags('TENANTS')
 @Controller()

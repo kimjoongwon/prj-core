@@ -1,4 +1,4 @@
-import type { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from '@shared/types';
 // Import RㅇUTE_NAMES from shared vars
 import { ROUTE_NAMES } from '@shared/vars';
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma } from '@shared/schema';
-import type { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '@shared/schema';
+import { Prisma } from '@shared/schema';
+import { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '@shared/schema';
 import { ContextProvider } from '../provider/context.provider';
-import type { ExercisesRepository } from '../repository/exercises.repository';
+import { ExercisesRepository } from '../repository/exercises.repository';
 
 @Injectable()
 export class ExercisesService {

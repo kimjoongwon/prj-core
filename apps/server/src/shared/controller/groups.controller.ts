@@ -19,7 +19,7 @@ import {
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth, Public } from '../decorator';
-import type { GroupsService } from '../service/services';
+import { GroupsService } from '../service/services';
 
 @ApiTags('GROUPS')
 @Controller()

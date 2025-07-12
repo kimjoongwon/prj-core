@@ -1,7 +1,7 @@
-import { type CallHandler, type ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
-import { Test, type TestingModule } from '@nestjs/testing';
+import { CallHandler, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { of, throwError } from 'rxjs';
-import type { UserDto } from '../dto/user.dto';
+import { UserDto } from '@shared/schema';
 import { ContextProvider } from '../provider';
 import { AuthUserInterceptor } from './auth-user.interceptor';
 

@@ -21,7 +21,7 @@ import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { SubjectsService } from '../service/subjects.service';
+import { SubjectsService } from '../service/subjects.service';
 
 @ApiTags('SUBJECTS')
 @Controller()

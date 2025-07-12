@@ -11,15 +11,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import type { CreateRoleAssociationDto } from '@shared/schema';
-import type { UpdateRoleAssociationDto } from '@shared/schema';
-import type { QueryRoleAssociationDto } from '@shared/schema';
+import { CreateRoleAssociationDto } from '@shared/schema';
+import { UpdateRoleAssociationDto } from '@shared/schema';
+import { QueryRoleAssociationDto } from '@shared/schema';
 import { RoleAssociationDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { Auth } from '../decorator/auth.decorator';
-import type { RoleAssociationsService } from '../service/role-associations.service';
+import { RoleAssociationsService } from '../service/role-associations.service';
 
 @ApiTags('ROLE-ASSOCIATIONS')
 @Controller()

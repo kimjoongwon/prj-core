@@ -1,4 +1,4 @@
-import type { Prisma } from '@shared/schema';
+import { Prisma } from '@shared/schema';
 
 export function loggingMiddleware(): Prisma.Middleware {
   return async (params, next) => {

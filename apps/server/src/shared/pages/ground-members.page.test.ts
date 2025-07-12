@@ -6,22 +6,22 @@ describe('GroundMembersPage', () => {
       const result = getGroundMembersPage();
 
       expect(result.name).toBe('그라운드 멤버 리스트');
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toHaveLength(1);
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toHaveLength(1);
     });
 
     it('DataGridBuilder를 포함해야 한다', () => {
       const result = getGroundMembersPage();
 
-      expect(result.elements[0].name).toBe('DataGridBuilder');
-      expect(result.elements[0].props).toBeDefined();
+      expect(result.elements![0].name).toBe('DataGridBuilder');
+      expect(result.elements![0].props).toBeDefined();
     });
   });
 
   describe('DataGridBuilder 버튼 설정', () => {
     it('멤버 추가 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
       const buttons = dataGrid.props.buttons;
 
       expect(buttons).toHaveLength(1);
@@ -37,7 +37,7 @@ describe('GroundMembersPage', () => {
 
     it('추가 버튼의 네비게이션이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const addButton = result.elements[0].props.buttons[0];
+      const addButton = result.elements![0].props.buttons[0];
 
       expect(addButton.navigator.type).toBe('push');
       expect(addButton.navigator.route.relativePath).toBe('new/create');
@@ -45,7 +45,7 @@ describe('GroundMembersPage', () => {
 
     it('추가 버튼에 올바른 스타일이 적용되어야 한다', () => {
       const result = getGroundMembersPage();
-      const addButton = result.elements[0].props.buttons[0];
+      const addButton = result.elements![0].props.buttons[0];
 
       expect(addButton.className).toBe(
         'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200'
@@ -56,7 +56,7 @@ describe('GroundMembersPage', () => {
   describe('DataGridBuilder 테이블 설정', () => {
     it('올바른 테이블 타입과 쿼리를 가져야 한다', () => {
       const result = getGroundMembersPage();
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
       const table = dataGrid.props.table;
 
       expect(table.type).toBe('table');
@@ -70,7 +70,7 @@ describe('GroundMembersPage', () => {
 
     it('올바른 컬럼 구성을 가져야 한다', () => {
       const result = getGroundMembersPage();
-      const columns = result.elements[0].props.table.columns;
+      const columns = result.elements![0].props.table.columns;
 
       expect(columns).toHaveLength(7);
 
@@ -92,7 +92,7 @@ describe('GroundMembersPage', () => {
 
     it('가입일 컬럼이 date 타입이어야 한다', () => {
       const result = getGroundMembersPage();
-      const joinedAtColumn = result.elements[0].props.table.columns.find(
+      const joinedAtColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'joinedAt'
       );
 
@@ -103,7 +103,7 @@ describe('GroundMembersPage', () => {
   describe('액션 컬럼 설정', () => {
     it('액션 컬럼이 row-actions 타입이어야 한다', () => {
       const result = getGroundMembersPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
 
@@ -113,7 +113,7 @@ describe('GroundMembersPage', () => {
 
     it('상세 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const detailButton = actionsColumn.cell.buttons[0];
@@ -128,7 +128,7 @@ describe('GroundMembersPage', () => {
 
     it('수정 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const editButton = actionsColumn.cell.buttons[1];
@@ -143,7 +143,7 @@ describe('GroundMembersPage', () => {
 
     it('삭제 버튼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const deleteButton = actionsColumn.cell.buttons[2];
@@ -160,7 +160,7 @@ describe('GroundMembersPage', () => {
   describe('액션 버튼 공통 스타일링', () => {
     it('액션 버튼들에 올바른 공통 스타일이 적용되어야 한다', () => {
       const result = getGroundMembersPage();
-      const actionsColumn = result.elements[0].props.table.columns.find(
+      const actionsColumn = result.elements![0].props.table.columns.find(
         (col) => col.accessorKey === 'actions'
       );
       const buttons = actionsColumn.cell.buttons;
@@ -178,7 +178,7 @@ describe('GroundMembersPage', () => {
   describe('사용자 정보 컬럼', () => {
     it('사용자 관련 컬럼들이 올바른 경로를 가져야 한다', () => {
       const result = getGroundMembersPage();
-      const columns = result.elements[0].props.table.columns;
+      const columns = result.elements![0].props.table.columns;
 
       const nameColumn = columns.find((col) => col.accessorKey === 'user.name');
       const emailColumn = columns.find((col) => col.accessorKey === 'user.email');
@@ -197,7 +197,7 @@ describe('GroundMembersPage', () => {
   describe('멤버 상태 컬럼', () => {
     it('역할과 상태 컬럼이 올바르게 설정되어야 한다', () => {
       const result = getGroundMembersPage();
-      const columns = result.elements[0].props.table.columns;
+      const columns = result.elements![0].props.table.columns;
 
       const roleColumn = columns.find((col) => col.accessorKey === 'role');
       const statusColumn = columns.find((col) => col.accessorKey === 'status');
@@ -213,7 +213,7 @@ describe('GroundMembersPage', () => {
   describe('타입 안전성', () => {
     it('DataGridBuilderProps 타입을 만족해야 한다', () => {
       const result = getGroundMembersPage();
-      const dataGrid = result.elements[0];
+      const dataGrid = result.elements![0];
 
       expect(dataGrid.props.table).toBeDefined();
       expect(dataGrid.props.buttons).toBeDefined();
@@ -226,8 +226,8 @@ describe('GroundMembersPage', () => {
     it('elements 기반 구조를 사용해야 한다', () => {
       const result = getGroundMembersPage();
 
-      expect(result.elements).toBeDefined();
-      expect(result.elements).toBeDefined();
+      expect(result.elements!).toBeDefined();
+      expect(result.elements!).toBeDefined();
     });
 
     it('페이지 상태(state)가 정의되지 않아도 문제없어야 한다', () => {
@@ -240,7 +240,7 @@ describe('GroundMembersPage', () => {
   describe('TODO 항목 검증', () => {
     it('쿼리명이 변경되어야 한다는 TODO가 있다', () => {
       const result = getGroundMembersPage();
-      const table = result.elements[0].props.table;
+      const table = result.elements![0].props.table;
 
       // 현재는 useGetTenantsByQuery를 사용하지만 적절한 멤버 쿼리로 변경되어야 함
       expect(table.query.name).toBe('useGetTenantsByQuery');

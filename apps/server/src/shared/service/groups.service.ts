@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { CreateGroupDto, Prisma, QueryGroupDto, UpdateGroupDto } from '@shared/schema';
-import type { GroupsRepository } from '../repository/groups.repository';
+import { CreateGroupDto, Prisma, QueryGroupDto, UpdateGroupDto } from '@shared/schema';
+import { GroupsRepository } from '../repository/groups.repository';
 
 @Injectable()
 export class GroupsService {

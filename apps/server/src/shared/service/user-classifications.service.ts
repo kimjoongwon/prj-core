@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import type {
+import {
   CreateUserClassificationDto,
   UpdateUserClassificationDto,
   UserClassification,
 } from '@shared/schema';
-import type { UserClassificationsRepository } from '../repository/user-classifications.repository';
+import { UserClassificationsRepository } from '../repository/user-classifications.repository';
 import { BaseService } from './base.service';
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -21,7 +21,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import type { InputProps } from '@heroui/react';
+import { InputProps } from '@heroui/react';
 import { ApiEnumProperty, ApiUUIDProperty } from './property.decorators';
 
 import {
@@ -32,8 +32,8 @@ import {
   ToUpperCase,
 } from './transform.decorators';
 
-import type { Constructor } from '@shared/schema';
-import type { ElementBuilder } from '@shared/types';
+import { Constructor } from '@shared/schema';
+import { ElementBuilder } from '@shared/types';
 import {
   IsNullable,
   IsPassword,

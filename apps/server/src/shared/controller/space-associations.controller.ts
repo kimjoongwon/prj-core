@@ -11,15 +11,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import type { CreateSpaceAssociationDto } from '@shared/schema';
-import type { UpdateSpaceAssociationDto } from '@shared/schema';
-import type { QuerySpaceAssociationDto } from '@shared/schema';
+import { CreateSpaceAssociationDto } from '@shared/schema';
+import { UpdateSpaceAssociationDto } from '@shared/schema';
+import { QuerySpaceAssociationDto } from '@shared/schema';
 import { SpaceAssociationDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { Auth } from '../decorator/auth.decorator';
-import type { SpaceAssociationsService } from '../service/space-associations.service';
+import { SpaceAssociationsService } from '../service/space-associations.service';
 
 @ApiTags('SPACE-ASSOCIATIONS')
 @Controller()

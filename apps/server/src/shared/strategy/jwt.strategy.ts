@@ -1,10 +1,10 @@
 import { Global, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import type { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import type { Request } from 'express';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { type AuthConfig, ContextProvider } from '..';
-import type { UsersService } from '../service/users.service';
+import { AuthConfig, ContextProvider } from '..';
+import { UsersService } from '../service/users.service';
 
 @Global()
 @Injectable()

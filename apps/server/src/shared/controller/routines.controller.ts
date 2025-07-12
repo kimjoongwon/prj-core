@@ -21,7 +21,7 @@ import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { RoutinesService } from '../service/routines.service';
+import { RoutinesService } from '../service/routines.service';
 
 @ApiTags('ROUTINE')
 @Controller()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import type { Prisma } from '@shared/schema';
-import type { CreateAssignmentDto, QueryAssignmentDto, UpdateAssignmentDto } from '@shared/schema';
-import type { AssignmentsRepository } from '../repository/assignments.repository';
+import { Prisma } from '@shared/schema';
+import { CreateAssignmentDto, QueryAssignmentDto, UpdateAssignmentDto } from '@shared/schema';
+import { AssignmentsRepository } from '../repository/assignments.repository';
 
 @Injectable()
 export class AssignmentsService {

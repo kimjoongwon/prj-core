@@ -21,7 +21,7 @@ import { PageMetaDto } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
-import type { TimelinesService } from '../service/timelines.service';
+import { TimelinesService } from '../service/timelines.service';
 
 @ApiTags('TIMELINE')
 @Controller()

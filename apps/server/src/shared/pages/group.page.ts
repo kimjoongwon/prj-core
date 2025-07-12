@@ -1,6 +1,6 @@
 import { ContextProvider } from '@shared';
-import type { $Enums } from '@shared/schema';
-import type {
+import { $Enums } from '@shared/schema';
+import {
   IButtonBuilder,
   InputProps,
   PageBuilder,
@@ -35,7 +35,7 @@ export const getGroupPage = (pageType: PageTypes, type: $Enums.GroupTypes): Page
 
   // pageType에 따른 버튼 구성
   const getActionButtons = () => {
-    const buttons = [];
+    const buttons: any[] = [];
 
     if (pageType === 'create' || pageType === 'add') {
       buttons.push({
