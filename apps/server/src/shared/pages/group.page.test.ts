@@ -1,4 +1,4 @@
-import type { $Enums } from '@prisma/client';
+import type { $Enums } from '@shared/schema';
 import { getGroupPage } from './group.page';
 
 // Mock ContextProvider

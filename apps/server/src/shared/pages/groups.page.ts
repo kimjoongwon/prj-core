@@ -1,4 +1,4 @@
-import type { $Enums } from '@prisma/client';
+import type { $Enums } from '@shared/schema';
 import type { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
 
 export const getGroupsPage = (type: $Enums.GroupTypes): PageBuilder => {
