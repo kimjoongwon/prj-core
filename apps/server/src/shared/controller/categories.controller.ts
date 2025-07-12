@@ -12,9 +12,9 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
   CategoryDto,
-  type CreateCategoryDto,
-  type QueryCategoryDto,
-  type UpdateCategoryDto,
+  CreateCategoryDto,
+  QueryCategoryDto,
+  UpdateCategoryDto,
 } from '@shared/schema';
 import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
@@ -24,7 +24,7 @@ import { CategoriesService } from '../service/services';
 @ApiTags('CATEGORIES')
 @Controller()
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoriesService: CategoriesService) { }
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
