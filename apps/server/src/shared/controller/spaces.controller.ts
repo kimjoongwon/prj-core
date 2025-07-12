@@ -13,9 +13,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateSpaceDto, QuerySpaceDto, UpdateSpaceDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
-import { SpaceDto } from '@shared/schema';
+import {
+  CreateSpaceDto,
+  QuerySpaceDto,
+  ResponseEntity,
+  SpaceDto,
+  UpdateSpaceDto,
+} from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { ContextProvider } from '../provider';

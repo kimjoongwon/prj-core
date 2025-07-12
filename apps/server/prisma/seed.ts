@@ -1,9 +1,9 @@
-import { $Enums, PrismaClient, CreateGroupDto, GroupNames } from '@shared/schema';
+import { $Enums, CreateGroupDto, GroupNames, PrismaClient } from '@shared/schema';
 import { hash } from 'bcrypt';
-import { userSeedData, groundSeedData, userGroundMapping } from './seed-data';
+import { groundSeedData, userGroundMapping, userSeedData } from './seed-data';
+
 const prisma = new PrismaClient();
 async function main() {
-
   // 먼저 Role들을 생성
   const superAdminRole = await prisma.role.upsert({
     where: { name: 'SUPER_ADMIN' },
@@ -238,7 +238,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
           }
 
           console.log(
-            `일반 유저 생성 완료: ${userData.email} (그라운드 ${userGrounds.length}개 소속)`,
+            `일반 유저 생성 완료: ${userData.email} (그라운드 ${userGrounds.length}개 소속)`
           );
         }
       } else {

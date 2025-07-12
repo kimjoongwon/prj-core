@@ -9,8 +9,7 @@ import {
   Post,
   UploadedFiles,
 } from '@nestjs/common';
-import { CreateFileDto, FileDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
+import { CreateFileDto, FileDto, ResponseEntity } from '@shared/schema';
 import _ from 'lodash';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { ApiFile } from '../decorator/swagger.schema';

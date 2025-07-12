@@ -13,27 +13,30 @@ module.exports = {
     '^@shared/vars$': '<rootDir>/../../packages/shared-vars/src',
   },
   transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      tsconfig: {
-        module: 'commonjs',
-        target: 'es2017',
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
-        types: ['jest', 'node'],
-        skipLibCheck: true,
-        strict: false,
-        paths: {
-          "@shared": ["./shared/index"],
-          "@shared/*": ["./shared/*"],
-          "@shared/types": ["../../packages/shared-types/src"],
-          "@shared/schema": ["../../packages/shared-schema/src"],
-          "@shared/utils": ["../../packages/shared-utils/src"],
-          "@shared/vars": ["../../packages/shared-vars/src"]
-        }
-      }
-    }],
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          module: 'commonjs',
+          target: 'es2017',
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          experimentalDecorators: true,
+          emitDecoratorMetadata: true,
+          types: ['jest', 'node'],
+          skipLibCheck: true,
+          strict: false,
+          paths: {
+            '@shared': ['./shared/index'],
+            '@shared/*': ['./shared/*'],
+            '@shared/types': ['../../packages/shared-types/src'],
+            '@shared/schema': ['../../packages/shared-schema/src'],
+            '@shared/utils': ['../../packages/shared-utils/src'],
+            '@shared/vars': ['../../packages/shared-vars/src'],
+          },
+        },
+      },
+    ],
   },
   maxWorkers: 1,
   testTimeout: 5000,

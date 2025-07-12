@@ -16,13 +16,6 @@
       "@shared/vars": ["../packages/shared-vars/src"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.test.ts"
-  ],
-  "exclude": [
-    "dist/**/*",
-    "node_modules/**/*",
-    "prisma/seed.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.test.ts"],
+  "exclude": ["dist/**/*", "node_modules/**/*", "prisma/seed.ts"]
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { UserClassification } from '@shared/schema';
+import { Prisma, UserClassification } from '@shared/schema';
 import { PrismaService } from 'nestjs-prisma';
 import { BaseRepository } from '../common/base.repository';
 import { UseEntity } from '../decorator/use-dto.decorator';

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGroundDto, Ground, QueryGroundDto, UpdateGroundDto } from '@shared/schema';
-import { Prisma } from '@shared/schema';
+import { CreateGroundDto, Ground, Prisma, QueryGroundDto, UpdateGroundDto } from '@shared/schema';
 import { GroundsRepository } from '../repository/grounds.repository';
 
 @Injectable()

@@ -26,14 +26,11 @@ import { UserAssociationsService } from './user-associations.service';
 import { UserClassificationsService } from './user-classifications.service';
 import { UsersService } from './users.service';
 
+export * from './app-builder.service';
+export * from './assignments.service';
 // 경계선
 export * from './auth.service';
-export * from './app-builder.service';
 export * from './aws.service';
-export * from './password.service';
-export * from './token.service';
-
-export * from './assignments.service';
 export * from './categories.service';
 export * from './exercises.service';
 export * from './file-associations.service';
@@ -41,6 +38,7 @@ export * from './file-classifications.service';
 export * from './files.service';
 export * from './grounds.service';
 export * from './groups.service';
+export * from './password.service';
 export * from './programs.service';
 export * from './role-associations.service';
 export * from './role-classifications.service';
@@ -53,6 +51,7 @@ export * from './spaces.service';
 export * from './subjects.service';
 export * from './tenants.service';
 export * from './timelines.service';
+export * from './token.service';
 export * from './user-associations.service';
 export * from './user-classifications.service';
 export * from './users.service';

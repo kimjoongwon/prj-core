@@ -1,4 +1,6 @@
+export * from './app-builder.controller';
 export * from './assignments.controller';
+export * from './auth.controller';
 export * from './categories.controller';
 export * from './exercises.controller';
 export * from './file-associations.controller';
@@ -21,5 +23,3 @@ export * from './timelines.controller';
 export * from './user-associations.controller';
 export * from './user-classifications.controller';
 export * from './users.controller';
-export * from './auth.controller';
-export * from './app-builder.controller';

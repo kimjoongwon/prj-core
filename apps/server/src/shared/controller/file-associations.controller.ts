@@ -11,12 +11,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateFileAssociationDto } from '@shared/schema';
-import { UpdateFileAssociationDto } from '@shared/schema';
-import { QueryFileAssociationDto } from '@shared/schema';
-import { FileAssociationDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
-import { PageMetaDto } from '@shared/schema';
+import {
+  CreateFileAssociationDto,
+  FileAssociationDto,
+  PageMetaDto,
+  QueryFileAssociationDto,
+  ResponseEntity,
+  UpdateFileAssociationDto,
+} from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { Auth } from '../decorator/auth.decorator';

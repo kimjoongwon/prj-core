@@ -11,11 +11,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserAssociationDto } from '@shared/schema';
-import { UpdateUserAssociationDto } from '@shared/schema';
-import { QueryUserAssociationDto } from '@shared/schema';
-import { UserAssociationDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
+import {
+  CreateUserAssociationDto,
+  QueryUserAssociationDto,
+  ResponseEntity,
+  UpdateUserAssociationDto,
+  UserAssociationDto,
+} from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
 import { Auth } from '../decorator/auth.decorator';

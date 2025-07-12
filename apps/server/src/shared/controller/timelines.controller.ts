@@ -13,12 +13,12 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
   type CreateTimelineDto,
+  PageMetaDto,
   type QueryTimelineDto,
+  ResponseEntity,
   TimelineDto,
   type UpdateTimelineDto,
 } from '@shared/schema';
-import { PageMetaDto } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth } from '../decorator';
 import { TimelinesService } from '../service/timelines.service';

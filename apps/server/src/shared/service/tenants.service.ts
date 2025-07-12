@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTenantDto, QueryTenantDto, Tenant, UpdateTenantDto } from '@shared/schema';
-import { Prisma } from '@shared/schema';
+import { CreateTenantDto, Prisma, QueryTenantDto, Tenant, UpdateTenantDto } from '@shared/schema';
 import { ContextProvider } from '../provider';
 import { TenantsRepository } from '../repository/tenants.repository';
 

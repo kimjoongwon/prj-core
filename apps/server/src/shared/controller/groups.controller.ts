@@ -14,9 +14,9 @@ import {
   type CreateGroupDto,
   GroupDto,
   type QueryGroupDto,
+  ResponseEntity,
   type UpdateGroupDto,
 } from '@shared/schema';
-import { ResponseEntity } from '@shared/schema';
 import { plainToInstance } from 'class-transformer';
 import { ApiResponseEntity, Auth, Public } from '../decorator';
 import { GroupsService } from '../service/services';

@@ -4,11 +4,11 @@ import {
   IButtonBuilder,
   InputProps,
   PageBuilder,
+  PageTypes,
   ResourceBuilder,
   SpacerProps,
   TextProps,
 } from '@shared/types';
-import { PageTypes } from '@shared/types';
 
 export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes): PageBuilder => {
   const formInputs = {

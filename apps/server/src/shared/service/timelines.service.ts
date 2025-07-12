@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { CreateTimelineDto, QueryTimelineDto } from '@shared/schema';
+import { CreateTimelineDto, Prisma, QueryTimelineDto } from '@shared/schema';
 import { TimelinesRepository } from '../repository/timeline.repository';
 
 @Injectable()

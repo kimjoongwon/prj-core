@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { CreateExerciseDto, QueryExerciseDto, UpdateExerciseDto } from '@shared/schema';
+import { CreateExerciseDto, Prisma, QueryExerciseDto, UpdateExerciseDto } from '@shared/schema';
 import { ContextProvider } from '../provider/context.provider';
 import { ExercisesRepository } from '../repository/exercises.repository';
 
