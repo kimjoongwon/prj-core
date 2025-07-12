@@ -8,23 +8,23 @@ import {
   Patch,
   Post,
   Query,
-} from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   CategoryDto,
   type CreateCategoryDto,
   type QueryCategoryDto,
   ResponseEntity,
   type UpdateCategoryDto,
-} from "@shared/schema";
-import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../decorator";
-import type { CategoriesService } from "../service/services";
+} from '@shared/schema';
+import { plainToInstance } from 'class-transformer';
+import { ApiResponseEntity, Auth } from '../decorator';
+import type { CategoriesService } from '../service/services';
 
-@ApiTags("CATEGORIES")
+@ApiTags('CATEGORIES')
 @Controller()
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) { }
+  constructor(private readonly categoriesService: CategoriesService) {}
   @Auth([])
   @ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
   @Get()
@@ -67,19 +67,16 @@ export class CategoriesController {
 
   @Auth()
   @ApiResponseEntity(CategoryDto)
-  @Patch(":categoryId")
+  @Patch(':categoryId')
   async updateCategoryById(
     @Param('categoryId') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
+    @Body() updateCategoryDto: UpdateCategoryDto
   ) {
-    const category = await this.categoriesService.updateById(
-      id,
-      updateCategoryDto,
-    );
+    const category = await this.categoriesService.updateById(id, updateCategoryDto);
     return new ResponseEntity(
       HttpStatus.OK,
-      "Category updated",
-      plainToInstance(CategoryDto, category),
+      'Category updated',
+      plainToInstance(CategoryDto, category)
     );
   }
 
