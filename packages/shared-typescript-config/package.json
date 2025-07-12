@@ -1,0 +1,26 @@
+{
+  "name": "@shared/typescript-config",
+  "version": "1.0.0",
+  "description": "Shared TypeScript configuration",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./base.json",
+    "./react": "./react.json",
+    "./node": "./node.json"
+  },
+  "scripts": {
+    "build": "echo 'No build needed for config package'",
+    "test": "echo 'No tests for config package'"
+  },
+  "keywords": ["typescript", "config", "shared"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

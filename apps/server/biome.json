@@ -1,3 +1,3 @@
 {
-  "extends": ["@shared/config/biome/node"]
+  "extends": ["@shared/biome-config/node"]
 }

@@ -43,7 +43,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
-    "@shared/config": "workspace:*",
+    "@shared/typescript-config": "workspace:*",
+    "@shared/biome-config": "workspace:*",
     "@shared/types": "workspace:*",
     "@types/pluralize": "^0.0.33",
     "@types/react": "^19.1.2",
