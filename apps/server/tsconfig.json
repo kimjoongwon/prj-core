@@ -1,5 +1,5 @@
 {
-  "extends": "@shared/config/typescript/node",
+  "extends": "@shared/typescript-config/node",
   "compilerOptions": {
     "paths": {
       "@shared": [

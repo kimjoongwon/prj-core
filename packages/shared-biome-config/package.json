@@ -1,0 +1,26 @@
+{
+  "name": "@shared/biome-config",
+  "version": "1.0.0",
+  "description": "Shared Biome configuration",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./base.json",
+    "./react": "./react.json",
+    "./node": "./node.json"
+  },
+  "scripts": {
+    "build": "echo 'No build needed for config package'",
+    "test": "echo 'No tests for config package'"
+  },
+  "keywords": ["biome", "config", "shared"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": "^1.9.0"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "extends": "@shared/config/typescript/react",
+  "extends": "@shared/typescript-config/react",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
   },

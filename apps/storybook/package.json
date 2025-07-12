@@ -23,7 +23,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
     "@chromatic-com/storybook": "^4",
-    "@shared/config": "workspace:*",
+    "@shared/typescript-config": "workspace:*",
+    "@shared/biome-config": "workspace:*",
     "@storybook/addon-a11y": "^9.0.10",
     "@storybook/addon-docs": "^9.0.10",
     "@storybook/addon-onboarding": "^9.0.10",
