@@ -15,7 +15,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import {
   type CreateUserDto,
-  GroundDto,
   type QueryUserDto,
   type UpdateUserDto,
   UserDto,
@@ -31,7 +30,7 @@ import { UsersService } from '../service/users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly service: UsersService) {}
+  constructor(private readonly service: UsersService) { }
 
   @Post()
   @Auth([])

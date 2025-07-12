@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { PrismaClient } from '../client';
-import type { CreateInput, UpdateInput } from '../types';
 
 describe('PrismaClient', () => {
   it('should create PrismaClient instance', () => {

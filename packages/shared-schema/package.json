@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "Shared schema, DTOs and entities for the core project",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./src/index.ts",
   "files": [
     "dist/**/*",
     "prisma/**/*"

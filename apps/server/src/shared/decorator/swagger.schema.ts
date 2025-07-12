@@ -79,9 +79,9 @@ function ApiFileDecorator(
     for (const file of files) {
       properties[file.name] = file.isArray
         ? {
-            type: 'array',
-            items: fileSchema,
-          }
+          type: 'array',
+          items: fileSchema,
+        }
         : fileSchema;
     }
 
