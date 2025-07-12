@@ -23,7 +23,7 @@ const COOKIE_CONFIG = {
 @Controller()
 export class AppBuilderController {
   private readonly logger = new Logger(AppBuilderController.name);
-  constructor(private readonly appBuilderService: AppBuilderService) {}
+  constructor(private readonly appBuilderService: AppBuilderService) { }
 
   @Get()
   @Auth([], { public: true })
