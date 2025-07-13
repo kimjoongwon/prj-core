@@ -1,42 +1,42 @@
-import { RouteBuilder } from '@shared/types';
+import { RouteBuilder } from "@shared/types";
 // Import RㅇUTE_NAMES from shared vars
-import { ROUTE_NAMES } from '@shared/vars';
+import { ROUTE_NAMES } from "@shared/vars";
 
-import { getCategoriesPage } from '../pages/categories.page';
-import { getCategoryPage } from '../pages/category.page';
-import { getDashboardPage } from '../pages/dashboard.page';
-import { getGroundMembersPage } from '../pages/ground-members.page';
-import { getGroundPage } from '../pages/ground.page';
-import { getGroundsPage } from '../pages/grounds.page';
-import { getGroupPage } from '../pages/group.page';
-import { getGroupsPage } from '../pages/groups.page';
+import { getCategoriesPage } from "../pages/categories.page";
+import { getCategoryPage } from "../pages/category.page";
+import { getDashboardPage } from "../pages/dashboard.page";
+import { getGroundPage } from "../pages/ground.page";
+import { getGroundMembersPage } from "../pages/ground-members.page";
+import { getGroundsPage } from "../pages/grounds.page";
+import { getGroupPage } from "../pages/group.page";
+import { getGroupsPage } from "../pages/groups.page";
 // Import page functions
-import { getLoginPage } from '../pages/login.page';
-import { getTenantSelectPage } from '../pages/tenant-select.page';
-import { getUsersPage } from '../pages/users.page';
+import { getLoginPage } from "../pages/login.page";
+import { getTenantSelectPage } from "../pages/tenant-select.page";
+import { getUsersPage } from "../pages/users.page";
 
 export const rawRoutes: RouteBuilder[] = [
   {
     name: ROUTE_NAMES.ADMIN,
-    relativePath: 'admin',
+    relativePath: "admin",
     children: [
       {
         name: ROUTE_NAMES.AUTH,
-        relativePath: 'auth',
+        relativePath: "auth",
         layout: {
-          type: 'Auth',
+          type: "Auth",
         },
         children: [
           {
             name: ROUTE_NAMES.LOGIN,
-            relativePath: 'login',
+            relativePath: "login",
             page: getLoginPage(),
             children: [
               {
                 name: ROUTE_NAMES.TENANT_SELECT,
-                relativePath: 'tenant-select',
+                relativePath: "tenant-select",
                 layout: {
-                  type: 'Modal',
+                  type: "Modal",
                 },
                 page: getTenantSelectPage(),
               },
@@ -46,80 +46,80 @@ export const rawRoutes: RouteBuilder[] = [
       },
       {
         name: ROUTE_NAMES.DASHBOARD,
-        relativePath: 'dashboard',
-        icon: 'LayoutDashboard',
+        relativePath: "dashboard",
+        icon: "LayoutDashboard",
         layout: {
-          type: 'Dashboard',
+          type: "Dashboard",
         },
         page: getDashboardPage(),
         children: [
           {
             name: ROUTE_NAMES.USER_SERVICE,
-            relativePath: 'user-service',
-            icon: 'Users',
+            relativePath: "user-service",
+            icon: "Users",
             children: [
               {
                 name: ROUTE_NAMES.USERS,
-                relativePath: 'users',
-                icon: 'User',
+                relativePath: "users",
+                icon: "User",
                 page: getUsersPage(),
               },
             ],
           },
           {
             name: ROUTE_NAMES.SPACE_SERVICE,
-            relativePath: 'space-service',
-            icon: 'MapPin',
+            relativePath: "space-service",
+            icon: "MapPin",
             children: [
               {
                 name: ROUTE_NAMES.GROUND_LIST,
-                relativePath: 'grounds',
+                relativePath: "grounds",
                 layout: {
-                  type: 'Root',
+                  type: "Root",
                 },
-                icon: 'Map',
+                icon: "Map",
                 page: getGroundsPage(),
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND,
-                    relativePath: ':groundId',
-                    icon: 'MapPin',
+                    relativePath: ":groundId",
+                    icon: "MapPin",
                     layout: {
-                      name: '그라운드',
-                      type: 'Modal',
+                      name: "그라운드",
+                      type: "Modal",
                     },
                     page: {
                       elements: [
                         {
-                          name: 'Outlet',
+                          name: "Outlet",
                         },
                       ],
                     },
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_CREATE,
-                        relativePath: 'create',
-                        icon: 'Edit',
-                        page: getGroundPage('create'),
+                        relativePath: "create",
+                        icon: "Edit",
+                        page: getGroundPage("create"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_DETAIL,
-                        relativePath: 'detail',
-                        icon: 'Edit',
+                        relativePath: "detail",
+                        icon: "Edit",
                         layout: {
-                          type: 'Tab',
+                          type: "Tab",
                           tabs: {
-                            defaultTab: 'info',
+                            defaultTab: "info",
                             options: [
                               {
-                                key: 'info',
-                                text: '상세',
-                                value: 'info',
+                                key: "info",
+                                text: "상세",
+                                value: "info",
                               },
                               {
-                                key: 'members',
-                                text: '멤버',
-                                value: 'members',
+                                key: "members",
+                                text: "멤버",
+                                value: "members",
                               },
                             ],
                           },
@@ -127,21 +127,21 @@ export const rawRoutes: RouteBuilder[] = [
                         children: [
                           {
                             name: ROUTE_NAMES.GROUND_DETAIL_INFO,
-                            relativePath: 'info',
-                            page: getGroundPage('detail'),
+                            relativePath: "info",
+                            page: getGroundPage("detail"),
                           },
                           {
                             name: ROUTE_NAMES.GROUND_MEMBER_LIST,
-                            relativePath: 'members',
+                            relativePath: "members",
                             page: getGroundMembersPage(),
                           },
                         ],
                       },
                       {
                         name: ROUTE_NAMES.GROUND_MODIFY,
-                        relativePath: 'modify',
-                        icon: 'Edit',
-                        page: getGroundPage('modify'),
+                        relativePath: "modify",
+                        icon: "Edit",
+                        page: getGroundPage("modify"),
                       },
                     ],
                   },
@@ -149,50 +149,50 @@ export const rawRoutes: RouteBuilder[] = [
               },
               {
                 name: ROUTE_NAMES.GROUND_CATEGORY,
-                relativePath: 'categories',
-                icon: 'Folder',
-                page: getCategoriesPage('Space'),
+                relativePath: "categories",
+                icon: "Folder",
+                page: getCategoriesPage("Space"),
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_CATEGORY,
-                    relativePath: ':categoryId',
-                    icon: 'FolderOpen',
+                    relativePath: ":categoryId",
+                    icon: "FolderOpen",
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_CREATE,
-                        relativePath: 'create',
-                        icon: 'Edit',
+                        relativePath: "create",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getCategoryPage('create', 'Space'),
+                        page: getCategoryPage("create", "Space"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_DETAIL,
-                        relativePath: 'detail',
-                        icon: 'Edit',
+                        relativePath: "detail",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getCategoryPage('detail', 'Space'),
+                        page: getCategoryPage("detail", "Space"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_MODIFY,
-                        relativePath: 'modify',
-                        icon: 'Edit',
+                        relativePath: "modify",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getCategoryPage('modify', 'Space'),
+                        page: getCategoryPage("modify", "Space"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_CATEGORY_ADD,
-                        relativePath: 'add',
-                        icon: 'Edit',
+                        relativePath: "add",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getCategoryPage('add', 'Space'),
+                        page: getCategoryPage("add", "Space"),
                       },
                     ],
                   },
@@ -200,41 +200,41 @@ export const rawRoutes: RouteBuilder[] = [
               },
               {
                 name: ROUTE_NAMES.GROUND_GROUP,
-                relativePath: 'groups',
-                icon: 'Group',
-                page: getGroupsPage('Space'),
+                relativePath: "groups",
+                icon: "Group",
+                page: getGroupsPage("Space"),
                 children: [
                   {
                     name: ROUTE_NAMES.GROUND_GROUP,
-                    relativePath: ':groupId',
-                    icon: 'Users',
+                    relativePath: ":groupId",
+                    icon: "Users",
                     children: [
                       {
                         name: ROUTE_NAMES.GROUND_GROUP_CREATE,
-                        relativePath: 'create',
-                        icon: 'Edit',
+                        relativePath: "create",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getGroupPage('create', 'Space'),
+                        page: getGroupPage("create", "Space"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_GROUP_DETAIL,
-                        relativePath: 'detail',
-                        icon: 'Edit',
+                        relativePath: "detail",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getGroupPage('detail', 'Space'),
+                        page: getGroupPage("detail", "Space"),
                       },
                       {
                         name: ROUTE_NAMES.GROUND_GROUP_MODIFY,
-                        relativePath: 'modify',
-                        icon: 'Edit',
+                        relativePath: "modify",
+                        icon: "Edit",
                         layout: {
-                          type: 'Modal',
+                          type: "Modal",
                         },
-                        page: getGroupPage('modify', 'Space'),
+                        page: getGroupPage("modify", "Space"),
                       },
                     ],
                   },

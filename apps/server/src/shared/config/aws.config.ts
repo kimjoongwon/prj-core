@@ -1,7 +1,7 @@
-import { registerAs } from '@nestjs/config';
-import { ValidationUtil } from '@shared/utils';
-import { IsString } from 'class-validator';
-import { AwsConfig } from './config.type';
+import { registerAs } from "@nestjs/config";
+import { ValidationUtil } from "@shared/utils";
+import { IsString } from "class-validator";
+import { AwsConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
   @IsString()
@@ -17,7 +17,7 @@ class EnvironmentVariablesValidator {
   AWS_S3_BUCKET_NAME!: string;
 }
 
-export default registerAs<AwsConfig>('aws', () => {
+export default registerAs<AwsConfig>("aws", () => {
   ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {

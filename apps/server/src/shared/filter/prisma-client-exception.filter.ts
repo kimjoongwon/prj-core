@@ -4,11 +4,11 @@ import {
   HttpException,
   type HttpServer,
   HttpStatus,
-} from '@nestjs/common';
-import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from '@nestjs/core';
-import { Prisma, ResponseEntity } from '@shared/schema';
+} from "@nestjs/common";
+import { APP_FILTER, BaseExceptionFilter, HttpAdapterHost } from "@nestjs/core";
+import { Prisma, ResponseEntity } from "@shared/schema";
 
-export declare type GqlContextType = 'graphql';
+export declare type GqlContextType = "graphql";
 
 export type ErrorCodesStatusMapping = {
   [key: string]:
@@ -77,24 +77,24 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
 
   private catchClientKnownRequestError(
     exception: Prisma.PrismaClientKnownRequestError,
-    host: ArgumentsHost
+    host: ArgumentsHost,
   ) {
     const statusCode = this.userDefinedStatusCode(exception) || this.defaultStatusCode(exception);
 
     const message =
       this.userDefinedExceptionMessage(exception) || this.defaultExceptionMessage(exception);
 
-    if (host.getType() === 'http') {
+    if (host.getType() === "http") {
       if (statusCode === undefined) {
         return super.catch(exception, host);
       }
 
       return super.catch(
         new HttpException(ResponseEntity.WITH_ERROR(statusCode, message), statusCode),
-        host
+        host,
       );
     }
-    if (host.getType<GqlContextType>() === 'graphql') {
+    if (host.getType<GqlContextType>() === "graphql") {
       // for graphql requests
       if (statusCode === undefined) {
         return exception;
@@ -105,10 +105,10 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
   }
 
   private userDefinedStatusCode(
-    exception: Prisma.PrismaClientKnownRequestError
+    exception: Prisma.PrismaClientKnownRequestError,
   ): number | undefined {
     const userDefinedValue = this.userDefinedMapping?.[exception.code];
-    return typeof userDefinedValue === 'number' ? userDefinedValue : userDefinedValue?.statusCode;
+    return typeof userDefinedValue === "number" ? userDefinedValue : userDefinedValue?.statusCode;
   }
 
   private defaultStatusCode(exception: Prisma.PrismaClientKnownRequestError): number | undefined {
@@ -116,20 +116,20 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
   }
 
   private userDefinedExceptionMessage(
-    exception: Prisma.PrismaClientKnownRequestError
+    exception: Prisma.PrismaClientKnownRequestError,
   ): string | undefined {
     const userDefinedValue = this.userDefinedMapping?.[exception.code];
-    return typeof userDefinedValue === 'number' ? undefined : userDefinedValue?.errorMessage;
+    return typeof userDefinedValue === "number" ? undefined : userDefinedValue?.errorMessage;
   }
 
   private defaultExceptionMessage(exception: Prisma.PrismaClientKnownRequestError): string {
-    const shortMessage = exception.message.substring(exception.message.indexOf('→'));
-    return `[${exception.code}]: ${shortMessage.substring(shortMessage.indexOf('\n')).replace(/\n/g, '').trim()}`;
+    const shortMessage = exception.message.substring(exception.message.indexOf("→"));
+    return `[${exception.code}]: ${shortMessage.substring(shortMessage.indexOf("\n")).replace(/\n/g, "").trim()}`;
   }
 }
 
 export function providePrismaClientExceptionFilter(
-  errorCodesStatusMapping?: ErrorCodesStatusMapping
+  errorCodesStatusMapping?: ErrorCodesStatusMapping,
 ) {
   return {
     provide: APP_FILTER,

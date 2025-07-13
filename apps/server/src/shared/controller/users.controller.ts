@@ -11,21 +11,21 @@ import {
   Post,
   Query,
   Req,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   type CreateUserDto,
   type QueryUserDto,
   ResponseEntity,
   type UpdateUserDto,
   UserDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { Request } from 'express';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { UsersService } from '../service/users.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { Request } from "express";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { UsersService } from "../service/users.service";
 
-@ApiTags('USERS')
+@ApiTags("USERS")
 @Controller()
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
@@ -40,58 +40,58 @@ export class UsersController {
     const user = await this.service.create({
       data: createUserDto,
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(UserDto, user));
   }
 
-  @Get(':userId')
+  @Get(":userId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
-  async getUser(@Param('userId') userId: string) {
+  async getUser(@Param("userId") userId: string) {
     const user = await this.service.getUnique({
       where: { id: userId },
       include: { tenants: true },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(UserDto, user));
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
   async removeUsers(@Body() userIds: string[]) {
     const users = await this.service.removeMany(userIds);
-    return new ResponseEntity(HttpStatus.OK, '성공', users.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", users.count);
   }
 
-  @Patch(':userId')
+  @Patch(":userId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
-  async updateUser(@Param('userId') userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(@Param("userId") userId: string, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.service.update({
       where: { id: userId },
       data: updateUserDto,
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(UserDto, user));
   }
 
-  @Patch(':userId/removedAt')
+  @Patch(":userId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
-  async removeUser(@Param('userId') userId: string) {
+  async removeUser(@Param("userId") userId: string) {
     const user = await this.service.remove(userId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(UserDto, user));
   }
 
-  @Delete(':userId')
+  @Delete(":userId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserDto, HttpStatus.OK)
-  async deleteUser(@Param('userId') userId: string) {
+  async deleteUser(@Param("userId") userId: string) {
     const user = await this.service.delete({ where: { id: userId } });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(UserDto, user));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(UserDto, user));
   }
 
   @Get()
@@ -113,14 +113,14 @@ export class UsersController {
 
       return new ResponseEntity(
         HttpStatus.OK,
-        'success',
+        "success",
         users.map((user) => user?.toDto?.() ?? user),
-        query.toPageMetaDto(count)
+        query.toPageMetaDto(count),
       );
     } catch (error) {
       this.logger.error(
         `Error in getUsersByQuery: ${error instanceof Error ? error.message : String(error)}`,
-        error instanceof Error ? error.stack : ''
+        error instanceof Error ? error.stack : "",
       );
       throw error;
     }

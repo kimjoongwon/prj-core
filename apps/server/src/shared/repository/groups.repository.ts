@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Group, Prisma } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { Group, Prisma } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(Group)
@@ -23,6 +23,6 @@ export class GroupsRepository extends BaseRepository<
   Group
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'Group');
+    super(prisma, "Group");
   }
 }

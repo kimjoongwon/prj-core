@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTenantDto, Prisma, QueryTenantDto, Tenant, UpdateTenantDto } from '@shared/schema';
-import { ContextProvider } from '../provider';
-import { TenantsRepository } from '../repository/tenants.repository';
+import { Injectable } from "@nestjs/common";
+import { CreateTenantDto, Prisma, QueryTenantDto, Tenant, UpdateTenantDto } from "@shared/schema";
+import { ContextProvider } from "../provider";
+import { TenantsRepository } from "../repository/tenants.repository";
 
 @Injectable()
 export class TenantsService {
@@ -80,7 +80,7 @@ export class TenantsService {
 
   async getManyByQuery(query: QueryTenantDto): Promise<{ tenants: Tenant[]; count: number }> {
     const currentUser = ContextProvider.getAuthUser();
-    console.log('Current User:', currentUser);
+    console.log("Current User:", currentUser);
     const args = query?.toArgs({
       where: {
         userId: currentUser?.id,

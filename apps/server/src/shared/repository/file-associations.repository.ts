@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { FileAssociation, Prisma } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { FileAssociation, Prisma } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(FileAssociation)
@@ -23,6 +23,6 @@ export class FileAssociationsRepository extends BaseRepository<
   FileAssociation
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'FileAssociation');
+    super(prisma, "FileAssociation");
   }
 }

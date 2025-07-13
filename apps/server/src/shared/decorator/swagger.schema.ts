@@ -1,20 +1,20 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
-import { Type, UseInterceptors, applyDecorators } from '@nestjs/common';
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
+import { applyDecorators, Type, UseInterceptors } from "@nestjs/common";
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
+import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from "@nestjs/swagger";
 import {
   ReferenceObject,
   SchemaObject,
-} from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { Many, castArray, mapValues } from 'lodash';
+} from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
+import { castArray, Many, mapValues } from "lodash";
 
 export interface IApiFile {
   name: string;
   isArray?: boolean;
 }
 
-const PARAMTYPES_METADATA = 'design:paramtypes';
+const PARAMTYPES_METADATA = "design:paramtypes";
 
 function reverseObjectKeys(originalObject: Record<string, any>): Record<string, any> {
   const reversedObject: any = {};
@@ -27,13 +27,13 @@ function reverseObjectKeys(originalObject: Record<string, any>): Record<string, 
   return reversedObject;
 }
 
-const ROUTE_ARGS_METADATA = '__routeArguments__';
+const ROUTE_ARGS_METADATA = "__routeArguments__";
 
 function explore(instance: object, propertyKey: string | symbol) {
   const types: Array<Type<unknown>> = Reflect.getMetadata(
     PARAMTYPES_METADATA,
     instance,
-    propertyKey
+    propertyKey,
   );
   const routeArgsMetadata =
     Reflect.getMetadata(ROUTE_ARGS_METADATA, instance.constructor, propertyKey) || {};
@@ -45,7 +45,7 @@ function explore(instance: object, propertyKey: string | symbol) {
   }));
 
   for (const [key, value] of Object.entries(parametersWithType)) {
-    const keyPair = key.split(':');
+    const keyPair = key.split(":");
 
     if (Number(keyPair[0]) === 3) {
       return value.type;
@@ -65,20 +65,20 @@ function RegisterModels(): MethodDecorator {
 
 function ApiFileDecorator(
   files: IApiFile[] = [],
-  options: Partial<{ isRequired: boolean }> = {}
+  options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
   return (target, propertyKey, descriptor: PropertyDescriptor) => {
     const { isRequired = false } = options;
     const fileSchema: SchemaObject = {
-      type: 'string',
-      format: 'binary',
+      type: "string",
+      format: "binary",
     };
     const properties: Record<string, SchemaObject | ReferenceObject> = {};
 
     for (const file of files) {
       properties[file.name] = file.isArray
         ? {
-            type: 'array',
+            type: "array",
             items: fileSchema,
           }
         : fileSchema;
@@ -86,7 +86,7 @@ function ApiFileDecorator(
 
     let schema: SchemaObject = {
       properties,
-      type: 'object',
+      type: "object",
     };
     const body = explore(target, propertyKey);
 
@@ -96,7 +96,7 @@ function ApiFileDecorator(
           {
             $ref: getSchemaPath(body),
           },
-          { properties, type: 'object' },
+          { properties, type: "object" },
         ],
       };
     }
@@ -110,15 +110,15 @@ function ApiFileDecorator(
 
 export function ApiFile(
   files: Many<IApiFile>,
-  options: Partial<{ isRequired: boolean }> = {}
+  options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
   const filesArray = castArray(files);
   const fileNames = filesArray.map((file) => ({ name: file.name }));
 
   return applyDecorators(
     RegisterModels(),
-    ApiConsumes('multipart/form-data'),
+    ApiConsumes("multipart/form-data"),
     ApiFileDecorator(filesArray, options),
-    UseInterceptors(FileFieldsInterceptor(fileNames))
+    UseInterceptors(FileFieldsInterceptor(fileNames)),
   );
 }

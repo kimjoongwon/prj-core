@@ -1,3 +1,16 @@
 {
-  "extends": ["@shared/biome-config/node"]
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "extends": ["../../biome.json"],
+  "linter": {
+    "rules": {
+      "correctness": {
+        "useHookAtTopLevel": "off",
+        "noUnusedImports": "off",
+        "noUnusedPrivateClassMembers": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
+      }
+    }
+  }
 }

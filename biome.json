@@ -1,16 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "a11y": {
-        "recommended": true,
-        "noSvgWithoutTitle": "off"
-      },
       "style": {
         "noNonNullAssertion": "off",
-        "useImportType": "error",
+        "useImportType": "off",
         "useConst": "error"
       },
       "suspicious": {
@@ -22,7 +17,9 @@
         "useHookAtTopLevel": "error"
       },
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "noStaticOnlyClass": "off",
+        "noBannedTypes": "off"
       },
       "nursery": {
         "useSortedClasses": "off"
@@ -39,21 +36,8 @@
     "attributePosition": "auto"
   },
   "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "es5",
-      "semicolons": "always",
-      "arrowParentheses": "always",
-      "bracketSpacing": true,
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto"
-    }
-  },
-  "json": {
-    "formatter": {
-      "enabled": true
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
     }
   }
 }

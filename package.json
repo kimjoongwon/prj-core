@@ -13,5 +13,8 @@
     "format": "turbo format",
     "test": "turbo test"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.6.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6"
+  }
 }

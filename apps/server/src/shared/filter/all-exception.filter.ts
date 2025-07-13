@@ -1,6 +1,6 @@
-import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
-import { BaseExceptionFilter } from '@nestjs/core';
-import { ResponseEntity } from '@shared/schema';
+import { ArgumentsHost, Catch, HttpException } from "@nestjs/common";
+import { BaseExceptionFilter } from "@nestjs/core";
+import { ResponseEntity } from "@shared/schema";
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
@@ -10,11 +10,11 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         ResponseEntity.WITH_ERROR<object | string>(
           exception?.getStatus?.(),
           exception.message,
-          typeof exception?.getResponse?.() === 'object' ? exception.getResponse() : null
+          typeof exception?.getResponse?.() === "object" ? exception.getResponse() : null,
         ),
-        exception?.getStatus?.()
+        exception?.getStatus?.(),
       ),
-      host
+      host,
     );
   }
 }

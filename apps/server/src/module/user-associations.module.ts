@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { UserAssociationsController } from '@shared';
+import { Module } from "@nestjs/common";
+import { UserAssociationsController } from "@shared";
 
 @Module({
   controllers: [UserAssociationsController],

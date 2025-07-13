@@ -1,15 +1,15 @@
-import { LanguageCode, TenantDto, UserDto } from '@shared/schema';
-import { PageTypes } from '@shared/types';
-import { ClsServiceManager } from 'nestjs-cls';
+import { LanguageCode, TenantDto, UserDto } from "@shared/schema";
+import { PageTypes } from "@shared/types";
+import { ClsServiceManager } from "nestjs-cls";
 
 export class ContextProvider {
-  private static readonly nameSpace = 'request';
+  private static readonly nameSpace = "request";
 
-  private static readonly authUserKey = 'user_key';
+  private static readonly authUserKey = "user_key";
 
-  private static readonly languageKey = 'language_key';
+  private static readonly languageKey = "language_key";
 
-  private static readonly tenantKey = 'tenant_key';
+  private static readonly tenantKey = "tenant_key";
 
   private static get<T>(key: string) {
     const store = ClsServiceManager.getClsService();
@@ -41,26 +41,26 @@ export class ContextProvider {
   }
 
   static setTanancyId(tenantId: string): void {
-    ContextProvider.set('tenantId', tenantId);
+    ContextProvider.set("tenantId", tenantId);
   }
 
   static setServiceId(serviceId: string): void {
-    ContextProvider.set('serviceId', serviceId);
+    ContextProvider.set("serviceId", serviceId);
   }
 
   static getServiceId(): string {
-    return ContextProvider.get('serviceId');
+    return ContextProvider.get("serviceId");
   }
 
   static getTenancyId(): string {
-    return ContextProvider.get('tenantId');
+    return ContextProvider.get("tenantId");
   }
 
   static setTenantId(tenantId: string): void {
-    ContextProvider.set('tenantId', tenantId);
+    ContextProvider.set("tenantId", tenantId);
   }
   static getTenantId(): string {
-    return ContextProvider.get('tenantId');
+    return ContextProvider.get("tenantId");
   }
 
   static getLanguage(): LanguageCode | undefined {
@@ -72,11 +72,11 @@ export class ContextProvider {
   }
 
   static setAuthUserId(userId: string): void {
-    ContextProvider.set('userId', userId);
+    ContextProvider.set("userId", userId);
   }
 
   static getAuthUserId(): string {
-    return ContextProvider.get('userId');
+    return ContextProvider.get("userId");
   }
 
   static getTenant(): TenantDto | undefined {
@@ -84,39 +84,39 @@ export class ContextProvider {
   }
 
   static setToken(token: string): void {
-    ContextProvider.set('token', token);
+    ContextProvider.set("token", token);
   }
   static getToken(): string {
-    return ContextProvider.get('token');
+    return ContextProvider.get("token");
   }
 
   static setServiceName(serviceName: string): void {
-    ContextProvider.set('serviceName', serviceName);
+    ContextProvider.set("serviceName", serviceName);
   }
   static getServiceName(): string {
-    return ContextProvider.get('serviceName');
+    return ContextProvider.get("serviceName");
   }
 
   static setPageContext(pageContext: PageTypes): void {
-    ContextProvider.set('pageContext', pageContext);
+    ContextProvider.set("pageContext", pageContext);
   }
 
   static getPageContext(): PageTypes {
-    return ContextProvider.get('pageContext');
+    return ContextProvider.get("pageContext");
   }
 
   static setSpaceId(spaceId: string): void {
-    ContextProvider.set('spaceId', spaceId);
+    ContextProvider.set("spaceId", spaceId);
   }
 
   static getSpaceId(): string {
-    return ContextProvider.get('spaceId');
+    return ContextProvider.get("spaceId");
   }
 
   static getSpaceNumber(): string {
-    return ContextProvider.get('spaceNumber');
+    return ContextProvider.get("spaceNumber");
   }
   static setSpaceNumber(spaceNumber: string): void {
-    ContextProvider.set('spaceNumber', spaceNumber);
+    ContextProvider.set("spaceNumber", spaceNumber);
   }
 }

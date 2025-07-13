@@ -1,19 +1,19 @@
-import { HttpCode, HttpStatus, Type, applyDecorators } from '@nestjs/common';
-import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { ResponseEntity } from '@shared/schema';
+import { applyDecorators, HttpCode, HttpStatus, Type } from "@nestjs/common";
+import { ApiExtraModels, ApiResponse, getSchemaPath } from "@nestjs/swagger";
+import { ResponseEntity } from "@shared/schema";
 
 export const ApiResponseEntity = <DataDto extends Type<unknown>>(
   dataDto: DataDto,
   httpStatus: HttpStatus = HttpStatus.OK,
-  options?: { isArray?: boolean }
+  options?: { isArray?: boolean },
 ) => {
   const properties = {
     httpStatus: {
-      type: 'number',
+      type: "number",
       nullable: false,
       example: httpStatus,
     },
-    message: { type: 'string', nullable: false },
+    message: { type: "string", nullable: false },
     data: { $ref: getSchemaPath(dataDto), nullable: true },
   };
 
@@ -22,20 +22,20 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
         {
           properties: {
             httpStatus: properties.httpStatus,
-            message: { type: 'string', nullable: false },
+            message: { type: "string", nullable: false },
             data: {
-              type: 'array',
+              type: "array",
               items: { $ref: getSchemaPath(dataDto) },
             },
             meta: {
-              type: 'object',
+              type: "object",
               properties: {
-                skip: { type: 'number', nullable: false },
-                take: { type: 'number', nullable: false },
-                itemCount: { type: 'number', nullable: false },
-                pageCount: { type: 'number', nullable: false },
-                hasNextPage: { type: 'boolean', nullable: false },
-                hasPreviousPage: { type: 'boolean', nullable: false },
+                skip: { type: "number", nullable: false },
+                take: { type: "number", nullable: false },
+                itemCount: { type: "number", nullable: false },
+                pageCount: { type: "number", nullable: false },
+                hasNextPage: { type: "boolean", nullable: false },
+                hasPreviousPage: { type: "boolean", nullable: false },
               },
             },
           },
@@ -55,6 +55,6 @@ export const ApiResponseEntity = <DataDto extends Type<unknown>>(
         allOf,
       },
     }),
-    HttpCode(httpStatus)
+    HttpCode(httpStatus),
   );
 };

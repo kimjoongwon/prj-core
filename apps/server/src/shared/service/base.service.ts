@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { AbstractEntity, QueryDto } from '@shared/schema';
-import { BaseRepository } from '../common/base.repository';
+import { Injectable } from "@nestjs/common";
+import { AbstractEntity, QueryDto } from "@shared/schema";
+import { BaseRepository } from "../common/base.repository";
 
 // Method names that can have include configurations
-type BaseServiceMethodNames = 'getManyByQuery' | 'getById' | 'create' | 'updateById';
+type BaseServiceMethodNames = "getManyByQuery" | "getById" | "create" | "updateById";
 
 // Helper type to ensure type safety for include options
 export interface BaseServiceOptions<TInclude = any> {
@@ -41,7 +41,7 @@ export class BaseService<
 
   constructor(
     protected readonly repository: TRepository,
-    options: BaseServiceOptions<TInclude> = {}
+    options: BaseServiceOptions<TInclude> = {},
   ) {
     this.options = options;
   }

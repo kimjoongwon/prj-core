@@ -1,8 +1,8 @@
-import { Global, Module } from '@nestjs/common';
-import { repositories } from '@shared';
-import { RolesRepository } from '../shared/repository/role.repository';
-import { ExercisesService } from '../shared/service/exercises.service';
-import { FilesService } from '../shared/service/files.service';
+import { Global, Module } from "@nestjs/common";
+import { repositories } from "@shared";
+import { RolesRepository } from "../shared/repository/role.repository";
+import { ExercisesService } from "../shared/service/exercises.service";
+import { FilesService } from "../shared/service/files.service";
 import {
   AssignmentsService,
   CategoriesService,
@@ -20,8 +20,8 @@ import {
   TimelinesService,
   UserClassificationsService,
   UsersService,
-} from '../shared/service/services';
-import { TenantsService } from '../shared/service/tenants.service';
+} from "../shared/service/services";
+import { TenantsService } from "../shared/service/tenants.service";
 
 const modules = [
   ...repositories,

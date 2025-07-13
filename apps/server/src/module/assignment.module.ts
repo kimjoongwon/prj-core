@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { AssignmentsController } from '@shared';
+import { Module } from "@nestjs/common";
+import { AssignmentsController } from "@shared";
 
 @Module({
   controllers: [AssignmentsController],

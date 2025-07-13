@@ -1,10 +1,10 @@
-import { ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
-import { PUBLIC_ROUTE_KEY } from '../decorator/public-route.decorator';
+import { ExecutionContext, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { AuthGuard } from "@nestjs/passport";
+import { PUBLIC_ROUTE_KEY } from "../decorator/public-route.decorator";
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class JwtAuthGuard extends AuthGuard("jwt") {
   private readonly logger = new Logger(JwtAuthGuard.name);
 
   constructor(private reflector: Reflector) {
@@ -20,17 +20,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     this.logger.log(`Request method: ${request.method}`);
 
     if (isPublic) {
-      this.logger.log('Route is public, allowing access');
+      this.logger.log("Route is public, allowing access");
       return true;
     }
 
-    this.logger.log('Route is protected, checking JWT');
+    this.logger.log("Route is protected, checking JWT");
     return super.canActivate(context);
   }
 
   handleRequest(err: any, user: any, info: any) {
     this.logger.log(
-      `JWT handleRequest - err: ${!!err}, user: ${!!user}, info: ${JSON.stringify(info)}`
+      `JWT handleRequest - err: ${!!err}, user: ${!!user}, info: ${JSON.stringify(info)}`,
     );
 
     if (err) {
@@ -40,7 +40,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (!user) {
       this.logger.error(`JWT authentication failed - no user found. Info: ${JSON.stringify(info)}`);
-      throw new UnauthorizedException('Authentication failed');
+      throw new UnauthorizedException("Authentication failed");
     }
 
     this.logger.log(`JWT authentication successful for user: ${user.id}`);

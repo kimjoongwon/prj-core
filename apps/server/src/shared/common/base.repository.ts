@@ -1,8 +1,8 @@
-import { Logger } from '@nestjs/common';
-import { Prisma } from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { PrismaService } from 'nestjs-prisma';
-import { Constructor } from '../decorator/use-dto.decorator';
+import { Logger } from "@nestjs/common";
+import { Prisma } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { PrismaService } from "nestjs-prisma";
+import { Constructor } from "../decorator/use-dto.decorator";
 
 export class BaseRepository<
   CreateArgs,
@@ -25,7 +25,7 @@ export class BaseRepository<
 
   constructor(
     readonly prisma: PrismaService,
-    readonly model: Prisma.ModelName
+    readonly model: Prisma.ModelName,
   ) {
     this.logger = new Logger(this.model);
   }

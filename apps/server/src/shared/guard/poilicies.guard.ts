@@ -1,12 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { CanActivate, ExecutionContext, Injectable, SetMetadata } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 
 // import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory/casl-ability.factory';
 
 // Temporary type definition
 type AppAbility = any;
 
-export const CHECK_POLICIES_KEY = 'check_policy';
+export const CHECK_POLICIES_KEY = "check_policy";
 
 export const CheckPolicies = (handlers: PolicyHandler[]) =>
   SetMetadata(CHECK_POLICIES_KEY, handlers);
@@ -22,11 +22,11 @@ export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 @Injectable()
 export class PoliciesGuard implements CanActivate {
   constructor(
-    private reflector: Reflector
+    private reflector: Reflector,
     // private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  async canActivate(_context: ExecutionContext): Promise<boolean> {
     // const policyHandlers =
     //   this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
 

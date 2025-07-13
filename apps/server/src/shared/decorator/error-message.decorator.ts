@@ -1,6 +1,6 @@
-import 'reflect-metadata';
+import "reflect-metadata";
 
-const ERROR_MESSAGE_KEY = Symbol('errorMessage');
+const ERROR_MESSAGE_KEY = Symbol("errorMessage");
 
 export function ErrorMessage(message): PropertyDecorator {
   return (target: Object, propertyKey: string | symbol) => {

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSubjectDto, Prisma, QuerySubjectDto } from '@shared/schema';
-import { SubjectsRepository } from '../repository/subjects.repository';
+import { Injectable } from "@nestjs/common";
+import { CreateSubjectDto, Prisma, QuerySubjectDto } from "@shared/schema";
+import { SubjectsRepository } from "../repository/subjects.repository";
 
 @Injectable()
 export class SubjectsService {

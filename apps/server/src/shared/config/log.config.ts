@@ -1,4 +1,4 @@
-import { LogLevel } from '@nestjs/common';
+import { LogLevel } from "@nestjs/common";
 
 export interface LogConfig {
   level: LogLevel[];
@@ -9,12 +9,12 @@ export interface LogConfig {
 }
 
 export const getLogConfig = (): LogConfig => {
-  const isDevelopment = process.env.NODE_ENV !== 'production';
-  const isTest = process.env.NODE_ENV === 'test';
+  const isDevelopment = process.env.NODE_ENV !== "production";
+  const isTest = process.env.NODE_ENV === "test";
 
   if (isTest) {
     return {
-      level: ['error'],
+      level: ["error"],
       timestamp: false,
       colorize: false,
       context: false,
@@ -24,7 +24,7 @@ export const getLogConfig = (): LogConfig => {
 
   if (isDevelopment) {
     return {
-      level: ['debug', 'log', 'warn', 'error'],
+      level: ["debug", "log", "warn", "error"],
       timestamp: true,
       colorize: true,
       context: true,
@@ -34,7 +34,7 @@ export const getLogConfig = (): LogConfig => {
 
   // Production
   return {
-    level: ['log', 'warn', 'error'],
+    level: ["log", "warn", "error"],
     timestamp: true,
     colorize: false,
     context: false,

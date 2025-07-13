@@ -1,16 +1,16 @@
 import {
-  ValidateIf,
-  type ValidationOptions,
   IsPhoneNumber as isPhoneNumber,
   registerDecorator,
-} from 'class-validator';
-import { isString } from 'lodash';
+  ValidateIf,
+  type ValidationOptions,
+} from "class-validator";
+import { isString } from "lodash";
 
 export function IsPassword(validationOptions?: ValidationOptions): PropertyDecorator {
   return (object, propertyName) => {
     registerDecorator({
       propertyName: propertyName as string,
-      name: 'isPassword',
+      name: "isPassword",
       target: object.constructor,
       constraints: [],
       options: validationOptions,
@@ -26,10 +26,10 @@ export function IsPassword(validationOptions?: ValidationOptions): PropertyDecor
 export function IsPhoneNumber(
   validationOptions?: ValidationOptions & {
     region?: Parameters<typeof isPhoneNumber>[0];
-  }
+  },
 ): PropertyDecorator {
   return isPhoneNumber(validationOptions?.region, {
-    message: 'error.phoneNumber',
+    message: "error.phoneNumber",
     ...validationOptions,
   });
 }
@@ -38,7 +38,7 @@ export function IsTmpKey(validationOptions?: ValidationOptions): PropertyDecorat
   return (object, propertyName) => {
     registerDecorator({
       propertyName: propertyName as string,
-      name: 'tmpKey',
+      name: "tmpKey",
       target: object.constructor,
       options: validationOptions,
       validator: {
@@ -46,7 +46,7 @@ export function IsTmpKey(validationOptions?: ValidationOptions): PropertyDecorat
           return isString(value) && /^tmp\//.test(value);
         },
         defaultMessage(): string {
-          return 'error.invalidTmpKey';
+          return "error.invalidTmpKey";
         },
       },
     });

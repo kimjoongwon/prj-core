@@ -1,5 +1,5 @@
-import { ContextProvider } from '@shared';
-import { $Enums } from '@shared/schema';
+import { ContextProvider } from "@shared";
+import { $Enums } from "@shared/schema";
 import {
   IButtonBuilder,
   InputProps,
@@ -8,11 +8,11 @@ import {
   ResourceBuilder,
   SpacerProps,
   TextProps,
-} from '@shared/types';
+} from "@shared/types";
 
 export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes): PageBuilder => {
   const formInputs = {
-    name: '',
+    name: "",
     type,
     parentId: null,
   };
@@ -20,15 +20,15 @@ export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes)
   // pageType에 따른 페이지 제목 설정
   const getPageTitle = () => {
     switch (pageType) {
-      case 'create':
-      case 'add':
-        return '카테고리 생성';
-      case 'modify':
-        return '카테고리 수정';
-      case 'detail':
-        return '카테고리 상세';
+      case "create":
+      case "add":
+        return "카테고리 생성";
+      case "modify":
+        return "카테고리 수정";
+      case "detail":
+        return "카테고리 상세";
       default:
-        return '카테고리';
+        return "카테고리";
     }
   };
 
@@ -36,48 +36,48 @@ export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes)
   const getActionButtons = () => {
     const buttons: any[] = [];
 
-    if (pageType === 'create' || pageType === 'add') {
+    if (pageType === "create" || pageType === "add") {
       buttons.push({
-        name: 'ButtonBuilder',
+        name: "ButtonBuilder",
         props: {
-          color: 'primary',
-          children: pageType === 'create' ? '생성' : '추가',
+          color: "primary",
+          children: pageType === "create" ? "생성" : "추가",
           mutation: {
-            name: 'createCategory',
-            queryKey: '/api/v1/categories',
+            name: "createCategory",
+            queryKey: "/api/v1/categories",
             validationFields: {
-              'form.inputs.name': {
-                required: { value: true, message: '카테고리 이름은 필수입니다' },
+              "form.inputs.name": {
+                required: { value: true, message: "카테고리 이름은 필수입니다" },
               },
             },
           },
           navigator: {
-            type: 'back',
+            type: "back",
           },
         } satisfies IButtonBuilder,
       });
     }
 
-    if (pageType === 'modify') {
+    if (pageType === "modify") {
       buttons.push({
-        name: 'ButtonBuilder',
+        name: "ButtonBuilder",
         props: {
-          color: 'primary',
-          children: '수정',
+          color: "primary",
+          children: "수정",
           mutation: {
-            name: 'updateCategoryById',
-            queryKey: '/api/v1/categories',
+            name: "updateCategoryById",
+            queryKey: "/api/v1/categories",
             validationFields: {
-              'form.inputs.name': {
-                required: { value: true, message: '카테고리 이름은 필수입니다' },
+              "form.inputs.name": {
+                required: { value: true, message: "카테고리 이름은 필수입니다" },
               },
             },
             pathParams: {
-              categoryId: 'categoryId', // pageState.categoryId에서 ID를 가져옴
+              categoryId: "categoryId", // pageState.categoryId에서 ID를 가져옴
             },
           },
           navigator: {
-            type: 'back',
+            type: "back",
           },
         } satisfies IButtonBuilder,
       });
@@ -87,7 +87,7 @@ export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes)
   };
 
   // pageType에 따른 Input 비활성화 설정
-  const isReadOnly = pageType === 'detail';
+  const isReadOnly = pageType === "detail";
 
   return {
     state: {
@@ -97,37 +97,37 @@ export const getCategoryPage = (pageType: PageTypes, type: $Enums.CategoryTypes)
     },
     elements: [
       {
-        name: 'ResourceBuilder',
+        name: "ResourceBuilder",
         props: {
-          resourceName: 'category',
-          type: 'resource' as const,
+          resourceName: "category",
+          type: "resource" as const,
           query: {
-            name: 'useGetCategoryById',
+            name: "useGetCategoryById",
           },
           elements: [
             {
-              name: 'VStack',
+              name: "VStack",
               props: {
-                className: 'space-y-4',
+                className: "space-y-4",
               },
               children: [
                 {
-                  name: 'Text',
+                  name: "Text",
                   props: {
                     children: getPageTitle(),
-                    variant: 'title',
+                    variant: "title",
                   } satisfies TextProps,
                 },
                 {
-                  name: 'Input',
+                  name: "Input",
                   props: {
-                    label: '이름',
-                    path: 'form.inputs.name',
+                    label: "이름",
+                    path: "form.inputs.name",
                     isReadOnly,
                   } as InputProps<any>,
                 },
                 {
-                  name: 'Spacer',
+                  name: "Spacer",
                   props: {
                     size: 4,
                   } satisfies SpacerProps,

@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, RoleClassification } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { Prisma, RoleClassification } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(RoleClassification)
@@ -23,6 +23,6 @@ export class RoleClassificationsRepository extends BaseRepository<
   RoleClassification
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'RoleClassification');
+    super(prisma, "RoleClassification");
   }
 }

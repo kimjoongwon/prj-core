@@ -9,21 +9,21 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateSpaceAssociationDto,
   QuerySpaceAssociationDto,
   ResponseEntity,
   SpaceAssociationDto,
   UpdateSpaceAssociationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { Auth } from '../decorator/auth.decorator';
-import { SpaceAssociationsService } from '../service/space-associations.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
+import { Auth } from "../decorator/auth.decorator";
+import { SpaceAssociationsService } from "../service/space-associations.service";
 
-@ApiTags('SPACE-ASSOCIATIONS')
+@ApiTags("SPACE-ASSOCIATIONS")
 @Controller()
 export class SpaceAssociationsController {
   constructor(private readonly service: SpaceAssociationsService) {}
@@ -37,27 +37,27 @@ export class SpaceAssociationsController {
 
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation)
+      "성공",
+      plainToInstance(SpaceAssociationDto, spaceAssociation),
     );
   }
 
-  @Get(':spaceAssociationId')
+  @Get(":spaceAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
-  async getSpaceAssociation(@Param('spaceAssociationId') spaceAssociationId: string) {
+  async getSpaceAssociation(@Param("spaceAssociationId") spaceAssociationId: string) {
     const spaceAssociation = await this.service.getUnique({
       where: { id: spaceAssociationId },
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation)
+      "성공",
+      plainToInstance(SpaceAssociationDto, spaceAssociation),
     );
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
@@ -66,16 +66,16 @@ export class SpaceAssociationsController {
       where: { id: { in: spaceAssociationIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', spaceAssociations.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", spaceAssociations.count);
   }
 
-  @Patch(':spaceAssociationId')
+  @Patch(":spaceAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
   async updateSpaceAssociation(
-    @Param('spaceAssociationId') spaceAssociationId: string,
-    @Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto
+    @Param("spaceAssociationId") spaceAssociationId: string,
+    @Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto,
   ) {
     const spaceAssociation = await this.service.update({
       where: { id: spaceAssociationId },
@@ -83,34 +83,34 @@ export class SpaceAssociationsController {
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation)
+      "성공",
+      plainToInstance(SpaceAssociationDto, spaceAssociation),
     );
   }
 
-  @Patch(':spaceAssociationId/removedAt')
+  @Patch(":spaceAssociationId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
-  async removeSpaceAssociation(@Param('spaceAssociationId') spaceAssociationId: string) {
+  async removeSpaceAssociation(@Param("spaceAssociationId") spaceAssociationId: string) {
     const spaceAssociation = await this.service.remove(spaceAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation)
+      "성공",
+      plainToInstance(SpaceAssociationDto, spaceAssociation),
     );
   }
 
-  @Delete(':spaceAssociationId')
+  @Delete(":spaceAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
-  async deleteSpaceAssociation(@Param('spaceAssociationId') spaceAssociationId: string) {
+  async deleteSpaceAssociation(@Param("spaceAssociationId") spaceAssociationId: string) {
     const spaceAssociation = await this.service.deleteById(spaceAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(SpaceAssociationDto, spaceAssociation)
+      "성공",
+      plainToInstance(SpaceAssociationDto, spaceAssociation),
     );
   }
 
@@ -122,9 +122,9 @@ export class SpaceAssociationsController {
     const { spaceAssociations, count } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
+      "성공",
       plainToInstance(SpaceAssociationDto, spaceAssociations),
-      query.toPageMetaDto(count)
+      query.toPageMetaDto(count),
     );
   }
 }

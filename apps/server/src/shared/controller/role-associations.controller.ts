@@ -9,21 +9,21 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateRoleAssociationDto,
   QueryRoleAssociationDto,
   ResponseEntity,
   RoleAssociationDto,
   UpdateRoleAssociationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { Auth } from '../decorator/auth.decorator';
-import { RoleAssociationsService } from '../service/role-associations.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
+import { Auth } from "../decorator/auth.decorator";
+import { RoleAssociationsService } from "../service/role-associations.service";
 
-@ApiTags('ROLE-ASSOCIATIONS')
+@ApiTags("ROLE-ASSOCIATIONS")
 @Controller()
 export class RoleAssociationsController {
   constructor(private readonly service: RoleAssociationsService) {}
@@ -37,27 +37,27 @@ export class RoleAssociationsController {
 
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation)
+      "성공",
+      plainToInstance(RoleAssociationDto, roleAssociation),
     );
   }
 
-  @Get(':roleAssociationId')
+  @Get(":roleAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
-  async getRoleAssociation(@Param('roleAssociationId') roleAssociationId: string) {
+  async getRoleAssociation(@Param("roleAssociationId") roleAssociationId: string) {
     const roleAssociation = await this.service.getUnique({
       where: { id: roleAssociationId },
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation)
+      "성공",
+      plainToInstance(RoleAssociationDto, roleAssociation),
     );
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
@@ -66,16 +66,16 @@ export class RoleAssociationsController {
       where: { id: { in: roleAssociationIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', roleAssociations.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", roleAssociations.count);
   }
 
-  @Patch(':roleAssociationId')
+  @Patch(":roleAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
   async updateRoleAssociation(
-    @Param('roleAssociationId') roleAssociationId: string,
-    @Body() updateRoleAssociationDto: UpdateRoleAssociationDto
+    @Param("roleAssociationId") roleAssociationId: string,
+    @Body() updateRoleAssociationDto: UpdateRoleAssociationDto,
   ) {
     const roleAssociation = await this.service.update({
       where: { id: roleAssociationId },
@@ -83,34 +83,34 @@ export class RoleAssociationsController {
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation)
+      "성공",
+      plainToInstance(RoleAssociationDto, roleAssociation),
     );
   }
 
-  @Patch(':roleAssociationId/removedAt')
+  @Patch(":roleAssociationId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
-  async removeRoleAssociation(@Param('roleAssociationId') roleAssociationId: string) {
+  async removeRoleAssociation(@Param("roleAssociationId") roleAssociationId: string) {
     const roleAssociation = await this.service.remove(roleAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation)
+      "성공",
+      plainToInstance(RoleAssociationDto, roleAssociation),
     );
   }
 
-  @Delete(':roleAssociationId')
+  @Delete(":roleAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
-  async deleteRoleAssociation(@Param('roleAssociationId') roleAssociationId: string) {
+  async deleteRoleAssociation(@Param("roleAssociationId") roleAssociationId: string) {
     const roleAssociation = await this.service.deleteById(roleAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(RoleAssociationDto, roleAssociation)
+      "성공",
+      plainToInstance(RoleAssociationDto, roleAssociation),
     );
   }
 
@@ -122,9 +122,9 @@ export class RoleAssociationsController {
     const { roleAssociations, count } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
+      "성공",
       plainToInstance(RoleAssociationDto, roleAssociations),
-      query.toPageMetaDto(count)
+      query.toPageMetaDto(count),
     );
   }
 }

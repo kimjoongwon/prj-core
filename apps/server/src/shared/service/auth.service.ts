@@ -4,13 +4,13 @@ import {
   Injectable,
   Logger,
   UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { LoginPayloadDto, ResponseEntity, SignUpPayloadDto } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { PasswordService } from './password.service';
-import { TokenService } from './token.service';
-import { UsersService } from './users.service';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { LoginPayloadDto, ResponseEntity, SignUpPayloadDto } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { PasswordService } from "./password.service";
+import { TokenService } from "./token.service";
+import { UsersService } from "./users.service";
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     private passwordService: PasswordService,
     private jwtService: JwtService,
     private tokenService: TokenService,
-    private prisma: PrismaService
+    private prisma: PrismaService,
   ) {}
 
   async getCurrentUser(accessToken: string) {
@@ -50,10 +50,10 @@ export class AuthService {
 
     if (!isPasswordValid) {
       this.logger.warn(
-        `Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`
+        `Invalid password attempt for user: ${email}. User: ${JSON.stringify(user)}`,
       );
       throw new UnauthorizedException(
-        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, '패스워드가 일치하지 않습니다.')
+        ResponseEntity.WITH_ERROR(HttpStatus.UNAUTHORIZED, "패스워드가 일치하지 않습니다."),
       );
     }
 
@@ -61,16 +61,16 @@ export class AuthService {
   }
 
   async signUp(signUpPayloadDto: SignUpPayloadDto) {
-    const { email, name, nickname, password, phone, spaceId } = signUpPayloadDto;
+    const { name, nickname, password, phone, spaceId } = signUpPayloadDto;
 
     // USER 역할 찾기 또는 생성
     let userRole = await this.prisma.role.findFirst({
-      where: { name: 'USER' },
+      where: { name: "USER" },
     });
 
     if (!userRole) {
       userRole = await this.prisma.role.create({
-        data: { name: 'USER' },
+        data: { name: "USER" },
       });
     }
 
@@ -118,13 +118,13 @@ export class AuthService {
     this.logger.log(`User: ${JSON.stringify(user)}`);
 
     if (!user) {
-      throw new UnauthorizedException('유저가 존재하지 않습니다.');
+      throw new UnauthorizedException("유저가 존재하지 않습니다.");
     }
 
     const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
     if (!passwordValid) {
-      throw new BadRequestException('비밀번호가 일치하지 않습니다.');
+      throw new BadRequestException("비밀번호가 일치하지 않습니다.");
     }
 
     const { accessToken, refreshToken } = this.tokenService.generateTokens({

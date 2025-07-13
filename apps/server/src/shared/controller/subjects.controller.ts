@@ -9,8 +9,8 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   type CreateSubjectDto,
   PageMetaDto,
@@ -18,12 +18,12 @@ import {
   ResponseEntity,
   SubjectDto,
   type UpdateSubjectDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { SubjectsService } from '../service/subjects.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { SubjectsService } from "../service/subjects.service";
 
-@ApiTags('SUBJECTS')
+@ApiTags("SUBJECTS")
 @Controller()
 export class SubjectsController {
   constructor(private readonly service: SubjectsService) {}
@@ -35,21 +35,21 @@ export class SubjectsController {
   async createSubject(@Body() createSubjectDto: CreateSubjectDto) {
     const subject = await this.service.create(createSubjectDto);
 
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SubjectDto, subject));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SubjectDto, subject));
   }
 
-  @Get(':subjectId')
+  @Get(":subjectId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
-  async getSubject(@Param('subjectId') subjectId: string) {
+  async getSubject(@Param("subjectId") subjectId: string) {
     const subject = await this.service.getUnique({
       where: { id: subjectId },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SubjectDto, subject));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SubjectDto, subject));
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
@@ -58,40 +58,40 @@ export class SubjectsController {
       where: { id: { in: subjectIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', subjects.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", subjects.count);
   }
 
-  @Patch(':subjectId')
+  @Patch(":subjectId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
   async updateSubject(
-    @Param('subjectId') subjectId: string,
-    @Body() updateSubjectDto: UpdateSubjectDto
+    @Param("subjectId") subjectId: string,
+    @Body() updateSubjectDto: UpdateSubjectDto,
   ) {
     const subject = await this.service.update({
       where: { id: subjectId },
       data: updateSubjectDto,
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SubjectDto, subject));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SubjectDto, subject));
   }
 
-  @Patch(':subjectId/removedAt')
+  @Patch(":subjectId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
-  async removeSubject(@Param('subjectId') subjectId: string) {
+  async removeSubject(@Param("subjectId") subjectId: string) {
     const subject = await this.service.remove(subjectId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SubjectDto, subject));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SubjectDto, subject));
   }
 
-  @Delete(':subjectId')
+  @Delete(":subjectId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SubjectDto, HttpStatus.OK)
-  async deleteSubject(@Param('subjectId') subjectId: string) {
+  async deleteSubject(@Param("subjectId") subjectId: string) {
     const subject = await this.service.deleteById(subjectId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SubjectDto, subject));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SubjectDto, subject));
   }
 
   @Get()
@@ -103,9 +103,9 @@ export class SubjectsController {
 
     return new ResponseEntity(
       HttpStatus.OK,
-      'success',
+      "success",
       subjects.map((subject) => subject?.toDto?.() ?? subject),
-      new PageMetaDto(query.skip, query.take, count)
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

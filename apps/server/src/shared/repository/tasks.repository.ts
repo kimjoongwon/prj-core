@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, Task } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { Prisma, Task } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(Task)
@@ -23,6 +23,6 @@ export class TasksRepository extends BaseRepository<
   Task
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'Task');
+    super(prisma, "Task");
   }
 }

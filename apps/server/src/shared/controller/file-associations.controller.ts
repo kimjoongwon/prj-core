@@ -9,22 +9,21 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateFileAssociationDto,
   FileAssociationDto,
-  PageMetaDto,
   QueryFileAssociationDto,
   ResponseEntity,
   UpdateFileAssociationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { Auth } from '../decorator/auth.decorator';
-import { FileAssociationsService } from '../service/file-associations.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
+import { Auth } from "../decorator/auth.decorator";
+import { FileAssociationsService } from "../service/file-associations.service";
 
-@ApiTags('FILE-ASSOCIATIONS')
+@ApiTags("FILE-ASSOCIATIONS")
 @Controller()
 export class FileAssociationsController {
   constructor(private readonly service: FileAssociationsService) {}
@@ -38,27 +37,27 @@ export class FileAssociationsController {
 
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(FileAssociationDto, fileAssociation)
+      "성공",
+      plainToInstance(FileAssociationDto, fileAssociation),
     );
   }
 
-  @Get(':fileAssociationId')
+  @Get(":fileAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
-  async getFileAssociation(@Param('fileAssociationId') fileAssociationId: string) {
+  async getFileAssociation(@Param("fileAssociationId") fileAssociationId: string) {
     const fileAssociation = await this.service.getUnique({
       where: { id: fileAssociationId },
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(FileAssociationDto, fileAssociation)
+      "성공",
+      plainToInstance(FileAssociationDto, fileAssociation),
     );
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
@@ -67,16 +66,16 @@ export class FileAssociationsController {
       where: { id: { in: fileAssociationIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', fileAssociations.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", fileAssociations.count);
   }
 
-  @Patch(':fileAssociationId')
+  @Patch(":fileAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
   async updateFileAssociation(
-    @Param('fileAssociationId') fileAssociationId: string,
-    @Body() updateFileAssociationDto: UpdateFileAssociationDto
+    @Param("fileAssociationId") fileAssociationId: string,
+    @Body() updateFileAssociationDto: UpdateFileAssociationDto,
   ) {
     const fileAssociation = await this.service.update({
       where: { id: fileAssociationId },
@@ -84,34 +83,34 @@ export class FileAssociationsController {
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(FileAssociationDto, fileAssociation)
+      "성공",
+      plainToInstance(FileAssociationDto, fileAssociation),
     );
   }
 
-  @Patch(':fileAssociationId/removedAt')
+  @Patch(":fileAssociationId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
-  async removeFileAssociation(@Param('fileAssociationId') fileAssociationId: string) {
+  async removeFileAssociation(@Param("fileAssociationId") fileAssociationId: string) {
     const fileAssociation = await this.service.remove(fileAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(FileAssociationDto, fileAssociation)
+      "성공",
+      plainToInstance(FileAssociationDto, fileAssociation),
     );
   }
 
-  @Delete(':fileAssociationId')
+  @Delete(":fileAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
-  async deleteFileAssociation(@Param('fileAssociationId') fileAssociationId: string) {
+  async deleteFileAssociation(@Param("fileAssociationId") fileAssociationId: string) {
     const fileAssociation = await this.service.deleteById(fileAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(FileAssociationDto, fileAssociation)
+      "성공",
+      plainToInstance(FileAssociationDto, fileAssociation),
     );
   }
 
@@ -123,9 +122,9 @@ export class FileAssociationsController {
     const { fileAssociations, count } = await this.service.getFileAssociationsByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
+      "성공",
       plainToInstance(FileAssociationDto, fileAssociations),
-      query.toPageMetaDto(count)
+      query.toPageMetaDto(count),
     );
   }
 }

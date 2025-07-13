@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { $Enums, Category, Prisma } from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { $Enums, Category, Prisma } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(Category)
@@ -24,7 +24,7 @@ export class CategoriesRepository extends BaseRepository<
   Category
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'Category');
+    super(prisma, "Category");
   }
 
   async findLastLeafCategoriesByServiceName() {

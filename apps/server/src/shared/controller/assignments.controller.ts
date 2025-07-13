@@ -9,20 +9,20 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   AssignmentDto,
   CreateAssignmentDto,
   PageMetaDto,
   QueryAssignmentDto,
   ResponseEntity,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { AssignmentsService } from '../service/assignments.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { AssignmentsService } from "../service/assignments.service";
 
-@ApiTags('ASSIGNMENTS')
+@ApiTags("ASSIGNMENTS")
 @Controller()
 export class AssignmentsController {
   constructor(private readonly service: AssignmentsService) {}
@@ -34,43 +34,44 @@ export class AssignmentsController {
   async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
     const assignment = await this.service.create(createAssignmentDto);
 
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssignmentDto, assignment));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(AssignmentDto, assignment));
   }
 
-  @Get(':assignmentId')
+  @Get(":assignmentId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
-  async getAssignment(@Param('assignmentId') assignmentId: string) {
+  async getAssignment(@Param("assignmentId") assignmentId: string) {
     const assignment = await this.service.getById(assignmentId);
-    return new ResponseEntity(HttpStatus.OK, '성공', assignment?.toDto?.() ?? assignment);
+
+    return new ResponseEntity(HttpStatus.OK, "성공", assignment?.toDto?.() ?? assignment);
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
   async removeAssignments(@Body() assignmentIds: string[]) {
     const assignments = await this.service.removeManyByIds(assignmentIds);
-    return new ResponseEntity(HttpStatus.OK, '성공', assignments.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", assignments.count);
   }
 
-  @Patch(':assignmentId/removedAt')
+  @Patch(":assignmentId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
-  async removeAssignmentById(@Param('assignmentId') assignmentId: string) {
+  async removeAssignmentById(@Param("assignmentId") assignmentId: string) {
     const assignment = await this.service.removeById(assignmentId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssignmentDto, assignment));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(AssignmentDto, assignment));
   }
 
-  @Delete(':assignmentId')
+  @Delete(":assignmentId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(AssignmentDto, HttpStatus.OK)
-  async deleteAssignment(@Param('assignmentId') assignmentId: string) {
+  async deleteAssignment(@Param("assignmentId") assignmentId: string) {
     const assignment = await this.service.deleteById(assignmentId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(AssignmentDto, assignment));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(AssignmentDto, assignment));
   }
 
   @Get()
@@ -81,9 +82,9 @@ export class AssignmentsController {
     const { count, assignments } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      'success',
+      "success",
       assignments.map((assignment) => assignment?.toDto?.() ?? assignment),
-      new PageMetaDto(query.skip, query.take, count)
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

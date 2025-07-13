@@ -1,25 +1,25 @@
-import { Body, Controller, Get, Logger, Post, Req, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { Auth } from '@shared';
-import { ResponseEntity, SelectTenantDto } from '@shared/schema';
-import { Request, Response } from 'express';
-import { AppBuilderService } from '../service/app-builder.service';
+import { Body, Controller, Get, Logger, Post, Req, Res } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { ResponseEntity, type SelectTenantDto } from "@shared/schema";
+import { Request, Response } from "express";
+import { Auth } from "../decorator/auth.decorator";
+import { AppBuilderService } from "../service/app-builder.service";
 
 // 응답 메시지 상수
 const RESPONSE_MESSAGES = {
-  SUCCESS: '성공',
+  SUCCESS: "성공",
 } as const;
 
 // 쿠키 설정 상수
 const COOKIE_CONFIG = {
   TENANT_ID: {
-    name: 'tenantId',
+    name: "tenantId",
     options: {},
   },
-  ACCESS_TOKEN: 'accessToken',
+  ACCESS_TOKEN: "accessToken",
 } as const;
 
-@ApiTags('BUILDER')
+@ApiTags("BUILDER")
 @Controller()
 export class AppBuilderController {
   private readonly logger = new Logger(AppBuilderController.name);
@@ -33,15 +33,15 @@ export class AppBuilderController {
     return new ResponseEntity(200, RESPONSE_MESSAGES.SUCCESS, app);
   }
 
-  @Post('select-tenant')
+  @Post("select-tenant")
   async selectTenant(
     @Body() selectTenantDto: SelectTenantDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
-    this.logger.log('테넌트 선택 요청:', selectTenantDto);
+    this.logger.log("테넌트 선택 요청:", selectTenantDto);
     if (!selectTenantDto.selectedTenantId) {
-      this.logger.warn('선택된 테넌트 ID가 없습니다.');
-      return new ResponseEntity(400, '테넌트를 선택해주세요.');
+      this.logger.warn("선택된 테넌트 ID가 없습니다.");
+      return new ResponseEntity(400, "테넌트를 선택해주세요.");
     }
     this.setTenantCookie(res, selectTenantDto.selectedTenantId);
     return new ResponseEntity(200, RESPONSE_MESSAGES.SUCCESS);

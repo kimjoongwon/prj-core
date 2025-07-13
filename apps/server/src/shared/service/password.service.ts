@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from '@shared';
-import { compare, hash, hashSync } from 'bcrypt';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { AuthConfig } from "@shared";
+import { compare, hash, hashSync } from "bcrypt";
 
 @Injectable()
 export class PasswordService {
@@ -12,7 +12,7 @@ export class PasswordService {
   }
 
   hashPassword(password: string): Promise<string> {
-    const authConfig = this.configService.get<AuthConfig>('auth');
+    const authConfig = this.configService.get<AuthConfig>("auth");
 
     return hash(password, authConfig?.bcryptSaltOrRound || 10);
   }
@@ -34,7 +34,7 @@ export class PasswordService {
    */
   static validateHash(
     password: string | undefined,
-    hash: string | undefined | null
+    hash: string | undefined | null,
   ): Promise<boolean> {
     if (!password || !hash) {
       return Promise.resolve(false);

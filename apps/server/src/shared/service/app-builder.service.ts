@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { RouteBuilder } from '@shared/types';
-import { PrismaService } from 'nestjs-prisma';
-import { rawRoutes } from '../vars/routes';
+import { Injectable } from "@nestjs/common";
+import { RouteBuilder } from "@shared/types";
+import { PrismaService } from "nestjs-prisma";
+import { rawRoutes } from "../vars/routes";
 
 // 라우트 타입 상수
 const ROUTE_TYPES = {
-  ADMIN: '관리자',
-  AUTH: '인증',
-  LOGIN: '로그인',
-  TENANT_SELECT: '테넌트 선택',
-  DASHBOARD: '대시보드',
+  ADMIN: "관리자",
+  AUTH: "인증",
+  LOGIN: "로그인",
+  TENANT_SELECT: "테넌트 선택",
+  DASHBOARD: "대시보드",
 } as const;
 
 @Injectable()
@@ -36,7 +36,7 @@ export class AppBuilderService {
         routes: this.routes,
       };
     } catch (error) {
-      console.error('Error in AppBuilderService.build():', error);
+      console.error("Error in AppBuilderService.build():", error);
       return {
         routes: this.routes || [],
       };

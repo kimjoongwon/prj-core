@@ -9,24 +9,22 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateSpaceClassificationDto,
   QuerySpaceClassificationDto,
   ResponseEntity,
   SpaceClassificationDto,
   UpdateSpaceClassificationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { SpaceClassificationsService } from '../service/space-classifications.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { SpaceClassificationsService } from "../service/space-classifications.service";
 
-@ApiTags('SPACE-CLASSIFICATIONS')
+@ApiTags("SPACE-CLASSIFICATIONS")
 @Controller()
 export class SpaceClassificationsController {
-  constructor(private readonly service: SpaceClassificationsService) {}
-
   // @Post()
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -35,14 +33,12 @@ export class SpaceClassificationsController {
   //   @Body() createSpaceClassificationDto: CreateSpaceClassificationDto,
   // ) {
   //   const spaceClassification = await this.service.create(createSpaceClassificationDto);
-
   //   return new ResponseEntity(
   //     HttpStatus.OK,
   //     '성공',
   //     plainToInstance(SpaceClassificationDto, spaceClassification),
   //   );
   // }
-
   // @Get(':spaceClassification')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -55,7 +51,6 @@ export class SpaceClassificationsController {
   //     plainToInstance(SpaceClassificationDto, spaceClassification),
   //   );
   // }
-
   // @Patch(':spaceClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -71,7 +66,6 @@ export class SpaceClassificationsController {
   //     plainToInstance(SpaceClassificationDto, spaceClassification),
   //   );
   // }
-
   // @Patch(':spaceClassificationId/removedAt')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -84,7 +78,6 @@ export class SpaceClassificationsController {
   //     plainToInstance(SpaceClassificationDto, spaceClassification),
   //   );
   // }
-
   // @Delete(':spaceClassificationId')
   // @Auth([])
   // @HttpCode(HttpStatus.OK)
@@ -97,7 +90,6 @@ export class SpaceClassificationsController {
   //     plainToInstance(SpaceClassificationDto, spaceClassification),
   //   );
   // }
-
   // @Get()
   // @Auth([])
   // @HttpCode(HttpStatus.OK)

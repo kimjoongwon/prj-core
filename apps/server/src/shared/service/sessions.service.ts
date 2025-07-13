@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSessionDto, Prisma, QuerySessionDto } from '@shared/schema';
-import { SessionsRepository } from '../repository/sessions.repository';
+import { Injectable } from "@nestjs/common";
+import { CreateSessionDto, Prisma, QuerySessionDto } from "@shared/schema";
+import { SessionsRepository } from "../repository/sessions.repository";
 
 @Injectable()
 export class SessionsService {

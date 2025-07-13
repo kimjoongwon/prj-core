@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateGroupDto, Prisma, QueryGroupDto, UpdateGroupDto } from '@shared/schema';
-import { GroupsRepository } from '../repository/groups.repository';
+import { Injectable } from "@nestjs/common";
+import { CreateGroupDto, Prisma, QueryGroupDto, UpdateGroupDto } from "@shared/schema";
+import { GroupsRepository } from "../repository/groups.repository";
 
 @Injectable()
 export class GroupsService {
@@ -12,7 +12,7 @@ export class GroupsService {
   async getManyByQuery(query: QueryGroupDto) {
     const args = query.toArgs<Prisma.GroupFindManyArgs>({
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 

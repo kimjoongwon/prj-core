@@ -9,8 +9,8 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   type CreateSessionDto,
   PageMetaDto,
@@ -18,12 +18,12 @@ import {
   ResponseEntity,
   SessionDto,
   type UpdateSessionDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { SessionsService } from '../service/services';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { SessionsService } from "../service/services";
 
-@ApiTags('SESSION')
+@ApiTags("SESSION")
 @Controller()
 export class SessionsController {
   constructor(private readonly service: SessionsService) {}
@@ -35,21 +35,21 @@ export class SessionsController {
   async createSession(@Body() createSessionDto: CreateSessionDto) {
     const session = await this.service.create(createSessionDto);
 
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SessionDto, session));
   }
 
-  @Get(':sessionId')
+  @Get(":sessionId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
-  async getSession(@Param('sessionId') sessionId: string) {
+  async getSession(@Param("sessionId") sessionId: string) {
     const session = await this.service.getUnique({
       where: { id: sessionId },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SessionDto, session));
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
@@ -58,40 +58,40 @@ export class SessionsController {
       where: { id: { in: sessionIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', sessions.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", sessions.count);
   }
 
-  @Patch(':sessionId')
+  @Patch(":sessionId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
   async updateSession(
-    @Param('sessionId') sessionId: string,
-    @Body() updateSessionDto: UpdateSessionDto
+    @Param("sessionId") sessionId: string,
+    @Body() updateSessionDto: UpdateSessionDto,
   ) {
     const session = await this.service.update({
       where: { id: sessionId },
       data: updateSessionDto,
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SessionDto, session));
   }
 
-  @Patch(':sessionId/removedAt')
+  @Patch(":sessionId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
-  async removeSession(@Param('sessionId') sessionId: string) {
+  async removeSession(@Param("sessionId") sessionId: string) {
     const session = await this.service.remove(sessionId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SessionDto, session));
   }
 
-  @Delete(':sessionId')
+  @Delete(":sessionId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(SessionDto, HttpStatus.OK)
-  async deleteSession(@Param('sessionId') sessionId: string) {
+  async deleteSession(@Param("sessionId") sessionId: string) {
     const session = await this.service.deleteById(sessionId);
-    return new ResponseEntity(HttpStatus.OK, '성공', plainToInstance(SessionDto, session));
+    return new ResponseEntity(HttpStatus.OK, "성공", plainToInstance(SessionDto, session));
   }
 
   @Get()
@@ -102,9 +102,9 @@ export class SessionsController {
     const { count, sessions } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      'success',
+      "success",
       sessions.map((session) => session?.toDto?.() ?? session),
-      new PageMetaDto(query.skip, query.take, count)
+      new PageMetaDto(query.skip, query.take, count),
     );
   }
 }

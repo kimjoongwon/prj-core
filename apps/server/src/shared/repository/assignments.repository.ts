@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Assignment, Prisma } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { Assignment, Prisma } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(Assignment)
@@ -23,6 +23,6 @@ export class AssignmentsRepository extends BaseRepository<
   Assignment
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'Assignment');
+    super(prisma, "Assignment");
   }
 }

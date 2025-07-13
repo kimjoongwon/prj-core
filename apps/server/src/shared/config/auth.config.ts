@@ -1,7 +1,7 @@
-import { registerAs } from '@nestjs/config';
-import { ValidationUtil } from '@shared/utils';
-import { IsString } from 'class-validator';
-import { AuthConfig } from './config.type';
+import { registerAs } from "@nestjs/config";
+import { ValidationUtil } from "@shared/utils";
+import { IsString } from "class-validator";
+import { AuthConfig } from "./config.type";
 
 class EnvironmentVariablesValidator {
   @IsString()
@@ -17,7 +17,7 @@ class EnvironmentVariablesValidator {
   AUTH_JWT_SALT_ROUNDS!: string;
 }
 
-export default registerAs<AuthConfig>('auth', () => {
+export default registerAs<AuthConfig>("auth", () => {
   ValidationUtil.validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {

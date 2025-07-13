@@ -1,12 +1,12 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
-import { AuthConfig } from '@shared';
-import { Request, Response } from 'express';
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
+import { AuthConfig } from "@shared";
+import { Request, Response } from "express";
 
 export const Token = {
-  ACCESS: 'accessToken',
-  REFRESH: 'refreshToken',
+  ACCESS: "accessToken",
+  REFRESH: "refreshToken",
 };
 
 type TokenValues = (typeof Token)[keyof typeof Token];
@@ -15,7 +15,7 @@ type TokenValues = (typeof Token)[keyof typeof Token];
 export class TokenService {
   constructor(
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   getTokenFromRequest(req: Request, key?: TokenValues): string {
@@ -33,7 +33,7 @@ export class TokenService {
   }
 
   generateRefreshToken(payload: { userId: string }) {
-    const authConfig = this.configService.get<AuthConfig>('auth');
+    const authConfig = this.configService.get<AuthConfig>("auth");
     return this.jwtService.sign(payload, {
       expiresIn: authConfig?.refresh,
     });
@@ -51,14 +51,14 @@ export class TokenService {
       return this.jwtService.verify(token);
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        throw new BadRequestException('토튼 만료 에러');
+        throw new BadRequestException("토튼 만료 에러");
       }
 
       if (error instanceof NotBeforeError) {
-        throw new BadRequestException('토큰 미사용');
+        throw new BadRequestException("토큰 미사용");
       }
 
-      throw new InternalServerErrorException('알 수 없는 에러');
+      throw new InternalServerErrorException("알 수 없는 에러");
     }
   }
 
@@ -66,7 +66,7 @@ export class TokenService {
     try {
       this.validateToken(token);
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   }

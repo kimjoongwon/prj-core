@@ -3,17 +3,17 @@ import {
   ClassSerializerInterceptor,
   Injectable,
   type PlainLiteralObject,
-} from '@nestjs/common';
-import { instanceToPlain } from 'class-transformer';
+} from "@nestjs/common";
+import { instanceToPlain } from "class-transformer";
 
 @Injectable()
 export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor {
   serialize(
     response: any,
-    options: ClassSerializerContextOptions
+    options: ClassSerializerContextOptions,
   ): PlainLiteralObject | PlainLiteralObject[] {
     const isArray = Array.isArray(response);
-    const isObject = response !== null && typeof response === 'object';
+    const isObject = response !== null && typeof response === "object";
     if (!isArray && !isObject) {
       return response;
     }

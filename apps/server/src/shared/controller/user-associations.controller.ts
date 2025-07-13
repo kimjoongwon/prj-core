@@ -9,21 +9,21 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateUserAssociationDto,
   QueryUserAssociationDto,
   ResponseEntity,
   UpdateUserAssociationDto,
   UserAssociationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity } from '../decorator/api-response-entity.decorator';
-import { Auth } from '../decorator/auth.decorator';
-import { UserAssociationsService } from '../service/user-associations.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
+import { Auth } from "../decorator/auth.decorator";
+import { UserAssociationsService } from "../service/user-associations.service";
 
-@ApiTags('USER-ASSOCIATIONS')
+@ApiTags("USER-ASSOCIATIONS")
 @Controller()
 export class UserAssociationsController {
   constructor(private readonly service: UserAssociationsService) {}
@@ -37,27 +37,27 @@ export class UserAssociationsController {
 
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(UserAssociationDto, userAssociation)
+      "성공",
+      plainToInstance(UserAssociationDto, userAssociation),
     );
   }
 
-  @Get(':userAssociationId')
+  @Get(":userAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
-  async getUserAssociation(@Param('userAssociationId') userAssociationId: string) {
+  async getUserAssociation(@Param("userAssociationId") userAssociationId: string) {
     const userAssociation = await this.service.getUnique({
       where: { id: userAssociationId },
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(UserAssociationDto, userAssociation)
+      "성공",
+      plainToInstance(UserAssociationDto, userAssociation),
     );
   }
 
-  @Patch('removedAt')
+  @Patch("removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
@@ -66,16 +66,16 @@ export class UserAssociationsController {
       where: { id: { in: userAssociationIds } },
       data: { removedAt: new Date() },
     });
-    return new ResponseEntity(HttpStatus.OK, '성공', userAssociations.count);
+    return new ResponseEntity(HttpStatus.OK, "성공", userAssociations.count);
   }
 
-  @Patch(':userAssociationId')
+  @Patch(":userAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
   async updateUserAssociation(
-    @Param('userAssociationId') userAssociationId: string,
-    @Body() updateUserAssociationDto: UpdateUserAssociationDto
+    @Param("userAssociationId") userAssociationId: string,
+    @Body() updateUserAssociationDto: UpdateUserAssociationDto,
   ) {
     const userAssociation = await this.service.update({
       where: { id: userAssociationId },
@@ -83,34 +83,34 @@ export class UserAssociationsController {
     });
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(UserAssociationDto, userAssociation)
+      "성공",
+      plainToInstance(UserAssociationDto, userAssociation),
     );
   }
 
-  @Patch(':userAssociationId/removedAt')
+  @Patch(":userAssociationId/removedAt")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
-  async removeUserAssociation(@Param('userAssociationId') userAssociationId: string) {
+  async removeUserAssociation(@Param("userAssociationId") userAssociationId: string) {
     const userAssociation = await this.service.remove(userAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(UserAssociationDto, userAssociation)
+      "성공",
+      plainToInstance(UserAssociationDto, userAssociation),
     );
   }
 
-  @Delete(':userAssociationId')
+  @Delete(":userAssociationId")
   @Auth([])
   @HttpCode(HttpStatus.OK)
   @ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
-  async deleteUserAssociation(@Param('userAssociationId') userAssociationId: string) {
+  async deleteUserAssociation(@Param("userAssociationId") userAssociationId: string) {
     const userAssociation = await this.service.deleteById(userAssociationId);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
-      plainToInstance(UserAssociationDto, userAssociation)
+      "성공",
+      plainToInstance(UserAssociationDto, userAssociation),
     );
   }
 
@@ -122,9 +122,9 @@ export class UserAssociationsController {
     const { userAssociations, count } = await this.service.getManyByQuery(query);
     return new ResponseEntity(
       HttpStatus.OK,
-      '성공',
+      "성공",
       plainToInstance(UserAssociationDto, userAssociations),
-      query.toPageMetaDto(count)
+      query.toPageMetaDto(count),
     );
   }
 }

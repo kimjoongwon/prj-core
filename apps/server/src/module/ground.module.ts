@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { GroundsController } from '@shared';
+import { Module } from "@nestjs/common";
+import { GroundsController } from "@shared";
 
 @Module({
   controllers: [GroundsController],

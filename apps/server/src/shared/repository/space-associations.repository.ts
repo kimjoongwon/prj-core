@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, SpaceAssociation } from '@shared/schema';
-import { PrismaService } from 'nestjs-prisma';
-import { BaseRepository } from '../common/base.repository';
-import { UseEntity } from '../decorator/use-dto.decorator';
+import { Injectable } from "@nestjs/common";
+import { Prisma, SpaceAssociation } from "@shared/schema";
+import { PrismaService } from "nestjs-prisma";
+import { BaseRepository } from "../common/base.repository";
+import { UseEntity } from "../decorator/use-dto.decorator";
 
 @Injectable()
 @UseEntity(SpaceAssociation)
@@ -23,6 +23,6 @@ export class SpaceAssociationsRepository extends BaseRepository<
   SpaceAssociation
 > {
   constructor(prisma: PrismaService) {
-    super(prisma, 'SpaceAssociation');
+    super(prisma, "SpaceAssociation");
   }
 }

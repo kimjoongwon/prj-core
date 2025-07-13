@@ -1,40 +1,40 @@
-import { Logger } from '@nestjs/common';
+import { Logger } from "@nestjs/common";
 
 const COLORS = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  dim: '\x1b[2m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m',
-  white: '\x1b[37m',
-  gray: '\x1b[90m',
+  reset: "\x1b[0m",
+  bright: "\x1b[1m",
+  dim: "\x1b[2m",
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  magenta: "\x1b[35m",
+  cyan: "\x1b[36m",
+  white: "\x1b[37m",
+  gray: "\x1b[90m",
 };
 
 const EMOJIS = {
-  auth: '🔐',
-  success: '✅',
-  error: '❌',
-  warning: '⚠️',
-  info: 'ℹ️',
-  debug: '🐛',
-  performance: '⚡',
-  database: '🗄️',
-  user: '👤',
-  request: '📨',
-  response: '📤',
-  slow: '🐌',
-  fast: '🚀',
-  context: '📋',
-  timer: '⏱️',
+  auth: "🔐",
+  success: "✅",
+  error: "❌",
+  warning: "⚠️",
+  info: "ℹ️",
+  debug: "🐛",
+  performance: "⚡",
+  database: "🗄️",
+  user: "👤",
+  request: "📨",
+  response: "📤",
+  slow: "🐌",
+  fast: "🚀",
+  context: "📋",
+  timer: "⏱️",
 };
 
 export class AppLogger extends Logger {
-  private isProduction = process.env.NODE_ENV === 'production';
-  private isDevelopment = process.env.NODE_ENV !== 'production';
+  private isProduction = process.env.NODE_ENV === "production";
+  private isDevelopment = process.env.NODE_ENV !== "production";
 
   /**
    * 예쁜 포맷으로 개발 환경에서만 로그를 출력합니다.
@@ -89,25 +89,25 @@ export class AppLogger extends Logger {
   performance(operation: string, duration: number, context?: string): void {
     let emoji = EMOJIS.fast;
     let color = COLORS.green;
-    let level: 'log' | 'warn' | 'debug' = 'debug';
+    let level: "log" | "warn" | "debug" = "debug";
 
     if (duration > 200) {
       emoji = EMOJIS.slow;
       color = COLORS.red;
-      level = 'warn';
+      level = "warn";
     } else if (duration > 100) {
       emoji = EMOJIS.warning;
       color = COLORS.yellow;
-      level = 'warn';
+      level = "warn";
     } else if (duration > 50) {
       emoji = EMOJIS.timer;
       color = COLORS.blue;
-      level = 'debug';
+      level = "debug";
     }
 
     const message = `${color}${emoji} ${operation} ${COLORS.dim}(${duration}ms)${COLORS.reset}`;
 
-    if (level === 'warn' || (this.isDevelopment && level === 'debug')) {
+    if (level === "warn" || (this.isDevelopment && level === "debug")) {
       super[level](message, context);
     }
   }
@@ -211,11 +211,11 @@ export class AppLogger extends Logger {
         continue;
       }
 
-      if (typeof value === 'string' && value.length > 100) {
+      if (typeof value === "string" && value.length > 100) {
         simplified[key] = `${value.substring(0, 50)}...`;
       } else if (Array.isArray(value)) {
         simplified[key] = `Array(${value.length})`;
-      } else if (typeof value === 'object') {
+      } else if (typeof value === "object") {
         simplified[key] = `Object(${Object.keys(value).length} keys)`;
       } else {
         simplified[key] = value;

@@ -1,25 +1,25 @@
-import { getTenantSelectPage } from './tenant-select.page';
+import { getTenantSelectPage } from "./tenant-select.page";
 
-describe('TenantSelectPage', () => {
-  describe('페이지 기본 구성', () => {
-    it('테넌트 선택 페이지를 올바르게 구성해야 한다', () => {
+describe("TenantSelectPage", () => {
+  describe("페이지 기본 구성", () => {
+    it("테넌트 선택 페이지를 올바르게 구성해야 한다", () => {
       const result = getTenantSelectPage();
 
-      expect(result.name).toBe('그라운드 선택');
+      expect(result.name).toBe("그라운드 선택");
       expect(result.state).toEqual({
-        selectedTenantId: '',
+        selectedTenantId: "",
       });
     });
 
-    it('elements 구조를 가져야 한다', () => {
+    it("elements 구조를 가져야 한다", () => {
       const result = getTenantSelectPage();
 
       expect(result.elements!).toBeDefined();
       expect(result.elements!).toHaveLength(1);
-      expect(result.elements![0].name).toBe('VStack');
+      expect(result.elements![0].name).toBe("VStack");
     });
 
-    it('VStack 내부에 필요한 컴포넌트들을 포함해야 한다', () => {
+    it("VStack 내부에 필요한 컴포넌트들을 포함해야 한다", () => {
       const result = getTenantSelectPage();
       const vstack = result.elements![0];
 
@@ -28,67 +28,67 @@ describe('TenantSelectPage', () => {
     });
   });
 
-  describe('ListboxBuilder 설정', () => {
-    it('올바른 쿼리 설정을 가져야 한다', () => {
+  describe("ListboxBuilder 설정", () => {
+    it("올바른 쿼리 설정을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const listbox = result.elements![0].children![2];
 
-      expect(listbox.props.query.type).toBe('list');
-      expect(listbox.props.query.query.name).toBe('useGetTenantsByQuery');
-      expect(listbox.props.query.listOptions.valueField).toBe('id');
-      expect(listbox.props.query.listOptions.labelField).toBe('space.ground.name');
-      expect(listbox.props.selectionMode).toBe('single');
+      expect(listbox.props.query.type).toBe("list");
+      expect(listbox.props.query.query.name).toBe("useGetTenantsByQuery");
+      expect(listbox.props.query.listOptions.valueField).toBe("id");
+      expect(listbox.props.query.listOptions.labelField).toBe("space.ground.name");
+      expect(listbox.props.selectionMode).toBe("single");
     });
   });
 
-  describe('ButtonBuilder 설정', () => {
-    it('올바른 mutation 설정을 가져야 한다', () => {
+  describe("ButtonBuilder 설정", () => {
+    it("올바른 mutation 설정을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const button = result.elements![0].children![3];
 
-      expect(button.props.mutation.name).toBe('selectTenant');
-      expect(button.props.mutation.data.selectedTenantId).toBe('selectedTenantId');
+      expect(button.props.mutation.name).toBe("selectTenant");
+      expect(button.props.mutation.data.selectedTenantId).toBe("selectedTenantId");
     });
 
-    it('올바른 validation 설정을 가져야 한다', () => {
+    it("올바른 validation 설정을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const button = result.elements![0].children![3];
 
       expect(button.props.mutation.validationFields.selectedTenantId.required).toEqual({
         value: true,
-        message: '그라운드를 선택해주세요.',
+        message: "그라운드를 선택해주세요.",
       });
     });
 
-    it('올바른 navigator 설정을 가져야 한다', () => {
+    it("올바른 navigator 설정을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const button = result.elements![0].children![3];
 
-      expect(button.props.navigator.type).toBe('push');
-      expect(button.props.navigator.route.fullPath).toBe('/admin/dashboard');
+      expect(button.props.navigator.type).toBe("push");
+      expect(button.props.navigator.route.fullPath).toBe("/admin/dashboard");
     });
   });
 
-  describe('스타일링 설정', () => {
-    it('VStack에 올바른 className을 가져야 한다', () => {
+  describe("스타일링 설정", () => {
+    it("VStack에 올바른 className을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const vstack = result.elements![0];
 
-      expect(vstack.props.className).toBe('space-y-6 max-w-md mx-auto mt-16');
+      expect(vstack.props.className).toBe("space-y-6 max-w-md mx-auto mt-16");
     });
 
-    it('제목에 올바른 className을 가져야 한다', () => {
+    it("제목에 올바른 className을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const title = result.elements![0].children![1];
 
-      expect(title.props.className).toBe('text-center text-2xl font-bold mb-6');
+      expect(title.props.className).toBe("text-center text-2xl font-bold mb-6");
     });
 
-    it('버튼에 올바른 className을 가져야 한다', () => {
+    it("버튼에 올바른 className을 가져야 한다", () => {
       const result = getTenantSelectPage();
       const button = result.elements![0].children![3];
 
-      expect(button.props.className).toBe('w-full');
+      expect(button.props.className).toBe("w-full");
     });
   });
 });

@@ -1,35 +1,35 @@
-import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from '@shared/types';
+import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from "@shared/types";
 
 export const getGroundMembersPage = (): PageBuilder => {
   return {
-    name: '그라운드 멤버 리스트',
+    name: "그라운드 멤버 리스트",
     elements: [
       {
-        name: 'DataGridBuilder',
+        name: "DataGridBuilder",
         props: {
           buttons: [
             {
-              children: '멤버 추가',
-              variant: 'solid',
-              color: 'primary',
-              size: 'md',
-              radius: 'lg',
-              startContent: 'plus-circle',
+              children: "멤버 추가",
+              variant: "solid",
+              color: "primary",
+              size: "md",
+              radius: "lg",
+              startContent: "plus-circle",
               className:
-                'font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200',
+                "font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200",
               navigator: {
-                type: 'push',
+                type: "push",
                 route: {
-                  relativePath: 'new/create',
+                  relativePath: "new/create",
                 },
               },
             },
           ],
           table: {
-            type: 'table' as const,
+            type: "table" as const,
             query: {
               // TODO: 쿼리명을 적절히 변경해주세요
-              name: 'useGetTenantsByQuery',
+              name: "useGetTenantsByQuery",
               params: {
                 skip: 0,
                 take: 10,
@@ -37,105 +37,105 @@ export const getGroundMembersPage = (): PageBuilder => {
             },
             columns: [
               {
-                accessorKey: 'user.name',
+                accessorKey: "user.name",
                 header: {
-                  name: '이름',
+                  name: "이름",
                 },
               },
               {
-                accessorKey: 'user.email',
+                accessorKey: "user.email",
                 header: {
-                  name: '이메일',
+                  name: "이메일",
                 },
               },
               {
-                accessorKey: 'user.phone',
+                accessorKey: "user.phone",
                 header: {
-                  name: '전화번호',
+                  name: "전화번호",
                 },
               },
               {
-                accessorKey: 'role',
+                accessorKey: "role",
                 header: {
-                  name: '역할',
+                  name: "역할",
                 },
               },
               {
-                accessorKey: 'status',
+                accessorKey: "status",
                 header: {
-                  name: '상태',
+                  name: "상태",
                 },
               },
               {
-                accessorKey: 'joinedAt',
+                accessorKey: "joinedAt",
                 header: {
-                  name: '가입일',
+                  name: "가입일",
                 },
                 cell: {
-                  type: 'date',
+                  type: "date",
                 },
               },
               {
-                accessorKey: 'actions',
+                accessorKey: "actions",
                 header: {
-                  name: '액션',
+                  name: "액션",
                 },
                 cell: {
-                  type: 'row-actions',
+                  type: "row-actions",
                   buttons: [
                     {
-                      children: '상세',
-                      variant: 'light',
-                      size: 'sm',
-                      color: 'primary',
-                      radius: 'sm',
+                      children: "상세",
+                      variant: "light",
+                      size: "sm",
+                      color: "primary",
+                      radius: "sm",
                       isIconOnly: false,
-                      startContent: 'eye',
-                      className: 'min-w-unit-14 text-xs px-2 py-1',
+                      startContent: "eye",
+                      className: "min-w-unit-14 text-xs px-2 py-1",
                       navigator: {
-                        type: 'push',
+                        type: "push",
                         route: {
-                          relativePath: ':memberId/detail',
+                          relativePath: ":memberId/detail",
                           pathParams: {
-                            memberId: 'selectedRow.id',
+                            memberId: "selectedRow.id",
                           },
                         },
                       },
                     } satisfies IButtonBuilder,
                     {
-                      children: '수정',
-                      variant: 'light',
-                      size: 'sm',
-                      color: 'warning',
-                      radius: 'sm',
+                      children: "수정",
+                      variant: "light",
+                      size: "sm",
+                      color: "warning",
+                      radius: "sm",
                       isIconOnly: false,
-                      startContent: 'edit',
-                      className: 'min-w-unit-14 text-xs px-2 py-1',
+                      startContent: "edit",
+                      className: "min-w-unit-14 text-xs px-2 py-1",
                       navigator: {
-                        type: 'push',
+                        type: "push",
                         route: {
-                          relativePath: ':memberId/modify',
+                          relativePath: ":memberId/modify",
                           pathParams: {
-                            memberId: 'selectedRow.id',
+                            memberId: "selectedRow.id",
                           },
                         },
                       },
                     } satisfies IButtonBuilder,
                     {
-                      children: '삭제',
-                      variant: 'light',
-                      size: 'sm',
-                      color: 'danger',
-                      radius: 'sm',
+                      children: "삭제",
+                      variant: "light",
+                      size: "sm",
+                      color: "danger",
+                      radius: "sm",
                       isIconOnly: false,
-                      startContent: 'trash',
-                      className: 'min-w-unit-14 text-xs px-2 py-1',
+                      startContent: "trash",
+                      className: "min-w-unit-14 text-xs px-2 py-1",
                       mutation: {
-                        name: 'deleteGroundMemberById',
+                        name: "deleteGroundMemberById",
                         pathParams: {
-                          memberId: 'selectedRow.id',
+                          memberId: "selectedRow.id",
                         },
-                        queryKey: '/api/v1/ground-members',
+                        queryKey: "/api/v1/ground-members",
                       },
                     } satisfies IButtonBuilder,
                   ],

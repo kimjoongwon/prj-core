@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   CreateAssignmentDto,
   Prisma,
   QueryAssignmentDto,
   UpdateAssignmentDto,
-} from '@shared/schema';
-import { AssignmentsRepository } from '../repository/assignments.repository';
+} from "@shared/schema";
+import { AssignmentsRepository } from "../repository/assignments.repository";
 
 @Injectable()
 export class AssignmentsService {

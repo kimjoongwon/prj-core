@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { RoutinesController } from '@shared';
+import { Module } from "@nestjs/common";
+import { RoutinesController } from "@shared";
 
 @Module({
   controllers: [RoutinesController],

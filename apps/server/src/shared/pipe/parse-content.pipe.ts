@@ -3,18 +3,18 @@ import {
   BadRequestException,
   Injectable,
   type PipeTransform,
-} from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
-import { validate } from 'class-validator';
+} from "@nestjs/common";
+import { plainToClass } from "class-transformer";
+import { validate } from "class-validator";
 
 @Injectable()
 export class ParseContentPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    if (value.content && typeof value.content === 'string') {
+    if (value.content && typeof value.content === "string") {
       try {
         value.content = JSON.parse(value.content);
-      } catch (error) {
-        throw new BadRequestException('Invalid JSON in content field');
+      } catch (_error) {
+        throw new BadRequestException("Invalid JSON in content field");
       }
     }
 

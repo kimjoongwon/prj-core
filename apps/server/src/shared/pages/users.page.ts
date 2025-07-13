@@ -1,16 +1,16 @@
-import { DataGridBuilderProps, PageBuilder } from '@shared/types';
+import { DataGridBuilderProps, PageBuilder } from "@shared/types";
 
 export const getUsersPage = (): PageBuilder => {
   return {
-    name: '사용자 리스트',
+    name: "사용자 리스트",
     elements: [
       {
-        name: 'DataGridBuilder',
+        name: "DataGridBuilder",
         props: {
           table: {
-            type: 'table' as const,
+            type: "table" as const,
             query: {
-              name: 'useGetUsersByQuery',
+              name: "useGetUsersByQuery",
               params: {
                 skip: 0,
                 take: 10,
@@ -22,15 +22,15 @@ export const getUsersPage = (): PageBuilder => {
             },
             columns: [
               {
-                accessorKey: 'name',
+                accessorKey: "name",
                 header: {
-                  name: '이름',
+                  name: "이름",
                 },
               },
               {
-                accessorKey: 'phone',
+                accessorKey: "phone",
                 header: {
-                  name: '전화번호',
+                  name: "전화번호",
                 },
               },
             ],

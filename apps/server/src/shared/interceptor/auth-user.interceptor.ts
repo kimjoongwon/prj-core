@@ -5,12 +5,12 @@ import {
   HttpStatus,
   Injectable,
   type NestInterceptor,
-} from '@nestjs/common';
-import { TenantDto, UserDto } from '@shared/schema';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { ContextProvider } from '../provider';
-import { AppLogger } from '../util/app-logger.util';
+} from "@nestjs/common";
+import { TenantDto, UserDto } from "@shared/schema";
+import { Observable, throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+import { ContextProvider } from "../provider";
+import { AppLogger } from "../util/app-logger.util";
 
 interface AuthContext {
   serviceId?: string;
@@ -27,7 +27,7 @@ export class AuthUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const startTime = Date.now();
     const request = context.switchToHttp().getRequest();
-    const requestId = request.headers['x-request-id'] || this.generateRequestId();
+    const requestId = request.headers["x-request-id"] || this.generateRequestId();
 
     try {
       const authContext = this.extractAuthContext(request, requestId);
@@ -43,7 +43,7 @@ export class AuthUserInterceptor implements NestInterceptor {
           const duration = Date.now() - startTime;
           this.logRequestError(error, requestId, duration);
           return throwError(() => this.handleError(error));
-        })
+        }),
       );
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -60,7 +60,7 @@ export class AuthUserInterceptor implements NestInterceptor {
       const currentTenant = user?.tenants?.find((tenant) => tenant.id === tenantId);
 
       // 디버깅을 위한 상세한 로깅
-      this.logger.dev('Auth context extraction', {
+      this.logger.dev("Auth context extraction", {
         reqId: requestId.slice(-8),
         hasUser: !!user,
         userId: user?.id?.slice(-8),
@@ -80,11 +80,11 @@ export class AuthUserInterceptor implements NestInterceptor {
     } catch (error) {
       this.logger.error(
         `Failed to extract auth context for request ${requestId}: ${error instanceof Error ? error.message : String(error)}`,
-        error instanceof Error ? error.stack : ''
+        error instanceof Error ? error.stack : "",
       );
       throw new HttpException(
-        'Failed to process authentication context',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        "Failed to process authentication context",
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -105,13 +105,13 @@ export class AuthUserInterceptor implements NestInterceptor {
         if (authContext.currentTenant.spaceId) {
           ContextProvider.setSpaceId(authContext.currentTenant.spaceId);
         }
-        this.logger.dev('Tenant context set', {
+        this.logger.dev("Tenant context set", {
           reqId: authContext.requestId?.slice(-8),
           tenantId: authContext.currentTenant.id?.slice(-8),
           spaceId: authContext.currentTenant.spaceId?.slice(-8),
         });
       } else if (authContext.tenantId) {
-        this.logger.warn('Tenant ID exists but tenant not found', {
+        this.logger.warn("Tenant ID exists but tenant not found", {
           reqId: authContext.requestId?.slice(-8),
           tenantId: authContext.tenantId?.slice(-8),
           hasUser: !!authContext.user,
@@ -122,12 +122,12 @@ export class AuthUserInterceptor implements NestInterceptor {
       if (authContext.user && this.isValidUser(authContext.user)) {
         ContextProvider.setAuthUser(authContext.user);
         ContextProvider.setAuthUserId(authContext.user.id);
-        this.logger.user('User authenticated', {
+        this.logger.user("User authenticated", {
           userId: authContext.user.id,
           tenants: authContext.user.tenants?.length || 0,
         });
       } else if (authContext.user) {
-        this.logger.dev('Invalid user object', {
+        this.logger.dev("Invalid user object", {
           reqId: authContext.requestId?.slice(-8),
           hasId: !!authContext.user.id,
           hasTenants: !!authContext.user.tenants,
@@ -136,11 +136,11 @@ export class AuthUserInterceptor implements NestInterceptor {
     } catch (error) {
       this.logger.error(
         `Context setup failed: ${error instanceof Error ? error.message : String(error)}`,
-        `req:${authContext.requestId?.slice(-8)}`
+        `req:${authContext.requestId?.slice(-8)}`,
       );
       throw new HttpException(
-        'Failed to set authentication context',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        "Failed to set authentication context",
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -150,7 +150,7 @@ export class AuthUserInterceptor implements NestInterceptor {
   }
 
   private logRequestStart(authContext: AuthContext, requestId: string): void {
-    this.logger.auth('Context initialized', {
+    this.logger.auth("Context initialized", {
       reqId: requestId.slice(-8),
       serviceId: authContext.serviceId,
       tenantId: authContext.tenantId,
@@ -159,13 +159,13 @@ export class AuthUserInterceptor implements NestInterceptor {
   }
 
   private logRequestSuccess(requestId: string, duration: number): void {
-    this.logger.performance('Auth processing', duration, `req:${requestId.slice(-8)}`);
+    this.logger.performance("Auth processing", duration, `req:${requestId.slice(-8)}`);
   }
 
   private logRequestError(error: any, requestId: string, duration: number): void {
     this.logger.error(
       `❌ Auth failed (${duration}ms) - ${error.message}`,
-      `req:${requestId.slice(-8)}`
+      `req:${requestId.slice(-8)}`,
     );
   }
 
@@ -173,7 +173,7 @@ export class AuthUserInterceptor implements NestInterceptor {
     this.logger.errorWithStack(
       `Auth interceptor error (${duration}ms)`,
       error,
-      `req:${requestId.slice(-8)}`
+      `req:${requestId.slice(-8)}`,
     );
   }
 
@@ -182,11 +182,11 @@ export class AuthUserInterceptor implements NestInterceptor {
       return error;
     }
 
-    this.logger.errorWithStack('Unhandled auth error', error);
+    this.logger.errorWithStack("Unhandled auth error", error);
 
     return new HttpException(
-      'Internal server error during authentication processing',
-      HttpStatus.INTERNAL_SERVER_ERROR
+      "Internal server error during authentication processing",
+      HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }
 

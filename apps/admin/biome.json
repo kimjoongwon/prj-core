@@ -1,3 +1,11 @@
 {
-  "extends": ["@shared/biome-config/react"]
+  "extends": "//",
+  "linter": {
+    "rules": {
+      "a11y": {
+        "recommended": true,
+        "noSvgWithoutTitle": "off"
+      }
+    }
+  }
 }

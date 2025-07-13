@@ -1,20 +1,20 @@
-import { MailerModule } from '@nestjs-modules/mailer';
-import { DynamicModule } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { ClsModule } from 'nestjs-cls';
-import { PrismaModule } from 'nestjs-prisma';
-import { AuthConfig, appConfig, authConfig, awsConfig, corsConfig, smtpConfig } from './shared';
+import { DynamicModule } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
+import { MailerModule } from "@nestjs-modules/mailer";
+import { ClsModule } from "nestjs-cls";
+import { PrismaModule } from "nestjs-prisma";
+import { AuthConfig, appConfig, authConfig, awsConfig, corsConfig, smtpConfig } from "./shared";
 
 export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
   ConfigModule.forRoot({
     isGlobal: true,
     load: [authConfig, appConfig, corsConfig, smtpConfig, awsConfig],
-    envFilePath: '.env',
+    envFilePath: ".env",
   }),
   MailerModule.forRootAsync({
     useFactory: async (config: ConfigService) => {
-      const smtpConfig = await config.get('smtp');
+      const smtpConfig = await config.get("smtp");
       return {
         transport: {
           host: smtpConfig.host,
@@ -41,12 +41,12 @@ export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
   JwtModule.registerAsync({
     global: true,
     useFactory: async (config: ConfigService) => {
-      const authConfig = await config.get<AuthConfig>('auth');
+      const authConfig = await config.get<AuthConfig>("auth");
       if (!authConfig?.secret) {
-        throw new Error('JWT secret is not defined in the configuration.');
+        throw new Error("JWT secret is not defined in the configuration.");
       }
       if (!authConfig?.expires) {
-        throw new Error('JWT expiration time is not defined in the configuration.');
+        throw new Error("JWT expiration time is not defined in the configuration.");
       }
       return {
         global: true,

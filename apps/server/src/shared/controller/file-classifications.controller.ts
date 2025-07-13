@@ -9,20 +9,20 @@ import {
   Patch,
   Post,
   Query,
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+} from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import {
   CreateFileClassificationDto,
   FileClassificationDto,
   QueryFileClassificationDto,
   ResponseEntity,
   UpdateFileClassificationDto,
-} from '@shared/schema';
-import { plainToInstance } from 'class-transformer';
-import { ApiResponseEntity, Auth } from '../decorator';
-import { FileClassificationsService } from '../service/file-classifications.service';
+} from "@shared/schema";
+import { plainToInstance } from "class-transformer";
+import { ApiResponseEntity, Auth } from "../decorator";
+import { FileClassificationsService } from "../service/file-classifications.service";
 
-@ApiTags('FILE-CLASSIFICATIONS')
+@ApiTags("FILE-CLASSIFICATIONS")
 @Controller()
 export class FileClassificationsController {
   // constructor(private readonly service: FileClassificationsService) {}
