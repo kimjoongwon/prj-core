@@ -1,12 +1,11 @@
-import { get, merge } from 'lodash-es';
-import { useParams } from 'react-router';
-import { addToast } from '@heroui/react';
-import { APIManager } from '@shared/api-client';
-import { Mutation } from '@shared/types';
-import { LoggerUtil } from '@shared/utils';
+import { get, merge } from "lodash-es";
+import { addToast } from "@heroui/react";
+import { APIManager } from "@shared/api-client";
+import { Mutation } from "@shared/types";
+import { LoggerUtil } from "@shared/utils";
 
 // 🎯 Debug logger utility for useMutation
-const logger = LoggerUtil.create('[useMutation]');
+const logger = LoggerUtil.create("[useMutation]");
 
 // 🚨 Toast notification utility
 const showToast = {
@@ -14,28 +13,28 @@ const showToast = {
     addToast({
       title: `✅ ${title}`,
       description,
-      color: 'success',
+      color: "success",
     });
   },
   error: (title: string, description?: string) => {
     addToast({
       title: `❌ ${title}`,
       description,
-      color: 'danger',
+      color: "danger",
     });
   },
   warning: (title: string, description?: string) => {
     addToast({
       title: `⚠️ ${title}`,
       description,
-      color: 'warning',
+      color: "warning",
     });
   },
   info: (title: string, description?: string) => {
     addToast({
       title: `ℹ️ ${title}`,
       description,
-      color: 'primary',
+      color: "primary",
     });
   },
 };
@@ -55,7 +54,7 @@ export const processMutation = (
   requestBody: any;
   pathParamValues: Record<string, any>;
 } => {
-  logger.info('🚀 Processing mutation', {
+  logger.info("🚀 Processing mutation", {
     mutationName: mutation.name,
     hasPathParams: !!mutation.pathParams,
     hasData: !!mutation.data,
@@ -68,13 +67,13 @@ export const processMutation = (
 
     // 🛣️ 1. pathParams 처리 - pageState에서 값 추출
     if (mutation.pathParams) {
-      logger.debug('🛣️ Processing pathParams', {
+      logger.debug("🛣️ Processing pathParams", {
         pathParams: mutation.pathParams,
-        pageStateKeys: pageState ? Object.keys(pageState) : 'no pageState',
+        pageStateKeys: pageState ? Object.keys(pageState) : "no pageState",
         fullPageState: pageState,
       });
 
-      Object.keys(mutation.pathParams).forEach(paramKey => {
+      Object.keys(mutation.pathParams).forEach((paramKey) => {
         const statePath = mutation.pathParams![paramKey];
 
         // pageState에서 값 추출
@@ -88,34 +87,29 @@ export const processMutation = (
         });
 
         if (value === undefined) {
-          logger.warning(
-            `🔍 PathParam value not found for ${paramKey} -> ${statePath}`,
-            {
-              availablePageStateKeys: pageState
-                ? Object.keys(pageState)
-                : 'no pageState',
-              fullPageState: pageState,
-            },
-          );
+          logger.warning(`🔍 PathParam value not found for ${paramKey} -> ${statePath}`, {
+            availablePageStateKeys: pageState ? Object.keys(pageState) : "no pageState",
+            fullPageState: pageState,
+          });
         }
 
         pathParamValues[paramKey] = value;
         apiArgs.push(value);
       });
 
-      logger.success('🛣️ PathParams processed', {
+      logger.success("🛣️ PathParams processed", {
         paramCount: Object.keys(mutation.pathParams).length,
         values: pathParamValues,
       });
     }
 
     // 📦 2. data 처리 - PageState.params에서 값을 추출하여 form.inputs에 병합
-    let extractedData: Record<string, any> = {};
+    const extractedData: Record<string, any> = {};
 
     if (mutation.data) {
-      logger.debug('📦 Processing data extraction', mutation.data);
+      logger.debug("📦 Processing data extraction", mutation.data);
 
-      Object.keys(mutation.data).forEach(targetKey => {
+      Object.keys(mutation.data).forEach((targetKey) => {
         const sourcePath = mutation.data![targetKey];
 
         // PageState에서 값 추출
@@ -127,17 +121,14 @@ export const processMutation = (
             value,
           });
         } else {
-          logger.warning(
-            `📊 Data extraction failed: ${targetKey} <- ${sourcePath}`,
-            {
-              sourcePath,
-              pageStateExists: !!pageState,
-            },
-          );
+          logger.warning(`📊 Data extraction failed: ${targetKey} <- ${sourcePath}`, {
+            sourcePath,
+            pageStateExists: !!pageState,
+          });
         }
       });
 
-      logger.success('📦 Data extraction completed', {
+      logger.success("📦 Data extraction completed", {
         extractedKeys: Object.keys(extractedData),
         extractedData,
       });
@@ -149,7 +140,7 @@ export const processMutation = (
     try {
       // form.inputs에서 기본 데이터 가져오기 (고정)
       const formInputs = pageState?.form?.inputs || {};
-      logger.debug('📝 Form inputs retrieved', {
+      logger.debug("📝 Form inputs retrieved", {
         hasFormInputs: Object.keys(formInputs).length > 0,
         formKeys: Object.keys(formInputs),
       });
@@ -157,29 +148,26 @@ export const processMutation = (
       // 우선순위: formInputs < extractedData
       requestBody = merge({}, formInputs, extractedData);
 
-      logger.success('🔗 Request body assembled', {
+      logger.success("🔗 Request body assembled", {
         finalBodyKeys: Object.keys(requestBody),
         sources: {
           fromFormInputs: Object.keys(formInputs).length,
           fromExtractedData: Object.keys(extractedData).length,
         },
       });
-    } catch (bodyError) {
-      logger.error('💥 Failed to assemble request body', bodyError);
-      showToast.error(
-        '요청 데이터 구성 실패',
-        '요청 바디를 구성하는 중 오류가 발생했습니다.',
-      );
+    } catch (bodyError: any) {
+      logger.error("💥 Failed to assemble request body", bodyError);
+      showToast.error("요청 데이터 구성 실패", "요청 바디를 구성하는 중 오류가 발생했습니다.");
       throw bodyError;
     }
 
     // 📤 4. API 인자에 요청 바디 추가 (pathParams 다음에 추가)
     if (Object.keys(requestBody).length > 0) {
       apiArgs.push(requestBody);
-      logger.debug('📤 Request body added to API args');
+      logger.debug("📤 Request body added to API args");
     }
 
-    logger.success('🏁 Mutation processing completed', {
+    logger.success("🏁 Mutation processing completed", {
       apiArgsCount: apiArgs.length,
       requestBodyKeys: Object.keys(requestBody),
       pathParamCount: Object.keys(pathParamValues).length,
@@ -190,11 +178,11 @@ export const processMutation = (
       requestBody,
       pathParamValues,
     };
-  } catch (error) {
-    logger.error('💥 Mutation processing failed', error);
+  } catch (error: any) {
+    logger.error("💥 Mutation processing failed", error);
     showToast.error(
-      'Mutation 처리 실패',
-      error instanceof Error ? error.message : '알 수 없는 오류',
+      "Mutation 처리 실패",
+      error instanceof Error ? error.message : "알 수 없는 오류",
     );
     throw error;
   }
@@ -207,11 +195,8 @@ export const processMutation = (
  * @param pageState - 페이지 상태 객체
  * @returns API 응답 결과
  */
-export const executeMutation = async (
-  mutation: Mutation,
-  pageState: any,
-): Promise<any> => {
-  logger.info('🎬 Starting mutation execution', {
+export const executeMutation = async (mutation: Mutation, pageState: any): Promise<any> => {
+  logger.info("🎬 Starting mutation execution", {
     mutationName: mutation.name,
   });
 
@@ -221,24 +206,21 @@ export const executeMutation = async (
 
     if (!apiFunction) {
       const errorMsg = `API 함수를 찾을 수 없습니다: ${mutation.name}`;
-      logger.error('🔍 API function not found', {
+      logger.error("🔍 API function not found", {
         mutationName: mutation.name,
         availableFunctions: Object.keys(APIManager),
       });
-      showToast.error('API 함수 오류', errorMsg);
+      showToast.error("API 함수 오류", errorMsg);
       throw new Error(errorMsg);
     }
 
-    logger.success('🔍 API function found', { mutationName: mutation.name });
+    logger.success("🔍 API function found", { mutationName: mutation.name });
 
     // 🔧 Mutation 처리 (pageState만 사용)
-    const { apiArgs, requestBody, pathParamValues } = processMutation(
-      mutation,
-      pageState,
-    );
+    const { apiArgs, requestBody, pathParamValues } = processMutation(mutation, pageState);
 
     // 🚀 API 호출
-    logger.info('🚀 Executing API call', {
+    logger.info("🚀 Executing API call", {
       functionName: mutation.name,
       argsCount: apiArgs.length,
       bodyKeys: Object.keys(requestBody),
@@ -246,26 +228,22 @@ export const executeMutation = async (
 
     const response = await (apiFunction as Function).apply(null, apiArgs);
 
-    logger.success('🎉 Mutation executed successfully', {
+    logger.success("🎉 Mutation executed successfully", {
       responseType: typeof response,
       hasData: !!response?.data,
     });
 
     // ✅ 성공 토스트 (선택적)
     if (response?.data?.message) {
-      showToast.success('작업 완료', response.data.message);
+      showToast.success("작업 완료", response.data.message);
     }
 
     return response;
-  } catch (error) {
-    logger.error('💥 Mutation execution failed', error);
+  } catch (error: any) {
+    logger.error("💥 Mutation execution failed", error);
 
-    const errorMessage =
-      error instanceof Error ? error.message : '알 수 없는 오류';
-    showToast.error(
-      '작업 실패',
-      `작업을 수행하는 중 오류가 발생했습니다: ${errorMessage}`,
-    );
+    const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류";
+    showToast.error("작업 실패", `작업을 수행하는 중 오류가 발생했습니다: ${errorMessage}`);
 
     throw error;
   }

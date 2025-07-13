@@ -7,7 +7,6 @@ import {
   PageBuilder,
   PageTypes,
   ResourceBuilder,
-  TabNavigationProps,
 } from "@shared/types";
 
 export const getGroundPage = (type: PageTypes): PageBuilder => {

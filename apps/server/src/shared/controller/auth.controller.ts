@@ -9,9 +9,11 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { Request, Response } from "express";
-import { ApiResponseEntity, Auth, ContextProvider, Public } from "..";
+import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
 import { AuthService } from "../service/auth.service";
 import { TokenService } from "../service/token.service";
+import { Auth, Public } from "../decorator";
+import { ContextProvider } from "../provider";
 
 @ApiTags("AUTH")
 @Controller()

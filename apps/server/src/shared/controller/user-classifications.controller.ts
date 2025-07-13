@@ -1,15 +1,5 @@
 import { Controller } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import {
-  CreateUserClassificationDto,
-  QueryUserClassificationDto,
-  ResponseEntity,
-  UpdateUserClassificationDto,
-  UserClassificationDto,
-} from "@shared/schema";
-import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../decorator";
-import { UserClassificationsService } from "../service/user-classifications.service";
 
 @ApiTags("USER-CLASSIFICATIONS")
 @Controller()

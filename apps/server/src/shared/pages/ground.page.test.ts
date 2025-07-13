@@ -1,4 +1,3 @@
-import { PageTypes } from "@shared/types";
 import { getGroundPage } from "./ground.page";
 
 describe("GroundPage", () => {

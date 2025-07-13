@@ -10,7 +10,6 @@ import {
   UploadedFiles,
 } from "@nestjs/common";
 import { CreateFileDto, FileDto, ResponseEntity } from "@shared/schema";
-import _ from "lodash";
 import { ApiResponseEntity, Auth } from "../decorator";
 import { ApiFile } from "../decorator/swagger.schema";
 import { FilesService } from "../service/files.service";
@@ -60,7 +59,7 @@ export class FilesController {
   )
   async updateFileById(
     @Param("fileId") fileId: string,
-    @UploadedFiles() { files }: { files: any[] },
+    @UploadedFiles() { files }: { files: FileDto[] },
   ) {
     const fileEntity = await this.service.updateById(fileId, files?.[0]);
     return new ResponseEntity(HttpStatus.OK, "success", fileEntity?.toDto?.() ?? fileEntity);
