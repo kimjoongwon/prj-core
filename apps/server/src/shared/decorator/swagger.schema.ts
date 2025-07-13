@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-len
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-argument */
 import { applyDecorators, Type, UseInterceptors } from "@nestjs/common";
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { ApiBody, ApiConsumes, ApiExtraModels, getSchemaPath } from "@nestjs/swagger";
 import {
   ReferenceObject,

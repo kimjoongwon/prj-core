@@ -1,26 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from "@nestjs/common";
+import { Controller } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import {
-  CreateSpaceClassificationDto,
-  QuerySpaceClassificationDto,
-  ResponseEntity,
-  SpaceClassificationDto,
-  UpdateSpaceClassificationDto,
-} from "@shared/schema";
-import { plainToInstance } from "class-transformer";
-import { ApiResponseEntity, Auth } from "../decorator";
-import { SpaceClassificationsService } from "../service/space-classifications.service";
 
 @ApiTags("SPACE-CLASSIFICATIONS")
 @Controller()

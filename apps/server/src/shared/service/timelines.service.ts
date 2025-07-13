@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CreateTimelineDto, Prisma, QueryTimelineDto } from "@shared/schema";
 import { TimelinesRepository } from "../repository/timeline.repository";
 

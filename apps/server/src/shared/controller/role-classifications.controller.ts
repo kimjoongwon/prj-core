@@ -9,7 +9,6 @@ import {
   Patch,
   Post,
   Query,
-  Type,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import {

@@ -4,11 +4,11 @@
  */
 
 // Export all APIs
-export * from './apis';
-export * as APIManager from './apis';
+export * from "./apis";
+export * as APIManager from "./apis";
 
 // Export all types and models
-export * from './model';
+export * from "./model";
 
 // Export custom axios instance for direct usage if needed
-export { customInstance, AXIOS_INSTANCE } from './libs/customAxios';
+export { customInstance, AXIOS_INSTANCE } from "./libs/customAxios";

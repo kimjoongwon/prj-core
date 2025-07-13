@@ -1,7 +1,4 @@
-import { AppBuilderService } from "./app-builder.service";
 import { AssignmentsService } from "./assignments.service";
-import { AuthService } from "./auth.service";
-import { AwsService } from "./aws.service";
 import { CategoriesService } from "./categories.service";
 import { ExercisesService } from "./exercises.service";
 import { FileAssociationsService } from "./file-associations.service";
@@ -9,7 +6,6 @@ import { FileClassificationsService } from "./file-classifications.service";
 import { FilesService } from "./files.service";
 import { GroundsService } from "./grounds.service";
 import { GroupsService } from "./groups.service";
-import { PasswordService } from "./password.service";
 import { ProgramsService } from "./programs.service";
 import { RoleAssociationsService } from "./role-associations.service";
 import { RoleClassificationsService } from "./role-classifications.service";
