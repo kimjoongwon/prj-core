@@ -1,11 +1,9 @@
-
-
-import { useState, useRef } from 'react';
-import { Play, Pause, Maximize, Minimize } from 'lucide-react';
-import { VideoPlayerProps } from '@shared/types';
-import { Modal, ModalContent } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { state } from '../SortableMedia/SortableMedia';
+import { useState, useRef } from "react";
+import { Play, Pause, Maximize, Minimize } from "lucide-react";
+import { VideoPlayerProps } from "@shared/types";
+import { Modal, ModalContent } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { state } from "../SortableMedia/SortableMedia";
 
 export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -33,8 +31,18 @@ export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
     }
   };
 
+  const close = () => {
+    state.open = false;
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0; // Reset video to start
+    }
+    setIsPlaying(false);
+    setIsFullscreen(false);
+  };
+
   return (
-    <Modal isOpen={state.open} onClose={() => (state.open = false)}>
+    <Modal isOpen={state.open} onClose={close}>
       <ModalContent>
         <div className="relative w-full h-full bg-black bg-opacity-10 rounded-lg overflow-hidden">
           <video
@@ -48,21 +56,13 @@ export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
               onClick={togglePlay}
               className="text-white hover:text-gray-300 transition-colors shadow-md"
             >
-              {isPlaying ? (
-                <Pause className="h-6 w-6" />
-              ) : (
-                <Play className="h-6 w-6" />
-              )}
+              {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
             </button>
             <button
               onClick={toggleFullscreen}
               className="text-white hover:text-gray-300 transition-colors shadow-md"
             >
-              {isFullscreen ? (
-                <Minimize className="h-6 w-6" />
-              ) : (
-                <Maximize className="h-6 w-6" />
-              )}
+              {isFullscreen ? <Minimize className="h-6 w-6" /> : <Maximize className="h-6 w-6" />}
             </button>
           </div>
         </div>
