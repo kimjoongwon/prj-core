@@ -1,4 +1,4 @@
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
+import { ToastProvider } from "@heroui/react";
 import { AppProvider, AuthProvider, QueryProvider } from "@shared/frontend";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 
@@ -11,14 +11,12 @@ export const Providers = (props: ProvidersProps) => {
 
   return (
     <QueryProvider>
-      <HeroUIProvider>
-        <NuqsAdapter>
-          <AuthProvider>
-            <AppProvider>{children}</AppProvider>
-          </AuthProvider>
-          <ToastProvider placement="bottom-center" />
-        </NuqsAdapter>
-      </HeroUIProvider>
+      <NuqsAdapter>
+        <AuthProvider>
+          <AppProvider>{children}</AppProvider>
+        </AuthProvider>
+        <ToastProvider placement="bottom-center" />
+      </NuqsAdapter>
     </QueryProvider>
   );
 };

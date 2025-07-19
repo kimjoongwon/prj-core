@@ -24,6 +24,7 @@ export const getLoginPage = (): PageBuilder => {
       {
         name: "VStack",
         props: {
+          h: 30,
           className: "space-y-4 max-w-md mx-auto mt-16",
         },
         children: [
@@ -33,7 +34,7 @@ export const getLoginPage = (): PageBuilder => {
           {
             name: "Spacer",
             props: {
-              size: "4",
+              size: "20",
             },
           },
           {

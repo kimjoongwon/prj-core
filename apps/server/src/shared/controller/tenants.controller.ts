@@ -12,12 +12,12 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
-  type CreateTenantDto,
+  CreateTenantDto,
   PageMetaDto,
-  type QueryTenantDto,
+  QueryTenantDto,
   ResponseEntity,
   TenantDto,
-  type UpdateTenantDto,
+  UpdateTenantDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";

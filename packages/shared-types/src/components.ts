@@ -99,11 +99,19 @@ export interface VideoPlayerProps {
 export interface VStackProps {
   children: React.ReactNode;
   className?: string;
+  alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+  justifyContent?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+  fullWidth?: boolean;
+  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
 }
 
 export interface HStackProps {
   children: React.ReactNode;
   className?: string;
+  alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+  justifyContent?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+  fullWidth?: boolean;
+  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
 }
 
 // Component specific interfaces from components folder (moved from ui.ts)
