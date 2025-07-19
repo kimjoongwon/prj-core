@@ -1,31 +1,23 @@
-import { action } from 'mobx';
-import { useMobxHookForm } from '../../../..';
-import { MobxProps } from '@shared/types';
-import {
-  Checkbox as NextUICheckbox,
-  CheckboxProps as NextUICheckboxProps,
-} from '@heroui/react';
-import { get } from 'lodash-es';
-import { Text } from '../../../..';
+import { action } from "mobx";
+import { useMobxHookForm } from "../../../..";
+import { MobxProps } from "@shared/types";
+import { Checkbox as NextUICheckbox, CheckboxProps as NextUICheckboxProps } from "@heroui/react";
+import { get } from "lodash-es";
+import { Text } from "../../../..";
 
 export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 
 export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
-  const { path = '', state = {}, ...rest } = props;
+  const { path = "", state = {}, ...rest } = props;
 
   const { localState } = useMobxHookForm(get(state, path), state, path);
 
-  const onChange: any = action((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = action((e: React.ChangeEvent<HTMLInputElement>) => {
     localState.value = e.target.checked;
   });
 
   return (
-    <NextUICheckbox
-      {...rest}
-      onChange={onChange}
-      size="lg"
-      isSelected={localState.value}
-    >
+    <NextUICheckbox {...rest} onChange={onChange} size="lg" isSelected={localState.value}>
       <Text className="font-bold">{props.children}</Text>
     </NextUICheckbox>
   );

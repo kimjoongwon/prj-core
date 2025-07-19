@@ -1,24 +1,24 @@
-import type { HeaderContext, CellContext } from '@tanstack/react-table';
+import type { HeaderContext, CellContext } from "@tanstack/react-table";
 import type {
   ButtonProps,
   CardProps,
   InputProps,
   TableProps,
   ListboxProps as HeroListboxProps,
-} from '@heroui/react';
-import { RouteNames } from './routes';
+} from "@heroui/react";
+import { RouteNames } from "./routes";
 
-export type BuilderOptionTypes = 'create' | 'modify' | 'detail' | 'add';
+export type BuilderOptionTypes = "create" | "modify" | "detail" | "add";
 
 export type BuilderOptions = {
-  id: string | 'new';
+  id: string | "new";
   type: BuilderOptionTypes;
   button: IButtonBuilder;
   sections: SectionBuilder[];
 };
 
 export type Validation = {
-  timings?: ('onBlur' | 'onChange' | 'onFocus')[];
+  timings?: ("onBlur" | "onChange" | "onFocus")[];
   required?: { value: boolean; message: string };
   minLength?: { value: number; message: string };
   maxLength?: { value: number; message: string };
@@ -35,82 +35,82 @@ export type ButtonValidation = {
 
 export type ValidationRecord<T extends object> = Omit<
   Record<keyof T, Validation>,
-  'id' | 'createdAt' | 'updatedAt' | 'removedAt' | 'seq'
+  "id" | "createdAt" | "updatedAt" | "removedAt" | "seq"
 >;
 
 export type ElementName =
-  | 'AutoComplete'
-  | 'Avatar'
-  | 'BottomTab'
-  | 'Breadcrumb'
-  | 'Button'
-  | 'ButtonBuilder'
-  | 'ButtonGroup'
-  | 'CalendarInput'
-  | 'Card'
-  | 'CategoryCard'
-  | 'Checkbox'
-  | 'Chip'
-  | 'Chips'
-  | 'CollapsibleSidebar'
-  | 'Container'
-  | 'Copyright'
-  | 'DarkModeSwitch'
-  | 'DataGrid'
-  | 'DatePicker'
-  | 'DateRangePicker'
-  | 'DepotUploader'
-  | 'Dropdown'
-  | 'Editor'
-  | 'FileUploader'
-  | 'Form'
-  | 'FormGroup'
-  | 'Header'
-  | 'HStack'
-  | 'Input'
-  | 'Link'
-  | 'List'
-  | 'Listbox'
-  | 'Logo'
-  | 'Message'
-  | 'Meta'
-  | 'MultiInput'
-  | 'MultiSelect'
-  | 'Navbar'
-  | 'NavbarItem'
-  | 'NavigationSetup'
-  | 'NotFound'
-  | 'PageModal'
-  | 'Pagination'
-  | 'Placeholder'
-  | 'RadioGroup'
-  | 'ResponsiveVisibility'
-  | 'Search'
-  | 'Section'
-  | 'Select'
-  | 'Skeleton'
-  | 'Spacer'
-  | 'SplashScreen'
-  | 'SubmitButton'
-  | 'Switch'
-  | 'TabNavigation'
-  | 'Table'
-  | 'Tabs'
-  | 'TenantList'
-  | 'Text'
-  | 'Textarea'
-  | 'TimeInput'
-  | 'TimePicker'
-  | 'User'
-  | 'Videos'
-  | 'VideoUploader'
-  | 'VStack'
-  | 'WeekInput'
-  | 'TenantAutoComplete'
-  | 'DataGridBuilder'
-  | 'ResourceBuilder'
-  | 'ListboxBuilder'
-  | 'Outlet';
+  | "AutoComplete"
+  | "Avatar"
+  | "BottomTab"
+  | "Breadcrumb"
+  | "Button"
+  | "ButtonBuilder"
+  | "ButtonGroup"
+  | "CalendarInput"
+  | "Card"
+  | "CategoryCard"
+  | "Checkbox"
+  | "Chip"
+  | "Chips"
+  | "CollapsibleSidebar"
+  | "Container"
+  | "Copyright"
+  | "DarkModeSwitch"
+  | "DataGrid"
+  | "DatePicker"
+  | "DateRangePicker"
+  | "DepotUploader"
+  | "Dropdown"
+  | "Editor"
+  | "FileUploader"
+  | "Form"
+  | "FormGroup"
+  | "Header"
+  | "HStack"
+  | "Input"
+  | "Link"
+  | "List"
+  | "Listbox"
+  | "Logo"
+  | "Message"
+  | "Meta"
+  | "MultiInput"
+  | "MultiSelect"
+  | "Navbar"
+  | "NavbarItem"
+  | "NavigationSetup"
+  | "NotFound"
+  | "PageModal"
+  | "Pagination"
+  | "Placeholder"
+  | "RadioGroup"
+  | "ResponsiveVisibility"
+  | "Search"
+  | "Section"
+  | "Select"
+  | "Skeleton"
+  | "Spacer"
+  | "SplashScreen"
+  | "SubmitButton"
+  | "Switch"
+  | "TabNavigation"
+  | "Table"
+  | "Tabs"
+  | "TenantList"
+  | "Text"
+  | "Textarea"
+  | "TimeInput"
+  | "TimePicker"
+  | "User"
+  | "Videos"
+  | "VideoUploader"
+  | "VStack"
+  | "WeekInput"
+  | "TenantAutoComplete"
+  | "DataGridBuilder"
+  | "ResourceBuilder"
+  | "ListboxBuilder"
+  | "Outlet";
 
 export interface ElementBuilder {
   visibleCondition?: {
@@ -119,7 +119,7 @@ export interface ElementBuilder {
       value: any;
     };
   };
-  type?: 'input' | 'normal';
+  type?: "input" | "normal";
   name: ElementName;
   props?: ElementProps<ElementName>;
   path?: string;
@@ -127,37 +127,37 @@ export interface ElementBuilder {
   children?: ElementBuilder[];
 }
 
-export type ElementProps<T extends ElementName> = T extends 'Button'
+export type ElementProps<T extends ElementName> = T extends "Button"
   ? ButtonProps
-  : T extends 'Input'
-  ? InputProps
-  : T extends 'Card'
-  ? CardProps
-  : T extends 'Table'
-  ? TableProps
-  : T extends 'ButtonBuilder'
-  ? ButtonProps & {
-      mutation?: Mutation;
-      color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-    }
-  : T extends 'Spacer'
-  ? { size?: string }
-  : T extends 'Copyright'
-  ? { companyName?: string }
-  : any;
+  : T extends "Input"
+    ? InputProps
+    : T extends "Card"
+      ? CardProps
+      : T extends "Table"
+        ? TableProps
+        : T extends "ButtonBuilder"
+          ? ButtonProps & {
+              mutation?: Mutation;
+              color?: "primary" | "secondary" | "success" | "warning" | "danger";
+            }
+          : T extends "Spacer"
+            ? { size?: string }
+            : T extends "Copyright"
+              ? { companyName?: string }
+              : any;
 
 export interface ButtonResponse {
   routeName?: RouteNames;
   state?: PageState<unknown>;
   toast?: {
-    color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    color?: "primary" | "secondary" | "success" | "warning" | "danger";
     title: string;
     description: string;
   };
 }
 
 export interface IButtonBuilder extends ButtonProps {
-  buttonType?: 'form' | 'cell' | 'general';
+  buttonType?: "form" | "cell" | "general";
   mutation?: Mutation;
   name?: string;
   icon?: string;
@@ -173,7 +173,7 @@ export interface AlertBuilder {
 }
 
 export interface Navigator {
-  type?: 'push' | 'replace' | 'back' | 'href';
+  type?: "push" | "replace" | "back" | "href";
   route?: {
     name?: RouteNames;
     fullPath?: string;
@@ -183,7 +183,7 @@ export interface Navigator {
   };
 }
 
-export type PageTypes = 'create' | 'modify' | 'detail' | 'add';
+export type PageTypes = "create" | "modify" | "detail" | "add";
 export interface AppBuilder {
   name: string;
   routes: RouteBuilder[];
@@ -240,7 +240,7 @@ export interface PageState<CDO> {
     };
   };
   dataGrid?: {
-    selectedRowIds?: Key[] | 'all';
+    selectedRowIds?: Key[] | "all";
     selectedRowId?: Key;
     filter?: any;
     sortings?: any;
@@ -264,7 +264,7 @@ export interface ResourceBuilder extends ApiQueryBuilder {
 }
 
 export interface PageBuilder {
-  type?: 'Outlet' | 'Page';
+  type?: "Outlet" | "Page";
   name?: string;
   state?: any;
   query?: Query;
@@ -272,7 +272,7 @@ export interface PageBuilder {
 }
 
 // 통합 API 쿼리 시스템
-export type QueryType = 'table' | 'list' | 'resource';
+export type QueryType = "table" | "list" | "resource";
 
 export interface ApiQueryBuilder {
   type: QueryType;
@@ -311,7 +311,7 @@ export interface ApiQueryResult {
 
   // 리소스 전용 반환값
   id?: string;
-  type?: 'create' | 'modify' | 'detail' | 'add';
+  type?: "create" | "modify" | "detail" | "add";
 }
 
 export interface TableState {
@@ -324,7 +324,7 @@ export interface TableState {
 
 export interface TableBuilder extends TableProps, ApiQueryBuilder {
   state?: TableState;
-  selection?: Key[] | 'all';
+  selection?: Key[] | "all";
   columns: ColumnBuilder[];
 }
 
@@ -336,14 +336,14 @@ export interface ColumnBuilder {
 }
 export interface CellBuilder {
   type?:
-    | 'date'
-    | 'time'
-    | 'dateTime'
-    | 'row-actions'
-    | 'text'
-    | 'number'
-    | 'boolean'
-    | 'expandable';
+    | "date"
+    | "time"
+    | "dateTime"
+    | "row-actions"
+    | "text"
+    | "number"
+    | "boolean"
+    | "expandable";
   link?: string;
   buttons?: IButtonBuilder[];
 }
@@ -368,14 +368,14 @@ export interface SectionBuilder {
 }
 
 export interface StackBuilder {
-  type: 'VStack' | 'HStack';
+  type: "VStack" | "HStack";
   elements: ElementBuilder[];
 }
 
 export interface DepotUploaderOptions {
   path: string;
   label?: string;
-  type: 'file' | 'image';
+  type: "file" | "image";
 }
 
 export interface Route {
@@ -390,12 +390,7 @@ export interface Route {
   children?: Route[];
 }
 
-export type CommonEntities =
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'removedAt'
-  | 'seq';
+export type CommonEntities = "id" | "createdAt" | "updatedAt" | "removedAt" | "seq";
 
 export type State<T> = {
   form: {
@@ -404,12 +399,12 @@ export type State<T> = {
 };
 
 export type PageTypeParams = {
-  type: 'add' | 'edit' | 'read';
+  type: "add" | "edit" | "read";
 };
 
 export type Join<K, P> = K extends string | number
   ? P extends string | number
-    ? `${K}${'' extends P ? '' : '.'}${P}`
+    ? `${K}${"" extends P ? "" : "."}${P}`
     : never
   : never;
 
@@ -442,18 +437,18 @@ export type Prev = [
 export type Paths<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends object
-  ? {
-      [K in keyof T]-?: K extends string | number
-        ? `${K}` | Join<K, Paths<T[K], Prev[D]>>
-        : never;
-    }[keyof T]
-  : '';
+    ? {
+        [K in keyof T]-?: K extends string | number
+          ? `${K}` | Join<K, Paths<T[K], Prev[D]>>
+          : never;
+      }[keyof T]
+    : "";
 
 export type Leaves<T, D extends number = 10> = [D] extends [never]
   ? never
   : T extends object
-  ? { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T]
-  : '';
+    ? { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T]
+    : "";
 
 export interface MobxProps<T = any> {
   path: Paths<T, 4>;
@@ -480,10 +475,7 @@ export interface ListboxBuilderQuery {
 }
 
 export interface ListboxBuilderProps
-  extends Omit<
-    HeroListboxProps,
-    'options' | 'value' | 'onChange' | 'children'
-  > {
+  extends Omit<HeroListboxProps, "options" | "value" | "onChange" | "children"> {
   path: string;
   query: ApiQueryBuilder;
 }
