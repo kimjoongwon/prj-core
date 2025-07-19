@@ -27,6 +27,11 @@ const config = {
     config.plugins = config.plugins || [];
     config.plugins.push(tailwindcss());
 
+    // JSX 자동 변환 설정
+    config.esbuild = {
+      jsx: "automatic",
+    };
+
     return config;
   },
 };

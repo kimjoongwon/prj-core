@@ -1,7 +1,5 @@
-
-
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -20,10 +18,8 @@ export const AuthProvider = observer((props: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const checkAuth = (): boolean => {
-    const cookies = document.cookie.split(';');
-    const accessToken = cookies.find(cookie =>
-      cookie.trim().startsWith('accessToken='),
-    );
+    const cookies = document.cookie.split(";");
+    const accessToken = cookies.find((cookie) => cookie.trim().startsWith("accessToken="));
     const authenticated = !!accessToken;
     setIsAuthenticated(authenticated);
     return authenticated;
@@ -37,12 +33,10 @@ export const AuthProvider = observer((props: AuthProviderProps) => {
     const interval = setInterval(checkAuth, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [checkAuth]);
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, checkAuth }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );
@@ -51,9 +45,9 @@ export const AuthProvider = observer((props: AuthProviderProps) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
 
-AuthProvider.displayName = 'AuthProvider';
+AuthProvider.displayName = "AuthProvider";

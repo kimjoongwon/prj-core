@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@shared/frontend";
 
 const meta = {
-  title: "Shared/Button",
+  title: "공유 컴포넌트/버튼",
   component: Button,
   parameters: {
     layout: "centered",
@@ -12,27 +12,34 @@ const meta = {
     color: {
       control: "select",
       options: ["default", "primary", "secondary", "success", "warning", "danger"],
+      description: "버튼의 색상 테마",
     },
     variant: {
       control: "select",
       options: ["solid", "bordered", "light", "flat", "faded", "shadow", "ghost"],
+      description: "버튼의 스타일 변형",
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg"],
+      description: "버튼의 크기",
     },
     radius: {
       control: "select",
       options: ["none", "sm", "md", "lg", "full"],
+      description: "버튼의 모서리 둥근 정도",
     },
     isDisabled: {
       control: "boolean",
+      description: "버튼 비활성화 상태",
     },
     isLoading: {
       control: "boolean",
+      description: "버튼 로딩 상태",
     },
     fullWidth: {
       control: "boolean",
+      description: "전체 너비 사용 여부",
     },
   },
 } satisfies Meta<typeof Button>;
@@ -40,130 +47,130 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
   args: {
-    children: "Button",
+    children: "버튼",
   },
 };
 
-export const Primary: Story = {
+export const 주요버튼: Story = {
   args: {
-    children: "Primary Button",
+    children: "주요 버튼",
     color: "primary",
   },
 };
 
-export const Secondary: Story = {
+export const 보조버튼: Story = {
   args: {
-    children: "Secondary Button",
+    children: "보조 버튼",
     color: "secondary",
   },
 };
 
-export const Success: Story = {
+export const 성공버튼: Story = {
   args: {
-    children: "Success Button",
+    children: "성공 버튼",
     color: "success",
   },
 };
 
-export const Warning: Story = {
+export const 경고버튼: Story = {
   args: {
-    children: "Warning Button",
+    children: "경고 버튼",
     color: "warning",
   },
 };
 
-export const Danger: Story = {
+export const 위험버튼: Story = {
   args: {
-    children: "Danger Button",
+    children: "위험 버튼",
     color: "danger",
   },
 };
 
-export const Variants: Story = {
+export const 다양한스타일: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button variant="solid" color="primary">
-        Solid
+        고체
       </Button>
       <Button variant="bordered" color="primary">
-        Bordered
+        테두리
       </Button>
       <Button variant="light" color="primary">
-        Light
+        연한색
       </Button>
       <Button variant="flat" color="primary">
-        Flat
+        평면
       </Button>
       <Button variant="faded" color="primary">
-        Faded
+        흐린색
       </Button>
       <Button variant="shadow" color="primary">
-        Shadow
+        그림자
       </Button>
       <Button variant="ghost" color="primary">
-        Ghost
+        투명
       </Button>
     </div>
   ),
 };
 
-export const Sizes: Story = {
+export const 다양한크기: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-4">
       <Button size="sm" color="primary">
-        Small
+        작음
       </Button>
       <Button size="md" color="primary">
-        Medium
+        보통
       </Button>
       <Button size="lg" color="primary">
-        Large
+        큼
       </Button>
     </div>
   ),
 };
 
-export const Radius: Story = {
+export const 모서리둥근정도: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <Button radius="none" color="primary">
-        None
+        각진모서리
       </Button>
       <Button radius="sm" color="primary">
-        Small
+        약간둥근
       </Button>
       <Button radius="md" color="primary">
-        Medium
+        보통둥근
       </Button>
       <Button radius="lg" color="primary">
-        Large
+        많이둥근
       </Button>
       <Button radius="full" color="primary">
-        Full
+        완전둥근
       </Button>
     </div>
   ),
 };
 
-export const States: Story = {
+export const 버튼상태: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
-      <Button color="primary">Normal</Button>
+      <Button color="primary">일반상태</Button>
       <Button color="primary" isDisabled>
-        Disabled
+        비활성화
       </Button>
       <Button color="primary" isLoading>
-        Loading
+        로딩중
       </Button>
     </div>
   ),
 };
 
-export const FullWidth: Story = {
+export const 전체너비: Story = {
   args: {
-    children: "Full Width Button",
+    children: "전체 너비 버튼",
     color: "primary",
     fullWidth: true,
   },

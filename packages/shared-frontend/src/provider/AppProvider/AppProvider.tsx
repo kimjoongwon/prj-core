@@ -1,13 +1,11 @@
-
-
-import React, { useEffect, createContext } from 'react';
-import type { RouteBuilder } from '@shared/types';
-import { PlateStore, NavigationStore } from '../../store';
-import { observer } from 'mobx-react-lite';
-import { observable, runInAction } from 'mobx';
-import { useGetAppBuilder } from '@shared/api-client';
-import { useAuth } from '../AuthProvider/AuthProvider';
-import { SplashScreen } from '../../components/ui/SplashScreen';
+import React, { useEffect, createContext } from "react";
+import type { RouteBuilder } from "@shared/types";
+import { PlateStore, NavigationStore } from "../../store";
+import { observer } from "mobx-react-lite";
+import { observable, runInAction } from "mobx";
+import { useGetAppBuilder } from "@shared/api-client";
+import { useAuth } from "../AuthProvider/AuthProvider";
+import { SplashScreen } from "../../components/ui/SplashScreen";
 
 const StoreContext = createContext<PlateStore | null>(null);
 
@@ -50,15 +48,11 @@ export const AppProvider = observer((props: StoreProviderProps) => {
   const { children } = props;
   const { data: response, refetch } = useGetAppBuilder();
   const { isAuthenticated } = useAuth();
-  const routeBuilders: RouteBuilder[] | undefined = (response as any)?.data
-    ?.routes;
+  const routeBuilders: RouteBuilder[] | undefined = (response as any)?.data?.routes;
 
   // 인증 상태가 변경되었을 때 앱 재로드
   useEffect(() => {
-    if (
-      appProvider.lastAuthState !== null &&
-      appProvider.lastAuthState !== isAuthenticated
-    ) {
+    if (appProvider.lastAuthState !== null && appProvider.lastAuthState !== isAuthenticated) {
       // 인증 상태가 변경되었으므로 새로운 라우트를 가져옴
       refetch();
       runInAction(() => {
@@ -82,15 +76,13 @@ export const AppProvider = observer((props: StoreProviderProps) => {
     return <SplashScreen />;
   }
 
-  return (
-    <StoreContext.Provider value={Plate}>{children}</StoreContext.Provider>
-  );
+  return <StoreContext.Provider value={Plate}>{children}</StoreContext.Provider>;
 });
 
 export const usePlate = () => {
   const store = React.useContext(StoreContext);
   if (!store) {
-    throw new Error('useApp must be used within a StoreProvider');
+    throw new Error("useApp must be used within a StoreProvider");
   }
   return store;
 };

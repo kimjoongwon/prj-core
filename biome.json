@@ -13,6 +13,7 @@
         "noArrayIndexKey": "off"
       },
       "correctness": {
+        "noUnusedImports": "off",
         "useExhaustiveDependencies": "warn",
         "useHookAtTopLevel": "off"
       },

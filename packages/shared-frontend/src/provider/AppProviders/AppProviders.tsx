@@ -1,12 +1,12 @@
 import { ToastProvider } from "@heroui/react";
-import { AppProvider, AuthProvider, QueryProvider } from "@shared/frontend";
+import { AppProvider, AuthProvider, QueryProvider } from "../index";
 import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 
-interface ProvidersProps {
+interface AppProvidersProps {
   children: React.ReactNode;
 }
 
-export const Providers = (props: ProvidersProps) => {
+export const AppProviders = (props: AppProvidersProps) => {
   const { children } = props;
 
   return (

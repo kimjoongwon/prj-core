@@ -1,5 +1,4 @@
 import "../tailwind.css";
-import { UIProviders } from "@shared/frontend";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
@@ -18,13 +17,6 @@ const preview = {
       test: "todo",
     },
   },
-  decorators: [
-    (Story) => (
-      <UIProviders>
-        <Story />
-      </UIProviders>
-    ),
-  ],
 };
 
 export default preview;
