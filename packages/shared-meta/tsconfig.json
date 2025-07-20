@@ -1,0 +1,10 @@
+{
+  "extends": "@shared/typescript-config/base",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "incremental": false
+  },
+  "include": ["**/*"],
+  "exclude": ["node_modules", "dist"]
+}

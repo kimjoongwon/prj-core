@@ -1,0 +1,32 @@
+{
+  "name": "@shared/meta",
+  "version": "1.0.0",
+  "description": "Shared page metadata and builders",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kimjoongwon",
+  "license": "ISC",
+  "devDependencies": {
+    "@heroui/react": "^2.7.8",
+    "@shared/typescript-config": "workspace:*",
+    "tsup": "^8.3.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@shared/schema": "workspace:*",
+    "@shared/types": "workspace:*"
+  }
+}

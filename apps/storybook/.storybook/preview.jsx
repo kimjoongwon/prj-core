@@ -1,8 +1,36 @@
 import "../tailwind.css";
-import { UIProviders } from "@shared/frontend";
+import { AppProviders, UIProviders } from "@shared/frontend";
 
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
+  decorators: [
+    (Story, { title, parameters }) => {
+      // 페이지 폴더의 스토리들에만 AppProviders 적용
+      if (title?.startsWith('페이지/') || parameters?.pageProvider) {
+        return (
+          <AppProviders>
+            <Story />
+          </AppProviders>
+        );
+      }
+      
+      // 빌더 컴포넌트들에는 AppProviders 적용
+      if (title?.startsWith('빌더 컴포넌트/')) {
+        return (
+          <AppProviders>
+            <Story />
+          </AppProviders>
+        );
+      }
+      
+      // 일반 컴포넌트는 UIProviders만 적용
+      return (
+        <UIProviders>
+          <Story />
+        </UIProviders>
+      );
+    },
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -18,13 +46,6 @@ const preview = {
       test: "todo",
     },
   },
-  decorators: [
-    (Story) => (
-      <UIProviders>
-        <Story />
-      </UIProviders>
-    ),
-  ],
 };
 
 export default preview;

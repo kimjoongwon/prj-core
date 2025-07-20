@@ -1,13 +1,13 @@
-import { NavigationSetup, NotFound, Plate, RouteBuilder, useAuth } from '@shared/frontend';
-import type { RouteBuilder as IRouteBuilder } from '@shared/types';
-import { observer } from 'mobx-react-lite';
+import { NavigationSetup, NotFound, Plate, RouteBuilder, useAuth } from "@shared/frontend";
+import type { RouteBuilder as IRouteBuilder } from "@shared/types";
+import { observer } from "mobx-react-lite";
 import {
   Navigate,
   Outlet,
   type RouteObject,
   RouterProvider,
   createBrowserRouter,
-} from 'react-router';
+} from "react-router";
 
 const AppLayout = () => (
   <>
@@ -48,7 +48,7 @@ export const App = observer(() => {
   // 모든 라우트를 포함한 라우터 설정
   const routes: RouteObject[] = [
     {
-      path: '/',
+      path: "/",
       Component: AppLayout,
       children: [
         {
@@ -60,7 +60,7 @@ export const App = observer(() => {
     },
     // Catch-all route for 404 Not Found
     {
-      path: '*',
+      path: "*",
       element: (
         <NotFound
           title="페이지를 찾을 수 없습니다"
