@@ -75,9 +75,6 @@ export const rawRoutes: RouteBuilder[] = [
               {
                 name: ROUTE_NAMES.GROUND_LIST,
                 relativePath: "grounds",
-                layout: {
-                  type: "Root",
-                },
                 icon: "Map",
                 page: getGroundsPage(),
                 children: [

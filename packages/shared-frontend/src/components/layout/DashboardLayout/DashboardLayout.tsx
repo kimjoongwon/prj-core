@@ -1,18 +1,17 @@
-import React from 'react';
-import { Card, CardBody } from '@heroui/react';
-import { Text } from '../../ui/Text';
-import { DashboardLayoutProps } from '@shared/types';
-import { observer } from 'mobx-react-lite';
+import { Card, CardBody } from "@heroui/react";
+import { Text } from "../../ui/Text";
+import { DashboardLayoutProps } from "@shared/types";
+import { observer } from "mobx-react-lite";
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
-  const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } =
-    props;
+  const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } = props;
 
   const renderPlaceholder = (componentName: string) => (
     <Card className="h-full shadow-sm">
       <CardBody className="flex items-center justify-center">
         <div className="text-center space-y-2">
           <div className="w-12 h-12 mx-auto rounded-lg bg-default-100 flex items-center justify-center">
+            {/** biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
             <svg
               className="w-6 h-6 text-default-400"
               fill="none"
@@ -35,7 +34,7 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
     </Card>
   );
 
-  const headerElement = header || renderPlaceholder('HeaderComponent');
+  const headerElement = header || renderPlaceholder("HeaderComponent");
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -49,9 +48,7 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
         {/* Left Sidebar - Only rendered when leftSidebar is provided */}
         {leftSidebar && (
           <aside className="flex flex-col bg-content1 border-r border-divider transition-all duration-300 min-w-16">
-            <div className="h-full overflow-y-auto scrollbar-thin">
-              {leftSidebar}
-            </div>
+            <div className="h-full overflow-y-auto scrollbar-thin">{leftSidebar}</div>
           </aside>
         )}
 
@@ -60,11 +57,9 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
           <div className="flex-1 overflow-y-auto scrollbar-thin">
             <div className="p-6">
               <Card className="min-h-full shadow-sm">
-                <CardBody className="p-6">
+                <CardBody>
                   {/* Breadcrumb Navigation */}
-                  {breadcrumb && (
-                    <div className="mb-4 sm:mb-6">{breadcrumb}</div>
-                  )}
+                  {breadcrumb && <div className="mb-4 sm:mb-6">{breadcrumb}</div>}
                   {children}
                 </CardBody>
               </Card>
@@ -92,4 +87,4 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   );
 });
 
-DashboardLayout.displayName = 'DashboardLayout';
+DashboardLayout.displayName = "DashboardLayout";
