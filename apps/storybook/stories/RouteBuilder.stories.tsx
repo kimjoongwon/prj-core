@@ -24,7 +24,6 @@ export const 기본: Story = {
     routeBuilder: {
       layout: {
         type: "default",
-        props: {},
       },
       page: {
         elements: [
@@ -46,7 +45,6 @@ export const 페이지컴포넌트포함: Story = {
     routeBuilder: {
       layout: {
         type: "default",
-        props: {},
       },
       page: {
         elements: [

@@ -14,10 +14,10 @@ import {
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import {
-  type CreateUserDto,
-  type QueryUserDto,
+  CreateUserDto,
+  QueryUserDto,
   ResponseEntity,
-  type UpdateUserDto,
+  UpdateUserDto,
   UserDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";

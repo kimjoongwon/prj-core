@@ -42,6 +42,7 @@
 		"@nestjs/terminus": "^11.0.0",
 		"@nestjs/throttler": "^6.4.0",
 		"@prisma/client": "^6.11.1",
+		"@shared/meta": "workspace:*",
 		"@shared/schema": "workspace:*",
 		"@shared/utils": "workspace:*",
 		"@shared/vars": "workspace:*",

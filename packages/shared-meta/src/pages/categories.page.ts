@@ -1,6 +1,6 @@
 import { $Enums } from "@shared/schema";
 import { DataGridBuilderProps, IButtonBuilder, PageBuilder } from "@shared/types";
-import { ContextProvider } from "../provider/context.provider";
+// Note: ContextProvider is now handled externally and not needed for page definition
 
 export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuilder => {
   return {
@@ -11,7 +11,7 @@ export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuil
         parentId: null,
         name: "",
         label: "",
-        tenantId: ContextProvider.getTenantId(),
+        // tenantId will be set dynamically by the server
       },
     },
     elements: [
@@ -44,7 +44,7 @@ export const getCategoriesPage = (categoryTypes: $Enums.CategoryTypes): PageBuil
                 skip: 0,
                 take: 10,
                 type: categoryTypes,
-                tenantId: ContextProvider.getTenantId(),
+                // tenantId will be set dynamically by the server
               },
             },
             pagination: {

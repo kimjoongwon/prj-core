@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@shared/meta": "workspace:*",
     "@heroui/react": "^2.8.1",
     "@shared/frontend": "workspace:*",
     "@tanstack/react-query": "^5.66.9",
