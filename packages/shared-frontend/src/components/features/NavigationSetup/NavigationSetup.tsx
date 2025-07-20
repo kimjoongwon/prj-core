@@ -1,7 +1,7 @@
 
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { Plate } from '../../../provider';
 
 /**

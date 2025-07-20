@@ -1,9 +1,9 @@
-import React, { createContext } from 'react';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { PageBuilder as PageBuilderInterface } from '@shared/types';
-import { v4 } from 'uuid';
-import { defaultTo } from 'lodash-es';
-import { useParams } from 'react-router';
+import React, { createContext } from "react";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { PageBuilder as PageBuilderInterface } from "@shared/types";
+import { v4 } from "uuid";
+import { defaultTo } from "lodash-es";
+import { useParams } from "@tanstack/react-router";
 
 interface PageProviderProps {
   pageBuilder: PageBuilderInterface;
@@ -11,17 +11,13 @@ interface PageProviderProps {
   children: React.ReactNode;
 }
 
-const PageContext = createContext<PageBuilderInterface>(
-  {} as PageBuilderInterface,
-);
+const PageContext = createContext<PageBuilderInterface>({} as PageBuilderInterface);
 
 export const PageProvider = observer((props: PageProviderProps) => {
-  const params = useParams();
   const page = useLocalObservable(() => ({
     ...props.pageBuilder,
     state: {
       ...props.pageBuilder.state,
-      params,
       setState: (newState: any) => defaultTo(page.state, newState),
     },
   }));
@@ -34,13 +30,13 @@ export const PageProvider = observer((props: PageProviderProps) => {
   );
 });
 
-PageContext.displayName = 'PageContext';
-PageProvider.displayName = 'PageProvider';
+PageContext.displayName = "PageContext";
+PageProvider.displayName = "PageProvider";
 
 export const usePage = (): PageBuilderInterface => {
   const page = React.useContext(PageContext);
   if (!page) {
-    throw new Error('usePage must be used within a PageProvider');
+    throw new Error("usePage must be used within a PageProvider");
   }
   return page;
 };

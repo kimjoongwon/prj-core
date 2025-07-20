@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { LayoutBuilder as LayoutBuilderInterface } from "@shared/types";
 import { observer } from "mobx-react-lite";
 import { reaction } from "mobx";
-import { Outlet } from "react-router";
+import { Outlet } from "@tanstack/react-router";
 import { DashboardLayout } from "../../layout/DashboardLayout";
 import { Header, CollapsibleSidebar } from "../../layout";
 import { useNavigation } from "../../../provider";

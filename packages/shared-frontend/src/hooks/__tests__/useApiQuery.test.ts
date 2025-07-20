@@ -18,7 +18,7 @@ vi.mock('nuqs', () => ({
   useQueryState: vi.fn(),
 }));
 
-vi.mock('react-router', () => ({
+vi.mock('@tanstack/react-router', () => ({
   useParams: vi.fn(),
   useLocation: vi.fn(),
 }));
@@ -41,7 +41,7 @@ vi.mock('../provider', () => ({
 
 import { APIManager } from '@shared/api-client';
 import { useQueryState } from 'nuqs';
-import { useParams, useLocation } from 'react-router';
+import { useParams, useLocation } from '@tanstack/react-router';
 import { addToast } from '@heroui/react';
 import { isEmpty, get } from 'lodash-es';
 import type { ApiQueryBuilder } from '@shared/types';

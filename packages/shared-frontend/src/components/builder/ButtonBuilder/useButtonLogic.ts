@@ -4,7 +4,7 @@ import { ButtonResponse, Mutation, Navigator } from '@shared/types';
 import { Plate, usePage } from '@shared/frontend';
 import { get } from 'lodash-es';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { PathUtil, LoggerUtil } from '@shared/utils';
 import { toJS } from 'mobx';

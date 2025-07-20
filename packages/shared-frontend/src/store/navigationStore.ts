@@ -1,14 +1,16 @@
 import { type RouteBuilder, type Route } from '@shared/types';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { type NavigateFunction } from 'react-router';
+import { type NavigateOptions } from '@tanstack/react-router';
 import { LoggerUtil } from '@shared/utils';
 import { type INavigationStore } from './navigatorStore';
 import { type PlateStore } from './plateStore';
 
 const logger = LoggerUtil.create('[NavigationStore]');
 
-// Next.js와 React Router 모두 지원하기 위한 타입
-type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
+// Next.js와 TanStack Router 모두 지원하기 위한 타입
+type UniversalNavigateFunction = 
+  | ((options: { to: string } & NavigateOptions) => void)
+  | ((path: string) => void);
 
 /**
  * NavigationStore - 통합된 네비게이션 스토어
@@ -104,7 +106,7 @@ export class NavigationStore implements INavigationStore {
   }
 
   /**
-   * React Router의 navigate 함수 또는 Next.js router.push 설정
+   * TanStack Router의 navigate 함수 또는 Next.js router.push 설정
    */
   setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
     this.plateStore.navigator.setNavigateFunction(navigateFunction);
