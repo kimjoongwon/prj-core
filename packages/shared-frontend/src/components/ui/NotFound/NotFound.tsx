@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, CardBody } from '@heroui/react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { Container } from '../Container';
 import { VStack } from '../VStack';
 import { Text } from '../Text';

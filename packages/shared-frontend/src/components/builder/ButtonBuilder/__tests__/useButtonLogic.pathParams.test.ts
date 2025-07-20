@@ -17,7 +17,7 @@ jest.mock('@shared/frontend', () => ({
   },
 }));
 
-jest.mock('react-router', () => ({
+jest.mock('@tanstack/react-router', () => ({
   useNavigate: jest.fn(() => jest.fn()),
   useParams: jest.fn(() => ({ id: 'test-id' })),
 }));
@@ -79,7 +79,7 @@ describe('useButtonLogic - pathParams 기능', () => {
     result.current.handleApiCall();
 
     // navigate 함수가 올바른 경로로 호출되었는지 확인
-    const navigate = require('react-router').useNavigate();
+    const navigate = require('@tanstack/react-router').useNavigate();
     expect(navigate).toHaveBeenCalledWith('456/detail/tenants/123');
   });
 
@@ -202,7 +202,7 @@ describe('useButtonLogic - pathParams 기능', () => {
 
     result.current.handleApiCall();
 
-    const navigate = require('react-router').useNavigate();
+    const navigate = require('@tanstack/react-router').useNavigate();
     expect(navigate).toHaveBeenCalledWith('organizations/org-123/users/deep-nested-id');
   });
 
@@ -238,7 +238,7 @@ describe('useButtonLogic - pathParams 기능', () => {
 
     result.current.handleApiCall();
 
-    const navigate = require('react-router').useNavigate();
+    const navigate = require('@tanstack/react-router').useNavigate();
     expect(navigate).toHaveBeenCalledWith('items/123');
   });
 });

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { LayoutBuilder as LayoutBuilderInterface } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import { Outlet } from 'react-router';
+import { Outlet } from '@tanstack/react-router';
 import { AuthLayout } from '../../layout/AuthLayout';
 import { ModalLayout } from '../../layout/ModalLayout';
 import { DashboardLayoutBuilder } from './DashboardLayoutBuilder';

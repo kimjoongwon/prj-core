@@ -3,7 +3,7 @@ import { TabNavigationProps } from '@shared/types';
 import { reaction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation } from '@tanstack/react-router';
 
 export const TabNavigation = observer((props: TabNavigationProps) => {
   const { tabBuilder } = props;

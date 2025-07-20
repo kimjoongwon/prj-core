@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useLocation } from 'react-router';
+import { useLocation } from '@tanstack/react-router';
 import {
   Breadcrumbs,
   BreadcrumbItem as HeroBreadcrumbItem,

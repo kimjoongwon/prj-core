@@ -2,7 +2,7 @@ import { APIManager } from '@shared/api-client';
 import { ApiQueryBuilder, ApiQueryResult } from '@shared/types';
 import { isEmpty, get } from 'lodash-es';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { useLocation } from 'react-router';
+import { useLocation } from '@tanstack/react-router';
 import { addToast } from '@heroui/react';
 import { LoggerUtil } from '@shared/utils';
 import { usePage } from '../provider';

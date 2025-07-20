@@ -58,6 +58,7 @@
     "@heroui/react": ">=2.8.1",
     "@heroui/use-theme": ">=2.1.8",
     "@tanstack/react-query": ">=5.66.9",
+    "@tanstack/react-router": ">=1.83.3",
     "framer-motion": ">=11.5.6",
     "mobx": ">=6.13.6",
     "mobx-react-lite": ">=4.1.0",
@@ -65,7 +66,6 @@
     "pluralize": ">=8.0.0",
     "react": ">=19.1.0",
     "react-dom": ">=19.1.0",
-    "react-router": ">=7.6.1",
     "uuid": ">=11.1.0"
   },
   "devDependencies": {
@@ -110,7 +110,9 @@
     "postcss": "^8.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^7.6.1",
+    "@tanstack/react-router": "^1.83.3",
+    "@tanstack/router-devtools": "^1.83.3",
+    "@tanstack/router-cli": "^1.83.3",
     "react-test-renderer": "^19.0.0",
     "tailwindcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",

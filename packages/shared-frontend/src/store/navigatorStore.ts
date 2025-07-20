@@ -1,11 +1,13 @@
 import { PathUtil, LoggerUtil } from '@shared/utils';
-import { type NavigateFunction } from 'react-router';
+import { type NavigateOptions } from '@tanstack/react-router';
 import { type PlateStore } from './plateStore';
 
 const logger = LoggerUtil.create('[NavigatorStore]');
 
-// Next.js와 React Router 모두 지원하기 위한 타입
-type UniversalNavigateFunction = NavigateFunction | ((path: string) => void);
+// Next.js와 TanStack Router 모두 지원하기 위한 타입
+type UniversalNavigateFunction = 
+  | ((options: { to: string } & NavigateOptions) => void)
+  | ((path: string) => void);
 
 /**
  * 네비게이션 스토어 인터페이스
@@ -20,7 +22,7 @@ export interface INavigationStore {
  */
 export class NavigatorStore {
   private navigateFunction?: UniversalNavigateFunction;
-  private isReactRouter: boolean = false;
+  private isTanStackRouter: boolean = false;
   private pathResolver?: (name: string) => string | undefined;
   private plateStore: PlateStore;
 
@@ -29,13 +31,13 @@ export class NavigatorStore {
   }
 
   /**
-   * React Router의 navigate 함수 또는 Next.js router.push 설정
+   * TanStack Router의 navigate 함수 또는 Next.js router.push 설정
    */
   setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
     this.navigateFunction = navigateFunction;
-    // NavigateFunction인지 확인 (length가 2 이상이면 React Router로 간주)
-    this.isReactRouter =
-      typeof navigateFunction === 'function' && navigateFunction.length >= 2;
+    // TanStack Router인지 확인 (첫 번째 매개변수가 객체인지 확인)
+    this.isTanStackRouter =
+      typeof navigateFunction === 'function' && navigateFunction.length === 1;
   }
 
   /**
@@ -83,7 +85,16 @@ export class NavigatorStore {
       urlSearchParams,
     );
 
-    this.navigateFunction(pathnameWithSearchParams);
+    // TanStack Router vs Next.js 구분하여 호출
+    if (this.isTanStackRouter) {
+      // TanStack Router - 객체 형태로 호출
+      (this.navigateFunction as (options: { to: string } & NavigateOptions) => void)({
+        to: pathnameWithSearchParams,
+      });
+    } else {
+      // Next.js - 문자열로 호출
+      (this.navigateFunction as (path: string) => void)(pathnameWithSearchParams);
+    }
 
     // 네비게이션 후 라우트 활성화 상태 업데이트
     if (this.plateStore?.navigation) {
@@ -173,12 +184,13 @@ export class NavigatorStore {
       urlSearchParams,
     );
 
-    // React Router의 경우 navigate(path, { replace: true })
+    // TanStack Router의 경우 navigate({ to: path, replace: true })
     // Next.js의 경우 router.replace(path)
     if (this.navigateFunction) {
-      if (this.isReactRouter) {
-        // React Router NavigateFunction
-        (this.navigateFunction as NavigateFunction)(pathnameWithSearchParams, {
+      if (this.isTanStackRouter) {
+        // TanStack Router - 객체 형태로 호출
+        (this.navigateFunction as (options: { to: string } & NavigateOptions) => void)({
+          to: pathnameWithSearchParams,
           replace: true,
         });
       } else {
