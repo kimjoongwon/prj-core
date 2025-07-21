@@ -226,7 +226,7 @@ export interface Mutation {
   // 🛣️ 경로 파라미터: PageState에서 값을 추출하여 mutation 인자로 사용
   pathParams?: Record<string, string>; // { groundId: 'id', testId: 'id' }
   // ✅ 필드별 validation 규칙 (각 키는 pageState의 전체 경로)
-  validationFields?: Record<string, Validation>; // 예: { 'form.inputs.name': {...}, 'form.inputs.email': {...} }
+  validationFields?: Record<string, Validation>; // 예: { 'form.input.name': {...}, 'form.input.email': {...} }
 }
 
 export type Key = string | number;

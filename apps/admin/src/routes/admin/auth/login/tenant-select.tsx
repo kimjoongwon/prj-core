@@ -6,7 +6,7 @@ import { useState } from "react";
 const TenantSelectRouteComponent = () => {
   const navigate = useNavigate();
   const [selectedTenant, setSelectedTenant] = useState("");
-  
+
   // Mock tenant data - in real app this would come from API
   const tenants = [
     { id: "1", name: "서울 그라운드" },
@@ -19,7 +19,7 @@ const TenantSelectRouteComponent = () => {
       alert("그라운드를 선택해주세요.");
       return;
     }
-    
+
     // Navigate to dashboard
     navigate({ to: "/admin/dashboard" });
   };
@@ -37,17 +37,10 @@ const TenantSelectRouteComponent = () => {
         }}
       >
         {tenants.map((tenant) => (
-          <ListboxItem key={tenant.id}>
-            {tenant.name}
-          </ListboxItem>
+          <ListboxItem key={tenant.id}>{tenant.name}</ListboxItem>
         ))}
       </Listbox>
-      <Button
-        color="primary"
-        size="md"
-        className="w-full"
-        onPress={handleSelect}
-      >
+      <Button color="primary" size="md" className="w-full" onPress={handleSelect}>
         선택
       </Button>
     </VStack>

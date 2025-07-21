@@ -13,6 +13,7 @@ export { MultiInput } from './MultiInput';
 export { MultiSelect } from './MultiSelect';
 export { Navbar } from './Navbar';
 export { Pagination } from './Pagination';
+export { PasswordInput } from './PasswordInput';
 export { RadioGroup } from './RadioGroup';
 export { Search } from './Search';
 export { Switch } from './Switch';

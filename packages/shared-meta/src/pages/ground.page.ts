@@ -149,7 +149,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
       name: "Input" as const,
       props: {
         label: "전화번호",
-        path: "form.inputs.phone",
+        path: "form.input.phone",
         isReadOnly: isReadonly,
         variant: "underlined",
       } as InputProps<any>,
@@ -167,7 +167,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
       name: "Input" as const,
       props: {
         label: "주소",
-        path: "form.inputs.address",
+        path: "form.input.address",
         isReadOnly: isReadonly,
         variant: "underlined",
       } as InputProps<any>,
@@ -176,7 +176,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
       name: "Input" as const,
       props: {
         label: "사업자번호",
-        path: "form.inputs.businessNo",
+        path: "form.input.businessNo",
         isReadOnly: isReadonly,
         variant: "underlined",
       } as InputProps<any>,
@@ -230,7 +230,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
                           name: "FileUploader" as const,
                           props: {
                             label: "로고 이미지 파일 ID",
-                            path: "form.inputs.logoImageFileId",
+                            path: "form.input.logoImageFileId",
                             isReadOnly: isReadonly,
                             variant: "underlined",
                           } as InputProps<any>,
@@ -239,7 +239,7 @@ export const getGroundPage = (type: PageTypes): PageBuilder => {
                           name: "FileUploader" as const,
                           props: {
                             label: "이미지 파일 ID",
-                            path: "form.inputs.imageFileId",
+                            path: "form.input.imageFileId",
                             isReadOnly: isReadonly,
                             variant: "underlined",
                           } as InputProps<any>,

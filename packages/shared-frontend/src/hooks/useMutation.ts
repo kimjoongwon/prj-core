@@ -134,13 +134,13 @@ export const processMutation = (
       });
     }
 
-    // 🔗 3. 요청 바디 구성 - form.inputs + extractedData 병합
+    // 🔗 3. 요청 바디 구성 - form.input + extractedData 병합
     let requestBody: any = {};
 
     try {
       // form.inputs에서 기본 데이터 가져오기 (고정)
       const formInputs = pageState?.form?.inputs || {};
-      logger.debug("📝 Form inputs retrieved", {
+      logger.debug("📝 Form input retrieved", {
         hasFormInputs: Object.keys(formInputs).length > 0,
         formKeys: Object.keys(formInputs),
       });

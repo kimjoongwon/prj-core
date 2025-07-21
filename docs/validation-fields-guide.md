@@ -15,7 +15,7 @@ ButtonBuilder에서 사용할 수 있는 새로운 validation 시스템입니다
     mutation: {
       name: 'createUser',
       validationFields: {
-        'form.inputs.name': {
+        'form.input.name': {
           required: { value: true, message: '이름은 필수입니다' },
           minLength: { value: 2, message: '최소 2자 이상 입력해주세요' }
         }
@@ -35,19 +35,19 @@ ButtonBuilder에서 사용할 수 있는 새로운 validation 시스템입니다
     mutation: {
       name: 'createUser',
       validationFields: {
-        'form.inputs.name': {
+        'form.input.name': {
           required: { value: true, message: '이름은 필수입니다' },
           minLength: { value: 2, message: '최소 2자 이상' },
           maxLength: { value: 50, message: '최대 50자까지' }
         },
-        'form.inputs.email': {
+        'form.input.email': {
           required: { value: true, message: '이메일은 필수입니다' },
           patterns: [{
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: '올바른 이메일 형식이 아닙니다'
           }]
         },
-        'form.inputs.age': {
+        'form.input.age': {
           required: { value: true, message: '나이는 필수입니다' },
           min: { value: 18, message: '18세 이상이어야 합니다' },
           max: { value: 120, message: '120세 이하여야 합니다' }
@@ -67,13 +67,13 @@ mutation: {
   name: 'createGround',
   queryKey: '/api/v1/grounds',
   validationFields: {
-    'form.inputs.name': {
+    'form.input.name': {
       required: { value: true, message: '그라운드 이름은 필수입니다' }
     },
-    'form.inputs.label': {
+    'form.input.label': {
       required: { value: true, message: '라벨은 필수입니다' }
     },
-    'form.inputs.email': {
+    'form.input.email': {
       patterns: [{
         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         message: '올바른 이메일 형식이 아닙니다'
@@ -88,14 +88,14 @@ mutation: {
 mutation: {
   name: 'getToken',
   validationFields: {
-    'form.inputs.email': {
+    'form.input.email': {
       required: { value: true, message: '이메일은 필수입니다' },
       patterns: [{
         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
         message: '올바른 이메일 형식이 아닙니다'
       }]
     },
-    'form.inputs.password': {
+    'form.input.password': {
       required: { value: true, message: '비밀번호는 필수입니다' },
       minLength: { value: 6, message: '비밀번호는 최소 6자 이상이어야 합니다' }
     }
@@ -149,7 +149,7 @@ patterns: [
 {
   mutation: {
     name: 'createUser',
-    path: 'form.inputs'  // ❌ 제거됨
+    path: 'form.input'  // ❌ 제거됨
   },
   validation: {  // ❌ 제거됨
     required: { value: true, message: '이름은 필수입니다' }
@@ -163,10 +163,10 @@ patterns: [
   mutation: {
     name: 'createUser',
     validationFields: {  // ✅ 새로운 방식
-      'form.inputs.name': {
+      'form.input.name': {
         required: { value: true, message: '이름은 필수입니다' }
       },
-      'form.inputs.email': {
+      'form.input.email': {
         required: { value: true, message: '이메일은 필수입니다' },
         patterns: [{
           value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,

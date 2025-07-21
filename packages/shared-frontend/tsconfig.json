@@ -30,14 +30,7 @@
 
     // 경로 매핑
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-
-    // 타입 정의
     "types": ["vitest/globals", "node"],
-
-    // 플러그인
     "plugins": [
       {
         "name": "next"
