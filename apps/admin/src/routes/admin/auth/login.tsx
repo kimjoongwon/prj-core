@@ -4,26 +4,6 @@ import { observer } from "mobx-react-lite";
 import { observable } from "mobx";
 import { useMutation } from "@tanstack/react-query";
 import { getToken } from "@shared/api-client/dist";
-
-const LoginRouteComponent = observer(() => {
-  const state = useState();
-  const { onClickLogin } = useHandler();
-
-  return (
-    <>
-      <LoginForm state={state.loginForm} />
-      <Button fullWidth type="submit" onClick={onClickLogin}>
-        로그인
-      </Button>
-      <Outlet />
-    </>
-  );
-});
-
-export const Route = createFileRoute("/admin/auth/login")({
-  component: LoginRouteComponent,
-});
-
 interface Props {
   state: ReturnType<typeof useState>;
   actions: ReturnType<typeof useActions>;
@@ -77,3 +57,26 @@ const useHandler = (props: Props) => {
     onClickLogin,
   };
 };
+
+const LoginRouteComponent = observer(() => {
+  const state = useState();
+  const actions = useActions();
+  const { onClickLogin } = useHandler({
+    state,
+    actions,
+  });
+
+  return (
+    <>
+      <LoginForm state={state.loginForm} />
+      <Button fullWidth type="submit" onClick={onClickLogin}>
+        로그인
+      </Button>
+      <Outlet />
+    </>
+  );
+});
+
+export const Route = createFileRoute("/admin/auth/login")({
+  component: LoginRouteComponent,
+});
