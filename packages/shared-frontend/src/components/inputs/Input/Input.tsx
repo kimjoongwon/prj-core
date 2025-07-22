@@ -1,43 +1,40 @@
-
-
-import { ChangeEventHandler } from 'react';
-import { useMobxHookForm } from '../../../..';
-import { action } from 'mobx';
-import { observer } from 'mobx-react-lite';
-import { get } from 'lodash-es';
-import { InputProps } from '@shared/types';
-import { Input as HeroUiInput } from '@heroui/react';
+import { ChangeEventHandler } from "react";
+import { useMobxHookForm } from "../../../..";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
+import { get } from "lodash-es";
+import { InputProps } from "@shared/types";
+import { Input as HeroUiInput } from "@heroui/react";
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
   const {
-    path = '',
+    path = "",
     state = {},
     onChange,
     onBlur,
-    errorMessage = ' ',
+    errorMessage = " ",
     type,
-    size = 'sm',
+    size = "sm",
     validation,
     ...rest
   } = props;
 
-  const initialValue = get(state, path) || '';
+  const initialValue = get(state, path) || "";
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
-    e => {
-      if (type === 'number' && typeof Number(e.target.value) === 'number') {
-        return (localState.value = Number(e.target.value));
-      }
+  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action((e) => {
+    if (type === "number" && typeof Number(e.target.value) === "number") {
+      localState.value = Number(e.target.value);
+      return;
+    }
 
-      localState.value = e.target.value;
-      onChange && onChange(localState.value);
-    },
-  );
+    localState.value = e.target.value;
+    onChange?.(localState.value);
+  });
 
-  const handleOnBlur: InputProps<T>['onBlur'] = e => {
-    onBlur && onBlur(e.target.value as any);
+  const handleOnBlur: InputProps<T>["onBlur"] = (e) => {
+    onBlur?.(e.target.value as any);
   };
 
   return (
@@ -48,7 +45,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
       onChange={handleChange}
       onBlur={handleOnBlur}
       errorMessage={errorMessage}
-      value={String(localState.value || '')}
+      value={String(localState.value || "")}
     />
   );
 });
