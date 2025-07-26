@@ -96,17 +96,4 @@ export class AppBuilderService {
 
     return route;
   }
-
-  /**
-   * 유효한 인증 라우트인지 확인
-   */
-  private isValidAuthRoute(route: RouteBuilder | null): route is RouteBuilder {
-    return (
-      route !== null &&
-      route?.name === ROUTE_TYPES.ADMIN &&
-      route.children !== undefined &&
-      Array.isArray(route.children) &&
-      route.children.some((child) => child?.name === ROUTE_TYPES.AUTH)
-    );
-  }
 }

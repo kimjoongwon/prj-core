@@ -1,4 +1,4 @@
-export const ADMIN_PATH = '/admin';
+export const ADMIN_PATH = "/admin";
 export const DASHBOARD_PAGE_PATH = `${ADMIN_PATH}/dashboard`;
 export const ADMIN_AUTH_PATH = `${ADMIN_PATH}/auth`;
 export const ADMIN_AUTH_LOGIN_PATH = `${ADMIN_AUTH_PATH}/login`;

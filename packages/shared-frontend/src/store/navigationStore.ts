@@ -1,40 +1,22 @@
-import { type RouteBuilder, type Route } from '@shared/types';
-import { makeAutoObservable, runInAction } from 'mobx';
-import { type NavigateOptions } from '@tanstack/react-router';
-import { LoggerUtil } from '@shared/utils';
-import { type INavigationStore } from './navigatorStore';
-import { type PlateStore } from './plateStore';
+import { type RouteBuilder, type Route } from "@shared/types";
+import { makeAutoObservable, runInAction } from "mobx";
+import { type AnyRouter } from "@tanstack/react-router";
+import { LoggerUtil } from "@shared/utils";
+import { type INavigationStore } from "./navigatorStore";
+import { type PlateStore } from "./plateStore";
 
-const logger = LoggerUtil.create('[NavigationStore]');
+const logger = LoggerUtil.create("[NavigationStore]");
 
-// Next.js와 TanStack Router 모두 지원하기 위한 타입
-type UniversalNavigateFunction = 
-  | ((options: { to: string } & NavigateOptions) => void)
-  | ((path: string) => void);
+// TanStack Router의 navigate 함수 타입 (제네릭 버전)
+type TanStackNavigateFunction<TRouter extends AnyRouter = AnyRouter> = TRouter["navigate"];
 
-/**
- * NavigationStore - 통합된 네비게이션 스토어
- *
- * Route 객체를 원천으로 사용하여 라우트 관리, 네비게이션, 활성 상태 추적을 처리합니다.
- * fullPath(절대경로)와 relativePath(상대경로)를 명확히 구분하여 경로 혼동을 방지합니다.
- *
- * 주요 특징:
- * - RouteBuilder에서 Route로 변환된 객체를 단일 데이터 소스로 사용
- * - routes 배열을 통한 직접적인 라우트 검색
- * - 단순화된 경로 매칭 로직
- * - fullPath와 relativePath의 명확한 구분
- * - PlateStore를 통해 NavigatorStore에 접근
- */
-export class NavigationStore implements INavigationStore {
+export class NavigationStore<TRouter extends AnyRouter = AnyRouter> implements INavigationStore {
   private _routes: Route[] = [];
   private plateStore: PlateStore;
   routeBuilders: RouteBuilder[] = [];
   currentRoute: Route | undefined = undefined;
-  selectedDashboardFullPath: string | undefined = '';
-
-  // 현재 경로 추적을 위한 observable 프로퍼티들
-  currentFullPath: string = '';
-  currentRelativePath: string = '';
+  currentFullPath: string = "";
+  currentRelativePath: string = "";
 
   constructor(plateStore: PlateStore, routeBuilders: RouteBuilder[] = []) {
     this.plateStore = plateStore;
@@ -43,34 +25,28 @@ export class NavigationStore implements INavigationStore {
 
     // 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
     this.initializeCurrentPath();
-
-    makeAutoObservable(this, {
-      routeBuilders: false, // routeBuilders는 외부에서 직접 수정하지 않도록 설정
-    });
+    makeAutoObservable(this);
   }
 
   /**
    * 초기 경로 설정 - localStorage에서 복원하거나 현재 위치 사용
    */
   private initializeCurrentPath(): void {
-    if (typeof window !== 'undefined') {
-      let initialPath = window.location?.pathname || '';
+    if (typeof window !== "undefined") {
+      let initialPath = window.location?.pathname || "";
 
       // localStorage에서 마지막 경로 복원 시도
       try {
-        const savedPath = localStorage.getItem('navigationCurrentPath');
-        if (savedPath && savedPath !== '/') {
+        const savedPath = localStorage.getItem("currentFullPath");
+        if (savedPath && savedPath !== "/") {
           // 저장된 경로가 있고 루트가 아닌 경우, 현재 브라우저 경로와 비교
           // 브라우저 경로가 루트(/)이고 저장된 경로가 있으면 저장된 경로 사용
-          if (initialPath === '/' || !initialPath) {
+          if (initialPath === "/" || !initialPath) {
             initialPath = savedPath;
           }
         }
       } catch (error) {
-        logger.warning(
-          'Failed to restore navigation path from localStorage:',
-          error,
-        );
+        logger.warning("Failed to restore navigation path from localStorage:", error);
       }
 
       if (initialPath) {
@@ -87,11 +63,11 @@ export class NavigationStore implements INavigationStore {
     this.currentRelativePath = this.extractRelativePath(fullPath);
 
     // localStorage에 현재 경로 저장
-    if (typeof window !== 'undefined' && fullPath && fullPath !== '/') {
+    if (typeof window !== "undefined" && fullPath && fullPath !== "/") {
       try {
-        localStorage.setItem('navigationCurrentPath', fullPath);
+        localStorage.setItem("currentFullPath", fullPath);
       } catch (error) {
-        logger.warning('Failed to save navigation path to localStorage:', error);
+        logger.warning("Failed to save navigation path to localStorage:", error);
       }
     }
   }
@@ -100,16 +76,24 @@ export class NavigationStore implements INavigationStore {
    * 절대 경로에서 마지막 세그먼트를 추출하여 상대 경로로 변환
    */
   private extractRelativePath(fullPath: string): string {
-    if (!fullPath) return '';
-    const segments = fullPath.split('/').filter(s => s.length > 0);
-    return segments.length > 0 ? segments[segments.length - 1] : '';
+    if (!fullPath) return "";
+    const segments = fullPath.split("/").filter((s) => s.length > 0);
+    return segments.length > 0 ? segments[segments.length - 1] : "";
   }
 
   /**
-   * TanStack Router의 navigate 함수 또는 Next.js router.push 설정
+   * TanStack Router의 navigate 함수 설정
    */
-  setNavigateFunction(navigateFunction: UniversalNavigateFunction): void {
-    this.plateStore.navigator.setNavigateFunction(navigateFunction);
+  setTanStackNavigateFunction(navigateFunction: TanStackNavigateFunction<TRouter>): void {
+    this.plateStore.navigator.setTanStackNavigateFunction(navigateFunction);
+  }
+
+  /**
+   * 범용 네비게이션 함수 설정 (이전 버전과의 호환성)
+   * @deprecated Use setTanStackNavigateFunction instead
+   */
+  setNavigateFunction(navigateFunction: TanStackNavigateFunction<TRouter>): void {
+    this.plateStore.navigator.setTanStackNavigateFunction(navigateFunction);
   }
 
   /**
@@ -138,34 +122,29 @@ export class NavigationStore implements INavigationStore {
   private generateRoutesFromBuilders(routeBuilders: RouteBuilder[]): void {
     const convertRouteBuilderToRoute = (
       routeBuilder: RouteBuilder,
-      parentPath: string = '',
+      parentPath: string = "",
     ): Route => {
       // RouteBuilder가 pathname 속성을 사용하는 경우 relativePath로 처리 (테스트 호환성)
-      const relativePath =
-        routeBuilder.relativePath || (routeBuilder as any).pathname || '';
+      const relativePath = routeBuilder.relativePath || (routeBuilder as any).pathname || "";
 
       // fullPath: 절대 경로 (부모 경로와 결합)
       const fullPath = this.combinePaths(parentPath, relativePath);
 
       const route: Route = {
-        name: routeBuilder.name || '',
+        name: routeBuilder.name || "",
         fullPath: fullPath,
         relativePath: relativePath,
         params: routeBuilder.params,
         active: false,
         icon: routeBuilder.icon,
         children:
-          routeBuilder.children?.map(child =>
-            convertRouteBuilderToRoute(child, fullPath),
-          ) || [],
+          routeBuilder.children?.map((child) => convertRouteBuilderToRoute(child, fullPath)) || [],
       };
 
       return route;
     };
 
-    this._routes = routeBuilders.map(builder =>
-      convertRouteBuilderToRoute(builder),
-    );
+    this._routes = routeBuilders.map((builder) => convertRouteBuilderToRoute(builder));
   }
 
   // ===== 라우트 검색 및 조회 =====
@@ -264,13 +243,13 @@ export class NavigationStore implements INavigationStore {
    * routes 원천 데이터를 통해 현재 활성화된 대시보드 자식 라우트를 찾음
    */
   getSelectedDashboardRouteChildren(): Route[] {
-    const dashboardRoute = this.getRouteByName('대시보드');
+    const dashboardRoute = this.getRouteByName("대시보드");
     if (!dashboardRoute?.children?.length) return [];
 
     // 현재 경로와 매칭되는 대시보드 자식 라우트 찾기
     const normalizedCurrentPath = this.normalizePath(this.currentFullPath);
 
-    const matchingChild = dashboardRoute.children.find(child => {
+    const matchingChild = dashboardRoute.children.find((child) => {
       const normalizedChildPath = this.normalizePath(child.fullPath);
       return normalizedCurrentPath.startsWith(normalizedChildPath);
     });
@@ -287,13 +266,13 @@ export class NavigationStore implements INavigationStore {
     pathname: string;
     icon?: string;
   } | null {
-    const dashboardRoute = this.getRouteByName('대시보드');
+    const dashboardRoute = this.getRouteByName("대시보드");
     if (!dashboardRoute?.children?.length) return null;
 
     // 현재 경로와 매칭되는 대시보드 자식 라우트 찾기 (선택된 대시보드 메뉴)
     const normalizedCurrentPath = this.normalizePath(this.currentFullPath);
 
-    const selectedDashboardChild = dashboardRoute.children.find(child => {
+    const selectedDashboardChild = dashboardRoute.children.find((child) => {
       const normalizedChildPath = this.normalizePath(child.fullPath);
       return normalizedCurrentPath.startsWith(normalizedChildPath);
     });
@@ -337,10 +316,7 @@ export class NavigationStore implements INavigationStore {
   /**
    * 라우트가 현재 경로에 대해 활성 상태인지 확인 - 단순화된 로직
    */
-  private isRouteActive(
-    currentFullPath: string,
-    routeFullPath: string,
-  ): boolean {
+  private isRouteActive(currentFullPath: string, routeFullPath: string): boolean {
     if (!currentFullPath || !routeFullPath) return false;
 
     const normalizedCurrent = this.normalizePath(currentFullPath);
@@ -352,7 +328,7 @@ export class NavigationStore implements INavigationStore {
     }
 
     // 하위 경로 매칭 (현재 경로가 라우트 경로의 하위인 경우)
-    return normalizedCurrent.startsWith(normalizedRoute + '/');
+    return normalizedCurrent.startsWith(`${normalizedRoute}/`);
   }
 
   /**
@@ -369,7 +345,7 @@ export class NavigationStore implements INavigationStore {
     const activeRoutes: Route[] = [];
 
     const findActiveRoutes = (routes: Route[]) => {
-      routes.forEach(route => {
+      routes.forEach((route) => {
         if (route.active) {
           activeRoutes.push(route);
         }
@@ -389,11 +365,11 @@ export class NavigationStore implements INavigationStore {
    * 경로 결합 헬퍼 함수
    */
   private combinePaths(parent: string, child: string): string {
-    if (!parent) return child.startsWith('/') ? child : `/${child}`;
+    if (!parent) return child.startsWith("/") ? child : `/${child}`;
     if (!child) return parent;
 
-    const cleanParent = parent.endsWith('/') ? parent.slice(0, -1) : parent;
-    const cleanChild = child.startsWith('/') ? child : `/${child}`;
+    const cleanParent = parent.endsWith("/") ? parent.slice(0, -1) : parent;
+    const cleanChild = child.startsWith("/") ? child : `/${child}`;
 
     return `${cleanParent}${cleanChild}`;
   }
@@ -402,8 +378,8 @@ export class NavigationStore implements INavigationStore {
    * 경로를 정규화 (슬래시 제거 및 통일)
    */
   private normalizePath(path: string): string {
-    if (!path) return '';
-    return path.startsWith('/') ? path.slice(1) : path;
+    if (!path) return "";
+    return path.startsWith("/") ? path.slice(1) : path;
   }
 
   /**

@@ -6,15 +6,30 @@ import { observable, runInAction } from "mobx";
 import { useGetAppBuilder } from "@shared/api-client";
 import { useAuth } from "../AuthProvider/AuthProvider";
 import { SplashScreen } from "../../components/ui/SplashScreen";
+import { type AnyRouter } from "@tanstack/react-router";
 
-const StoreContext = createContext<PlateStore | null>(null);
+const StoreContext = createContext<PlateStore<AnyRouter> | null>(null);
 
 interface StoreProviderProps {
   children: React.ReactNode;
 }
 
 // Define Plate as a global variable that will be initialized by AppProvider
-export let Plate: PlateStore;
+export let Plate: PlateStore<AnyRouter>;
+
+// Helper function to initialize Plate with specific router type
+export function initializePlateWithRouter<TRouter extends AnyRouter>(
+  routeBuilders: RouteBuilder[],
+  router: TRouter
+): PlateStore<TRouter> {
+  const plateStore = new PlateStore<TRouter>(routeBuilders);
+  plateStore.isInitialized = true;
+  
+  // Set the navigate function with proper typing
+  plateStore.navigation.setTanStackNavigateFunction(router.navigate);
+  
+  return plateStore;
+}
 
 // MobX observable state
 const appProvider = observable(
@@ -31,7 +46,7 @@ const appProvider = observable(
     },
 
     initializePlate(routeBuilders: RouteBuilder[]) {
-      Plate = new PlateStore(routeBuilders);
+      Plate = new PlateStore<AnyRouter>(routeBuilders);
       Plate.isInitialized = true;
       this.isInitialized = true;
     },
