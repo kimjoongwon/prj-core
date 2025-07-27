@@ -1,6 +1,11 @@
-import { CopyrightView } from './CopyrightView';
-import { CopyrightProps } from '@shared/types';
+import dayjs from "dayjs";
+import { CopyrightProps } from "@shared/types";
 
 export const Copyright = (props: CopyrightProps) => {
-  return <CopyrightView companyName={props.companyName} />;
+  const { companyName } = props;
+  return (
+    <p className="text-xs text-center text-gray-500">
+      © {dayjs().get("year")} {companyName}. All rights reserved.
+    </p>
+  );
 };

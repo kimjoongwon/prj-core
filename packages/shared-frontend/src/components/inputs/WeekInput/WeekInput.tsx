@@ -3,7 +3,7 @@
 import { WeekInputView } from './WeekInputView';
 import { get } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 import { RecurringDayOfTheWeek } from '@shared/types';
 
 export const WeekInput = observer((props: any) => {

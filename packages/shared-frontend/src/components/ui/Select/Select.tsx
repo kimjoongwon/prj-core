@@ -6,7 +6,7 @@ import {
 } from '@heroui/react';
 import { MobxProps } from '@shared/types';
 import { cloneDeep, get } from 'lodash-es';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 import { Option } from '@shared/types';
 
 interface SelectProps<T>

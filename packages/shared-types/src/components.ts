@@ -12,10 +12,10 @@ import type {
   AutocompleteProps,
   SelectProps as NextUISelectProps,
   ListboxProps as HeroListboxProps,
-} from '@heroui/react';
-import type { HeaderContext } from '@tanstack/react-table';
-import type { Leaves, MobxProps, Route, Option, Validation } from './builders';
-import type { ReactNode } from 'react';
+} from "@heroui/react";
+import type { HeaderContext } from "@tanstack/react-table";
+import type { Leaves, MobxProps, Route, Option, Validation } from "./builders";
+import type { ReactNode } from "react";
 
 // Form and component props interfaces
 export interface FormUnitProps<T> {
@@ -38,9 +38,9 @@ export interface ResponsiveVisibilityProps {
   /** The children components to show/hide */
   children: React.ReactNode;
   /** Device type - 'mobile' will hide on mobile, 'pc' will hide on desktop */
-  device: 'mobile' | 'pc';
+  device: "mobile" | "pc";
   /** Breakpoint for responsive behavior (default: 'xl' - 1280px) */
-  breakpoint?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  breakpoint?: "sm" | "md" | "lg" | "xl" | "2xl";
   /** Additional CSS classes */
   className?: string;
 }
@@ -54,7 +54,7 @@ export interface PaginationState {
 export interface QuerySorting {
   query: {
     sortingKey?: string;
-    sortingValue?: 'asc' | 'desc';
+    sortingValue?: "asc" | "desc";
     skip: number;
     take: number;
   };
@@ -71,14 +71,14 @@ export interface SearchFilterState<T extends object> {
 
 // Button and UI component interfaces
 export interface GroupButton extends ButtonProps {
-  href?: LinkProps['href'];
+  href?: LinkProps["href"];
 }
 
 // FileUploader related types
 export interface UploadedMedia {
   id: string;
   url: string;
-  type: 'image' | 'video';
+  type: "image" | "video";
 }
 
 export interface SortableMediaProps {
@@ -87,7 +87,7 @@ export interface SortableMediaProps {
 }
 
 export interface MediaUploadProps {
-  mode: 'single' | 'multiple';
+  mode: "single" | "multiple";
   maxFiles?: number;
 }
 
@@ -96,20 +96,20 @@ export interface VideoPlayerProps {
 }
 
 // Stack component interfaces
-export interface VStackProps {
-  children: React.ReactNode;
+export type VStackProps = {
+  children?: React.ReactNode;
   className?: string;
-  alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
-  justifyContent?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+  alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
+  justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
   fullWidth?: boolean;
   gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
-}
+};
 
 export interface HStackProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
-  alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
-  justifyContent?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+  alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
+  justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
   fullWidth?: boolean;
   gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
 }
@@ -119,51 +119,51 @@ export interface HStackProps {
 
 // Text component variant type
 export const textVariants = {
-  base: 'font-pretendard',
+  base: "font-pretendard",
   variants: {
     variant: {
-      h1: 'text-4xl font-bold text-black',
-      h2: 'text-3xl font-bold text-black',
-      h3: 'text-2xl font-bold text-black',
-      h4: 'text-xl font-bold text-black',
-      h5: 'text-lg font-bold text-black',
-      h6: 'text-base font-bold text-black',
-      caption: 'text-sm font-normal text-gray-500',
-      subtitle1: 'text-base font-normal text-gray-500',
-      subtitle2: 'text-sm font-normal text-gray-500',
-      body1: 'text-base font-normal text-black',
-      body2: 'text-sm font-normal text-black',
-      title: 'text-xl font-normal text-black',
-      label: 'text-sm font-semiBold text-gray-500',
-      text: 'text-base font-normal text-black',
+      h1: "text-4xl font-bold text-black",
+      h2: "text-3xl font-bold text-black",
+      h3: "text-2xl font-bold text-black",
+      h4: "text-xl font-bold text-black",
+      h5: "text-lg font-bold text-black",
+      h6: "text-base font-bold text-black",
+      caption: "text-sm font-normal text-gray-500",
+      subtitle1: "text-base font-normal text-gray-500",
+      subtitle2: "text-sm font-normal text-gray-500",
+      body1: "text-base font-normal text-black",
+      body2: "text-sm font-normal text-black",
+      title: "text-xl font-normal text-black",
+      label: "text-sm font-semiBold text-gray-500",
+      text: "text-base font-normal text-black",
     },
   },
   defaultVariants: {
-    variant: 'body1',
+    variant: "body1",
   },
 } as const;
 
 export interface TextProps extends React.HTMLAttributes<HTMLElement> {
   variant?:
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6'
-    | 'caption'
-    | 'subtitle1'
-    | 'subtitle2'
-    | 'body1'
-    | 'body2'
-    | 'title'
-    | 'label'
-    | 'text'
-    | 'error';
+    | "h1"
+    | "h2"
+    | "h3"
+    | "h4"
+    | "h5"
+    | "h6"
+    | "caption"
+    | "subtitle1"
+    | "subtitle2"
+    | "body1"
+    | "body2"
+    | "title"
+    | "label"
+    | "text"
+    | "error";
   as?: React.ElementType;
   children?: React.ReactNode;
   truncate?: boolean;
-  lineClamp?: 1 | 2 | 3 | 4 | 5 | 6 | 'none';
+  lineClamp?: 1 | 2 | 3 | 4 | 5 | 6 | "none";
 }
 
 export interface SearchProps<T> extends MobxProps<T> {
@@ -193,9 +193,7 @@ export interface SwitchProps<T> extends NextUISwitchProps, MobxProps<T> {}
 
 export interface BaseTextareaProps<T> extends TextAreaProps, MobxProps<T> {}
 
-export interface DatePickerProps<T>
-  extends HeroUiDatePickerProps,
-    MobxProps<T> {}
+export interface DatePickerProps<T> extends HeroUiDatePickerProps, MobxProps<T> {}
 
 export interface DateRangePickerProps<T extends object>
   extends HeroUiDateRangePickerProps,
@@ -236,17 +234,12 @@ export interface CategoryCardProps {
 
 export interface FileUploaderProps<T = any> extends MobxProps<T> {
   label?: string;
-  type: 'image' | 'video' | 'all';
-  onFilesChange?: (
-    type: FileUploaderProps<T>['type'],
-    fileDtos: Partial<any>[],
-  ) => void;
+  type: "image" | "video" | "all";
+  onFilesChange?: (type: FileUploaderProps<T>["type"], fileDtos: Partial<any>[]) => void;
   onFileRemove?: (fileDto: Partial<any>) => void;
 }
 
-export interface SelectProps<T>
-  extends Omit<NextUISelectProps, 'children'>,
-    MobxProps<T> {
+export interface SelectProps<T> extends Omit<NextUISelectProps, "children">, MobxProps<T> {
   options?: Option[];
 }
 
@@ -260,7 +253,7 @@ export interface ListProps<T> {
 
 export interface MultiInputProps<T> extends MobxProps<T>, NextUIInputProps {}
 
-export type EmailProps<T> = any & {
+export type EmailProps<_T> = any & {
   validation?: any; // Validation type would be imported
 };
 
@@ -350,10 +343,10 @@ export interface DashboardLayoutProps {
 export interface BottomTabProps {
   routes: Route[];
   className?: string;
-  activeColor?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-  inactiveColor?: 'default' | 'secondary';
-  variant?: 'light' | 'solid' | 'bordered' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  activeColor?: "primary" | "secondary" | "success" | "warning" | "danger";
+  inactiveColor?: "default" | "secondary";
+  variant?: "light" | "solid" | "bordered" | "ghost";
+  size?: "sm" | "md" | "lg";
   showLabels?: boolean;
   iconSize?: number;
   onTabPress?: (route: Route) => void;
@@ -373,7 +366,7 @@ export interface LayoutProps {
 }
 
 export interface FormGroupControlProps {
-  direction?: 'row' | 'col';
+  direction?: "row" | "col";
   children: React.ReactNode;
 }
 
@@ -392,7 +385,7 @@ export interface ChipsProps<T> extends MobxProps<T> {}
 
 // AutoComplete component types
 export interface BaseAutoCompleteProps<T>
-  extends Omit<AutocompleteProps, 'children'>,
+  extends Omit<AutocompleteProps, "children">,
     MobxProps<T> {
   options: {
     text: string;
@@ -403,7 +396,7 @@ export interface BaseAutoCompleteProps<T>
 
 // TenantAutoComplete component types
 export interface TenantAutoCompleteProps
-  extends Omit<AutocompleteProps, 'children' | 'selectedKey' | 'onSelectionChange'> {
+  extends Omit<AutocompleteProps, "children" | "selectedKey" | "onSelectionChange"> {
   /** Additional CSS classes */
   className?: string;
   /** Callback function called when a tenant is selected */
@@ -415,20 +408,18 @@ export interface ButtonGroupProps {
   rightButtons?: GroupButton[];
 }
 
-export interface DepotProps<T>
-  extends MobxProps<T>,
-    Omit<FileUploaderProps<T>, 'onFilesChange'> {}
+export interface DepotProps<T> extends MobxProps<T>, Omit<FileUploaderProps<T>, "onFilesChange"> {}
 
 export type RecurringDayOfTheWeek =
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY';
+  | "MONDAY"
+  | "TUESDAY"
+  | "WEDNESDAY"
+  | "THURSDAY"
+  | "FRIDAY"
+  | "SATURDAY"
+  | "SUNDAY";
 
-export type ListboxProps<T> = Omit<HeroListboxProps, 'state' | 'children'> &
+export type ListboxProps<T> = Omit<HeroListboxProps, "state" | "children"> &
   MobxProps<T> & {
     title?: string;
     options:
@@ -458,7 +449,7 @@ export interface SpacerProps {
   /**
    * Direction of the spacer - horizontal or vertical
    */
-  direction?: 'horizontal' | 'vertical';
+  direction?: "horizontal" | "vertical";
 
   /**
    * Optional additional className

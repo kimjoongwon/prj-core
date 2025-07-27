@@ -1,8 +1,6 @@
-
-
-import { v4 } from 'uuid';
-import { observer } from 'mobx-react-lite';
-import { Button } from '../Button';
+import { v4 } from "uuid";
+import { observer } from "mobx-react-lite";
+import { Button } from "../Button";
 
 export interface NavbarItemProps {
   url: string;
@@ -26,7 +24,7 @@ export const NavbarItem = observer((props: NavbarItemProps) => {
       key={v4()}
       variant="light"
       className="font-semibold"
-      color={active ? 'primary' : 'default'}
+      color={active ? "primary" : "default"}
       onClick={onClickNavItem}
     >
       {text}

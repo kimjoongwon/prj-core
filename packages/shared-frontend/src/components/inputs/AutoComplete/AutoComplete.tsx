@@ -3,7 +3,7 @@ import { cloneDeep, get } from 'lodash-es';
 import React from 'react';
 import { BaseAutoCompleteProps } from '@shared/types';
 import { observer } from 'mobx-react-lite';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 
 export const AutoComplete = observer(
   <T extends object>(props: BaseAutoCompleteProps<T>) => {

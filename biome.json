@@ -28,7 +28,9 @@
       "a11y": {
         "useButtonType": "off",
         "useAltText": "off",
-        "useMediaCaption": "off"
+        "useMediaCaption": "off",
+        "noLabelWithoutControl": "off",
+        "useValidAnchor": "off"
       }
     }
   },
