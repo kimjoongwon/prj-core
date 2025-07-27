@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Card, CardBody } from '@heroui/react';
-import { useNavigate } from '@tanstack/react-router';
 import { Container } from '../Container';
 import { VStack } from '../VStack';
 import { Text } from '../Text';
@@ -24,9 +23,13 @@ export interface NotFoundProps {
    */
   backButtonText?: string;
   /**
-   * 홈 경로
+   * 홈으로 돌아가기 클릭 핸들러
    */
-  homePath?: string;
+  onHomeClick?: () => void;
+  /**
+   * 이전 페이지로 돌아가기 클릭 핸들러
+   */
+  onBackClick?: () => void;
   /**
    * 추가 액션 버튼들
    */
@@ -38,27 +41,18 @@ export interface NotFoundProps {
 }
 
 /**
- * 404 Not Found 페이지 컴포넌트
+ * 404 Not Found 페이지 컴포넌트 (Pure Function)
  */
-export const NotFound: React.FC<NotFoundProps> = ({
+export function NotFound({
   title = '페이지를 찾을 수 없습니다',
   description = '요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.',
   homeButtonText = '홈으로 돌아가기',
   backButtonText = '이전 페이지',
-  homePath = '/',
+  onHomeClick,
+  onBackClick,
   actions,
   icon,
-}) => {
-  const navigate = useNavigate();
-
-  const handleGoHome = () => {
-    navigate(homePath);
-  };
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
+}: NotFoundProps) {
   const defaultIcon = (
     <div className="text-9xl text-gray-300 font-bold">404</div>
   );
@@ -87,7 +81,7 @@ export const NotFound: React.FC<NotFoundProps> = ({
                   color="primary"
                   variant="solid"
                   size="lg"
-                  onClick={handleGoHome}
+                  onPress={onHomeClick}
                   className="w-full"
                 >
                   {homeButtonText}
@@ -97,7 +91,7 @@ export const NotFound: React.FC<NotFoundProps> = ({
                   color="default"
                   variant="bordered"
                   size="md"
-                  onClick={handleGoBack}
+                  onPress={onBackClick}
                   className="w-full"
                 >
                   {backButtonText}
@@ -109,6 +103,6 @@ export const NotFound: React.FC<NotFoundProps> = ({
       </Card>
     </Container>
   );
-};
+}
 
 export default NotFound;
