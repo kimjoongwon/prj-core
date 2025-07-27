@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
   LoginPayloadDto,
@@ -24,8 +34,8 @@ export class AuthController {
   ) {}
 
   @ApiResponseEntity(TokenDto, HttpStatus.OK)
-  @Post("token")
-  async getToken(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
+  @Post("login")
+  async login(@Body() loginDto: LoginPayloadDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
 
     res.cookie("refreshToken", refreshToken, {
@@ -44,6 +54,33 @@ export class AuthController {
         user,
       }),
     );
+  }
+
+  @ApiResponseEntity(TokenDto, HttpStatus.OK)
+  @Post("token/refresh")
+  async refreshToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<TokenDto> {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      throw new UnauthorizedException("리프레시 토큰이 존재하지 않습니다.");
+    }
+
+    const { newAccessToken, newRefreshToken } = await this.authService.getNewToken(refreshToken);
+
+    res.cookie("refreshToken", newRefreshToken, { httpOnly: true });
+    res.cookie("accessToken", newAccessToken, { httpOnly: true });
+
+    const user = await this.authService.getCurrentUser(newAccessToken);
+
+    return plainToInstance(TokenDto, {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+      user,
+      mainTenantId: user.tenants?.find((tenant) => tenant.main)?.id || "",
+    });
   }
 
   @Auth([])

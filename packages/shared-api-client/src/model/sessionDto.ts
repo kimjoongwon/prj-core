@@ -19,8 +19,7 @@ export interface SessionDto {
   type: SessionTypes;
   startDateTime?: string;
   endDateTime?: string;
-  /** @nullable */
-  timelineId?: string | null;
+  timelineId: string;
   /** @nullable */
   repeatCycleType?: SessionDtoRepeatCycleType;
   /** @nullable */

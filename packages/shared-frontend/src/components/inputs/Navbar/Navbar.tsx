@@ -1,39 +1,34 @@
-import { observer } from 'mobx-react-lite';
-import { HStack, VStack, Plate } from '../../../..';
-import { Button } from '@heroui/react';
-import { Route } from '@shared/types';
-import { renderLucideIcon } from '../../../utils/iconUtils';
+import { observer } from "mobx-react-lite";
+import { HStack, VStack } from "../../../..";
+import { Button } from "@heroui/react";
+import { Route } from "@shared/types";
+import { renderLucideIcon } from "../../../utils/iconUtils";
 
 interface NavbarProps {
   routes: Route[];
-  direction?: 'horizontal' | 'vertical';
+  direction?: "horizontal" | "vertical";
 }
 
 export const Navbar = observer((props: NavbarProps) => {
-  const { routes, direction = 'horizontal' } = props;
+  const { routes, direction = "horizontal" } = props;
 
   const handleRouteClick = (route: Route) => {
     if (route.fullPath) {
       // NavigationStore의 setCurrentPath를 통해 경로 변경
       // 실제 네비게이션 로직은 DashboardLayoutBuilder의 reaction에서 처리
-      Plate.navigation.setCurrentPath(route.fullPath);
     }
   };
 
-  if (direction === 'vertical') {
+  if (direction === "vertical") {
     return (
       <VStack className="gap-2">
         {routes?.map((route, index) => (
           <Button
             variant="light"
-            color={route.active ? 'primary' : 'default'}
+            color={route.active ? "primary" : "default"}
             key={route.name || `route-${index}`}
             onPress={() => handleRouteClick(route)}
-            startContent={
-              route.icon
-                ? renderLucideIcon(route.icon, 'w-4 h-4', 16)
-                : undefined
-            }
+            startContent={route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined}
           >
             {route.name || route.fullPath}
           </Button>
@@ -47,12 +42,10 @@ export const Navbar = observer((props: NavbarProps) => {
       {routes?.map((route, index) => (
         <Button
           variant="light"
-          color={route.active ? 'primary' : 'default'}
+          color={route.active ? "primary" : "default"}
           key={route.name || `route-${index}`}
           onPress={() => handleRouteClick(route)}
-          startContent={
-            route.icon ? renderLucideIcon(route.icon, 'w-4 h-4', 16) : undefined
-          }
+          startContent={route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined}
         >
           {route.name || route.fullPath}
         </Button>

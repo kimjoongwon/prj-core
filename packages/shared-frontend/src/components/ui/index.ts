@@ -1,5 +1,4 @@
 export * from "./Avatar";
-export * from "./Breadcrumb";
 export * from "./Button";
 export * from "./ButtonGroup";
 export * from "./CategoryCard";

@@ -1,22 +1,57 @@
-import { makeAutoObservable } from 'mobx';
-import { BrowserUtil, LoggerUtil } from '@shared/utils';
-import { type PlateStore } from './plateStore';
+import { makeAutoObservable } from "mobx";
+import { BrowserUtil, LoggerUtil } from "@shared/utils";
+import { PlateStore } from "./plateStore";
+import { AXIOS_INSTANCE } from "@shared/api-client";
+import { isAxiosError } from "axios";
 
-const logger = LoggerUtil.create('[AuthStore]');
+const logger = LoggerUtil.create("[AuthStore]");
 
 export class AuthStore {
-  private plateStore: PlateStore;
+  plateStore: PlateStore;
   isLoggingOut = false;
 
   constructor(plateStore: PlateStore) {
     this.plateStore = plateStore;
+
+    AXIOS_INSTANCE.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        this.handleAuthError(error);
+      },
+    );
+
+    AXIOS_INSTANCE.interceptors.request.use(
+      async (config) => {
+        const isATExpired = this.plateStore.tokenStore?.isAccessTokenExpired();
+        if (isATExpired) {
+          await this.plateStore.tokenStore?.refreshToken();
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
+
     makeAutoObservable(this);
+  }
+
+  async handleAuthError(error: unknown) {
+    if (isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        window.location.href = "/admin/auth/login";
+
+        return;
+      }
+    }
+
+    return Promise.reject(error);
   }
 
   async logout(logoutApi?: () => Promise<any>) {
     try {
       this.isLoggingOut = true;
-      logger.info('로그아웃 처리 중...');
+      logger.info("로그아웃 처리 중...");
 
       // Call backend logout API to clear HttpOnly cookies if provided
       if (logoutApi) {
@@ -28,14 +63,14 @@ export class AuthStore {
       BrowserUtil.clearSessionStorage();
 
       // Navigate to login page
-      BrowserUtil.navigateTo('/admin/auth/login', true);
-    } catch (error) {
-      logger.error('로그아웃 중 오류가 발생했습니다:', error);
+      BrowserUtil.navigateTo("/admin/auth/login", true);
+    } catch (_error) {
+      // logger.error("로그아웃 중 오류가 발생했습니다:", error);
 
       // Even if API call fails, clear client storage and redirect
       BrowserUtil.clearLocalStorage();
       BrowserUtil.clearSessionStorage();
-      BrowserUtil.navigateTo('/admin/auth/login', true);
+      BrowserUtil.navigateTo("/admin/auth/login", true);
     } finally {
       this.isLoggingOut = false;
     }

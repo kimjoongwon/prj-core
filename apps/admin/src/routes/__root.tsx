@@ -1,9 +1,8 @@
-import { NavigationSetup, NotFound } from "@shared/frontend";
+import { NotFound } from "@shared/frontend";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 
 const AppLayout = () => (
   <>
-    <NavigationSetup />
     <Outlet />
   </>
 );

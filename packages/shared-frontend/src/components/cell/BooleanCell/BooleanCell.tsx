@@ -1,11 +1,7 @@
+import { CellContext } from "@tanstack/react-table";
+import { Chip } from "@heroui/react";
 
-import React from 'react';
-import { CellContext } from '@tanstack/react-table';
-import { Chip } from '@heroui/react';
-
-export const BooleanCell = <T extends unknown>(
-  cellContext: CellContext<T, unknown>,
-) => {
+export const BooleanCell = <T,>(cellContext: CellContext<T, unknown>) => {
   const { getValue } = cellContext;
   const value = getValue();
 
@@ -16,8 +12,8 @@ export const BooleanCell = <T extends unknown>(
   const boolValue = Boolean(value);
 
   return (
-    <Chip color={boolValue ? 'success' : 'default'} size="sm" variant="flat">
-      {boolValue ? '예' : '아니오'}
+    <Chip color={boolValue ? "success" : "default"} size="sm" variant="flat">
+      {boolValue ? "예" : "아니오"}
     </Chip>
   );
 };

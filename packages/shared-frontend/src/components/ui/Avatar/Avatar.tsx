@@ -1,8 +1,7 @@
-import { User, Avatar as HeroUIAvatar, Button, Chip } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { EnvironmentUtil } from '@shared/utils';
-import { Dropdown, DropdownItemProps } from '../../inputs/Dropdown';
-import { usePlate } from '../../../provider/AppProvider/AppProvider';
+import { User, Avatar as HeroUIAvatar, Button, Chip } from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { EnvironmentUtil } from "@shared/utils";
+import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown";
 
 interface AvatarProps {
   showInfo?: boolean;
@@ -11,68 +10,66 @@ interface AvatarProps {
 
 export const Avatar = observer((props: AvatarProps) => {
   const { showInfo = true, onMenuAction } = props;
-  const plate = usePlate();
 
   const environment = EnvironmentUtil.getCurrentEnvironment();
 
   const userMenuItems: DropdownItemProps[] = [
     {
-      key: 'environment',
-      label: '환경 정보',
+      key: "environment",
+      label: "환경 정보",
       description: `현재 ${environment.name} 환경입니다`,
       startContent: <EnvironmentChip environment={environment} />,
       isDisabled: true,
     },
     {
-      key: 'divider-0',
-      label: '',
+      key: "divider-0",
+      label: "",
       isDisabled: true,
     },
     {
-      key: 'profile',
-      label: '프로필',
-      description: '계정 정보 관리',
+      key: "profile",
+      label: "프로필",
+      description: "계정 정보 관리",
       startContent: <ProfileIcon />,
     },
     {
-      key: 'settings',
-      label: '설정',
-      description: '앱 설정 및 환경설정',
+      key: "settings",
+      label: "설정",
+      description: "앱 설정 및 환경설정",
       startContent: <SettingsIcon />,
     },
     {
-      key: 'divider-1',
-      label: '',
+      key: "divider-1",
+      label: "",
       isDisabled: true,
     },
     {
-      key: 'help',
-      label: '도움말',
-      description: '사용 가이드 및 문의',
+      key: "help",
+      label: "도움말",
+      description: "사용 가이드 및 문의",
       startContent: <HelpIcon />,
     },
     {
-      key: 'logout',
-      label: '로그아웃',
-      description: '계정에서 로그아웃',
-      color: 'danger',
+      key: "logout",
+      label: "로그아웃",
+      description: "계정에서 로그아웃",
+      color: "danger",
       startContent: <LogoutIcon />,
     },
   ];
 
   const handleMenuAction = (key: string) => {
     switch (key) {
-      case 'profile':
-        console.log('프로필 페이지로 이동');
+      case "profile":
+        console.log("프로필 페이지로 이동");
         break;
-      case 'settings':
-        console.log('설정 페이지로 이동');
+      case "settings":
+        console.log("설정 페이지로 이동");
         break;
-      case 'help':
-        console.log('도움말 페이지로 이동');
+      case "help":
+        console.log("도움말 페이지로 이동");
         break;
-      case 'logout':
-        plate.auth.logout();
+      case "logout":
         break;
       default:
         break;
@@ -96,8 +93,8 @@ export const Avatar = observer((props: AvatarProps) => {
               name="슈퍼매니저"
               description="총괄"
               avatarProps={{
-                src: '/moka.webp',
-                size: 'sm',
+                src: "/moka.webp",
+                size: "sm",
               }}
               className="cursor-pointer"
             />
@@ -118,12 +115,7 @@ export const Avatar = observer((props: AvatarProps) => {
           variant="light"
           className="bg-transparent data-[hover=true]:bg-transparent"
         >
-          <HeroUIAvatar
-            src="/moka.webp"
-            name="슈퍼매니저"
-            size="sm"
-            className="cursor-pointer"
-          />
+          <HeroUIAvatar src="/moka.webp" name="슈퍼매니저" size="sm" className="cursor-pointer" />
         </Button>
       }
     />
@@ -134,28 +126,19 @@ export const Avatar = observer((props: AvatarProps) => {
 interface EnvironmentChipProps {
   environment: {
     name: string;
-    color: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    color: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
   };
 }
 
 const EnvironmentChip = ({ environment }: EnvironmentChipProps) => (
-  <Chip
-    size="sm"
-    color={environment.color}
-    variant="flat"
-    className="text-xs"
-  >
+  <Chip size="sm" color={environment.color} variant="flat" className="text-xs">
     {environment.name}
   </Chip>
 );
 
 const ProfileIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -166,12 +149,8 @@ const ProfileIcon = () => (
 );
 
 const SettingsIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -188,12 +167,8 @@ const SettingsIcon = () => (
 );
 
 const HelpIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -204,12 +179,8 @@ const HelpIcon = () => (
 );
 
 const LogoutIcon = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+  // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
       strokeLinecap="round"
       strokeLinejoin="round"

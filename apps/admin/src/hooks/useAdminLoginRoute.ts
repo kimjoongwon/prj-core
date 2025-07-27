@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 import { useMutation } from "@tanstack/react-query";
-import { getToken } from "@shared/api-client/dist";
+import { login } from "@shared/api-client/dist";
 import { useNavigate } from "@tanstack/react-router";
 import { isAxiosError } from "axios";
 
@@ -19,8 +19,8 @@ const useState = () => {
 };
 
 const useActions = () => {
-  const { mutateAsync: login } = useMutation({
-    mutationFn: getToken,
+  const { mutateAsync: loginMutation } = useMutation({
+    mutationFn: login,
   });
 
   const navigate = useNavigate();
@@ -33,19 +33,19 @@ const useActions = () => {
 
   return {
     goToTenantSelect,
-    login,
+    loginMutation,
   };
 };
 
 const useHandlers = (props: AdminAuthLoginRouteProps) => {
   const {
     state,
-    actions: { login, goToTenantSelect },
+    actions: { loginMutation, goToTenantSelect },
   } = props;
 
   const onClickLogin = async () => {
     try {
-      await login(state.loginForm);
+      await loginMutation(state.loginForm);
     } catch (error: unknown) {
       if (isAxiosError(error)) {
         throw new Error(error.response?.data?.message);

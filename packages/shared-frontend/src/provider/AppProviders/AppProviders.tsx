@@ -1,6 +1,6 @@
 import { ToastProvider } from "@heroui/react";
-import { AppProvider, AuthProvider, QueryProvider } from "../index";
-import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
+import { AuthProvider, QueryProvider } from "../index";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -12,9 +12,7 @@ export const AppProviders = (props: AppProvidersProps) => {
   return (
     <QueryProvider>
       <NuqsAdapter>
-        <AuthProvider>
-          <AppProvider>{children}</AppProvider>
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
         <ToastProvider placement="bottom-center" />
       </NuqsAdapter>
     </QueryProvider>
