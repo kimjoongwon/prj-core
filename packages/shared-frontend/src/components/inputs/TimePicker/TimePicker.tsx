@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { MobxProps } from '@shared/types';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 import dayjs from 'dayjs';
 import { get } from 'lodash-es';
 

@@ -1,8 +1,7 @@
-import { observer } from 'mobx-react-lite';
-import { Videos } from '../../../..';
-import { Upload } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { VideoUploaderProps } from '@shared/types';
+import { observer } from "mobx-react-lite";
+import { Upload } from "lucide-react";
+import { useRef, useState } from "react";
+import { VideoUploaderProps } from "@shared/types";
 
 export const VideoUploader = observer((props: VideoUploaderProps) => {
   const { label } = props;
@@ -14,13 +13,13 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.type.startsWith('video/')) {
+    if (selectedFile?.type.startsWith("video/")) {
       setFile(selectedFile);
       if (videoRef.current) {
         videoRef.current.src = URL.createObjectURL(selectedFile);
       }
     } else {
-      alert('유효한 비디오 파일을 선택해주세요.');
+      alert("유효한 비디오 파일을 선택해주세요.");
     }
   };
 
@@ -60,9 +59,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
   };
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-8 text-center text-foreground">
-        {label}
-      </h1>
+      <h1 className="text-2xl font-bold mb-8 text-center text-foreground">{label}</h1>
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <div className="mb-8">
           <div className="mb-4">
@@ -73,8 +70,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <Upload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">클릭하여 업로드</span> 또는
-                  드래그 앤 드롭
+                  <span className="font-semibold">클릭하여 업로드</span> 또는 드래그 앤 드롭
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   MP4, WebM, OGG (최대 100MB)
@@ -95,9 +91,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
               <video ref={videoRef} controls className="w-full rounded-lg">
                 Your browser does not support the video tag.
               </video>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                {file.name}
-              </p>
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{file.name}</p>
             </div>
           )}
           <button
@@ -105,11 +99,11 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
             disabled={!file || uploading}
             className={`w-full px-4 py-2 text-white font-semibold rounded-lg ${
               !file || uploading
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             }`}
           >
-            {uploading ? '업로드 중...' : '비디오 업로드'}
+            {uploading ? "업로드 중..." : "비디오 업로드"}
           </button>
           {uploading && (
             <div className="mt-4">
@@ -125,7 +119,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
             </div>
           )}
         </div>
-        <Videos />
+        {/* <Videos /> */}
       </div>
     </div>
   );

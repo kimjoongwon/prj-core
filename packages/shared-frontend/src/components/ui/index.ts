@@ -1,7 +1,6 @@
 export * from "./Avatar";
 export * from "./Button";
 export * from "./ButtonGroup";
-export * from "./CategoryCard";
 export * from "./Chip";
 export * from "./Container";
 export * from "./Copyright";
@@ -21,6 +20,4 @@ export * from "./SplashScreen";
 export * from "./Text";
 export * from "./User";
 export * from "./VStack";
-export * from "./Videos";
 export * from "./DataGrid";
-export * from "./ResponsiveVisibility";

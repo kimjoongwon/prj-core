@@ -4,7 +4,7 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import { ReactNode, useEffect } from 'react';
 import { ListboxProps } from '@shared/types';
 import { reaction } from 'mobx';
-import { Text } from '../../../..';
+import { Text } from '../../ui';
 
 export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
   const {

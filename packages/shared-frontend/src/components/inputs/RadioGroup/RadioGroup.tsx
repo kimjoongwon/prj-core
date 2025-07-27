@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { action } from 'mobx';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 import { MobxProps } from '@shared/types';
 import {
   Radio,

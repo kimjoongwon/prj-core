@@ -4,10 +4,11 @@ import { MobxProps } from "@shared/types";
 import { Checkbox as NextUICheckbox, CheckboxProps as NextUICheckboxProps } from "@heroui/react";
 import { get } from "lodash-es";
 import { Text } from "../../../..";
+import { observer } from "mobx-react-lite";
 
 export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 
-export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
+function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
   const { path = "", state = {}, ...rest } = props;
 
   const { localState } = useMobxHookForm(get(state, path), state, path);
@@ -22,3 +23,5 @@ export function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
     </NextUICheckbox>
   );
 }
+
+export const Checkbox = observer(BaseCheckbox);

@@ -2,7 +2,7 @@ import { ForwardedRef } from 'react';
 import { action } from 'mobx';
 import { SwitchProps } from '@shared/types';
 import { Switch as NextUISwitch } from '@heroui/react';
-import { useMobxHookForm } from '../../../..';
+import { useMobxHookForm } from '../../../hooks';
 import { get } from 'lodash-es';
 
 export function BaseSwitch<T extends object>(
