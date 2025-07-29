@@ -385,14 +385,15 @@ export interface ChipsProps<T> extends MobxProps<T> {}
 
 // AutoComplete component types
 export interface BaseAutoCompleteProps<T>
-  extends Omit<AutocompleteProps, "children">,
-    MobxProps<T> {
-  options: {
-    text: string;
-    value: any;
-    description?: string;
-  }[];
-}
+  extends Omit<
+      AutocompleteProps<{
+        label: string;
+        description?: string;
+        key?: string;
+      }>,
+      "children"
+    >,
+    MobxProps<T> {}
 
 // TenantAutoComplete component types
 export interface TenantAutoCompleteProps
