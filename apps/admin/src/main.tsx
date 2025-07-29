@@ -1,6 +1,6 @@
+import { AppProviders } from "@shared/frontend";
 import ReactDOM from "react-dom/client";
 import { App } from "./App";
-import { AppProviders } from "@shared/frontend";
 
 const rootElement = document.getElementById("root")!;
 
