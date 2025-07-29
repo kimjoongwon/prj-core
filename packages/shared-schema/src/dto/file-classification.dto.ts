@@ -1,6 +1,6 @@
-import { FileClassification } from '@prisma/client';
-import { ClassField, UUIDField } from '../decorator';
-import { FileDto, AbstractDto, CategoryDto } from '.';
+import { FileClassification } from "@prisma/client";
+import { ClassField, UUIDField } from "../decorator";
+import { AbstractDto, CategoryDto, FileDto } from ".";
 
 export class FileClassificationDto extends AbstractDto implements FileClassification {
   @UUIDField()

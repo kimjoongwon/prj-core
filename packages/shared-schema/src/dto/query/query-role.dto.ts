@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
-import { QueryDto } from './query.dto';
-import { EnumFieldOptional } from '../../decorator/field.decorators';
+import { Prisma } from "@prisma/client";
+import { EnumFieldOptional } from "../../decorator/field.decorators";
+import { QueryDto } from "./query.dto";
 
 export class QueryRoleDto extends QueryDto {
   @EnumFieldOptional(() => Prisma.SortOrder)

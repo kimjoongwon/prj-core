@@ -1,6 +1,6 @@
-import { Tab, Tabs, TabsProps } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { Option } from '@shared/types';
+import { Tab, Tabs, TabsProps } from "@heroui/react";
+import { Option } from "@shared/types";
+import { observer } from "mobx-react-lite";
 
 export interface TabsViewProps extends TabsProps {
   options: Option[];
@@ -12,7 +12,7 @@ export const TabsView = observer((props: TabsViewProps) => {
 
   return (
     <Tabs selectedKey={value} onSelectionChange={onSelectionChange}>
-      {options?.map(item => (
+      {options?.map((item) => (
         <Tab key={item.value} title={item.text} />
       ))}
     </Tabs>

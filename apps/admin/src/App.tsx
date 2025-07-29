@@ -1,4 +1,4 @@
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
 
 // Import the generated route tree

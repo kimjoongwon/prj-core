@@ -1,7 +1,7 @@
-import { CalendarState } from '@shared/types';
-import { useContext } from './useContext';
-import dayjs from 'dayjs';
-import { useInputState } from '../../../../hooks/useInputState';
+import { CalendarState } from "@shared/types";
+import dayjs from "dayjs";
+import { useInputState } from "../../../../hooks/useInputState";
+import { useContext } from "./useContext";
 
 export const useState = <T extends object>(props: {
   context: ReturnType<typeof useContext<T>>;
@@ -14,14 +14,14 @@ export const useState = <T extends object>(props: {
     extendState: {
       calendarInput: {
         header: {
-          date: dayjs().startOf('d').toDate(),
+          date: dayjs().startOf("d").toDate(),
           decreaseMonth() {
             // @ts-ignore
             inputState.calendarInput.header.date = dayjs(
               // @ts-ignore
               inputState.calendarInput.header.date,
             )
-              .subtract(1, 'M')
+              .subtract(1, "M")
               .toDate();
           },
           increaseMonth() {
@@ -30,7 +30,7 @@ export const useState = <T extends object>(props: {
               // @ts-ignore
               inputState.calendarInput.header.date,
             )
-              .add(1, 'M')
+              .add(1, "M")
               .toDate();
           },
         },

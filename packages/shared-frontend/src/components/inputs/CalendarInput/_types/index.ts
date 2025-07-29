@@ -1,5 +1,5 @@
-import { MobxProps } from '@shared/types';
-import { useProps } from '../_hooks/useProps';
+import { MobxProps } from "@shared/types";
+import { useProps } from "../_hooks/useProps";
 
 export interface CalendarInputProps<T> extends MobxProps<T> {}
 
@@ -20,7 +20,7 @@ export enum Months {
 
 export interface CalendarInputPropsView {
   readOnly?: boolean;
-  state: ReturnType<typeof useProps>['state'];
+  state: ReturnType<typeof useProps>["state"];
 }
 
 export type ISOString = string;

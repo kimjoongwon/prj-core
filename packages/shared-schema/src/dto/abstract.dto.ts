@@ -1,4 +1,4 @@
-import { DateField, NumberField, UUIDField } from '../decorator/field.decorators';
+import { DateField, NumberField, UUIDField } from "../decorator/field.decorators";
 
 export class AbstractDto {
   @UUIDField()

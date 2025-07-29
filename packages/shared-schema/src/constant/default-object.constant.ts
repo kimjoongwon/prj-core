@@ -1,1 +1,1 @@
-export type DefaultObject<T> = Omit<T, 'id'>;
+export type DefaultObject<T> = Omit<T, "id">;

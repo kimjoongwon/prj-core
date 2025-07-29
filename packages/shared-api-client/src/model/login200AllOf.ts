@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TokenDto } from './tokenDto';
+import type { TokenDto } from "./tokenDto";
 
 export type Login200AllOf = {
   /** */

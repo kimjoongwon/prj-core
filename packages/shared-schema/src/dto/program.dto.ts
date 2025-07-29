@@ -1,6 +1,6 @@
-import { NumberField, UUIDField } from '../decorator';
-import { AbstractDto } from './abstract.dto';
-import { Program as ProgramEntity } from '@prisma/client';
+import { Program as ProgramEntity } from "@prisma/client";
+import { NumberField, UUIDField } from "../decorator";
+import { AbstractDto } from "./abstract.dto";
 
 export class ProgramDto extends AbstractDto implements ProgramEntity {
   @UUIDField()

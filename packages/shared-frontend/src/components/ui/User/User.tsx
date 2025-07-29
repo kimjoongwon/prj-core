@@ -1,11 +1,11 @@
 import {
+  User as BaseUser,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  User as BaseUser,
-} from '@heroui/react';
-import { observer } from 'mobx-react-lite';
+} from "@heroui/react";
+import { observer } from "mobx-react-lite";
 
 export const User = observer(() => {
   return (
@@ -13,12 +13,12 @@ export const User = observer(() => {
       <DropdownTrigger>
         <BaseUser
           isFocusable
-          name={'hah'}
+          name={"hah"}
           avatarProps={{
-            size: 'sm',
+            size: "sm",
             isBordered: true,
             isFocusable: true,
-            as: 'button',
+            as: "button",
           }}
         />
       </DropdownTrigger>

@@ -1,10 +1,9 @@
-import { action } from "mobx";
-import { useMobxHookForm } from "../../../..";
-import { MobxProps } from "@shared/types";
 import { Checkbox as NextUICheckbox, CheckboxProps as NextUICheckboxProps } from "@heroui/react";
+import { MobxProps } from "@shared/types";
 import { get } from "lodash-es";
-import { Text } from "../../../..";
+import { action } from "mobx";
 import { observer } from "mobx-react-lite";
+import { Text, useMobxHookForm } from "../../../..";
 
 export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 

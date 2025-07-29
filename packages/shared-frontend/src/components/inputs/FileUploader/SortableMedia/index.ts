@@ -1,1 +1,1 @@
-export { SortableMedia } from './SortableMedia';
+export { SortableMedia } from "./SortableMedia";

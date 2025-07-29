@@ -1,22 +1,22 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
-export default defineConfig(option => ({
-  entry: ['./index.ts'],
-  format: ['esm', 'cjs'],
-  outDir: './dist',
+export default defineConfig((option) => ({
+  entry: ["./index.ts"],
+  format: ["esm", "cjs"],
+  outDir: "./dist",
   clean: !option.watch,
   watch: option.watch,
   env: {
-    NODE_ENV: option.watch ? 'development' : 'production',
+    NODE_ENV: option.watch ? "development" : "production",
   },
   sourcemap: true,
   dts: true,
   external: [
-    'class-transformer',
-    'class-validator',
-    'dayjs',
-    'path-parser',
-    'remeda',
-    'reflect-metadata',
+    "class-transformer",
+    "class-validator",
+    "dayjs",
+    "path-parser",
+    "remeda",
+    "reflect-metadata",
   ],
 }));

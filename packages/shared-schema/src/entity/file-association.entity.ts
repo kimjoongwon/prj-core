@@ -1,7 +1,7 @@
-import { FileAssociation as FileAssociationEntity, File, Group } from '@prisma/client';
-import { AbstractEntity } from './abstract.entity';
-import { UseDto } from '../decorator/use-dto.decorator';
-import { FileAssociationDto } from '../dto/file-association.dto';
+import { File, FileAssociation as FileAssociationEntity, Group } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { FileAssociationDto } from "../dto/file-association.dto";
+import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(FileAssociationDto)
 export class FileAssociation

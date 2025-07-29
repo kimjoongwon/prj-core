@@ -4,11 +4,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type Order = typeof Order[keyof typeof Order];
-
+export type Order = (typeof Order)[keyof typeof Order];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Order = {
-  asc: 'asc',
-  desc: 'desc',
+  asc: "asc",
+  desc: "desc",
 } as const;

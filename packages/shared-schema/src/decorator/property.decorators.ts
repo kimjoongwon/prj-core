@@ -1,7 +1,7 @@
-import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
-import { ClassConstructor } from 'class-transformer/types/interfaces';
+import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
+import { plainToClass } from "class-transformer";
+import { ClassConstructor } from "class-transformer/types/interfaces";
+import { validateSync } from "class-validator";
 
 export class ValidationUtil {
   static validateConfig<T extends object>(
@@ -21,7 +21,7 @@ export class ValidationUtil {
     return validatedConfig;
   }
   static getVariableName<TResult>(getVar: () => TResult): string | undefined {
-    const m = /\(\)=>(.*)/.exec(getVar.toString().replace(/(\r\n|\n|\r|\s)/gm, ''));
+    const m = /\(\)=>(.*)/.exec(getVar.toString().replace(/(\r\n|\n|\r|\s)/gm, ""));
 
     if (!m) {
       throw new Error("The function does not contain a statement matching 'return variableName;'");
@@ -29,18 +29,18 @@ export class ValidationUtil {
 
     const fullMemberName = m[1];
 
-    const memberParts = fullMemberName.split('.');
+    const memberParts = fullMemberName.split(".");
 
     return memberParts.at(-1);
   }
 }
 
 export function ApiBooleanProperty(options: ApiPropertyOptions = {}): PropertyDecorator {
-  return ApiProperty({ type: 'boolean', ...options });
+  return ApiProperty({ type: "boolean", ...options });
 }
 
 export function ApiBooleanPropertyOptional(
-  options: Omit<ApiPropertyOptions, 'type' | 'required'> = {},
+  options: Omit<ApiPropertyOptions, "type" | "required"> = {},
 ): PropertyDecorator {
   return ApiBooleanProperty({ required: false, ...options });
 }
@@ -49,15 +49,15 @@ export function ApiUUIDProperty(
   options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
   return ApiProperty({
-    type: options.each ? [String] : 'string',
-    format: 'uuid',
+    type: options.each ? [String] : "string",
+    format: "uuid",
     isArray: options.each,
     ...options,
   });
 }
 
 export function ApiUUIDPropertyOptional(
-  options: Omit<ApiPropertyOptions, 'type' | 'format' | 'required'> &
+  options: Omit<ApiPropertyOptions, "type" | "format" | "required"> &
     Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
   return ApiUUIDProperty({ required: false, ...options });
@@ -81,7 +81,7 @@ export function ApiEnumProperty<TEnum>(
 
 export function ApiEnumPropertyOptional<TEnum>(
   getEnum: () => TEnum,
-  options: Omit<ApiPropertyOptions, 'type' | 'required'> & {
+  options: Omit<ApiPropertyOptions, "type" | "required"> & {
     each?: boolean;
   } = {},
 ): PropertyDecorator {

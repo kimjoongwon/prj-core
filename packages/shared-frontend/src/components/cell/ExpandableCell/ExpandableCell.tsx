@@ -1,5 +1,5 @@
-import React from 'react';
-import { CellContext } from '@tanstack/react-table';
+import { CellContext } from "@tanstack/react-table";
+import React from "react";
 
 // SVG 폴더 아이콘 컴포넌트들
 const FolderOpenIcon = ({ className }: { className?: string }) => (
@@ -44,12 +44,11 @@ const DocumentIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-interface ExpandableCellProps<T extends unknown>
-  extends CellContext<T, unknown> {
+interface ExpandableCellProps<T> extends CellContext<T, unknown> {
   expandable?: boolean;
 }
 
-export const ExpandableCell = <T extends unknown>({
+export const ExpandableCell = <T,>({
   row,
   getValue,
   expandable = true,
@@ -67,9 +66,9 @@ export const ExpandableCell = <T extends unknown>({
             className="absolute border-l border-gray-300"
             style={{
               left: `-${(row.depth - 1) * 2 + 1.25}rem`, // 상위 폴더 아이콘의 중앙
-              top: '0rem', // 상위 폴더 아이콘의 하단에서 시작
-              height: '0.875rem', // 현재 아이콘의 중앙까지
-              width: '1px',
+              top: "0rem", // 상위 폴더 아이콘의 하단에서 시작
+              height: "0.875rem", // 현재 아이콘의 중앙까지
+              width: "1px",
             }}
           />
         )}
@@ -80,7 +79,7 @@ export const ExpandableCell = <T extends unknown>({
             className="absolute border-t border-gray-300"
             style={{
               left: `-${(row.depth - 1) * 2 + 1.25}rem`, // 상위 폴더 중앙에서 시작
-              top: '0.875rem', // 아이콘 중앙 높이
+              top: "0.875rem", // 아이콘 중앙 높이
               width: `${(row.depth - 1) * 2 + 0.875}rem`, // 현재 아이콘까지의 거리
             }}
           />
@@ -89,7 +88,7 @@ export const ExpandableCell = <T extends unknown>({
           <div
             {...{
               onClick: row.getToggleExpandedHandler(),
-              style: { cursor: 'pointer' },
+              style: { cursor: "pointer" },
             }}
             className="mr-3 flex items-center justify-center w-7 h-7 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-md transition-all duration-200 border border-yellow-200 hover:border-yellow-300"
           >

@@ -3,11 +3,11 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { Order } from './order';
+import type { Order } from "./order";
 
 export type GetSessionsByQueryParams = {
-skip?: number;
-take?: number;
-timelineId?: string | null;
-startDateTimeSortOrder?: Order;
+  skip?: number;
+  take?: number;
+  timelineId?: string | null;
+  startDateTimeSortOrder?: Order;
 };

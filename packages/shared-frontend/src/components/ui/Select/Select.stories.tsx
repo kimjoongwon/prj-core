@@ -138,24 +138,9 @@ export const Sizes: Story = {
   args: {},
   render: () => (
     <div className="flex flex-col gap-4 w-80">
-      <Select
-        options={categoryOptions}
-        placeholder="Small size"
-        label="Small"
-        size="sm"
-      />
-      <Select
-        options={categoryOptions}
-        placeholder="Medium size"
-        label="Medium"
-        size="md"
-      />
-      <Select
-        options={categoryOptions}
-        placeholder="Large size"
-        label="Large"
-        size="lg"
-      />
+      <Select options={categoryOptions} placeholder="Small size" label="Small" size="sm" />
+      <Select options={categoryOptions} placeholder="Medium size" label="Medium" size="md" />
+      <Select options={categoryOptions} placeholder="Large size" label="Large" size="lg" />
     </div>
   ),
   parameters: {
@@ -171,24 +156,14 @@ export const Variants: Story = {
   args: {},
   render: () => (
     <div className="flex flex-col gap-4 w-80">
-      <Select
-        options={roleOptions}
-        placeholder="Flat variant"
-        label="Flat"
-        variant="flat"
-      />
+      <Select options={roleOptions} placeholder="Flat variant" label="Flat" variant="flat" />
       <Select
         options={roleOptions}
         placeholder="Bordered variant"
         label="Bordered"
         variant="bordered"
       />
-      <Select
-        options={roleOptions}
-        placeholder="Faded variant"
-        label="Faded"
-        variant="faded"
-      />
+      <Select options={roleOptions} placeholder="Faded variant" label="Faded" variant="faded" />
       <Select
         options={roleOptions}
         placeholder="Underlined variant"
@@ -240,12 +215,7 @@ export const Colors: Story = {
         label="Warning"
         color="warning"
       />
-      <Select
-        options={categoryOptions}
-        placeholder="Danger color"
-        label="Danger"
-        color="danger"
-      />
+      <Select options={categoryOptions} placeholder="Danger color" label="Danger" color="danger" />
     </div>
   ),
   parameters: {
@@ -263,23 +233,9 @@ export const FormExample: Story = {
     <div className="max-w-md p-6 bg-white border rounded-lg shadow">
       <h3 className="text-lg font-semibold mb-4">User Information</h3>
       <div className="flex flex-col gap-4">
-        <Select
-          options={countryOptions}
-          placeholder="Select country"
-          label="Country"
-          isRequired
-        />
-        <Select
-          options={roleOptions}
-          placeholder="Select role"
-          label="Role"
-          isRequired
-        />
-        <Select
-          options={categoryOptions}
-          placeholder="Select department"
-          label="Department"
-        />
+        <Select options={countryOptions} placeholder="Select country" label="Country" isRequired />
+        <Select options={roleOptions} placeholder="Select role" label="Role" isRequired />
+        <Select options={categoryOptions} placeholder="Select department" label="Department" />
         <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
           Submit
         </button>

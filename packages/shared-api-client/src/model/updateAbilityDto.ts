@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityTypes } from './abilityTypes';
+import type { AbilityTypes } from "./abilityTypes";
 
 export interface UpdateAbilityDto {
   tenantId?: string;

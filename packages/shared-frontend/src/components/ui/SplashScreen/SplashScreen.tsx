@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardBody, Progress, Spinner, Chip } from '@heroui/react';
-import { VStack } from '../VStack';
-import { Logo } from '../Logo';
-import { Text } from '../Text';
+import { Card, CardBody, Chip, Progress, Spinner } from "@heroui/react";
+import React from "react";
+import { Logo } from "../Logo";
+import { Text } from "../Text";
+import { VStack } from "../VStack";
 
 export interface SplashScreenProps {
   title?: string;
@@ -12,8 +12,8 @@ export interface SplashScreenProps {
 }
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({
-  title = '앱을 준비하고 있습니다',
-  subtitle = '잠시만 기다려주세요...',
+  title = "앱을 준비하고 있습니다",
+  subtitle = "잠시만 기다려주세요...",
   progress,
   showProgress = true,
 }) => {
@@ -56,12 +56,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
                 {/* 퍼센티지 표시 */}
                 {progress !== undefined && (
                   <div className="text-center">
-                    <Chip
-                      size="sm"
-                      variant="flat"
-                      color="primary"
-                      className="text-xs"
-                    >
+                    <Chip size="sm" variant="flat" color="primary" className="text-xs">
                       {Math.round(progress)}%
                     </Chip>
                   </div>
@@ -81,15 +76,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       <div className="absolute top-10 left-10 w-20 h-20 bg-primary-200/20 dark:bg-primary-500/10 rounded-full blur-xl animate-pulse" />
       <div
         className="absolute top-32 right-20 w-16 h-16 bg-secondary-200/20 dark:bg-secondary-500/10 rounded-full blur-xl animate-pulse"
-        style={{ animationDelay: '1s' }}
+        style={{ animationDelay: "1s" }}
       />
       <div
         className="absolute bottom-20 left-1/4 w-24 h-24 bg-success-200/20 dark:bg-success-500/10 rounded-full blur-xl animate-pulse"
-        style={{ animationDelay: '2s' }}
+        style={{ animationDelay: "2s" }}
       />
       <div
         className="absolute bottom-32 right-10 w-18 h-18 bg-warning-200/20 dark:bg-warning-500/10 rounded-full blur-xl animate-pulse"
-        style={{ animationDelay: '0.5s' }}
+        style={{ animationDelay: "0.5s" }}
       />
     </div>
   );

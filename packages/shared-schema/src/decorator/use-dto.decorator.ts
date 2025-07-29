@@ -14,7 +14,7 @@ export function UseEntity(entityClass: Constructor): ClassDecorator {
   return (ctor) => {
     // FIXME make dtoClass function returning dto
     if (!(<unknown>entityClass)) {
-      throw new Error('UseEntity decorator requires entityClass');
+      throw new Error("UseEntity decorator requires entityClass");
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

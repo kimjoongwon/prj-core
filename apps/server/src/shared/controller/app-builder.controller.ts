@@ -2,9 +2,9 @@ import { Body, Controller, Get, Logger, Post, Req, Res } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { AppBuilderDto, ResponseEntity, type SelectTenantDto } from "@shared/schema";
 import { Request, Response } from "express";
+import { ApiResponseEntity } from "../decorator";
 import { Auth } from "../decorator/auth.decorator";
 import { AppBuilderService } from "../service/app-builder.service";
-import { ApiResponseEntity } from "../decorator";
 
 // 응답 메시지 상수
 const RESPONSE_MESSAGES = {

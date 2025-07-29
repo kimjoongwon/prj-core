@@ -1,4 +1,4 @@
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { createFileRoute } from "@tanstack/react-router";
 
 const UsersRouteComponent = () => {

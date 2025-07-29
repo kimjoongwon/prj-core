@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RouteDto } from './routeDto';
+import type { RouteDto } from "./routeDto";
 
 export interface AppBuilderDto {
   routes: RouteDto[];

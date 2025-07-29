@@ -1,6 +1,6 @@
+import { Validation } from "@shared/types";
 import { observer } from "mobx-react-lite";
 import { Input, InputProps } from "../Input";
-import { Validation } from "@shared/types";
 
 type PasswordProps<T> = InputProps<T> & {
   validation?: Validation;

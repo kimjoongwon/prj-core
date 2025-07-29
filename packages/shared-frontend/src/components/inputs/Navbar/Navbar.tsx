@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
-import { HStack, VStack } from "../../../..";
 import { Button } from "@heroui/react";
 import { Route } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { HStack, VStack } from "../../../..";
 import { renderLucideIcon } from "../../../utils/iconUtils";
 
 interface NavbarProps {

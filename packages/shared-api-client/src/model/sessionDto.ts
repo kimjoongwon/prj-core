@@ -3,9 +3,10 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { SessionTypes } from './sessionTypes';
-import type { SessionDtoRepeatCycleType } from './sessionDtoRepeatCycleType';
-import type { SessionDtoRecurringDayOfWeek } from './sessionDtoRecurringDayOfWeek';
+
+import type { SessionDtoRecurringDayOfWeek } from "./sessionDtoRecurringDayOfWeek";
+import type { SessionDtoRepeatCycleType } from "./sessionDtoRepeatCycleType";
+import type { SessionTypes } from "./sessionTypes";
 
 export interface SessionDto {
   id: string;

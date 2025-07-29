@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RecurringDayOfWeek } from './recurringDayOfWeek';
+import type { RecurringDayOfWeek } from "./recurringDayOfWeek";
 
 /**
  * @nullable

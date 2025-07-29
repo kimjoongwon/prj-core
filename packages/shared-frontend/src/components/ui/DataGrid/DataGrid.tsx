@@ -1,12 +1,3 @@
-import React, { useEffect } from "react";
-import {
-  ColumnDef,
-  ExpandedState,
-  flexRender,
-  getCoreRowModel,
-  getExpandedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import {
   Selection,
   SortDescriptor,
@@ -18,10 +9,19 @@ import {
   TableProps,
   TableRow,
 } from "@heroui/react";
-import { observer, useLocalObservable } from "mobx-react-lite";
-import { action, reaction } from "mobx";
 import { MobxProps } from "@shared/types";
+import {
+  ColumnDef,
+  ExpandedState,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { get, set } from "lodash-es";
+import { action, reaction } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import React, { useEffect } from "react";
 
 export type Key = string | number;
 

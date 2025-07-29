@@ -5,7 +5,7 @@ export interface EnvironmentInfo {
   /** 환경 이름 */
   name: string;
   /** 환경 색상 (HeroUI 컬러 스킴) */
-  color: 'success' | 'warning' | 'danger' | 'primary' | 'secondary' | 'default';
+  color: "success" | "warning" | "danger" | "primary" | "secondary" | "default";
 }
 
 /**
@@ -29,21 +29,17 @@ export class EnvironmentUtil {
     const port = window.location.port;
 
     // 로컬 개발 환경
-    if (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      port === '5173'
-    ) {
-      return { name: '개발', color: 'success' };
+    if (hostname === "localhost" || hostname === "127.0.0.1" || port === "5173") {
+      return { name: "개발", color: "success" };
     }
 
     // 스테이징 환경 (예: staging.example.com)
-    if (hostname.includes('staging') || hostname.includes('stg')) {
-      return { name: '스테이징', color: 'warning' };
+    if (hostname.includes("staging") || hostname.includes("stg")) {
+      return { name: "스테이징", color: "warning" };
     }
 
     // 운영 환경
-    return { name: '운영', color: 'danger' };
+    return { name: "운영", color: "danger" };
   }
 
   /**
@@ -52,8 +48,8 @@ export class EnvironmentUtil {
    * @returns 개발 환경 여부
    */
   static isDevelopment(): boolean {
-    const env = this.getCurrentEnvironment();
-    return env.name === '개발';
+    const env = EnvironmentUtil.getCurrentEnvironment();
+    return env.name === "개발";
   }
 
   /**
@@ -62,8 +58,8 @@ export class EnvironmentUtil {
    * @returns 스테이징 환경 여부
    */
   static isStaging(): boolean {
-    const env = this.getCurrentEnvironment();
-    return env.name === '스테이징';
+    const env = EnvironmentUtil.getCurrentEnvironment();
+    return env.name === "스테이징";
   }
 
   /**
@@ -72,8 +68,8 @@ export class EnvironmentUtil {
    * @returns 운영 환경 여부
    */
   static isProduction(): boolean {
-    const env = this.getCurrentEnvironment();
-    return env.name === '운영';
+    const env = EnvironmentUtil.getCurrentEnvironment();
+    return env.name === "운영";
   }
 
   /**
@@ -92,7 +88,7 @@ export class EnvironmentUtil {
    * ```
    */
   static getConfigByEnvironment<T>(configs: Record<string, T>): T {
-    const env = this.getCurrentEnvironment();
-    return configs[env.name] || configs['운영']; // 기본값으로 운영 환경 설정 사용
+    const env = EnvironmentUtil.getCurrentEnvironment();
+    return configs[env.name] || configs.운영; // 기본값으로 운영 환경 설정 사용
   }
 }

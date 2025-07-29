@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroundDtoSpace } from './groundDtoSpace';
+import type { GroundDtoSpace } from "./groundDtoSpace";
 
 export interface GroundDto {
   id: string;

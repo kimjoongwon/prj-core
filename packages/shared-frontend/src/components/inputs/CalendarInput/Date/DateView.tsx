@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react-lite';
-import { DateModel } from '@shared/types';
-import { Text } from '../../../ui/Text';
-import dayjs from 'dayjs';
-import { Card, CardBody } from '@heroui/react';
+import { Card, CardBody } from "@heroui/react";
+import { DateModel } from "@shared/types";
+import dayjs from "dayjs";
+import { observer } from "mobx-react-lite";
+import { Text } from "../../../ui/Text";
 
 interface DateViewProps {
   state: DateModel;
@@ -10,7 +10,7 @@ interface DateViewProps {
 
 export const DateView = observer((props: DateViewProps) => {
   const { state } = props;
-  const date = dayjs(state.value).get('date');
+  const date = dayjs(state.value).get("date");
   return (
     <Card
       isPressable={state.isPressable}
@@ -18,10 +18,7 @@ export const DateView = observer((props: DateViewProps) => {
       radius="sm"
       isHoverable
       onClick={() => state.selectDate()}
-      className={
-        state.className +
-        `${state.selected ? ' bg-primary-500 text-white' : ''} h-20`
-      }
+      className={`${state.className}${state.selected ? " bg-primary-500 text-white" : ""} h-20`}
     >
       <CardBody className="text-right">
         <Text>{date}일</Text>

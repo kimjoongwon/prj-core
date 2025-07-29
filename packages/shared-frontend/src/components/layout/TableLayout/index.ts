@@ -1,1 +1,1 @@
-export { TableLayout } from './Table';
+export { TableLayout } from "./Table";

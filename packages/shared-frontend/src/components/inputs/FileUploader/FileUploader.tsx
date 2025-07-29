@@ -1,13 +1,12 @@
-import { X } from 'lucide-react';
-import { Card, Button } from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { v4 } from 'uuid';
-import { FileDto } from '@shared/api-client';
-import { action } from 'mobx';
-import { FileUploaderProps } from '@shared/types';
-import { useMobxHookForm } from '../../../hooks';
-import { get } from 'lodash-es';
-import { makeAutoObservable } from 'mobx';
+import { Button, Card } from "@heroui/react";
+import { FileDto } from "@shared/api-client";
+import { FileUploaderProps } from "@shared/types";
+import { get } from "lodash-es";
+import { X } from "lucide-react";
+import { action, makeAutoObservable } from "mobx";
+import { observer } from "mobx-react-lite";
+import { v4 } from "uuid";
+import { useMobxHookForm } from "../../../hooks";
 
 export class FileUploaderStore {
   file: Partial<FileDto> | null = null;
@@ -32,7 +31,7 @@ export class FileUploaderStore {
 
 export const FileUploader = observer(
   <T extends object>({
-    type = 'image',
+    type = "image",
     onFilesChange,
     onFileRemove,
     label,
@@ -42,25 +41,23 @@ export const FileUploader = observer(
     const initialValue = get(state, path) || null;
     const { localState } = useMobxHookForm(initialValue, state, path);
 
-    const handleFileUpload = action(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-          const file = files[0];
-          const fileDto: Partial<FileDto> = {
-            id: v4(),
-            name: file.name,
-            url: URL.createObjectURL(file),
-            mimeType: file.type,
-            size: file.size,
-          };
+    const handleFileUpload = action((e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const fileDto: Partial<FileDto> = {
+          id: v4(),
+          name: file.name,
+          url: URL.createObjectURL(file),
+          mimeType: file.type,
+          size: file.size,
+        };
 
-          localState.value = fileDto;
-          onFilesChange?.(type, [fileDto]);
-        }
-        e.target.value = '';
-      },
-    );
+        localState.value = fileDto;
+        onFilesChange?.(type, [fileDto]);
+      }
+      e.target.value = "";
+    });
 
     const removeFile = action(() => {
       const fileToRemove = localState.value;
@@ -76,8 +73,8 @@ export const FileUploader = observer(
       const file = localState.value;
       if (!file) return null;
 
-      const isImage = file.mimeType?.startsWith('image/');
-      const isVideo = file.mimeType?.startsWith('video/');
+      const isImage = file.mimeType?.startsWith("image/");
+      const isVideo = file.mimeType?.startsWith("video/");
 
       return (
         <div className="relative group w-full max-w-sm mx-auto">
@@ -85,16 +82,19 @@ export const FileUploader = observer(
             {isImage && (
               <div className="w-full h-full relative bg-white dark:bg-gray-700">
                 {/* 체크무늬 배경 패턴 (투명한 이미지를 위해) */}
-                <div className="absolute inset-0 opacity-20" style={{
-                  backgroundImage: `
+                <div
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    backgroundImage: `
                     linear-gradient(45deg, #ccc 25%, transparent 25%),
                     linear-gradient(-45deg, #ccc 25%, transparent 25%),
                     linear-gradient(45deg, transparent 75%, #ccc 75%),
                     linear-gradient(-45deg, transparent 75%, #ccc 75%)
                   `,
-                  backgroundSize: '20px 20px',
-                  backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-                }} />
+                    backgroundSize: "20px 20px",
+                    backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0px",
+                  }}
+                />
                 <img
                   src={file.url}
                   alt={file.name}
@@ -135,12 +135,11 @@ export const FileUploader = observer(
             </div>
             {file.size && (
               <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                {file.size < 1024 
+                {file.size < 1024
                   ? `${file.size} bytes`
                   : file.size < 1024 * 1024
-                  ? `${(file.size / 1024).toFixed(1)} KB`
-                  : `${(file.size / 1024 / 1024).toFixed(1)} MB`
-                }
+                    ? `${(file.size / 1024).toFixed(1)} KB`
+                    : `${(file.size / 1024 / 1024).toFixed(1)} MB`}
               </div>
             )}
           </div>
@@ -156,7 +155,7 @@ export const FileUploader = observer(
               {label}
             </h3>
           )}
-          
+
           <div className="flex flex-col items-center space-y-4">
             {localState.value ? (
               renderFilePreview()
@@ -166,11 +165,11 @@ export const FileUploader = observer(
                   <input
                     type="file"
                     accept={
-                      type === 'image'
-                        ? 'image/*'
-                        : type === 'video'
-                        ? 'video/*'
-                        : 'image/*, video/*'
+                      type === "image"
+                        ? "image/*"
+                        : type === "video"
+                          ? "video/*"
+                          : "image/*, video/*"
                     }
                     className="hidden"
                     onChange={handleFileUpload}
@@ -185,18 +184,18 @@ export const FileUploader = observer(
                 </label>
               </div>
             )}
-            
+
             {!localState.value && (
               <div className="text-center">
                 <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">
-                  {type === 'image' && '이미지 파일을 업로드하세요'}
-                  {type === 'video' && '비디오 파일을 업로드하세요'}
-                  {type === 'all' && '파일을 업로드하세요'}
+                  {type === "image" && "이미지 파일을 업로드하세요"}
+                  {type === "video" && "비디오 파일을 업로드하세요"}
+                  {type === "all" && "파일을 업로드하세요"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  {type === 'image' && 'JPG, PNG, GIF 등의 이미지 파일'}
-                  {type === 'video' && 'MP4, AVI, MOV 등의 비디오 파일'}
-                  {type === 'all' && '모든 형태의 파일'}
+                  {type === "image" && "JPG, PNG, GIF 등의 이미지 파일"}
+                  {type === "video" && "MP4, AVI, MOV 등의 비디오 파일"}
+                  {type === "all" && "모든 형태의 파일"}
                 </p>
               </div>
             )}

@@ -1,8 +1,9 @@
 /// <reference types="vitest/globals" />
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { isAxiosError } from "axios";
-import { BrowserUtil } from "@shared/utils";
+
 import { AXIOS_INSTANCE } from "@shared/api-client";
+import { BrowserUtil } from "@shared/utils";
+import { isAxiosError } from "axios";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthStore } from "../authStore";
 import { PlateStore } from "../plateStore";
 import { TokenStore } from "../tokenStore";

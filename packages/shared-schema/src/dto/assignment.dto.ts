@@ -1,8 +1,8 @@
-import { Assignment as AssignmentEntity } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { ClassField, UUIDField } from '../decorator';
-import { RoleDto } from './role.dto';
-import { TenantDto } from './tenant.dto';
+import { Assignment as AssignmentEntity } from "@prisma/client";
+import { ClassField, UUIDField } from "../decorator";
+import { AbstractDto } from "./abstract.dto";
+import { RoleDto } from "./role.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class AssignmentDto extends AbstractDto implements AssignmentEntity {
   @UUIDField()

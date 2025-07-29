@@ -1,4 +1,4 @@
-import { VStack, Spacer, Text } from "@shared/frontend";
+import { Spacer, Text, VStack } from "@shared/frontend";
 import { createFileRoute } from "@tanstack/react-router";
 
 const DashboardIndexRouteComponent = () => {

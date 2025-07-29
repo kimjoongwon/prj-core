@@ -1,1 +1,1 @@
-export { CollapsibleSidebar } from './CollapsibleSidebarLayout';
+export { CollapsibleSidebar } from "./CollapsibleSidebarLayout";

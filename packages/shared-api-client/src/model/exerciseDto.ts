@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateTaskDto } from './createTaskDto';
+import type { CreateTaskDto } from "./createTaskDto";
 
 export interface ExerciseDto {
   id: string;

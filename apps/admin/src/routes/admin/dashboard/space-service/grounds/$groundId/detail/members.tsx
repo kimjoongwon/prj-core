@@ -1,4 +1,12 @@
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip } from "@heroui/react";
+import {
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/react";
 import { createFileRoute } from "@tanstack/react-router";
 
 const GroundDetailMembersRouteComponent = () => {
@@ -23,7 +31,7 @@ const GroundDetailMembersRouteComponent = () => {
   return (
     <div className="space-y-6">
       <h4 className="text-lg font-medium text-gray-900">멤버 리스트</h4>
-      
+
       <Table aria-label="그라운드 멤버 테이블">
         <TableHeader>
           <TableColumn>이름</TableColumn>
@@ -50,6 +58,8 @@ const GroundDetailMembersRouteComponent = () => {
   );
 };
 
-export const Route = createFileRoute("/admin/dashboard/space-service/grounds/$groundId/detail/members")({
+export const Route = createFileRoute(
+  "/admin/dashboard/space-service/grounds/$groundId/detail/members",
+)({
   component: GroundDetailMembersRouteComponent,
 });

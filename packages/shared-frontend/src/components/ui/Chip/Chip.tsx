@@ -1,4 +1,4 @@
-import { Chip as NextUIChip, ChipProps } from "@heroui/react";
+import { ChipProps, Chip as NextUIChip } from "@heroui/react";
 
 export function Chip(props: ChipProps) {
   const { children } = props;

@@ -1,9 +1,9 @@
-import { Enum, EnumType } from 'ts-jenum';
+import { Enum, EnumType } from "ts-jenum";
 
-@Enum('code')
+@Enum("code")
 export class SessionTypes extends EnumType<SessionTypes>() {
-  static readonly ONE_TIME = new SessionTypes('ONE_TIME', '일회성');
-  static readonly RECURRING = new SessionTypes('RECURRING', '반복');
+  static readonly ONE_TIME = new SessionTypes("ONE_TIME", "일회성");
+  static readonly RECURRING = new SessionTypes("RECURRING", "반복");
 
   private constructor(
     readonly _code: string,
@@ -19,7 +19,7 @@ export class SessionTypes extends EnumType<SessionTypes>() {
     return this._name;
   }
   static findName(code: string): string | undefined {
-    return this.values().find((e) => e.equals(code))?.name;
+    return SessionTypes.values().find((e) => e.equals(code))?.name;
   }
 
   equals(code: string): boolean {

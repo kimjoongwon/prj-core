@@ -1,5 +1,5 @@
-import { $Enums, Session } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
+import { $Enums, Session } from "@prisma/client";
+import { Transform } from "class-transformer";
 import {
   DateFieldOptional,
   EnumField,
@@ -8,10 +8,10 @@ import {
   StringField,
   UUIDField,
   UUIDFieldOptional,
-} from '../decorator/field.decorators';
-import { Transform } from 'class-transformer';
-import { SessionTypes } from '../enum/session-types.enum';
-import { RepeatCycleTypes } from '../enum/repeat-cycle-types.enum';
+} from "../decorator/field.decorators";
+import { RepeatCycleTypes } from "../enum/repeat-cycle-types.enum";
+import { SessionTypes } from "../enum/session-types.enum";
+import { AbstractDto } from "./abstract.dto";
 
 export class SessionDto extends AbstractDto implements Session {
   @StringField()

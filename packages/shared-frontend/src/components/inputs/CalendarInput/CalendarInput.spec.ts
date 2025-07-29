@@ -1,5 +1,5 @@
-import { describe, test } from 'vitest';
+import { describe, test } from "vitest";
 
-describe('CalendarInput', () => {
-  test('onClickNextMonth', () => {});
+describe("CalendarInput", () => {
+  test("onClickNextMonth", () => {});
 });

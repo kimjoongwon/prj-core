@@ -1,6 +1,6 @@
-import { plainToClass } from 'class-transformer';
-import { validateSync } from 'class-validator';
-import { ClassConstructor } from 'class-transformer/types/interfaces';
+import { plainToClass } from "class-transformer";
+import { ClassConstructor } from "class-transformer/types/interfaces";
+import { validateSync } from "class-validator";
 
 export class ValidationUtil {
   static validateConfig<T extends object>(
@@ -21,19 +21,15 @@ export class ValidationUtil {
     return validatedConfig;
   }
   static getVariableName<TResult>(getVar: () => TResult): string | undefined {
-    const m = /\(\)=>(.*)/.exec(
-      getVar.toString().replace(/(\r\n|\n|\r|\s)/gm, ''),
-    );
+    const m = /\(\)=>(.*)/.exec(getVar.toString().replace(/(\r\n|\n|\r|\s)/gm, ""));
 
     if (!m) {
-      throw new Error(
-        "The function does not contain a statement matching 'return variableName;'",
-      );
+      throw new Error("The function does not contain a statement matching 'return variableName;'");
     }
 
     const fullMemberName = m[1];
 
-    const memberParts = fullMemberName.split('.');
+    const memberParts = fullMemberName.split(".");
 
     return memberParts.at(-1);
   }

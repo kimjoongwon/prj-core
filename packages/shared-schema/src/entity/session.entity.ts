@@ -1,7 +1,7 @@
-import { UseDto } from '../decorator/use-dto.decorator';
-import { SessionDto } from '../dto/session.dto';
-import { AbstractEntity } from './abstract.entity';
-import { $Enums, Session as SessionEntity } from '@prisma/client';
+import { $Enums, Session as SessionEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { SessionDto } from "../dto/session.dto";
+import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(SessionDto)
 export class Session extends AbstractEntity<SessionDto> implements SessionEntity {

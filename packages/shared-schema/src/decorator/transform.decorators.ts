@@ -1,16 +1,16 @@
-import { Transform, TransformationType } from 'class-transformer';
-import { parsePhoneNumber } from 'libphonenumber-js';
-import { castArray, isNil } from 'lodash';
+import { Transform, TransformationType } from "class-transformer";
+import { parsePhoneNumber } from "libphonenumber-js";
+import { castArray, isNil } from "lodash";
 
 export function ToBoolean(): PropertyDecorator {
   return Transform(
-    params => {
+    (params) => {
       switch (params.value) {
-        case 'true': {
+        case "true": {
           return true;
         }
 
-        case 'false': {
+        case "false": {
           return false;
         }
 
@@ -34,7 +34,7 @@ export function ToBoolean(): PropertyDecorator {
  */
 export function ToInt(): PropertyDecorator {
   return Transform(
-    params => {
+    (params) => {
       const value = params.value as string;
 
       return Number.parseInt(value, 10);
@@ -53,7 +53,7 @@ export function ToInt(): PropertyDecorator {
  */
 export function ToArray(): PropertyDecorator {
   return Transform(
-    params => {
+    (params) => {
       const value = params.value;
 
       if (isNil(value)) {
@@ -68,7 +68,7 @@ export function ToArray(): PropertyDecorator {
 
 export function ToLowerCase(): PropertyDecorator {
   return Transform(
-    params => {
+    (params) => {
       const value = params.value;
 
       if (!value) {
@@ -79,7 +79,7 @@ export function ToLowerCase(): PropertyDecorator {
         return value.toLowerCase();
       }
 
-      return value.map(v => v.toLowerCase());
+      return value.map((v) => v.toLowerCase());
     },
     {
       toClassOnly: true,
@@ -89,7 +89,7 @@ export function ToLowerCase(): PropertyDecorator {
 
 export function ToUpperCase(): PropertyDecorator {
   return Transform(
-    params => {
+    (params) => {
       const value = params.value;
 
       if (!value) {
@@ -100,7 +100,7 @@ export function ToUpperCase(): PropertyDecorator {
         return value.toUpperCase();
       }
 
-      return value.map(v => v.toUpperCase());
+      return value.map((v) => v.toUpperCase());
     },
     {
       toClassOnly: true,
@@ -109,5 +109,5 @@ export function ToUpperCase(): PropertyDecorator {
 }
 
 export function PhoneNumberSerializer(): PropertyDecorator {
-  return Transform(params => parsePhoneNumber(params.value as string).number);
+  return Transform((params) => parsePhoneNumber(params.value as string).number);
 }

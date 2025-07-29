@@ -43,8 +43,8 @@ export const WithText: Story = {
     <Section>
       <h2 className="text-xl font-bold">Section Title</h2>
       <p className="text-gray-600">
-        This is a section with some text content. The section provides consistent 
-        styling with border, padding, and spacing for organized layout.
+        This is a section with some text content. The section provides consistent styling with
+        border, padding, and spacing for organized layout.
       </p>
     </Section>
   ),
@@ -63,22 +63,18 @@ export const WithForm: Story = {
       <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
-          </label>
-          <input 
-            type="text" 
-            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500" 
+          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input
+            type="text"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your name"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input 
-            type="email" 
-            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500" 
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email"
           />
         </div>
@@ -143,10 +139,15 @@ export const WithList: Story = {
         ].map((item, index) => (
           <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
             <div className="flex items-center space-x-3">
-              <div className={`w-2 h-2 rounded-full ${
-                item.status === 'success' ? 'bg-green-500' :
-                item.status === 'error' ? 'bg-red-500' : 'bg-blue-500'
-              }`} />
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  item.status === "success"
+                    ? "bg-green-500"
+                    : item.status === "error"
+                      ? "bg-red-500"
+                      : "bg-blue-500"
+                }`}
+              />
               <span className="text-sm">{item.action}</span>
             </div>
             <span className="text-xs text-gray-500">{item.time}</span>
@@ -172,7 +173,7 @@ export const NestedSections: Story = {
         <p className="text-gray-600 mb-4">
           This is the main section containing nested subsections.
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Section>
             <h4 className="font-semibold mb-2">Subsection A</h4>
@@ -180,7 +181,7 @@ export const NestedSections: Story = {
               Content for the first subsection with its own styling.
             </p>
           </Section>
-          
+
           <Section>
             <h4 className="font-semibold mb-2">Subsection B</h4>
             <p className="text-sm text-gray-600">

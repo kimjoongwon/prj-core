@@ -1,9 +1,7 @@
-
-
-import { useEffect } from 'react';
-import { useLocalObservable } from 'mobx-react-lite';
-import { reaction } from 'mobx';
-import { get, set } from 'lodash-es';
+import { get, set } from "lodash-es";
+import { reaction } from "mobx";
+import { useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 
 interface InputState<S, V> {
   extendState?: S;
@@ -26,14 +24,14 @@ export const useInputState = <S extends object, V>({
   useEffect(() => {
     const setterDisposer = reaction(
       () => inputState.value,
-      value => {
+      (value) => {
         set(state, path, value);
       },
     );
 
     const getterDisposer = reaction(
       () => get(state, path),
-      value => {
+      (value) => {
         inputState.value = value;
       },
     );
@@ -42,7 +40,7 @@ export const useInputState = <S extends object, V>({
       setterDisposer();
       getterDisposer();
     };
-  }, []);
+  }, [inputState, path, state]);
 
   return inputState;
 };

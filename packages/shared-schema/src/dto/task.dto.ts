@@ -1,6 +1,6 @@
-import { Task as TaskEntity } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { UUIDField } from '../decorator';
+import { Task as TaskEntity } from "@prisma/client";
+import { UUIDField } from "../decorator";
+import { AbstractDto } from "./abstract.dto";
 
 // export const createTaskValidationObject: Omit<ValidationRecord<CreateTaskDto>, 'content'> = {
 //   name: {

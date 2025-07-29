@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { ProgramDto } from './programDto';
+import type { ProgramDto } from "./programDto";
 
 export type RemoveProgramById200AllOf = {
   /** */

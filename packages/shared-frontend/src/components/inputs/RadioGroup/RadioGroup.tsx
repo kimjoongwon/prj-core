@@ -1,13 +1,9 @@
-import { observer } from 'mobx-react-lite';
-import { action } from 'mobx';
-import { useMobxHookForm } from '../../../hooks';
-import { MobxProps } from '@shared/types';
-import {
-  Radio,
-  RadioGroup as NextUIRadioGroup,
-  RadioGroupProps,
-} from '@heroui/react';
-import { get } from 'lodash-es';
+import { RadioGroup as NextUIRadioGroup, Radio, RadioGroupProps } from "@heroui/react";
+import { MobxProps } from "@shared/types";
+import { get } from "lodash-es";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
+import { useMobxHookForm } from "../../../hooks";
 
 interface RadioOption {
   text: string;
@@ -21,21 +17,21 @@ function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
   const {
     options = [
       {
-        text: 'test',
-        value: 'test',
+        text: "test",
+        value: "test",
       },
       {
-        text: 'test2',
-        value: 'test2',
+        text: "test2",
+        value: "test2",
       },
     ],
     state = {},
-    path = '',
+    path = "",
     ...rest
   } = props;
 
   const initialValue: any =
-    options?.find(option => option.value === get(state, path))?.value || '';
+    options?.find((option) => option.value === get(state, path))?.value || "";
 
   const { localState } = useMobxHookForm(initialValue, state, path);
 
@@ -44,12 +40,8 @@ function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
   });
 
   return (
-    <NextUIRadioGroup
-      {...rest}
-      value={localState.value}
-      onValueChange={onChangeValue}
-    >
-      {options.map(option => (
+    <NextUIRadioGroup {...rest} value={localState.value} onValueChange={onChangeValue}>
+      {options.map((option) => (
         <Radio key={option.value} value={option.value}>
           {option.text}
         </Radio>

@@ -1,19 +1,13 @@
-import { Listbox as HeroListbox, ListboxItem } from '@heroui/react';
-import { get, set } from 'lodash-es';
-import { observer, useLocalObservable } from 'mobx-react-lite';
-import { ReactNode, useEffect } from 'react';
-import { ListboxProps } from '@shared/types';
-import { reaction } from 'mobx';
-import { Text } from '../../ui';
+import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
+import { ListboxProps } from "@shared/types";
+import { get, set } from "lodash-es";
+import { reaction } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { ReactNode, useEffect } from "react";
+import { Text } from "../../ui";
 
 export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
-  const {
-    state = {},
-    path = '',
-    options = [],
-    selectionMode = 'multiple',
-    title,
-  } = props;
+  const { state = {}, path = "", options = [], selectionMode = "multiple", title } = props;
 
   const initialValue = get(state, path);
 
@@ -27,7 +21,7 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
     const disposer = reaction(
       () => localState.value,
       () => {
-        if (selectionMode === 'single') {
+        if (selectionMode === "single") {
           set(state, path, Array.from(localState.value)[0]);
           return;
         }
@@ -36,13 +30,12 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
     );
 
     return disposer;
-  }, []);
+  }, [localState.value, path, selectionMode, state]);
 
-  const handleSelectionChange: ListboxProps<T>['onSelectionChange'] =
-    selection => {
-      const selectedKeys = Array.from(selection);
-      localState.value = new Set(selectedKeys);
-    };
+  const handleSelectionChange: ListboxProps<T>["onSelectionChange"] = (selection) => {
+    const selectedKeys = Array.from(selection);
+    localState.value = new Set(selectedKeys);
+  };
 
   return (
     <ListboxWrapper>
@@ -59,12 +52,12 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
         items={options}
         variant="flat"
         classNames={{
-          list: 'max-h-[300px] overflow-scroll',
+          list: "max-h-[300px] overflow-scroll",
         }}
         defaultSelectedKeys={localState.value}
         onSelectionChange={handleSelectionChange}
       >
-        {item => {
+        {(item) => {
           return (
             <ListboxItem className="w-full" key={item.value}>
               {item.text}
@@ -76,10 +69,8 @@ export const Listbox = observer(<T extends object>(props: ListboxProps<T>) => {
   );
 });
 
-export const ListboxWrapper = observer(
-  ({ children }: { children: ReactNode }) => (
-    <div className="w-full border-small px-2 py-2 rounded-small border-default-200 dark:border-default-100">
-      {children}
-    </div>
-  ),
-);
+export const ListboxWrapper = observer(({ children }: { children: ReactNode }) => (
+  <div className="w-full border-small px-2 py-2 rounded-small border-default-200 dark:border-default-100">
+    {children}
+  </div>
+));

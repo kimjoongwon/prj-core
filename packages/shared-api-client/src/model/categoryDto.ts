@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryTypes } from './categoryTypes';
+import type { CategoryTypes } from "./categoryTypes";
 
 export interface CategoryDto {
   id: string;

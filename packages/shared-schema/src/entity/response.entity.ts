@@ -1,7 +1,7 @@
-import { HttpStatus } from '@nestjs/common';
-import { ApiProperty } from '@nestjs/swagger';
-import { ClassField } from '../decorator/field.decorators';
-import { PageMetaDto } from '../dto/query/page-meta.dto';
+import { HttpStatus } from "@nestjs/common";
+import { ApiProperty } from "@nestjs/swagger";
+import { ClassField } from "../decorator/field.decorators";
+import { PageMetaDto } from "../dto/query/page-meta.dto";
 
 export class ResponseEntity<T> {
   @ApiProperty({
@@ -26,7 +26,7 @@ export class ResponseEntity<T> {
   }
 
   static WITH_SUCCESS<T>(message: string): ResponseEntity<T> {
-    return new ResponseEntity(HttpStatus.OK, message || '성공');
+    return new ResponseEntity(HttpStatus.OK, message || "성공");
   }
 
   static WITH_ERROR<T>(
@@ -34,14 +34,14 @@ export class ResponseEntity<T> {
     message: string,
     data?: T | null,
   ): ResponseEntity<T | null> {
-    return new ResponseEntity(httpStatus, message || '실패', data);
+    return new ResponseEntity(httpStatus, message || "실패", data);
   }
 
   static WITH_ROUTE<T>(data: T): ResponseEntity<T> {
-    return new ResponseEntity(HttpStatus.OK, '성공', data);
+    return new ResponseEntity(HttpStatus.OK, "성공", data);
   }
 
   from(data: T): ResponseEntity<T> {
-    return new ResponseEntity(this.httpStatus, '성공', data, this.meta);
+    return new ResponseEntity(this.httpStatus, "성공", data, this.meta);
   }
 }

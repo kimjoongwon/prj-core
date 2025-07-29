@@ -1,6 +1,6 @@
-import { UserClassification } from '@prisma/client';
-import { ClassField, UUIDFieldOptional } from '../decorator';
-import { AbstractDto, UserDto } from '.';
+import { UserClassification } from "@prisma/client";
+import { ClassField, UUIDFieldOptional } from "../decorator";
+import { AbstractDto, UserDto } from ".";
 
 export class UserClassificationDto extends AbstractDto implements UserClassification {
   @UUIDFieldOptional()

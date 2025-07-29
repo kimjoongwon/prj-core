@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalBody, ModalProps, ModalHeader } from "@heroui/react";
+import { Modal, ModalBody, ModalContent, ModalHeader, ModalProps } from "@heroui/react";
 import { usePage } from "../../../provider";
 
 interface ModalLayoutProps extends ModalProps {}

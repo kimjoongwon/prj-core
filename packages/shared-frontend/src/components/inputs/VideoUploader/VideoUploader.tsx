@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite";
-import { Upload } from "lucide-react";
-import { useRef, useState } from "react";
 import { VideoUploaderProps } from "@shared/types";
+import { Upload } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { useRef, useState } from "react";
 
 export const VideoUploader = observer((props: VideoUploaderProps) => {
   const { label } = props;

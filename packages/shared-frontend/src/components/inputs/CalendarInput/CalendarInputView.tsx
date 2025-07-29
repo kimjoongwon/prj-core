@@ -1,10 +1,8 @@
-
-
-import { DaysOfWeek } from './DaysOfWeek';
-import { CalendarInputPropsView } from '@shared/types';
-import { Dates } from './Dates';
-import { Header } from './Header';
-import { observer } from 'mobx-react-lite';
+import { CalendarInputPropsView } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { Dates } from "./Dates";
+import { DaysOfWeek } from "./DaysOfWeek";
+import { Header } from "./Header";
 
 export const CalendarInputView = observer((props: CalendarInputPropsView) => {
   const { state } = props;

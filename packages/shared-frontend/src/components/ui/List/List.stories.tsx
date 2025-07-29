@@ -71,7 +71,10 @@ export const UserList: Story = {
   args: {
     data: sampleUsers,
     renderItem: (user) => (
-      <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2">
+      <div
+        key={user.id}
+        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2"
+      >
         <div>
           <div className="font-medium text-gray-900">{user.name}</div>
           <div className="text-sm text-gray-500">{user.email}</div>
@@ -121,7 +124,10 @@ export const SimpleTextList: Story = {
   args: {
     data: ["First item", "Second item", "Third item", "Fourth item"],
     renderItem: (item, index) => (
-      <div key={index} className="px-3 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0">
+      <div
+        key={index}
+        className="px-3 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0"
+      >
         {item}
       </div>
     ),
@@ -139,7 +145,12 @@ export const SimpleTextList: Story = {
 export const CardList: Story = {
   args: {
     data: [
-      { id: 1, title: "Task 1", description: "Complete the project documentation", status: "pending" },
+      {
+        id: 1,
+        title: "Task 1",
+        description: "Complete the project documentation",
+        status: "pending",
+      },
       { id: 2, title: "Task 2", description: "Review code changes", status: "completed" },
       { id: 3, title: "Task 3", description: "Update test cases", status: "in-progress" },
     ],
@@ -147,11 +158,15 @@ export const CardList: Story = {
       <div key={task.id} className="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-medium text-gray-900">{task.title}</h3>
-          <span className={`px-2 py-1 text-xs rounded-full ${
-            task.status === 'completed' ? 'bg-green-100 text-green-800' :
-            task.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
+          <span
+            className={`px-2 py-1 text-xs rounded-full ${
+              task.status === "completed"
+                ? "bg-green-100 text-green-800"
+                : task.status === "in-progress"
+                  ? "bg-blue-100 text-blue-800"
+                  : "bg-gray-100 text-gray-800"
+            }`}
+          >
             {task.status}
           </span>
         </div>
@@ -180,7 +195,9 @@ export const Playground: Story = {
     renderItem: (item) => (
       <div key={item.id} className="p-3 border rounded-lg mb-2 bg-white shadow-sm">
         <div className="font-medium">{item.name}</div>
-        <div className="text-sm text-gray-500">{item.type} • {item.color}</div>
+        <div className="text-sm text-gray-500">
+          {item.type} • {item.color}
+        </div>
       </div>
     ),
     placeholder: <div className="text-gray-500 text-center py-4">No items to show</div>,

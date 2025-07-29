@@ -1,7 +1,7 @@
-import { Exercise as ExcerciesEntity } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { ClassField, NumberField, StringField, UUIDField, UUIDFieldOptional } from '../decorator';
-import { CreateTaskDto } from './create';
+import { Exercise as ExcerciesEntity } from "@prisma/client";
+import { ClassField, NumberField, StringField, UUIDField, UUIDFieldOptional } from "../decorator";
+import { AbstractDto } from "./abstract.dto";
+import { CreateTaskDto } from "./create";
 
 export class ExerciseDto extends AbstractDto implements ExcerciesEntity {
   @StringField()

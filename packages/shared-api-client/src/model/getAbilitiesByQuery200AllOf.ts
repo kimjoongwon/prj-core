@@ -3,8 +3,8 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityDto } from './abilityDto';
-import type { GetAbilitiesByQuery200AllOfMeta } from './getAbilitiesByQuery200AllOfMeta';
+import type { AbilityDto } from "./abilityDto";
+import type { GetAbilitiesByQuery200AllOfMeta } from "./getAbilitiesByQuery200AllOfMeta";
 
 export type GetAbilitiesByQuery200AllOf = {
   /** */

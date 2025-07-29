@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@heroui/react";
-import { Text } from "../../ui/Text";
 import { DashboardLayoutProps } from "@shared/types";
 import { observer } from "mobx-react-lite";
+import { Text } from "../../ui/Text";
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
   const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } = props;

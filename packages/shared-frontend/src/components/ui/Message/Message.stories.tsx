@@ -60,7 +60,8 @@ export const ShortMessage: Story = {
 export const LongMessage: Story = {
   args: {
     title: "Important Update",
-    message: "This is a longer message that contains more detailed information about an important update or notification that users need to be aware of. It demonstrates how the message component handles longer text content.",
+    message:
+      "This is a longer message that contains more detailed information about an important update or notification that users need to be aware of. It demonstrates how the message component handles longer text content.",
   },
   parameters: {
     docs: {
@@ -74,17 +75,17 @@ export const LongMessage: Story = {
 export const SystemMessages: Story = {
   render: () => (
     <div className="space-y-4 max-w-md">
-      <Message 
-        title="System Maintenance" 
-        message="Scheduled maintenance will occur tonight from 12:00 AM to 2:00 AM EST." 
+      <Message
+        title="System Maintenance"
+        message="Scheduled maintenance will occur tonight from 12:00 AM to 2:00 AM EST."
       />
-      <Message 
-        title="New Feature Available" 
-        message="Dark mode is now available in your account settings." 
+      <Message
+        title="New Feature Available"
+        message="Dark mode is now available in your account settings."
       />
-      <Message 
-        title="Backup Completed" 
-        message="Your data backup has been successfully completed." 
+      <Message
+        title="Backup Completed"
+        message="Your data backup has been successfully completed."
       />
     </div>
   ),
@@ -100,7 +101,8 @@ export const SystemMessages: Story = {
 export const WelcomeMessage: Story = {
   args: {
     title: "Welcome!",
-    message: "Thank you for joining our platform. Get started by exploring the dashboard and setting up your profile.",
+    message:
+      "Thank you for joining our platform. Get started by exploring the dashboard and setting up your profile.",
   },
   parameters: {
     docs: {
@@ -114,7 +116,8 @@ export const WelcomeMessage: Story = {
 export const UpdateNotification: Story = {
   args: {
     title: "Update Available",
-    message: "Version 2.1.0 is now available with new features and bug fixes. Update now to get the latest improvements.",
+    message:
+      "Version 2.1.0 is now available with new features and bug fixes. Update now to get the latest improvements.",
   },
   parameters: {
     docs: {
@@ -128,9 +131,9 @@ export const UpdateNotification: Story = {
 export const InformationalBanner: Story = {
   render: () => (
     <div className="w-full max-w-4xl">
-      <Message 
-        title="COVID-19 Update" 
-        message="We continue to follow all health and safety guidelines. Our services remain available with enhanced safety measures in place." 
+      <Message
+        title="COVID-19 Update"
+        message="We continue to follow all health and safety guidelines. Our services remain available with enhanced safety measures in place."
       />
     </div>
   ),
@@ -146,17 +149,11 @@ export const InformationalBanner: Story = {
 export const QuickTips: Story = {
   render: () => (
     <div className="space-y-3 max-w-lg">
-      <Message 
-        title="Tip #1" 
-        message="Use keyboard shortcuts Ctrl+S to save your work quickly." 
-      />
-      <Message 
-        title="Tip #2" 
-        message="Click the star icon to bookmark your favorite items." 
-      />
-      <Message 
-        title="Tip #3" 
-        message="Use the search bar to quickly find what you're looking for." 
+      <Message title="Tip #1" message="Use keyboard shortcuts Ctrl+S to save your work quickly." />
+      <Message title="Tip #2" message="Click the star icon to bookmark your favorite items." />
+      <Message
+        title="Tip #3"
+        message="Use the search bar to quickly find what you're looking for."
       />
     </div>
   ),
@@ -172,17 +169,17 @@ export const QuickTips: Story = {
 export const StatusUpdates: Story = {
   render: () => (
     <div className="space-y-4 max-w-md">
-      <Message 
-        title="Processing Complete" 
-        message="Your file has been successfully processed and is ready for download." 
+      <Message
+        title="Processing Complete"
+        message="Your file has been successfully processed and is ready for download."
       />
-      <Message 
-        title="Sync in Progress" 
-        message="Synchronizing your data with the cloud. This may take a few minutes." 
+      <Message
+        title="Sync in Progress"
+        message="Synchronizing your data with the cloud. This may take a few minutes."
       />
-      <Message 
-        title="Connection Restored" 
-        message="Internet connection has been restored. All features are now available." 
+      <Message
+        title="Connection Restored"
+        message="Internet connection has been restored. All features are now available."
       />
     </div>
   ),

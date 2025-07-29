@@ -1,12 +1,12 @@
-import { $Enums, Category } from '@prisma/client';
-import { ClassField, EnumField, StringField, UUIDField } from '../decorator/field.decorators';
-import { AbstractDto } from './abstract.dto';
+import { $Enums, Category } from "@prisma/client";
+import { ClassField, EnumField, StringField, UUIDField } from "../decorator/field.decorators";
+import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto extends AbstractDto implements Category {
   @UUIDField()
   tenantId: string;
 
-  @StringField({ default: '' })
+  @StringField({ default: "" })
   name: string;
 
   @EnumField(() => $Enums.CategoryTypes, { default: $Enums.CategoryTypes.Role })

@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { FileDto } from './fileDto';
+import type { FileDto } from "./fileDto";
 
 export type CreateFile201AllOf = {
   /** */

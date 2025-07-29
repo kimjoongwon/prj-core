@@ -4,4 +4,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateSpaceDto { [key: string]: unknown }
+export interface CreateSpaceDto {
+  [key: string]: unknown;
+}

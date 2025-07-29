@@ -1,6 +1,6 @@
-import { observer } from 'mobx-react-lite';
-import { DateView } from './DateView';
-import { DateModel } from '@shared/types';
+import { DateModel } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { DateView } from "./DateView";
 
 export interface DateProps {
   state: DateModel;

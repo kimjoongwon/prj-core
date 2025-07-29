@@ -1,10 +1,10 @@
-import { Space } from '@prisma/client';
-import { ClassField } from '../decorator/field.decorators';
-import { AbstractDto } from './abstract.dto';
-import { TenantDto } from './tenant.dto';
-import { SpaceClassificationDto } from './space-classification.dto';
-import { SpaceAssociationDto } from './space-association.dto';
-import { GroundDto } from './ground.dto';
+import { Space } from "@prisma/client";
+import { ClassField } from "../decorator/field.decorators";
+import { AbstractDto } from "./abstract.dto";
+import { GroundDto } from "./ground.dto";
+import { SpaceAssociationDto } from "./space-association.dto";
+import { SpaceClassificationDto } from "./space-classification.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class SpaceDto extends AbstractDto implements Space {
   @ClassField(() => TenantDto, { required: false, swagger: false, isArray: true })

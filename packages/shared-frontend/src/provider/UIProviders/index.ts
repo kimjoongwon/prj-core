@@ -1,1 +1,1 @@
-export { UIProviders } from './UIProviders';
+export { UIProviders } from "./UIProviders";

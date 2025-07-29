@@ -1,5 +1,5 @@
-import { cva } from "class-variance-authority";
 import { HStackProps } from "@shared/types";
+import { cva } from "class-variance-authority";
 
 const hStackVariants = cva("flex", {
   variants: {

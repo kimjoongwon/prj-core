@@ -1,6 +1,7 @@
 /// <reference types="vitest/globals" />
-import { beforeEach, describe, expect, it } from "vitest";
+
 import type { RouteDto } from "@shared/api-client";
+import { beforeEach, describe, expect, it } from "vitest";
 import { NavigatorStore } from "../navigatorStore";
 import { PlateStore } from "../plateStore";
 
@@ -179,7 +180,10 @@ describe("NavigatorStore", () => {
         },
       ];
 
-      const result = navigatorStore.getRouteByFullPath("/level1/level2/level3/level4", complexRoutes);
+      const result = navigatorStore.getRouteByFullPath(
+        "/level1/level2/level3/level4",
+        complexRoutes,
+      );
 
       expect(result).toBeDefined();
       expect(result?.name).toBe("Level4");

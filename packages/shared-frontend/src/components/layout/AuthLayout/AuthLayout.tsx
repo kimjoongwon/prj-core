@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
+import { ReactNode } from "react";
 
 export const AuthLayout = observer(
   (props: {
@@ -8,12 +8,7 @@ export const AuthLayout = observer(
     adImageSrc?: string;
     adImageAlt?: string;
   }) => {
-    const {
-      formComponent,
-      adComponent,
-      adImageSrc,
-      adImageAlt = 'Advertisement',
-    } = props;
+    const { formComponent, adComponent, adImageSrc, adImageAlt = "Advertisement" } = props;
 
     // If no adComponent is provided but adImageSrc is provided, create default image component
     const defaultAdComponent = adImageSrc ? (

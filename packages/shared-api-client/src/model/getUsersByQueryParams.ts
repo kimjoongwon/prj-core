@@ -3,10 +3,10 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { SortOrder } from './sortOrder';
+import type { SortOrder } from "./sortOrder";
 
 export type GetUsersByQueryParams = {
-skip?: number;
-take?: number;
-createdAtSortOrder?: SortOrder;
+  skip?: number;
+  take?: number;
+  createdAtSortOrder?: SortOrder;
 };

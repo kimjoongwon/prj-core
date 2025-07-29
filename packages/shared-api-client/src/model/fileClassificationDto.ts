@@ -3,8 +3,8 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryDto } from './categoryDto';
-import type { FileDto } from './fileDto';
+import type { CategoryDto } from "./categoryDto";
+import type { FileDto } from "./fileDto";
 
 export interface FileClassificationDto {
   id: string;

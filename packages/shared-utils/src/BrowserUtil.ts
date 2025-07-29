@@ -8,19 +8,17 @@ export class BrowserUtil {
    * HttpOnly 쿠키는 클라이언트에서 삭제할 수 없으므로 제외됩니다.
    */
   static clearAllCookies(): void {
-    if (typeof document === 'undefined') {
-      console.warn(
-        'document가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+    if (typeof document === "undefined") {
+      console.warn("document가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return;
     }
 
     // 모든 쿠키 가져오기
-    const cookies = document.cookie.split(';');
+    const cookies = document.cookie.split(";");
 
     // 각 쿠키를 삭제
-    cookies.forEach(cookie => {
-      const eqPos = cookie.indexOf('=');
+    cookies.forEach((cookie) => {
+      const eqPos = cookie.indexOf("=");
       const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
 
       if (name) {
@@ -38,15 +36,13 @@ export class BrowserUtil {
    * @param path 쿠키 경로 (기본값: '/')
    * @param domain 쿠키 도메인 (기본값: 현재 도메인)
    */
-  static deleteCookie(name: string, path: string = '/', domain?: string): void {
-    if (typeof document === 'undefined') {
-      console.warn(
-        'document가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+  static deleteCookie(name: string, path: string = "/", domain?: string): void {
+    if (typeof document === "undefined") {
+      console.warn("document가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return;
     }
 
-    const domainStr = domain ? `; domain=${domain}` : '';
+    const domainStr = domain ? `; domain=${domain}` : "";
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domainStr}`;
   }
 
@@ -54,8 +50,8 @@ export class BrowserUtil {
    * 로컬 스토리지를 모두 삭제합니다.
    */
   static clearLocalStorage(): void {
-    if (typeof localStorage === 'undefined') {
-      console.warn('localStorage가 지원되지 않습니다.');
+    if (typeof localStorage === "undefined") {
+      console.warn("localStorage가 지원되지 않습니다.");
       return;
     }
 
@@ -66,8 +62,8 @@ export class BrowserUtil {
    * 세션 스토리지를 모두 삭제합니다.
    */
   static clearSessionStorage(): void {
-    if (typeof sessionStorage === 'undefined') {
-      console.warn('sessionStorage가 지원되지 않습니다.');
+    if (typeof sessionStorage === "undefined") {
+      console.warn("sessionStorage가 지원되지 않습니다.");
       return;
     }
 
@@ -78,9 +74,9 @@ export class BrowserUtil {
    * 모든 클라이언트 저장소를 삭제합니다 (쿠키, 로컬 스토리지, 세션 스토리지).
    */
   static clearAllStorage(): void {
-    this.clearAllCookies();
-    this.clearLocalStorage();
-    this.clearSessionStorage();
+    BrowserUtil.clearAllCookies();
+    BrowserUtil.clearLocalStorage();
+    BrowserUtil.clearSessionStorage();
   }
 
   /**
@@ -89,10 +85,8 @@ export class BrowserUtil {
    * @param replace 현재 히스토리를 대체할지 여부 (기본값: false)
    */
   static navigateTo(url: string, replace: boolean = false): void {
-    if (typeof window === 'undefined') {
-      console.warn(
-        'window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+    if (typeof window === "undefined") {
+      console.warn("window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return;
     }
 
@@ -107,11 +101,9 @@ export class BrowserUtil {
    * 페이지를 새로고침합니다.
    * @param forceReload 캐시를 무시하고 강제로 새로고침할지 여부 (기본값: false)
    */
-  static reload(forceReload: boolean = false): void {
-    if (typeof window === 'undefined') {
-      console.warn(
-        'window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+  static reload(_forceReload: boolean = false): void {
+    if (typeof window === "undefined") {
+      console.warn("window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return;
     }
 
@@ -130,10 +122,8 @@ export class BrowserUtil {
     search: string;
     hash: string;
   } | null {
-    if (typeof window === 'undefined') {
-      console.warn(
-        'window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+    if (typeof window === "undefined") {
+      console.warn("window가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return null;
     }
 
@@ -160,35 +150,30 @@ export class BrowserUtil {
     browser: string;
     os: string;
   } | null {
-    if (typeof navigator === 'undefined') {
-      console.warn(
-        'navigator가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.',
-      );
+    if (typeof navigator === "undefined") {
+      console.warn("navigator가 정의되지 않았습니다. 브라우저 환경에서만 사용 가능합니다.");
       return null;
     }
 
     const userAgent = navigator.userAgent;
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        userAgent,
-      );
-    const isTablet = /iPad|Android(?=.*\bMobile\b)(?=.*\bSafari\b)/i.test(
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       userAgent,
     );
+    const isTablet = /iPad|Android(?=.*\bMobile\b)(?=.*\bSafari\b)/i.test(userAgent);
     const isDesktop = !isMobile && !isTablet;
 
-    let browser = 'Unknown';
-    if (userAgent.indexOf('Chrome') > -1) browser = 'Chrome';
-    else if (userAgent.indexOf('Firefox') > -1) browser = 'Firefox';
-    else if (userAgent.indexOf('Safari') > -1) browser = 'Safari';
-    else if (userAgent.indexOf('Edge') > -1) browser = 'Edge';
+    let browser = "Unknown";
+    if (userAgent.indexOf("Chrome") > -1) browser = "Chrome";
+    else if (userAgent.indexOf("Firefox") > -1) browser = "Firefox";
+    else if (userAgent.indexOf("Safari") > -1) browser = "Safari";
+    else if (userAgent.indexOf("Edge") > -1) browser = "Edge";
 
-    let os = 'Unknown';
-    if (userAgent.indexOf('Windows') > -1) os = 'Windows';
-    else if (userAgent.indexOf('Mac') > -1) os = 'macOS';
-    else if (userAgent.indexOf('Linux') > -1) os = 'Linux';
-    else if (userAgent.indexOf('Android') > -1) os = 'Android';
-    else if (userAgent.indexOf('iOS') > -1) os = 'iOS';
+    let os = "Unknown";
+    if (userAgent.indexOf("Windows") > -1) os = "Windows";
+    else if (userAgent.indexOf("Mac") > -1) os = "macOS";
+    else if (userAgent.indexOf("Linux") > -1) os = "Linux";
+    else if (userAgent.indexOf("Android") > -1) os = "Android";
+    else if (userAgent.indexOf("iOS") > -1) os = "iOS";
 
     return {
       userAgent,

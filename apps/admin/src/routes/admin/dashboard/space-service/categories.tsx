@@ -1,5 +1,13 @@
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@heroui/react";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/react";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 const CategoriesRouteComponent = () => {
   // Mock categories data - in real app this would come from API
@@ -14,7 +22,9 @@ const CategoriesRouteComponent = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-medium text-gray-900">카테고리 리스트</h3>
-        <Button color="primary" size="sm">카테고리 추가</Button>
+        <Button color="primary" size="sm">
+          카테고리 추가
+        </Button>
       </div>
       <Table aria-label="카테고리 테이블">
         <TableHeader>

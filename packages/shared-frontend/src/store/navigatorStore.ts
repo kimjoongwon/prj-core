@@ -13,7 +13,7 @@ export class NavigatorStore {
       if (route.fullPath === fullPath) {
         return route;
       }
-      
+
       if (route.children) {
         const childResult = this.getRouteByFullPath(fullPath, route.children);
         if (childResult) {
@@ -21,7 +21,7 @@ export class NavigatorStore {
         }
       }
     }
-    
+
     return undefined;
   }
 }

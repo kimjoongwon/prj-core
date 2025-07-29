@@ -1,7 +1,7 @@
+import { defaultsDeep, merge } from "lodash";
 import { NumberFieldOptional } from "../../decorator";
 import { PaginationUtil } from "../../lib/PaginationUtil";
 import { PageMetaDto } from "./page-meta.dto";
-import { defaultsDeep, merge } from "lodash";
 
 export class QueryDto {
   @NumberFieldOptional({

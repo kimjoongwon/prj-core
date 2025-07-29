@@ -108,18 +108,10 @@ export const FormLayout: Story = {
     children: (
       <>
         <h3 className="text-lg font-semibold">Contact Form</h3>
-        <input 
-          type="text" 
-          placeholder="Name" 
-          className="w-full p-2 border rounded"
-        />
-        <input 
-          type="email" 
-          placeholder="Email" 
-          className="w-full p-2 border rounded"
-        />
-        <textarea 
-          placeholder="Message" 
+        <input type="text" placeholder="Name" className="w-full p-2 border rounded" />
+        <input type="email" placeholder="Email" className="w-full p-2 border rounded" />
+        <textarea
+          placeholder="Message"
           rows={3}
           className="w-full p-2 border rounded resize-none"
         />

@@ -1,13 +1,11 @@
-
-
 import {
   Pagination as HeroUiPagination,
   PaginationProps as HeroUiPaginationProps,
-} from '@heroui/react';
-import { observer } from 'mobx-react-lite';
-import { parseAsInteger, useQueryStates } from 'nuqs';
+} from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import { parseAsInteger, useQueryStates } from "nuqs";
 
-export interface PaginationProps extends Omit<HeroUiPaginationProps, 'total'> {
+export interface PaginationProps extends Omit<HeroUiPaginationProps, "total"> {
   totalCount: number;
 }
 
@@ -27,7 +25,7 @@ export const Pagination = observer((props: PaginationProps) => {
         take: 10,
       },
       {
-        history: 'push',
+        history: "push",
         clearOnDefault: false,
         throttleMs: 500,
       },
@@ -39,12 +37,5 @@ export const Pagination = observer((props: PaginationProps) => {
   // total skip take로 현재 페이지를 계산합니다.
   const currentPage = Math.floor(skip / take) + 1;
 
-  return (
-    <HeroUiPagination
-      {...rest}
-      total={total}
-      onChange={onChangePage}
-      page={currentPage}
-    />
-  );
+  return <HeroUiPagination {...rest} total={total} onChange={onChangePage} page={currentPage} />;
 });

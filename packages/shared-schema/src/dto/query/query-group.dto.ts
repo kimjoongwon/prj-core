@@ -1,6 +1,6 @@
-import { Order } from '../../constant';
-import { StringFieldOptional, EnumFieldOptional } from '../../decorator/field.decorators';
-import { QueryDto } from './query.dto';
+import { Order } from "../../constant";
+import { EnumFieldOptional, StringFieldOptional } from "../../decorator/field.decorators";
+import { QueryDto } from "./query.dto";
 
 export class QueryGroupDto extends QueryDto {
   @StringFieldOptional()

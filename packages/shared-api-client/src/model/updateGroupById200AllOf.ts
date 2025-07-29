@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupDto } from './groupDto';
+import type { GroupDto } from "./groupDto";
 
 export type UpdateGroupById200AllOf = {
   /** */

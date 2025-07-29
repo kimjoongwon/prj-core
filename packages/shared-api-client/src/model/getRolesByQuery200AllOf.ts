@@ -3,8 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleDto } from './roleDto';
-import type { GetRolesByQuery200AllOfMeta } from './getRolesByQuery200AllOfMeta';
+
+import type { GetRolesByQuery200AllOfMeta } from "./getRolesByQuery200AllOfMeta";
+import type { RoleDto } from "./roleDto";
 
 export type GetRolesByQuery200AllOf = {
   /** */

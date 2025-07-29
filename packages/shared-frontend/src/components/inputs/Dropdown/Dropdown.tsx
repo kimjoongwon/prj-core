@@ -1,23 +1,21 @@
-import React from 'react';
 import {
-  Dropdown as HeroUIDropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
-  DropdownProps as HeroUIDropdownProps,
+  DropdownMenu,
+  DropdownTrigger,
+  Dropdown as HeroUIDropdown,
   DropdownItemProps as HeroUIDropdownItemProps,
-} from '@heroui/react';
-import { observer } from 'mobx-react-lite';
+  DropdownProps as HeroUIDropdownProps,
+} from "@heroui/react";
+import { observer } from "mobx-react-lite";
+import React from "react";
 
-export interface DropdownItemProps
-  extends Omit<HeroUIDropdownItemProps, 'children'> {
+export interface DropdownItemProps extends Omit<HeroUIDropdownItemProps, "children"> {
   key: string;
   label: string;
   onClick?: () => void;
 }
 
-export interface DropdownProps
-  extends Omit<HeroUIDropdownProps, 'children' | 'trigger'> {
+export interface DropdownProps extends Omit<HeroUIDropdownProps, "children" | "trigger"> {
   trigger: React.ReactNode;
   dropdownItems: DropdownItemProps[];
   onAction?: (key: string) => void;
@@ -28,7 +26,7 @@ export const Dropdown = observer((props: DropdownProps) => {
 
   const handleAction = (key: React.Key) => {
     const stringKey = String(key);
-    const item = dropdownItems.find(item => item.key === stringKey);
+    const item = dropdownItems.find((item) => item.key === stringKey);
 
     // Call item's onClick if it exists
     item?.onClick?.();
@@ -40,12 +38,8 @@ export const Dropdown = observer((props: DropdownProps) => {
   return (
     <HeroUIDropdown {...dropdownProps}>
       <DropdownTrigger>{trigger}</DropdownTrigger>
-      <DropdownMenu
-        aria-label="Dropdown menu"
-        onAction={handleAction}
-        variant="flat"
-      >
-        {dropdownItems.map(item => {
+      <DropdownMenu aria-label="Dropdown menu" onAction={handleAction} variant="flat">
+        {dropdownItems.map((item) => {
           const { key, label, onClick, ...itemProps } = item;
           return (
             <DropdownItem key={key} {...itemProps}>
@@ -58,4 +52,4 @@ export const Dropdown = observer((props: DropdownProps) => {
   );
 });
 
-Dropdown.displayName = 'Dropdown';
+Dropdown.displayName = "Dropdown";

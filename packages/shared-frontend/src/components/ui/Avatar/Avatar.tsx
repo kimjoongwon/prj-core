@@ -1,6 +1,6 @@
-import { User, Avatar as HeroUIAvatar, Button, Chip } from "@heroui/react";
-import { observer } from "mobx-react-lite";
+import { Button, Chip, Avatar as HeroUIAvatar, User } from "@heroui/react";
 import { EnvironmentUtil } from "@shared/utils";
+import { observer } from "mobx-react-lite";
 import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown";
 
 interface AvatarProps {

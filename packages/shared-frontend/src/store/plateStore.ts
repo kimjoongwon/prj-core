@@ -1,10 +1,10 @@
-import { makeAutoObservable } from "mobx";
-import { NavigationStore } from "./navigationStore";
 import { getAppBuilder } from "@shared/api-client";
-import { NavigatorStore } from "./navigatorStore";
-import { TokenStore } from "./tokenStore";
+import { makeAutoObservable } from "mobx";
 import { AuthStore } from "./authStore";
 import { CookieStore } from "./cookieStore";
+import { NavigationStore } from "./navigationStore";
+import { NavigatorStore } from "./navigatorStore";
+import { TokenStore } from "./tokenStore";
 
 export class PlateStore {
   name: string = "PROTOTYPE";

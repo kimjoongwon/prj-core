@@ -19,7 +19,7 @@ const meta = {
       control: "select",
       options: [
         "h1",
-        "h2", 
+        "h2",
         "h3",
         "h4",
         "h5",
@@ -103,12 +103,12 @@ export const BodyText: Story = {
       <Text variant="subtitle1">Subtitle 1 - Lorem ipsum dolor sit amet</Text>
       <Text variant="subtitle2">Subtitle 2 - Consectetur adipiscing elit</Text>
       <Text variant="body1">
-        Body 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Body 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.
       </Text>
       <Text variant="body2">
-        Body 2 - Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
+        Body 2 - Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+        ex ea commodo consequat.
       </Text>
       <Text variant="caption">Caption - Small descriptive text</Text>
       <Text variant="label">Label Text</Text>
@@ -141,19 +141,17 @@ export const TruncatedText: Story = {
   render: () => (
     <div className="w-48 space-y-4">
       <Text truncate>
-        This is a very long text that will be truncated with ellipsis when it
-        overflows the container width
+        This is a very long text that will be truncated with ellipsis when it overflows the
+        container width
       </Text>
       <Text lineClamp={2}>
-        This is a multi-line text that will be clamped to exactly two lines
-        when it exceeds the specified line limit, showing ellipsis at the end
-        of the second line
+        This is a multi-line text that will be clamped to exactly two lines when it exceeds the
+        specified line limit, showing ellipsis at the end of the second line
       </Text>
       <Text lineClamp={3}>
-        This text demonstrates the line clamp feature which is useful for
-        creating consistent layouts with preview text. It will show exactly
-        three lines before cutting off with ellipsis, regardless of the actual
-        content length.
+        This text demonstrates the line clamp feature which is useful for creating consistent
+        layouts with preview text. It will show exactly three lines before cutting off with
+        ellipsis, regardless of the actual content length.
       </Text>
     </div>
   ),

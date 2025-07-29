@@ -5,6 +5,6 @@
  */
 
 export type GetRoutinesByQueryParams = {
-skip?: number;
-take?: number;
+  skip?: number;
+  take?: number;
 };

@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroundDto } from './groundDto';
+import type { GroundDto } from "./groundDto";
 
 export type GetGroundsByQuery200AllOf = {
   /** */

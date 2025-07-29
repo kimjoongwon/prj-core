@@ -1,6 +1,6 @@
-import { RoleClassification } from '@prisma/client';
-import { ClassField, UUIDField } from '../decorator';
-import { RoleDto, AbstractDto, CategoryDto } from '.';
+import { RoleClassification } from "@prisma/client";
+import { ClassField, UUIDField } from "../decorator";
+import { AbstractDto, CategoryDto, RoleDto } from ".";
 
 export class RoleClassificationDto extends AbstractDto implements RoleClassification {
   @UUIDField()

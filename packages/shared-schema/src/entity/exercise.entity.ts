@@ -1,7 +1,7 @@
-import { AbstractEntity } from './abstract.entity';
-import { Exercise as ExcerciseEntity, Task } from '@prisma/client';
-import { UseDto } from '../decorator/use-dto.decorator';
-import { ExerciseDto } from '../dto/exercise.dto';
+import { Exercise as ExcerciseEntity, Task } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { ExerciseDto } from "../dto/exercise.dto";
+import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(ExerciseDto)
 export class Exercise extends AbstractEntity<ExerciseDto> implements ExcerciseEntity {

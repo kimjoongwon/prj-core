@@ -5,6 +5,6 @@
  */
 
 export type GetTimelinesByQueryParams = {
-skip?: number;
-take?: number;
+  skip?: number;
+  take?: number;
 };

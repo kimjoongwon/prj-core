@@ -1,35 +1,32 @@
+import { Button } from "@heroui/react";
+import { useTheme } from "@heroui/use-theme";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Moon, Sun } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import React from "react";
 
-
-import { Button } from '@heroui/react';
-import { useTheme } from '@heroui/use-theme';
-import { observer } from 'mobx-react-lite';
-import { Moon, Sun } from 'lucide-react';
-import React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-
-const darkModeSwitchStyles = cva('p-2', {
+const darkModeSwitchStyles = cva("p-2", {
   variants: {
     position: {
-      'top-left': 'fixed top-4 left-4 z-50',
-      'top-right': 'fixed top-4 right-4 z-50',
-      'bottom-left': 'fixed bottom-4 left-4 z-50',
-      'bottom-right': 'fixed bottom-4 right-4 z-50',
-      inline: 'relative',
+      "top-left": "fixed top-4 left-4 z-50",
+      "top-right": "fixed top-4 right-4 z-50",
+      "bottom-left": "fixed bottom-4 left-4 z-50",
+      "bottom-right": "fixed bottom-4 right-4 z-50",
+      inline: "relative",
     },
     size: {
-      sm: 'text-sm',
-      md: 'text-md',
-      lg: 'text-lg',
+      sm: "text-sm",
+      md: "text-md",
+      lg: "text-lg",
     },
   },
   defaultVariants: {
-    position: 'bottom-right',
-    size: 'md',
+    position: "bottom-right",
+    size: "md",
   },
 });
 
-export interface DarkModeSwitchProps
-  extends VariantProps<typeof darkModeSwitchStyles> {
+export interface DarkModeSwitchProps extends VariantProps<typeof darkModeSwitchStyles> {
   /**
    * Optional class name for additional styling
    */
@@ -45,7 +42,7 @@ export const DarkModeSwitch = observer((props: DarkModeSwitchProps) => {
   const { setTheme, theme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
@@ -54,13 +51,13 @@ export const DarkModeSwitch = observer((props: DarkModeSwitchProps) => {
       variant="ghost"
       radius="full"
       className={darkModeSwitchStyles({ position, size, className })}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       onPress={toggleTheme}
     >
-      {theme === 'dark' ? (
-        <Sun size={size === 'sm' ? 16 : size === 'md' ? 20 : 24} />
+      {theme === "dark" ? (
+        <Sun size={size === "sm" ? 16 : size === "md" ? 20 : 24} />
       ) : (
-        <Moon size={size === 'sm' ? 16 : size === 'md' ? 20 : 24} />
+        <Moon size={size === "sm" ? 16 : size === "md" ? 20 : 24} />
       )}
     </Button>
   );

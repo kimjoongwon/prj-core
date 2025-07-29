@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { Number } from './number';
+import type { Number } from "./number";
 
 export type DeleteGroup200AllOf = {
   /** */

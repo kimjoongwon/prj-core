@@ -26,7 +26,7 @@ export interface LogData {
 export class LoggerUtil {
   private prefix: string;
 
-  constructor(prefix: string = '') {
+  constructor(prefix: string = "") {
     this.prefix = prefix;
   }
 
@@ -47,7 +47,7 @@ export class LoggerUtil {
    * @param data - 추가 데이터 (선택사항)
    */
   info(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`🔍 ${this.prefix} ${message}`, data || '');
+    console.log(`🔍 ${this.prefix} ${message}`, data || "");
   }
 
   /**
@@ -57,7 +57,7 @@ export class LoggerUtil {
    * @param data - 추가 데이터 (선택사항)
    */
   success(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`✅ ${this.prefix} ${message}`, data || '');
+    console.log(`✅ ${this.prefix} ${message}`, data || "");
   }
 
   /**
@@ -67,7 +67,7 @@ export class LoggerUtil {
    * @param data - 추가 데이터 (선택사항)
    */
   warning(message: string, data?: LogData | string | number | boolean): void {
-    console.warn(`⚠️ ${this.prefix} ${message}`, data || '');
+    console.warn(`⚠️ ${this.prefix} ${message}`, data || "");
   }
 
   /**
@@ -77,7 +77,7 @@ export class LoggerUtil {
    * @param data - 추가 데이터 (선택사항)
    */
   error(message: string, data?: LogData | string | number | boolean): void {
-    console.error(`❌ ${this.prefix} ${message}`, data || '');
+    console.error(`❌ ${this.prefix} ${message}`, data || "");
   }
 
   /**
@@ -87,57 +87,42 @@ export class LoggerUtil {
    * @param data - 추가 데이터 (선택사항)
    */
   debug(message: string, data?: LogData | string | number | boolean): void {
-    console.debug(`🐛 ${this.prefix} ${message}`, data || '');
+    console.debug(`🐛 ${this.prefix} ${message}`, data || "");
   }
 
   // 정적 메서드들 - prefix 없이 바로 사용 가능
   /**
    * 정보성 로그를 출력합니다 (정적 메서드).
    */
-  static info(
-    message: string,
-    data?: LogData | string | number | boolean,
-  ): void {
-    console.log(`🔍 ${message}`, data || '');
+  static info(message: string, data?: LogData | string | number | boolean): void {
+    console.log(`🔍 ${message}`, data || "");
   }
 
   /**
    * 성공 로그를 출력합니다 (정적 메서드).
    */
-  static success(
-    message: string,
-    data?: LogData | string | number | boolean,
-  ): void {
-    console.log(`✅ ${message}`, data || '');
+  static success(message: string, data?: LogData | string | number | boolean): void {
+    console.log(`✅ ${message}`, data || "");
   }
 
   /**
    * 경고 로그를 출력합니다 (정적 메서드).
    */
-  static warning(
-    message: string,
-    data?: LogData | string | number | boolean,
-  ): void {
-    console.warn(`⚠️ ${message}`, data || '');
+  static warning(message: string, data?: LogData | string | number | boolean): void {
+    console.warn(`⚠️ ${message}`, data || "");
   }
 
   /**
    * 에러 로그를 출력합니다 (정적 메서드).
    */
-  static error(
-    message: string,
-    data?: LogData | string | number | boolean,
-  ): void {
-    console.error(`❌ ${message}`, data || '');
+  static error(message: string, data?: LogData | string | number | boolean): void {
+    console.error(`❌ ${message}`, data || "");
   }
 
   /**
    * 디버그 로그를 출력합니다 (정적 메서드).
    */
-  static debug(
-    message: string,
-    data?: LogData | string | number | boolean,
-  ): void {
-    console.debug(`🐛 ${message}`, data || '');
+  static debug(message: string, data?: LogData | string | number | boolean): void {
+    console.debug(`🐛 ${message}`, data || "");
   }
 }

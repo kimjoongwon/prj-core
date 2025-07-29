@@ -1,9 +1,9 @@
-import { useProps } from '../_hooks/useProps';
-import { Date } from '../Date';
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
+import { useProps } from "../_hooks/useProps";
+import { Date } from "../Date";
 
 interface DatesViewProps {
-  state: ReturnType<typeof useProps>['state'];
+  state: ReturnType<typeof useProps>["state"];
 }
 
 export const DatesView = observer((props: DatesViewProps) => {
@@ -13,7 +13,7 @@ export const DatesView = observer((props: DatesViewProps) => {
     <>
       {
         // @ts-ignore
-        state.calendarInput.dates.map(date => (
+        state.calendarInput.dates.map((date) => (
           <Date state={date} />
         ))
       }

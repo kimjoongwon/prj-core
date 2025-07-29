@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react-lite';
-import { get, isUndefined, set } from 'lodash-es';
-import { MobxProps, SearchProps } from '@shared/types';
-import { KeyboardEventHandler } from 'react';
-import { Input } from '../Input';
+import { MobxProps, SearchProps } from "@shared/types";
+import { get, isUndefined, set } from "lodash-es";
+import { observer } from "mobx-react-lite";
+import { KeyboardEventHandler } from "react";
+import { Input } from "../Input";
 
 export const Search = observer(<T extends object>(props: SearchProps<T>) => {
   const { state, path, queryState } = props;
@@ -14,11 +14,11 @@ export const Search = observer(<T extends object>(props: SearchProps<T>) => {
       return null;
     }
 
-    set(state, path, '');
+    set(state, path, "");
   };
 
-  const onEnterKeyPress: KeyboardEventHandler<HTMLInputElement> = e => {
-    if (e.key === 'Enter') {
+  const onEnterKeyPress: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === "Enter") {
       set(queryState, path, get(state, path));
     }
   };

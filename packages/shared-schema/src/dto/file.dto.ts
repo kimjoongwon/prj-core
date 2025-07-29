@@ -1,9 +1,9 @@
-import { File } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { ClassField, NumberField, StringField, UUIDField } from '../decorator';
-import { TenantDto } from './tenant.dto';
-import { FileClassificationDto } from './file-classification.dto';
-import { FileAssociation } from '../entity';
+import { File } from "@prisma/client";
+import { ClassField, NumberField, StringField, UUIDField } from "../decorator";
+import { FileAssociation } from "../entity";
+import { AbstractDto } from "./abstract.dto";
+import { FileClassificationDto } from "./file-classification.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class FileDto extends AbstractDto implements File {
   @UUIDField()

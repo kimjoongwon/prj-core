@@ -1,7 +1,7 @@
-import { AbstractDto } from './abstract.dto';
-import { ClassField, UUIDField } from '../decorator/field.decorators';
-import { Timeline } from '@prisma/client';
-import { TenantDto } from './tenant.dto';
+import { Timeline } from "@prisma/client";
+import { ClassField, UUIDField } from "../decorator/field.decorators";
+import { AbstractDto } from "./abstract.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class TimelineDto extends AbstractDto implements Timeline {
   @UUIDField()

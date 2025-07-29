@@ -1,1 +1,1 @@
-export { VideoUploader } from './VideoUploader';
+export { VideoUploader } from "./VideoUploader";

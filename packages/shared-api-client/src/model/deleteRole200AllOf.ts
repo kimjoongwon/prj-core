@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleDto } from './roleDto';
+import type { RoleDto } from "./roleDto";
 
 export type DeleteRole200AllOf = {
   /** */

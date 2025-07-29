@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
+import type { RoutineDto } from "./routineDto";
 
 export type DeleteRoutine200AllOf = {
   /** */

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Card, CardBody } from '@heroui/react';
-import { Container } from '../Container';
-import { VStack } from '../VStack';
-import { Text } from '../Text';
-import { Spacer } from '../Spacer';
+import { Button, Card, CardBody } from "@heroui/react";
+import React from "react";
+import { Container } from "../Container";
+import { Spacer } from "../Spacer";
+import { Text } from "../Text";
+import { VStack } from "../VStack";
 
 export interface NotFoundProps {
   /**
@@ -44,18 +44,16 @@ export interface NotFoundProps {
  * 404 Not Found 페이지 컴포넌트 (Pure Function)
  */
 export function NotFound({
-  title = '페이지를 찾을 수 없습니다',
-  description = '요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.',
-  homeButtonText = '홈으로 돌아가기',
-  backButtonText = '이전 페이지',
+  title = "페이지를 찾을 수 없습니다",
+  description = "요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.",
+  homeButtonText = "홈으로 돌아가기",
+  backButtonText = "이전 페이지",
   onHomeClick,
   onBackClick,
   actions,
   icon,
 }: NotFoundProps) {
-  const defaultIcon = (
-    <div className="text-9xl text-gray-300 font-bold">404</div>
-  );
+  const defaultIcon = <div className="text-9xl text-gray-300 font-bold">404</div>;
 
   return (
     <Container className="min-h-screen flex items-center justify-center">
@@ -65,10 +63,8 @@ export function NotFound({
             {icon || defaultIcon}
 
             <VStack className="gap-2 items-center">
-              <Text variant="h2" className="text-foreground">
-                {title}
-              </Text>
-              <Text variant="body1" className="text-default-500 text-center">
+              <Text variant="h2">{title}</Text>
+              <Text variant="body1" className="text-center">
                 {description}
               </Text>
             </VStack>

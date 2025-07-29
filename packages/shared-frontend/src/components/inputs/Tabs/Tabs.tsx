@@ -1,11 +1,11 @@
-import { TabsProps } from '@shared/types';
-import { TabsView } from './TabsView';
-import { get } from 'lodash-es';
-import { Key } from 'react';
-import { useMobxHookForm } from '../../../hooks';
+import { TabsProps } from "@shared/types";
+import { get } from "lodash-es";
+import { Key } from "react";
+import { useMobxHookForm } from "../../../hooks";
+import { TabsView } from "./TabsView";
 
-export const Tabs = <T extends any>(props: TabsProps<T>) => {
-  const { state, path = '' } = props;
+export const Tabs = <T,>(props: TabsProps<T>) => {
+  const { state, path = "" } = props;
   const value = get(state, path);
   const { localState } = useMobxHookForm(get(state, path), state, path);
 
@@ -13,7 +13,5 @@ export const Tabs = <T extends any>(props: TabsProps<T>) => {
     localState.value = key;
   };
 
-  return (
-    <TabsView value={value} {...props} onSelectionChange={onSelectionChange} />
-  );
+  return <TabsView value={value} {...props} onSelectionChange={onSelectionChange} />;
 };

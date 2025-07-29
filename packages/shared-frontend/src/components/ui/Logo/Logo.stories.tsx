@@ -99,9 +99,15 @@ export const InNavigationBar: Story = {
     <div className="flex items-center justify-between w-full max-w-4xl p-4 bg-white border-b shadow-sm">
       <Logo variants="text" onClick={() => console.log("Navigate to home")} />
       <nav className="flex space-x-6">
-        <a href="#" className="text-gray-600 hover:text-gray-900">Home</a>
-        <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-        <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+        <a href="#" className="text-gray-600 hover:text-gray-900">
+          Home
+        </a>
+        <a href="#" className="text-gray-600 hover:text-gray-900">
+          About
+        </a>
+        <a href="#" className="text-gray-600 hover:text-gray-900">
+          Contact
+        </a>
       </nav>
       <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
         Sign In
@@ -121,7 +127,11 @@ export const InSidebar: Story = {
   render: () => (
     <div className="w-64 h-96 bg-gray-50 border-r p-4">
       <div className="mb-8">
-        <Logo variants="text" className="text-xl" onClick={() => console.log("Sidebar logo clicked")} />
+        <Logo
+          variants="text"
+          className="text-xl"
+          onClick={() => console.log("Sidebar logo clicked")}
+        />
       </div>
       <nav className="space-y-2">
         <a href="#" className="block px-3 py-2 text-gray-700 hover:bg-blue-100 rounded">

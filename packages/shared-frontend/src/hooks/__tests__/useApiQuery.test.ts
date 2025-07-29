@@ -1,9 +1,10 @@
 /// <reference types="vitest/globals" />
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
+
+import { renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock dependencies
-vi.mock('@shared/api-client', () => ({
+vi.mock("@shared/api-client", () => ({
   APIManager: {
     useGetUsersByQuery: vi.fn(),
     useGetGroundsByQuery: vi.fn(),
@@ -11,51 +12,51 @@ vi.mock('@shared/api-client', () => ({
   },
 }));
 
-vi.mock('nuqs', () => ({
+vi.mock("nuqs", () => ({
   parseAsInteger: {
     withDefault: (defaultValue: number) => ({ defaultValue }),
   },
   useQueryState: vi.fn(),
 }));
 
-vi.mock('@tanstack/react-router', () => ({
+vi.mock("@tanstack/react-router", () => ({
   useParams: vi.fn(),
   useLocation: vi.fn(),
 }));
 
-vi.mock('@heroui/react', () => ({
+vi.mock("@heroui/react", () => ({
   addToast: vi.fn(),
 }));
 
-vi.mock('lodash-es', () => ({
+vi.mock("lodash-es", () => ({
   isEmpty: vi.fn(),
   get: vi.fn(),
 }));
 
 // Mock the PageProvider
-vi.mock('../provider', () => ({
+vi.mock("../provider", () => ({
   usePage: vi.fn(() => ({
     state: {},
   })),
 }));
 
-import { APIManager } from '@shared/api-client';
-import { useQueryState } from 'nuqs';
-import { useParams, useLocation } from '@tanstack/react-router';
-import { addToast } from '@heroui/react';
-import { isEmpty, get } from 'lodash-es';
-import type { ApiQueryBuilder } from '@shared/types';
-import { useApiQuery } from '../useApiQuery';
+import { addToast } from "@heroui/react";
+import { APIManager } from "@shared/api-client";
+import type { ApiQueryBuilder } from "@shared/types";
+import { useLocation, useParams } from "@tanstack/react-router";
+import { get, isEmpty } from "lodash-es";
+import { useQueryState } from "nuqs";
+import { useApiQuery } from "../useApiQuery";
 
 // Console spy to test logging
 const consoleSpy = {
-  log: vi.spyOn(console, 'log').mockImplementation(() => {}),
-  warn: vi.spyOn(console, 'warn').mockImplementation(() => {}),
-  error: vi.spyOn(console, 'error').mockImplementation(() => {}),
-  debug: vi.spyOn(console, 'debug').mockImplementation(() => {}),
+  log: vi.spyOn(console, "log").mockImplementation(() => {}),
+  warn: vi.spyOn(console, "warn").mockImplementation(() => {}),
+  error: vi.spyOn(console, "error").mockImplementation(() => {}),
+  debug: vi.spyOn(console, "debug").mockImplementation(() => {}),
 };
 
-describe('useApiQuery', () => {
+describe("useApiQuery", () => {
   const mockSetSkip = vi.fn();
   const mockSetTake = vi.fn();
 
@@ -64,13 +65,13 @@ describe('useApiQuery', () => {
 
     // Default mock implementations
     (useQueryState as any).mockImplementation((key: string, config: any) => {
-      if (key === 'skip') return [0, mockSetSkip];
-      if (key === 'take') return [10, mockSetTake];
+      if (key === "skip") return [0, mockSetSkip];
+      if (key === "take") return [10, mockSetTake];
       return [config.defaultValue, vi.fn()];
     });
 
-    (useParams as any).mockReturnValue({ id: '123' });
-    (useLocation as any).mockReturnValue({ pathname: '/test/detail/123' });
+    (useParams as any).mockReturnValue({ id: "123" });
+    (useLocation as any).mockReturnValue({ pathname: "/test/detail/123" });
     (isEmpty as any).mockReturnValue(false);
     (get as any).mockImplementation((obj: any, path: string) => obj?.[path]);
   });
@@ -79,11 +80,11 @@ describe('useApiQuery', () => {
     vi.resetAllMocks();
   });
 
-  describe('Table Query', () => {
-    it('should handle table query with pagination', () => {
+  describe("Table Query", () => {
+    it("should handle table query with pagination", () => {
       const mockTableQuery = {
         data: {
-          data: [{ id: 1, name: 'Test User' }],
+          data: [{ id: 1, name: "Test User" }],
           meta: { skip: 0, take: 10, itemCount: 1 },
         },
         isLoading: false,
@@ -94,23 +95,23 @@ describe('useApiQuery', () => {
       (isEmpty as any).mockReturnValue(false);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery', params: { filter: 'active' } },
+        type: "table",
+        query: { name: "useGetUsersByQuery", params: { filter: "active" } },
         pagination: { enabled: true, defaultTake: 10 },
       };
 
       const { result } = renderHook(() => useApiQuery(tableBuilder));
 
-      expect(result.current.data).toEqual([{ id: 1, name: 'Test User' }]);
+      expect(result.current.data).toEqual([{ id: 1, name: "Test User" }]);
       expect(result.current.meta).toEqual({ skip: 0, take: 10, itemCount: 1 });
       expect(result.current.isLoading).toBe(false);
       expect(result.current.skip).toBe(0);
       expect(result.current.take).toBe(10);
-      expect(typeof result.current.setSkip).toBe('function');
-      expect(typeof result.current.setTake).toBe('function');
+      expect(typeof result.current.setSkip).toBe("function");
+      expect(typeof result.current.setTake).toBe("function");
     });
 
-    it('should handle empty query params for table', () => {
+    it("should handle empty query params for table", () => {
       const mockTableQuery = {
         data: { data: [], meta: {} },
         isLoading: false,
@@ -121,8 +122,8 @@ describe('useApiQuery', () => {
       (isEmpty as any).mockReturnValue(true);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery' },
+        type: "table",
+        query: { name: "useGetUsersByQuery" },
         pagination: { enabled: true },
       };
 
@@ -137,13 +138,13 @@ describe('useApiQuery', () => {
     });
   });
 
-  describe('List Query', () => {
-    it('should handle list query and transform to options', () => {
+  describe("List Query", () => {
+    it("should handle list query and transform to options", () => {
       const mockListQuery = {
         data: {
           data: [
-            { id: 1, name: 'Option 1' },
-            { id: 2, name: 'Option 2' },
+            { id: 1, name: "Option 1" },
+            { id: 2, name: "Option 2" },
           ],
         },
         isLoading: false,
@@ -152,28 +153,28 @@ describe('useApiQuery', () => {
 
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockListQuery);
       (get as any).mockImplementation((obj: any, path: string) => {
-        if (path === 'id') return obj.id;
-        if (path === 'name') return obj.name;
+        if (path === "id") return obj.id;
+        if (path === "name") return obj.name;
         return undefined;
       });
 
       const listBuilder: ApiQueryBuilder = {
-        type: 'list',
-        query: { name: 'useGetUsersByQuery', params: {} },
-        listOptions: { valueField: 'id', labelField: 'name' },
+        type: "list",
+        query: { name: "useGetUsersByQuery", params: {} },
+        listOptions: { valueField: "id", labelField: "name" },
       };
 
       const { result } = renderHook(() => useApiQuery(listBuilder));
 
       expect(result.current.options).toEqual([
-        { value: 1, text: 'Option 1' },
-        { value: 2, text: 'Option 2' },
+        { value: 1, text: "Option 1" },
+        { value: 2, text: "Option 2" },
       ]);
       expect(result.current.isLoading).toBe(false);
     });
 
-    it('should handle list query error and show toast', () => {
-      const mockError = new Error('API Error');
+    it("should handle list query error and show toast", () => {
+      const mockError = new Error("API Error");
       const mockListQuery = {
         data: null,
         isLoading: false,
@@ -183,49 +184,49 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockListQuery);
 
       const listBuilder: ApiQueryBuilder = {
-        type: 'list',
-        query: { name: 'useGetUsersByQuery' },
-        listOptions: { valueField: 'id', labelField: 'name' },
+        type: "list",
+        query: { name: "useGetUsersByQuery" },
+        listOptions: { valueField: "id", labelField: "name" },
       };
 
       const { result } = renderHook(() => useApiQuery(listBuilder));
 
       expect(addToast).toHaveBeenCalledWith({
-        title: '💥 ListboxBuilder 오류',
-        description: '데이터를 불러오는 중 오류가 발생했습니다: API Error',
-        color: 'danger',
+        title: "💥 ListboxBuilder 오류",
+        description: "데이터를 불러오는 중 오류가 발생했습니다: API Error",
+        color: "danger",
       });
       expect(result.current.options).toEqual([]);
     });
   });
 
-  describe('Resource Query', () => {
-    it('should handle resource query with ID', () => {
+  describe("Resource Query", () => {
+    it("should handle resource query with ID", () => {
       const mockResourceQuery = {
-        data: { data: { id: 123, name: 'Test Ground' } },
+        data: { data: { id: 123, name: "Test Ground" } },
         isLoading: false,
         error: null,
       };
 
       (APIManager.useGetGroundById as any).mockReturnValue(mockResourceQuery);
-      (useParams as any).mockReturnValue({ id: '123' });
-      (useLocation as any).mockReturnValue({ pathname: '/grounds/detail/123' });
+      (useParams as any).mockReturnValue({ id: "123" });
+      (useLocation as any).mockReturnValue({ pathname: "/grounds/detail/123" });
 
       const resourceBuilder: ApiQueryBuilder = {
-        type: 'resource',
-        query: { name: 'useGetGroundById' },
-        resourceName: 'ground',
+        type: "resource",
+        query: { name: "useGetGroundById" },
+        resourceName: "ground",
       };
 
       const { result } = renderHook(() => useApiQuery(resourceBuilder));
 
-      expect(result.current.data).toEqual({ id: 123, name: 'Test Ground' });
-      expect(result.current.id).toBe('123');
-      expect(result.current.type).toBe('detail');
+      expect(result.current.data).toEqual({ id: 123, name: "Test Ground" });
+      expect(result.current.id).toBe("123");
+      expect(result.current.type).toBe("detail");
       expect(result.current.isLoading).toBe(false);
     });
 
-    it('should detect different path types for resource', () => {
+    it("should detect different path types for resource", () => {
       const mockResourceQuery = {
         data: undefined,
         isLoading: false,
@@ -236,19 +237,19 @@ describe('useApiQuery', () => {
       (useParams as any).mockReturnValue({ id: undefined });
 
       const testCases = [
-        { pathname: '/grounds/create', expected: 'create' },
-        { pathname: '/grounds/modify/123', expected: 'modify' },
-        { pathname: '/grounds/add', expected: 'add' },
-        { pathname: '/grounds/123', expected: 'detail' },
+        { pathname: "/grounds/create", expected: "create" },
+        { pathname: "/grounds/modify/123", expected: "modify" },
+        { pathname: "/grounds/add", expected: "add" },
+        { pathname: "/grounds/123", expected: "detail" },
       ];
 
       testCases.forEach(({ pathname, expected }) => {
         (useLocation as any).mockReturnValue({ pathname });
 
         const resourceBuilder: ApiQueryBuilder = {
-          type: 'resource',
-          query: { name: 'useGetGroundById' },
-          resourceName: 'ground',
+          type: "resource",
+          query: { name: "useGetGroundById" },
+          resourceName: "ground",
         };
 
         const { result } = renderHook(() => useApiQuery(resourceBuilder));
@@ -256,13 +257,13 @@ describe('useApiQuery', () => {
       });
     });
 
-    it('should return default values when no ID and query name', () => {
+    it("should return default values when no ID and query name", () => {
       (useParams as any).mockReturnValue({ id: undefined });
 
       const resourceBuilder: ApiQueryBuilder = {
-        type: 'resource',
+        type: "resource",
         query: { name: undefined },
-        resourceName: 'ground',
+        resourceName: "ground",
       };
 
       const { result } = renderHook(() => useApiQuery(resourceBuilder));
@@ -273,24 +274,24 @@ describe('useApiQuery', () => {
     });
   });
 
-  describe('Invalid Query Type', () => {
-    it('should throw error for unsupported query type', () => {
+  describe("Invalid Query Type", () => {
+    it("should throw error for unsupported query type", () => {
       const invalidBuilder = {
-        type: 'invalid' as any,
-        query: { name: 'useGetUsersByQuery' },
+        type: "invalid" as any,
+        query: { name: "useGetUsersByQuery" },
       };
 
       expect(() => {
         renderHook(() => useApiQuery(invalidBuilder));
-      }).toThrow('Unsupported query type: invalid');
+      }).toThrow("Unsupported query type: invalid");
     });
   });
 
-  describe('Logging', () => {
-    it('should log query and response data', () => {
+  describe("Logging", () => {
+    it("should log query and response data", () => {
       const mockTableQuery = {
         data: {
-          data: [{ id: 1, name: 'Test User' }],
+          data: [{ id: 1, name: "Test User" }],
           meta: { skip: 0, take: 10, itemCount: 1 },
         },
         isLoading: false,
@@ -300,25 +301,25 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockTableQuery);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery', params: { filter: 'active' } },
+        type: "table",
+        query: { name: "useGetUsersByQuery", params: { filter: "active" } },
         pagination: { enabled: true, defaultTake: 10 },
       };
 
       renderHook(() => useApiQuery(tableBuilder));
 
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('Querying'),
-        expect.objectContaining({ name: 'useGetUsersByQuery' }),
+        expect.stringContaining("Querying"),
+        expect.objectContaining({ name: "useGetUsersByQuery" }),
       );
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('Received response'),
-        expect.objectContaining({ data: [{ id: 1, name: 'Test User' }] }),
+        expect.stringContaining("Received response"),
+        expect.objectContaining({ data: [{ id: 1, name: "Test User" }] }),
       );
     });
 
-    it('should log error messages', () => {
-      const mockError = new Error('API Error');
+    it("should log error messages", () => {
+      const mockError = new Error("API Error");
       const mockListQuery = {
         data: null,
         isLoading: false,
@@ -328,20 +329,20 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockListQuery);
 
       const listBuilder: ApiQueryBuilder = {
-        type: 'list',
-        query: { name: 'useGetUsersByQuery' },
-        listOptions: { valueField: 'id', labelField: 'name' },
+        type: "list",
+        query: { name: "useGetUsersByQuery" },
+        listOptions: { valueField: "id", labelField: "name" },
       };
 
       renderHook(() => useApiQuery(listBuilder));
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining('Error in query'),
-        expect.objectContaining({ message: 'API Error' }),
+        expect.stringContaining("Error in query"),
+        expect.objectContaining({ message: "API Error" }),
       );
     });
 
-    it('should log warnings for empty data', () => {
+    it("should log warnings for empty data", () => {
       const mockTableQuery = {
         data: { data: [], meta: {} },
         isLoading: false,
@@ -352,51 +353,51 @@ describe('useApiQuery', () => {
       (isEmpty as any).mockReturnValue(true);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery' },
+        type: "table",
+        query: { name: "useGetUsersByQuery" },
         pagination: { enabled: true },
       };
 
       renderHook(() => useApiQuery(tableBuilder));
 
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringContaining('Received empty data'),
-        expect.objectContaining({ query: 'useGetUsersByQuery' }),
+        expect.stringContaining("Received empty data"),
+        expect.objectContaining({ query: "useGetUsersByQuery" }),
       );
     });
 
-    it('should log debug information', () => {
+    it("should log debug information", () => {
       const mockResourceQuery = {
-        data: { data: { id: 123, name: 'Test Ground' } },
+        data: { data: { id: 123, name: "Test Ground" } },
         isLoading: false,
         error: null,
       };
 
       (APIManager.useGetGroundById as any).mockReturnValue(mockResourceQuery);
-      (useParams as any).mockReturnValue({ id: '123' });
-      (useLocation as any).mockReturnValue({ pathname: '/grounds/detail/123' });
+      (useParams as any).mockReturnValue({ id: "123" });
+      (useLocation as any).mockReturnValue({ pathname: "/grounds/detail/123" });
 
       const resourceBuilder: ApiQueryBuilder = {
-        type: 'resource',
-        query: { name: 'useGetGroundById' },
-        resourceName: 'ground',
+        type: "resource",
+        query: { name: "useGetGroundById" },
+        resourceName: "ground",
       };
 
       renderHook(() => useApiQuery(resourceBuilder));
 
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringContaining('Resource query details'),
-        expect.objectContaining({ id: 123, name: 'Test Ground' }),
+        expect.stringContaining("Resource query details"),
+        expect.objectContaining({ id: 123, name: "Test Ground" }),
       );
     });
   });
 
-  describe('Logging and Error Notifications', () => {
+  describe("Logging and Error Notifications", () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
-    it('should log initialization with correct prefix [useApiQuery]', () => {
+    it("should log initialization with correct prefix [useApiQuery]", () => {
       const mockTableQuery = {
         data: { data: [], meta: {} },
         isLoading: false,
@@ -406,8 +407,8 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockTableQuery);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery', params: {} },
+        type: "table",
+        query: { name: "useGetUsersByQuery", params: {} },
         pagination: { enabled: true, defaultTake: 10 },
       };
 
@@ -415,10 +416,10 @@ describe('useApiQuery', () => {
 
       // Check initialization log
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('🚀 [useApiQuery] Hook called with builder'),
+        expect.stringContaining("🚀 [useApiQuery] Hook called with builder"),
         expect.objectContaining({
-          type: 'table',
-          queryName: 'useGetUsersByQuery',
+          type: "table",
+          queryName: "useGetUsersByQuery",
           hasListOptions: false,
           hasPagination: true,
         }),
@@ -426,36 +427,36 @@ describe('useApiQuery', () => {
 
       // Check routing log
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringContaining('📊 [useApiQuery] Routing to table query'),
-        '',
+        expect.stringContaining("📊 [useApiQuery] Routing to table query"),
+        "",
       );
     });
 
-    it('should show error toast for unsupported query type', () => {
+    it("should show error toast for unsupported query type", () => {
       const invalidBuilder: any = {
-        type: 'invalid',
-        query: { name: 'test' },
+        type: "invalid",
+        query: { name: "test" },
       };
 
       expect(() => renderHook(() => useApiQuery(invalidBuilder))).toThrow();
 
       // Check error log
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining('🚫 [useApiQuery] Invalid query type'),
-        expect.objectContaining({ type: 'invalid' }),
+        expect.stringContaining("🚫 [useApiQuery] Invalid query type"),
+        expect.objectContaining({ type: "invalid" }),
       );
 
       // Check error toast
       expect(addToast).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: '❌ 쿼리 타입 오류',
-          description: 'Unsupported query type: invalid',
-          color: 'danger',
+          title: "❌ 쿼리 타입 오류",
+          description: "Unsupported query type: invalid",
+          color: "danger",
         }),
       );
     });
 
-    it('should log table query success with data count', () => {
+    it("should log table query success with data count", () => {
       const mockTableQuery = {
         data: {
           data: [{ id: 1 }, { id: 2 }, { id: 3 }],
@@ -468,8 +469,8 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockTableQuery);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery', params: {} },
+        type: "table",
+        query: { name: "useGetUsersByQuery", params: {} },
         pagination: { enabled: true },
       };
 
@@ -477,7 +478,7 @@ describe('useApiQuery', () => {
 
       // Check success log
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('📊 [useApiQuery] Table data loaded successfully'),
+        expect.stringContaining("📊 [useApiQuery] Table data loaded successfully"),
         expect.objectContaining({
           count: 3,
           pagination: { skip: 0, take: 10, itemCount: 3 },
@@ -485,8 +486,8 @@ describe('useApiQuery', () => {
       );
     });
 
-    it('should show error toast for table query API errors', () => {
-      const mockError = new Error('Network connection failed');
+    it("should show error toast for table query API errors", () => {
+      const mockError = new Error("Network connection failed");
       const mockTableQuery = {
         data: null,
         isLoading: false,
@@ -496,34 +497,34 @@ describe('useApiQuery', () => {
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockTableQuery);
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
-        query: { name: 'useGetUsersByQuery', params: {} },
+        type: "table",
+        query: { name: "useGetUsersByQuery", params: {} },
       };
 
       renderHook(() => useApiQuery(tableBuilder));
 
       // Check error log
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining('📊 [useApiQuery] Table query error'),
+        expect.stringContaining("📊 [useApiQuery] Table query error"),
         mockError,
       );
 
       // Check error toast
       expect(addToast).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: '❌ 테이블 데이터 로드 실패',
-          description: '데이터를 불러오는 중 오류가 발생했습니다: Network connection failed',
-          color: 'danger',
+          title: "❌ 테이블 데이터 로드 실패",
+          description: "데이터를 불러오는 중 오류가 발생했습니다: Network connection failed",
+          color: "danger",
         }),
       );
     });
 
-    it('should log list query processing with options count', () => {
+    it("should log list query processing with options count", () => {
       const mockListQuery = {
         data: {
           data: [
-            { id: 1, name: 'Option 1' },
-            { id: 2, name: 'Option 2' },
+            { id: 1, name: "Option 1" },
+            { id: 2, name: "Option 2" },
           ],
         },
         isLoading: false,
@@ -532,61 +533,61 @@ describe('useApiQuery', () => {
 
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockListQuery);
       (get as any).mockImplementation((obj: any, path: string) => {
-        if (path === 'id') return obj.id;
-        if (path === 'name') return obj.name;
+        if (path === "id") return obj.id;
+        if (path === "name") return obj.name;
         return undefined;
       });
 
       const listBuilder: ApiQueryBuilder = {
-        type: 'list',
-        query: { name: 'useGetUsersByQuery', params: {} },
-        listOptions: { valueField: 'id', labelField: 'name' },
+        type: "list",
+        query: { name: "useGetUsersByQuery", params: {} },
+        listOptions: { valueField: "id", labelField: "name" },
       };
 
       renderHook(() => useApiQuery(listBuilder));
 
       // Check success log
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('📋 [useApiQuery] List options processed successfully'),
+        expect.stringContaining("📋 [useApiQuery] List options processed successfully"),
         expect.objectContaining({
           originalDataCount: 2,
           processedOptionsCount: 2,
-          sampleOption: { value: 1, text: 'Option 1' },
+          sampleOption: { value: 1, text: "Option 1" },
         }),
       );
     });
 
-    it('should show warning toast for missing list options fields', () => {
+    it("should show warning toast for missing list options fields", () => {
       const listBuilder: ApiQueryBuilder = {
-        type: 'list',
-        query: { name: 'useGetUsersByQuery', params: {} },
-        listOptions: { valueField: '', labelField: 'name' },
+        type: "list",
+        query: { name: "useGetUsersByQuery", params: {} },
+        listOptions: { valueField: "", labelField: "name" },
       };
 
       renderHook(() => useApiQuery(listBuilder));
 
       // Check error log
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining('📋 [useApiQuery] Missing list options fields'),
-        expect.objectContaining({ valueField: '', labelField: 'name' }),
+        expect.stringContaining("📋 [useApiQuery] Missing list options fields"),
+        expect.objectContaining({ valueField: "", labelField: "name" }),
       );
 
       // Check error toast
       expect(addToast).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: '❌ 리스트 쿼리 설정 오류',
-          description: 'valueField와 labelField가 필요합니다.',
-          color: 'danger',
+          title: "❌ 리스트 쿼리 설정 오류",
+          description: "valueField와 labelField가 필요합니다.",
+          color: "danger",
         }),
       );
     });
 
-    it('should log resource query type detection from path', () => {
-      (useLocation as any).mockReturnValue({ pathname: '/grounds/modify/123' });
-      (useParams as any).mockReturnValue({ id: '123' });
+    it("should log resource query type detection from path", () => {
+      (useLocation as any).mockReturnValue({ pathname: "/grounds/modify/123" });
+      (useParams as any).mockReturnValue({ id: "123" });
 
       const mockResourceQuery = {
-        data: { id: 123, name: 'Test Ground' },
+        data: { id: 123, name: "Test Ground" },
         isLoading: false,
         error: null,
       };
@@ -594,38 +595,38 @@ describe('useApiQuery', () => {
       (APIManager.useGetGroundById as any).mockReturnValue(mockResourceQuery);
 
       const resourceBuilder: ApiQueryBuilder = {
-        type: 'resource',
-        query: { name: 'useGetGroundById', params: {} },
+        type: "resource",
+        query: { name: "useGetGroundById", params: {} },
       };
 
       renderHook(() => useApiQuery(resourceBuilder));
 
       // Check type detection log
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('🗂️ [useApiQuery] Detected resource type from path'),
+        expect.stringContaining("🗂️ [useApiQuery] Detected resource type from path"),
         expect.objectContaining({
-          type: 'modify',
-          pathname: '/grounds/modify/123',
+          type: "modify",
+          pathname: "/grounds/modify/123",
         }),
       );
     });
 
-    it('should show warning toast for missing ID in resource query', () => {
-      (useLocation as any).mockReturnValue({ pathname: '/grounds/detail/undefined' });
+    it("should show warning toast for missing ID in resource query", () => {
+      (useLocation as any).mockReturnValue({ pathname: "/grounds/detail/undefined" });
       (useParams as any).mockReturnValue({ id: undefined });
 
       const resourceBuilder: ApiQueryBuilder = {
-        type: 'resource',
-        query: { name: 'useGetGroundById', params: {} },
+        type: "resource",
+        query: { name: "useGetGroundById", params: {} },
       };
 
       renderHook(() => useApiQuery(resourceBuilder));
 
       // Check warning log
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringContaining('🗂️ [useApiQuery] Required ID missing for detail/modify operation'),
+        expect.stringContaining("🗂️ [useApiQuery] Required ID missing for detail/modify operation"),
         expect.objectContaining({
-          type: 'detail',
+          type: "detail",
           args: [undefined],
         }),
       );
@@ -633,14 +634,14 @@ describe('useApiQuery', () => {
       // Check warning toast
       expect(addToast).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: '⚠️ 리소스 ID 누락',
-          description: 'detail 작업에 필요한 ID가 제공되지 않았습니다.',
-          color: 'warning',
+          title: "⚠️ 리소스 ID 누락",
+          description: "detail 작업에 필요한 ID가 제공되지 않았습니다.",
+          color: "warning",
         }),
       );
     });
 
-    it('should log API arguments building process', () => {
+    it("should log API arguments building process", () => {
       const mockTableQuery = {
         data: { data: [], meta: {} },
         isLoading: false,
@@ -648,14 +649,14 @@ describe('useApiQuery', () => {
       };
 
       (APIManager.useGetUsersByQuery as any).mockReturnValue(mockTableQuery);
-      (useParams as any).mockReturnValue({ groundId: 'test123' });
+      (useParams as any).mockReturnValue({ groundId: "test123" });
 
       const tableBuilder: ApiQueryBuilder = {
-        type: 'table',
+        type: "table",
         query: {
-          name: 'useGetUsersByQuery',
-          params: { filter: 'active' },
-          pathParams: { groundId: 'groundId' },
+          name: "useGetUsersByQuery",
+          params: { filter: "active" },
+          pathParams: { groundId: "groundId" },
         },
       };
 
@@ -663,18 +664,18 @@ describe('useApiQuery', () => {
 
       // Check API args building log
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringContaining('🔨 [useApiQuery] Building API arguments'),
+        expect.stringContaining("🔨 [useApiQuery] Building API arguments"),
         expect.objectContaining({
-          pathParams: { groundId: 'groundId' },
-          params: ['filter'],
+          pathParams: { groundId: "groundId" },
+          params: ["filter"],
           hasState: true,
-          urlParams: ['groundId'],
+          urlParams: ["groundId"],
         }),
       );
 
       // Check success log for args building
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringContaining('🔨 [useApiQuery] API arguments built successfully'),
+        expect.stringContaining("🔨 [useApiQuery] API arguments built successfully"),
         expect.objectContaining({
           argsCount: expect.any(Number),
         }),

@@ -1,11 +1,11 @@
 /// <reference types="vitest/globals" />
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { vi } from 'vitest';
-import { renderHook } from '@testing-library/react';
-import { useGetTableQuery } from '../useGetTableQuery';
+
+import { renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { useGetTableQuery } from "../useGetTableQuery";
 
 // Mock dependencies
-vi.mock('@shared/api-client', () => ({
+vi.mock("@shared/api-client", () => ({
   APIManager: {
     useGetUsersByQuery: vi.fn(),
     useGetGroundsByQuery: vi.fn(),
@@ -13,21 +13,21 @@ vi.mock('@shared/api-client', () => ({
   },
 }));
 
-vi.mock('nuqs', () => ({
+vi.mock("nuqs", () => ({
   parseAsInteger: {
     withDefault: (defaultValue: number) => ({ defaultValue }),
   },
   useQueryState: vi.fn(),
 }));
 
-vi.mock('lodash-es', () => ({
+vi.mock("lodash-es", () => ({
   isEmpty: vi.fn(),
 }));
 
-import { APIManager } from '@shared/api-client';
-import { useQueryState } from 'nuqs';
-import { isEmpty } from 'lodash-es';
-import type { TableBuilder } from '@shared/types';
+import { APIManager } from "@shared/api-client";
+import type { TableBuilder } from "@shared/types";
+import { isEmpty } from "lodash-es";
+import { useQueryState } from "nuqs";
 
 // Mock query response type
 interface MockQuery {
@@ -46,7 +46,7 @@ interface MockQuery {
   error?: Error;
 }
 
-describe('useGetTableQuery', () => {
+describe("useGetTableQuery", () => {
   const mockSetSkip = vi.fn();
   const mockSetTake = vi.fn();
   const mockUseQueryState = useQueryState as any;
@@ -64,21 +64,21 @@ describe('useGetTableQuery', () => {
     mockIsEmpty.mockReturnValue(false);
 
     // Console methods mock
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  describe('Basic functionality', () => {
-    it('should return initial state when no query name is provided', () => {
+  describe("Basic functionality", () => {
+    it("should return initial state when no query name is provided", () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
@@ -100,10 +100,10 @@ describe('useGetTableQuery', () => {
       });
     });
 
-    it('should call API with correct parameters when query name is provided', () => {
+    it("should call API with correct parameters when query name is provided", () => {
       const mockApiResponse: MockQuery = {
         data: {
-          data: [{ id: '1', name: 'Test User' }],
+          data: [{ id: "1", name: "Test User" }],
           meta: { itemCount: 1, pageCount: 1, skip: 0, take: 10 },
         },
         isLoading: false,
@@ -114,13 +114,13 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
-          params: { createdAtSortOrder: 'desc' },
+          name: "useGetUsersByQuery",
+          params: { createdAtSortOrder: "desc" },
         },
       };
 
@@ -128,7 +128,7 @@ describe('useGetTableQuery', () => {
 
       expect(APIManager.useGetUsersByQuery).toHaveBeenCalledWith(
         {
-          createdAtSortOrder: 'desc',
+          createdAtSortOrder: "desc",
           skip: 0,
           take: 10,
         },
@@ -139,7 +139,7 @@ describe('useGetTableQuery', () => {
         },
       );
 
-      expect(result.current.data).toEqual([{ id: '1', name: 'Test User' }]);
+      expect(result.current.data).toEqual([{ id: "1", name: "Test User" }]);
       expect(result.current.meta).toEqual({
         itemCount: 1,
         pageCount: 1,
@@ -149,7 +149,7 @@ describe('useGetTableQuery', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    it('should handle loading state correctly', () => {
+    it("should handle loading state correctly", () => {
       const mockApiResponse: MockQuery = {
         data: undefined,
         isLoading: true,
@@ -160,12 +160,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -176,8 +176,8 @@ describe('useGetTableQuery', () => {
       expect(result.current.data).toBeUndefined();
     });
 
-    it('should handle API errors correctly', () => {
-      const mockError = new Error('API Error');
+    it("should handle API errors correctly", () => {
+      const mockError = new Error("API Error");
       const mockApiResponse: MockQuery = {
         data: undefined,
         isLoading: false,
@@ -189,12 +189,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -206,8 +206,8 @@ describe('useGetTableQuery', () => {
     });
   });
 
-  describe('Parameter validation', () => {
-    it('should handle skip and take parameters correctly', () => {
+  describe("Parameter validation", () => {
+    it("should handle skip and take parameters correctly", () => {
       // 테스트는 현재 mock 설정(skip=0, take=10)으로 진행
       const mockApiResponse: MockQuery = {
         data: { data: [], meta: { skip: 0, take: 10 } },
@@ -219,12 +219,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -248,7 +248,7 @@ describe('useGetTableQuery', () => {
       expect(result.current.take).toBe(10);
     });
 
-    it('should handle empty query parameters correctly', () => {
+    it("should handle empty query parameters correctly", () => {
       // isEmpty가 true를 반환하도록 설정하면 빈 객체가 추가되지 않음
       mockIsEmpty.mockReturnValue(true);
 
@@ -262,12 +262,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -278,12 +278,12 @@ describe('useGetTableQuery', () => {
       expect(APIManager.useGetUsersByQuery).toHaveBeenCalledWith();
     });
 
-    it('should handle complex query parameters', () => {
+    it("should handle complex query parameters", () => {
       const mockApiResponse: MockQuery = {
         data: {
           data: [
-            { id: '1', name: 'User 1' },
-            { id: '2', name: 'User 2' },
+            { id: "1", name: "User 1" },
+            { id: "2", name: "User 2" },
           ],
           meta: { itemCount: 2, pageCount: 1 },
         },
@@ -295,15 +295,15 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {
-            createdAtSortOrder: 'desc',
-            searchTerm: 'test',
+            createdAtSortOrder: "desc",
+            searchTerm: "test",
           },
         },
       };
@@ -312,8 +312,8 @@ describe('useGetTableQuery', () => {
 
       expect(APIManager.useGetUsersByQuery).toHaveBeenCalledWith(
         {
-          createdAtSortOrder: 'desc',
-          searchTerm: 'test',
+          createdAtSortOrder: "desc",
+          searchTerm: "test",
           skip: 0,
           take: 10,
         },
@@ -326,17 +326,17 @@ describe('useGetTableQuery', () => {
     });
   });
 
-  describe('Setter functions', () => {
-    it('should call setSkip and setTake with correct values', () => {
+  describe("Setter functions", () => {
+    it("should call setSkip and setTake with correct values", () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -353,11 +353,11 @@ describe('useGetTableQuery', () => {
     });
   });
 
-  describe('Different API endpoints', () => {
-    it('should work with different query functions', () => {
+  describe("Different API endpoints", () => {
+    it("should work with different query functions", () => {
       const mockApiResponse: MockQuery = {
         data: {
-          data: [{ id: '1', name: 'Ground 1' }],
+          data: [{ id: "1", name: "Ground 1" }],
           meta: { itemCount: 1, pageCount: 1 },
         },
         isLoading: false,
@@ -368,12 +368,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetGroundsByQuery',
+          name: "useGetGroundsByQuery",
           params: {},
         },
       };
@@ -381,24 +381,24 @@ describe('useGetTableQuery', () => {
       const { result } = renderHook(() => useGetTableQuery(tableBuilder));
 
       expect(APIManager.useGetGroundsByQuery).toHaveBeenCalled();
-      expect(result.current.data).toEqual([{ id: '1', name: 'Ground 1' }]);
+      expect(result.current.data).toEqual([{ id: "1", name: "Ground 1" }]);
     });
   });
 
-  describe('Edge cases', () => {
-    it('should handle null/undefined skip and take values', () => {
+  describe("Edge cases", () => {
+    it("should handle null/undefined skip and take values", () => {
       // useQueryState에서 null/undefined가 반환되는 경우를 테스트
       // 실제로는 parseAsInteger.withDefault(0)으로 인해 0이 반환됨
       const { result } = renderHook(() =>
         useGetTableQuery({
           columns: [
             {
-              accessorKey: 'name',
-              header: { name: '이름' },
+              accessorKey: "name",
+              header: { name: "이름" },
             },
           ],
           query: {
-            name: 'useGetUsersByQuery',
+            name: "useGetUsersByQuery",
             params: {},
           },
         }),
@@ -409,10 +409,10 @@ describe('useGetTableQuery', () => {
       expect(result.current.take).toBe(10);
     });
 
-    it('should handle circular reference in params gracefully', () => {
+    it("should handle circular reference in params gracefully", () => {
       // 순환 참조가 있어도 코드가 중단되지 않는지 테스트
       // 실제로는 JSON.stringify에서 에러가 발생하지만 isEmpty 체크로 넘어감
-      const circularRef: any = { name: 'test' };
+      const circularRef: any = { name: "test" };
       circularRef.self = circularRef;
 
       const mockApiResponse: MockQuery = {
@@ -426,12 +426,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: circularRef,
         },
       };
@@ -447,16 +447,16 @@ describe('useGetTableQuery', () => {
       }
     });
 
-    it('should handle missing APIManager function', () => {
+    it("should handle missing APIManager function", () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'nonExistentQuery',
+          name: "nonExistentQuery",
           params: {},
         },
       };
@@ -467,13 +467,13 @@ describe('useGetTableQuery', () => {
     });
   });
 
-  describe('Data extraction', () => {
-    it('should extract nested data correctly', () => {
+  describe("Data extraction", () => {
+    it("should extract nested data correctly", () => {
       const mockApiResponse: MockQuery = {
         data: {
           data: [
-            { id: '1', name: 'User 1', profile: { nickname: 'nick1' } },
-            { id: '2', name: 'User 2', profile: { nickname: 'nick2' } },
+            { id: "1", name: "User 1", profile: { nickname: "nick1" } },
+            { id: "2", name: "User 2", profile: { nickname: "nick2" } },
           ],
           meta: {
             itemCount: 2,
@@ -490,12 +490,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };
@@ -503,14 +503,11 @@ describe('useGetTableQuery', () => {
       const { result } = renderHook(() => useGetTableQuery(tableBuilder));
 
       expect(result.current.data).toHaveLength(2);
-      expect(result.current.data?.[0]).toHaveProperty(
-        'profile.nickname',
-        'nick1',
-      );
-      expect(result.current.meta).toHaveProperty('hasNextPage', false);
+      expect(result.current.data?.[0]).toHaveProperty("profile.nickname", "nick1");
+      expect(result.current.meta).toHaveProperty("hasNextPage", false);
     });
 
-    it('should handle missing nested data gracefully', () => {
+    it("should handle missing nested data gracefully", () => {
       const mockApiResponse: MockQuery = {
         isLoading: false,
       };
@@ -520,12 +517,12 @@ describe('useGetTableQuery', () => {
       const tableBuilder: TableBuilder = {
         columns: [
           {
-            accessorKey: 'name',
-            header: { name: '이름' },
+            accessorKey: "name",
+            header: { name: "이름" },
           },
         ],
         query: {
-          name: 'useGetUsersByQuery',
+          name: "useGetUsersByQuery",
           params: {},
         },
       };

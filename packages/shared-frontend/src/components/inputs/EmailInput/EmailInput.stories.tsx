@@ -1,6 +1,6 @@
+import { Validation } from "@shared/types";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EmailInput } from "./EmailInput";
-import { Validation } from "@shared/types";
 
 type EmailState = {
   email?: string;
@@ -90,12 +90,17 @@ export const 유효성검사: Story = {
     state: { email: "" },
     path: "email",
     validation: {
-      required: "이메일을 입력해주세요.",
-      pattern: {
-        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        message: "올바른 이메일 형식이 아닙니다.",
+      required: {
+        message: "이메일은 필수 입력입니다.",
+        value: true,
       },
-    } as Validation,
+      patterns: [
+        {
+          message: "유효한 이메일 형식이 아닙니다.",
+          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        },
+      ],
+    },
   },
 };
 
@@ -107,7 +112,7 @@ export const 스타일변형: Story = {
   render: () => (
     <div className="flex flex-col gap-4 w-80">
       <EmailInput variant="bordered" state={{ bordered: "" }} path="bordered" />
-      <EmailInput variant="filled" state={{ filled: "" }} path="filled" />
+      <EmailInput variant="underlined" state={{ filled: "" }} path="filled" />
     </div>
   ),
 };

@@ -1,6 +1,6 @@
-import { plainToInstance } from 'class-transformer';
-import { AbstractDto } from '../dto/abstract.dto';
-import { Constructor } from '../decorator/use-dto.decorator';
+import { plainToInstance } from "class-transformer";
+import { Constructor } from "../decorator/use-dto.decorator";
+import { AbstractDto } from "../dto/abstract.dto";
 
 export class AbstractEntity<DTO extends AbstractDto, O = never> {
   id: string;

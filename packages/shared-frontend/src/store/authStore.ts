@@ -1,8 +1,8 @@
-import { makeAutoObservable } from "mobx";
-import { BrowserUtil, LoggerUtil } from "@shared/utils";
-import { PlateStore } from "./plateStore";
 import { AXIOS_INSTANCE } from "@shared/api-client";
+import { BrowserUtil, LoggerUtil } from "@shared/utils";
 import { isAxiosError } from "axios";
+import { makeAutoObservable } from "mobx";
+import { PlateStore } from "./plateStore";
 
 const logger = LoggerUtil.create("[AuthStore]");
 

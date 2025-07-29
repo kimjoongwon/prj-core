@@ -3,16 +3,16 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { CategoryTypes } from './categoryTypes';
-import type { SortOrder } from './sortOrder';
+import type { CategoryTypes } from "./categoryTypes";
+import type { SortOrder } from "./sortOrder";
 
 export type GetCategoriesByQueryParams = {
-skip?: number;
-take?: number;
-name?: string;
-type?: CategoryTypes;
-parentId?: string;
-tenantId?: string;
-serviceId?: string;
-nameSortOrder?: SortOrder;
+  skip?: number;
+  take?: number;
+  name?: string;
+  type?: CategoryTypes;
+  parentId?: string;
+  tenantId?: string;
+  serviceId?: string;
+  nameSortOrder?: SortOrder;
 };

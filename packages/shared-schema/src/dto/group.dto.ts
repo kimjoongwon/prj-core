@@ -1,14 +1,14 @@
-import { GroupTypes } from '@prisma/client';
-import type { Group } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
+import type { Group } from "@prisma/client";
+import { GroupTypes } from "@prisma/client";
 import {
   ClassField,
   EnumField,
   StringField,
   StringFieldOptional,
   UUIDField,
-} from '../decorator/field.decorators';
-import { TenantDto } from './tenant.dto';
+} from "../decorator/field.decorators";
+import { AbstractDto } from "./abstract.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class GroupDto extends AbstractDto implements Group {
   @StringField()

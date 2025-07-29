@@ -1,7 +1,7 @@
-import { $Enums, Role as RoleEntity } from '@prisma/client';
-import { AbstractEntity } from './abstract.entity';
-import { UseDto } from '../decorator/use-dto.decorator';
-import { RoleDto } from '../dto';
+import { $Enums, Role as RoleEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { RoleDto } from "../dto";
+import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(RoleDto)
 export class Role extends AbstractEntity<RoleDto> implements RoleEntity {

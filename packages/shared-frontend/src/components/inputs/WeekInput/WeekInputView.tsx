@@ -1,8 +1,8 @@
-import React from 'react';
-import { Chip } from '@heroui/chip';
-import { observer } from 'mobx-react-lite';
-import { RecurringDayOfTheWeek } from '@shared/types';
-import { VStack, Text, HStack } from '../../ui';
+import { Chip } from "@heroui/chip";
+import { RecurringDayOfTheWeek } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { HStack, Text, VStack } from "../../ui";
 
 export interface WeekInputViewProps {
   onChange: (value: RecurringDayOfTheWeek) => void;
@@ -17,32 +17,32 @@ export const WeekInputView = observer((props: WeekInputViewProps) => {
     value: RecurringDayOfTheWeek;
   }[] = [
     {
-      text: '월',
-      value: 'MONDAY',
+      text: "월",
+      value: "MONDAY",
     },
     {
-      text: '화',
-      value: 'TUESDAY',
+      text: "화",
+      value: "TUESDAY",
     },
     {
-      text: '수',
-      value: 'WEDNESDAY',
+      text: "수",
+      value: "WEDNESDAY",
     },
     {
-      text: '목',
-      value: 'THURSDAY',
+      text: "목",
+      value: "THURSDAY",
     },
     {
-      text: '금',
-      value: 'FRIDAY',
+      text: "금",
+      value: "FRIDAY",
     },
     {
-      text: '토',
-      value: 'SATURDAY',
+      text: "토",
+      value: "SATURDAY",
     },
     {
-      text: '일',
-      value: 'SUNDAY',
+      text: "일",
+      value: "SUNDAY",
     },
   ];
 
@@ -50,13 +50,13 @@ export const WeekInputView = observer((props: WeekInputViewProps) => {
     <VStack className="space-y-2">
       <Text variant="caption">반복 요일</Text>
       <HStack className="space-x-2">
-        {dayOptions.map(day => {
+        {dayOptions.map((day) => {
           return (
             <Chip
               className="cursor-pointer"
               onClick={() => onChange(day.value)}
               key={day.value}
-              color={value === day.value ? 'primary' : 'default'}
+              color={value === day.value ? "primary" : "default"}
             >
               {day.text}
             </Chip>

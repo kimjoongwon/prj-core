@@ -1,7 +1,7 @@
-import { UseDto } from '../decorator/use-dto.decorator';
-import { FileDto } from '../dto';
-import { AbstractEntity } from './abstract.entity';
-import { File as FileEntity } from '@prisma/client';
+import { File as FileEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { FileDto } from "../dto";
+import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(FileDto)
 export class File extends AbstractEntity<FileDto> implements FileEntity {

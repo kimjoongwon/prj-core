@@ -1,8 +1,8 @@
 import { RouteDto } from "@shared/api-client";
-import { makeAutoObservable } from "mobx";
 import { LoggerUtil } from "@shared/utils";
-import { PlateStore } from "./plateStore";
+import { makeAutoObservable } from "mobx";
 import { NavigatorStore } from "./navigatorStore";
+import { PlateStore } from "./plateStore";
 import { RouteStore } from "./routeStore";
 
 const _logger = LoggerUtil.create("[NavigationStore]");

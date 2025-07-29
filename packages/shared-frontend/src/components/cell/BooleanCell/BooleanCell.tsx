@@ -1,5 +1,5 @@
-import { CellContext } from "@tanstack/react-table";
 import { Chip } from "@heroui/react";
+import { CellContext } from "@tanstack/react-table";
 
 export const BooleanCell = <T,>(cellContext: CellContext<T, unknown>) => {
   const { getValue } = cellContext;

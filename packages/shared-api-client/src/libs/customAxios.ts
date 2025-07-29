@@ -1,21 +1,17 @@
-import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'production'
-      ? 'https://wallyops.com'
-      : 'http://localhost:3005',
+  baseURL: process.env.NODE_ENV === "production" ? "https://wallyops.com" : "http://localhost:3005",
 }); // use your own URL here or environment variable
 
 // 409 에러 처리를 위한 response 인터셉터 추가
 AXIOS_INSTANCE.interceptors.response.use(
-  response => response,
+  (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 409) {
       const responseData = error.response.data as { message?: string };
-      const errorMessage =
-        responseData?.message || '충돌이 발생했습니다. 다시 시도해주세요.';
-      console.error('409 Conflict Error:', errorMessage);
+      const errorMessage = responseData?.message || "충돌이 발생했습니다. 다시 시도해주세요.";
+      console.error("409 Conflict Error:", errorMessage);
 
       // 에러 객체에 사용자 친화적인 메시지 추가
       error.message = errorMessage;
@@ -44,7 +40,7 @@ export const customInstance = <T>(
 
   // @ts-ignore
   promise.cancel = () => {
-    source.cancel('Query was cancelled');
+    source.cancel("Query was cancelled");
   };
 
   return promise;

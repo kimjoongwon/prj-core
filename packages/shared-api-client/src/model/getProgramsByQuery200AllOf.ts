@@ -3,8 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { ProgramDto } from './programDto';
-import type { GetProgramsByQuery200AllOfMeta } from './getProgramsByQuery200AllOfMeta';
+
+import type { GetProgramsByQuery200AllOfMeta } from "./getProgramsByQuery200AllOfMeta";
+import type { ProgramDto } from "./programDto";
 
 export type GetProgramsByQuery200AllOf = {
   /** */

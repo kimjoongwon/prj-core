@@ -3,8 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDto } from './tenantDto';
-import type { GetMyTenant200AllOfMeta } from './getMyTenant200AllOfMeta';
+
+import type { GetMyTenant200AllOfMeta } from "./getMyTenant200AllOfMeta";
+import type { TenantDto } from "./tenantDto";
 
 export type GetMyTenant200AllOf = {
   /** */

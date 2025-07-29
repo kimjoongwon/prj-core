@@ -1,11 +1,11 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
   // Entry points
-  entry: ['src/index.ts', 'src/types.ts'],
+  entry: ["src/index.ts", "src/types.ts"],
 
   // Output formats
-  format: ['cjs', 'esm'],
+  format: ["cjs", "esm"],
 
   // TypeScript declarations
   dts: true,
@@ -20,7 +20,7 @@ export default defineConfig({
   clean: true,
 
   // Minification for production builds
-  minify: process.env.NODE_ENV === 'production',
+  minify: process.env.NODE_ENV === "production",
 
   // Tree shaking
   treeshake: true,
@@ -29,11 +29,11 @@ export default defineConfig({
   bundle: true,
 
   // External dependencies (peer dependencies)
-  external: ['react', 'react-dom', '@tanstack/react-query', 'axios'],
+  external: ["react", "react-dom", "@tanstack/react-query", "axios"],
 
   // Target environment
-  target: 'es2022',
+  target: "es2022",
 
   // Output directory
-  outDir: 'dist',
+  outDir: "dist",
 });

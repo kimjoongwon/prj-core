@@ -1,5 +1,5 @@
-import { IntersectionType } from '@nestjs/swagger';
-import { QueryDto } from './query.dto';
-import { UpdateActionDto } from '../update';
+import { IntersectionType } from "@nestjs/swagger";
+import { UpdateActionDto } from "../update";
+import { QueryDto } from "./query.dto";
 
 export class QueryActionDto extends QueryDto {}

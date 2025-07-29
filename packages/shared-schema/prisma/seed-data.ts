@@ -23,8 +23,8 @@ export const userSeedData: UserSeedData[] = Array.from({ length: 50 }, (_, index
   const userNumber = index + 1;
   return {
     email: `user-${userNumber}@gmail.com`,
-    phone: `0107316${String(userNumber).padStart(4, '0')}`,
-    password: 'user123!@#', // 모든 일반 유저에게 동일한 비밀번호 사용
+    phone: `0107316${String(userNumber).padStart(4, "0")}`,
+    password: "user123!@#", // 모든 일반 유저에게 동일한 비밀번호 사용
     profile: {
       name: `일반유저${userNumber}`,
       nickname: `유저${userNumber}`,
@@ -37,42 +37,42 @@ export const groundSeedData: GroundSeedData[] = Array.from({ length: 50 }, (_, i
   const companyNumber = index + 1;
   return {
     name: `회사-${companyNumber}`,
-    label: companyNumber <= 10 ? '본점' : companyNumber <= 30 ? '지점' : '분점',
+    label: companyNumber <= 10 ? "본점" : companyNumber <= 30 ? "지점" : "분점",
     address: `서울시 ${getRandomDistrict()}`,
-    phone: `0207316${String(companyNumber).padStart(4, '0')}`,
+    phone: `0207316${String(companyNumber).padStart(4, "0")}`,
     email: `company-${companyNumber}@gmail.com`,
-    businessNo: `${String(companyNumber).padStart(3, '0')}${String(Math.floor(Math.random() * 1000000)).padStart(6, '0')}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`,
+    businessNo: `${String(companyNumber).padStart(3, "0")}${String(Math.floor(Math.random() * 1000000)).padStart(6, "0")}${String(Math.floor(Math.random() * 100)).padStart(2, "0")}`,
   };
 });
 
 // 서울시 구 목록 (랜덤 선택용)
 function getRandomDistrict(): string {
   const districts = [
-    '강남구',
-    '강동구',
-    '강북구',
-    '강서구',
-    '관악구',
-    '광진구',
-    '구로구',
-    '금천구',
-    '노원구',
-    '도봉구',
-    '동대문구',
-    '동작구',
-    '마포구',
-    '서대문구',
-    '서초구',
-    '성동구',
-    '성북구',
-    '송파구',
-    '양천구',
-    '영등포구',
-    '용산구',
-    '은평구',
-    '종로구',
-    '중구',
-    '중랑구',
+    "강남구",
+    "강동구",
+    "강북구",
+    "강서구",
+    "관악구",
+    "광진구",
+    "구로구",
+    "금천구",
+    "노원구",
+    "도봉구",
+    "동대문구",
+    "동작구",
+    "마포구",
+    "서대문구",
+    "서초구",
+    "성동구",
+    "성북구",
+    "송파구",
+    "양천구",
+    "영등포구",
+    "용산구",
+    "은평구",
+    "종로구",
+    "중구",
+    "중랑구",
   ];
   return districts[Math.floor(Math.random() * districts.length)];
 }

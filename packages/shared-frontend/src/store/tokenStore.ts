@@ -52,10 +52,10 @@ export class TokenStore {
     try {
       const parts = token.split(".");
       if (parts.length !== 3) return true;
-      
+
       const payload = JSON.parse(atob(parts[1]));
       if (!payload.exp) return true;
-      
+
       const currentTime = Math.floor(Date.now() / 1000);
       return payload.exp < currentTime;
     } catch (_error) {

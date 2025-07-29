@@ -5,6 +5,6 @@
  */
 
 export type GetAbilitiesByQueryParams = {
-skip?: number;
-take?: number;
+  skip?: number;
+  take?: number;
 };

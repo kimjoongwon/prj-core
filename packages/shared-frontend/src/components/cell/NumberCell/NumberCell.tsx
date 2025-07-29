@@ -1,11 +1,7 @@
+import { CellContext } from "@tanstack/react-table";
+import React from "react";
 
-
-import React from 'react';
-import { CellContext } from '@tanstack/react-table';
-
-export const NumberCell = <T extends unknown>(
-  cellContext: CellContext<T, unknown>,
-) => {
+export const NumberCell = <T,>(cellContext: CellContext<T, unknown>) => {
   const { getValue } = cellContext;
   const value = getValue();
 
@@ -14,7 +10,7 @@ export const NumberCell = <T extends unknown>(
   }
 
   const numValue = Number(value);
-  if (isNaN(numValue)) {
+  if (Number.isNaN(numValue)) {
     return <p>-</p>;
   }
 

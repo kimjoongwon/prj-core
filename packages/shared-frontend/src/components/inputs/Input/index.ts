@@ -1,2 +1,2 @@
-export { Input } from './Input';
-export type { InputProps } from '@shared/types';
+export type { InputProps } from "@shared/types";
+export { Input } from "./Input";

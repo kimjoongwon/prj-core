@@ -3,8 +3,8 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionDto } from './actionDto';
-import type { GetActionsByQuery200AllOfMeta } from './getActionsByQuery200AllOfMeta';
+import type { ActionDto } from "./actionDto";
+import type { GetActionsByQuery200AllOfMeta } from "./getActionsByQuery200AllOfMeta";
 
 export type GetActionsByQuery200AllOf = {
   /** */

@@ -14,7 +14,11 @@
     "build": "echo 'No build needed for config package'",
     "test": "echo 'No tests for config package'"
   },
-  "keywords": ["typescript", "config", "shared"],
+  "keywords": [
+    "typescript",
+    "config",
+    "shared"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {

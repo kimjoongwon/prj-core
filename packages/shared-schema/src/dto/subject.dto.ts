@@ -1,6 +1,6 @@
-import { Subject } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { StringField, UUIDField } from '../decorator/field.decorators';
+import { Subject } from "@prisma/client";
+import { StringField, UUIDField } from "../decorator/field.decorators";
+import { AbstractDto } from "./abstract.dto";
 
 export class SubjectDto extends AbstractDto implements Subject {
   @UUIDField()

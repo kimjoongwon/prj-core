@@ -1,8 +1,6 @@
-
-
-import { observer } from 'mobx-react-lite';
-import { TableLayoutProps } from '@shared/types';
-import { VStack } from '../../ui/VStack/VStack';
+import { TableLayoutProps } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { VStack } from "../../ui/VStack/VStack";
 
 export const TableLayout = observer((props: TableLayoutProps) => {
   const { children } = props;

@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { SpaceDto } from './spaceDto';
+import type { SpaceDto } from "./spaceDto";
 
 export type GetSpace200AllOf = {
   /** */

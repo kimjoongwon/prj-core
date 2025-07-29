@@ -82,9 +82,7 @@ export const InListView: Story = {
   args: {},
   render: () => (
     <div className="w-full max-w-md bg-white border border-gray-300 rounded-lg">
-      <div className="p-4 border-b border-gray-200 font-semibold">
-        사용자 목록
-      </div>
+      <div className="p-4 border-b border-gray-200 font-semibold">사용자 목록</div>
       <div className="p-8">
         <Placeholder />
       </div>

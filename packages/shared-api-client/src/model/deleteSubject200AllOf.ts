@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { SubjectDto } from './subjectDto';
+import type { SubjectDto } from "./subjectDto";
 
 export type DeleteSubject200AllOf = {
   /** */

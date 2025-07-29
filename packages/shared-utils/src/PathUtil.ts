@@ -1,15 +1,11 @@
-import { Path } from 'path-parser';
-import * as R from 'remeda';
+import { Path } from "path-parser";
+import * as R from "remeda";
 
 export class PathUtil {
-  static getUrlWithParamsAndQueryString(
-    url: string,
-    params: object = {},
-    queryString?: string,
-  ) {
+  static getUrlWithParamsAndQueryString(url: string, params: object = {}, queryString?: string) {
     const path = new Path(url);
 
-    let pathWithParams = '';
+    let pathWithParams = "";
     if (R.isEmpty(params)) {
       pathWithParams = url;
     } else {
@@ -17,7 +13,7 @@ export class PathUtil {
     }
 
     if (queryString) {
-      pathWithParams = pathWithParams + '?' + queryString;
+      pathWithParams = `${pathWithParams}?${queryString}`;
     }
 
     return pathWithParams;
@@ -32,7 +28,7 @@ export class PathUtil {
   }) {
     return Object.fromEntries(
       // @ts-ignore
-      pathParamKeys.map(key => [key, pathParams?.[key]]),
+      pathParamKeys.map((key) => [key, pathParams?.[key]]),
     );
   }
 }

@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { Boolean } from './boolean';
+import type { Boolean } from "./boolean";
 
 export type Logout200AllOf = {
   /** */

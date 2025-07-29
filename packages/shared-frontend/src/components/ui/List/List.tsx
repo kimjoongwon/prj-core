@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { observer } from "mobx-react-lite";
-import { v4 } from "uuid";
 import { ListProps } from "@shared/types";
+import { observer } from "mobx-react-lite";
+import { ReactNode } from "react";
+import { v4 } from "uuid";
 
 export const List = observer(<T extends object>(props: ListProps<T>) => {
   const { data, renderItem, placeholder } = props;

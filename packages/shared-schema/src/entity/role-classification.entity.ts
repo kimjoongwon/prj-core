@@ -1,9 +1,9 @@
-import { RoleClassification as RoleClassificationEntity } from '@prisma/client';
-import { AbstractEntity } from './abstract.entity';
-import { Category } from './category.entity';
-import { Role } from './role.entity';
-import { RoleClassificationDto } from '../dto';
-import { UseDto } from '../decorator/use-dto.decorator';
+import { RoleClassification as RoleClassificationEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { RoleClassificationDto } from "../dto";
+import { AbstractEntity } from "./abstract.entity";
+import { Category } from "./category.entity";
+import { Role } from "./role.entity";
 
 @UseDto(RoleClassificationDto)
 export class RoleClassification

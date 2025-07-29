@@ -3,12 +3,12 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { Order } from './order';
+import type { Order } from "./order";
 
 export type GetGroupsByQueryParams = {
-skip?: number;
-take?: number;
-name?: string;
-serviceId?: string;
-orderByCreatedAt?: Order;
+  skip?: number;
+  take?: number;
+  name?: string;
+  serviceId?: string;
+  orderByCreatedAt?: Order;
 };

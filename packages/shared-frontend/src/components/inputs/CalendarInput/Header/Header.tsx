@@ -1,9 +1,9 @@
-import { Button, HStack } from '../../../../..';
-import { useProps } from '../_hooks/useProps';
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react-lite";
+import { Button, HStack } from "../../../../..";
+import { useProps } from "../_hooks/useProps";
 
 interface HeaderProps {
-  state: ReturnType<typeof useProps>['state'];
+  state: ReturnType<typeof useProps>["state"];
 }
 
 export const Header = observer((props: HeaderProps) => {
@@ -36,7 +36,7 @@ export const Header = observer((props: HeaderProps) => {
 });
 
 interface YearProps {
-  state: ReturnType<typeof useProps>['state'];
+  state: ReturnType<typeof useProps>["state"];
 }
 
 export const Year = observer((props: YearProps) => {

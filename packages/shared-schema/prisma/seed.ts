@@ -1,45 +1,46 @@
-import { PrismaClient } from '@prisma/client';
-import { CreateGroupDto } from '../src/dto/create/create-group.dto';
-import { GroupNames } from '../src/enum/group-names.enum';
-import { hash } from 'bcrypt';
-import { userSeedData, groundSeedData, userGroundMapping } from './seed-data';
+import { PrismaClient } from "@prisma/client";
+import { hash } from "bcrypt";
+import { CreateGroupDto } from "../src/dto/create/create-group.dto";
+import { GroupNames } from "../src/enum/group-names.enum";
+import { groundSeedData, userGroundMapping, userSeedData } from "./seed-data";
+
 const prisma = new PrismaClient();
 async function main() {
-  const hashedPassword = await hash('rkdmf12!@', 10);
+  const hashedPassword = await hash("rkdmf12!@", 10);
 
   // 먼저 Role들을 생성
   const superAdminRole = await prisma.role.upsert({
-    where: { name: 'SUPER_ADMIN' },
+    where: { name: "SUPER_ADMIN" },
     update: {},
-    create: { name: 'SUPER_ADMIN' },
+    create: { name: "SUPER_ADMIN" },
   });
 
   const adminRole = await prisma.role.upsert({
-    where: { name: 'ADMIN' },
+    where: { name: "ADMIN" },
     update: {},
-    create: { name: 'ADMIN' },
+    create: { name: "ADMIN" },
   });
 
   const userRole = await prisma.role.upsert({
-    where: { name: 'USER' },
+    where: { name: "USER" },
     update: {},
-    create: { name: 'USER' },
+    create: { name: "USER" },
   });
 
   // Super Admin 유저 생성
   const superAdminUser = await prisma.user.upsert({
     where: {
-      name: 'plate@gmail.com',
+      name: "plate@gmail.com",
     },
     update: {},
     create: {
-      name: 'plate@gmail.com',
-      phone: '01073162347',
+      name: "plate@gmail.com",
+      phone: "01073162347",
       password: hashedPassword,
       profiles: {
         create: {
-          name: 'Plate',
-          nickname: '플레이트',
+          name: "Plate",
+          nickname: "플레이트",
         },
       },
     },
@@ -59,14 +60,14 @@ async function main() {
   });
 
   // 워크스페이스 생성
-  const ground = await prisma.ground.create({
+  const _ground = await prisma.ground.create({
     data: {
-      name: '(주)플레이트',
-      label: '본점',
-      address: '서울시 강남구',
-      phone: '01073162347',
-      email: 'plate@gmail.com',
-      businessNo: '12345678902',
+      name: "(주)플레이트",
+      label: "본점",
+      address: "서울시 강남구",
+      phone: "01073162347",
+      email: "plate@gmail.com",
+      businessNo: "12345678902",
       spaceId: superAdminSpace.id,
     },
   });
@@ -84,7 +85,7 @@ async function main() {
   //   },
   // });
 
-  spaceGroupSeed.forEach(async group => {
+  spaceGroupSeed.forEach(async (group) => {
     const existGroup = await prisma.group.findFirst({
       where: { name: group.name },
     });
@@ -93,7 +94,7 @@ async function main() {
         data: {
           tenant: { connect: { seq: 1 } },
           name: group.name,
-          type: 'Space',
+          type: "Space",
         },
       });
     }
@@ -106,7 +107,7 @@ async function main() {
 }
 
 async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
-  console.log('일반 유저들과 그라운드 생성 시작...');
+  console.log("일반 유저들과 그라운드 생성 시작...");
 
   // 각 그라운드 생성
   const createdGrounds = [];
@@ -130,7 +131,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
           data: {
             name: groundData.email,
             phone: groundData.phone,
-            password: await hash('admin123!@#', 10),
+            password: await hash("admin123!@#", 10),
             profiles: {
               create: {
                 name: `${groundData.name} 관리자`,
@@ -141,7 +142,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
         });
 
         // Tenant 생성 (그라운드 관리자용)
-        const tenant = await prisma.tenant.create({
+        const _tenant = await prisma.tenant.create({
           data: {
             main: true,
             userId: adminUser.id,
@@ -200,7 +201,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
         // 유저가 소속될 그라운드들
         const userGrounds = [];
         for (const groundIndex of userMapping.groundIndices) {
-          const groundInfo = createdGrounds.find(g => g.index === groundIndex);
+          const groundInfo = createdGrounds.find((g) => g.index === groundIndex);
           if (groundInfo) {
             userGrounds.push(groundInfo);
           }
@@ -227,7 +228,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
             const groundInfo = userGrounds[i];
             const isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
 
-            const tenant = await prisma.tenant.create({
+            const _tenant = await prisma.tenant.create({
               data: {
                 main: isMain,
                 userId: user.id,
@@ -249,38 +250,37 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
     }
   }
 
-  console.log('일반 유저들과 그라운드 생성 완료!');
+  console.log("일반 유저들과 그라운드 생성 완료!");
 }
 main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async e => {
+  .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
   });
 
-const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> =
-  [
-    {
-      name: GroupNames.TEAM_TRAINING.name,
-      label: '',
-      tenantId: '',
-    },
-    {
-      name: GroupNames.PERSONAL_TRAINNING.name,
-      label: '',
-      tenantId: '',
-    },
-    {
-      name: GroupNames.GROUND.name,
-      label: '',
-      tenantId: '',
-    },
-    {
-      name: GroupNames.PILATES.name,
-      label: '',
-      tenantId: '',
-    },
-  ];
+const spaceGroupSeed: Array<{ name: string; label: string; tenantId: string }> = [
+  {
+    name: GroupNames.TEAM_TRAINING.name,
+    label: "",
+    tenantId: "",
+  },
+  {
+    name: GroupNames.PERSONAL_TRAINNING.name,
+    label: "",
+    tenantId: "",
+  },
+  {
+    name: GroupNames.GROUND.name,
+    label: "",
+    tenantId: "",
+  },
+  {
+    name: GroupNames.PILATES.name,
+    label: "",
+    tenantId: "",
+  },
+];

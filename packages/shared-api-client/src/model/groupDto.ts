@@ -3,8 +3,8 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupTypes } from './groupTypes';
-import type { TenantDto } from './tenantDto';
+import type { GroupTypes } from "./groupTypes";
+import type { TenantDto } from "./tenantDto";
 
 export interface GroupDto {
   id: string;

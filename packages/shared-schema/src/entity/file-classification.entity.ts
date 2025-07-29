@@ -1,9 +1,9 @@
-import { FileClassification as FileClassificationEntity } from '@prisma/client';
-import { AbstractEntity } from './abstract.entity';
-import { Category } from './category.entity';
-import { File } from './file.entity';
-import { FileClassificationDto } from '../dto';
-import { UseDto } from '../decorator/use-dto.decorator';
+import { FileClassification as FileClassificationEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { FileClassificationDto } from "../dto";
+import { AbstractEntity } from "./abstract.entity";
+import { Category } from "./category.entity";
+import { File } from "./file.entity";
 
 @UseDto(FileClassificationDto)
 export class FileClassification

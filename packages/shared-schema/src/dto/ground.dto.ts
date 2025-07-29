@@ -1,14 +1,14 @@
-import { Ground as GroundEntity } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
+import { Ground as GroundEntity } from "@prisma/client";
+import { Expose } from "class-transformer";
 import {
   ClassField,
   StringField,
   StringFieldOptional,
   UUIDField,
   UUIDFieldOptional,
-} from '../decorator';
-import { SpaceDto } from './space.dto';
-import { Expose } from 'class-transformer';
+} from "../decorator";
+import { AbstractDto } from "./abstract.dto";
+import { SpaceDto } from "./space.dto";
 
 export class GroundDto extends AbstractDto implements GroundEntity {
   @StringField()

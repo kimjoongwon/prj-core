@@ -1,5 +1,5 @@
-import { StringField } from '../../decorator';
-import { QueryDto } from './query.dto';
+import { StringField } from "../../decorator";
+import { QueryDto } from "./query.dto";
 
 export class QueryWorkspaceDto extends QueryDto {
   @StringField()

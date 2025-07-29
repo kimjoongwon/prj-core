@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TimelineDto } from './timelineDto';
+import type { TimelineDto } from "./timelineDto";
 
 export type RemoveTimelines200AllOf = {
   /** */

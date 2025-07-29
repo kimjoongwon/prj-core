@@ -1,24 +1,19 @@
-import { X, Play } from 'lucide-react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { type SortableMediaProps } from '@shared/types';
-import { VideoPlayer } from '../VideoPlayer';
-import { action, observable } from 'mobx';
-import { v4 } from 'uuid';
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { type SortableMediaProps } from "@shared/types";
+import { Play, X } from "lucide-react";
+import { action, observable } from "mobx";
+import { v4 } from "uuid";
+import { VideoPlayer } from "../VideoPlayer";
 
 export const state = observable({
   open: false,
 });
 
 export function SortableMedia({ media, onRemove }: SortableMediaProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: media.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: media.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -28,7 +23,7 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
   };
 
   const url = media.url;
-  console.log('media', media);
+  console.log("media", media);
   return (
     <>
       <div
@@ -38,18 +33,15 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
         {...attributes}
         {...listeners}
       >
-        {media.mimeType.includes('image') ? (
+        {media.mimeType.includes("image") ? (
           <img
-            src={url || '/placeholder.svg'}
+            src={url || "/placeholder.svg"}
             alt="Uploaded content"
             className="w-full h-full object-cover rounded-lg"
           />
         ) : (
           <div className="relative w-full h-full cursor-pointer">
-            <video
-              src={url}
-              className="w-full h-full object-cover rounded-lg"
-            />
+            <video src={url} className="w-full h-full object-cover rounded-lg" />
             <div
               className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg"
               onClick={action(() => (state.open = true))}

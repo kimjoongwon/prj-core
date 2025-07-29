@@ -1,12 +1,12 @@
-import { isEmpty } from 'remeda';
+import { isEmpty } from "remeda";
 
 export class PaginationUtil {
   static getPage = ({ skip, take }: { skip?: number; take?: number }): number => {
     const actualSkip = skip || 0;
     const actualTake = take || 10;
-    
+
     if (actualTake === 0) {
-      throw new Error('Take must be greater than 0');
+      throw new Error("Take must be greater than 0");
     }
     const page = Math.floor(actualSkip / actualTake) + 1;
     return page;
@@ -19,17 +19,17 @@ export class PaginationUtil {
     return Object.entries(query)
       .map(([key, value]) => {
         let object;
-        if (key === 'take' || key === 'skip') {
+        if (key === "take" || key === "skip") {
           object = {
             [key]: value,
           };
           return object;
         }
 
-        if (key.endsWith('SortOrder')) {
+        if (key.endsWith("SortOrder")) {
           object = {
             orderBy: {
-              [key.replace('SortOrder', '')]: value,
+              [key.replace("SortOrder", "")]: value,
             },
           };
 

@@ -1,5 +1,5 @@
-import { VStack } from '../VStack';
-import { Text } from '../Text';
+import { Text } from "../Text";
+import { VStack } from "../VStack";
 
 export const Placeholder = () => {
   return (

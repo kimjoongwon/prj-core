@@ -16,10 +16,7 @@ export interface BaseEntity {
 }
 
 // Type utilities for Prisma models
-export type WithoutId<T> = Omit<T, 'id'>;
-export type WithoutTimestamps<T> = Omit<
-  T,
-  'createdAt' | 'updatedAt' | 'removedAt'
->;
+export type WithoutId<T> = Omit<T, "id">;
+export type WithoutTimestamps<T> = Omit<T, "createdAt" | "updatedAt" | "removedAt">;
 export type CreateInput<T> = WithoutId<WithoutTimestamps<T>>;
 export type UpdateInput<T> = Partial<WithoutTimestamps<T>>;

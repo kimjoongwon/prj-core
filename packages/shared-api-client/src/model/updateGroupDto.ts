@@ -3,7 +3,7 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { GroupTypes } from './groupTypes';
+import type { GroupTypes } from "./groupTypes";
 
 export interface UpdateGroupDto {
   name?: string;

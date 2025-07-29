@@ -30,7 +30,7 @@ const preview: Preview = {
       return createElement(
         QueryClientProvider,
         { client: queryClient },
-        createElement("div", { id: "storybook-container" }, createElement(Story))
+        createElement("div", { id: "storybook-container" }, createElement(Story)),
       );
     },
   ],

@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import { CopyrightProps } from "@shared/types";
+import dayjs from "dayjs";
 
 export const Copyright = (props: CopyrightProps) => {
   const { companyName } = props;

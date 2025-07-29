@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react-lite';
-import { ChipsProps } from '@shared/types';
-import { get } from 'lodash-es';
-import { v4 } from 'uuid';
-import { useInputState } from '../../../hooks/useInputState';
-import { Chip } from '../../ui/Chip';
+import { ChipsProps } from "@shared/types";
+import { get } from "lodash-es";
+import { observer } from "mobx-react-lite";
+import { v4 } from "uuid";
+import { useInputState } from "../../../hooks/useInputState";
+import { Chip } from "../../ui/Chip";
 export const Chips = observer(<T extends object>(props: ChipsProps<T>) => {
   const { state, path } = props;
 
@@ -18,7 +18,7 @@ export const Chips = observer(<T extends object>(props: ChipsProps<T>) => {
   const handleOnClose = (value: string) => {
     if (inputState?.value.includes(value)) {
       // @ts-ignore
-      inputState.value = inputState.value.filter(v => v !== value);
+      inputState.value = inputState.value.filter((v) => v !== value);
     } else {
       inputState.value.push(value);
     }
@@ -26,13 +26,8 @@ export const Chips = observer(<T extends object>(props: ChipsProps<T>) => {
 
   return (
     <div className="space-x-2">
-      {inputState?.value?.map(value => (
-        <Chip
-          variant="flat"
-          color="primary"
-          key={v4()}
-          onClose={() => handleOnClose(value)}
-        >
+      {inputState?.value?.map((value) => (
+        <Chip variant="flat" color="primary" key={v4()} onClose={() => handleOnClose(value)}>
           {value}
         </Chip>
       ))}

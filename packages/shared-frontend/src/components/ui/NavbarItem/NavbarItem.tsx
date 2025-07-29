@@ -1,5 +1,5 @@
-import { v4 } from "uuid";
 import { observer } from "mobx-react-lite";
+import { v4 } from "uuid";
 import { Button } from "../Button";
 
 export interface NavbarItemProps {

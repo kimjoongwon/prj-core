@@ -1,8 +1,8 @@
-import { Ground as GroundEntity } from '@prisma/client';
-import { AbstractEntity } from './abstract.entity';
-import { Space } from './space.entity';
-import { UseDto } from '../decorator/use-dto.decorator';
-import { GroundDto } from '../dto/ground.dto';
+import { Ground as GroundEntity } from "@prisma/client";
+import { UseDto } from "../decorator/use-dto.decorator";
+import { GroundDto } from "../dto/ground.dto";
+import { AbstractEntity } from "./abstract.entity";
+import { Space } from "./space.entity";
 
 @UseDto(GroundDto)
 export class Ground extends AbstractEntity<GroundDto> implements GroundEntity {

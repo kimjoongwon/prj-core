@@ -1,8 +1,8 @@
-import { $Enums, Action } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { JsonValue } from '@prisma/client/runtime/library';
-import { ClassField, EnumField, StringFieldOptional, UUIDField } from '../decorator';
-import { TenantDto } from './tenant.dto';
+import { $Enums, Action } from "@prisma/client";
+import { JsonValue } from "@prisma/client/runtime/library";
+import { ClassField, EnumField, StringFieldOptional, UUIDField } from "../decorator";
+import { AbstractDto } from "./abstract.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class ActionDto extends AbstractDto implements Action {
   @UUIDField()

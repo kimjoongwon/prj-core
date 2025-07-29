@@ -4,4 +4,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface Boolean { [key: string]: unknown }
+export interface Boolean {
+  [key: string]: unknown;
+}

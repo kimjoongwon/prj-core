@@ -3,8 +3,9 @@
  * Do not edit manually.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantDto } from './tenantDto';
-import type { FileClassificationDto } from './fileClassificationDto';
+
+import type { FileClassificationDto } from "./fileClassificationDto";
+import type { TenantDto } from "./tenantDto";
 
 export interface FileDto {
   id: string;

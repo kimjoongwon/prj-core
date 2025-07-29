@@ -1,6 +1,6 @@
 import { ToastProvider } from "@heroui/react";
-import { AuthProvider, QueryProvider } from "../index";
 import { NuqsAdapter } from "nuqs/adapters/react";
+import { AuthProvider, QueryProvider } from "../index";
 
 interface AppProvidersProps {
   children: React.ReactNode;

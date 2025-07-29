@@ -1,7 +1,7 @@
-import { Tenant } from '@prisma/client';
-import { AbstractDto } from './abstract.dto';
-import { UserDto, SpaceDto, RoleDto } from '.';
-import { BooleanField, ClassField, StringField, UUIDField } from '../decorator/field.decorators';
+import { Tenant } from "@prisma/client";
+import { BooleanField, ClassField, StringField, UUIDField } from "../decorator/field.decorators";
+import { RoleDto, SpaceDto, UserDto } from ".";
+import { AbstractDto } from "./abstract.dto";
 
 export class TenantDto extends AbstractDto implements Tenant {
   @BooleanField()

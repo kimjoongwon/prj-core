@@ -78,11 +78,7 @@ export const WithCustomIcon: Story = {
   args: {
     title: "Oops! Something went wrong",
     description: "We couldn't find what you're looking for.",
-    icon: (
-      <div className="text-6xl text-blue-500 mb-4">
-        🔍
-      </div>
-    ),
+    icon: <div className="text-6xl text-blue-500 mb-4">🔍</div>,
   },
   parameters: {
     docs: {
@@ -137,12 +133,11 @@ export const Minimal: Story = {
 export const ServerError: Story = {
   args: {
     title: "500 - Server Error",
-    description: "Something went wrong on our end. Please try again later or contact support if the problem persists.",
+    description:
+      "Something went wrong on our end. Please try again later or contact support if the problem persists.",
     homeButtonText: "Return Home",
     backButtonText: "Try Again",
-    icon: (
-      <div className="text-8xl text-red-400 font-bold">500</div>
-    ),
+    icon: <div className="text-8xl text-red-400 font-bold">500</div>,
   },
   parameters: {
     docs: {
@@ -156,14 +151,11 @@ export const ServerError: Story = {
 export const MaintenanceMode: Story = {
   args: {
     title: "Under Maintenance",
-    description: "We're currently performing scheduled maintenance. Please check back in a few hours.",
+    description:
+      "We're currently performing scheduled maintenance. Please check back in a few hours.",
     homeButtonText: "Check Status Page",
     backButtonText: "Notify Me",
-    icon: (
-      <div className="text-6xl text-yellow-500 mb-4">
-        🔧
-      </div>
-    ),
+    icon: <div className="text-6xl text-yellow-500 mb-4">🔧</div>,
   },
   parameters: {
     docs: {

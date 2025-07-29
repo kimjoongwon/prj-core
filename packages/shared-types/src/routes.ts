@@ -1,4 +1,4 @@
-import { ROUTE_NAMES } from '@shared/vars';
+import { ROUTE_NAMES } from "@shared/vars";
 
 /**
  * ROUTE_NAMES 객체의 값들을 union 타입으로 추출

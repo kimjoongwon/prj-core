@@ -1,6 +1,6 @@
-import { StringField, ClassField } from "../../decorator/field.decorators";
-import { UserDto } from "../user.dto";
 import { ApiProperty } from "@nestjs/swagger";
+import { ClassField, StringField } from "../../decorator/field.decorators";
+import { UserDto } from "../user.dto";
 
 export class TokenDto {
   @ApiProperty({

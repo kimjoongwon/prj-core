@@ -1,6 +1,6 @@
-import { useState } from '../_hooks/useState';
-import { observer } from 'mobx-react-lite';
-import { DatesView } from './DatesView';
+import { observer } from "mobx-react-lite";
+import { useState } from "../_hooks/useState";
+import { DatesView } from "./DatesView";
 
 interface DatesProps {
   state: ReturnType<typeof useState>;

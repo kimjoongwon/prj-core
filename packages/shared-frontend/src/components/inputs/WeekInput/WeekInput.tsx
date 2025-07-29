@@ -1,10 +1,8 @@
-
-
-import { WeekInputView } from './WeekInputView';
-import { get } from 'lodash-es';
-import { observer } from 'mobx-react-lite';
-import { useMobxHookForm } from '../../../hooks';
-import { RecurringDayOfTheWeek } from '@shared/types';
+import { RecurringDayOfTheWeek } from "@shared/types";
+import { get } from "lodash-es";
+import { observer } from "mobx-react-lite";
+import { useMobxHookForm } from "../../../hooks";
+import { WeekInputView } from "./WeekInputView";
 
 export const WeekInput = observer((props: any) => {
   const { state, path, ...rest } = props;
@@ -15,7 +13,5 @@ export const WeekInput = observer((props: any) => {
     localState.value = value;
   };
 
-  return (
-    <WeekInputView {...rest} onChange={onChange} value={localState.value} />
-  );
+  return <WeekInputView {...rest} onChange={onChange} value={localState.value} />;
 });

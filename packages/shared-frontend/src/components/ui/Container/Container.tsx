@@ -1,9 +1,9 @@
-import { cva } from 'class-variance-authority';
-import { ContainerProps } from '@shared/types';
+import { ContainerProps } from "@shared/types";
+import { cva } from "class-variance-authority";
 
-const container = cva('flex flex-col');
+const container = cva("flex flex-col");
 
 export const Container = (props: ContainerProps) => {
-  const { className = '', children } = props;
+  const { className = "", children } = props;
   return <div className={container({ className })}>{children}</div>;
 };

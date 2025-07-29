@@ -64,13 +64,13 @@ export const VerticalSizes: Story = {
         <Spacer size={8} />
         <div className="bg-green-200 p-1 text-center">Content</div>
       </div>
-      
+
       <div className="border border-gray-300 p-2">
         <div className="bg-blue-200 p-1 text-center">Medium (16px)</div>
         <Spacer size={16} />
         <div className="bg-green-200 p-1 text-center">Content</div>
       </div>
-      
+
       <div className="border border-gray-300 p-2">
         <div className="bg-blue-200 p-1 text-center">Large (32px)</div>
         <Spacer size={32} />
@@ -116,13 +116,13 @@ export const HorizontalSizes: Story = {
         <Spacer size={8} direction="horizontal" />
         <div className="bg-green-200 p-1">8px</div>
       </div>
-      
+
       <div className="flex items-center border border-gray-300 p-2">
         <div className="bg-blue-200 p-1">Medium</div>
         <Spacer size={16} direction="horizontal" />
         <div className="bg-green-200 p-1">16px</div>
       </div>
-      
+
       <div className="flex items-center border border-gray-300 p-2">
         <div className="bg-blue-200 p-1">Large</div>
         <Spacer size={32} direction="horizontal" />
@@ -143,33 +143,21 @@ export const InFormLayout: Story = {
   render: () => (
     <div className="max-w-sm mx-auto p-6 bg-white border rounded-lg shadow">
       <h3 className="text-lg font-semibold">Registration Form</h3>
-      
+
       <Spacer size={16} />
-      
-      <input 
-        type="text" 
-        placeholder="First Name" 
-        className="w-full p-2 border rounded"
-      />
-      
+
+      <input type="text" placeholder="First Name" className="w-full p-2 border rounded" />
+
       <Spacer size={12} />
-      
-      <input 
-        type="text" 
-        placeholder="Last Name" 
-        className="w-full p-2 border rounded"
-      />
-      
+
+      <input type="text" placeholder="Last Name" className="w-full p-2 border rounded" />
+
       <Spacer size={12} />
-      
-      <input 
-        type="email" 
-        placeholder="Email" 
-        className="w-full p-2 border rounded"
-      />
-      
+
+      <input type="email" placeholder="Email" className="w-full p-2 border rounded" />
+
       <Spacer size={24} />
-      
+
       <button className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">
         Sign Up
       </button>
@@ -199,7 +187,8 @@ export const WithCustomClass: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Spacer with custom styling to visualize the space (normally spacers are invisible).",
+        story:
+          "Spacer with custom styling to visualize the space (normally spacers are invisible).",
       },
     },
   },

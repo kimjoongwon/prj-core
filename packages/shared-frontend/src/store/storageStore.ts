@@ -12,10 +12,10 @@ export class StorageStore {
   getItem(key: string): any {
     const item = this.storage.getItem(key);
     if (!item) return null;
-    
+
     try {
       return JSON.parse(item);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }

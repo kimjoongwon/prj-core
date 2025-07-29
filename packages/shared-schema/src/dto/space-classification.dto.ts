@@ -1,6 +1,6 @@
-import { SpaceClassification } from '@prisma/client';
-import { ClassField, UUIDField } from '../decorator';
-import { SpaceDto, AbstractDto, CategoryDto } from '.';
+import { SpaceClassification } from "@prisma/client";
+import { ClassField, UUIDField } from "../decorator";
+import { AbstractDto, CategoryDto, SpaceDto } from ".";
 
 export class SpaceClassificationDto extends AbstractDto implements SpaceClassification {
   @UUIDField()

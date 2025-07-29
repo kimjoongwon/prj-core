@@ -1,4 +1,4 @@
-import { Validation } from '@shared/types';
+import { Validation } from "@shared/types";
 
 /**
  * Form Validation Utility
@@ -10,19 +10,19 @@ export class FormValidationUtil {
    */
   static validateSingleField = (
     value: any,
-    validation: Validation
+    validation: Validation,
   ): { isValid: boolean; errorMessage?: string } => {
     const { required, minLength, maxLength, min, max, patterns } = validation;
 
     // 필수 값 검증
     if (required?.value) {
-      if (value === undefined || value === null || value === '') {
+      if (value === undefined || value === null || value === "") {
         return { isValid: false, errorMessage: required.message };
       }
     }
 
     // 값이 없으면 다른 검증은 건너뛰기 (required가 아닌 경우)
-    if (value === undefined || value === null || value === '') {
+    if (value === undefined || value === null || value === "") {
       return { isValid: true };
     }
 
@@ -40,22 +40,20 @@ export class FormValidationUtil {
     }
 
     // 최소값 검증
-    if (min && !isNaN(numValue) && numValue < min.value) {
+    if (min && !Number.isNaN(numValue) && numValue < min.value) {
       return { isValid: false, errorMessage: min.message };
     }
 
     // 최대값 검증
-    if (max && !isNaN(numValue) && numValue > max.value) {
+    if (max && !Number.isNaN(numValue) && numValue > max.value) {
       return { isValid: false, errorMessage: max.message };
     }
 
     // 정규표현식 검증
     if (patterns && patterns.length > 0) {
       for (const pattern of patterns) {
-        const regex = pattern.value instanceof RegExp 
-          ? pattern.value 
-          : new RegExp(pattern.value);
-          
+        const regex = pattern.value instanceof RegExp ? pattern.value : new RegExp(pattern.value);
+
         if (!regex.test(strValue)) {
           return { isValid: false, errorMessage: pattern.message };
         }
@@ -70,25 +68,25 @@ export class FormValidationUtil {
    */
   static validateFields = (
     state: any,
-    validationFields: Record<string, Validation>
+    validationFields: Record<string, Validation>,
   ): { isValid: boolean; errorMessage?: string } => {
     // lodash-es의 get 대신 간단한 path 접근 구현
     const getValue = (obj: any, path: string): any => {
-      return path.split('.').reduce((current, key) => current?.[key], obj);
+      return path.split(".").reduce((current, key) => current?.[key], obj);
     };
 
     for (const [fieldPath, fieldValidation] of Object.entries(validationFields)) {
       const fieldValue = getValue(state, fieldPath);
       const fieldResult = FormValidationUtil.validateSingleField(fieldValue, fieldValidation);
-      
+
       if (!fieldResult.isValid) {
-        return { 
-          isValid: false, 
-          errorMessage: fieldResult.errorMessage 
+        return {
+          isValid: false,
+          errorMessage: fieldResult.errorMessage,
         };
       }
     }
-    
+
     return { isValid: true };
   };
 }
