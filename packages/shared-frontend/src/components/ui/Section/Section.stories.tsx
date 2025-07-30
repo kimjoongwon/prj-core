@@ -64,26 +64,37 @@ export const WithForm: Story = {
 			<h3 className="text-lg font-semibold mb-4">Contact Information</h3>
 			<div className="space-y-4">
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label
+						htmlFor="fullName"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
 						Full Name
 					</label>
 					<input
+						id="fullName"
 						type="text"
 						className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
 						placeholder="Enter your name"
 					/>
 				</div>
 				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
+					<label
+						htmlFor="email"
+						className="block text-sm font-medium text-gray-700 mb-1"
+					>
 						Email
 					</label>
 					<input
+						id="email"
 						type="email"
 						className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
 						placeholder="Enter your email"
 					/>
 				</div>
-				<button className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">
+				<button
+					type="button"
+					className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+				>
 					Submit
 				</button>
 			</div>
@@ -157,9 +168,9 @@ export const WithList: Story = {
 						time: "15 minutes ago",
 						status: "error",
 					},
-				].map((item, index) => (
+				].map((item) => (
 					<div
-						key={index}
+						key={item.action}
 						className="flex items-center justify-between p-3 bg-gray-50 rounded"
 					>
 						<div className="flex items-center space-x-3">

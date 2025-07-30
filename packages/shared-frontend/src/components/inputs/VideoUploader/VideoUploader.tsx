@@ -92,6 +92,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
 					{file && (
 						<div className="mb-4">
 							<video ref={videoRef} controls className="w-full rounded-lg">
+								<track kind="captions" srcLang="ko" label="Korean captions" />
 								Your browser does not support the video tag.
 							</video>
 							<p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -100,6 +101,7 @@ export const VideoUploader = observer((props: VideoUploaderProps) => {
 						</div>
 					)}
 					<button
+						type="button"
 						onClick={handleUpload}
 						disabled={!file || uploading}
 						className={`w-full px-4 py-2 text-white font-semibold rounded-lg ${

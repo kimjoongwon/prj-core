@@ -109,7 +109,9 @@ export const FileUploader = observer(
 								src={file.url}
 								className="w-full h-full object-contain bg-black"
 								controls={false}
-							/>
+							>
+								<track kind="captions" />
+							</video>
 						)}
 						{!isImage && !isVideo && (
 							<div className="w-full h-full flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">

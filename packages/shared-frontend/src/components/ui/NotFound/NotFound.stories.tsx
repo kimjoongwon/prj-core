@@ -97,10 +97,16 @@ export const WithCustomActions: Story = {
 		description: "You don't have permission to access this resource.",
 		actions: (
 			<div className="flex flex-col gap-3 w-full">
-				<button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+				<button
+					type="button"
+					className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+				>
 					Contact Support
 				</button>
-				<button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+				<button
+					type="button"
+					className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+				>
 					View Documentation
 				</button>
 			</div>

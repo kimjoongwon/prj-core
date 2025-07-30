@@ -133,19 +133,24 @@ export const ProfileSkeleton: Story = {
 export const ListSkeleton: Story = {
 	render: () => (
 		<div className="space-y-4 max-w-md">
-			{[...Array(5)].map((_, i) => (
-				<div
-					key={i}
-					className="flex items-center space-x-3 p-3 bg-white border rounded-lg"
-				>
-					<Skeleton isLoaded={false} className="w-8 h-8 rounded-full" />
-					<div className="flex-1 space-y-1">
-						<Skeleton isLoaded={false} className="w-3/4 h-4 rounded-lg" />
-						<Skeleton isLoaded={false} className="w-1/2 h-3 rounded-lg" />
+			{[...Array(5)].map((_, i) => {
+				const uniqueKey = `list-skeleton-item-${i}-${Math.random()
+					.toString(36)
+					.substr(2, 9)}`;
+				return (
+					<div
+						key={uniqueKey}
+						className="flex items-center space-x-3 p-3 bg-white border rounded-lg"
+					>
+						<Skeleton isLoaded={false} className="w-8 h-8 rounded-full" />
+						<div className="flex-1 space-y-1">
+							<Skeleton isLoaded={false} className="w-3/4 h-4 rounded-lg" />
+							<Skeleton isLoaded={false} className="w-1/2 h-3 rounded-lg" />
+						</div>
+						<Skeleton isLoaded={false} className="w-12 h-6 rounded-lg" />
 					</div>
-					<Skeleton isLoaded={false} className="w-12 h-6 rounded-lg" />
-				</div>
-			))}
+				);
+			})}
 		</div>
 	),
 	parameters: {
@@ -191,7 +196,10 @@ export const LoadingStates: Story = {
 
 				<div className="mt-4">
 					<Skeleton isLoaded={isLoaded} className="w-full h-10 rounded-lg">
-						<button className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+						<button
+							type="button"
+							className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+						>
 							Add to Cart
 						</button>
 					</Skeleton>

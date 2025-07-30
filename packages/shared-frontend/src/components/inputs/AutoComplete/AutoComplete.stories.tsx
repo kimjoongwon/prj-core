@@ -271,7 +271,10 @@ export const 폼예시: Story = {
 					state={{ user: "" }}
 					path="user"
 				/>
-				<button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+				<button
+					type="button"
+					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+				>
 					제출
 				</button>
 			</div>

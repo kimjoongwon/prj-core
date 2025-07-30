@@ -88,7 +88,10 @@ export const ResponsiveLayout: Story = {
 					This is an example of a responsive container that works well on
 					different screen sizes.
 				</p>
-				<button className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">
+				<button
+					type="button"
+					className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+				>
 					Action Button
 				</button>
 			</>
@@ -125,7 +128,10 @@ export const FormLayout: Story = {
 					rows={3}
 					className="w-full p-2 border rounded resize-none"
 				/>
-				<button className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600">
+				<button
+					type="button"
+					className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600"
+				>
 					Send Message
 				</button>
 			</>

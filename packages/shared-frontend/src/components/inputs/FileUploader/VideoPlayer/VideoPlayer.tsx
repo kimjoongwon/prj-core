@@ -50,9 +50,12 @@ export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
 						src={src}
 						className="w-full h-full object-contain"
 						onClick={togglePlay}
-					/>
+					>
+						<track kind="captions" />
+					</video>
 					<div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-4 bg-black bg-opacity-10 hover:bg-opacity-30 transition-all duration-300">
 						<button
+							type="button"
 							onClick={togglePlay}
 							className="text-white hover:text-gray-300 transition-colors shadow-md"
 						>
@@ -63,6 +66,7 @@ export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
 							)}
 						</button>
 						<button
+							type="button"
 							onClick={toggleFullscreen}
 							className="text-white hover:text-gray-300 transition-colors shadow-md"
 						>

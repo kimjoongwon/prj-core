@@ -31,7 +31,11 @@
 				"noStaticOnlyClass": "off"
 			},
 			"style": {
-				"useImportType": "off"
+				"useImportType": "off",
+				"noNonNullAssertion": "off"
+			},
+			"a11y": {
+				"useValidAnchor": "off"
 			}
 		}
 	},

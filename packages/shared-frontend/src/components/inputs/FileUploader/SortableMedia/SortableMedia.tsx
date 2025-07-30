@@ -28,6 +28,13 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 		opacity: isDragging ? 0.5 : 1,
 	};
 
+	const handleRemoveClick = () => {
+		onRemove(media.id);
+	};
+	const handleVideoClick = action(() => {
+		state.open = true;
+	});
+
 	const url = media.url;
 	console.log("media", media);
 	return (
@@ -47,22 +54,21 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 					/>
 				) : (
 					<div className="relative w-full h-full cursor-pointer">
-						<video
-							src={url}
-							className="w-full h-full object-cover rounded-lg"
-						/>
-						<div
+						<video src={url} className="w-full h-full object-cover rounded-lg">
+							<track kind="captions" />
+						</video>
+						<button
+							type="button"
 							className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg"
-							onClick={action(() => (state.open = true))}
+							onClick={handleVideoClick}
 						>
 							<Play className="h-12 w-12 text-white" />
-						</div>
+						</button>
 					</div>
 				)}
 				<button
-					onClick={() => {
-						onRemove(media.id);
-					}}
+					type="button"
+					onClick={handleRemoveClick}
 					className="absolute -top-2 -right-2 bg-gray-800 rounded-full p-1"
 				>
 					<X className="h-4 w-4 text-white" />

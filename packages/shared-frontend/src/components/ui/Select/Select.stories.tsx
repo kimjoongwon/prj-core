@@ -287,7 +287,10 @@ export const FormExample: Story = {
 					placeholder="Select department"
 					label="Department"
 				/>
-				<button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+				<button
+					type="button"
+					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+				>
 					Submit
 				</button>
 			</div>

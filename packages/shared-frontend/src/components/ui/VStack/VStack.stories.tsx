@@ -260,8 +260,14 @@ export const FormLayoutExample: Story = {
 			<h3 className="text-lg font-semibold text-center">Contact Form</h3>
 
 			<VStack gap={2} alignItems="stretch">
-				<label className="text-sm font-medium text-gray-700">Name</label>
+				<label
+					htmlFor="contact-name"
+					className="text-sm font-medium text-gray-700"
+				>
+					Name
+				</label>
 				<input
+					id="contact-name"
 					type="text"
 					placeholder="Enter your name"
 					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -269,8 +275,14 @@ export const FormLayoutExample: Story = {
 			</VStack>
 
 			<VStack gap={2} alignItems="stretch">
-				<label className="text-sm font-medium text-gray-700">Email</label>
+				<label
+					htmlFor="contact-email"
+					className="text-sm font-medium text-gray-700"
+				>
+					Email
+				</label>
 				<input
+					id="contact-email"
 					type="email"
 					placeholder="Enter your email"
 					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -278,15 +290,24 @@ export const FormLayoutExample: Story = {
 			</VStack>
 
 			<VStack gap={2} alignItems="stretch">
-				<label className="text-sm font-medium text-gray-700">Message</label>
+				<label
+					htmlFor="contact-message"
+					className="text-sm font-medium text-gray-700"
+				>
+					Message
+				</label>
 				<textarea
+					id="contact-message"
 					placeholder="Enter your message"
 					rows={4}
 					className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
 				/>
 			</VStack>
 
-			<button className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+			<button
+				type="button"
+				className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+			>
 				Send Message
 			</button>
 		</VStack>
@@ -322,10 +343,16 @@ export const CardExample: Story = {
 				</p>
 
 				<VStack gap={2} alignItems="stretch">
-					<button className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">
+					<button
+						type="button"
+						className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+					>
 						Add to Cart
 					</button>
-					<button className="w-full py-2 px-4 border border-gray-300 rounded hover:bg-gray-50">
+					<button
+						type="button"
+						className="w-full py-2 px-4 border border-gray-300 rounded hover:bg-gray-50"
+					>
 						Add to Wishlist
 					</button>
 				</VStack>

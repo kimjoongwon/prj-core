@@ -35,7 +35,9 @@ export const DatePicker = observer(
 				//   @ts-ignore
 				value={localState.value}
 				//   @ts-ignore
-				onChange={(value) => (localState.value = value)}
+				onChange={(value) => {
+					localState.value = value;
+				}}
 			/>
 		);
 	},

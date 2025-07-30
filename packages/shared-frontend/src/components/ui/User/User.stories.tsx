@@ -52,7 +52,9 @@ export const InNavigationBar: Story = {
 				</nav>
 			</div>
 			<div className="flex items-center space-x-4">
-				<button className="p-2 text-gray-600 hover:text-gray-900">🔔</button>
+				<button type="button" className="p-2 text-gray-600 hover:text-gray-900">
+					🔔
+				</button>
 				<User />
 			</div>
 		</div>

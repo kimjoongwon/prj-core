@@ -8,6 +8,7 @@ export const DaysOfWeek = () => {
 			{daysOfWeek.map((dayOfWeek) => {
 				return (
 					<Chip
+						key={dayOfWeek}
 						variant="light"
 						color={["SAT", "SUN"].includes(dayOfWeek) ? "danger" : "default"}
 						className="place-self-center"

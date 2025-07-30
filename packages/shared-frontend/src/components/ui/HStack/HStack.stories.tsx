@@ -294,10 +294,16 @@ export const NavigationExample: Story = {
 				</HStack>
 			</HStack>
 			<HStack gap={2}>
-				<button className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+				<button
+					type="button"
+					className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+				>
 					Sign In
 				</button>
-				<button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+				<button
+					type="button"
+					className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+				>
 					Sign Up
 				</button>
 			</HStack>
@@ -322,10 +328,16 @@ export const CardActionsExample: Story = {
 				for action buttons.
 			</p>
 			<HStack justifyContent="end" gap={2}>
-				<button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+				<button
+					type="button"
+					className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+				>
 					Cancel
 				</button>
-				<button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+				<button
+					type="button"
+					className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+				>
 					Add to Cart
 				</button>
 			</HStack>
