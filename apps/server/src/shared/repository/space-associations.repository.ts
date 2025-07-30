@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(SpaceAssociation)
 export class SpaceAssociationsRepository extends BaseRepository<
-  Prisma.SpaceAssociationCreateArgs,
-  Prisma.SpaceAssociationUpsertArgs,
-  Prisma.SpaceAssociationUpdateArgs,
-  Prisma.SpaceAssociationUpdateManyArgs,
-  Prisma.SpaceAssociationDeleteArgs,
-  Prisma.SpaceAssociationFindManyArgs,
-  Prisma.SpaceAssociationCountArgs,
-  Prisma.SpaceAssociationAggregateArgs,
-  Prisma.SpaceAssociationDeleteManyArgs,
-  Prisma.SpaceAssociationFindFirstArgs,
-  Prisma.SpaceAssociationFindUniqueArgs,
-  Prisma.SpaceAssociationGroupByArgs,
-  Prisma.SpaceAssociationCreateManyArgs,
-  SpaceAssociation
+	Prisma.SpaceAssociationCreateArgs,
+	Prisma.SpaceAssociationUpsertArgs,
+	Prisma.SpaceAssociationUpdateArgs,
+	Prisma.SpaceAssociationUpdateManyArgs,
+	Prisma.SpaceAssociationDeleteArgs,
+	Prisma.SpaceAssociationFindManyArgs,
+	Prisma.SpaceAssociationCountArgs,
+	Prisma.SpaceAssociationAggregateArgs,
+	Prisma.SpaceAssociationDeleteManyArgs,
+	Prisma.SpaceAssociationFindFirstArgs,
+	Prisma.SpaceAssociationFindUniqueArgs,
+	Prisma.SpaceAssociationGroupByArgs,
+	Prisma.SpaceAssociationCreateManyArgs,
+	SpaceAssociation
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "SpaceAssociation");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "SpaceAssociation");
+	}
 }

@@ -7,15 +7,27 @@ import { SpaceClassificationDto } from "./space-classification.dto";
 import { TenantDto } from "./tenant.dto";
 
 export class SpaceDto extends AbstractDto implements Space {
-  @ClassField(() => TenantDto, { required: false, swagger: false, isArray: true })
-  tenants?: TenantDto[];
+	@ClassField(() => TenantDto, {
+		required: false,
+		swagger: false,
+		isArray: true,
+	})
+	tenants?: TenantDto[];
 
-  @ClassField(() => SpaceClassificationDto, { required: false, swagger: false, isArray: true })
-  spaceClassifications?: SpaceClassificationDto[];
+	@ClassField(() => SpaceClassificationDto, {
+		required: false,
+		swagger: false,
+		isArray: true,
+	})
+	spaceClassifications?: SpaceClassificationDto[];
 
-  @ClassField(() => SpaceAssociationDto, { required: false, swagger: false, isArray: true })
-  spaceAssociations?: SpaceAssociationDto[];
+	@ClassField(() => SpaceAssociationDto, {
+		required: false,
+		swagger: false,
+		isArray: true,
+	})
+	spaceAssociations?: SpaceAssociationDto[];
 
-  @ClassField(() => GroundDto, { required: false })
-  ground?: GroundDto;
+	@ClassField(() => GroundDto, { required: false })
+	ground?: GroundDto;
 }

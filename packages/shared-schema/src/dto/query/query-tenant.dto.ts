@@ -3,6 +3,6 @@ import { EnumFieldOptional } from "../../decorator/field.decorators";
 import { QueryDto } from "./query.dto";
 
 export class QueryTenantDto extends QueryDto {
-  @EnumFieldOptional(() => Prisma.SortOrder)
-  createdAtSortOrder?: Prisma.SortOrder;
+	@EnumFieldOptional(() => Prisma.SortOrder)
+	createdAtSortOrder?: Prisma.SortOrder;
 }

@@ -6,10 +6,10 @@
 import type { GroundDto } from "./groundDto";
 
 export type GetGroundsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: GroundDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: GroundDto;
 };

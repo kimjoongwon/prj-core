@@ -1,6 +1,6 @@
 import {
-  TimeInputProps as HeroUiTimeInputProps,
-  TimeInput as NextUiTimeInput,
+	TimeInputProps as HeroUiTimeInputProps,
+	TimeInput as NextUiTimeInput,
 } from "@heroui/react";
 import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
 import { MobxProps } from "@shared/types";
@@ -11,35 +11,38 @@ import { useEffect } from "react";
 
 export interface TimeInputProps<T> extends HeroUiTimeInputProps, MobxProps<T> {}
 
-export const TimeInput = observer(<T extends object>(props: TimeInputProps<T>) => {
-  const { state, path, ...rest } = props;
-  // @ts-ignore
-  const defaultValue = (get(state, path) || new Date().toISOString()) as string;
+export const TimeInput = observer(
+	<T extends object>(props: TimeInputProps<T>) => {
+		const { state, path, ...rest } = props;
+		// @ts-ignore
+		const defaultValue = (get(state, path) ||
+			new Date().toISOString()) as string;
 
-  const localState = useLocalObservable(() => ({
-    value: parseAbsoluteToLocal(defaultValue),
-  }));
+		const localState = useLocalObservable(() => ({
+			value: parseAbsoluteToLocal(defaultValue),
+		}));
 
-  useEffect(() => {
-    const disposer = reaction(
-      () => localState.value,
-      (value) => {
-        set(state, path, value.toDate().toISOString());
-      },
-    );
-    return disposer;
-  }, [localState.value, path, state]);
+		useEffect(() => {
+			const disposer = reaction(
+				() => localState.value,
+				(value) => {
+					set(state, path, value.toDate().toISOString());
+				},
+			);
+			return disposer;
+		}, [localState.value, path, state]);
 
-  return (
-    <NextUiTimeInput
-      {...rest}
-      hideTimeZone
-      value={localState.value}
-      // @ts-ignore
-      onChange={action((value) => {
-        // @ts-ignore
-        localState.value = value as unknown as ZonedDateTime;
-      })}
-    />
-  );
-});
+		return (
+			<NextUiTimeInput
+				{...rest}
+				hideTimeZone
+				value={localState.value}
+				// @ts-ignore
+				onChange={action((value) => {
+					// @ts-ignore
+					localState.value = value as unknown as ZonedDateTime;
+				})}
+			/>
+		);
+	},
+);

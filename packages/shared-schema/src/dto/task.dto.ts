@@ -23,6 +23,6 @@ import { AbstractDto } from "./abstract.dto";
 // };
 
 export class TaskDto extends AbstractDto implements TaskEntity {
-  @UUIDField()
-  tenantId: string;
+	@UUIDField()
+	tenantId: string;
 }

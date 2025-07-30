@@ -8,10 +8,10 @@ import type { GetSubjectsByQuery200AllOfMeta } from "./getSubjectsByQuery200AllO
 import type { SubjectDto } from "./subjectDto";
 
 export type GetSubjectsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SubjectDto[];
-  meta?: GetSubjectsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SubjectDto[];
+	meta?: GetSubjectsByQuery200AllOfMeta;
 };

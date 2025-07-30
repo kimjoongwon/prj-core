@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from "@nestjs/common";
+import {
+	CanActivate,
+	ExecutionContext,
+	Injectable,
+	SetMetadata,
+} from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
 // import { AppAbility, CaslAbilityFactory } from '../casl/casl-ability.factory/casl-ability.factory';
@@ -9,10 +14,10 @@ type AppAbility = any;
 export const CHECK_POLICIES_KEY = "check_policy";
 
 export const CheckPolicies = (handlers: PolicyHandler[]) =>
-  SetMetadata(CHECK_POLICIES_KEY, handlers);
+	SetMetadata(CHECK_POLICIES_KEY, handlers);
 
 interface IPolicyHandler {
-  handle(ability: AppAbility): boolean;
+	handle(ability: AppAbility): boolean;
 }
 
 type PolicyHandlerCallback = (ability: AppAbility) => boolean;
@@ -21,26 +26,26 @@ export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    // private caslAbilityFactory: CaslAbilityFactory,
-  ) {}
+	constructor(
+		private reflector: Reflector,
+		// private caslAbilityFactory: CaslAbilityFactory,
+	) {}
 
-  async canActivate(_context: ExecutionContext): Promise<boolean> {
-    // const policyHandlers =
-    //   this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
+	async canActivate(_context: ExecutionContext): Promise<boolean> {
+		// const policyHandlers =
+		//   this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || [];
 
-    // const { user } = context.switchToHttp().getRequest();
-    // const ability = await this.caslAbilityFactory.createForUser(user);
+		// const { user } = context.switchToHttp().getRequest();
+		// const ability = await this.caslAbilityFactory.createForUser(user);
 
-    // return policyHandlers.every((handler) => this.execPolicyHandler(handler, ability));
-    return true; // Temporary: allow all access
-  }
+		// return policyHandlers.every((handler) => this.execPolicyHandler(handler, ability));
+		return true; // Temporary: allow all access
+	}
 
-  // private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
-  //   if (typeof handler === 'function') {
-  //     return handler(ability);
-  //   }
-  //   return handler.handle(ability);
-  // }
+	// private execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
+	//   if (typeof handler === 'function') {
+	//     return handler(ability);
+	//   }
+	//   return handler.handle(ability);
+	// }
 }

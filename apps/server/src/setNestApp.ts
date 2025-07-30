@@ -3,5 +3,5 @@ import { Reflector } from "@nestjs/core";
 // import { CustomClassSerializerInterceptor } from './shared';
 
 export function setNestApp<T extends INestApplication>(app: T): void {
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+	app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 }

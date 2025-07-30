@@ -5,12 +5,12 @@
  */
 
 export interface RoutineDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  label: string;
-  name: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	label: string;
+	name: string;
 }

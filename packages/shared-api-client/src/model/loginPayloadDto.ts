@@ -5,6 +5,6 @@
  */
 
 export interface LoginPayloadDto {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }

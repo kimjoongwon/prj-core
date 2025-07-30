@@ -8,10 +8,10 @@ import type { GetGroupsByQuery200AllOfMeta } from "./getGroupsByQuery200AllOfMet
 import type { GroupDto } from "./groupDto";
 
 export type GetGroupsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: GroupDto[];
-  meta?: GetGroupsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: GroupDto[];
+	meta?: GetGroupsByQuery200AllOfMeta;
 };

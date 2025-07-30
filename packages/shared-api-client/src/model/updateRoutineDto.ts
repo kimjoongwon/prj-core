@@ -5,6 +5,6 @@
  */
 
 export interface UpdateRoutineDto {
-  label?: string;
-  name?: string;
+	label?: string;
+	name?: string;
 }

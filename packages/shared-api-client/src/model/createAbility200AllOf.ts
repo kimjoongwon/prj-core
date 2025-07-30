@@ -6,10 +6,10 @@
 import type { AbilityDto } from "./abilityDto";
 
 export type CreateAbility200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: AbilityDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: AbilityDto;
 };

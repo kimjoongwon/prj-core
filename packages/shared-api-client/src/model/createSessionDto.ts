@@ -9,17 +9,17 @@ import type { CreateSessionDtoRepeatCycleType } from "./createSessionDtoRepeatCy
 import type { SessionTypes } from "./sessionTypes";
 
 export interface CreateSessionDto {
-  name: string;
-  label: string;
-  startDateTime?: string;
-  endDateTime?: string;
-  /** @nullable */
-  timelineId?: string | null;
-  /** @nullable */
-  repeatCycleType?: CreateSessionDtoRepeatCycleType;
-  /** @nullable */
-  recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
-  /** @nullable */
-  recurringMonth?: number | null;
-  type: SessionTypes;
+	name: string;
+	label: string;
+	startDateTime?: string;
+	endDateTime?: string;
+	/** @nullable */
+	timelineId?: string | null;
+	/** @nullable */
+	repeatCycleType?: CreateSessionDtoRepeatCycleType;
+	/** @nullable */
+	recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
+	/** @nullable */
+	recurringMonth?: number | null;
+	type: SessionTypes;
 }

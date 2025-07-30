@@ -6,18 +6,25 @@ import { ForwardedRef } from "react";
 import { useMobxHookForm } from "../../../hooks";
 
 export function BaseSwitch<T extends object>(
-  props: SwitchProps<T>,
-  ref: ForwardedRef<HTMLInputElement>,
+	props: SwitchProps<T>,
+	ref: ForwardedRef<HTMLInputElement>,
 ) {
-  const { path = "", state = {}, ...rest } = props;
+	const { path = "", state = {}, ...rest } = props;
 
-  const initialValue = get(state, path);
+	const initialValue = get(state, path);
 
-  const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const onChange = action((isSelected: boolean) => {
-    localState.value = isSelected;
-  });
+	const onChange = action((isSelected: boolean) => {
+		localState.value = isSelected;
+	});
 
-  return <NextUISwitch {...rest} ref={ref} onValueChange={onChange} value={localState.value} />;
+	return (
+		<NextUISwitch
+			{...rest}
+			ref={ref}
+			onValueChange={onChange}
+			value={localState.value}
+		/>
+	);
 }

@@ -9,14 +9,14 @@ import smtpConfig from "./smtp.config";
 // import mailConfig from './mail.config';
 
 export {
-  awsConfig,
-  // databaseConfig,
-  appConfig,
-  authConfig,
-  corsConfig,
-  logConfig,
-  smtpConfig,
-  // fileConfig,
-  // mailConfig,
+	awsConfig,
+	// databaseConfig,
+	appConfig,
+	authConfig,
+	corsConfig,
+	logConfig,
+	smtpConfig,
+	// fileConfig,
+	// mailConfig,
 };
 export * from "./config.type";

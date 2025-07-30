@@ -8,10 +8,10 @@ import type { GetTimelinesByQuery200AllOfMeta } from "./getTimelinesByQuery200Al
 import type { TimelineDto } from "./timelineDto";
 
 export type GetTimelinesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: TimelineDto[];
-  meta?: GetTimelinesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: TimelineDto[];
+	meta?: GetTimelinesByQuery200AllOfMeta;
 };

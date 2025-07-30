@@ -7,45 +7,47 @@ import { ChangeEventHandler } from "react";
 import { useMobxHookForm } from "../../../..";
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
-  const {
-    path = "",
-    state = {},
-    onChange,
-    onBlur,
-    errorMessage = " ",
-    type,
-    size = "sm",
-    validation,
-    ...rest
-  } = props;
+	const {
+		path = "",
+		state = {},
+		onChange,
+		onBlur,
+		errorMessage = " ",
+		type,
+		size = "sm",
+		validation,
+		...rest
+	} = props;
 
-  const initialValue = get(state, path) || "";
+	const initialValue = get(state, path) || "";
 
-  const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action((e) => {
-    if (type === "number" && typeof Number(e.target.value) === "number") {
-      localState.value = Number(e.target.value);
-      return;
-    }
+	const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
+		(e) => {
+			if (type === "number" && typeof Number(e.target.value) === "number") {
+				localState.value = Number(e.target.value);
+				return;
+			}
 
-    localState.value = e.target.value;
-    onChange?.(localState.value);
-  });
+			localState.value = e.target.value;
+			onChange?.(localState.value);
+		},
+	);
 
-  const handleOnBlur: InputProps<T>["onBlur"] = (e) => {
-    onBlur?.(e.target.value as any);
-  };
+	const handleOnBlur: InputProps<T>["onBlur"] = (e) => {
+		onBlur?.(e.target.value as any);
+	};
 
-  return (
-    <HeroUiInput
-      {...rest}
-      type={type}
-      size={size}
-      onChange={handleChange}
-      onBlur={handleOnBlur}
-      errorMessage={errorMessage}
-      value={String(localState.value || "")}
-    />
-  );
+	return (
+		<HeroUiInput
+			{...rest}
+			type={type}
+			size={size}
+			onChange={handleChange}
+			onBlur={handleOnBlur}
+			errorMessage={errorMessage}
+			value={String(localState.value || "")}
+		/>
+	);
 });

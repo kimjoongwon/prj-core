@@ -6,10 +6,10 @@
 import type { FileDto } from "./fileDto";
 
 export type GetFileById200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: FileDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: FileDto;
 };

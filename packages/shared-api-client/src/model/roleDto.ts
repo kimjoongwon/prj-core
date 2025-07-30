@@ -6,11 +6,11 @@
 import type { Roles } from "./roles";
 
 export interface RoleDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: Roles;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: Roles;
 }

@@ -5,13 +5,15 @@ import { useMobxHookForm } from "../../../hooks";
 import { TabsView } from "./TabsView";
 
 export const Tabs = <T,>(props: TabsProps<T>) => {
-  const { state, path = "" } = props;
-  const value = get(state, path);
-  const { localState } = useMobxHookForm(get(state, path), state, path);
+	const { state, path = "" } = props;
+	const value = get(state, path);
+	const { localState } = useMobxHookForm(get(state, path), state, path);
 
-  const onSelectionChange = (key: Key) => {
-    localState.value = key;
-  };
+	const onSelectionChange = (key: Key) => {
+		localState.value = key;
+	};
 
-  return <TabsView value={value} {...props} onSelectionChange={onSelectionChange} />;
+	return (
+		<TabsView value={value} {...props} onSelectionChange={onSelectionChange} />
+	);
 };

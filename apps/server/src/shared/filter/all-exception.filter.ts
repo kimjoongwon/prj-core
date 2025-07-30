@@ -4,17 +4,19 @@ import { ResponseEntity } from "@shared/schema";
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
-    super.catch(
-      new HttpException(
-        ResponseEntity.WITH_ERROR<object | string>(
-          exception?.getStatus?.(),
-          exception.message,
-          typeof exception?.getResponse?.() === "object" ? exception.getResponse() : null,
-        ),
-        exception?.getStatus?.(),
-      ),
-      host,
-    );
-  }
+	catch(exception: HttpException, host: ArgumentsHost) {
+		super.catch(
+			new HttpException(
+				ResponseEntity.WITH_ERROR<object | string>(
+					exception?.getStatus?.(),
+					exception.message,
+					typeof exception?.getResponse?.() === "object"
+						? exception.getResponse()
+						: null,
+				),
+				exception?.getStatus?.(),
+			),
+			host,
+		);
+	}
 }

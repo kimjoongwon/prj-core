@@ -7,10 +7,10 @@ import type { AbilityDto } from "./abilityDto";
 import type { GetAbilitiesByQuery200AllOfMeta } from "./getAbilitiesByQuery200AllOfMeta";
 
 export type GetAbilitiesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: AbilityDto[];
-  meta?: GetAbilitiesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: AbilityDto[];
+	meta?: GetAbilitiesByQuery200AllOfMeta;
 };

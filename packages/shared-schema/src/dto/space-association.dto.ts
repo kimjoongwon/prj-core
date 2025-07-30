@@ -2,13 +2,16 @@ import { SpaceAssociation } from "@prisma/client";
 import { ClassField, UUIDField } from "../decorator/field.decorators";
 import { AbstractDto, GroupDto } from ".";
 
-export class SpaceAssociationDto extends AbstractDto implements SpaceAssociation {
-  @UUIDField()
-  spaceId: string;
+export class SpaceAssociationDto
+	extends AbstractDto
+	implements SpaceAssociation
+{
+	@UUIDField()
+	spaceId: string;
 
-  @UUIDField()
-  groupId: string;
+	@UUIDField()
+	groupId: string;
 
-  @ClassField(() => GroupDto, { required: false, swagger: false })
-  group?: GroupDto;
+	@ClassField(() => GroupDto, { required: false, swagger: false })
+	group?: GroupDto;
 }

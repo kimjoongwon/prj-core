@@ -5,6 +5,6 @@
  */
 
 export interface CreateSubjectDto {
-  tenantId: string;
-  name: string;
+	tenantId: string;
+	name: string;
 }

@@ -8,10 +8,10 @@ import type { GetSpacesByQuery200AllOfMeta } from "./getSpacesByQuery200AllOfMet
 import type { SpaceDto } from "./spaceDto";
 
 export type GetSpacesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SpaceDto[];
-  meta?: GetSpacesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SpaceDto[];
+	meta?: GetSpacesByQuery200AllOfMeta;
 };

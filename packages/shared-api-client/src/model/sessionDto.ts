@@ -9,22 +9,22 @@ import type { SessionDtoRepeatCycleType } from "./sessionDtoRepeatCycleType";
 import type { SessionTypes } from "./sessionTypes";
 
 export interface SessionDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: string;
-  label: string;
-  type: SessionTypes;
-  startDateTime?: string;
-  endDateTime?: string;
-  timelineId: string;
-  /** @nullable */
-  repeatCycleType?: SessionDtoRepeatCycleType;
-  /** @nullable */
-  recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
-  /** @nullable */
-  recurringMonth?: number | null;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: string;
+	label: string;
+	type: SessionTypes;
+	startDateTime?: string;
+	endDateTime?: string;
+	timelineId: string;
+	/** @nullable */
+	repeatCycleType?: SessionDtoRepeatCycleType;
+	/** @nullable */
+	recurringDayOfWeek?: SessionDtoRecurringDayOfWeek;
+	/** @nullable */
+	recurringMonth?: number | null;
 }

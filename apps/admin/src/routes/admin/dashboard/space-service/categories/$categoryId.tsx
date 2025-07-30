@@ -1,9 +1,11 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 const CategoryIdRouteComponent = () => {
-  return <Outlet />;
+	return <Outlet />;
 };
 
-export const Route = createFileRoute("/admin/dashboard/space-service/categories/$categoryId")({
-  component: CategoryIdRouteComponent,
+export const Route = createFileRoute(
+	"/admin/dashboard/space-service/categories/$categoryId",
+)({
+	component: CategoryIdRouteComponent,
 });

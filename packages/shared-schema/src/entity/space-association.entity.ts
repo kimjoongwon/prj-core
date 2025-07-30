@@ -6,11 +6,11 @@ import { Group } from "./group.entity";
 
 @UseDto(SpaceAssociationDto)
 export class SpaceAssociation
-  extends AbstractEntity<SpaceAssociationDto>
-  implements SpaceAssociationEntity
+	extends AbstractEntity<SpaceAssociationDto>
+	implements SpaceAssociationEntity
 {
-  spaceId: string;
-  groupId: string;
+	spaceId: string;
+	groupId: string;
 
-  group?: Group;
+	group?: Group;
 }

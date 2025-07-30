@@ -5,6 +5,6 @@
  */
 
 export type GetSubjectsByQueryParams = {
-  skip?: number;
-  take?: number;
+	skip?: number;
+	take?: number;
 };

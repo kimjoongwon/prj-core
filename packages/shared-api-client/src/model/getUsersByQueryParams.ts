@@ -6,7 +6,7 @@
 import type { SortOrder } from "./sortOrder";
 
 export type GetUsersByQueryParams = {
-  skip?: number;
-  take?: number;
-  createdAtSortOrder?: SortOrder;
+	skip?: number;
+	take?: number;
+	createdAtSortOrder?: SortOrder;
 };

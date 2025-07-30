@@ -20,109 +20,124 @@
  */
 
 export interface LogData {
-  [key: string]: any;
+	[key: string]: any;
 }
 
 export class LoggerUtil {
-  private prefix: string;
+	private prefix: string;
 
-  constructor(prefix: string = "") {
-    this.prefix = prefix;
-  }
+	constructor(prefix: string = "") {
+		this.prefix = prefix;
+	}
 
-  /**
-   * 새로운 로거 인스턴스를 생성합니다.
-   *
-   * @param prefix - 로그 메시지 앞에 표시될 접두사 (예: '[useButtonLogic]')
-   * @returns LoggerUtil 인스턴스
-   */
-  static create(prefix: string): LoggerUtil {
-    return new LoggerUtil(prefix);
-  }
+	/**
+	 * 새로운 로거 인스턴스를 생성합니다.
+	 *
+	 * @param prefix - 로그 메시지 앞에 표시될 접두사 (예: '[useButtonLogic]')
+	 * @returns LoggerUtil 인스턴스
+	 */
+	static create(prefix: string): LoggerUtil {
+		return new LoggerUtil(prefix);
+	}
 
-  /**
-   * 정보성 로그를 출력합니다.
-   *
-   * @param message - 로그 메시지
-   * @param data - 추가 데이터 (선택사항)
-   */
-  info(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`🔍 ${this.prefix} ${message}`, data || "");
-  }
+	/**
+	 * 정보성 로그를 출력합니다.
+	 *
+	 * @param message - 로그 메시지
+	 * @param data - 추가 데이터 (선택사항)
+	 */
+	info(message: string, data?: LogData | string | number | boolean): void {
+		console.log(`🔍 ${this.prefix} ${message}`, data || "");
+	}
 
-  /**
-   * 성공 로그를 출력합니다.
-   *
-   * @param message - 로그 메시지
-   * @param data - 추가 데이터 (선택사항)
-   */
-  success(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`✅ ${this.prefix} ${message}`, data || "");
-  }
+	/**
+	 * 성공 로그를 출력합니다.
+	 *
+	 * @param message - 로그 메시지
+	 * @param data - 추가 데이터 (선택사항)
+	 */
+	success(message: string, data?: LogData | string | number | boolean): void {
+		console.log(`✅ ${this.prefix} ${message}`, data || "");
+	}
 
-  /**
-   * 경고 로그를 출력합니다.
-   *
-   * @param message - 로그 메시지
-   * @param data - 추가 데이터 (선택사항)
-   */
-  warning(message: string, data?: LogData | string | number | boolean): void {
-    console.warn(`⚠️ ${this.prefix} ${message}`, data || "");
-  }
+	/**
+	 * 경고 로그를 출력합니다.
+	 *
+	 * @param message - 로그 메시지
+	 * @param data - 추가 데이터 (선택사항)
+	 */
+	warning(message: string, data?: LogData | string | number | boolean): void {
+		console.warn(`⚠️ ${this.prefix} ${message}`, data || "");
+	}
 
-  /**
-   * 에러 로그를 출력합니다.
-   *
-   * @param message - 로그 메시지
-   * @param data - 추가 데이터 (선택사항)
-   */
-  error(message: string, data?: LogData | string | number | boolean): void {
-    console.error(`❌ ${this.prefix} ${message}`, data || "");
-  }
+	/**
+	 * 에러 로그를 출력합니다.
+	 *
+	 * @param message - 로그 메시지
+	 * @param data - 추가 데이터 (선택사항)
+	 */
+	error(message: string, data?: LogData | string | number | boolean): void {
+		console.error(`❌ ${this.prefix} ${message}`, data || "");
+	}
 
-  /**
-   * 디버그 로그를 출력합니다.
-   *
-   * @param message - 로그 메시지
-   * @param data - 추가 데이터 (선택사항)
-   */
-  debug(message: string, data?: LogData | string | number | boolean): void {
-    console.debug(`🐛 ${this.prefix} ${message}`, data || "");
-  }
+	/**
+	 * 디버그 로그를 출력합니다.
+	 *
+	 * @param message - 로그 메시지
+	 * @param data - 추가 데이터 (선택사항)
+	 */
+	debug(message: string, data?: LogData | string | number | boolean): void {
+		console.debug(`🐛 ${this.prefix} ${message}`, data || "");
+	}
 
-  // 정적 메서드들 - prefix 없이 바로 사용 가능
-  /**
-   * 정보성 로그를 출력합니다 (정적 메서드).
-   */
-  static info(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`🔍 ${message}`, data || "");
-  }
+	// 정적 메서드들 - prefix 없이 바로 사용 가능
+	/**
+	 * 정보성 로그를 출력합니다 (정적 메서드).
+	 */
+	static info(
+		message: string,
+		data?: LogData | string | number | boolean,
+	): void {
+		console.log(`🔍 ${message}`, data || "");
+	}
 
-  /**
-   * 성공 로그를 출력합니다 (정적 메서드).
-   */
-  static success(message: string, data?: LogData | string | number | boolean): void {
-    console.log(`✅ ${message}`, data || "");
-  }
+	/**
+	 * 성공 로그를 출력합니다 (정적 메서드).
+	 */
+	static success(
+		message: string,
+		data?: LogData | string | number | boolean,
+	): void {
+		console.log(`✅ ${message}`, data || "");
+	}
 
-  /**
-   * 경고 로그를 출력합니다 (정적 메서드).
-   */
-  static warning(message: string, data?: LogData | string | number | boolean): void {
-    console.warn(`⚠️ ${message}`, data || "");
-  }
+	/**
+	 * 경고 로그를 출력합니다 (정적 메서드).
+	 */
+	static warning(
+		message: string,
+		data?: LogData | string | number | boolean,
+	): void {
+		console.warn(`⚠️ ${message}`, data || "");
+	}
 
-  /**
-   * 에러 로그를 출력합니다 (정적 메서드).
-   */
-  static error(message: string, data?: LogData | string | number | boolean): void {
-    console.error(`❌ ${message}`, data || "");
-  }
+	/**
+	 * 에러 로그를 출력합니다 (정적 메서드).
+	 */
+	static error(
+		message: string,
+		data?: LogData | string | number | boolean,
+	): void {
+		console.error(`❌ ${message}`, data || "");
+	}
 
-  /**
-   * 디버그 로그를 출력합니다 (정적 메서드).
-   */
-  static debug(message: string, data?: LogData | string | number | boolean): void {
-    console.debug(`🐛 ${message}`, data || "");
-  }
+	/**
+	 * 디버그 로그를 출력합니다 (정적 메서드).
+	 */
+	static debug(
+		message: string,
+		data?: LogData | string | number | boolean,
+	): void {
+		console.debug(`🐛 ${message}`, data || "");
+	}
 }

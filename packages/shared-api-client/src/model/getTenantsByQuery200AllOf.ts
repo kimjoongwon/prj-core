@@ -8,10 +8,10 @@ import type { GetTenantsByQuery200AllOfMeta } from "./getTenantsByQuery200AllOfM
 import type { TenantDto } from "./tenantDto";
 
 export type GetTenantsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: TenantDto[];
-  meta?: GetTenantsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: TenantDto[];
+	meta?: GetTenantsByQuery200AllOfMeta;
 };

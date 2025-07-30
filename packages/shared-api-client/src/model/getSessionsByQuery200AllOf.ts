@@ -8,10 +8,10 @@ import type { GetSessionsByQuery200AllOfMeta } from "./getSessionsByQuery200AllO
 import type { SessionDto } from "./sessionDto";
 
 export type GetSessionsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: SessionDto[];
-  meta?: GetSessionsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: SessionDto[];
+	meta?: GetSessionsByQuery200AllOfMeta;
 };

@@ -8,10 +8,10 @@ import type { GetProgramsByQuery200AllOfMeta } from "./getProgramsByQuery200AllO
 import type { ProgramDto } from "./programDto";
 
 export type GetProgramsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: ProgramDto[];
-  meta?: GetProgramsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: ProgramDto[];
+	meta?: GetProgramsByQuery200AllOfMeta;
 };

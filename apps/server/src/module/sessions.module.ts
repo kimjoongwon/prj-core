@@ -2,6 +2,6 @@ import { Module } from "@nestjs/common";
 import { SessionsController } from "@shared";
 
 @Module({
-  controllers: [SessionsController],
+	controllers: [SessionsController],
 })
 export class SessionsModule {}

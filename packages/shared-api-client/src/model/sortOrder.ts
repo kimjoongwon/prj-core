@@ -8,6 +8,6 @@ export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SortOrder = {
-  asc: "asc",
-  desc: "desc",
+	asc: "asc",
+	desc: "desc",
 } as const;

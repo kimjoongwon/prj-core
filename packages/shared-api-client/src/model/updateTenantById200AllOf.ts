@@ -6,10 +6,10 @@
 import type { TenantDto } from "./tenantDto";
 
 export type UpdateTenantById200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: TenantDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: TenantDto;
 };

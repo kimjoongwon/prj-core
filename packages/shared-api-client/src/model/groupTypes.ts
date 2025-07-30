@@ -8,8 +8,8 @@ export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GroupTypes = {
-  Role: "Role",
-  Space: "Space",
-  File: "File",
-  User: "User",
+	Role: "Role",
+	Space: "Space",
+	File: "File",
+	User: "User",
 } as const;

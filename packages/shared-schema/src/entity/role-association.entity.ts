@@ -6,11 +6,11 @@ import { Group } from "./group.entity";
 
 @UseDto(RoleAssociationDto)
 export class RoleAssociation
-  extends AbstractEntity<RoleAssociationDto>
-  implements RoleAssociationEntity
+	extends AbstractEntity<RoleAssociationDto>
+	implements RoleAssociationEntity
 {
-  roleId: string;
-  groupId: string;
+	roleId: string;
+	groupId: string;
 
-  group?: Group;
+	group?: Group;
 }

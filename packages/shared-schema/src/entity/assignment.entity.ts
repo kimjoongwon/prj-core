@@ -4,10 +4,13 @@ import { AssignmentDto } from "../dto/assignment.dto";
 import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(AssignmentDto)
-export class Assignment extends AbstractEntity<AssignmentDto> implements AssignmentEntity {
-  roleId: string;
-  tenantId: string;
+export class Assignment
+	extends AbstractEntity<AssignmentDto>
+	implements AssignmentEntity
+{
+	roleId: string;
+	tenantId: string;
 
-  role?: Role;
-  tenant?: Tenant;
+	role?: Role;
+	tenant?: Tenant;
 }

@@ -2,6 +2,6 @@ import { Module } from "@nestjs/common";
 import { AssignmentsController } from "@shared";
 
 @Module({
-  controllers: [AssignmentsController],
+	controllers: [AssignmentsController],
 })
 export class AssignmentsModule {}

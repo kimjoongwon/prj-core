@@ -1,29 +1,32 @@
 import {
-  type ClassSerializerContextOptions,
-  ClassSerializerInterceptor,
-  Injectable,
-  type PlainLiteralObject,
+	type ClassSerializerContextOptions,
+	ClassSerializerInterceptor,
+	Injectable,
+	type PlainLiteralObject,
 } from "@nestjs/common";
 import { instanceToPlain } from "class-transformer";
 
 @Injectable()
 export class CustomClassSerializerInterceptor extends ClassSerializerInterceptor {
-  serialize(
-    response: any,
-    options: ClassSerializerContextOptions,
-  ): PlainLiteralObject | PlainLiteralObject[] {
-    const isArray = Array.isArray(response);
-    const isObject = response !== null && typeof response === "object";
-    if (!isArray && !isObject) {
-      return response;
-    }
+	serialize(
+		response: any,
+		options: ClassSerializerContextOptions,
+	): PlainLiteralObject | PlainLiteralObject[] {
+		const isArray = Array.isArray(response);
+		const isObject = response !== null && typeof response === "object";
+		if (!isArray && !isObject) {
+			return response;
+		}
 
-    return isArray
-      ? response.map((res) => this.transformToPlain(res, options))
-      : this.transformToPlain(response, options);
-  }
+		return isArray
+			? response.map((res) => this.transformToPlain(res, options))
+			: this.transformToPlain(response, options);
+	}
 
-  transformToPlain(plainOrClass: any, options: ClassSerializerContextOptions): PlainLiteralObject {
-    return plainOrClass ? instanceToPlain(plainOrClass, options) : plainOrClass;
-  }
+	transformToPlain(
+		plainOrClass: any,
+		options: ClassSerializerContextOptions,
+	): PlainLiteralObject {
+		return plainOrClass ? instanceToPlain(plainOrClass, options) : plainOrClass;
+	}
 }

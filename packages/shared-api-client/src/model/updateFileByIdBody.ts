@@ -5,5 +5,5 @@
  */
 
 export type UpdateFileByIdBody = {
-  files?: Blob;
+	files?: Blob;
 };

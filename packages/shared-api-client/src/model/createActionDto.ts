@@ -6,7 +6,7 @@
 import type { AbilityActions } from "./abilityActions";
 
 export interface CreateActionDto {
-  tenantId: string;
-  name: AbilityActions;
-  conditions?: string;
+	tenantId: string;
+	name: AbilityActions;
+	conditions?: string;
 }

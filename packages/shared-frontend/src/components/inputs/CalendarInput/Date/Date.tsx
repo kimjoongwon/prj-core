@@ -3,11 +3,11 @@ import { observer } from "mobx-react-lite";
 import { DateView } from "./DateView";
 
 export interface DateProps {
-  state: DateModel;
+	state: DateModel;
 }
 
 export const Date = observer((props: DateProps) => {
-  const { state } = props;
+	const { state } = props;
 
-  return <DateView state={state} />;
+	return <DateView state={state} />;
 });

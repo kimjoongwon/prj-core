@@ -5,6 +5,6 @@
  */
 
 export type GetGroundsByQueryParams = {
-  skip?: number;
-  take?: number;
+	skip?: number;
+	take?: number;
 };

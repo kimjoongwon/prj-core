@@ -7,20 +7,20 @@ import type { AbilityTypes } from "./abilityTypes";
 import type { TenantDto } from "./tenantDto";
 
 export interface AbilityDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  actionId: string;
-  /** @nullable */
-  conditions?: string | null;
-  subjectId: string;
-  type: AbilityTypes;
-  roleId: string;
-  /** @nullable */
-  description?: string | null;
-  tenant?: TenantDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	actionId: string;
+	/** @nullable */
+	conditions?: string | null;
+	subjectId: string;
+	type: AbilityTypes;
+	roleId: string;
+	/** @nullable */
+	description?: string | null;
+	tenant?: TenantDto;
 }

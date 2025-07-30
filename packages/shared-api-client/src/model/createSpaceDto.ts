@@ -5,5 +5,5 @@
  */
 
 export interface CreateSpaceDto {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }

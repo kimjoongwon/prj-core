@@ -6,8 +6,8 @@
 import type { SortOrder } from "./sortOrder";
 
 export type GetRolesByQueryParams = {
-  skip?: number;
-  take?: number;
-  nameSortOrder?: SortOrder;
-  createdAtSortOrder?: SortOrder;
+	skip?: number;
+	take?: number;
+	nameSortOrder?: SortOrder;
+	createdAtSortOrder?: SortOrder;
 };

@@ -8,18 +8,18 @@ import type { FileClassificationDto } from "./fileClassificationDto";
 import type { TenantDto } from "./tenantDto";
 
 export interface FileDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  parentId: string;
-  tenantId: string;
-  name: string;
-  size: number;
-  mimeType: string;
-  url: string;
-  tenant?: TenantDto;
-  classification?: FileClassificationDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	parentId: string;
+	tenantId: string;
+	name: string;
+	size: number;
+	mimeType: string;
+	url: string;
+	tenant?: TenantDto;
+	classification?: FileClassificationDto;
 }

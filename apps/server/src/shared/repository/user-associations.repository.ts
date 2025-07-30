@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(UserAssociation)
 export class UserAssociationsRepository extends BaseRepository<
-  Prisma.UserAssociationCreateArgs,
-  Prisma.UserAssociationUpsertArgs,
-  Prisma.UserAssociationUpdateArgs,
-  Prisma.UserAssociationUpdateManyArgs,
-  Prisma.UserAssociationDeleteArgs,
-  Prisma.UserAssociationFindManyArgs,
-  Prisma.UserAssociationCountArgs,
-  Prisma.UserAssociationAggregateArgs,
-  Prisma.UserAssociationDeleteManyArgs,
-  Prisma.UserAssociationFindFirstArgs,
-  Prisma.UserAssociationFindUniqueArgs,
-  Prisma.UserAssociationGroupByArgs,
-  Prisma.UserAssociationCreateManyArgs,
-  UserAssociation
+	Prisma.UserAssociationCreateArgs,
+	Prisma.UserAssociationUpsertArgs,
+	Prisma.UserAssociationUpdateArgs,
+	Prisma.UserAssociationUpdateManyArgs,
+	Prisma.UserAssociationDeleteArgs,
+	Prisma.UserAssociationFindManyArgs,
+	Prisma.UserAssociationCountArgs,
+	Prisma.UserAssociationAggregateArgs,
+	Prisma.UserAssociationDeleteManyArgs,
+	Prisma.UserAssociationFindFirstArgs,
+	Prisma.UserAssociationFindUniqueArgs,
+	Prisma.UserAssociationGroupByArgs,
+	Prisma.UserAssociationCreateManyArgs,
+	UserAssociation
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "UserAssociation");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "UserAssociation");
+	}
 }

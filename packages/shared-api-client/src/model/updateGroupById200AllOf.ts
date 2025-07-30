@@ -6,10 +6,10 @@
 import type { GroupDto } from "./groupDto";
 
 export type UpdateGroupById200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: GroupDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: GroupDto;
 };

@@ -6,12 +6,12 @@
 import type { TenantDto } from "./tenantDto";
 
 export interface TimelineDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  tenant: TenantDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	tenant: TenantDto;
 }

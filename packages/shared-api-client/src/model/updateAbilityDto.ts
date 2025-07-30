@@ -6,13 +6,13 @@
 import type { AbilityTypes } from "./abilityTypes";
 
 export interface UpdateAbilityDto {
-  tenantId?: string;
-  actionId?: string;
-  /** @nullable */
-  conditions?: string | null;
-  subjectId?: string;
-  type?: AbilityTypes;
-  roleId?: string;
-  /** @nullable */
-  description?: string | null;
+	tenantId?: string;
+	actionId?: string;
+	/** @nullable */
+	conditions?: string | null;
+	subjectId?: string;
+	type?: AbilityTypes;
+	roleId?: string;
+	/** @nullable */
+	description?: string | null;
 }

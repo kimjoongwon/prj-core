@@ -6,10 +6,10 @@
 import type { RoutineDto } from "./routineDto";
 
 export type DeleteRoutine200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: RoutineDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: RoutineDto;
 };

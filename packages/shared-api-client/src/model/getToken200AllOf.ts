@@ -6,10 +6,10 @@
 import type { TokenDto } from "./tokenDto";
 
 export type GetToken200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: TokenDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: TokenDto;
 };

@@ -6,11 +6,11 @@
 import type { GroundDto } from "./groundDto";
 
 export interface SpaceDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  ground?: GroundDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	ground?: GroundDto;
 }

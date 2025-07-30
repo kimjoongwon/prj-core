@@ -8,23 +8,23 @@ import type { UpdateSessionDtoRecurringDayOfWeek } from "./updateSessionDtoRecur
 import type { UpdateSessionDtoRepeatCycleType } from "./updateSessionDtoRepeatCycleType";
 
 export interface UpdateSessionDto {
-  id?: string;
-  seq?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  /** @nullable */
-  removedAt?: string | null;
-  name?: string;
-  label?: string;
-  type?: SessionTypes;
-  startDateTime?: string;
-  endDateTime?: string;
-  /** @nullable */
-  timelineId?: string | null;
-  /** @nullable */
-  repeatCycleType?: UpdateSessionDtoRepeatCycleType;
-  /** @nullable */
-  recurringDayOfWeek?: UpdateSessionDtoRecurringDayOfWeek;
-  /** @nullable */
-  recurringMonth?: number | null;
+	id?: string;
+	seq?: number;
+	createdAt?: string;
+	updatedAt?: string;
+	/** @nullable */
+	removedAt?: string | null;
+	name?: string;
+	label?: string;
+	type?: SessionTypes;
+	startDateTime?: string;
+	endDateTime?: string;
+	/** @nullable */
+	timelineId?: string | null;
+	/** @nullable */
+	repeatCycleType?: UpdateSessionDtoRepeatCycleType;
+	/** @nullable */
+	recurringDayOfWeek?: UpdateSessionDtoRecurringDayOfWeek;
+	/** @nullable */
+	recurringMonth?: number | null;
 }

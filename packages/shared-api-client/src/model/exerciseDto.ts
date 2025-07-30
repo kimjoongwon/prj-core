@@ -6,18 +6,18 @@
 import type { CreateTaskDto } from "./createTaskDto";
 
 export interface ExerciseDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: string;
-  description: string;
-  imageFileId?: string;
-  videoFileId?: string;
-  taskId: string;
-  duration: number;
-  count: number;
-  task?: CreateTaskDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: string;
+	description: string;
+	imageFileId?: string;
+	videoFileId?: string;
+	taskId: string;
+	duration: number;
+	count: number;
+	task?: CreateTaskDto;
 }

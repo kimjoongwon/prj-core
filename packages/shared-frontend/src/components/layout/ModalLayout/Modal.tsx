@@ -1,19 +1,31 @@
-import { Modal, ModalBody, ModalContent, ModalHeader, ModalProps } from "@heroui/react";
+import {
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader,
+	ModalProps,
+} from "@heroui/react";
 import { usePage } from "../../../provider";
 
 interface ModalLayoutProps extends ModalProps {}
 
 export function ModalLayout(props: ModalLayoutProps) {
-  const page = usePage();
+	const page = usePage();
 
-  return (
-    <Modal isOpen={true} onClose={() => {}} scrollBehavior="inside" size="5xl" {...props}>
-      <ModalContent>
-        <ModalHeader>{page.name}</ModalHeader>
-        <ModalBody>{props.children}</ModalBody>
-      </ModalContent>
-    </Modal>
-  );
+	return (
+		<Modal
+			isOpen={true}
+			onClose={() => {}}
+			scrollBehavior="inside"
+			size="5xl"
+			{...props}
+		>
+			<ModalContent>
+				<ModalHeader>{page.name}</ModalHeader>
+				<ModalBody>{props.children}</ModalBody>
+			</ModalContent>
+		</Modal>
+	);
 }
 
 export default ModalLayout;

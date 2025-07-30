@@ -5,21 +5,24 @@ import { AbstractEntity } from "./abstract.entity";
 import { Tenant } from "./tenant.entity";
 
 @UseDto(CategoryDto)
-export class Category extends AbstractEntity<CategoryDto> implements CategoryEntity {
-  name: string;
-  type: $Enums.CategoryTypes;
-  parentId: string | null;
-  tenantId: string;
+export class Category
+	extends AbstractEntity<CategoryDto>
+	implements CategoryEntity
+{
+	name: string;
+	type: $Enums.CategoryTypes;
+	parentId: string | null;
+	tenantId: string;
 
-  parent?: Category;
-  children?: Category[];
-  tenant?: Tenant;
+	parent?: Category;
+	children?: Category[];
+	tenant?: Tenant;
 
-  toOption() {
-    return {
-      key: this.id,
-      value: this.id,
-      text: this.name,
-    };
-  }
+	toOption() {
+		return {
+			key: this.id,
+			value: this.id,
+			text: this.name,
+		};
+	}
 }

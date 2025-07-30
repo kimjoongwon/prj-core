@@ -6,9 +6,9 @@
 import type { GroupTypes } from "./groupTypes";
 
 export interface UpdateGroupDto {
-  name?: string;
-  /** @nullable */
-  label?: string | null;
-  type?: GroupTypes;
-  tenantId?: string;
+	name?: string;
+	/** @nullable */
+	label?: string | null;
+	type?: GroupTypes;
+	tenantId?: string;
 }

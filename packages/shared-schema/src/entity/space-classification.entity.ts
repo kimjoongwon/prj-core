@@ -7,12 +7,12 @@ import { Space } from "./space.entity";
 
 @UseDto(SpaceClassificationDto)
 export class SpaceClassification
-  extends AbstractEntity<SpaceClassificationDto>
-  implements SpaceClassificationEntity
+	extends AbstractEntity<SpaceClassificationDto>
+	implements SpaceClassificationEntity
 {
-  categoryId: string;
-  spaceId: string;
+	categoryId: string;
+	spaceId: string;
 
-  category?: Category;
-  space?: Space;
+	category?: Category;
+	space?: Space;
 }

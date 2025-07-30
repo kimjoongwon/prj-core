@@ -5,11 +5,11 @@
  */
 
 export interface RouteDto {
-  name: string;
-  relativePath: string;
-  fullPath: string;
-  /** @nullable */
-  icon: string | null;
-  /** @nullable */
-  children: RouteDto[] | null;
+	name: string;
+	relativePath: string;
+	fullPath: string;
+	/** @nullable */
+	icon: string | null;
+	/** @nullable */
+	children: RouteDto[] | null;
 }

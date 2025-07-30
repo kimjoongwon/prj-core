@@ -6,7 +6,7 @@ import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(ActionDto)
 export class Action extends AbstractEntity<ActionDto> implements ActionEntity {
-  tenantId: string;
-  name: $Enums.AbilityActions;
-  conditions: JsonValue | null;
+	tenantId: string;
+	name: $Enums.AbilityActions;
+	conditions: JsonValue | null;
 }

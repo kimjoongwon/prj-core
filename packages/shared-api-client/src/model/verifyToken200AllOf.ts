@@ -6,10 +6,10 @@
 import type { Boolean } from "./boolean";
 
 export type VerifyToken200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: Boolean;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: Boolean;
 };

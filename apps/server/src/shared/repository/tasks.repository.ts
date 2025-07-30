@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(Task)
 export class TasksRepository extends BaseRepository<
-  Prisma.TaskCreateArgs,
-  Prisma.TaskUpsertArgs,
-  Prisma.TaskUpdateArgs,
-  Prisma.TaskUpdateManyArgs,
-  Prisma.TaskDeleteArgs,
-  Prisma.TaskFindManyArgs,
-  Prisma.TaskCountArgs,
-  Prisma.TaskAggregateArgs,
-  Prisma.TaskDeleteManyArgs,
-  Prisma.TaskFindFirstArgs,
-  Prisma.TaskFindUniqueArgs,
-  Prisma.TaskGroupByArgs,
-  Prisma.TaskCreateManyAndReturnArgs,
-  Task
+	Prisma.TaskCreateArgs,
+	Prisma.TaskUpsertArgs,
+	Prisma.TaskUpdateArgs,
+	Prisma.TaskUpdateManyArgs,
+	Prisma.TaskDeleteArgs,
+	Prisma.TaskFindManyArgs,
+	Prisma.TaskCountArgs,
+	Prisma.TaskAggregateArgs,
+	Prisma.TaskDeleteManyArgs,
+	Prisma.TaskFindFirstArgs,
+	Prisma.TaskFindUniqueArgs,
+	Prisma.TaskGroupByArgs,
+	Prisma.TaskCreateManyAndReturnArgs,
+	Task
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "Task");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "Task");
+	}
 }

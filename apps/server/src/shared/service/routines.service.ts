@@ -5,13 +5,13 @@ import { BaseService } from "./base.service";
 
 @Injectable()
 export class RoutinesService extends BaseService<
-  CreateRoutineDto,
-  UpdateRoutineDto,
-  any,
-  Routine,
-  RoutinesRepository
+	CreateRoutineDto,
+	UpdateRoutineDto,
+	any,
+	Routine,
+	RoutinesRepository
 > {
-  constructor(readonly repository: RoutinesRepository) {
-    super(repository);
-  }
+	constructor(readonly repository: RoutinesRepository) {
+		super(repository);
+	}
 }

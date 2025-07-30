@@ -4,7 +4,10 @@ import { SubjectDto } from "../dto/subject.dto";
 import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(SubjectDto)
-export class Subject extends AbstractEntity<SubjectDto> implements SubjectEntity {
-  tenantId: string;
-  name: string;
+export class Subject
+	extends AbstractEntity<SubjectDto>
+	implements SubjectEntity
+{
+	tenantId: string;
+	name: string;
 }

@@ -7,23 +7,23 @@ import { PublicRoute } from "./public-route.decorator";
 import { Roles } from "./roles.decorator";
 
 export function Auth(
-  roles: RoleType[] = [],
-  options?: Partial<{ public: boolean }>,
+	roles: RoleType[] = [],
+	options?: Partial<{ public: boolean }>,
 ): MethodDecorator {
-  const isPublicRoute = options?.public;
+	const isPublicRoute = options?.public;
 
-  const decorators = [
-    PublicRoute(isPublicRoute),
-    ApiCookieAuth("accessToken"),
-    ApiUnauthorizedResponse({ description: "Unauthorized" }),
-    Roles(roles),
-  ];
+	const decorators = [
+		PublicRoute(isPublicRoute),
+		ApiCookieAuth("accessToken"),
+		ApiUnauthorizedResponse({ description: "Unauthorized" }),
+		Roles(roles),
+	];
 
-  decorators.push(UseInterceptors(AuthUserInterceptor));
+	decorators.push(UseInterceptors(AuthUserInterceptor));
 
-  if (!isPublicRoute) {
-    decorators.push(UseGuards(JwtAuthGuard));
-  }
+	if (!isPublicRoute) {
+		decorators.push(UseGuards(JwtAuthGuard));
+	}
 
-  return applyDecorators(...decorators);
+	return applyDecorators(...decorators);
 }

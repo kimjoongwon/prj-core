@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(Timeline)
 export class TimelinesRepository extends BaseRepository<
-  Prisma.TimelineCreateArgs,
-  Prisma.TimelineUpsertArgs,
-  Prisma.TimelineUpdateArgs,
-  Prisma.TimelineUpdateManyArgs,
-  Prisma.TimelineDeleteArgs,
-  Prisma.TimelineFindManyArgs,
-  Prisma.TimelineCountArgs,
-  Prisma.TimelineAggregateArgs,
-  Prisma.TimelineDeleteManyArgs,
-  Prisma.TimelineFindFirstArgs,
-  Prisma.TimelineFindUniqueArgs,
-  Prisma.TimelineGroupByArgs,
-  Prisma.TimelineCreateManyAndReturnArgs,
-  Timeline
+	Prisma.TimelineCreateArgs,
+	Prisma.TimelineUpsertArgs,
+	Prisma.TimelineUpdateArgs,
+	Prisma.TimelineUpdateManyArgs,
+	Prisma.TimelineDeleteArgs,
+	Prisma.TimelineFindManyArgs,
+	Prisma.TimelineCountArgs,
+	Prisma.TimelineAggregateArgs,
+	Prisma.TimelineDeleteManyArgs,
+	Prisma.TimelineFindFirstArgs,
+	Prisma.TimelineFindUniqueArgs,
+	Prisma.TimelineGroupByArgs,
+	Prisma.TimelineCreateManyAndReturnArgs,
+	Timeline
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "Timeline");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "Timeline");
+	}
 }

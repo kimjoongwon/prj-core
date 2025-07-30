@@ -7,12 +7,12 @@ import { Role } from "./role.entity";
 
 @UseDto(RoleClassificationDto)
 export class RoleClassification
-  extends AbstractEntity<RoleClassificationDto>
-  implements RoleClassificationEntity
+	extends AbstractEntity<RoleClassificationDto>
+	implements RoleClassificationEntity
 {
-  categoryId: string;
-  roleId: string;
+	categoryId: string;
+	roleId: string;
 
-  category?: Category;
-  role?: Role;
+	category?: Category;
+	role?: Role;
 }

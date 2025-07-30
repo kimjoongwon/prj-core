@@ -6,10 +6,10 @@
 import type { RoleDto } from "./roleDto";
 
 export type UpdateRole200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: RoleDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: RoleDto;
 };

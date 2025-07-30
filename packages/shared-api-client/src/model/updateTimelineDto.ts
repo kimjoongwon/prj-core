@@ -5,5 +5,5 @@
  */
 
 export interface UpdateTimelineDto {
-  tenantId?: string;
+	tenantId?: string;
 }

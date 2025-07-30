@@ -5,5 +5,5 @@
  */
 
 export interface Number {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }

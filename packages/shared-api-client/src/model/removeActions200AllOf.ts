@@ -6,10 +6,10 @@
 import type { ActionDto } from "./actionDto";
 
 export type RemoveActions200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: ActionDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: ActionDto;
 };

@@ -7,22 +7,22 @@ import { NavigatorStore } from "./navigatorStore";
 import { TokenStore } from "./tokenStore";
 
 export class PlateStore {
-  name: string = "PROTOTYPE";
-  navigation: NavigationStore | undefined;
-  tokenStore: TokenStore | undefined;
-  authStore: AuthStore | undefined;
-  cookieStore: CookieStore | undefined;
+	name: string = "PROTOTYPE";
+	navigation: NavigationStore | undefined;
+	tokenStore: TokenStore | undefined;
+	authStore: AuthStore | undefined;
+	cookieStore: CookieStore | undefined;
 
-  constructor() {
-    getAppBuilder().then((res) => {
-      const routeDtos = res.data?.routes;
-      const navigator = new NavigatorStore(this);
-      this.navigation = new NavigationStore(this, navigator, routeDtos || []);
-      this.tokenStore = new TokenStore(this);
-      this.cookieStore = new CookieStore();
-      this.authStore = new AuthStore(this);
-    });
+	constructor() {
+		getAppBuilder().then((res) => {
+			const routeDtos = res.data?.routes;
+			const navigator = new NavigatorStore(this);
+			this.navigation = new NavigationStore(this, navigator, routeDtos || []);
+			this.tokenStore = new TokenStore(this);
+			this.cookieStore = new CookieStore();
+			this.authStore = new AuthStore(this);
+		});
 
-    makeAutoObservable(this);
-  }
+		makeAutoObservable(this);
+	}
 }

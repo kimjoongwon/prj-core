@@ -3,6 +3,6 @@ import { COMMON_ENTITY_FIELDS } from "../../constant/entity-common-fields";
 import { RoleAssociationDto } from "../role-association.dto";
 
 export class CreateRoleAssociationDto extends OmitType(RoleAssociationDto, [
-  ...COMMON_ENTITY_FIELDS,
-  "group",
+	...COMMON_ENTITY_FIELDS,
+	"group",
 ]) {}

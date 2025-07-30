@@ -6,9 +6,9 @@ import { Tenant } from "./tenant.entity";
 
 @UseDto(GroupDto)
 export class Group extends AbstractEntity<GroupDto> implements GroupEntity {
-  name: string;
-  label: string;
-  type: $Enums.GroupTypes;
-  tenantId: string;
-  tenant: Tenant;
+	name: string;
+	label: string;
+	type: $Enums.GroupTypes;
+	tenantId: string;
+	tenant: Tenant;
 }

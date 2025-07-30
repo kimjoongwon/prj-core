@@ -6,10 +6,10 @@
 import type { UserDto } from "./userDto";
 
 export type UpdateUser200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: UserDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: UserDto;
 };

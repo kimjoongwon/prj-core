@@ -3,11 +3,11 @@ import { useState } from "../_hooks/useState";
 import { DatesView } from "./DatesView";
 
 interface DatesProps {
-  state: ReturnType<typeof useState>;
+	state: ReturnType<typeof useState>;
 }
 
 export const Dates = observer((props: DatesProps) => {
-  const { state } = props;
+	const { state } = props;
 
-  return <DatesView state={state} />;
+	return <DatesView state={state} />;
 });

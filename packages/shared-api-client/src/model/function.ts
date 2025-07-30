@@ -5,5 +5,5 @@
  */
 
 export interface Function {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }

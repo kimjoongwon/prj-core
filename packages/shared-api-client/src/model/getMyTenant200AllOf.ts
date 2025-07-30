@@ -8,10 +8,10 @@ import type { GetMyTenant200AllOfMeta } from "./getMyTenant200AllOfMeta";
 import type { TenantDto } from "./tenantDto";
 
 export type GetMyTenant200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: TenantDto[];
-  meta?: GetMyTenant200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: TenantDto[];
+	meta?: GetMyTenant200AllOfMeta;
 };

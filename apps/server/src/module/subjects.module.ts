@@ -2,6 +2,6 @@ import { Module } from "@nestjs/common";
 import { SubjectsController } from "@shared";
 
 @Module({
-  controllers: [SubjectsController],
+	controllers: [SubjectsController],
 })
 export class SubjectsModule {}

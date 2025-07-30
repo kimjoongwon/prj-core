@@ -5,13 +5,13 @@ import { BaseService } from "./base.service";
 
 @Injectable()
 export class FilesService extends BaseService<
-  CreateFileDto,
-  UpdateFileDto,
-  any,
-  File,
-  FilesRepository
+	CreateFileDto,
+	UpdateFileDto,
+	any,
+	File,
+	FilesRepository
 > {
-  constructor(readonly repository: FilesRepository) {
-    super(repository);
-  }
+	constructor(readonly repository: FilesRepository) {
+		super(repository);
+	}
 }

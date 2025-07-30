@@ -7,14 +7,14 @@ import type { CategoryDto } from "./categoryDto";
 import type { FileDto } from "./fileDto";
 
 export interface FileClassificationDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  fileId: string;
-  categoryId: string;
-  category?: CategoryDto;
-  file?: FileDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	fileId: string;
+	categoryId: string;
+	category?: CategoryDto;
+	file?: FileDto;
 }

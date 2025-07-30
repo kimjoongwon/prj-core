@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(SpaceClassification)
 export class SpaceClassificationsRepository extends BaseRepository<
-  Prisma.SpaceClassificationCreateArgs,
-  Prisma.SpaceClassificationUpsertArgs,
-  Prisma.SpaceClassificationUpdateArgs,
-  Prisma.SpaceClassificationUpdateManyArgs,
-  Prisma.SpaceClassificationDeleteArgs,
-  Prisma.SpaceClassificationFindManyArgs,
-  Prisma.SpaceClassificationCountArgs,
-  Prisma.SpaceClassificationAggregateArgs,
-  Prisma.SpaceClassificationDeleteManyArgs,
-  Prisma.SpaceClassificationFindFirstArgs,
-  Prisma.SpaceClassificationFindUniqueArgs,
-  Prisma.SpaceClassificationGroupByArgs,
-  Prisma.SpaceClassificationCreateManyArgs,
-  SpaceClassification
+	Prisma.SpaceClassificationCreateArgs,
+	Prisma.SpaceClassificationUpsertArgs,
+	Prisma.SpaceClassificationUpdateArgs,
+	Prisma.SpaceClassificationUpdateManyArgs,
+	Prisma.SpaceClassificationDeleteArgs,
+	Prisma.SpaceClassificationFindManyArgs,
+	Prisma.SpaceClassificationCountArgs,
+	Prisma.SpaceClassificationAggregateArgs,
+	Prisma.SpaceClassificationDeleteManyArgs,
+	Prisma.SpaceClassificationFindFirstArgs,
+	Prisma.SpaceClassificationFindUniqueArgs,
+	Prisma.SpaceClassificationGroupByArgs,
+	Prisma.SpaceClassificationCreateManyArgs,
+	SpaceClassification
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "SpaceClassification");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "SpaceClassification");
+	}
 }

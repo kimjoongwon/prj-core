@@ -6,8 +6,8 @@
 import type { Order } from "./order";
 
 export type GetSessionsByQueryParams = {
-  skip?: number;
-  take?: number;
-  timelineId?: string | null;
-  startDateTimeSortOrder?: Order;
+	skip?: number;
+	take?: number;
+	timelineId?: string | null;
+	startDateTimeSortOrder?: Order;
 };

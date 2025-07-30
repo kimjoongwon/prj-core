@@ -5,9 +5,9 @@
  */
 
 export interface UpdateProgramDto {
-  instructorId?: string;
-  capacity?: number;
-  routineId?: string;
-  sessionId?: string;
-  tenancyId?: string;
+	instructorId?: string;
+	capacity?: number;
+	routineId?: string;
+	sessionId?: string;
+	tenancyId?: string;
 }

@@ -2,18 +2,18 @@ import { Chip } from "@heroui/react";
 import { CellContext } from "@tanstack/react-table";
 
 export const BooleanCell = <T,>(cellContext: CellContext<T, unknown>) => {
-  const { getValue } = cellContext;
-  const value = getValue();
+	const { getValue } = cellContext;
+	const value = getValue();
 
-  if (value === null || value === undefined) {
-    return <p>-</p>;
-  }
+	if (value === null || value === undefined) {
+		return <p>-</p>;
+	}
 
-  const boolValue = Boolean(value);
+	const boolValue = Boolean(value);
 
-  return (
-    <Chip color={boolValue ? "success" : "default"} size="sm" variant="flat">
-      {boolValue ? "예" : "아니오"}
-    </Chip>
-  );
+	return (
+		<Chip color={boolValue ? "success" : "default"} size="sm" variant="flat">
+			{boolValue ? "예" : "아니오"}
+		</Chip>
+	);
 };

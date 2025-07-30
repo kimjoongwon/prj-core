@@ -7,14 +7,14 @@ import type { AbilityActions } from "./abilityActions";
 import type { TenantDto } from "./tenantDto";
 
 export interface ActionDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  name: AbilityActions;
-  conditions?: string;
-  tenant?: TenantDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	name: AbilityActions;
+	conditions?: string;
+	tenant?: TenantDto;
 }

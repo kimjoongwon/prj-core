@@ -6,10 +6,10 @@
 import type { CategoryDto } from "./categoryDto";
 
 export type CreateCategory200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: CategoryDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: CategoryDto;
 };

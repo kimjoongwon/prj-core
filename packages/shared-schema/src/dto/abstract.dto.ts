@@ -1,18 +1,22 @@
-import { DateField, NumberField, UUIDField } from "../decorator/field.decorators";
+import {
+	DateField,
+	NumberField,
+	UUIDField,
+} from "../decorator/field.decorators";
 
 export class AbstractDto {
-  @UUIDField()
-  id!: string;
+	@UUIDField()
+	id!: string;
 
-  @NumberField()
-  seq!: number;
+	@NumberField()
+	seq!: number;
 
-  @DateField()
-  createdAt!: Date;
+	@DateField()
+	createdAt!: Date;
 
-  @DateField()
-  updatedAt!: Date;
+	@DateField()
+	updatedAt!: Date;
 
-  @DateField({ nullable: true })
-  removedAt!: Date;
+	@DateField({ nullable: true })
+	removedAt!: Date;
 }

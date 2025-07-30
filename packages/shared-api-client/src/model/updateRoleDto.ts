@@ -6,7 +6,7 @@
 import type { Roles } from "./roles";
 
 export interface UpdateRoleDto {
-  name?: Roles;
-  serviceId?: string;
-  categoryId?: string;
+	name?: Roles;
+	serviceId?: string;
+	categoryId?: string;
 }

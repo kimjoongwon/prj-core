@@ -5,5 +5,5 @@
  */
 
 export interface Boolean {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }

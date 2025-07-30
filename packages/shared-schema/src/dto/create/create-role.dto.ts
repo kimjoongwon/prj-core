@@ -3,10 +3,12 @@ import { COMMON_ENTITY_FIELDS } from "../../constant";
 import { UUIDField } from "../../decorator";
 import { RoleDto } from "../role.dto";
 
-export class CreateRoleDto extends OmitType(RoleDto, [...COMMON_ENTITY_FIELDS]) {
-  @UUIDField()
-  serviceId: string;
+export class CreateRoleDto extends OmitType(RoleDto, [
+	...COMMON_ENTITY_FIELDS,
+]) {
+	@UUIDField()
+	serviceId: string;
 
-  @UUIDField()
-  categoryId: string;
+	@UUIDField()
+	categoryId: string;
 }

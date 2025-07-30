@@ -8,11 +8,11 @@ import { User } from "./user.entity";
 
 @UseDto(TenantDto)
 export class Tenant extends AbstractEntity<TenantDto> implements TenantEntity {
-  main: boolean;
-  spaceId: string;
-  userId: string;
-  roleId: string;
-  space?: Space;
-  user?: User;
-  role?: Role;
+	main: boolean;
+	spaceId: string;
+	userId: string;
+	roleId: string;
+	space?: Space;
+	user?: User;
+	role?: Role;
 }

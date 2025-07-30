@@ -6,10 +6,10 @@
 import type { ProgramDto } from "./programDto";
 
 export type DeleteProgramById200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: ProgramDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: ProgramDto;
 };

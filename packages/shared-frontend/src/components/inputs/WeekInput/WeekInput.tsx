@@ -5,13 +5,15 @@ import { useMobxHookForm } from "../../../hooks";
 import { WeekInputView } from "./WeekInputView";
 
 export const WeekInput = observer((props: any) => {
-  const { state, path, ...rest } = props;
-  const initialValue = get(state, path);
-  const { localState } = useMobxHookForm(initialValue, state, path);
+	const { state, path, ...rest } = props;
+	const initialValue = get(state, path);
+	const { localState } = useMobxHookForm(initialValue, state, path);
 
-  const onChange = (value: RecurringDayOfTheWeek) => {
-    localState.value = value;
-  };
+	const onChange = (value: RecurringDayOfTheWeek) => {
+		localState.value = value;
+	};
 
-  return <WeekInputView {...rest} onChange={onChange} value={localState.value} />;
+	return (
+		<WeekInputView {...rest} onChange={onChange} value={localState.value} />
+	);
 });

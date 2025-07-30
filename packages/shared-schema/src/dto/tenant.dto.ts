@@ -1,27 +1,32 @@
 import { Tenant } from "@prisma/client";
-import { BooleanField, ClassField, StringField, UUIDField } from "../decorator/field.decorators";
+import {
+	BooleanField,
+	ClassField,
+	StringField,
+	UUIDField,
+} from "../decorator/field.decorators";
 import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 
 export class TenantDto extends AbstractDto implements Tenant {
-  @BooleanField()
-  main: boolean;
+	@BooleanField()
+	main: boolean;
 
-  @UUIDField()
-  roleId: string;
+	@UUIDField()
+	roleId: string;
 
-  @StringField()
-  userId: string;
+	@StringField()
+	userId: string;
 
-  @StringField()
-  spaceId: string;
+	@StringField()
+	spaceId: string;
 
-  @ClassField(() => UserDto, { required: false })
-  user?: UserDto;
+	@ClassField(() => UserDto, { required: false })
+	user?: UserDto;
 
-  @ClassField(() => SpaceDto, { required: false })
-  space?: SpaceDto;
+	@ClassField(() => SpaceDto, { required: false })
+	space?: SpaceDto;
 
-  @ClassField(() => RoleDto, { required: false })
-  role?: RoleDto;
+	@ClassField(() => RoleDto, { required: false })
+	role?: RoleDto;
 }

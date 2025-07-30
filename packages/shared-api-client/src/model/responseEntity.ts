@@ -9,9 +9,9 @@ import type { ResponseEntityHttpStatus } from "./responseEntityHttpStatus";
 import type { ResponseEntityMeta } from "./responseEntityMeta";
 
 export interface ResponseEntity {
-  httpStatus: ResponseEntityHttpStatus;
-  message: string;
-  data?: ResponseEntityData;
-  /** @nullable */
-  meta?: ResponseEntityMeta;
+	httpStatus: ResponseEntityHttpStatus;
+	message: string;
+	data?: ResponseEntityData;
+	/** @nullable */
+	meta?: ResponseEntityMeta;
 }

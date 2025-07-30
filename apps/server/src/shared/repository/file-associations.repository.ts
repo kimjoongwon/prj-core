@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(FileAssociation)
 export class FileAssociationsRepository extends BaseRepository<
-  Prisma.FileAssociationCreateArgs,
-  Prisma.FileAssociationUpsertArgs,
-  Prisma.FileAssociationUpdateArgs,
-  Prisma.FileAssociationUpdateManyArgs,
-  Prisma.FileAssociationDeleteArgs,
-  Prisma.FileAssociationFindManyArgs,
-  Prisma.FileAssociationCountArgs,
-  Prisma.FileAssociationAggregateArgs,
-  Prisma.FileAssociationDeleteManyArgs,
-  Prisma.FileAssociationFindFirstArgs,
-  Prisma.FileAssociationFindUniqueArgs,
-  Prisma.FileAssociationGroupByArgs,
-  Prisma.FileAssociationCreateManyArgs,
-  FileAssociation
+	Prisma.FileAssociationCreateArgs,
+	Prisma.FileAssociationUpsertArgs,
+	Prisma.FileAssociationUpdateArgs,
+	Prisma.FileAssociationUpdateManyArgs,
+	Prisma.FileAssociationDeleteArgs,
+	Prisma.FileAssociationFindManyArgs,
+	Prisma.FileAssociationCountArgs,
+	Prisma.FileAssociationAggregateArgs,
+	Prisma.FileAssociationDeleteManyArgs,
+	Prisma.FileAssociationFindFirstArgs,
+	Prisma.FileAssociationFindUniqueArgs,
+	Prisma.FileAssociationGroupByArgs,
+	Prisma.FileAssociationCreateManyArgs,
+	FileAssociation
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "FileAssociation");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "FileAssociation");
+	}
 }

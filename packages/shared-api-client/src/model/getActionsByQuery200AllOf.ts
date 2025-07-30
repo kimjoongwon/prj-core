@@ -7,10 +7,10 @@ import type { ActionDto } from "./actionDto";
 import type { GetActionsByQuery200AllOfMeta } from "./getActionsByQuery200AllOfMeta";
 
 export type GetActionsByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: ActionDto[];
-  meta?: GetActionsByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: ActionDto[];
+	meta?: GetActionsByQuery200AllOfMeta;
 };

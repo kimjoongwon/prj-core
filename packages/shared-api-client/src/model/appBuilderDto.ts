@@ -6,5 +6,5 @@
 import type { RouteDto } from "./routeDto";
 
 export interface AppBuilderDto {
-  routes: RouteDto[];
+	routes: RouteDto[];
 }

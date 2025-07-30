@@ -5,51 +5,57 @@ import { HStack, VStack } from "../../../..";
 import { renderLucideIcon } from "../../../utils/iconUtils";
 
 interface NavbarProps {
-  routes: Route[];
-  direction?: "horizontal" | "vertical";
+	routes: Route[];
+	direction?: "horizontal" | "vertical";
 }
 
 export const Navbar = observer((props: NavbarProps) => {
-  const { routes, direction = "horizontal" } = props;
+	const { routes, direction = "horizontal" } = props;
 
-  const handleRouteClick = (route: Route) => {
-    if (route.fullPath) {
-      // NavigationStore의 setCurrentPath를 통해 경로 변경
-      // 실제 네비게이션 로직은 DashboardLayoutBuilder의 reaction에서 처리
-    }
-  };
+	const handleRouteClick = (route: Route) => {
+		if (route.fullPath) {
+			// NavigationStore의 setCurrentPath를 통해 경로 변경
+			// 실제 네비게이션 로직은 DashboardLayoutBuilder의 reaction에서 처리
+		}
+	};
 
-  if (direction === "vertical") {
-    return (
-      <VStack className="gap-2">
-        {routes?.map((route, index) => (
-          <Button
-            variant="light"
-            color={route.active ? "primary" : "default"}
-            key={route.name || `route-${index}`}
-            onPress={() => handleRouteClick(route)}
-            startContent={route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined}
-          >
-            {route.name || route.fullPath}
-          </Button>
-        ))}
-      </VStack>
-    );
-  }
+	if (direction === "vertical") {
+		return (
+			<VStack className="gap-2">
+				{routes?.map((route, index) => (
+					<Button
+						variant="light"
+						color={route.active ? "primary" : "default"}
+						key={route.name || `route-${index}`}
+						onPress={() => handleRouteClick(route)}
+						startContent={
+							route.icon
+								? renderLucideIcon(route.icon, "w-4 h-4", 16)
+								: undefined
+						}
+					>
+						{route.name || route.fullPath}
+					</Button>
+				))}
+			</VStack>
+		);
+	}
 
-  return (
-    <HStack className="flex-1 gap-2 items-center justify-center">
-      {routes?.map((route, index) => (
-        <Button
-          variant="light"
-          color={route.active ? "primary" : "default"}
-          key={route.name || `route-${index}`}
-          onPress={() => handleRouteClick(route)}
-          startContent={route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined}
-        >
-          {route.name || route.fullPath}
-        </Button>
-      ))}
-    </HStack>
-  );
+	return (
+		<HStack className="flex-1 gap-2 items-center justify-center">
+			{routes?.map((route, index) => (
+				<Button
+					variant="light"
+					color={route.active ? "primary" : "default"}
+					key={route.name || `route-${index}`}
+					onPress={() => handleRouteClick(route)}
+					startContent={
+						route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined
+					}
+				>
+					{route.name || route.fullPath}
+				</Button>
+			))}
+		</HStack>
+	);
 });

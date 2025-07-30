@@ -6,10 +6,10 @@
 import type { RoleDto } from "./roleDto";
 
 export type DeleteRole200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: RoleDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: RoleDto;
 };

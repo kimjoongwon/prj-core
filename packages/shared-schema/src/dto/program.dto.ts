@@ -3,18 +3,18 @@ import { NumberField, UUIDField } from "../decorator";
 import { AbstractDto } from "./abstract.dto";
 
 export class ProgramDto extends AbstractDto implements ProgramEntity {
-  @UUIDField()
-  instructorId: string;
+	@UUIDField()
+	instructorId: string;
 
-  @NumberField()
-  capacity: number;
+	@NumberField()
+	capacity: number;
 
-  @UUIDField()
-  routineId: string;
+	@UUIDField()
+	routineId: string;
 
-  @UUIDField()
-  sessionId: string;
+	@UUIDField()
+	sessionId: string;
 
-  @UUIDField()
-  tenancyId: string;
+	@UUIDField()
+	tenancyId: string;
 }

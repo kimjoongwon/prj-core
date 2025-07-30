@@ -4,10 +4,10 @@ import { UUIDField } from "../../decorator";
 import { ExerciseDto } from "../exercise.dto";
 
 export class CreateExerciseDto extends OmitType(ExerciseDto, [
-  ...COMMON_ENTITY_FIELDS,
-  "taskId",
-  "task",
+	...COMMON_ENTITY_FIELDS,
+	"taskId",
+	"task",
 ]) {
-  @UUIDField()
-  tenantId: string;
+	@UUIDField()
+	tenantId: string;
 }

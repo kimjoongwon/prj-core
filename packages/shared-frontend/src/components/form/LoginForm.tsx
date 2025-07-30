@@ -3,17 +3,17 @@ import { PasswordInput } from "../inputs/PasswordInput";
 import { VStack } from "../ui/VStack/VStack";
 
 interface LoginFormProps {
-  state: {
-    email: string;
-    password: string;
-  };
+	state: {
+		email: string;
+		password: string;
+	};
 }
 
 export const LoginForm = ({ state }: LoginFormProps) => {
-  return (
-    <VStack fullWidth justifyContent="center">
-      <EmailInput path="email" state={state} variant="flat" />
-      <PasswordInput path="password" state={state} variant="flat" />
-    </VStack>
-  );
+	return (
+		<VStack fullWidth justifyContent="center">
+			<EmailInput path="email" state={state} variant="flat" />
+			<PasswordInput path="password" state={state} variant="flat" />
+		</VStack>
+	);
 };

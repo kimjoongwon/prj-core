@@ -8,10 +8,10 @@ import type { GetRoutinesByQuery200AllOfMeta } from "./getRoutinesByQuery200AllO
 import type { RoutineDto } from "./routineDto";
 
 export type GetRoutinesByQuery200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  data?: RoutineDto[];
-  meta?: GetRoutinesByQuery200AllOfMeta;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	data?: RoutineDto[];
+	meta?: GetRoutinesByQuery200AllOfMeta;
 };

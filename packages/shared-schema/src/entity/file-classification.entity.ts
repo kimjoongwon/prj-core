@@ -7,12 +7,12 @@ import { File } from "./file.entity";
 
 @UseDto(FileClassificationDto)
 export class FileClassification
-  extends AbstractEntity<FileClassificationDto>
-  implements FileClassificationEntity
+	extends AbstractEntity<FileClassificationDto>
+	implements FileClassificationEntity
 {
-  categoryId: string;
-  fileId: string;
+	categoryId: string;
+	fileId: string;
 
-  category?: Category;
-  file?: File;
+	category?: Category;
+	file?: File;
 }

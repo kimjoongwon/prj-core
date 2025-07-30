@@ -3,7 +3,7 @@ import { COMMON_ENTITY_FIELDS } from "../../constant";
 import { FileDto } from "../file.dto";
 
 export class CreateFileDto extends OmitType(FileDto, [
-  ...COMMON_ENTITY_FIELDS,
-  "tenant",
-  "classification",
+	...COMMON_ENTITY_FIELDS,
+	"tenant",
+	"classification",
 ]) {}

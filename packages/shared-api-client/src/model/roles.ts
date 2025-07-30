@@ -8,7 +8,7 @@ export type Roles = (typeof Roles)[keyof typeof Roles];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Roles = {
-  USER: "USER",
-  SUPER_ADMIN: "SUPER_ADMIN",
-  ADMIN: "ADMIN",
+	USER: "USER",
+	SUPER_ADMIN: "SUPER_ADMIN",
+	ADMIN: "ADMIN",
 } as const;

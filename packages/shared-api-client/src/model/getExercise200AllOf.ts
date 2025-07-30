@@ -6,10 +6,10 @@
 import type { ExerciseDto } from "./exerciseDto";
 
 export type GetExercise200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: ExerciseDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: ExerciseDto;
 };

@@ -3,11 +3,11 @@ import dayjs from "dayjs";
 import React from "react";
 
 export const DateTimeCell = <T,>(cellContext: CellContext<T, unknown>) => {
-  const { getValue } = cellContext;
+	const { getValue } = cellContext;
 
-  if (!getValue()) {
-    return <p>-</p>;
-  }
+	if (!getValue()) {
+		return <p>-</p>;
+	}
 
-  return <p>{dayjs(getValue() as string).format("YYYY.MM.DD HH:mm")}</p>;
+	return <p>{dayjs(getValue() as string).format("YYYY.MM.DD HH:mm")}</p>;
 };

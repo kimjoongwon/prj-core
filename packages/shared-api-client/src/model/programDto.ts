@@ -5,15 +5,15 @@
  */
 
 export interface ProgramDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  instructorId: string;
-  capacity: number;
-  routineId: string;
-  sessionId: string;
-  tenancyId: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	instructorId: string;
+	capacity: number;
+	routineId: string;
+	sessionId: string;
+	tenancyId: string;
 }

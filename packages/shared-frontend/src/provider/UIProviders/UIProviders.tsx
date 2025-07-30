@@ -1,16 +1,16 @@
 import { ToastProvider } from "@heroui/react";
 
 interface UIProvidersProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export const UIProviders = (props: UIProvidersProps) => {
-  const { children } = props;
+	const { children } = props;
 
-  return (
-    <>
-      <ToastProvider placement="bottom-center" />
-      {children}
-    </>
-  );
+	return (
+		<>
+			<ToastProvider placement="bottom-center" />
+			{children}
+		</>
+	);
 };

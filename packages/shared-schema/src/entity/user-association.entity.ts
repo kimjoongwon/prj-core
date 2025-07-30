@@ -7,12 +7,12 @@ import { User } from "./user.entity";
 
 @UseDto(UserAssociationDto)
 export class UserAssociation
-  extends AbstractEntity<UserAssociationDto>
-  implements UserAssociationEntity
+	extends AbstractEntity<UserAssociationDto>
+	implements UserAssociationEntity
 {
-  userId: string;
-  groupId: string;
+	userId: string;
+	groupId: string;
 
-  group?: Group;
-  user?: User;
+	group?: Group;
+	user?: User;
 }

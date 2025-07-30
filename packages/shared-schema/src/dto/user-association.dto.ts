@@ -3,15 +3,15 @@ import { ClassField, UUIDField } from "../decorator/field.decorators";
 import { AbstractDto, GroupDto, UserDto } from ".";
 
 export class UserAssociationDto extends AbstractDto implements UserAssociation {
-  @UUIDField()
-  userId: string;
+	@UUIDField()
+	userId: string;
 
-  @UUIDField()
-  groupId: string;
+	@UUIDField()
+	groupId: string;
 
-  @ClassField(() => GroupDto, { required: false, swagger: false })
-  group?: GroupDto;
+	@ClassField(() => GroupDto, { required: false, swagger: false })
+	group?: GroupDto;
 
-  @ClassField(() => UserDto, { required: false, swagger: false })
-  user?: UserDto;
+	@ClassField(() => UserDto, { required: false, swagger: false })
+	user?: UserDto;
 }

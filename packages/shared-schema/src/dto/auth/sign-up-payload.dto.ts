@@ -1,21 +1,25 @@
-import { EmailField, StringField, UUIDField } from "../../decorator/field.decorators";
+import {
+	EmailField,
+	StringField,
+	UUIDField,
+} from "../../decorator/field.decorators";
 
 export class SignUpPayloadDto {
-  @StringField()
-  nickname: string;
+	@StringField()
+	nickname: string;
 
-  @UUIDField()
-  spaceId: string;
+	@UUIDField()
+	spaceId: string;
 
-  @EmailField()
-  email: string;
+	@EmailField()
+	email: string;
 
-  @StringField()
-  name: string;
+	@StringField()
+	name: string;
 
-  @StringField()
-  phone: string;
+	@StringField()
+	phone: string;
 
-  @StringField()
-  password: string;
+	@StringField()
+	password: string;
 }

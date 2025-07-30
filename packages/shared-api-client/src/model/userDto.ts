@@ -5,19 +5,19 @@
  */
 
 export interface UserDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  spaceId: string;
-  email: string;
-  name: string;
-  phone: string;
-  /**
-   * 응답 제외 필드
-   * @minLength 6
-   */
-  password: string;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	spaceId: string;
+	email: string;
+	name: string;
+	phone: string;
+	/**
+	 * 응답 제외 필드
+	 * @minLength 6
+	 */
+	password: string;
 }

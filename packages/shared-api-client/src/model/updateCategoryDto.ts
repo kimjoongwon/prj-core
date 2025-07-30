@@ -6,9 +6,9 @@
 import type { CategoryTypes } from "./categoryTypes";
 
 export interface UpdateCategoryDto {
-  tenantId?: string;
-  name?: string;
-  type?: CategoryTypes;
-  /** @nullable */
-  parentId?: string | null;
+	tenantId?: string;
+	name?: string;
+	type?: CategoryTypes;
+	/** @nullable */
+	parentId?: string | null;
 }

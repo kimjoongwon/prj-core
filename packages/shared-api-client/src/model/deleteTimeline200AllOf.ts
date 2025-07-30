@@ -6,10 +6,10 @@
 import type { TimelineDto } from "./timelineDto";
 
 export type DeleteTimeline200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: TimelineDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: TimelineDto;
 };

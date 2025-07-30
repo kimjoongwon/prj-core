@@ -5,7 +5,10 @@ import { AbstractEntity } from "./abstract.entity";
 import { Tenant } from "./tenant.entity";
 
 @UseDto(TimelineDto)
-export class Timeline extends AbstractEntity<TimelineDto> implements TimelineEntity {
-  tenantId: string;
-  tenant?: Tenant;
+export class Timeline
+	extends AbstractEntity<TimelineDto>
+	implements TimelineEntity
+{
+	tenantId: string;
+	tenant?: Tenant;
 }

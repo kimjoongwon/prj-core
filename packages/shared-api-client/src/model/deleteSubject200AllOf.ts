@@ -6,10 +6,10 @@
 import type { SubjectDto } from "./subjectDto";
 
 export type DeleteSubject200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: SubjectDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: SubjectDto;
 };

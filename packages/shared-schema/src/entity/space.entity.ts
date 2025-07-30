@@ -9,8 +9,8 @@ import { Tenant } from "./tenant.entity";
 
 @UseDto(SpaceDto)
 export class Space extends AbstractEntity<SpaceDto> implements SpaceEntity {
-  tenants?: Tenant[];
-  spaceClassifications?: SpaceClassification[];
-  spaceAssociations?: SpaceAssociation[];
-  ground?: Ground;
+	tenants?: Tenant[];
+	spaceClassifications?: SpaceClassification[];
+	spaceAssociations?: SpaceAssociation[];
+	ground?: Ground;
 }

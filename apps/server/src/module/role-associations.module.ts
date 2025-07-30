@@ -2,6 +2,6 @@ import { Module } from "@nestjs/common";
 import { RoleAssociationsController } from "@shared";
 
 @Module({
-  controllers: [RoleAssociationsController],
+	controllers: [RoleAssociationsController],
 })
 export class RoleAssociationsModule {}

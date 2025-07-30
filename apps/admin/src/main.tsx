@@ -5,9 +5,9 @@ import { App } from "./App";
 const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
-  ReactDOM.createRoot(rootElement).render(
-    <AppProviders>
-      <App />
-    </AppProviders>,
-  );
+	ReactDOM.createRoot(rootElement).render(
+		<AppProviders>
+			<App />
+		</AppProviders>,
+	);
 }

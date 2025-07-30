@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(Ground)
 export class GroundsRepository extends BaseRepository<
-  Prisma.GroundCreateArgs,
-  Prisma.GroundUpsertArgs,
-  Prisma.GroundUpdateArgs,
-  Prisma.GroundUpdateManyArgs,
-  Prisma.GroundDeleteArgs,
-  Prisma.GroundFindManyArgs,
-  Prisma.GroundCountArgs,
-  Prisma.GroundAggregateArgs,
-  Prisma.GroundDeleteManyArgs,
-  Prisma.GroundFindFirstArgs,
-  Prisma.GroundFindUniqueArgs,
-  Prisma.GroundGroupByArgs,
-  Prisma.GroundCreateManyArgs,
-  Ground
+	Prisma.GroundCreateArgs,
+	Prisma.GroundUpsertArgs,
+	Prisma.GroundUpdateArgs,
+	Prisma.GroundUpdateManyArgs,
+	Prisma.GroundDeleteArgs,
+	Prisma.GroundFindManyArgs,
+	Prisma.GroundCountArgs,
+	Prisma.GroundAggregateArgs,
+	Prisma.GroundDeleteManyArgs,
+	Prisma.GroundFindFirstArgs,
+	Prisma.GroundFindUniqueArgs,
+	Prisma.GroundGroupByArgs,
+	Prisma.GroundCreateManyArgs,
+	Ground
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "Ground");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "Ground");
+	}
 }

@@ -6,17 +6,17 @@
 import type { CategoryTypes } from "./categoryTypes";
 
 export interface CategoryDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  tenantId: string;
-  name: string;
-  type: CategoryTypes;
-  /** @nullable */
-  parentId: string | null;
-  parent?: CategoryDto;
-  children?: CategoryDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	tenantId: string;
+	name: string;
+	type: CategoryTypes;
+	/** @nullable */
+	parentId: string | null;
+	parent?: CategoryDto;
+	children?: CategoryDto;
 }

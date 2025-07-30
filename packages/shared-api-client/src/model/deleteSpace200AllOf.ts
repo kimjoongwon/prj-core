@@ -6,10 +6,10 @@
 import type { SpaceDto } from "./spaceDto";
 
 export type DeleteSpace200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: SpaceDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: SpaceDto;
 };

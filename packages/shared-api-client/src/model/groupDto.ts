@@ -7,16 +7,16 @@ import type { GroupTypes } from "./groupTypes";
 import type { TenantDto } from "./tenantDto";
 
 export interface GroupDto {
-  id: string;
-  seq: number;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  name: string;
-  /** @nullable */
-  label?: string | null;
-  type: GroupTypes;
-  tenantId: string;
-  tenant?: TenantDto;
+	id: string;
+	seq: number;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	name: string;
+	/** @nullable */
+	label?: string | null;
+	type: GroupTypes;
+	tenantId: string;
+	tenant?: TenantDto;
 }

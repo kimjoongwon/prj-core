@@ -5,5 +5,5 @@ import { AbstractEntity } from "./abstract.entity";
 
 @UseDto(TaskDto)
 export class Task extends AbstractEntity<TaskDto> implements TaskEntity {
-  tenantId: string;
+	tenantId: string;
 }

@@ -6,10 +6,10 @@
 import type { Number } from "./number";
 
 export type DeleteGroup200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: Number;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: Number;
 };

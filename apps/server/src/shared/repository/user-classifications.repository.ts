@@ -7,22 +7,22 @@ import { UseEntity } from "../decorator/use-dto.decorator";
 @Injectable()
 @UseEntity(UserClassification)
 export class UserClassificationsRepository extends BaseRepository<
-  Prisma.UserClassificationCreateArgs,
-  Prisma.UserClassificationUpsertArgs,
-  Prisma.UserClassificationUpdateArgs,
-  Prisma.UserClassificationUpdateManyArgs,
-  Prisma.UserClassificationDeleteArgs,
-  Prisma.UserClassificationFindManyArgs,
-  Prisma.UserClassificationCountArgs,
-  Prisma.UserClassificationAggregateArgs,
-  Prisma.UserClassificationDeleteManyArgs,
-  Prisma.UserClassificationFindFirstArgs,
-  Prisma.UserClassificationFindUniqueArgs,
-  Prisma.UserClassificationGroupByArgs,
-  Prisma.UserClassificationCreateManyAndReturnArgs,
-  UserClassification
+	Prisma.UserClassificationCreateArgs,
+	Prisma.UserClassificationUpsertArgs,
+	Prisma.UserClassificationUpdateArgs,
+	Prisma.UserClassificationUpdateManyArgs,
+	Prisma.UserClassificationDeleteArgs,
+	Prisma.UserClassificationFindManyArgs,
+	Prisma.UserClassificationCountArgs,
+	Prisma.UserClassificationAggregateArgs,
+	Prisma.UserClassificationDeleteManyArgs,
+	Prisma.UserClassificationFindFirstArgs,
+	Prisma.UserClassificationFindUniqueArgs,
+	Prisma.UserClassificationGroupByArgs,
+	Prisma.UserClassificationCreateManyAndReturnArgs,
+	UserClassification
 > {
-  constructor(prisma: PrismaService) {
-    super(prisma, "UserClassification");
-  }
+	constructor(prisma: PrismaService) {
+		super(prisma, "UserClassification");
+	}
 }

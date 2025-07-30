@@ -6,10 +6,10 @@
 import type { SessionDto } from "./sessionDto";
 
 export type UpdateSession200AllOf = {
-  /** */
-  httpStatus?: number;
-  /** */
-  message?: string;
-  /** @nullable */
-  data?: SessionDto;
+	/** */
+	httpStatus?: number;
+	/** */
+	message?: string;
+	/** @nullable */
+	data?: SessionDto;
 };
