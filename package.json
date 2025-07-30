@@ -1,18 +1,18 @@
 {
-  "name": "core",
-  "private": true,
-  "version": "0.0.0",
-  "packageManager": "pnpm@10.13.1",
-  "scripts": {
-    "build": "turbo build",
-    "clean": "turbo clean",
-    "start:dev": "turbo start:dev --no-cache  --continue",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
-    "format": "turbo format",
-    "test": "turbo test"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.0.6"
-  }
+	"name": "core",
+	"private": true,
+	"version": "0.0.0",
+	"packageManager": "pnpm@10.13.1",
+	"scripts": {
+		"build": "turbo build",
+		"clean": "turbo clean",
+		"start:dev": "turbo start:dev --no-cache  --continue",
+		"lint": "turbo lint",
+		"lint:fix": "turbo lint:fix",
+		"format": "turbo format",
+		"test": "turbo test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.1.3"
+	}
 }

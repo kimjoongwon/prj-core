@@ -1,52 +1,51 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "style": {
-        "noNonNullAssertion": "off",
-        "useImportType": "off",
-        "useConst": "error"
-      },
-      "suspicious": {
-        "noExplicitAny": "off",
-        "noArrayIndexKey": "off"
-      },
-      "correctness": {
-        "noUnusedImports": "off",
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "off"
-      },
-      "complexity": {
-        "noForEach": "off",
-        "noStaticOnlyClass": "off",
-        "noBannedTypes": "off"
-      },
-      "nursery": {
-        "useSortedClasses": "off"
-      },
-      "a11y": {
-        "useButtonType": "off",
-        "useAltText": "off",
-        "useMediaCaption": "off",
-        "noLabelWithoutControl": "off",
-        "useValidAnchor": "off"
-      }
-    }
-  },
-
-  "formatter": {
-    "enabled": true,
-    "formatWithErrors": false,
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 100,
-    "attributePosition": "auto"
-  },
-  "javascript": {
-    "parser": {
-      "unsafeParameterDecoratorsEnabled": true
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": ["./apps/**/*.{ts,tsx}", "./packages/**/*.{ts,tsx}"]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noImplicitAnyLet": "off",
+				"noShadowRestrictedNames": "off"
+			},
+			"correctness": {
+				"noUnusedVariables": "off",
+				"useExhaustiveDependencies": "off"
+			},
+			"complexity": {
+				"noStaticOnlyClass": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		},
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	}
 }
