@@ -88,7 +88,9 @@ export const 사용자_리스트: Story = {
 			</div>
 		),
 		placeholder: (
-			<div className="text-center text-gray-500 py-8">사용자를 찾을 수 없습니다</div>
+			<div className="text-center text-gray-500 py-8">
+				사용자를 찾을 수 없습니다
+			</div>
 		),
 	},
 	parameters: {
@@ -111,7 +113,9 @@ export const 빈_리스트: Story = {
 		placeholder: (
 			<div className="text-center py-12">
 				<div className="text-gray-400 text-6xl mb-4">📭</div>
-				<div className="text-lg font-medium text-gray-600">아직 아이템이 없습니다</div>
+				<div className="text-lg font-medium text-gray-600">
+					아직 아이템이 없습니다
+				</div>
 				<div className="text-sm text-gray-500 mt-1">
 					시작하려면 아이템을 추가하세요
 				</div>
@@ -129,7 +133,12 @@ export const 빈_리스트: Story = {
 
 export const 간단한_텍스트_리스트: Story = {
 	args: {
-		data: ["첫 번째 아이템", "두 번째 아이템", "세 번째 아이템", "네 번째 아이템"],
+		data: [
+			"첫 번째 아이템",
+			"두 번째 아이템",
+			"세 번째 아이템",
+			"네 번째 아이템",
+		],
 		renderItem: (item, index) => (
 			<div
 				key={index}
@@ -138,7 +147,9 @@ export const 간단한_텍스트_리스트: Story = {
 				{item}
 			</div>
 		),
-		placeholder: <div className="text-gray-500 p-4">사용 가능한 아이템이 없습니다</div>,
+		placeholder: (
+			<div className="text-gray-500 p-4">사용 가능한 아이템이 없습니다</div>
+		),
 	},
 	parameters: {
 		docs: {
@@ -225,7 +236,9 @@ export const 플레이그라운드: Story = {
 			</div>
 		),
 		placeholder: (
-			<div className="text-gray-500 text-center py-4">보여줄 아이템이 없습니다</div>
+			<div className="text-gray-500 text-center py-4">
+				보여줄 아이템이 없습니다
+			</div>
 		),
 	},
 	parameters: {

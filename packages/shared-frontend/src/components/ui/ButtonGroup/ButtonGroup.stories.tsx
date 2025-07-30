@@ -9,8 +9,7 @@ const meta = {
 		layout: "centered",
 		docs: {
 			description: {
-				component:
-					"좌측과 우측에 버튼들을 그룹으로 표시하는 컴포넌트입니다.",
+				component: "좌측과 우측에 버튼들을 그룹으로 표시하는 컴포넌트입니다.",
 			},
 		},
 	},
@@ -62,8 +61,7 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"좌측과 우측 모두에 버튼이 있는 기본 버튼 그룹입니다.",
+				story: "좌측과 우측 모두에 버튼이 있는 기본 버튼 그룹입니다.",
 			},
 		},
 	},
@@ -143,8 +141,7 @@ export const 링크버튼: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"다른 페이지로 이동하는 링크 버튼들의 그룹입니다.",
+				story: "다른 페이지로 이동하는 링크 버튼들의 그룹입니다.",
 			},
 		},
 	},

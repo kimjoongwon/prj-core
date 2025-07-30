@@ -172,7 +172,9 @@ export const 카드_액션_예시: Story = {
 		children: (
 			<>
 				<div className="px-4 py-2 border border-gray-300 rounded">취소</div>
-				<div className="px-4 py-2 bg-blue-500 text-white rounded">장바구니 추가</div>
+				<div className="px-4 py-2 bg-blue-500 text-white rounded">
+					장바구니 추가
+				</div>
 			</>
 		),
 	},

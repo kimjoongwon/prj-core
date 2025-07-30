@@ -71,8 +71,7 @@ export const 여러요소: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"여러 자식 요소가 있는 컴테이너입니다.",
+				story: "여러 자식 요소가 있는 컴테이너입니다.",
 			},
 		},
 	},

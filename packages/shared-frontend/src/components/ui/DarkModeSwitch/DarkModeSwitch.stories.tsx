@@ -48,8 +48,7 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"우측 하단에 위치한 중간 크기의 기본 다크 모드 스위치입니다.",
+				story: "우측 하단에 위치한 중간 크기의 기본 다크 모드 스위치입니다.",
 			},
 		},
 	},
@@ -77,8 +76,7 @@ export const 크기들: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"다크 모드 스위치의 다양한 크기들: 작음, 중간, 큼입니다.",
+				story: "다크 모드 스위치의 다양한 크기들: 작음, 중간, 큼입니다.",
 			},
 		},
 	},

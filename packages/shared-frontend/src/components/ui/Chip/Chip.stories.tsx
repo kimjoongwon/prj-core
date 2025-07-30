@@ -8,8 +8,7 @@ const meta = {
 		layout: "centered",
 		docs: {
 			description: {
-				component:
-					"커스터마이증 가능한 칩 컴포넌트입니다.",
+				component: "커스터마이증 가능한 칩 컴포넌트입니다.",
 			},
 		},
 	},

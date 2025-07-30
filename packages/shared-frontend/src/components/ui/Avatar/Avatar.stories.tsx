@@ -8,8 +8,7 @@ const meta = {
 		layout: "centered",
 		docs: {
 			description: {
-				component:
-					"사용자 아바타 컴포넌트입니다. 사용자 정보를 표시합니다.",
+				component: "사용자 아바타 컴포넌트입니다. 사용자 정보를 표시합니다.",
 			},
 		},
 	},
@@ -17,8 +16,7 @@ const meta = {
 	argTypes: {
 		showInfo: {
 			control: "boolean",
-			description:
-				"전체 사용자 정보 표시 여부",
+			description: "전체 사용자 정보 표시 여부",
 			defaultValue: true,
 		},
 		onMenuAction: {
@@ -38,8 +36,7 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"기본 아바타입니다.",
+				story: "기본 아바타입니다.",
 			},
 		},
 	},
@@ -52,8 +49,7 @@ export const 사용자정보표시: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"사용자 정보를 표시하는 아바타입니다.",
+				story: "사용자 정보를 표시하는 아바타입니다.",
 			},
 		},
 	},
@@ -66,8 +62,7 @@ export const 아바타만: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"아바타 이미지만 표시하는 아바타입니다.",
+				story: "아바타 이미지만 표시하는 아바타입니다.",
 			},
 		},
 	},
@@ -80,8 +75,7 @@ export const 인터랙티브: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"인터랙티브 아바타입니다.",
+				story: "인터랙티브 아바타입니다.",
 			},
 		},
 	},

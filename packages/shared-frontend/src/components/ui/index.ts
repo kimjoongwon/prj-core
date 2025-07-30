@@ -18,6 +18,7 @@ export * from "./Select";
 export * from "./Skeleton";
 export * from "./Spacer";
 export * from "./SplashScreen";
+export * from "./Table";
 export * from "./Text";
 export * from "./User";
 export * from "./VStack";

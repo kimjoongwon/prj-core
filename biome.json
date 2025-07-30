@@ -25,7 +25,8 @@
 			},
 			"correctness": {
 				"noUnusedVariables": "off",
-				"useExhaustiveDependencies": "off"
+				"useExhaustiveDependencies": "off",
+				"useHookAtTopLevel": "off"
 			},
 			"complexity": {
 				"noStaticOnlyClass": "off"
