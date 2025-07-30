@@ -6,17 +6,17 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { flexRender, Table as ReactTable } from "@tanstack/react-table";
+import { flexRender, Table as ReactTableProps } from "@tanstack/react-table";
 
-export type TableComponentProps<T> = {
-  table: ReactTable<T>;
+export type TableProps<T> = {
+  reactTable: ReactTableProps<T>;
 };
 
-export const Table = <T extends object>({
-  table,
+export const Table = <T extends any>({
+  reactTable,
   ...rest
-}: TableComponentProps<T>) => {
-  const headers = table?.getHeaderGroups?.()?.[0]?.headers || [];
+}: TableProps<T>) => {
+  const headers = reactTable?.getHeaderGroups?.()?.[0]?.headers || [];
 
   return (
     <HeroTable fullWidth {...rest}>
@@ -30,7 +30,7 @@ export const Table = <T extends object>({
         ))}
       </TableHeader>
       <TableBody>
-        {table.getRowModel().rows.map((row) => (
+        {reactTable.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>

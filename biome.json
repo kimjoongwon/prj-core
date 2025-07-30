@@ -29,7 +29,8 @@
 				"useHookAtTopLevel": "off"
 			},
 			"complexity": {
-				"noStaticOnlyClass": "off"
+				"noStaticOnlyClass": "off",
+				"noUselessTypeConstraint": "off"
 			},
 			"style": {
 				"useImportType": "off",
