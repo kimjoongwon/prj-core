@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
-import { CreateGroupDto } from "../src/dto/create/create-group.dto";
 import { GroupNames } from "../src/enum/group-names.enum";
 import { groundSeedData, userGroundMapping, userSeedData } from "./seed-data";
 

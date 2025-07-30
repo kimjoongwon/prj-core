@@ -1,4 +1,4 @@
-import { Card, CardBody, Chip, Progress, Spinner } from "@heroui/react";
+import { Card, CardBody, Chip, Progress } from "@heroui/react";
 import React from "react";
 import { Logo } from "../Logo";
 import { Text } from "../Text";

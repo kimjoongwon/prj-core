@@ -1,7 +1,6 @@
 import { Chip } from "@heroui/chip";
 import { RecurringDayOfTheWeek } from "@shared/types";
 import { observer } from "mobx-react-lite";
-import React from "react";
 import { HStack, Text, VStack } from "../../ui";
 
 export interface WeekInputViewProps {

@@ -1,5 +1,4 @@
 import { CellContext } from "@tanstack/react-table";
-import React from "react";
 
 // SVG 폴더 아이콘 컴포넌트들
 const FolderOpenIcon = ({ className }: { className?: string }) => (

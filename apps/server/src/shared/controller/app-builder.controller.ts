@@ -1,11 +1,7 @@
-import { Body, Controller, Get, Logger, Post, Req, Res } from "@nestjs/common";
+import { Controller, Get, Req } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import {
-	AppBuilderDto,
-	ResponseEntity,
-	type SelectTenantDto,
-} from "@shared/schema";
-import { Request, Response } from "express";
+import { AppBuilderDto, ResponseEntity } from "@shared/schema";
+import { Request } from "express";
 import { ApiResponseEntity } from "../decorator";
 import { Auth } from "../decorator/auth.decorator";
 import { AppBuilderService } from "../service/app-builder.service";
@@ -27,7 +23,6 @@ const COOKIE_CONFIG = {
 @ApiTags("BUILDER")
 @Controller()
 export class AppBuilderController {
-	private readonly logger = new Logger(AppBuilderController.name);
 	constructor(private readonly appBuilderService: AppBuilderService) {}
 
 	@Get()
@@ -44,16 +39,5 @@ export class AppBuilderController {
 	 */
 	private checkAuthenticationStatus(req: Request): boolean {
 		return !!req.cookies?.[COOKIE_CONFIG.ACCESS_TOKEN];
-	}
-
-	/**
-	 * 테넌트 쿠키 설정
-	 */
-	private setTenantCookie(res: Response, tenantId: string): void {
-		res.cookie(
-			COOKIE_CONFIG.TENANT_ID.name,
-			tenantId,
-			COOKIE_CONFIG.TENANT_ID.options,
-		);
 	}
 }

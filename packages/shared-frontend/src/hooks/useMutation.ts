@@ -74,7 +74,7 @@ export const processMutation = (
 			});
 
 			Object.keys(mutation.pathParams).forEach((paramKey) => {
-				const statePath = mutation.pathParams![paramKey];
+				const statePath = mutation.pathParams?.[paramKey];
 
 				// pageState에서 값 추출
 				const value = pageState ? get(pageState, statePath) : undefined;
@@ -115,7 +115,7 @@ export const processMutation = (
 			logger.debug("📦 Processing data extraction", mutation.data);
 
 			Object.keys(mutation.data).forEach((targetKey) => {
-				const sourcePath = mutation.data![targetKey];
+				const sourcePath = mutation.data?.[targetKey];
 
 				// PageState에서 값 추출
 				const value = pageState ? get(pageState, sourcePath) : undefined;

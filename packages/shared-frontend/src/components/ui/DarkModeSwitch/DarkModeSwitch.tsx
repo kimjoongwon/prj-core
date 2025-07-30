@@ -3,7 +3,6 @@ import { useTheme } from "@heroui/use-theme";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Moon, Sun } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import React from "react";
 
 const darkModeSwitchStyles = cva("p-2", {
 	variants: {

@@ -1,7 +1,6 @@
 import { $Enums, Prisma } from "@prisma/client";
 import {
 	EnumFieldOptional,
-	StringField,
 	StringFieldOptional,
 } from "../../decorator/field.decorators";
 import { QueryDto } from "./query.dto";

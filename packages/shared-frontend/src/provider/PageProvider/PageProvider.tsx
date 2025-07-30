@@ -1,5 +1,4 @@
 import { PageBuilder as PageBuilderInterface } from "@shared/types";
-import { useParams } from "@tanstack/react-router";
 import { defaultTo } from "lodash-es";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import React, { createContext } from "react";

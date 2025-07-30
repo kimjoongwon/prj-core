@@ -1,6 +1,5 @@
 import { CellContext } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import React from "react";
 
 export const TimeCell = <T,>(cellContext: CellContext<T, unknown>) => {
 	const { getValue } = cellContext;

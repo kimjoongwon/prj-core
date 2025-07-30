@@ -7,7 +7,6 @@ import {
 	NumberFieldOptional,
 	StringField,
 	UUIDField,
-	UUIDFieldOptional,
 } from "../decorator/field.decorators";
 import { RepeatCycleTypes } from "../enum/repeat-cycle-types.enum";
 import { SessionTypes } from "../enum/session-types.enum";

@@ -1,4 +1,3 @@
-import { Validation } from "@shared/types";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EmailInput } from "./EmailInput";
 

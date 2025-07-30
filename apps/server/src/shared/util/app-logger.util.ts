@@ -33,7 +33,6 @@ const EMOJIS = {
 };
 
 export class AppLogger extends Logger {
-	private isProduction = process.env.NODE_ENV === "production";
 	private isDevelopment = process.env.NODE_ENV !== "production";
 
 	/**

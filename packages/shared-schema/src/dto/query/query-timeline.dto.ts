@@ -1,4 +1,4 @@
-import { Transform, Type } from "class-transformer";
+import { Transform } from "class-transformer";
 import { IsOptional } from "class-validator";
 import { QueryDto } from "./query.dto";
 

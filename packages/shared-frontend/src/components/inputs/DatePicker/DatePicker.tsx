@@ -1,9 +1,6 @@
-import {
-	DatePicker as HeroUiDatePicker,
-	DatePickerProps as HeroUiDatePickerProps,
-} from "@heroui/react";
+import { DatePicker as HeroUiDatePicker } from "@heroui/react";
 import { parseAbsoluteToLocal } from "@internationalized/date";
-import { DatePickerProps, MobxProps } from "@shared/types";
+import { DatePickerProps } from "@shared/types";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";

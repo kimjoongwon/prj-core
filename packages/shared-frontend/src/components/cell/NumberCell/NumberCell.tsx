@@ -1,5 +1,4 @@
 import { CellContext } from "@tanstack/react-table";
-import React from "react";
 
 export const NumberCell = <T,>(cellContext: CellContext<T, unknown>) => {
 	const { getValue } = cellContext;

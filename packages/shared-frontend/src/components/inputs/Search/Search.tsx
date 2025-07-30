@@ -1,4 +1,4 @@
-import { MobxProps, SearchProps } from "@shared/types";
+import { SearchProps } from "@shared/types";
 import { get, isUndefined, set } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { KeyboardEventHandler } from "react";
