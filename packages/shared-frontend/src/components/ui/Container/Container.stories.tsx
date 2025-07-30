@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Container } from "./Container";
 
 const meta = {
-	title: "UI/Container",
+	title: "ui/Container",
 	component: Container,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A flexible container component that provides consistent layout structure with flex column by default.",
+					"일관된 레이아웃 구조를 제공하는 유연한 컴테이너 컴포넌트입니다.",
 			},
 		},
 	},
@@ -17,11 +17,11 @@ const meta = {
 	argTypes: {
 		className: {
 			control: "text",
-			description: "Additional CSS classes to apply",
+			description: "추가 CSS 클래스",
 		},
 		children: {
 			control: "text",
-			description: "The content to display inside the container",
+			description: "컴테이너 내부에 표시할 컨텐츠",
 		},
 	},
 } satisfies Meta<typeof Container>;
@@ -29,41 +29,41 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
-		children: "Container content",
+		children: "컴테이너 컨텐츠",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default container with flex column layout.",
+				story: "기본 컴테이너입니다.",
 			},
 		},
 	},
 };
 
-export const WithCustomClass: Story = {
+export const 커스텀스타일: Story = {
 	args: {
-		children: "Container with custom styling",
+		children: "커스텀 스타일 컴테이너",
 		className: "p-4 bg-blue-100 rounded-lg border-2 border-blue-300",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Container with additional CSS classes for styling.",
+				story: "커스텀 스타일이 적용된 컴테이너입니다.",
 			},
 		},
 	},
 };
 
-export const WithMultipleChildren: Story = {
+export const 여러요소: Story = {
 	args: {
 		className: "gap-4 p-4 bg-gray-50 rounded-lg",
 		children: (
 			<>
-				<div className="p-2 bg-blue-200 rounded">Item 1</div>
-				<div className="p-2 bg-green-200 rounded">Item 2</div>
-				<div className="p-2 bg-yellow-200 rounded">Item 3</div>
+				<div className="p-2 bg-blue-200 rounded">아이템 1</div>
+				<div className="p-2 bg-green-200 rounded">아이템 2</div>
+				<div className="p-2 bg-yellow-200 rounded">아이템 3</div>
 			</>
 		),
 	},
@@ -72,27 +72,26 @@ export const WithMultipleChildren: Story = {
 		docs: {
 			description: {
 				story:
-					"Container with multiple child elements demonstrating flex column layout.",
+					"여러 자식 요소가 있는 컴테이너입니다.",
 			},
 		},
 	},
 };
 
-export const ResponsiveLayout: Story = {
+export const 반응형: Story = {
 	args: {
 		className: "w-full max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg",
 		children: (
 			<>
-				<h2 className="text-xl font-bold mb-4">Card Title</h2>
+				<h2 className="text-xl font-bold mb-4">카드 제목</h2>
 				<p className="text-gray-600 mb-4">
-					This is an example of a responsive container that works well on
-					different screen sizes.
+					다양한 화면 크기에 잘 맞는 반응형 컴테이너의 예시입니다.
 				</p>
 				<button
 					type="button"
 					className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
 				>
-					Action Button
+					액션 버튼
 				</button>
 			</>
 		),
@@ -101,30 +100,30 @@ export const ResponsiveLayout: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Container used for responsive card-like layouts.",
+				story: "반응형 카드 레이아웃에 사용되는 컴테이너입니다.",
 			},
 		},
 	},
 };
 
-export const FormLayout: Story = {
+export const 폼레이아웃: Story = {
 	args: {
 		className: "gap-4 p-6 max-w-sm bg-white border rounded-lg shadow",
 		children: (
 			<>
-				<h3 className="text-lg font-semibold">Contact Form</h3>
+				<h3 className="text-lg font-semibold">연락처 폼</h3>
 				<input
 					type="text"
-					placeholder="Name"
+					placeholder="이름"
 					className="w-full p-2 border rounded"
 				/>
 				<input
 					type="email"
-					placeholder="Email"
+					placeholder="이메일"
 					className="w-full p-2 border rounded"
 				/>
 				<textarea
-					placeholder="Message"
+					placeholder="메시지"
 					rows={3}
 					className="w-full p-2 border rounded resize-none"
 				/>
@@ -132,7 +131,7 @@ export const FormLayout: Story = {
 					type="button"
 					className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600"
 				>
-					Send Message
+					메시지 보내기
 				</button>
 			</>
 		),
@@ -141,21 +140,21 @@ export const FormLayout: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Container used for form layouts with proper spacing.",
+				story: "적절한 간격이 있는 폼 레이아웃에 사용되는 컴테이너입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
-		children: "Playground Container",
+		children: "플레이그라운드 컴테이너",
 		className: "p-4 border-2 border-dashed border-gray-300",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different container configurations.",
+				story: "다양한 컴테이너 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

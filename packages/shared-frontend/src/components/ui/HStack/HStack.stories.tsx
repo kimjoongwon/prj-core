@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { HStack } from "./HStack";
 
 const meta = {
-	title: "UI/HStack",
+	title: "ui/HStack",
 	component: HStack,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A horizontal stack component that arranges children in a row with customizable alignment, spacing, and layout options.",
+					"자식 요소들을 가로 줄로 배치하는 수평 스택 컴포넌트로, 정렬, 간격, 레이아웃 옵션을 커스터마이징할 수 있습니다.",
 			},
 		},
 	},
@@ -18,27 +18,27 @@ const meta = {
 		alignItems: {
 			control: "select",
 			options: ["start", "center", "end", "stretch", "baseline"],
-			description: "Vertical alignment of items",
+			description: "아이템들의 세로 정렬",
 		},
 		justifyContent: {
 			control: "select",
 			options: ["start", "center", "end", "between", "around", "evenly"],
-			description: "Horizontal distribution of items",
+			description: "아이템들의 가로 배치",
 		},
 		gap: {
 			control: "select",
 			options: [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24],
-			description: "Gap between items in pixels (Tailwind spacing units)",
+			description: "아이템 간 간격 (테일위드 스페이싱 단위)",
 			defaultValue: 4,
 		},
 		fullWidth: {
 			control: "boolean",
-			description: "Whether the stack should take full width",
+			description: "스택이 전체 너비를 차지할지 여부",
 			defaultValue: false,
 		},
 		className: {
 			control: "text",
-			description: "Additional CSS classes to apply",
+			description: "추가로 적용할 CSS 클래스",
 		},
 	},
 } satisfies Meta<typeof HStack>;
@@ -46,7 +46,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const SampleItem = ({
+const 샘플아이템 = ({
 	children,
 	className = "",
 }: {
@@ -58,318 +58,152 @@ const SampleItem = ({
 	</div>
 );
 
-export const Default: Story = {
-	render: () => (
-		<HStack>
-			<SampleItem>Item 1</SampleItem>
-			<SampleItem>Item 2</SampleItem>
-			<SampleItem>Item 3</SampleItem>
-		</HStack>
-	),
+export const 기본: Story = {
+	args: {
+		children: (
+			<>
+				<샘플아이템>아이템 1</샘플아이템>
+				<샘플아이템>아이템 2</샘플아이템>
+				<샘플아이템>아이템 3</샘플아이템>
+			</>
+		),
+	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default horizontal stack with standard gap and alignment.",
+				story: "표준 간격과 정렬을 사용한 기본 수평 스택입니다.",
 			},
 		},
 	},
 };
 
-export const AlignItems: Story = {
-	render: () => (
-		<div className="space-y-4">
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Start</h4>
-				<HStack alignItems="start" className="border border-gray-300 p-2 h-20">
-					<SampleItem className="h-8">Short</SampleItem>
-					<SampleItem className="h-12">Medium</SampleItem>
-					<SampleItem className="h-16">Tall</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Center</h4>
-				<HStack alignItems="center" className="border border-gray-300 p-2 h-20">
-					<SampleItem className="h-8">Short</SampleItem>
-					<SampleItem className="h-12">Medium</SampleItem>
-					<SampleItem className="h-16">Tall</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Align End</h4>
-				<HStack alignItems="end" className="border border-gray-300 p-2 h-20">
-					<SampleItem className="h-8">Short</SampleItem>
-					<SampleItem className="h-12">Medium</SampleItem>
-					<SampleItem className="h-16">Tall</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Align Stretch</h4>
-				<HStack
-					alignItems="stretch"
-					className="border border-gray-300 p-2 h-20"
-				>
-					<SampleItem>Short</SampleItem>
-					<SampleItem>Medium</SampleItem>
-					<SampleItem>Tall</SampleItem>
-				</HStack>
-			</div>
-		</div>
-	),
+export const 아이템_정렬: Story = {
+	args: {
+		alignItems: "center",
+		children: (
+			<>
+				<샘플아이템>짧음</샘플아이템>
+				<샘플아이템>중간</샘플아이템>
+				<샘플아이템>김</샘플아이템>
+			</>
+		),
+		className: "border border-gray-300 p-2 h-20",
+	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Different vertical alignment options for items.",
+				story: "아이템들의 다양한 세로 정렬 옵션들입니다.",
 			},
 		},
 	},
 };
 
-export const JustifyContent: Story = {
-	render: () => (
-		<div className="space-y-4 w-full max-w-md">
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Start</h4>
-				<HStack
-					justifyContent="start"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Center</h4>
-				<HStack
-					justifyContent="center"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify End</h4>
-				<HStack
-					justifyContent="end"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Between</h4>
-				<HStack
-					justifyContent="between"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Around</h4>
-				<HStack
-					justifyContent="around"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Justify Evenly</h4>
-				<HStack
-					justifyContent="evenly"
-					fullWidth
-					className="border border-gray-300 p-2"
-				>
-					<SampleItem>A</SampleItem>
-					<SampleItem>B</SampleItem>
-					<SampleItem>C</SampleItem>
-				</HStack>
-			</div>
-		</div>
-	),
+export const 콘텐츠_배치: Story = {
+	args: {
+		justifyContent: "center",
+		fullWidth: true,
+		children: (
+			<>
+				<샘플아이템>가</샘플아이템>
+				<샘플아이템>나</샘플아이템>
+				<샘플아이템>다</샘플아이템>
+			</>
+		),
+		className: "border border-gray-300 p-2",
+	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Different horizontal distribution options for items.",
+				story: "아이템들의 다양한 가로 배치 옵션들입니다.",
 			},
 		},
 	},
 };
 
-export const GapSizes: Story = {
-	render: () => (
-		<div className="space-y-4">
-			<div>
-				<h4 className="text-sm font-semibold mb-2">No Gap (0px)</h4>
-				<HStack gap={0} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Small Gap (8px)</h4>
-				<HStack gap={2} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Medium Gap (16px)</h4>
-				<HStack gap={4} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</HStack>
-			</div>
-
-			<div>
-				<h4 className="text-sm font-semibold mb-2">Large Gap (32px)</h4>
-				<HStack gap={8} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</HStack>
-			</div>
-		</div>
-	),
+export const 간격_크기들: Story = {
+	args: {
+		gap: 4,
+		children: (
+			<>
+				<샘플아이템>아이템 1</샘플아이템>
+				<샘플아이템>아이템 2</샘플아이템>
+				<샘플아이템>아이템 3</샘플아이템>
+			</>
+		),
+		className: "border border-gray-300 p-2",
+	},
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"Different gap sizes between items in pixels (using Tailwind spacing units).",
+					"아이템 간의 다양한 간격 크기 (테일위드 스페이싱 단위 사용)입니다.",
 			},
 		},
 	},
 };
 
-export const NavigationExample: Story = {
-	render: () => (
-		<HStack
-			justifyContent="between"
-			alignItems="center"
-			fullWidth
-			className="p-4 bg-white border-b"
-		>
-			<HStack gap={6}>
-				<div className="text-xl font-bold text-blue-600">Logo</div>
-				<HStack gap={4}>
-					<a href="#" className="text-gray-600 hover:text-gray-900">
-						Home
-					</a>
-					<a href="#" className="text-gray-600 hover:text-gray-900">
-						About
-					</a>
-					<a href="#" className="text-gray-600 hover:text-gray-900">
-						Services
-					</a>
-					<a href="#" className="text-gray-600 hover:text-gray-900">
-						Contact
-					</a>
-				</HStack>
-			</HStack>
-			<HStack gap={2}>
-				<button
-					type="button"
-					className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
-				>
-					Sign In
-				</button>
-				<button
-					type="button"
-					className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-				>
-					Sign Up
-				</button>
-			</HStack>
-		</HStack>
-	),
+export const 내비게이션_예시: Story = {
+	args: {
+		justifyContent: "between",
+		alignItems: "center",
+		fullWidth: true,
+		children: (
+			<>
+				<div className="text-xl font-bold text-blue-600">로고</div>
+				<div className="text-sm text-gray-600">내비게이션 메뉴</div>
+			</>
+		),
+		className: "p-4 bg-white border-b",
+	},
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"Example navigation layout using HStack for responsive header design.",
+					"반응형 헤더 디자인을 위해 HStack을 사용한 내비게이션 레이아웃 예시입니다.",
 			},
 		},
 	},
 };
 
-export const CardActionsExample: Story = {
-	render: () => (
-		<div className="max-w-sm bg-white border rounded-lg shadow p-6">
-			<h3 className="text-lg font-semibold mb-2">Product Card</h3>
-			<p className="text-gray-600 mb-4">
-				This is a sample product description that shows how HStack can be used
-				for action buttons.
-			</p>
-			<HStack justifyContent="end" gap={2}>
-				<button
-					type="button"
-					className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-				>
-					Cancel
-				</button>
-				<button
-					type="button"
-					className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-				>
-					Add to Cart
-				</button>
-			</HStack>
-		</div>
-	),
+export const 카드_액션_예시: Story = {
+	args: {
+		justifyContent: "end",
+		gap: 2,
+		children: (
+			<>
+				<div className="px-4 py-2 border border-gray-300 rounded">취소</div>
+				<div className="px-4 py-2 bg-blue-500 text-white rounded">장바구니 추가</div>
+			</>
+		),
+	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Example card layout with action buttons using HStack.",
+				story: "HStack을 사용한 액션 버튼이 있는 카드 레이아웃 예시입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
 		gap: 4,
 		alignItems: "center",
 		justifyContent: "start",
 		fullWidth: false,
+		children: (
+			<>
+				<샘플아이템>아이템 1</샘플아이템>
+				<샘플아이템>아이템 2</샘플아이템>
+				<샘플아이템>아이템 3</샘플아이템>
+			</>
+		),
+		className: "border border-gray-300 p-4",
 	},
-	render: (args) => (
-		<HStack {...args} className="border border-gray-300 p-4">
-			<SampleItem>Item 1</SampleItem>
-			<SampleItem>Item 2</SampleItem>
-			<SampleItem>Item 3</SampleItem>
-		</HStack>
-	),
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different HStack configurations.",
+				story: "다양한 HStack 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

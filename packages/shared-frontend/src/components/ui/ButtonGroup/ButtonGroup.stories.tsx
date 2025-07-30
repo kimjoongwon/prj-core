@@ -3,14 +3,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ButtonGroup } from "./ButtonGroup";
 
 const meta = {
-	title: "UI/ButtonGroup",
+	title: "ui/ButtonGroup",
 	component: ButtonGroup,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A component that displays buttons in left and right groups with flexible layout. Supports both regular buttons and link buttons.",
+					"좌측과 우측에 버튼들을 그룹으로 표시하는 컴포넌트입니다.",
 			},
 		},
 	},
@@ -18,11 +18,11 @@ const meta = {
 	argTypes: {
 		leftButtons: {
 			control: "object",
-			description: "Array of buttons to display on the left side",
+			description: "좌측에 표시할 버튼 배열",
 		},
 		rightButtons: {
 			control: "object",
-			description: "Array of buttons to display on the right side",
+			description: "우측에 표시할 버튼 배열",
 		},
 	},
 } satisfies Meta<typeof ButtonGroup>;
@@ -32,33 +32,29 @@ type Story = StoryObj<typeof meta>;
 
 const sampleLeftButtons: GroupButton[] = [
 	{
-		children: "New",
+		children: "새로만들기",
 		color: "primary",
-		onPress: () => {},
 	},
 	{
-		children: "Edit",
+		children: "편집",
 		color: "default",
 		variant: "bordered",
-		onPress: () => {},
 	},
 ];
 
 const sampleRightButtons: GroupButton[] = [
 	{
-		children: "Cancel",
+		children: "취소",
 		color: "default",
 		variant: "light",
-		onPress: () => {},
 	},
 	{
-		children: "Save",
+		children: "저장",
 		color: "success",
-		onPress: () => {},
 	},
 ];
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
 		leftButtons: sampleLeftButtons,
 		rightButtons: sampleRightButtons,
@@ -67,73 +63,69 @@ export const Default: Story = {
 		docs: {
 			description: {
 				story:
-					"Default button group with buttons on both left and right sides.",
+					"좌측과 우측 모두에 버튼이 있는 기본 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const LeftOnly: Story = {
+export const 좌측만: Story = {
 	args: {
 		leftButtons: [
 			{
-				children: "Back",
+				children: "뒤로",
 				color: "default",
 				variant: "bordered",
-				onPress: () => {},
 			},
 			{
-				children: "Refresh",
+				children: "새로고침",
 				color: "primary",
 				variant: "light",
-				onPress: () => {},
 			},
 		],
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Button group with buttons only on the left side.",
+				story: "좌측에만 버튼이 있는 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const RightOnly: Story = {
+export const 우측만: Story = {
 	args: {
 		rightButtons: [
 			{
-				children: "Close",
+				children: "닫기",
 				color: "danger",
 				variant: "light",
-				onPress: () => {},
 			},
 			{
-				children: "Submit",
+				children: "제출",
 				color: "primary",
-				onPress: () => {},
 			},
 		],
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Button group with buttons only on the right side.",
+				story: "우측에만 버튼이 있는 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const WithLinks: Story = {
+export const 링크버튼: Story = {
 	args: {
 		leftButtons: [
 			{
-				children: "Home",
+				children: "홈",
 				href: "/",
 				color: "primary",
 			},
 			{
-				children: "About",
+				children: "소개",
 				href: "/about",
 				color: "default",
 				variant: "light",
@@ -141,7 +133,7 @@ export const WithLinks: Story = {
 		],
 		rightButtons: [
 			{
-				children: "Contact",
+				children: "연락처",
 				href: "/contact",
 				color: "secondary",
 				variant: "bordered",
@@ -152,39 +144,35 @@ export const WithLinks: Story = {
 		docs: {
 			description: {
 				story:
-					"Button group with link buttons that navigate to different pages.",
+					"다른 페이지로 이동하는 링크 버튼들의 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const FormActions: Story = {
+export const 폼액션: Story = {
 	args: {
 		leftButtons: [
 			{
-				children: "Reset",
+				children: "초기화",
 				color: "warning",
 				variant: "light",
-				onPress: () => {},
 			},
 		],
 		rightButtons: [
 			{
-				children: "Cancel",
+				children: "취소",
 				color: "default",
 				variant: "bordered",
-				onPress: () => {},
 			},
 			{
-				children: "Save Draft",
+				children: "임시저장",
 				color: "secondary",
 				variant: "light",
-				onPress: () => {},
 			},
 			{
-				children: "Publish",
+				children: "발행",
 				color: "success",
-				onPress: () => {},
 			},
 		],
 	},
@@ -192,46 +180,41 @@ export const FormActions: Story = {
 		docs: {
 			description: {
 				story:
-					"Button group configured for form actions with reset, cancel, save, and publish options.",
+					"초기화, 취소, 저장, 발행 옵션이 있는 폼 액션용 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const ToolbarActions: Story = {
+export const 도구목록: Story = {
 	args: {
 		leftButtons: [
 			{
-				children: "← Back",
+				children: "← 뒤로",
 				color: "default",
 				variant: "light",
-				onPress: () => {},
 			},
 			{
-				children: "Select All",
+				children: "전체선택",
 				color: "primary",
 				variant: "light",
-				onPress: () => {},
 			},
 			{
-				children: "Delete Selected",
+				children: "선택삭제",
 				color: "danger",
 				variant: "light",
 				isDisabled: true,
-				onPress: () => {},
 			},
 		],
 		rightButtons: [
 			{
-				children: "Filter",
+				children: "필터",
 				color: "default",
 				variant: "bordered",
-				onPress: () => {},
 			},
 			{
-				children: "Export",
+				children: "내보내기",
 				color: "secondary",
-				onPress: () => {},
 			},
 		],
 	},
@@ -239,61 +222,59 @@ export const ToolbarActions: Story = {
 		docs: {
 			description: {
 				story:
-					"Button group configured as a toolbar with navigation, selection, and action buttons.",
+					"내비게이션, 선택, 액션 버튼이 있는 도구 목록용 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const Empty: Story = {
+export const 비어있음: Story = {
 	args: {},
 	parameters: {
 		docs: {
 			description: {
-				story: "Empty button group with no buttons defined.",
+				story: "버튼이 정의되지 않은 비어있는 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const MixedButtonTypes: Story = {
+export const 혼합타입: Story = {
 	args: {
 		leftButtons: [
 			{
-				children: "Link Button",
+				children: "링크 버튼",
 				href: "/example",
 				color: "primary",
 			},
 			{
-				children: "Action Button",
+				children: "액션 버튼",
 				color: "secondary",
-				onPress: () => {},
 			},
 		],
 		rightButtons: [
 			{
-				children: "External Link",
+				children: "외부 링크",
 				href: "https://example.com",
 				color: "default",
 				variant: "bordered",
 			},
 			{
-				children: "Submit",
+				children: "제출",
 				color: "success",
-				onPress: () => {},
 			},
 		],
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Button group mixing both link buttons and action buttons.",
+				story: "링크 버튼과 액션 버튼이 혼합된 버튼 그룹입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
 		leftButtons: sampleLeftButtons,
 		rightButtons: sampleRightButtons,
@@ -301,7 +282,7 @@ export const Playground: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different button group configurations.",
+				story: "다양한 버튼 그룹 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

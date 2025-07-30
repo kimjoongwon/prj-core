@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Copyright } from "./Copyright";
 
 const meta = {
-	title: "UI/Copyright",
+	title: "ui/Copyright",
 	component: Copyright,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A simple copyright component that displays the current year and company name with standard copyright formatting.",
+					"현재 년도와 회사명을 표시하는 간단한 저작권 컴포넌트입니다.",
 			},
 		},
 	},
@@ -17,11 +17,11 @@ const meta = {
 	argTypes: {
 		companyName: {
 			control: "text",
-			description: "The name of the company to display in the copyright notice",
+			description: "저작권 고지에 표시할 회사명",
 		},
 		className: {
 			control: "text",
-			description: "Additional CSS classes to apply",
+			description: "추가 CSS 클래스",
 		},
 	},
 } satisfies Meta<typeof Copyright>;
@@ -29,54 +29,54 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
-		companyName: "Acme Corp",
+		companyName: "오쿠만 주식회사",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default copyright notice with company name.",
+				story: "회사명이 포함된 기본 저작권 고지입니다.",
 			},
 		},
 	},
 };
 
-export const WithLongCompanyName: Story = {
+export const 긴회사명: Story = {
 	args: {
-		companyName: "Very Long Company Name Technologies International Ltd.",
+		companyName: "매우 긴 회사 이름 기술 국제 주식회사",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Copyright notice with a long company name.",
+				story: "긴 회사명이 있는 저작권 고지입니다.",
 			},
 		},
 	},
 };
 
-export const WithCustomClass: Story = {
+export const 커스텀스타일: Story = {
 	args: {
-		companyName: "Custom Styled Corp",
+		companyName: "커스텀 스타일 주식회사",
 		className: "text-blue-600 font-semibold",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Copyright notice with custom styling.",
+				story: "커스텀 스타일이 적용된 저작권 고지입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
-		companyName: "Your Company",
+		companyName: "귀하의 회사",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different copyright configurations.",
+				story: "다양한 저작권 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Chip } from "./Chip";
 
 const meta = {
-	title: "UI/Chip",
+	title: "ui/Chip",
 	component: Chip,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A customizable chip component based on NextUI Chip with variant and color support.",
+					"커스터마이증 가능한 칩 컴포넌트입니다.",
 			},
 		},
 	},
@@ -18,7 +18,7 @@ const meta = {
 		variant: {
 			control: "select",
 			options: ["solid", "bordered", "light", "flat", "faded", "shadow", "dot"],
-			description: "The visual style variant of the chip",
+			description: "칩의 시각적 스타일 변형",
 			defaultValue: "solid",
 		},
 		color: {
@@ -31,24 +31,24 @@ const meta = {
 				"warning",
 				"danger",
 			],
-			description: "The color theme of the chip",
+			description: "칩의 색상 테마",
 			defaultValue: "default",
 		},
 		size: {
 			control: "select",
 			options: ["sm", "md", "lg"],
-			description: "The size of the chip",
+			description: "칩의 크기",
 			defaultValue: "md",
 		},
 		radius: {
 			control: "select",
 			options: ["none", "sm", "md", "lg", "full"],
-			description: "The border radius of the chip",
+			description: "칩의 모서리 반지름",
 			defaultValue: "full",
 		},
 		children: {
 			control: "text",
-			description: "The content to display inside the chip",
+			description: "칩 내부에 표시할 컨텐칠",
 		},
 	},
 } satisfies Meta<typeof Chip>;
@@ -56,156 +56,123 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
-		children: "Chip",
+		children: "칩",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default chip with solid variant and default color.",
+				story: "기본 칩입니다.",
 			},
 		},
 	},
 };
 
-export const Primary: Story = {
+export const 주요: Story = {
 	args: {
-		children: "Primary",
+		children: "주요",
 		color: "primary",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Primary chip with primary color theme.",
+				story: "주요 색상의 칩입니다.",
 			},
 		},
 	},
 };
 
-export const Success: Story = {
+export const 성공: Story = {
 	args: {
-		children: "Success",
+		children: "성공",
 		color: "success",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Success chip for positive states.",
+				story: "긍정적인 상태를 나타내는 성공 칩입니다.",
 			},
 		},
 	},
 };
 
-export const Warning: Story = {
+export const 경고: Story = {
 	args: {
-		children: "Warning",
+		children: "경고",
 		color: "warning",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Warning chip for caution states.",
+				story: "주의가 필요한 상태를 나타내는 경고 칩입니다.",
 			},
 		},
 	},
 };
 
-export const Danger: Story = {
+export const 위험: Story = {
 	args: {
-		children: "Error",
+		children: "오류",
 		color: "danger",
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Danger chip for error states.",
+				story: "오류 상태를 나타내는 위험 칩입니다.",
 			},
 		},
 	},
 };
 
-export const Variants: Story = {
-	render: () => (
-		<div className="flex gap-4 flex-wrap">
-			<Chip variant="solid" color="primary">
-				Solid
-			</Chip>
-			<Chip variant="bordered" color="primary">
-				Bordered
-			</Chip>
-			<Chip variant="light" color="primary">
-				Light
-			</Chip>
-			<Chip variant="flat" color="primary">
-				Flat
-			</Chip>
-			<Chip variant="faded" color="primary">
-				Faded
-			</Chip>
-			<Chip variant="shadow" color="primary">
-				Shadow
-			</Chip>
-			<Chip variant="dot" color="primary">
-				Dot
-			</Chip>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "All available chip variants with primary color.",
-			},
-		},
-	},
-};
-
-export const Sizes: Story = {
-	render: () => (
-		<div className="flex gap-4 items-center">
-			<Chip size="sm" color="primary">
-				Small
-			</Chip>
-			<Chip size="md" color="primary">
-				Medium
-			</Chip>
-			<Chip size="lg" color="primary">
-				Large
-			</Chip>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "Different chip sizes: small, medium, and large.",
-			},
-		},
-	},
-};
-
-export const Colors: Story = {
-	render: () => (
-		<div className="flex gap-4 flex-wrap">
-			<Chip color="default">Default</Chip>
-			<Chip color="primary">Primary</Chip>
-			<Chip color="secondary">Secondary</Chip>
-			<Chip color="success">Success</Chip>
-			<Chip color="warning">Warning</Chip>
-			<Chip color="danger">Danger</Chip>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "All available chip colors.",
-			},
-		},
-	},
-};
-
-export const Playground: Story = {
+export const 경계선: Story = {
 	args: {
-		children: "Playground Chip",
+		children: "경계선 칩",
+		variant: "bordered",
+		color: "primary",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "경계선이 있는 칩입니다.",
+			},
+		},
+	},
+};
+
+export const 작은크기: Story = {
+	args: {
+		children: "작은 칩",
+		size: "sm",
+		color: "primary",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "작은 크기의 칩입니다.",
+			},
+		},
+	},
+};
+
+export const 큰크기: Story = {
+	args: {
+		children: "큰 칩",
+		size: "lg",
+		color: "primary",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "큰 크기의 칩입니다.",
+			},
+		},
+	},
+};
+
+export const 플레이그라운드: Story = {
+	args: {
+		children: "플레이그라운드 칩",
 		color: "primary",
 		variant: "solid",
 		size: "md",
@@ -213,7 +180,7 @@ export const Playground: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different chip configurations.",
+				story: "다양한 칩 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

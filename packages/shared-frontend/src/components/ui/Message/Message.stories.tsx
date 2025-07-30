@@ -2,213 +2,173 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Message } from "./Message";
 
 const meta = {
-	title: "UI/Message",
-	component: Message,
-	parameters: {
-		layout: "centered",
-		docs: {
-			description: {
-				component:
-					"A message component for displaying alerts and notifications with title and message content. Uses blue styling for informational messages.",
-			},
-		},
-	},
-	tags: ["autodocs"],
-	argTypes: {
-		title: {
-			control: "text",
-			description: "The title of the message",
-		},
-		message: {
-			control: "text",
-			description: "The main message content",
-		},
-	},
+  title: "ui/Message",
+  component: Message,
+  parameters: {
+    layout: "centered",
+    docs: {
+      description: {
+        component:
+          "제목과 메시지 콘텐츠로 알림과 알림을 표시하는 메시지 컴포넌트입니다. 정보 메시지를 위해 파란색 스타일을 사용합니다.",
+      },
+    },
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    title: {
+      control: "text",
+      description: "메시지의 제목",
+    },
+    message: {
+      control: "text",
+      description: "주요 메시지 콘텐츠",
+    },
+  },
 } satisfies Meta<typeof Message>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-	args: {
-		title: "Information",
-		message: "This is an informational message.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Default message with title and content.",
-			},
-		},
-	},
+export const 기본: Story = {
+  args: {
+    title: "정보",
+    message: "이것은 정보 메시지입니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "제목과 콘텐츠가 있는 기본 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const ShortMessage: Story = {
-	args: {
-		title: "Notice",
-		message: "Short message.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Message with short content.",
-			},
-		},
-	},
+export const 짧은_메시지: Story = {
+  args: {
+    title: "알림",
+    message: "짧은 메시지입니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "짧은 콘텐츠를 가진 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const LongMessage: Story = {
-	args: {
-		title: "Important Update",
-		message:
-			"This is a longer message that contains more detailed information about an important update or notification that users need to be aware of. It demonstrates how the message component handles longer text content.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Message with longer content demonstrating text wrapping.",
-			},
-		},
-	},
+export const 긴_메시지: Story = {
+  args: {
+    title: "중요한 업데이트",
+    message:
+      "이것은 사용자가 알아야 할 중요한 업데이트나 알림에 대한 더 자세한 정보를 포함하는 더 긴 메시지입니다. 이것은 메시지 컴포넌트가 더 긴 텍스트 콘텐츠를 어떻게 처리하는지를 보여줍니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "텍스트 랩핑을 보여주는 긴 콘텐츠를 가진 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const SystemMessages: Story = {
-	render: () => (
-		<div className="space-y-4 max-w-md">
-			<Message
-				title="System Maintenance"
-				message="Scheduled maintenance will occur tonight from 12:00 AM to 2:00 AM EST."
-			/>
-			<Message
-				title="New Feature Available"
-				message="Dark mode is now available in your account settings."
-			/>
-			<Message
-				title="Backup Completed"
-				message="Your data backup has been successfully completed."
-			/>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "Multiple system messages demonstrating different use cases.",
-			},
-		},
-	},
+export const 시스템_메시지들: Story = {
+  args: {
+    title: "시스템 유지보수",
+    message: "예정된 유지보수가 오늘 밤 오전 12:00부터 오전 2:00까지 실시됩니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "다양한 사용 사례를 보여주는 여러 시스템 메시지들입니다.",
+      },
+    },
+  },
 };
 
-export const WelcomeMessage: Story = {
-	args: {
-		title: "Welcome!",
-		message:
-			"Thank you for joining our platform. Get started by exploring the dashboard and setting up your profile.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Welcome message for new users.",
-			},
-		},
-	},
+export const 환영_메시지: Story = {
+  args: {
+    title: "환영합니다!",
+    message:
+      "저희 플랫폼에 가입해 주셔서 감사합니다. 대시보드를 탐색하고 프로필을 설정하여 시작하세요.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "신규 사용자를 위한 환영 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const UpdateNotification: Story = {
-	args: {
-		title: "Update Available",
-		message:
-			"Version 2.1.0 is now available with new features and bug fixes. Update now to get the latest improvements.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Software update notification message.",
-			},
-		},
-	},
+export const 업데이트_알림: Story = {
+  args: {
+    title: "업데이트 사용 가능",
+    message:
+      "새로운 기능과 버그 수정이 포함된 버전 2.1.0이 이제 사용 가능합니다. 최신 개선 사항을 얻으려면 지금 업데이트하세요.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "소프트웨어 업데이트 알림 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const InformationalBanner: Story = {
-	render: () => (
-		<div className="w-full max-w-4xl">
-			<Message
-				title="COVID-19 Update"
-				message="We continue to follow all health and safety guidelines. Our services remain available with enhanced safety measures in place."
-			/>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "Wide informational banner message for important announcements.",
-			},
-		},
-	},
+export const 정보_배너: Story = {
+  args: {
+    title: "COVID-19 업데이트",
+    message: "저희는 계속해서 모든 보건 및 안전 지침을 따르고 있습니다. 강화된 안전 조치와 함께 서비스를 계속 이용할 수 있습니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "중요한 공지사항을 위한 넓은 정보 배너 메시지입니다.",
+      },
+    },
+  },
 };
 
-export const QuickTips: Story = {
-	render: () => (
-		<div className="space-y-3 max-w-lg">
-			<Message
-				title="Tip #1"
-				message="Use keyboard shortcuts Ctrl+S to save your work quickly."
-			/>
-			<Message
-				title="Tip #2"
-				message="Click the star icon to bookmark your favorite items."
-			/>
-			<Message
-				title="Tip #3"
-				message="Use the search bar to quickly find what you're looking for."
-			/>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "Series of helpful tip messages for users.",
-			},
-		},
-	},
+export const 빠른_팁들: Story = {
+  args: {
+    title: "팁 #1",
+    message: "작업을 빠르게 저장하려면 키보드 단축키 Ctrl+S를 사용하세요.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "사용자를 위한 도움이 되는 팁 메시지 시리즈입니다.",
+      },
+    },
+  },
 };
 
-export const StatusUpdates: Story = {
-	render: () => (
-		<div className="space-y-4 max-w-md">
-			<Message
-				title="Processing Complete"
-				message="Your file has been successfully processed and is ready for download."
-			/>
-			<Message
-				title="Sync in Progress"
-				message="Synchronizing your data with the cloud. This may take a few minutes."
-			/>
-			<Message
-				title="Connection Restored"
-				message="Internet connection has been restored. All features are now available."
-			/>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story: "Status update messages for different system states.",
-			},
-		},
-	},
+export const 상태_업데이트들: Story = {
+  args: {
+    title: "처리 완료",
+    message: "파일이 성공적으로 처리되었으며 다운로드할 준비가 되었습니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "다양한 시스템 상태에 대한 상태 업데이트 메시지들입니다.",
+      },
+    },
+  },
 };
 
-export const Playground: Story = {
-	args: {
-		title: "Playground Message",
-		message:
-			"This is a playground message for testing different configurations.",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Playground for testing different message configurations.",
-			},
-		},
-	},
+export const 플레이그라운드: Story = {
+  args: {
+    title: "플레이그라운드 메시지",
+    message:
+      "이것은 다양한 설정을 테스트하기 위한 플레이그라운드 메시지입니다.",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "다양한 메시지 설정을 테스트할 수 있는 플레이그라운드입니다.",
+      },
+    },
+  },
 };
