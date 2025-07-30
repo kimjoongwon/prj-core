@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { DarkModeSwitch } from "./DarkModeSwitch";
 
 const meta = {
-	title: "UI/DarkModeSwitch",
+	title: "ui/DarkModeSwitch",
 	component: DarkModeSwitch,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A toggle switch component that allows users to switch between light and dark modes. Can be positioned in any corner of the screen or inline.",
+					"라이트 모드와 다크 모드 간 전환이 가능한 토글 스위치 컴포넌트입니다. 화면의 모든 모서리 또는 인라인으로 위치시킬 수 있습니다.",
 			},
 		},
 	},
@@ -24,18 +24,18 @@ const meta = {
 				"bottom-right",
 				"inline",
 			],
-			description: "Position of the dark mode switch",
+			description: "다크 모드 스위치의 위치",
 			defaultValue: "bottom-right",
 		},
 		size: {
 			control: "select",
 			options: ["sm", "md", "lg"],
-			description: "Size of the switch icon",
+			description: "스위치 아이콘의 크기",
 			defaultValue: "md",
 		},
 		className: {
 			control: "text",
-			description: "Additional CSS classes to apply",
+			description: "추가로 적용할 CSS 클래스",
 		},
 	},
 } satisfies Meta<typeof DarkModeSwitch>;
@@ -43,19 +43,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {},
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"Default dark mode switch positioned at bottom-right with medium size.",
+					"우측 하단에 위치한 중간 크기의 기본 다크 모드 스위치입니다.",
 			},
 		},
 	},
 };
 
-export const Inline: Story = {
+export const 인라인: Story = {
 	args: {
 		position: "inline",
 	},
@@ -63,69 +63,13 @@ export const Inline: Story = {
 		docs: {
 			description: {
 				story:
-					"Dark mode switch positioned inline for use within other components.",
+					"다른 컴포넌트 내에서 사용하기 위해 인라인으로 위치한 다크 모드 스위치입니다.",
 			},
 		},
 	},
 };
 
-export const Sizes: Story = {
-	args: {},
-	render: () => (
-		<div className="flex gap-4 items-center">
-			<DarkModeSwitch position="inline" size="sm" />
-			<DarkModeSwitch position="inline" size="md" />
-			<DarkModeSwitch position="inline" size="lg" />
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Different sizes of the dark mode switch: small, medium, and large.",
-			},
-		},
-	},
-};
-
-export const Positions: Story = {
-	args: {},
-	render: () => (
-		<div className="relative w-96 h-64 border border-gray-300 rounded bg-gray-50">
-			<DarkModeSwitch position="top-left" />
-			<DarkModeSwitch position="top-right" />
-			<DarkModeSwitch position="bottom-left" />
-			<DarkModeSwitch position="bottom-right" />
-			<div className="absolute inset-0 flex items-center justify-center text-gray-500">
-				Preview Area
-			</div>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"All available positions for the dark mode switch in corners of the screen.",
-			},
-		},
-	},
-};
-
-export const WithCustomStyling: Story = {
-	args: {
-		position: "inline",
-		className: "bg-blue-100 hover:bg-blue-200 border border-blue-300",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story: "Dark mode switch with custom styling applied.",
-			},
-		},
-	},
-};
-
-export const Playground: Story = {
+export const 크기들: Story = {
 	args: {
 		position: "inline",
 		size: "md",
@@ -134,7 +78,50 @@ export const Playground: Story = {
 		docs: {
 			description: {
 				story:
-					"Playground for testing different dark mode switch configurations.",
+					"다크 모드 스위치의 다양한 크기들: 작음, 중간, 큼입니다.",
+			},
+		},
+	},
+};
+
+export const 위치들: Story = {
+	args: {
+		position: "top-left",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"화면 모서리에서 사용 가능한 다크 모드 스위치의 모든 위치입니다.",
+			},
+		},
+	},
+};
+
+export const 커스텀_스타일링: Story = {
+	args: {
+		position: "inline",
+		className: "bg-blue-100 hover:bg-blue-200 border border-blue-300",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: "커스텀 스타일이 적용된 다크 모드 스위치입니다.",
+			},
+		},
+	},
+};
+
+export const 플레이그라운드: Story = {
+	args: {
+		position: "inline",
+		size: "md",
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"다양한 다크 모드 스위치 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

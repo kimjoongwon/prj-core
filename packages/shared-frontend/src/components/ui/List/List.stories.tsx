@@ -2,31 +2,31 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { List } from "./List";
 
 const meta = {
-	title: "UI/List",
+	title: "ui/List",
 	component: List,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A flexible list component that renders items from an array with a custom render function. Shows placeholder when empty.",
+					"커스텀 렌더 함수로 배열의 아이템들을 렌더링하는 유연한 리스트 컴포넌트입니다. 비어있을 때 플레이스홀더를 보여줍니다.",
 			},
 		},
 	},
 	tags: ["autodocs"],
 	argTypes: {
 		data: {
-			description: "Array of data items to render",
+			description: "렌더링할 데이터 아이템 배열",
 		},
 		renderItem: {
-			description: "Function to render each item",
+			description: "각 아이템을 렌더링할 함수",
 		},
 		placeholder: {
-			description: "Content to show when the list is empty",
+			description: "리스트가 비어있을 때 보여줄 콘텐츠",
 		},
 		className: {
 			control: "text",
-			description: "Additional CSS classes to apply",
+			description: "추가로 적용할 CSS 클래스",
 		},
 	},
 } satisfies Meta<typeof List>;
@@ -34,23 +34,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Sample data for stories
-const sampleItems = [
-	{ id: 1, name: "Apple", type: "fruit", color: "red" },
-	{ id: 2, name: "Banana", type: "fruit", color: "yellow" },
-	{ id: 3, name: "Carrot", type: "vegetable", color: "orange" },
-	{ id: 4, name: "Broccoli", type: "vegetable", color: "green" },
+// 스토리용 샘플 데이터
+const 샘플아이템들 = [
+	{ id: 1, name: "사과", type: "과일", color: "빨간색" },
+	{ id: 2, name: "바나나", type: "과일", color: "노란색" },
+	{ id: 3, name: "당근", type: "채소", color: "주황색" },
+	{ id: 4, name: "브로콜리", type: "채소", color: "초록색" },
 ];
 
-const sampleUsers = [
-	{ id: 1, name: "John Doe", email: "john@example.com", role: "Admin" },
-	{ id: 2, name: "Jane Smith", email: "jane@example.com", role: "User" },
-	{ id: 3, name: "Bob Johnson", email: "bob@example.com", role: "Editor" },
+const 샘플사용자들 = [
+	{ id: 1, name: "홍길동", email: "hong@example.com", role: "관리자" },
+	{ id: 2, name: "김철수", email: "kim@example.com", role: "사용자" },
+	{ id: 3, name: "이영희", email: "lee@example.com", role: "편집자" },
 ];
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
-		data: sampleItems,
+		data: 샘플아이템들,
 		renderItem: (item) => (
 			<div key={item.id} className="p-2 border rounded mb-2">
 				<span className="font-medium">{item.name}</span> - {item.type} (
@@ -58,21 +58,21 @@ export const Default: Story = {
 			</div>
 		),
 		placeholder: (
-			<div className="text-gray-500 italic">No items to display</div>
+			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
 		),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default list with simple item rendering.",
+				story: "간단한 아이템 렌더링을 사용한 기본 리스트입니다.",
 			},
 		},
 	},
 };
 
-export const UserList: Story = {
+export const 사용자_리스트: Story = {
 	args: {
-		data: sampleUsers,
+		data: 샘플사용자들,
 		renderItem: (user) => (
 			<div
 				key={user.id}
@@ -88,19 +88,19 @@ export const UserList: Story = {
 			</div>
 		),
 		placeholder: (
-			<div className="text-center text-gray-500 py-8">No users found</div>
+			<div className="text-center text-gray-500 py-8">사용자를 찾을 수 없습니다</div>
 		),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "List displaying user information with styled cards.",
+				story: "스타일링된 카드로 사용자 정보를 표시하는 리스트입니다.",
 			},
 		},
 	},
 };
 
-export const EmptyList: Story = {
+export const 빈_리스트: Story = {
 	args: {
 		data: [],
 		renderItem: (item: any) => (
@@ -111,9 +111,9 @@ export const EmptyList: Story = {
 		placeholder: (
 			<div className="text-center py-12">
 				<div className="text-gray-400 text-6xl mb-4">📭</div>
-				<div className="text-lg font-medium text-gray-600">No items yet</div>
+				<div className="text-lg font-medium text-gray-600">아직 아이템이 없습니다</div>
 				<div className="text-sm text-gray-500 mt-1">
-					Add some items to get started
+					시작하려면 아이템을 추가하세요
 				</div>
 			</div>
 		),
@@ -121,15 +121,15 @@ export const EmptyList: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Empty list showing custom placeholder content.",
+				story: "커스텀 플레이스홀더 콘텐츠를 보여주는 빈 리스트입니다.",
 			},
 		},
 	},
 };
 
-export const SimpleTextList: Story = {
+export const 간단한_텍스트_리스트: Story = {
 	args: {
-		data: ["First item", "Second item", "Third item", "Fourth item"],
+		data: ["첫 번째 아이템", "두 번째 아이템", "세 번째 아이템", "네 번째 아이템"],
 		renderItem: (item, index) => (
 			<div
 				key={index}
@@ -138,37 +138,37 @@ export const SimpleTextList: Story = {
 				{item}
 			</div>
 		),
-		placeholder: <div className="text-gray-500 p-4">No items available</div>,
+		placeholder: <div className="text-gray-500 p-4">사용 가능한 아이템이 없습니다</div>,
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Simple text list with hover effects.",
+				story: "호버 효과가 있는 간단한 텍스트 리스트입니다.",
 			},
 		},
 	},
 };
 
-export const CardList: Story = {
+export const 카드_리스트: Story = {
 	args: {
 		data: [
 			{
 				id: 1,
-				title: "Task 1",
-				description: "Complete the project documentation",
-				status: "pending",
+				title: "할 일 1",
+				description: "프로젝트 문서 완성",
+				status: "대기중",
 			},
 			{
 				id: 2,
-				title: "Task 2",
-				description: "Review code changes",
-				status: "completed",
+				title: "할 일 2",
+				description: "코드 변경 사항 검토",
+				status: "완료",
 			},
 			{
 				id: 3,
-				title: "Task 3",
-				description: "Update test cases",
-				status: "in-progress",
+				title: "할 일 3",
+				description: "테스트 케이스 업데이트",
+				status: "진행중",
 			},
 		],
 		renderItem: (task) => (
@@ -180,9 +180,9 @@ export const CardList: Story = {
 					<h3 className="font-medium text-gray-900">{task.title}</h3>
 					<span
 						className={`px-2 py-1 text-xs rounded-full ${
-							task.status === "completed"
+							task.status === "완료"
 								? "bg-green-100 text-green-800"
-								: task.status === "in-progress"
+								: task.status === "진행중"
 									? "bg-blue-100 text-blue-800"
 									: "bg-gray-100 text-gray-800"
 						}`}
@@ -196,7 +196,7 @@ export const CardList: Story = {
 		placeholder: (
 			<div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
 				<div className="text-gray-400 text-2xl mb-2">📋</div>
-				<div className="text-gray-600">No tasks available</div>
+				<div className="text-gray-600">사용 가능한 할 일이 없습니다</div>
 			</div>
 		),
 	},
@@ -204,15 +204,15 @@ export const CardList: Story = {
 		docs: {
 			description: {
 				story:
-					"Card-style list with status indicators and detailed placeholder.",
+					"상태 표시기와 상세 플레이스홀더가 있는 카드 스타일 리스트입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
-		data: sampleItems,
+		data: 샘플아이템들,
 		renderItem: (item) => (
 			<div
 				key={item.id}
@@ -225,13 +225,13 @@ export const Playground: Story = {
 			</div>
 		),
 		placeholder: (
-			<div className="text-gray-500 text-center py-4">No items to show</div>
+			<div className="text-gray-500 text-center py-4">보여줄 아이템이 없습니다</div>
 		),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different list configurations.",
+				story: "다양한 리스트 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

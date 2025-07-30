@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Avatar } from "./Avatar";
 
 const meta = {
-	title: "UI/Avatar",
+	title: "ui/Avatar",
 	component: Avatar,
 	parameters: {
 		layout: "centered",
 		docs: {
 			description: {
 				component:
-					"A user avatar component with dropdown menu functionality. Shows user info and environment details.",
+					"사용자 아바타 컴포넌트입니다. 사용자 정보를 표시합니다.",
 			},
 		},
 	},
@@ -18,12 +18,12 @@ const meta = {
 		showInfo: {
 			control: "boolean",
 			description:
-				"Whether to show full user information (desktop mode) or just avatar (mobile mode)",
+				"전체 사용자 정보 표시 여부",
 			defaultValue: true,
 		},
 		onMenuAction: {
 			action: "menu-action",
-			description: "Callback function called when menu item is selected",
+			description: "메뉴 아이템 선택 시 호출되는 콜백 함수",
 		},
 	},
 } satisfies Meta<typeof Avatar>;
@@ -31,7 +31,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const 기본: Story = {
 	args: {
 		showInfo: true,
 	},
@@ -39,13 +39,13 @@ export const Default: Story = {
 		docs: {
 			description: {
 				story:
-					"Default avatar with full user information displayed. Shows dropdown menu on click.",
+					"기본 아바타입니다.",
 			},
 		},
 	},
 };
 
-export const WithUserInfo: Story = {
+export const 사용자정보표시: Story = {
 	args: {
 		showInfo: true,
 	},
@@ -53,13 +53,13 @@ export const WithUserInfo: Story = {
 		docs: {
 			description: {
 				story:
-					"Avatar showing full user information including name and role. Suitable for desktop layouts.",
+					"사용자 정보를 표시하는 아바타입니다.",
 			},
 		},
 	},
 };
 
-export const AvatarOnly: Story = {
+export const 아바타만: Story = {
 	args: {
 		showInfo: false,
 	},
@@ -67,37 +67,34 @@ export const AvatarOnly: Story = {
 		docs: {
 			description: {
 				story:
-					"Avatar showing only the profile image. Suitable for mobile layouts or compact spaces.",
+					"아바타 이미지만 표시하는 아바타입니다.",
 			},
 		},
 	},
 };
 
-export const Interactive: Story = {
+export const 인터랙티브: Story = {
 	args: {
 		showInfo: true,
-		onMenuAction: (key: string) => {
-			console.log(`Menu action: ${key}`);
-		},
 	},
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"Interactive avatar that logs menu actions to console. Try clicking different menu items.",
+					"인터랙티브 아바타입니다.",
 			},
 		},
 	},
 };
 
-export const Playground: Story = {
+export const 플레이그라운드: Story = {
 	args: {
 		showInfo: true,
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Playground for testing different avatar configurations.",
+				story: "다양한 아바타 설정을 테스트할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},
