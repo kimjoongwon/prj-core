@@ -22,3 +22,6 @@ export * from "./Table/Table";
 export * from "./Text/Text";
 export * from "./User/User";
 export * from "./VStack/VStack";
+export { VideoPlayer } from "./VideoPlayer/VideoPlayer";
+export { SortableMedia } from "./SortableMedia/SortableMedia";
+export { Navbar } from "./Navbar/Navbar";

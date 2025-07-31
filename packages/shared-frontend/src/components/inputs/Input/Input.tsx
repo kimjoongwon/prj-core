@@ -6,7 +6,7 @@ import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { ChangeEventHandler } from "react";
-import { useMobxHookForm } from "../../../..";
+import { useMobxHookForm } from "../../../hooks";
 import { MobxProps, Validation } from "../../../types";
 
 export type InputProps<T> = MobxProps<T> &
