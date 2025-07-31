@@ -1,7 +1,7 @@
 export { AutoComplete } from "./AutoComplete";
 export { Calendar } from "./Calendar";
 export { Checkbox } from "./Checkbox/Checkbox";
-export { Chips } from "./Chips";
+export { ChipSelect } from "./ChipSelect";
 export { DatePicker } from "./DatePicker";
 export { DateRangePicker } from "./DateRangePicker";
 export { Dropdown } from "./Dropdown";
