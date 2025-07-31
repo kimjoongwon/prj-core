@@ -8,7 +8,7 @@ type ChipSelectState = {
 };
 
 const meta = {
-	title: "입력 컴포넌트/ChipSelect",
+	title: "inputs/ChipSelect",
 	component: ChipSelect<ChipSelectState>,
 	parameters: {
 		layout: "centered",
@@ -112,7 +112,7 @@ export const 긴목록: Story = {
 	args: {
 		options: [
 			"JavaScript",
-			"TypeScript", 
+			"TypeScript",
 			"React",
 			"Vue",
 			"Angular",

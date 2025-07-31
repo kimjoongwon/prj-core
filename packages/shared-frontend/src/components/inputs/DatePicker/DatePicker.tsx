@@ -1,44 +1,50 @@
-import { DatePicker as HeroUiDatePicker } from "@heroui/react";
+import { DatePicker as HeroUiDatePicker, DatePickerProps as HeroUiDatePickerProps } from "@heroui/react";
 import { parseAbsoluteToLocal } from "@internationalized/date";
-import { DatePickerProps } from "@shared/types";
+import type { CalendarDate, CalendarDateTime, ZonedDateTime } from "@internationalized/date";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { MobxProps } from "../../../types";
 
-export const DatePicker = observer(
-	<T extends object>(props: DatePickerProps<T>) => {
-		const { state, path = "", ...rest } = props;
-		// @ts-ignore
-		const defaultValue = (get(state, path) ||
-			new Date().toISOString()) as string;
+interface DatePickerProps<T = any> extends HeroUiDatePickerProps, MobxProps<T> { }
 
-		const localState = useLocalObservable(() => ({
-			value: parseAbsoluteToLocal(defaultValue),
-		}));
+const DatePickerComponent = <T extends object>(props: DatePickerProps<T>) => {
+	const { state, path = "", ...rest } = props;
+	const defaultValue = (get(state, path) || new Date().toISOString()) as string;
 
-		useEffect(() => {
-			const disposer = reaction(
-				() => localState.value,
-				() => {
-					set(state, path, localState.value.toAbsoluteString());
-				},
-			);
+	const localState = useLocalObservable(() => ({
+		value: parseAbsoluteToLocal(defaultValue),
+	}));
 
-			return disposer;
-		});
+	const handleDateChange = <T extends object>(
+		value: CalendarDate | CalendarDateTime | ZonedDateTime | null,
+		localState: { value: ZonedDateTime }
+	) => {
+		if (value && 'toAbsoluteString' in value) {
+			localState.value = value as ZonedDateTime;
+		}
+	};
 
-		return (
-			<HeroUiDatePicker
-				{...rest}
-				hideTimeZone
-				//   @ts-ignore
-				value={localState.value}
-				//   @ts-ignore
-				onChange={(value) => {
-					localState.value = value;
-				}}
-			/>
+	useEffect(() => {
+		const disposer = reaction(
+			() => localState.value,
+			() => {
+				set(state, path, localState.value.toAbsoluteString());
+			},
 		);
-	},
-);
+
+		return disposer;
+	});
+
+	return (
+		<HeroUiDatePicker
+			{...rest}
+			hideTimeZone
+			value={localState.value}
+			onChange={(value) => handleDateChange(value, localState)}
+		/>
+	);
+};
+
+export const DatePicker = observer(DatePickerComponent);

@@ -493,10 +493,7 @@ export type ListboxProps<T> = Omit<HeroListboxProps, "state" | "children"> &
 			| undefined;
 	};
 
-export type InputProps<T> = MobxProps<T> &
-	NextUIInputProps & {
-		validation?: Validation;
-	};
+
 
 export type Validation = {
 	timings?: ("onBlur" | "onChange" | "onFocus")[];

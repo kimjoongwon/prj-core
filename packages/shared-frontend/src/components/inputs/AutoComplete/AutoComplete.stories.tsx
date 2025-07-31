@@ -10,7 +10,7 @@ type AutoCompleteState = {
 };
 
 const meta = {
-	title: "입력 컴포넌트/AutoComplete",
+	title: "inputs/AutoComplete",
 	component: AutoComplete<AutoCompleteState>,
 	parameters: {
 		layout: "centered",

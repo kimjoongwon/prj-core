@@ -20,7 +20,7 @@ type CheckboxState = {
 };
 
 const meta = {
-	title: "입력 컴포넌트/Checkbox",
+	title: "inputs/Checkbox",
 	component: Checkbox<CheckboxState>,
 	parameters: {
 		layout: "centered",

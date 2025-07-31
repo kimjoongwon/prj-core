@@ -1,10 +1,15 @@
-import { Input as HeroUiInput } from "@heroui/react";
-import { InputProps } from "@shared/types";
+import { Input as HeroUiInput, type InputProps as HeroUiInputProps } from "@heroui/react";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { ChangeEventHandler } from "react";
 import { useMobxHookForm } from "../../../..";
+import { MobxProps, Validation } from "../../../types";
+
+export type InputProps<T> = MobxProps<T> &
+	HeroUiInputProps & {
+		validation?: Validation;
+	};
 
 export const Input = observer(<T extends object>(props: InputProps<T>) => {
 	const {

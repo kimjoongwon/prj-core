@@ -29,7 +29,6 @@
     "noUncheckedIndexedAccess": false,
 
     // 경로 매핑
-    "baseUrl": ".",
     "types": ["vitest/globals", "node"],
     "plugins": [
       {
