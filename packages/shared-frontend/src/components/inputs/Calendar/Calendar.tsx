@@ -22,7 +22,7 @@ export interface CalendarProps {
 const DAY_OF_WEEK = 7;
 const WEEK_OF_MONTH = 6;
 
-class CalendarState {
+export class CalendarState {
 	headerDate = dayjs().startOf("d").toDate();
 	dates: DateData[] = [];
 

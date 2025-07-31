@@ -13,15 +13,7 @@ declare global {
 	}
 }
 
-// Plate mock
-const mockNavigator = {
-	push: vi.fn(),
-};
-
-const mockNavigation = {
-	setCurrentPath: vi.fn(),
-};
-
+// Plate mock - vi.mock 내부에서 직접 정의
 vi.mock("../../../..", () => ({
 	HStack: ({ children, className }: any) => (
 		<div className={className}>{children}</div>
@@ -30,7 +22,9 @@ vi.mock("../../../..", () => ({
 		<div className={className}>{children}</div>
 	),
 	Plate: {
-		navigation: mockNavigation,
+		navigation: {
+			setCurrentPath: vi.fn(),
+		},
 	},
 }));
 
@@ -63,6 +57,12 @@ vi.mock("../../../utils/iconUtils", () => ({
 		<span data-testid={`icon-${iconName}`} />
 	)),
 }));
+
+// Mock 함수에 접근하기 위한 헬퍼
+const getMockNavigation = () => {
+	const { Plate } = require("../../../..");
+	return Plate.navigation;
+};
 
 describe("Navbar", () => {
 	const mockRoutes: Route[] = [
@@ -161,7 +161,7 @@ describe("Navbar", () => {
 			const userServiceButton = screen.getByTestId("button-사용자 서비스");
 			fireEvent.click(userServiceButton);
 
-			expect(mockNavigation.setCurrentPath).toHaveBeenCalledWith(
+			expect(getMockNavigation().setCurrentPath).toHaveBeenCalledWith(
 				"/dashboard/user-service",
 			);
 		});
@@ -172,7 +172,7 @@ describe("Navbar", () => {
 			const spaceServiceButton = screen.getByTestId("button-공간 서비스");
 			fireEvent.click(spaceServiceButton);
 
-			expect(mockNavigation.setCurrentPath).toHaveBeenCalledWith(
+			expect(getMockNavigation().setCurrentPath).toHaveBeenCalledWith(
 				"/dashboard/space-service",
 			);
 		});
@@ -183,7 +183,7 @@ describe("Navbar", () => {
 			const settingsButton = screen.getByTestId("button-설정");
 			fireEvent.click(settingsButton);
 
-			expect(mockNavigation.setCurrentPath).toHaveBeenCalledWith(
+			expect(getMockNavigation().setCurrentPath).toHaveBeenCalledWith(
 				"/dashboard/settings",
 			);
 		});
@@ -204,7 +204,7 @@ describe("Navbar", () => {
 			const button = screen.getByTestId("button-경로 없는 라우트");
 			fireEvent.click(button);
 
-			expect(mockNavigation.setCurrentPath).not.toHaveBeenCalled();
+			expect(getMockNavigation().setCurrentPath).not.toHaveBeenCalled();
 		});
 	});
 
@@ -242,7 +242,7 @@ describe("Navbar", () => {
 			const button = screen.getByTestId("button-빈 자식 라우트");
 			fireEvent.click(button);
 
-			expect(mockNavigator.push).toHaveBeenCalledWith(
+			expect(getMockNavigation().setCurrentPath).toHaveBeenCalledWith(
 				"/dashboard/empty-children",
 			);
 		});

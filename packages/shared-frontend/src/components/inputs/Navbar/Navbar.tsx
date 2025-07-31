@@ -1,61 +1,66 @@
 import { Button } from "@heroui/react";
 import { Route } from "@shared/types";
-import { observer } from "mobx-react-lite";
+import { memo, useCallback, useMemo } from "react";
 import { HStack, VStack } from "../../../..";
 import { renderLucideIcon } from "../../../utils/iconUtils";
+import { NavbarProps } from "./types";
+import { getRouteDisplayText, getRouteKey, isRouteClickable } from "./utils";
 
-interface NavbarProps {
-	routes: Route[];
-	direction?: "horizontal" | "vertical";
-}
-
-export const Navbar = observer((props: NavbarProps) => {
-	const { routes, direction = "horizontal" } = props;
-
-	const handleRouteClick = (route: Route) => {
-		if (route.fullPath) {
-			// NavigationStore의 setCurrentPath를 통해 경로 변경
-			// 실제 네비게이션 로직은 DashboardLayoutBuilder의 reaction에서 처리
+const NavbarButton = memo(({ 
+	route, 
+	onRouteClick 
+}: { 
+	route: Route; 
+	onRouteClick?: (route: Route) => void;
+}) => {
+	const handleClick = useCallback(() => {
+		if (isRouteClickable(route) && onRouteClick) {
+			onRouteClick(route);
 		}
-	};
-
-	if (direction === "vertical") {
-		return (
-			<VStack className="gap-2">
-				{routes?.map((route, index) => (
-					<Button
-						variant="light"
-						color={route.active ? "primary" : "default"}
-						key={route.name || `route-${index}`}
-						onPress={() => handleRouteClick(route)}
-						startContent={
-							route.icon
-								? renderLucideIcon(route.icon, "w-4 h-4", 16)
-								: undefined
-						}
-					>
-						{route.name || route.fullPath}
-					</Button>
-				))}
-			</VStack>
-		);
-	}
+	}, [route, onRouteClick]);
 
 	return (
-		<HStack className="flex-1 gap-2 items-center justify-center">
-			{routes?.map((route, index) => (
-				<Button
-					variant="light"
-					color={route.active ? "primary" : "default"}
-					key={route.name || `route-${index}`}
-					onPress={() => handleRouteClick(route)}
-					startContent={
-						route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined
-					}
-				>
-					{route.name || route.fullPath}
-				</Button>
-			))}
-		</HStack>
+		<Button
+			variant="light"
+			color={route.active ? "primary" : "default"}
+			onPress={handleClick}
+			startContent={
+				route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined
+			}
+		>
+			{getRouteDisplayText(route)}
+		</Button>
 	);
 });
+
+NavbarButton.displayName = "NavbarButton";
+
+export const Navbar = memo<NavbarProps>(({ 
+	routes = [], 
+	direction = "horizontal", 
+	onRouteClick 
+}) => {
+	const buttons = useMemo(() => 
+		routes.map((route, index) => (
+			<NavbarButton
+				key={getRouteKey(route, index)}
+				route={route}
+				onRouteClick={onRouteClick}
+			/>
+		)), 
+		[routes, onRouteClick]
+	);
+
+	const Container = direction === "vertical" ? VStack : HStack;
+	const containerClassName = direction === "vertical" 
+		? "gap-2" 
+		: "flex-1 gap-2 items-center justify-center";
+
+	return (
+		<Container className={containerClassName}>
+			{buttons}
+		</Container>
+	);
+});
+
+Navbar.displayName = "Navbar";
