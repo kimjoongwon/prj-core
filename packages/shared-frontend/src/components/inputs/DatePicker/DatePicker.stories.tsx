@@ -9,7 +9,8 @@ const meta: Meta<typeof DatePicker> = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "A date picker component built with HeroUI and MobX integration for state management.",
+				component:
+					"A date picker component built with HeroUI and MobX integration for state management.",
 			},
 		},
 	},
@@ -56,7 +57,14 @@ const meta: Meta<typeof DatePicker> = {
 		color: {
 			description: "Color theme of the date picker",
 			control: "select",
-			options: ["default", "primary", "secondary", "success", "warning", "danger"],
+			options: [
+				"default",
+				"primary",
+				"secondary",
+				"success",
+				"warning",
+				"danger",
+			],
 		},
 		radius: {
 			description: "Border radius of the date picker",
@@ -78,13 +86,7 @@ const createMockState = (initialDate?: string) => ({
 const DatePickerWrapper = (args: any) => {
 	const state = useLocalObservable(() => createMockState(args.initialDate));
 
-	return (
-		<DatePicker
-			{...args}
-			state={state}
-			path="selectedDate"
-		/>
-	);
+	return <DatePicker {...args} state={state} path="selectedDate" />;
 };
 
 export const Default: Story = {

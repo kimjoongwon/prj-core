@@ -1,5 +1,5 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
-import { HeaderProps } from "@shared/types";
+import type { HeaderProps } from "../../../types";
 
 export const Header = (props: HeaderProps) => {
 	const { left, center, right } = props;

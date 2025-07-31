@@ -1,4 +1,4 @@
-import { ListProps } from "@shared/types";
+import type { ListProps } from "../../../types";
 import { observer } from "mobx-react-lite";
 import { ReactNode } from "react";
 import { v4 } from "uuid";

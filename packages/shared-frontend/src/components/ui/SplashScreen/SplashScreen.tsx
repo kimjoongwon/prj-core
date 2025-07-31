@@ -1,8 +1,8 @@
 import { Card, CardBody, Chip, Progress } from "@heroui/react";
 import React from "react";
-import { Logo } from "../Logo";
-import { Text } from "../Text";
-import { VStack } from "../VStack";
+import { Logo } from "../Logo/Logo";
+import { Text } from "../Text/Text";
+import { VStack } from "../VStack/VStack";
 
 export interface SplashScreenProps {
 	title?: string;

@@ -1,11 +1,19 @@
 import { Button } from "@heroui/react";
-import { MobxProps, Route } from "@shared/types";
+import type { MobxProps } from "../../../types";
+
+// Route type definition - moved from @shared/types
+interface Route {
+	name: string;
+	pathname: string;
+	iconName?: string;
+	submenu?: Route[];
+}
 import { action } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useMobxHookForm } from "../../../hooks";
 import { renderLucideIcon } from "../../../utils/iconUtils";
-import { VStack } from "../../ui/VStack";
+import { VStack } from "../../ui/VStack/VStack";
 
 interface ParentMenuInfo {
 	name: string;

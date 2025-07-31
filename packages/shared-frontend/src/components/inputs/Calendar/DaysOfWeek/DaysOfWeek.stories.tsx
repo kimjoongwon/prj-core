@@ -29,7 +29,8 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "기본적인 요일 헤더입니다. 주말(토요일, 일요일)은 빨간색으로 표시됩니다.",
+				story:
+					"기본적인 요일 헤더입니다. 주말(토요일, 일요일)은 빨간색으로 표시됩니다.",
 			},
 		},
 	},

@@ -1,6 +1,6 @@
 import { Card, CardBody } from "@heroui/react";
 import dayjs from "dayjs";
-import { Text } from "../../../ui/Text";
+import { Text } from "../../../ui/Text/Text";
 
 export interface DateProps {
 	value: string;
@@ -11,7 +11,13 @@ export interface DateProps {
 }
 
 export const Date = (props: DateProps) => {
-	const { value, selected = false, isPressable = true, className = "", onDateClick } = props;
+	const {
+		value,
+		selected = false,
+		isPressable = true,
+		className = "",
+		onDateClick,
+	} = props;
 	const date = dayjs(value).get("date");
 
 	return (
@@ -39,23 +45,25 @@ export const Date = (props: DateProps) => {
 						<polyline
 							points="20,6 9,17 4,12"
 							style={{
-								strokeDasharray: '22',
-								strokeDashoffset: '22',
-								animation: 'draw 0.4s ease-in-out 0.1s forwards'
+								strokeDasharray: "22",
+								strokeDashoffset: "22",
+								animation: "draw 0.4s ease-in-out 0.1s forwards",
 							}}
 						/>
 					</svg>
 				</div>
 			)}
-			<style dangerouslySetInnerHTML={{
-				__html: `
+			<style
+				dangerouslySetInnerHTML={{
+					__html: `
 					@keyframes draw {
 						to {
 							stroke-dashoffset: 0;
 						}
 					}
-				`
-			}} />
+				`,
+				}}
+			/>
 			<CardBody className="text-right">
 				<Text className={!isPressable ? "text-gray-400" : ""}>{date}일</Text>
 			</CardBody>

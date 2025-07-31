@@ -37,7 +37,11 @@
 				"noNonNullAssertion": "off"
 			},
 			"a11y": {
-				"useValidAnchor": "off"
+				"useValidAnchor": "off",
+				"noSvgWithoutTitle": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
 			}
 		}
 	},

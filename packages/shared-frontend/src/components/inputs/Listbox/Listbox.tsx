@@ -1,5 +1,5 @@
 import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
-import { ListboxProps } from "@shared/types";
+import type { ListboxProps } from "../../../types";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";

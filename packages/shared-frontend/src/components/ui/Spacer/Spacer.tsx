@@ -1,4 +1,4 @@
-import { SpacerProps } from "@shared/types";
+import type { SpacerProps } from "../../../types";
 import React from "react";
 
 /**

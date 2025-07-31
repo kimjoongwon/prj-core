@@ -1,8 +1,8 @@
-import { SearchProps } from "@shared/types";
+import type { SearchProps } from "../../../types";
 import { get, isUndefined, set } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { KeyboardEventHandler } from "react";
-import { Input } from "../Input";
+import { Input } from "../Input/Input";
 
 export const Search = observer(<T extends object>(props: SearchProps<T>) => {
 	const { state, path, queryState } = props;

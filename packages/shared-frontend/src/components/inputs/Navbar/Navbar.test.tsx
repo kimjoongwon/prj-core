@@ -1,7 +1,7 @@
-import { Route } from "./types";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Navbar } from "./Navbar";
+import { Route } from "./types";
 
 // DOM 매처 확장
 declare global {
@@ -163,7 +163,7 @@ describe("Navbar", () => {
 			const mockOnRouteClick = vi.fn((route) => {
 				getMockNavigation().setCurrentPath(route.fullPath);
 			});
-			
+
 			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const userServiceButton = screen.getByTestId("button-사용자 서비스");
@@ -178,7 +178,7 @@ describe("Navbar", () => {
 			const mockOnRouteClick = vi.fn((route) => {
 				getMockNavigation().setCurrentPath(route.fullPath);
 			});
-			
+
 			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const spaceServiceButton = screen.getByTestId("button-공간 서비스");
@@ -193,7 +193,7 @@ describe("Navbar", () => {
 			const mockOnRouteClick = vi.fn((route) => {
 				getMockNavigation().setCurrentPath(route.fullPath);
 			});
-			
+
 			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const settingsButton = screen.getByTestId("button-설정");
@@ -219,7 +219,9 @@ describe("Navbar", () => {
 				getMockNavigation().setCurrentPath(route.fullPath);
 			});
 
-			render(<Navbar routes={routeWithoutPath} onRouteClick={mockOnRouteClick} />);
+			render(
+				<Navbar routes={routeWithoutPath} onRouteClick={mockOnRouteClick} />,
+			);
 
 			const button = screen.getByTestId("button-경로 없는 라우트");
 			fireEvent.click(button);
@@ -261,7 +263,12 @@ describe("Navbar", () => {
 				getMockNavigation().setCurrentPath(route.fullPath);
 			});
 
-			render(<Navbar routes={routeWithEmptyChildren} onRouteClick={mockOnRouteClick} />);
+			render(
+				<Navbar
+					routes={routeWithEmptyChildren}
+					onRouteClick={mockOnRouteClick}
+				/>,
+			);
 
 			const button = screen.getByTestId("button-빈 자식 라우트");
 			fireEvent.click(button);

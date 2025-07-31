@@ -1,4 +1,4 @@
-import { RecurringDayOfTheWeek } from "@shared/types";
+import type { RecurringDayOfTheWeek } from "../../../types";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";

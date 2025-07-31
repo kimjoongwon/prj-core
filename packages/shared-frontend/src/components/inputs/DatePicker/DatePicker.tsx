@@ -1,13 +1,22 @@
-import { DatePicker as HeroUiDatePicker, DatePickerProps as HeroUiDatePickerProps } from "@heroui/react";
+import {
+	DatePicker as HeroUiDatePicker,
+	DatePickerProps as HeroUiDatePickerProps,
+} from "@heroui/react";
+import type {
+	CalendarDate,
+	CalendarDateTime,
+	ZonedDateTime,
+} from "@internationalized/date";
 import { parseAbsoluteToLocal } from "@internationalized/date";
-import type { CalendarDate, CalendarDateTime, ZonedDateTime } from "@internationalized/date";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { MobxProps } from "../../../types";
 
-interface DatePickerProps<T = any> extends HeroUiDatePickerProps, MobxProps<T> { }
+interface DatePickerProps<T = any>
+	extends HeroUiDatePickerProps,
+		MobxProps<T> {}
 
 const DatePickerComponent = <T extends object>(props: DatePickerProps<T>) => {
 	const { state, path = "", ...rest } = props;
@@ -19,9 +28,9 @@ const DatePickerComponent = <T extends object>(props: DatePickerProps<T>) => {
 
 	const handleDateChange = <T extends object>(
 		value: CalendarDate | CalendarDateTime | ZonedDateTime | null,
-		localState: { value: ZonedDateTime }
+		localState: { value: ZonedDateTime },
 	) => {
-		if (value && 'toAbsoluteString' in value) {
+		if (value && "toAbsoluteString" in value) {
 			localState.value = value as ZonedDateTime;
 		}
 	};

@@ -522,9 +522,6 @@ importers:
       '@shared/api-client':
         specifier: workspace:*
         version: link:../shared-api-client
-      '@shared/types':
-        specifier: workspace:*
-        version: link:../shared-types
       '@shared/utils':
         specifier: workspace:*
         version: link:../shared-utils

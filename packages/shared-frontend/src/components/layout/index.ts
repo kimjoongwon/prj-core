@@ -1,7 +1,7 @@
-export { AuthLayout } from "./AuthLayout";
-export { CollapsibleSidebar } from "./CollapsibleSidebarLayout";
-export { DashboardLayout } from "./DashboardLayout";
-export { Header } from "./HeaderLayout";
-export { AdminMainLayout } from "./MainLayout";
-export { ModalLayout } from "./ModalLayout";
-export { TableLayout } from "./TableLayout";
+export { AuthLayout } from "./AuthLayout/AuthLayout";
+export { CollapsibleSidebar } from "./CollapsibleSidebarLayout/CollapsibleSidebarLayout";
+export { DashboardLayout } from "./DashboardLayout/DashboardLayout";
+export { Header } from "./HeaderLayout/Header";
+export { AdminMainLayout } from "./MainLayout/Main";
+export { ModalLayout } from "./ModalLayout/Modal";
+export { TableLayout } from "./TableLayout/Table";

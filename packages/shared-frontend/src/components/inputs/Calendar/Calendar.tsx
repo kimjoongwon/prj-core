@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { range } from "lodash-es";
-import { makeObservable, observable, action } from "mobx";
+import { action, makeObservable, observable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Date as DateComponent } from "./Date/Date";
-import { DaysOfWeek } from "./DaysOfWeek";
-import { Header } from "./Header";
+import { DaysOfWeek } from "./DaysOfWeek/DaysOfWeek";
+import { Header } from "./Header/Header";
 
 export interface DateData {
 	value: string;
@@ -57,25 +57,35 @@ export class CalendarState {
 
 		const prevMonthRange = range(prevMonthEnd - startDay, prevMonthEnd);
 		const currentMonthRange = range(1, endDate + 1);
-		const nextMonthRange = range(1, DAY_OF_WEEK * WEEK_OF_MONTH - (prevMonthRange.length + currentMonthRange.length) + 1);
+		const nextMonthRange = range(
+			1,
+			DAY_OF_WEEK * WEEK_OF_MONTH -
+				(prevMonthRange.length + currentMonthRange.length) +
+				1,
+		);
 
-		const createDateModel = (date: Date, type: "prev" | "current" | "next"): DateData => ({
+		const createDateModel = (
+			date: Date,
+			type: "prev" | "current" | "next",
+		): DateData => ({
 			value: date.toISOString(),
-			selected: selectedValues.some(value => dayjs(value).isSame(date, "date")),
+			selected: selectedValues.some((value) =>
+				dayjs(value).isSame(date, "date"),
+			),
 			isPressable: type === "current",
 			className: type === "current" ? "text-black" : "text-gray-400",
 		});
 
-		const prevMonthDates = prevMonthRange.map(day =>
-			createDateModel(prevMonth.set("date", day).toDate(), "prev")
+		const prevMonthDates = prevMonthRange.map((day) =>
+			createDateModel(prevMonth.set("date", day).toDate(), "prev"),
 		);
 
-		const currentMonthDates = currentMonthRange.map(day =>
-			createDateModel(currentMonth.set("date", day).toDate(), "current")
+		const currentMonthDates = currentMonthRange.map((day) =>
+			createDateModel(currentMonth.set("date", day).toDate(), "current"),
 		);
 
-		const nextMonthDates = nextMonthRange.map(day =>
-			createDateModel(nextMonth.set("date", day).toDate(), "next")
+		const nextMonthDates = nextMonthRange.map((day) =>
+			createDateModel(nextMonth.set("date", day).toDate(), "next"),
 		);
 
 		this.dates = [...prevMonthDates, ...currentMonthDates, ...nextMonthDates];
@@ -156,5 +166,4 @@ export const Calendar = observer((props: CalendarProps) => {
 			</div>
 		</div>
 	);
-},
-);
+});

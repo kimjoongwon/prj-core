@@ -1,5 +1,5 @@
-import { MainLayoutProps } from "@shared/types";
-import { VStack } from "../../ui/VStack";
+import type { MainLayoutProps } from "../../../types";
+import { VStack } from "../../ui/VStack/VStack";
 
 export const AdminMainLayout = (props: MainLayoutProps) => {
 	const { children } = props;

@@ -1,4 +1,4 @@
-import { VStackProps } from "@shared/types";
+import type { VStackProps } from "../../../types";
 import { cva } from "class-variance-authority";
 
 const vStackVariants = cva("flex flex-col", {

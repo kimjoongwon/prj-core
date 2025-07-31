@@ -1,9 +1,9 @@
 import { Button, Card, CardBody } from "@heroui/react";
 import React from "react";
-import { Container } from "../Container";
-import { Spacer } from "../Spacer";
-import { Text } from "../Text";
-import { VStack } from "../VStack";
+import { Container } from "../Container/Container";
+import { Spacer } from "../Spacer/Spacer";
+import { Text } from "../Text/Text";
+import { VStack } from "../VStack/VStack";
 
 export interface NotFoundProps {
 	/**

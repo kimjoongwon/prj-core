@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@heroui/react";
-import { DashboardLayoutProps } from "@shared/types";
+import type { DashboardLayoutProps } from "../../../types";
 import { observer } from "mobx-react-lite";
-import { Text } from "../../ui/Text";
+import { Text } from "../../ui/Text/Text";
 
 export const DashboardLayout = observer((props: DashboardLayoutProps) => {
 	const { header, leftSidebar, rightSidebar, bottom, breadcrumb, children } =
@@ -12,7 +12,6 @@ export const DashboardLayout = observer((props: DashboardLayoutProps) => {
 			<CardBody className="flex items-center justify-center">
 				<div className="text-center space-y-2">
 					<div className="w-12 h-12 mx-auto rounded-lg bg-default-100 flex items-center justify-center">
-						{/** biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 						<svg
 							className="w-6 h-6 text-default-400"
 							fill="none"

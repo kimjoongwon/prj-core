@@ -1,4 +1,7 @@
-import { Input as HeroUiInput, type InputProps as HeroUiInputProps } from "@heroui/react";
+import {
+	Input as HeroUiInput,
+	type InputProps as HeroUiInputProps,
+} from "@heroui/react";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";

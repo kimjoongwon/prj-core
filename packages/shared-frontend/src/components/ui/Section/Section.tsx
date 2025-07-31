@@ -1,4 +1,4 @@
-import { SectionProps } from "@shared/types";
+import type { SectionProps } from "../../../types";
 
 export const Section = (props: SectionProps) => {
 	const { children } = props;

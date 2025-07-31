@@ -1,7 +1,7 @@
 import { Button, Chip, Avatar as HeroUIAvatar, User } from "@heroui/react";
 import { EnvironmentUtil } from "@shared/utils";
 import { observer } from "mobx-react-lite";
-import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown";
+import { Dropdown, DropdownItemProps } from "../../inputs/Dropdown/Dropdown";
 
 interface AvatarProps {
 	showInfo?: boolean;
@@ -148,7 +148,6 @@ const EnvironmentChip = ({ environment }: EnvironmentChipProps) => (
 );
 
 const ProfileIcon = () => (
-	// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 	<svg
 		className="w-4 h-4"
 		fill="none"
@@ -165,7 +164,6 @@ const ProfileIcon = () => (
 );
 
 const SettingsIcon = () => (
-	// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 	<svg
 		className="w-4 h-4"
 		fill="none"
@@ -188,7 +186,6 @@ const SettingsIcon = () => (
 );
 
 const HelpIcon = () => (
-	// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 	<svg
 		className="w-4 h-4"
 		fill="none"
@@ -205,7 +202,6 @@ const HelpIcon = () => (
 );
 
 const LogoutIcon = () => (
-	// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 	<svg
 		className="w-4 h-4"
 		fill="none"

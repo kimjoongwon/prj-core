@@ -50,7 +50,7 @@ export const 기본: Story = {
 		selected: false,
 		isPressable: true,
 		className: "text-black",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {
@@ -68,7 +68,7 @@ export const 선택됨: Story = {
 		selected: true,
 		isPressable: true,
 		className: "text-black",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {
@@ -86,7 +86,7 @@ export const 비활성화: Story = {
 		selected: false,
 		isPressable: false,
 		className: "text-gray-400",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {
@@ -104,7 +104,7 @@ export const 이전달날짜: Story = {
 		selected: false,
 		isPressable: false,
 		className: "text-gray-400",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {
@@ -122,7 +122,7 @@ export const 다음달날짜: Story = {
 		selected: false,
 		isPressable: false,
 		className: "text-gray-400",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {
@@ -140,7 +140,7 @@ export const 플레이그라운드: Story = {
 		selected: false,
 		isPressable: true,
 		className: "text-black",
-		onDateClick: (value: string) => console.log('Date clicked:', value),
+		onDateClick: (value: string) => console.log("Date clicked:", value),
 	},
 	render: (args) => <DateComponent {...args} />,
 	parameters: {

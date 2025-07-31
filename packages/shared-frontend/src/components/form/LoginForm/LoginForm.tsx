@@ -1,5 +1,5 @@
-import { VStack } from "../../ui/VStack/VStack";
 import { Input } from "../../inputs/Input/Input";
+import { VStack } from "../../ui/VStack/VStack";
 
 interface LoginFormProps {
 	state: {

@@ -1,6 +1,6 @@
 import { Button, Card } from "@heroui/react";
 import { FileDto } from "@shared/api-client";
-import { FileUploaderProps } from "@shared/types";
+import type { FileUploaderProps } from "../../../types";
 import { get } from "lodash-es";
 import { X } from "lucide-react";
 import { action, makeAutoObservable } from "mobx";

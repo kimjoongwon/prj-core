@@ -3,7 +3,7 @@ import {
 	TimeInput as NextUiTimeInput,
 } from "@heroui/react";
 import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
-import { MobxProps } from "@shared/types";
+import type { MobxProps } from "../../../types";
 import { get, set } from "lodash-es";
 import { action, reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";

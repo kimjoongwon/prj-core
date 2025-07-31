@@ -126,7 +126,7 @@ type Story = StoryObj<typeof meta>;
 const DataGridWrapper = observer<{
 	selectionMode?: "none" | "single" | "multiple";
 	emptyContent?: string;
-}>(({ selectionMode = "none", emptyContent }) => {
+}>(({ selectionMode = "none" }) => {
 	const state = useLocalObservable(() => ({
 		selectedKeys: [] as Key[],
 	}));

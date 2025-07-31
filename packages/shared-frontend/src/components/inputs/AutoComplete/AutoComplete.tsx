@@ -3,7 +3,7 @@ import {
 	AutocompleteItem,
 	AutocompleteProps,
 } from "@heroui/react";
-import { BaseAutoCompleteProps } from "@shared/types";
+import type { BaseAutoCompleteProps } from "../../../types";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";

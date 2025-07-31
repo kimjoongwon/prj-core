@@ -1,4 +1,4 @@
-import { MobxProps } from "@shared/types";
+import type { MobxProps } from "../../../types";
 import dayjs from "dayjs";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";

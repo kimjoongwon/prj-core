@@ -1,14 +1,11 @@
 import { Switch as NextUISwitch } from "@heroui/react";
-import { SwitchProps } from "@shared/types";
+import type { SwitchProps } from "../../../types";
 import { get } from "lodash-es";
 import { action } from "mobx";
-import { ForwardedRef } from "react";
 import { useMobxHookForm } from "../../../hooks";
+import { observer } from "mobx-react-lite";
 
-export function BaseSwitch<T extends object>(
-	props: SwitchProps<T>,
-	ref: ForwardedRef<HTMLInputElement>,
-) {
+export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 	const { path = "", state = {}, ...rest } = props;
 
 	const initialValue = get(state, path);
@@ -20,11 +17,6 @@ export function BaseSwitch<T extends object>(
 	});
 
 	return (
-		<NextUISwitch
-			{...rest}
-			ref={ref}
-			onValueChange={onChange}
-			value={localState.value}
-		/>
+		<NextUISwitch {...rest} onValueChange={onChange} value={localState.value} />
 	);
-}
+});

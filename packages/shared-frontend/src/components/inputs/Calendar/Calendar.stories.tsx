@@ -33,18 +33,12 @@ type Story = StoryObj<typeof meta>;
 export const 기본: Story = {
 	args: {
 		value: [],
-		onChange: () => { },
+		onChange: () => {},
 	},
 	render: (args) => {
 		const [value, setValue] = useState<string[]>([]);
 
-		return (
-			<Calendar
-				{...args}
-				value={value}
-				onChange={setValue}
-			/>
-		);
+		return <Calendar {...args} value={value} onChange={setValue} />;
 	},
 	parameters: {
 		docs: {
@@ -62,18 +56,12 @@ export const 미리선택된날짜: Story = {
 			new Date(2024, 0, 20).toISOString(), // 2024년 1월 20일
 			new Date(2024, 0, 25).toISOString(), // 2024년 1월 25일
 		],
-		onChange: () => { },
+		onChange: () => {},
 	},
 	render: (args) => {
 		const [value, setValue] = useState<string[]>(args.value);
 
-		return (
-			<Calendar
-				{...args}
-				value={value}
-				onChange={setValue}
-			/>
-		);
+		return <Calendar {...args} value={value} onChange={setValue} />;
 	},
 	parameters: {
 		docs: {
@@ -89,19 +77,16 @@ const CalendarWrapper = () => {
 
 	return (
 		<div className="space-y-4">
-			<Calendar
-				value={selectedDates}
-				onChange={setSelectedDates}
-			/>
+			<Calendar value={selectedDates} onChange={setSelectedDates} />
 			<div className="mt-4 p-4 bg-gray-100 rounded">
 				<h4 className="font-semibold mb-2">선택된 날짜들:</h4>
 				{selectedDates.length === 0 ? (
 					<p className="text-gray-500">선택된 날짜가 없습니다.</p>
 				) : (
 					<ul className="space-y-1">
-						{selectedDates.map((dateString, index) => (
-							<li key={index} className="text-sm">
-								{new Date(dateString).toLocaleDateString('ko-KR')}
+						{selectedDates.map((dateString) => (
+							<li key={dateString} className="text-sm">
+								{new Date(dateString).toLocaleDateString("ko-KR")}
 							</li>
 						))}
 					</ul>
@@ -114,13 +99,14 @@ const CalendarWrapper = () => {
 export const 플레이그라운드: Story = {
 	args: {
 		value: [],
-		onChange: () => { },
+		onChange: () => {},
 	},
 	render: () => <CalendarWrapper />,
 	parameters: {
 		docs: {
 			description: {
-				story: "선택된 날짜들을 실시간으로 확인할 수 있는 플레이그라운드입니다.",
+				story:
+					"선택된 날짜들을 실시간으로 확인할 수 있는 플레이그라운드입니다.",
 			},
 		},
 	},

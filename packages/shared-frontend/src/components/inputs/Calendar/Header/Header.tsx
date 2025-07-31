@@ -40,11 +40,7 @@ interface YearProps {
 
 export const Year = (props: YearProps) => {
 	const { year } = props;
-	return (
-		<div className="text-2xl lg:text-4xl font-bold">
-			{year}년
-		</div>
-	);
+	return <div className="text-2xl lg:text-4xl font-bold">{year}년</div>;
 };
 
 interface MonthProps {
@@ -53,9 +49,5 @@ interface MonthProps {
 
 export const Month = (props: MonthProps) => {
 	const { month } = props;
-	return (
-		<div className="text-2xl lg:text-4xl font-bold">
-			{month}월
-		</div>
-	);
+	return <div className="text-2xl lg:text-4xl font-bold">{month}월</div>;
 };

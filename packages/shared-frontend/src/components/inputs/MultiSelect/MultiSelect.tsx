@@ -3,7 +3,7 @@ import {
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import { MobxProps } from "@shared/types";
+import type { MobxProps } from "../../../types";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";

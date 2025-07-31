@@ -295,7 +295,7 @@ export interface FileUploaderProps<T = any> extends MobxProps<T> {
 	onFileRemove?: (fileDto: Partial<any>) => void;
 }
 
-export interface Option{
+export interface Option {
 	key: string;
 	value: string;
 	label: string;
@@ -492,8 +492,6 @@ export type ListboxProps<T> = Omit<HeroListboxProps, "state" | "children"> &
 			  }[]
 			| undefined;
 	};
-
-
 
 export type Validation = {
 	timings?: ("onBlur" | "onChange" | "onFocus")[];

@@ -1,4 +1,8 @@
-import { PageBuilder as PageBuilderInterface } from "@shared/types";
+// PageBuilder interface - moved from @shared/types
+interface PageBuilderInterface {
+	state: any;
+	[key: string]: any;
+}
 import { defaultTo } from "lodash-es";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import React, { createContext } from "react";

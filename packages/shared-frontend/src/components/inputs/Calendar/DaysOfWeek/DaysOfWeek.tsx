@@ -7,8 +7,11 @@ export const DaysOfWeek = () => {
 				return (
 					<div
 						key={dayOfWeek}
-						className={`flex items-center justify-center text-sm font-medium ${["SAT", "SUN"].includes(dayOfWeek) ? "text-red-500" : "text-gray-700"
-							}`}
+						className={`flex items-center justify-center text-sm font-medium ${
+							["SAT", "SUN"].includes(dayOfWeek)
+								? "text-red-500"
+								: "text-gray-700"
+						}`}
 					>
 						{dayOfWeek}
 					</div>

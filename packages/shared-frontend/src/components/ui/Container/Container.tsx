@@ -1,4 +1,4 @@
-import { ContainerProps } from "@shared/types";
+import type { ContainerProps } from "../../../types";
 import { cva } from "class-variance-authority";
 
 const container = cva("flex flex-col");

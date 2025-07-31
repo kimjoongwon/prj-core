@@ -1,5 +1,5 @@
 import { InputProps } from "@heroui/react";
-import { MultiInputProps } from "@shared/types";
+import type { MultiInputProps } from "../../../types";
 import { get } from "lodash-es";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useInputState } from "../../../hooks/useInputState";

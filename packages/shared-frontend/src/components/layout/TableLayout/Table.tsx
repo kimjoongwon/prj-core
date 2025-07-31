@@ -1,4 +1,4 @@
-import { TableLayoutProps } from "@shared/types";
+import type { TableLayoutProps } from "../../../types";
 import { observer } from "mobx-react-lite";
 import { VStack } from "../../ui/VStack/VStack";
 

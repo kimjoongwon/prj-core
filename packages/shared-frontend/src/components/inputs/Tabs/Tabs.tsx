@@ -1,4 +1,4 @@
-import { TabsProps } from "@shared/types";
+import type { TabsProps } from "../../../types";
 import { get } from "lodash-es";
 import { Key } from "react";
 import { useMobxHookForm } from "../../../hooks";

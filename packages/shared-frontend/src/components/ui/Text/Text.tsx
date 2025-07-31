@@ -1,4 +1,4 @@
-import { TextProps } from "@shared/types";
+import type { TextProps } from "../../../types";
 import { cva } from "class-variance-authority";
 import React from "react";
 

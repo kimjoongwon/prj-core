@@ -1,6 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { type SortableMediaProps } from "@shared/types";
+import type { SortableMediaProps } from "../../../types";
 import { Play, X } from "lucide-react";
 import { action, observable } from "mobx";
 import { VideoPlayer } from "../VideoPlayer";

@@ -1,7 +1,7 @@
+import { Link } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
-import { Button } from "../Button";
-import {Link} from "@heroui/react";
+import { Button } from "../Button/Button";
 
 export interface NavbarItemProps {
 	url: string;
@@ -11,7 +11,7 @@ export interface NavbarItemProps {
 }
 
 export const NavbarItem = observer((props: NavbarItemProps) => {
-	const { label = '미입력', value, onChange } = props;
+	const { label = "미입력", value, onChange } = props;
 
 	// Check if current path matches the value
 	const isActive = useMemo(() => {
@@ -26,8 +26,8 @@ export const NavbarItem = observer((props: NavbarItemProps) => {
 	}, [onChange, value]);
 
 	return (
-		<Link 
-			as={Button} 
+		<Link
+			as={Button}
 			variant="light"
 			color={isActive ? "primary" : "foreground"}
 			onPress={handleClick}

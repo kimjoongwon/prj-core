@@ -1,5 +1,5 @@
-import { MessageProps } from "@shared/types";
-import { Text } from "../Text";
+import type { MessageProps } from "../../../types";
+import { Text } from "../Text/Text";
 
 export const Message = (props: MessageProps) => {
 	const { message, title } = props;

@@ -9,8 +9,7 @@ import {
 import { action } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useState } from "react";
-import { Table } from "../Table";
-import { TableProps } from "../Table/Table";
+import { Table, TableProps } from "../Table/Table";
 
 export type Key = string | number;
 
@@ -18,7 +17,7 @@ type DataGridState = {
 	selectedKeys: Key[] | null;
 };
 
-export type DataGridProps<T> = Omit<TableProps<T>, 'tableInstance'> & {
+export type DataGridProps<T> = Omit<TableProps<T>, "tableInstance"> & {
 	state: DataGridState;
 	columns: ColumnDef<T, any>[];
 	data: (T & { id: Key })[];

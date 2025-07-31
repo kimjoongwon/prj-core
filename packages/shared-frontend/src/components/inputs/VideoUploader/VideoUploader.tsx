@@ -1,4 +1,4 @@
-import { VideoUploaderProps } from "@shared/types";
+import type { VideoUploaderProps } from "../../../types";
 import { Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";

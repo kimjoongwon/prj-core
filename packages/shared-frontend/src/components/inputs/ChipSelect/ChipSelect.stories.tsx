@@ -14,7 +14,8 @@ const meta = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "선택 가능한 칩 컴포넌트입니다. 단일 선택, 다중 선택, 선택 불가 모드를 지원합니다.",
+				component:
+					"선택 가능한 칩 컴포넌트입니다. 단일 선택, 다중 선택, 선택 불가 모드를 지원합니다.",
 			},
 		},
 	},
@@ -122,7 +123,7 @@ export const 긴목록: Story = {
 			"Nuxt.js",
 			"Svelte",
 			"SvelteKit",
-			"Astro"
+			"Astro",
 		],
 		selectionMode: "multiple",
 		state: { chipMultiple: [] },

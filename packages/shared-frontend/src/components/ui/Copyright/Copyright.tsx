@@ -1,4 +1,4 @@
-import { CopyrightProps } from "@shared/types";
+import type { CopyrightProps } from "../../../types";
 import dayjs from "dayjs";
 
 export const Copyright = (props: CopyrightProps) => {

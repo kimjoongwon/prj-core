@@ -1,10 +1,10 @@
-import { Textarea } from "@heroui/react";
-import { BaseTextareaProps } from "@shared/types";
+import { Textarea as BaseTextarea } from "@heroui/react";
+import type { BaseTextareaProps } from "../../../types";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";
 
-export const BaseTextarea = observer(
+export const Textarea = observer(
 	<T extends object>(props: BaseTextareaProps<T>) => {
 		const { value, state = {}, path = "", ...rest } = props;
 		const initialValue = get(state, path, value);
@@ -15,7 +15,11 @@ export const BaseTextarea = observer(
 		};
 
 		return (
-			<Textarea {...rest} value={localState.value} onChange={handleOnChange} />
+			<BaseTextarea
+				{...rest}
+				value={localState.value}
+				onChange={handleOnChange}
+			/>
 		);
 	},
 );

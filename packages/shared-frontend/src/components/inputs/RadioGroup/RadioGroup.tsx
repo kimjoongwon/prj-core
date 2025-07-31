@@ -3,7 +3,7 @@ import {
 	Radio,
 	RadioGroupProps,
 } from "@heroui/react";
-import { MobxProps } from "@shared/types";
+import type { MobxProps } from "../../../types";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";

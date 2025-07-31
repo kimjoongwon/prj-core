@@ -46,7 +46,8 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Default navigation item. Active state is automatically determined by comparing value with window.location.pathname.",
+				story:
+					"Default navigation item. Active state is automatically determined by comparing value with window.location.pathname.",
 			},
 		},
 	},
@@ -62,7 +63,8 @@ export const Active: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "Navigation item that appears active when window.location.pathname matches the value.",
+				story:
+					"Navigation item that appears active when window.location.pathname matches the value.",
 			},
 		},
 	},
@@ -87,14 +89,40 @@ export const LongText: Story = {
 export const NavigationBar: Story = {
 	args: {},
 	render: () => {
-		const handleNavigation = (value: string) => console.log("Navigating to:", value);
+		const handleNavigation = (value: string) =>
+			console.log("Navigating to:", value);
 		return (
 			<div className="flex gap-2 p-4 bg-gray-50 rounded-lg">
-				<NavbarItem label="Home" url="/" value="/" onChange={handleNavigation} />
-				<NavbarItem label="Products" url="/products" value="/products" onChange={handleNavigation} />
-				<NavbarItem label="Services" url="/services" value="/services" onChange={handleNavigation} />
-				<NavbarItem label="About" url="/about" value="/about" onChange={handleNavigation} />
-				<NavbarItem label="Contact" url="/contact" value="/contact" onChange={handleNavigation} />
+				<NavbarItem
+					label="Home"
+					url="/"
+					value="/"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Products"
+					url="/products"
+					value="/products"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Services"
+					url="/services"
+					value="/services"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="About"
+					url="/about"
+					value="/about"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Contact"
+					url="/contact"
+					value="/contact"
+					onChange={handleNavigation}
+				/>
 			</div>
 		);
 	},
@@ -111,21 +139,48 @@ export const NavigationBar: Story = {
 export const VerticalNavigation: Story = {
 	args: {},
 	render: () => {
-		const handleNavigation = (value: string) => console.log("Navigating to:", value);
+		const handleNavigation = (value: string) =>
+			console.log("Navigating to:", value);
 		return (
 			<div className="flex flex-col gap-1 p-4 bg-white border rounded-lg w-48">
-				<NavbarItem label="Dashboard" url="/dashboard" value="/dashboard" onChange={handleNavigation} />
-				<NavbarItem label="Analytics" url="/analytics" value="/analytics" onChange={handleNavigation} />
-				<NavbarItem label="Projects" url="/projects" value="/projects" onChange={handleNavigation} />
-				<NavbarItem label="Team" url="/team" value="/team" onChange={handleNavigation} />
-				<NavbarItem label="Settings" url="/settings" value="/settings" onChange={handleNavigation} />
+				<NavbarItem
+					label="Dashboard"
+					url="/dashboard"
+					value="/dashboard"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Analytics"
+					url="/analytics"
+					value="/analytics"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Projects"
+					url="/projects"
+					value="/projects"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Team"
+					url="/team"
+					value="/team"
+					onChange={handleNavigation}
+				/>
+				<NavbarItem
+					label="Settings"
+					url="/settings"
+					value="/settings"
+					onChange={handleNavigation}
+				/>
 			</div>
 		);
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Vertical navigation layout with nav items stacked. Active state is automatically determined.",
+				story:
+					"Vertical navigation layout with nav items stacked. Active state is automatically determined.",
 			},
 		},
 	},
@@ -136,12 +191,17 @@ export const WithParams: Story = {
 		label: "User Profile",
 		url: "/user",
 		value: "/user",
-		onChange: (value) => console.log("Navigating to:", value, "with params:", { userId: "123", tab: "profile" }),
+		onChange: (value) =>
+			console.log("Navigating to:", value, "with params:", {
+				userId: "123",
+				tab: "profile",
+			}),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Navigation item example. Additional parameters can be handled in the onChange callback.",
+				story:
+					"Navigation item example. Additional parameters can be handled in the onChange callback.",
 			},
 		},
 	},

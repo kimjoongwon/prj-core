@@ -1,4 +1,4 @@
-import type { GroupButton } from "@shared/types";
+import type { GroupButton } from "../../../types";
 import type { Meta, StoryObj } from "@storybook/react";
 import { ButtonGroup } from "./ButtonGroup";
 
