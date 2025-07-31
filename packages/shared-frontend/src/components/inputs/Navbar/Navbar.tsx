@@ -1,54 +1,36 @@
 import { Button } from "@heroui/react";
-import { Route } from "@shared/types";
 import { memo, useCallback, useMemo } from "react";
-import { HStack, VStack } from "../../../..";
-import { renderLucideIcon } from "../../../utils/iconUtils";
-import { NavbarProps } from "./types";
+import { HStack, VStack } from "../../ui";
+import { renderLucideIcon } from "../../../utils";
+import { NavbarProps, Route } from "./types";
 import { getRouteDisplayText, getRouteKey, isRouteClickable } from "./utils";
-
-const NavbarButton = memo(({ 
-	route, 
-	onRouteClick 
-}: { 
-	route: Route; 
-	onRouteClick?: (route: Route) => void;
-}) => {
-	const handleClick = useCallback(() => {
-		if (isRouteClickable(route) && onRouteClick) {
-			onRouteClick(route);
-		}
-	}, [route, onRouteClick]);
-
-	return (
-		<Button
-			variant="light"
-			color={route.active ? "primary" : "default"}
-			onPress={handleClick}
-			startContent={
-				route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined
-			}
-		>
-			{getRouteDisplayText(route)}
-		</Button>
-	);
-});
-
-NavbarButton.displayName = "NavbarButton";
 
 export const Navbar = memo<NavbarProps>(({ 
 	routes = [], 
 	direction = "horizontal", 
 	onRouteClick 
 }) => {
+	const handleRouteClick = useCallback((route: Route) => {
+		if (isRouteClickable(route) && onRouteClick) {
+			onRouteClick(route);
+		}
+	}, [onRouteClick]);
+
 	const buttons = useMemo(() => 
 		routes.map((route, index) => (
-			<NavbarButton
+			<Button
 				key={getRouteKey(route, index)}
-				route={route}
-				onRouteClick={onRouteClick}
-			/>
+				variant="light"
+				color={route.active ? "primary" : "default"}
+				onPress={() => handleRouteClick(route)}
+				startContent={
+					route.icon ? renderLucideIcon(route.icon, "w-4 h-4", 16) : undefined
+				}
+			>
+				{getRouteDisplayText(route)}
+			</Button>
 		)), 
-		[routes, onRouteClick]
+		[routes, handleRouteClick]
 	);
 
 	const Container = direction === "vertical" ? VStack : HStack;

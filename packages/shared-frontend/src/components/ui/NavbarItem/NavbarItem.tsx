@@ -1,33 +1,38 @@
 import { observer } from "mobx-react-lite";
-import { v4 } from "uuid";
+import { useCallback, useMemo } from "react";
 import { Button } from "../Button";
+import {Link} from "@heroui/react";
 
 export interface NavbarItemProps {
 	url: string;
-	text: string;
-	active: boolean;
-	params?: object;
+	label: string;
+	value: string;
+	onChange: (href: string) => void;
 }
 
 export const NavbarItem = observer((props: NavbarItemProps) => {
-	const { text, active } = props;
+	const { label = '미입력', value, onChange } = props;
 
-	const onClickNavItem = () => {
-		// galaxy?.router.push({
-		//   url,
-		//   params,
-		// });
-	};
+	// Check if current path matches the value
+	const isActive = useMemo(() => {
+		return window.location.pathname === value;
+	}, [value]);
+
+	// Handle click event
+	const handleClick = useCallback(() => {
+		if (onChange) {
+			onChange(value);
+		}
+	}, [onChange, value]);
 
 	return (
-		<Button
-			key={v4()}
+		<Link 
+			as={Button} 
 			variant="light"
-			className="font-semibold"
-			color={active ? "primary" : "default"}
-			onClick={onClickNavItem}
+			color={isActive ? "primary" : "foreground"}
+			onPress={handleClick}
 		>
-			{text}
-		</Button>
+			{label}
+		</Link>
 	);
 });

@@ -9,26 +9,26 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"A navigation item component used in navbars and menus. Shows different styling based on active state.",
+					"A navigation item component that automatically detects active state by comparing window.location.pathname with the value prop. Callbacks the value when clicked.",
 			},
 		},
 	},
 	tags: ["autodocs"],
 	argTypes: {
-		text: {
+		label: {
 			control: "text",
 			description: "The text to display in the navigation item",
 		},
 		url: {
 			control: "text",
-			description: "The URL to navigate to when clicked",
+			description: "The URL (deprecated, use value instead)",
 		},
-		active: {
-			control: "boolean",
-			description: "Whether this navigation item is currently active",
+		value: {
+			control: "text",
+			description: "The path value to compare with window.location.pathname",
 		},
-		params: {
-			description: "Optional parameters to pass with navigation",
+		onChange: {
+			description: "Callback function called with the value when clicked",
 		},
 	},
 } satisfies Meta<typeof NavbarItem>;
@@ -38,14 +38,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
-		text: "Home",
+		label: "Home",
 		url: "/home",
-		active: false,
+		value: "/home",
+		onChange: (value) => console.log("Navigating to:", value),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Default navigation item in inactive state.",
+				story: "Default navigation item. Active state is automatically determined by comparing value with window.location.pathname.",
 			},
 		},
 	},
@@ -53,14 +54,15 @@ export const Default: Story = {
 
 export const Active: Story = {
 	args: {
-		text: "Dashboard",
+		label: "Dashboard",
 		url: "/dashboard",
-		active: true,
+		value: window.location.pathname, // This will make it active if current path matches
+		onChange: (value) => console.log("Navigating to:", value),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Navigation item in active state with primary color.",
+				story: "Navigation item that appears active when window.location.pathname matches the value.",
 			},
 		},
 	},
@@ -68,9 +70,10 @@ export const Active: Story = {
 
 export const LongText: Story = {
 	args: {
-		text: "Very Long Navigation Item Text",
+		label: "Very Long Navigation Item Text",
 		url: "/long-page",
-		active: false,
+		value: "/long-page",
+		onChange: (value) => console.log("Navigating to:", value),
 	},
 	parameters: {
 		docs: {
@@ -83,20 +86,23 @@ export const LongText: Story = {
 
 export const NavigationBar: Story = {
 	args: {},
-	render: () => (
-		<div className="flex gap-2 p-4 bg-gray-50 rounded-lg">
-			<NavbarItem text="Home" url="/" active={true} />
-			<NavbarItem text="Products" url="/products" active={false} />
-			<NavbarItem text="Services" url="/services" active={false} />
-			<NavbarItem text="About" url="/about" active={false} />
-			<NavbarItem text="Contact" url="/contact" active={false} />
-		</div>
-	),
+	render: () => {
+		const handleNavigation = (value: string) => console.log("Navigating to:", value);
+		return (
+			<div className="flex gap-2 p-4 bg-gray-50 rounded-lg">
+				<NavbarItem label="Home" url="/" value="/" onChange={handleNavigation} />
+				<NavbarItem label="Products" url="/products" value="/products" onChange={handleNavigation} />
+				<NavbarItem label="Services" url="/services" value="/services" onChange={handleNavigation} />
+				<NavbarItem label="About" url="/about" value="/about" onChange={handleNavigation} />
+				<NavbarItem label="Contact" url="/contact" value="/contact" onChange={handleNavigation} />
+			</div>
+		);
+	},
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"Example navigation bar with multiple nav items, showing one active item.",
+					"Example navigation bar with multiple nav items. Active state is automatically determined by window.location.pathname.",
 			},
 		},
 	},
@@ -104,19 +110,22 @@ export const NavigationBar: Story = {
 
 export const VerticalNavigation: Story = {
 	args: {},
-	render: () => (
-		<div className="flex flex-col gap-1 p-4 bg-white border rounded-lg w-48">
-			<NavbarItem text="Dashboard" url="/dashboard" active={true} />
-			<NavbarItem text="Analytics" url="/analytics" active={false} />
-			<NavbarItem text="Projects" url="/projects" active={false} />
-			<NavbarItem text="Team" url="/team" active={false} />
-			<NavbarItem text="Settings" url="/settings" active={false} />
-		</div>
-	),
+	render: () => {
+		const handleNavigation = (value: string) => console.log("Navigating to:", value);
+		return (
+			<div className="flex flex-col gap-1 p-4 bg-white border rounded-lg w-48">
+				<NavbarItem label="Dashboard" url="/dashboard" value="/dashboard" onChange={handleNavigation} />
+				<NavbarItem label="Analytics" url="/analytics" value="/analytics" onChange={handleNavigation} />
+				<NavbarItem label="Projects" url="/projects" value="/projects" onChange={handleNavigation} />
+				<NavbarItem label="Team" url="/team" value="/team" onChange={handleNavigation} />
+				<NavbarItem label="Settings" url="/settings" value="/settings" onChange={handleNavigation} />
+			</div>
+		);
+	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Vertical navigation layout with nav items stacked.",
+				story: "Vertical navigation layout with nav items stacked. Active state is automatically determined.",
 			},
 		},
 	},
@@ -124,15 +133,15 @@ export const VerticalNavigation: Story = {
 
 export const WithParams: Story = {
 	args: {
-		text: "User Profile",
+		label: "User Profile",
 		url: "/user",
-		active: false,
-		params: { userId: "123", tab: "profile" },
+		value: "/user",
+		onChange: (value) => console.log("Navigating to:", value, "with params:", { userId: "123", tab: "profile" }),
 	},
 	parameters: {
 		docs: {
 			description: {
-				story: "Navigation item with additional parameters for navigation.",
+				story: "Navigation item example. Additional parameters can be handled in the onChange callback.",
 			},
 		},
 	},
@@ -140,9 +149,10 @@ export const WithParams: Story = {
 
 export const Playground: Story = {
 	args: {
-		text: "Navigation Item",
+		label: "Navigation Item",
 		url: "/example",
-		active: false,
+		value: "/example",
+		onChange: (value) => console.log("Navigating to:", value),
 	},
 	parameters: {
 		docs: {

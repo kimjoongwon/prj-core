@@ -1,4 +1,4 @@
-import { Route } from "@shared/types";
+import { Route } from "./types";
 
 export const isRouteClickable = (route: Route): boolean => {
 	return Boolean(route.fullPath);

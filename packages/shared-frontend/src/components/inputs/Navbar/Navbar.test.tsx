@@ -1,4 +1,4 @@
-import { Route } from "@shared/types";
+import { Route } from "./types";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Navbar } from "./Navbar";
@@ -13,14 +13,18 @@ declare global {
 	}
 }
 
-// Plate mock - vi.mock 내부에서 직접 정의
-vi.mock("../../../..", () => ({
+// UI components mock
+vi.mock("../../ui", () => ({
 	HStack: ({ children, className }: any) => (
 		<div className={className}>{children}</div>
 	),
 	VStack: ({ children, className }: any) => (
 		<div className={className}>{children}</div>
 	),
+}));
+
+// Plate mock
+vi.mock("../../../..", () => ({
 	Plate: {
 		navigation: {
 			setCurrentPath: vi.fn(),
@@ -156,7 +160,11 @@ describe("Navbar", () => {
 
 	describe("클릭 이벤트 처리", () => {
 		it("라우트를 클릭하면 setCurrentPath를 호출해야 한다", () => {
-			render(<Navbar routes={mockRoutes} />);
+			const mockOnRouteClick = vi.fn((route) => {
+				getMockNavigation().setCurrentPath(route.fullPath);
+			});
+			
+			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const userServiceButton = screen.getByTestId("button-사용자 서비스");
 			fireEvent.click(userServiceButton);
@@ -167,7 +175,11 @@ describe("Navbar", () => {
 		});
 
 		it("다른 라우트를 클릭해도 setCurrentPath를 호출해야 한다", () => {
-			render(<Navbar routes={mockRoutes} />);
+			const mockOnRouteClick = vi.fn((route) => {
+				getMockNavigation().setCurrentPath(route.fullPath);
+			});
+			
+			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const spaceServiceButton = screen.getByTestId("button-공간 서비스");
 			fireEvent.click(spaceServiceButton);
@@ -178,7 +190,11 @@ describe("Navbar", () => {
 		});
 
 		it("자식이 없는 라우트를 클릭해도 setCurrentPath를 호출해야 한다", () => {
-			render(<Navbar routes={mockRoutes} />);
+			const mockOnRouteClick = vi.fn((route) => {
+				getMockNavigation().setCurrentPath(route.fullPath);
+			});
+			
+			render(<Navbar routes={mockRoutes} onRouteClick={mockOnRouteClick} />);
 
 			const settingsButton = screen.getByTestId("button-설정");
 			fireEvent.click(settingsButton);
@@ -199,7 +215,11 @@ describe("Navbar", () => {
 				},
 			];
 
-			render(<Navbar routes={routeWithoutPath} />);
+			const mockOnRouteClick = vi.fn((route) => {
+				getMockNavigation().setCurrentPath(route.fullPath);
+			});
+
+			render(<Navbar routes={routeWithoutPath} onRouteClick={mockOnRouteClick} />);
 
 			const button = screen.getByTestId("button-경로 없는 라우트");
 			fireEvent.click(button);
@@ -237,7 +257,11 @@ describe("Navbar", () => {
 				},
 			];
 
-			render(<Navbar routes={routeWithEmptyChildren} />);
+			const mockOnRouteClick = vi.fn((route) => {
+				getMockNavigation().setCurrentPath(route.fullPath);
+			});
+
+			render(<Navbar routes={routeWithEmptyChildren} onRouteClick={mockOnRouteClick} />);
 
 			const button = screen.getByTestId("button-빈 자식 라우트");
 			fireEvent.click(button);
