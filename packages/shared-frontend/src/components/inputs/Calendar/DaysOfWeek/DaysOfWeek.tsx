@@ -1,5 +1,3 @@
-import { Chip } from "../../../../..";
-
 export const DaysOfWeek = () => {
 	const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THR", "FRI", "SAT"];
 
@@ -7,14 +5,13 @@ export const DaysOfWeek = () => {
 		<>
 			{daysOfWeek.map((dayOfWeek) => {
 				return (
-					<Chip
+					<div
 						key={dayOfWeek}
-						variant="light"
-						color={["SAT", "SUN"].includes(dayOfWeek) ? "danger" : "default"}
-						className="place-self-center"
+						className={`flex items-center justify-center text-sm font-medium ${["SAT", "SUN"].includes(dayOfWeek) ? "text-red-500" : "text-gray-700"
+							}`}
 					>
 						{dayOfWeek}
-					</Chip>
+					</div>
 				);
 			})}
 		</>

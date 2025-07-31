@@ -264,14 +264,7 @@ export type EmailProps<_T> = any & {
 	validation?: any; // Validation type would be imported
 };
 
-// CalendarInput related types
-export interface CalendarInputProps<T> extends MobxProps<T> {}
-
-export interface CalendarInputPropsView {
-	readOnly?: boolean;
-	state: any; // ReturnType<typeof useProps>['state']
-}
-
+// Calendar related types
 export type ISOString = string;
 
 export interface DateModel {

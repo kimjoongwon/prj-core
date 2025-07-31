@@ -1,5 +1,5 @@
 export { AutoComplete } from "./AutoComplete";
-export { CalendarInput } from "./CalendarInput";
+export { Calendar } from "./Calendar";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Chips } from "./Chips";
 export { DatePicker } from "./DatePicker";
