@@ -1,14 +1,16 @@
 import { Modal, ModalContent } from "@heroui/react";
-export interface VideoPlayerProps {
-	src: string;
-}
-
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { useRef, useState } from "react";
-import { state } from "../SortableMedia/SortableMedia";
+import { useEffect, useRef, useState } from "react";
 
-export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
+export interface VideoPlayerProps {
+	src: string;
+	isOpen: boolean;
+	onClose: () => void;
+}
+
+export const VideoPlayer = observer((props: VideoPlayerProps) => {
+	const { src, isOpen, onClose } = props;
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const videoRef = useRef<HTMLVideoElement>(null);
@@ -34,18 +36,24 @@ export const VideoPlayer = observer(({ src }: VideoPlayerProps) => {
 		}
 	};
 
-	const close = () => {
-		state.open = false;
+	const handleClose = () => {
 		if (videoRef.current) {
 			videoRef.current.pause();
 			videoRef.current.currentTime = 0; // Reset video to start
 		}
 		setIsPlaying(false);
 		setIsFullscreen(false);
+		onClose();
 	};
 
+	useEffect(() => {
+		if (!isOpen) {
+			handleClose();
+		}
+	}, [isOpen]);
+
 	return (
-		<Modal isOpen={state.open} onClose={close}>
+		<Modal isOpen={isOpen} onClose={handleClose}>
 			<ModalContent>
 				<div className="relative w-full h-full bg-black bg-opacity-10 rounded-lg overflow-hidden">
 					<video

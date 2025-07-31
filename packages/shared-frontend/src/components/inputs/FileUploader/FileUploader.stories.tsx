@@ -3,7 +3,7 @@ import { useLocalObservable } from "mobx-react-lite";
 import { FileUploader } from "./FileUploader";
 
 const meta: Meta<typeof FileUploader> = {
-	title: "Components/Inputs/FileUploader",
+	title: "Inputs/FileUploader",
 	component: FileUploader,
 	parameters: {
 		layout: "centered",

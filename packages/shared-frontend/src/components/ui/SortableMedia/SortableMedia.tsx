@@ -1,19 +1,17 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Play, X } from "lucide-react";
+import { useState } from "react";
+import { VideoPlayer } from "../VideoPlayer/VideoPlayer";
+
 export interface SortableMediaProps {
 	media: Partial<any>; // TODO: Replace with proper FileDto type when available
 	onRemove: (id: string) => void;
 }
 
-import { Play, X } from "lucide-react";
-import { action, observable } from "mobx";
-import { VideoPlayer } from "../VideoPlayer";
-
-export const state = observable({
-	open: false,
-});
-
 export function SortableMedia({ media, onRemove }: SortableMediaProps) {
+	const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
+
 	const {
 		attributes,
 		listeners,
@@ -35,12 +33,13 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 	const handleRemoveClick = () => {
 		onRemove(media.id);
 	};
-	const handleVideoClick = action(() => {
-		state.open = true;
-	});
+
+	const handleVideoClick = () => {
+		setIsVideoPlayerOpen(true);
+	};
 
 	const url = media.url;
-	console.log("media", media);
+
 	return (
 		<>
 			<div
@@ -50,7 +49,7 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 				{...attributes}
 				{...listeners}
 			>
-				{media.mimeType.includes("image") ? (
+				{media.mimeType?.includes("image") ? (
 					<img
 						src={url || "/placeholder.svg"}
 						alt="Uploaded content"
@@ -78,7 +77,13 @@ export function SortableMedia({ media, onRemove }: SortableMediaProps) {
 					<X className="h-4 w-4 text-white" />
 				</button>
 			</div>
-			<VideoPlayer src={url} />
+			{url && (
+				<VideoPlayer
+					src={url}
+					isOpen={isVideoPlayerOpen}
+					onClose={() => setIsVideoPlayerOpen(false)}
+				/>
+			)}
 		</>
 	);
 }
