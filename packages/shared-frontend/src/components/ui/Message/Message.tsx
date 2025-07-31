@@ -1,4 +1,8 @@
-import type { MessageProps } from "../../../types";
+export interface MessageProps {
+	title: string;
+	message: string;
+}
+
 import { Text } from "../Text/Text";
 
 export const Message = (props: MessageProps) => {

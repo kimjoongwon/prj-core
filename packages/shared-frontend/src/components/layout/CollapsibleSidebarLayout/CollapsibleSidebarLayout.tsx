@@ -8,6 +8,7 @@ interface Route {
 	iconName?: string;
 	submenu?: Route[];
 }
+
 import { action } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";

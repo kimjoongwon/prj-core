@@ -1,7 +1,7 @@
-import type { RecurringDayOfTheWeek } from "../../../types";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";
+import type { RecurringDayOfTheWeek } from "../../../types";
 import { WeekInputView } from "./WeekInputView";
 
 export const WeekInput = observer((props: any) => {

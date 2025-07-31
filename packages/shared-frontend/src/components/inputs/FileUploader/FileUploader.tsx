@@ -1,12 +1,23 @@
 import { Button, Card } from "@heroui/react";
 import { FileDto } from "@shared/api-client";
-import type { FileUploaderProps } from "../../../types";
 import { get } from "lodash-es";
 import { X } from "lucide-react";
 import { action, makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
 import { useMobxHookForm } from "../../../hooks";
+import type { MobxProps } from "../../../types";
+
+export interface FileUploaderProps<T = any> extends MobxProps<T> {
+	label?: string;
+	type: "image" | "video" | "all";
+	onFilesChange?: (
+		type: "image" | "video" | "all",
+		fileDtos: Partial<any>[],
+	) => void;
+	onFileRemove?: (fileDto: Partial<any>) => void;
+	fullWidth?: boolean;
+}
 
 export class FileUploaderStore {
 	file: Partial<FileDto> | null = null;
@@ -37,8 +48,9 @@ export const FileUploader = observer(
 		label,
 		state,
 		path,
+		fullWidth,
 	}: FileUploaderProps<T>) => {
-		const initialValue = get(state, path) || null;
+		const initialValue = get(state, path);
 		const { localState } = useMobxHookForm(initialValue, state, path);
 
 		const handleFileUpload = action(
@@ -154,7 +166,9 @@ export const FileUploader = observer(
 		};
 
 		return (
-			<Card className="p-4 sm:p-6 w-full max-w-2xl mx-auto">
+			<Card
+				className={`p-4 sm:p-6 w-full ${!fullWidth && "max-w-2xl mx-auto"}`}
+			>
 				<div className="space-y-6">
 					{label && (
 						<h3 className="text-lg sm:text-xl font-semibold text-center text-gray-900 dark:text-gray-100">

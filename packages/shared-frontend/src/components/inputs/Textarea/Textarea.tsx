@@ -1,5 +1,9 @@
+import type { TextAreaProps } from "@heroui/react";
 import { Textarea as BaseTextarea } from "@heroui/react";
-import type { BaseTextareaProps } from "../../../types";
+import type { MobxProps } from "../../../types";
+
+export interface BaseTextareaProps<T> extends TextAreaProps, MobxProps<T> {}
+
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";

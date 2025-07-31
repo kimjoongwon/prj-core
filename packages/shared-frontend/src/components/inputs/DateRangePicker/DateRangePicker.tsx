@@ -1,21 +1,32 @@
+import type { DateRangePickerProps as HeroUiDateRangePickerProps } from "@heroui/react";
 import { DateRangePicker as HeroUiDateRangePicker } from "@heroui/react";
-import { parseAbsoluteToLocal } from "@internationalized/date";
-import type { DateRangePickerProps } from "../../../types";
+import { type DateValue, parseAbsoluteToLocal } from "@internationalized/date";
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import type { MobxProps } from "../../../types";
+
+export interface DateRangePickerProps<T extends object>
+	extends HeroUiDateRangePickerProps,
+		MobxProps<T> {}
 
 export const DateRangePicker = observer(
 	<T extends object>(props: DateRangePickerProps<T>) => {
 		const { state, path = "", ...rest } = props;
 
-		const startDateTime =
-			get(state, (path as string)?.split(",")?.[0]) || new Date().toISOString();
-		const endDateTime =
-			get(state, (path as string)?.split(",")?.[1]) || new Date().toISOString();
+		const [startPath, endPath] = useMemo(
+			() => (path as string)?.split(","),
+			[path],
+		);
 
-		const localState = useLocalObservable(() => ({
+		const startDateTime = get(state, startPath) || new Date().toISOString();
+		const endDateTime = get(state, endPath) || new Date().toISOString();
+
+		const localState = useLocalObservable<{
+			startDateTime: DateValue;
+			endDateTime: DateValue;
+		}>(() => ({
 			startDateTime: parseAbsoluteToLocal(startDateTime),
 			endDateTime: parseAbsoluteToLocal(endDateTime),
 		}));
@@ -24,36 +35,32 @@ export const DateRangePicker = observer(
 			const disposer = reaction(
 				() => JSON.stringify(localState),
 				() => {
-					set(
-						state,
-						(path as string)?.split(",")?.[0],
-						localState.startDateTime.toAbsoluteString(),
-					);
-					set(
-						state,
-						(path as string)?.split(",")?.[1],
-						localState.endDateTime.toAbsoluteString(),
-					);
+					if (startPath && endPath) {
+						set(state, startPath, localState.startDateTime.toString());
+						set(state, endPath, localState.endDateTime.toString());
+					}
 				},
 			);
 
 			return disposer;
-		}, [localState, path, state]);
+		}, [localState, startPath, endPath, state]);
+
+		const handleDateChange: HeroUiDateRangePickerProps["onChange"] = (
+			value,
+		) => {
+			if (value) {
+				localState.startDateTime = value.start;
+				localState.endDateTime = value.end;
+			}
+		};
 
 		return (
 			<HeroUiDateRangePicker
-				hideTimeZone
 				{...rest}
-				onChange={(value) => {
-					if (value) {
-						localState.startDateTime = value.start;
-						localState.endDateTime = value.end;
-					}
-				}}
+				hideTimeZone
+				onChange={handleDateChange}
 				defaultValue={{
-					// @ts-ignore
 					start: localState.startDateTime,
-					// @ts-ignore
 					end: localState.endDateTime,
 				}}
 			/>

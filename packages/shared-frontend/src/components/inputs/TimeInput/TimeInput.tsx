@@ -3,11 +3,11 @@ import {
 	TimeInput as NextUiTimeInput,
 } from "@heroui/react";
 import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
-import type { MobxProps } from "../../../types";
 import { get, set } from "lodash-es";
 import { action, reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import type { MobxProps } from "../../../types";
 
 export interface TimeInputProps<T> extends HeroUiTimeInputProps, MobxProps<T> {}
 

@@ -1,4 +1,9 @@
-import type { MainLayoutProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface MainLayoutProps {
+	children: ReactNode;
+}
+
 import { VStack } from "../../ui/VStack/VStack";
 
 export const AdminMainLayout = (props: MainLayoutProps) => {

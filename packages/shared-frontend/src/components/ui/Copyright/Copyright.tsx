@@ -1,4 +1,8 @@
-import type { CopyrightProps } from "../../../types";
+export interface CopyrightProps {
+	companyName: string;
+	className?: string;
+}
+
 import dayjs from "dayjs";
 
 export const Copyright = (props: CopyrightProps) => {

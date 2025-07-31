@@ -1,5 +1,15 @@
+import type { ButtonProps, LinkProps } from "@heroui/react";
 import { Link } from "@heroui/react";
-import type { ButtonGroupProps, GroupButton } from "../../../types";
+
+export interface GroupButton extends ButtonProps {
+	href?: LinkProps["href"];
+}
+
+export interface ButtonGroupProps {
+	leftButtons?: GroupButton[];
+	rightButtons?: GroupButton[];
+}
+
 import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
 import { Button } from "../Button/Button";

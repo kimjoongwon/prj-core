@@ -1,6 +1,29 @@
-import type { TextProps } from "../../../types";
 import { cva } from "class-variance-authority";
+import type { ElementType, HTMLAttributes, ReactNode } from "react";
 import React from "react";
+
+export interface TextProps extends HTMLAttributes<HTMLElement> {
+	variant?:
+		| "h1"
+		| "h2"
+		| "h3"
+		| "h4"
+		| "h5"
+		| "h6"
+		| "caption"
+		| "subtitle1"
+		| "subtitle2"
+		| "body1"
+		| "body2"
+		| "title"
+		| "label"
+		| "text"
+		| "error";
+	as?: ElementType;
+	children?: ReactNode;
+	truncate?: boolean;
+	lineClamp?: 1 | 2 | 3 | 4 | 5 | 6 | "none";
+}
 
 const text = cva(["transition-colors duration-200"], {
 	variants: {

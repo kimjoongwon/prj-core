@@ -1,5 +1,9 @@
+import type { InputProps as NextUIInputProps } from "@heroui/react";
 import { InputProps } from "@heroui/react";
-import type { MultiInputProps } from "../../../types";
+import type { MobxProps } from "../../../types";
+
+export interface MultiInputProps<T> extends MobxProps<T>, NextUIInputProps {}
+
 import { get } from "lodash-es";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useInputState } from "../../../hooks/useInputState";

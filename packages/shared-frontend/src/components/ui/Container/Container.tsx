@@ -1,4 +1,8 @@
-import type { ContainerProps } from "../../../types";
+export interface ContainerProps {
+	children: React.ReactNode;
+	className?: string;
+}
+
 import { cva } from "class-variance-authority";
 
 const container = cva("flex flex-col");

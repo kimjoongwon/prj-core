@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const { validateSingleField, validateFields } = FormValidationUtil;
 
-import type { Validation } from "../../../types";
+import type { Validation } from "../../types/index";
 
 describe("validateSingleField", () => {
 	it("should validate required fields correctly", () => {

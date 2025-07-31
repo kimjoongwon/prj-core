@@ -13,7 +13,6 @@ export interface DropdownItemProps
 	extends Omit<HeroUIDropdownItemProps, "children"> {
 	key: string;
 	label: string;
-	onClick?: () => void;
 }
 
 export interface DropdownProps
@@ -23,18 +22,11 @@ export interface DropdownProps
 	onAction?: (key: string) => void;
 }
 
-export const Dropdown = observer((props: DropdownProps) => {
+const DropdownComponent = (props: DropdownProps) => {
 	const { trigger, dropdownItems, onAction, ...dropdownProps } = props;
 
 	const handleAction = (key: React.Key) => {
-		const stringKey = String(key);
-		const item = dropdownItems.find((item) => item.key === stringKey);
-
-		// Call item's onClick if it exists
-		item?.onClick?.();
-
-		// Call the dropdown's onAction if it exists
-		onAction?.(stringKey);
+		onAction?.(String(key));
 	};
 
 	return (
@@ -45,17 +37,16 @@ export const Dropdown = observer((props: DropdownProps) => {
 				onAction={handleAction}
 				variant="flat"
 			>
-				{dropdownItems.map((item) => {
-					const { key, label, onClick, ...itemProps } = item;
-					return (
-						<DropdownItem key={key} {...itemProps}>
-							{label}
-						</DropdownItem>
-					);
-				})}
+				{dropdownItems.map(({ key, label, ...itemProps }) => (
+					<DropdownItem key={key} {...itemProps}>
+						{label}
+					</DropdownItem>
+				))}
 			</DropdownMenu>
 		</HeroUIDropdown>
 	);
-});
+};
 
-Dropdown.displayName = "Dropdown";
+DropdownComponent.displayName = "Dropdown";
+
+export const Dropdown = observer(DropdownComponent);

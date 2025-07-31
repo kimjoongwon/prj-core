@@ -3,11 +3,11 @@ import {
 	Radio,
 	RadioGroupProps,
 } from "@heroui/react";
-import type { MobxProps } from "../../../types";
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";
+import type { MobxProps } from "../../../types";
 
 interface RadioOption {
 	text: string;

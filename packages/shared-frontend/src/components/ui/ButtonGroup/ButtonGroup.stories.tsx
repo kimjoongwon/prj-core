@@ -1,5 +1,5 @@
-import type { GroupButton } from "../../../types";
 import type { Meta, StoryObj } from "@storybook/react";
+import type { GroupButton } from "../../../types";
 import { ButtonGroup } from "./ButtonGroup";
 
 const meta = {

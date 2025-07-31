@@ -1,4 +1,9 @@
-import type { SpacerProps } from "../../../types";
+export interface SpacerProps {
+	size?: number;
+	direction?: "horizontal" | "vertical";
+	className?: string;
+}
+
 import React from "react";
 
 /**

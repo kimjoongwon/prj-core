@@ -1,4 +1,9 @@
-import type { TableLayoutProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface TableLayoutProps {
+	children: ReactNode;
+}
+
 import { observer } from "mobx-react-lite";
 import { VStack } from "../../ui/VStack/VStack";
 

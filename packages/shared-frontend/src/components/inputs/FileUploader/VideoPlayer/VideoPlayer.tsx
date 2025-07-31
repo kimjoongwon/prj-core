@@ -1,5 +1,8 @@
 import { Modal, ModalContent } from "@heroui/react";
-import type { VideoPlayerProps } from "../../../types";
+export interface VideoPlayerProps {
+	src: string;
+}
+
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";

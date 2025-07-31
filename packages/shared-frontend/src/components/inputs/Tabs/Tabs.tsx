@@ -1,4 +1,9 @@
-import type { TabsProps } from "../../../types";
+import type { MobxProps, Option } from "../../../types";
+
+export interface TabsProps<T> extends MobxProps<T> {
+	options: Option[];
+}
+
 import { get } from "lodash-es";
 import { Key } from "react";
 import { useMobxHookForm } from "../../../hooks";
