@@ -1,6 +1,6 @@
 import { Tab, Tabs, TabsProps } from "@heroui/react";
-import type { Option } from "../../../types";
 import { observer } from "mobx-react-lite";
+import type { Option } from "../../../types";
 
 export interface TabsViewProps extends TabsProps {
 	options: Option[];

@@ -1,5 +1,11 @@
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
-import type { HeaderProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface HeaderProps {
+	left?: ReactNode;
+	center?: ReactNode;
+	right?: ReactNode;
+}
 
 export const Header = (props: HeaderProps) => {
 	const { left, center, right } = props;

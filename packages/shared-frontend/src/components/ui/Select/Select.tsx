@@ -3,10 +3,10 @@ import {
 	SelectProps as NextUISelectProps,
 	SelectItem,
 } from "@heroui/react";
-import type { MobxProps, Option } from "../../../types";
 import { cloneDeep, get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMobxHookForm } from "../../../hooks";
+import type { MobxProps, Option } from "../../../types";
 
 interface SelectProps<T>
 	extends Omit<NextUISelectProps, "children">,

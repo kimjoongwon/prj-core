@@ -1,9 +1,18 @@
-import {
-	Autocomplete,
-	AutocompleteItem,
-	AutocompleteProps,
-} from "@heroui/react";
-import type { BaseAutoCompleteProps } from "../../../types";
+import type { AutocompleteProps } from "@heroui/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import type { MobxProps } from "../../../types";
+
+export interface BaseAutoCompleteProps<T>
+	extends Omit<
+			AutocompleteProps<{
+				label: string;
+				description?: string;
+				key?: string;
+			}>,
+			"children"
+		>,
+		MobxProps<T> {}
+
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";

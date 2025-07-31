@@ -1,5 +1,18 @@
+import type { ListboxProps as HeroListboxProps } from "@heroui/react";
 import { Listbox as HeroListbox, ListboxItem } from "@heroui/react";
-import type { ListboxProps } from "../../../types";
+import type { MobxProps } from "../../../types";
+
+export type ListboxProps<T> = Omit<HeroListboxProps, "state" | "children"> &
+	MobxProps<T> & {
+		title?: string;
+		options:
+			| {
+					text: string;
+					value: any;
+			  }[]
+			| undefined;
+	};
+
 import { get, set } from "lodash-es";
 import { reaction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";

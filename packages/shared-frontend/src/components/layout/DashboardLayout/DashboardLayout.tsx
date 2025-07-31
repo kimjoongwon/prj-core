@@ -1,5 +1,15 @@
 import { Card, CardBody } from "@heroui/react";
-import type { DashboardLayoutProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface DashboardLayoutProps {
+	header?: ReactNode;
+	leftSidebar?: ReactNode;
+	rightSidebar?: ReactNode;
+	bottom?: ReactNode;
+	breadcrumb?: ReactNode;
+	children: ReactNode;
+}
+
 import { observer } from "mobx-react-lite";
 import { Text } from "../../ui/Text/Text";
 

@@ -1,4 +1,14 @@
-import type { VStackProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export type VStackProps = {
+	children?: ReactNode;
+	className?: string;
+	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
+	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+	fullWidth?: boolean;
+	gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
+};
+
 import { cva } from "class-variance-authority";
 
 const vStackVariants = cva("flex flex-col", {

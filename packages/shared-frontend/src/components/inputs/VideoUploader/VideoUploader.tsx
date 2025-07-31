@@ -1,4 +1,7 @@
-import type { VideoUploaderProps } from "../../../types";
+export interface VideoUploaderProps {
+	label?: string;
+}
+
 import { Upload } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";

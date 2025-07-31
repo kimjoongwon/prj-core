@@ -1,4 +1,14 @@
-import type { HStackProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface HStackProps {
+	children?: ReactNode;
+	className?: string;
+	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
+	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+	fullWidth?: boolean;
+	gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16 | 20 | 24;
+}
+
 import { cva } from "class-variance-authority";
 
 const hStackVariants = cva("flex", {

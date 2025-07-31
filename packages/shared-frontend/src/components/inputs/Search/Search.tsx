@@ -1,4 +1,9 @@
-import type { SearchProps } from "../../../types";
+import type { MobxProps } from "../../../types";
+
+export interface SearchProps<T> extends MobxProps<T> {
+	queryState: any;
+}
+
 import { get, isUndefined, set } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { KeyboardEventHandler } from "react";

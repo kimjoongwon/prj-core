@@ -1,6 +1,14 @@
-import type { ListProps } from "../../../types";
+import type { ReactNode } from "react";
+
+export interface ListProps<T> {
+	data: T[];
+	renderItem: (item: T) => ReactNode;
+	horizontal?: boolean;
+	className?: string;
+	placeholder?: ReactNode;
+}
+
 import { observer } from "mobx-react-lite";
-import { ReactNode } from "react";
 import { v4 } from "uuid";
 
 export const List = observer(<T extends object>(props: ListProps<T>) => {
