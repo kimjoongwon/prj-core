@@ -1,17 +1,55 @@
 import { Injectable } from "@nestjs/common";
-import { CreateFileDto, File, UpdateFileDto } from "@shared/schema";
+import {
+	CreateFileDto,
+	Prisma,
+	QueryFileDto,
+	UpdateFileDto,
+} from "@shared/schema";
 import { FilesRepository } from "../repository/files.repository";
-import { BaseService } from "./base.service";
 
 @Injectable()
-export class FilesService extends BaseService<
-	CreateFileDto,
-	UpdateFileDto,
-	any,
-	File,
-	FilesRepository
-> {
-	constructor(readonly repository: FilesRepository) {
-		super(repository);
+export class FilesService {
+	constructor(private readonly repository: FilesRepository) {}
+
+	async create(createFileDto: CreateFileDto) {
+		const file = await this.repository.create({
+			data: createFileDto,
+		});
+
+		return file;
+	}
+
+	async getManyByQuery(query: QueryFileDto) {
+		const args = query.toArgs<Prisma.FileFindManyArgs>();
+		const countArgs = query.toCountArgs<Prisma.FileCountArgs>();
+		const items = await this.repository.findMany(args);
+		const count = await this.repository.count(countArgs);
+
+		return {
+			items,
+			count,
+		};
+	}
+
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
+	}
+
+	updateById(id: string, updateFileDto: UpdateFileDto) {
+		return this.repository.update({
+			where: { id },
+			data: updateFileDto,
+		});
+	}
+
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
+
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
 	}
 }

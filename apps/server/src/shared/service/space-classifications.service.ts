@@ -1,21 +1,55 @@
 import { Injectable } from "@nestjs/common";
 import {
 	CreateSpaceClassificationDto,
-	SpaceClassification,
+	Prisma,
+	QuerySpaceClassificationDto,
 	UpdateSpaceClassificationDto,
 } from "@shared/schema";
 import { SpaceClassificationsRepository } from "../repository/space-classifications.repository";
-import { BaseService } from "./base.service";
 
 @Injectable()
-export class SpaceClassificationsService extends BaseService<
-	CreateSpaceClassificationDto,
-	UpdateSpaceClassificationDto,
-	any,
-	SpaceClassification,
-	SpaceClassificationsRepository
-> {
-	constructor(readonly repository: SpaceClassificationsRepository) {
-		super(repository);
+export class SpaceClassificationsService {
+	constructor(private readonly repository: SpaceClassificationsRepository) {}
+
+	async create(createSpaceClassificationDto: CreateSpaceClassificationDto) {
+		const spaceClassification = await this.repository.create({
+			data: createSpaceClassificationDto,
+		});
+
+		return spaceClassification;
+	}
+
+	async getManyByQuery(query: QuerySpaceClassificationDto) {
+		const args = query.toArgs<Prisma.SpaceClassificationFindManyArgs>();
+		const countArgs = query.toCountArgs<Prisma.SpaceClassificationCountArgs>();
+		const items = await this.repository.findMany(args);
+		const count = await this.repository.count(countArgs);
+
+		return {
+			items,
+			count,
+		};
+	}
+
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
+	}
+
+	updateById(id: string, updateSpaceClassificationDto: UpdateSpaceClassificationDto) {
+		return this.repository.update({
+			where: { id },
+			data: updateSpaceClassificationDto,
+		});
+	}
+
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
+
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
 	}
 }

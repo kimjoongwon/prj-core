@@ -1,21 +1,55 @@
 import { Injectable } from "@nestjs/common";
 import {
 	CreateUserClassificationDto,
+	Prisma,
+	QueryUserClassificationDto,
 	UpdateUserClassificationDto,
-	UserClassification,
 } from "@shared/schema";
 import { UserClassificationsRepository } from "../repository/user-classifications.repository";
-import { BaseService } from "./base.service";
 
 @Injectable()
-export class UserClassificationsService extends BaseService<
-	CreateUserClassificationDto,
-	UpdateUserClassificationDto,
-	any,
-	UserClassification,
-	UserClassificationsRepository
-> {
-	constructor(readonly repository: UserClassificationsRepository) {
-		super(repository);
+export class UserClassificationsService {
+	constructor(private readonly repository: UserClassificationsRepository) {}
+
+	async create(createUserClassificationDto: CreateUserClassificationDto) {
+		const userClassification = await this.repository.create({
+			data: createUserClassificationDto,
+		});
+
+		return userClassification;
+	}
+
+	async getManyByQuery(query: QueryUserClassificationDto) {
+		const args = query.toArgs<Prisma.UserClassificationFindManyArgs>();
+		const countArgs = query.toCountArgs<Prisma.UserClassificationCountArgs>();
+		const items = await this.repository.findMany(args);
+		const count = await this.repository.count(countArgs);
+
+		return {
+			items,
+			count,
+		};
+	}
+
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
+	}
+
+	updateById(id: string, updateUserClassificationDto: UpdateUserClassificationDto) {
+		return this.repository.update({
+			where: { id },
+			data: updateUserClassificationDto,
+		});
+	}
+
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
+
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
 	}
 }

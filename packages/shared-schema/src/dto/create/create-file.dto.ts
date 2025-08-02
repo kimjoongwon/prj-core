@@ -6,4 +6,5 @@ export class CreateFileDto extends OmitType(FileDto, [
 	...COMMON_ENTITY_FIELDS,
 	"tenant",
 	"classification",
+	"associations",
 ]) {}

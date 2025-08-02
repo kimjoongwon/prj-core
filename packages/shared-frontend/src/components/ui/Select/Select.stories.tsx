@@ -99,6 +99,8 @@ export const Default: Story = {
 		options: countryOptions,
 		placeholder: "Select a country",
 		label: "Country",
+		state: {},
+		path: "selectedValue",
 	},
 	parameters: {
 		docs: {
@@ -115,6 +117,8 @@ export const WithLabel: Story = {
 		placeholder: "Choose your role",
 		label: "User Role",
 		isRequired: true,
+		state: {},
+		path: "selectedValue",
 	},
 	parameters: {
 		docs: {
@@ -131,6 +135,8 @@ export const Disabled: Story = {
 		placeholder: "Select a country",
 		label: "Country",
 		isDisabled: true,
+		state: {},
+		path: "selectedValue",
 	},
 	parameters: {
 		docs: {
@@ -144,7 +150,7 @@ export const Disabled: Story = {
 export const Sizes: Story = {
 	args: {
 		options: categoryOptions,
-		state: {},
+		state: { selectedValue: "" } as any,
 		path: "selectedValue",
 	},
 	render: (args) => (
@@ -365,6 +371,8 @@ export const Playground: Story = {
 		color: "default",
 		isRequired: false,
 		isDisabled: false,
+		state: {},
+		path: "selectedValue",
 	},
 	parameters: {
 		docs: {

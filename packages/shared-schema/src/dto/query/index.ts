@@ -26,3 +26,4 @@ export * from "./query-user.dto";
 export * from "./query-user-association.dto";
 export * from "./query-user-classification.dto";
 export * from "./query-workspace.dto";
+export * from "./query-file.dto";
