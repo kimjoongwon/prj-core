@@ -51,16 +51,22 @@ const 샘플사용자들 = [
 export const 기본: Story = {
 	args: {
 		data: 샘플아이템들,
-		renderItem: (item) => (
-			<div key={item.id} className="p-2 border rounded mb-2">
-				<span className="font-medium">{item.name}</span> - {item.type} (
-				{item.color})
-			</div>
-		),
+		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
 		placeholder: (
 			<div className="text-gray-500 italic">표시할 아이템이 없습니다</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(item) => (
+				<div key={item.id} className="p-2 border rounded mb-2">
+					<span className="font-medium">{item.name}</span> - {item.type} (
+					{item.color})
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -73,26 +79,32 @@ export const 기본: Story = {
 export const 사용자_리스트: Story = {
 	args: {
 		data: 샘플사용자들,
-		renderItem: (user) => (
-			<div
-				key={user.id}
-				className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2"
-			>
-				<div>
-					<div className="font-medium text-gray-900">{user.name}</div>
-					<div className="text-sm text-gray-500">{user.email}</div>
-				</div>
-				<span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-					{user.role}
-				</span>
-			</div>
-		),
+		renderItem: (user: any) => <div key={user.id}>{user.name}</div>,
 		placeholder: (
 			<div className="text-center text-gray-500 py-8">
 				사용자를 찾을 수 없습니다
 			</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(user) => (
+				<div
+					key={user.id}
+					className="flex items-center justify-between p-3 bg-gray-50 rounded-lg mb-2"
+				>
+					<div>
+						<div className="font-medium text-gray-900">{user.name}</div>
+						<div className="text-sm text-gray-500">{user.email}</div>
+					</div>
+					<span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+						{user.role}
+					</span>
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -105,11 +117,7 @@ export const 사용자_리스트: Story = {
 export const 빈_리스트: Story = {
 	args: {
 		data: [],
-		renderItem: (item: any) => (
-			<div key={item.id} className="p-2 border rounded">
-				{item.name}
-			</div>
-		),
+		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
 		placeholder: (
 			<div className="text-center py-12">
 				<div className="text-gray-400 text-6xl mb-4">📭</div>
@@ -122,6 +130,16 @@ export const 빈_리스트: Story = {
 			</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(item: any) => (
+				<div key={item.id} className="p-2 border rounded">
+					{item.name}
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -134,23 +152,29 @@ export const 빈_리스트: Story = {
 export const 간단한_텍스트_리스트: Story = {
 	args: {
 		data: [
-			"첫 번째 아이템",
-			"두 번째 아이템",
-			"세 번째 아이템",
-			"네 번째 아이템",
+			{ id: 1, text: "첫 번째 아이템" },
+			{ id: 2, text: "두 번째 아이템" },
+			{ id: 3, text: "세 번째 아이템" },
+			{ id: 4, text: "네 번째 아이템" },
 		],
-		renderItem: (item, index) => (
-			<div
-				key={index}
-				className="px-3 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0"
-			>
-				{item}
-			</div>
-		),
+		renderItem: (item: any) => <div key={item.id}>{item.text}</div>,
 		placeholder: (
 			<div className="text-gray-500 p-4">사용 가능한 아이템이 없습니다</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(item: any) => (
+				<div
+					key={item.id}
+					className="px-3 py-2 hover:bg-gray-100 border-b border-gray-200 last:border-b-0"
+				>
+					{item.text}
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -182,28 +206,7 @@ export const 카드_리스트: Story = {
 				status: "진행중",
 			},
 		],
-		renderItem: (task) => (
-			<div
-				key={task.id}
-				className="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm"
-			>
-				<div className="flex items-center justify-between mb-2">
-					<h3 className="font-medium text-gray-900">{task.title}</h3>
-					<span
-						className={`px-2 py-1 text-xs rounded-full ${
-							task.status === "완료"
-								? "bg-green-100 text-green-800"
-								: task.status === "진행중"
-									? "bg-blue-100 text-blue-800"
-									: "bg-gray-100 text-gray-800"
-						}`}
-					>
-						{task.status}
-					</span>
-				</div>
-				<p className="text-sm text-gray-600">{task.description}</p>
-			</div>
-		),
+		renderItem: (task: any) => <div key={task.id}>{task.title}</div>,
 		placeholder: (
 			<div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
 				<div className="text-gray-400 text-2xl mb-2">📋</div>
@@ -211,6 +214,33 @@ export const 카드_리스트: Story = {
 			</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(task: any) => (
+				<div
+					key={task.id}
+					className="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-sm"
+				>
+					<div className="flex items-center justify-between mb-2">
+						<h3 className="font-medium text-gray-900">{task.title}</h3>
+						<span
+							className={`px-2 py-1 text-xs rounded-full ${
+								task.status === "완료"
+									? "bg-green-100 text-green-800"
+									: task.status === "진행중"
+										? "bg-blue-100 text-blue-800"
+										: "bg-gray-100 text-gray-800"
+							}`}
+						>
+							{task.status}
+						</span>
+					</div>
+					<p className="text-sm text-gray-600">{task.description}</p>
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {
@@ -224,23 +254,29 @@ export const 카드_리스트: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		data: 샘플아이템들,
-		renderItem: (item) => (
-			<div
-				key={item.id}
-				className="p-3 border rounded-lg mb-2 bg-white shadow-sm"
-			>
-				<div className="font-medium">{item.name}</div>
-				<div className="text-sm text-gray-500">
-					{item.type} • {item.color}
-				</div>
-			</div>
-		),
+		renderItem: (item: any) => <div key={item.id}>{item.name}</div>,
 		placeholder: (
 			<div className="text-gray-500 text-center py-4">
 				보여줄 아이템이 없습니다
 			</div>
 		),
 	},
+	render: (args) => (
+		<List
+			{...args}
+			renderItem={(item: any) => (
+				<div
+					key={item.id}
+					className="p-3 border rounded-lg mb-2 bg-white shadow-sm"
+				>
+					<div className="font-medium">{item.name}</div>
+					<div className="text-sm text-gray-500">
+						{item.type} • {item.color}
+					</div>
+				</div>
+			)}
+		/>
+	),
 	parameters: {
 		docs: {
 			description: {

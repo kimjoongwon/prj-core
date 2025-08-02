@@ -4,11 +4,11 @@ import { Button } from "../../ui/Button/Button";
 import { HStack } from "../../ui/HStack/HStack";
 import { Text } from "../../ui/Text/Text";
 import { VStack } from "../../ui/VStack/VStack";
-import { AdminMainLayout } from "./Main";
+import { MainLayout } from "./Main";
 
-const meta: Meta<typeof AdminMainLayout> = {
+const meta: Meta<typeof MainLayout> = {
 	title: "Layout/AdminMainLayout",
-	component: AdminMainLayout,
+	component: MainLayout,
 	parameters: {
 		layout: "fullscreen",
 	},
