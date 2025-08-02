@@ -17,6 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 const Template: Story["render"] = (args) => {
 	const state = useLocalObservable(() => ({
+		// @ts-ignore
 		time: args.state?.time || "12:00",
 	}));
 	return <TimePicker {...args} state={state} path="time" />;
