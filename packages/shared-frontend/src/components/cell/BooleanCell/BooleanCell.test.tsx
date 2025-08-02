@@ -26,25 +26,25 @@ describe("BooleanCell", () => {
 	it("renders success color chip for true value", () => {
 		render(<BooleanCell value={true} />);
 		const chip = screen.getByText("예").closest("div");
-		expect(chip).toHaveClass("bg-success");
+		expect(chip).toHaveClass("bg-success/20");
 	});
 
 	it("renders default color chip for false value", () => {
 		render(<BooleanCell value={false} />);
 		const chip = screen.getByText("아니오").closest("div");
-		expect(chip).toHaveClass("bg-default");
+		expect(chip).toHaveClass("bg-default/40");
 	});
 
 	it("renders small size chip", () => {
 		render(<BooleanCell value={true} />);
 		const chip = screen.getByText("예").closest("div");
-		expect(chip).toHaveClass("text-small");
+		expect(chip).toHaveClass("text-tiny");
 	});
 
 	it("renders flat variant chip", () => {
 		render(<BooleanCell value={true} />);
 		const chip = screen.getByText("예").closest("div");
-		expect(chip).toHaveClass("data-[variant=flat]");
+		expect(chip).toHaveClass("rounded-full");
 	});
 
 	it("renders p element for null/undefined values", () => {

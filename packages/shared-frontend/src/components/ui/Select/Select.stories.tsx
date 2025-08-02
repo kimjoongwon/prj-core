@@ -71,27 +71,27 @@ type Story = StoryObj<typeof meta>;
 
 // Sample options for stories
 const countryOptions = [
-	{ text: "Korea", value: "kr" },
-	{ text: "United States", value: "us" },
-	{ text: "Japan", value: "jp" },
-	{ text: "China", value: "cn" },
-	{ text: "United Kingdom", value: "uk" },
+	{ key: "1", value: "kr", label: "Korea" },
+	{ key: "2", value: "us", label: "United States" },
+	{ key: "3", value: "jp", label: "Japan" },
+	{ key: "4", value: "cn", label: "China" },
+	{ key: "5", value: "uk", label: "United Kingdom" },
 ];
 
 const roleOptions = [
-	{ text: "Admin", value: "admin" },
-	{ text: "Editor", value: "editor" },
-	{ text: "Viewer", value: "viewer" },
-	{ text: "Guest", value: "guest" },
+	{ key: "1", value: "admin", label: "Admin" },
+	{ key: "2", value: "editor", label: "Editor" },
+	{ key: "3", value: "viewer", label: "Viewer" },
+	{ key: "4", value: "guest", label: "Guest" },
 ];
 
 const categoryOptions = [
-	{ text: "Technology", value: "tech" },
-	{ text: "Design", value: "design" },
-	{ text: "Marketing", value: "marketing" },
-	{ text: "Sales", value: "sales" },
-	{ text: "Finance", value: "finance" },
-	{ text: "Operations", value: "operations" },
+	{ key: "1", value: "tech", label: "Technology" },
+	{ key: "2", value: "design", label: "Design" },
+	{ key: "3", value: "marketing", label: "Marketing" },
+	{ key: "4", value: "sales", label: "Sales" },
+	{ key: "5", value: "finance", label: "Finance" },
+	{ key: "6", value: "operations", label: "Operations" },
 ];
 
 export const Default: Story = {
@@ -142,26 +142,38 @@ export const Disabled: Story = {
 };
 
 export const Sizes: Story = {
-	args: {},
-	render: () => (
+	args: {
+		options: categoryOptions,
+		state: {},
+		path: "selectedValue",
+	},
+	render: (args) => (
 		<div className="flex flex-col gap-4 w-80">
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Small size"
 				label="Small"
 				size="sm"
+				state={{
+					selectedValue: "",
+				}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Medium size"
 				label="Medium"
 				size="md"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Large size"
 				label="Large"
 				size="lg"
+				state={{}}
+				path="selectedValue"
 			/>
 		</div>
 	),
@@ -175,32 +187,44 @@ export const Sizes: Story = {
 };
 
 export const Variants: Story = {
-	args: {},
-	render: () => (
+	args: {
+		options: roleOptions,
+		state: {},
+		path: "selectedValue",
+	},
+	render: (args) => (
 		<div className="flex flex-col gap-4 w-80">
 			<Select
-				options={roleOptions}
+				{...args}
 				placeholder="Flat variant"
 				label="Flat"
 				variant="flat"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={roleOptions}
+				{...args}
 				placeholder="Bordered variant"
 				label="Bordered"
 				variant="bordered"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={roleOptions}
+				{...args}
 				placeholder="Faded variant"
 				label="Faded"
 				variant="faded"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={roleOptions}
+				{...args}
 				placeholder="Underlined variant"
 				label="Underlined"
 				variant="underlined"
+				state={{}}
+				path="selectedValue"
 			/>
 		</div>
 	),
@@ -214,44 +238,60 @@ export const Variants: Story = {
 };
 
 export const Colors: Story = {
-	args: {},
-	render: () => (
+	args: {
+		options: categoryOptions,
+		state: {},
+		path: "selectedValue",
+	},
+	render: (args) => (
 		<div className="flex flex-col gap-4 w-80">
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Default color"
 				label="Default"
 				color="default"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Primary color"
 				label="Primary"
 				color="primary"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Secondary color"
 				label="Secondary"
 				color="secondary"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Success color"
 				label="Success"
 				color="success"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Warning color"
 				label="Warning"
 				color="warning"
+				state={{}}
+				path="selectedValue"
 			/>
 			<Select
-				options={categoryOptions}
+				{...args}
 				placeholder="Danger color"
 				label="Danger"
 				color="danger"
+				state={{}}
+				path="selectedValue"
 			/>
 		</div>
 	),
@@ -265,8 +305,12 @@ export const Colors: Story = {
 };
 
 export const FormExample: Story = {
-	args: {},
-	render: () => (
+	args: {
+		options: countryOptions,
+		state: {},
+		path: "selectedValue",
+	},
+	render: (args) => (
 		<div className="max-w-md p-6 bg-white border rounded-lg shadow">
 			<h3 className="text-lg font-semibold mb-4">User Information</h3>
 			<div className="flex flex-col gap-4">
@@ -275,17 +319,23 @@ export const FormExample: Story = {
 					placeholder="Select country"
 					label="Country"
 					isRequired
+					state={{}}
+					path="country"
 				/>
 				<Select
 					options={roleOptions}
 					placeholder="Select role"
 					label="Role"
 					isRequired
+					state={{}}
+					path="role"
 				/>
 				<Select
 					options={categoryOptions}
 					placeholder="Select department"
 					label="Department"
+					state={{}}
+					path="department"
 				/>
 				<button
 					type="button"

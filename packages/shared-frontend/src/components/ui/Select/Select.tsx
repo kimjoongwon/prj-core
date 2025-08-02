@@ -36,8 +36,8 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 		>
 			{_options.map((option) => {
 				return (
-					<SelectItem key={option.value} textValue={option.value}>
-						{option.text}
+					<SelectItem key={option.key} textValue={option.value}>
+						{option.label}
 					</SelectItem>
 				);
 			})}

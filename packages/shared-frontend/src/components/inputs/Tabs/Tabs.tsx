@@ -1,24 +1,31 @@
+import { Tab, Tabs as HeroUITabs } from "@heroui/react";
+import { get } from "lodash-es";
+import { observer } from "mobx-react-lite";
+import { Key } from "react";
+import { useMobxHookForm } from "../../../hooks";
 import type { MobxProps, Option } from "../../../types";
 
 export interface TabsProps<T> extends MobxProps<T> {
 	options: Option[];
 }
 
-import { get } from "lodash-es";
-import { Key } from "react";
-import { useMobxHookForm } from "../../../hooks";
-import { TabsView } from "./TabsView";
-
-export const Tabs = <T,>(props: TabsProps<T>) => {
-	const { state, path = "" } = props;
+export const Tabs = observer(<T,>(props: TabsProps<T>) => {
+	const { state, path = "", options } = props;
 	const value = get(state, path);
 	const { localState } = useMobxHookForm(get(state, path), state, path);
 
-	const onSelectionChange = (key: Key) => {
+	const handleSelectionChange = (key: Key) => {
 		localState.value = key;
 	};
 
 	return (
-		<TabsView value={value} {...props} onSelectionChange={onSelectionChange} />
+		<HeroUITabs
+			selectedKey={String(value)}
+			onSelectionChange={handleSelectionChange}
+		>
+			{options?.map((item) => (
+				<Tab key={item.value} title={item.label} />
+			))}
+		</HeroUITabs>
 	);
-};
+});

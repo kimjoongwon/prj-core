@@ -6,6 +6,6 @@ interface LinkCellViewProps extends LinkProps {
 }
 
 export const LinkCell = observer((props: LinkCellViewProps) => {
-	const { value, href } = props;
-	return <Link href={href}>{value}</Link>;
+	const { value, ...linkProps } = props;
+	return <Link {...linkProps}>{value}</Link>;
 });
