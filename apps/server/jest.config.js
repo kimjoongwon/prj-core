@@ -5,12 +5,13 @@ module.exports = {
   testMatch: ["**/*.test.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
   moduleNameMapper: {
+    "^@shared/schema$": "<rootDir>/../../../packages/shared-schema/src",
+    "^@shared/types$": "<rootDir>/../../../packages/shared-types/src", 
+    "^@shared/utils$": "<rootDir>/../../../packages/shared-utils/src",
+    "^@shared/vars$": "<rootDir>/../../../packages/shared-vars/src",
+    "^@shared/meta$": "<rootDir>/../../../packages/shared-meta/src",
+    "^@shared$": "<rootDir>/../../../packages/shared-schema/src",
     "^@shared/(.*)$": "<rootDir>/shared/$1",
-    "^@shared$": "<rootDir>/shared/index",
-    "^@shared/types$": "<rootDir>/../../packages/shared-types/src",
-    "^@shared/schema$": "<rootDir>/../../packages/shared-schema/src",
-    "^@shared/utils$": "<rootDir>/../../packages/shared-utils/src",
-    "^@shared/vars$": "<rootDir>/../../packages/shared-vars/src",
   },
   transform: {
     "^.+\\.ts$": [
@@ -18,7 +19,7 @@ module.exports = {
       {
         tsconfig: {
           module: "commonjs",
-          target: "es2017",
+          target: "es2022",
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
           experimentalDecorators: true,

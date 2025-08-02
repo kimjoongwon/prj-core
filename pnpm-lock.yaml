@@ -364,6 +364,9 @@ importers:
       jest:
         specifier: ^30.0.4
         version: 30.0.4(@types/node@24.0.14)(esbuild-register@3.6.0(esbuild@0.25.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.0.14)(typescript@5.8.3))
+      jest-mock-extended:
+        specifier: ^4.0.0
+        version: 4.0.0(@jest/globals@30.0.4)(jest@30.0.4(@types/node@24.0.14)(esbuild-register@3.6.0(esbuild@0.25.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.0.14)(typescript@5.8.3)))(typescript@5.8.3)
       prisma:
         specifier: 6.11.1
         version: 6.11.1(typescript@5.8.3)
@@ -8275,6 +8278,13 @@ packages:
     resolution: {integrity: sha512-vXywcxmr0SsKXF/bAD7t7nMamRvPuJkras00gqYeB1V0WllxZrbZ0paRr3XqpFU2sYYjD0qAaG2fRyn/CGZ0aw==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
+  jest-mock-extended@4.0.0:
+    resolution: {integrity: sha512-7BZpfuvLam+/HC+NxifIi9b+5VXj/utUDMPUqrDJehGWVuXPtLS9Jqlob2mJLrI/pg2k1S8DMfKDvEB88QNjaQ==}
+    peerDependencies:
+      '@jest/globals': ^28.0.0 || ^29.0.0 || ^30.0.0
+      jest: ^24.0.0 || ^25.0.0 || ^26.0.0 || ^27.0.0 || ^28.0.0 || ^29.0.0 || ^30.0.0
+      typescript: ^3.0.0 || ^4.0.0 || ^5.0.0
+
   jest-mock@30.0.2:
     resolution: {integrity: sha512-PnZOHmqup/9cT/y+pXIVbbi8ID6U1XHRmbvR7MvUy4SLqhCbwpkmXhLbsWbGewHrV5x/1bF7YDjs+x24/QSvFA==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -10632,6 +10642,14 @@ packages:
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
+
+  ts-essentials@10.1.1:
+    resolution: {integrity: sha512-4aTB7KLHKmUvkjNj8V+EdnmuVTiECzn3K+zIbRthumvHu+j44x3w63xpfs0JL3NGIzGXqoQ7AV591xHO+XrOTw==}
+    peerDependencies:
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
@@ -13398,7 +13416,7 @@ snapshots:
       '@react-types/textfield': 3.12.3(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
-      react-textarea-autosize: 8.5.3(@types/react@19.1.5)(react@19.1.1)
+      react-textarea-autosize: 8.5.3(@types/react@19.1.9)(react@19.1.1)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -13461,7 +13479,7 @@ snapshots:
       '@react-types/textfield': 3.12.4(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
-      react-textarea-autosize: 8.5.3(@types/react@19.1.5)(react@19.1.1)
+      react-textarea-autosize: 8.5.3(@types/react@19.1.9)(react@19.1.1)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -19174,7 +19192,7 @@ snapshots:
       magic-string: 0.30.17
       sirv: 3.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@24.1.0)(@vitest/browser@3.2.4)(jiti@2.4.2)(jsdom@25.0.1)(lightningcss@1.30.1)(msw@2.10.4(@types/node@24.1.0)(typescript@5.8.3))(terser@5.31.3)(tsx@4.19.2)(yaml@2.7.1)
+      vitest: 3.2.4(@types/node@24.1.0)(@vitest/browser@3.2.4)(@vitest/ui@1.6.1)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(msw@2.10.4(@types/node@24.1.0)(typescript@5.8.3))(terser@5.31.3)(tsx@4.19.2)(yaml@2.7.1)
       ws: 8.18.2
     optionalDependencies:
       playwright: 1.54.1
@@ -21815,6 +21833,13 @@ snapshots:
       pretty-format: 30.0.2
       slash: 3.0.0
       stack-utils: 2.0.6
+
+  jest-mock-extended@4.0.0(@jest/globals@30.0.4)(jest@30.0.4(@types/node@24.0.14)(esbuild-register@3.6.0(esbuild@0.25.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.0.14)(typescript@5.8.3)))(typescript@5.8.3):
+    dependencies:
+      '@jest/globals': 30.0.4
+      jest: 30.0.4(@types/node@24.0.14)(esbuild-register@3.6.0(esbuild@0.25.2))(ts-node@10.9.2(@swc/core@1.13.3)(@types/node@24.0.14)(typescript@5.8.3))
+      ts-essentials: 10.1.1(typescript@5.8.3)
+      typescript: 5.8.3
 
   jest-mock@30.0.2:
     dependencies:
@@ -24801,6 +24826,10 @@ snapshots:
   tree-kill@1.2.2: {}
 
   ts-dedent@2.2.0: {}
+
+  ts-essentials@10.1.1(typescript@5.8.3):
+    optionalDependencies:
+      typescript: 5.8.3
 
   ts-interface-checker@0.1.13: {}
 
