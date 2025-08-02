@@ -15,7 +15,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
+const Template: Story["render"] = (args) => {
 	const state = useLocalObservable(() => ({ text: args.state?.text || "" }));
 	return <Textarea {...args} state={state} path="text" />;
 };

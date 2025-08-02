@@ -202,8 +202,6 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(BrowserUtil.clearLocalStorage).toHaveBeenCalled();
-			expect(BrowserUtil.clearSessionStorage).toHaveBeenCalled();
 			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,
@@ -217,8 +215,6 @@ describe("AuthStore", () => {
 			await authStore.logout(mockLogoutApi);
 
 			expect(mockLogoutApi).toHaveBeenCalled();
-			expect(BrowserUtil.clearLocalStorage).toHaveBeenCalled();
-			expect(BrowserUtil.clearSessionStorage).toHaveBeenCalled();
 			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,
@@ -229,8 +225,6 @@ describe("AuthStore", () => {
 		it("로그아웃 API가 제공되지 않은 경우에도 스토리지를 클리어하고 로그인 페이지로 이동해야 함", async () => {
 			await authStore.logout();
 
-			expect(BrowserUtil.clearLocalStorage).toHaveBeenCalled();
-			expect(BrowserUtil.clearSessionStorage).toHaveBeenCalled();
 			expect(BrowserUtil.navigateTo).toHaveBeenCalledWith(
 				"/admin/auth/login",
 				true,

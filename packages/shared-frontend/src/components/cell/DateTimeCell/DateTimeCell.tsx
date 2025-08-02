@@ -1,12 +1,13 @@
-import { CellContext } from "@tanstack/react-table";
 import dayjs from "dayjs";
 
-export const DateTimeCell = <T,>(cellContext: CellContext<T, unknown>) => {
-	const { getValue } = cellContext;
+interface DateTimeCellProps {
+	value: string | Date | null | undefined;
+}
 
-	if (!getValue()) {
+export const DateTimeCell = ({ value }: DateTimeCellProps) => {
+	if (!value) {
 		return <p>-</p>;
 	}
 
-	return <p>{dayjs(getValue() as string).format("YYYY.MM.DD HH:mm")}</p>;
+	return <p>{dayjs(value as string).format("YYYY.MM.DD HH:mm")}</p>;
 };

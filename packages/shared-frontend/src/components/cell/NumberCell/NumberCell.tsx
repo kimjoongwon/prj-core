@@ -1,9 +1,8 @@
-import { CellContext } from "@tanstack/react-table";
+interface NumberCellProps {
+	value: number | string | null | undefined;
+}
 
-export const NumberCell = <T,>(cellContext: CellContext<T, unknown>) => {
-	const { getValue } = cellContext;
-	const value = getValue();
-
+export const NumberCell = ({ value }: NumberCellProps) => {
 	if (value === null || value === undefined) {
 		return <p>-</p>;
 	}

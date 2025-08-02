@@ -15,8 +15,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ time: args.state?.time || new Date().toISOString() }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({
+		time: args.state?.time || new Date().toISOString(),
+	}));
 	return <TimeInput {...args} state={state} path="time" />;
 };
 

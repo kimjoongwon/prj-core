@@ -21,8 +21,10 @@ const options = [
 	{ name: "Option 3", value: "3" },
 ];
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ values: args.state?.values || [] }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({
+		values: args.state?.values || [],
+	}));
 	return <MultiSelect {...args} state={state} path="values" />;
 };
 

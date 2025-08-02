@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { VideoPlayer } from "./VideoPlayer";
 import { Button } from "@heroui/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
+import { VideoPlayer } from "./VideoPlayer";
 
 const meta: Meta<typeof VideoPlayer> = {
 	title: "ui/VideoPlayer",

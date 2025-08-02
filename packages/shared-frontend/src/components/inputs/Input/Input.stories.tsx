@@ -15,8 +15,8 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ value: args.state?.value || '' }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({ value: args.state?.value || "" }));
 	return <Input {...args} state={state} path="value" />;
 };
 

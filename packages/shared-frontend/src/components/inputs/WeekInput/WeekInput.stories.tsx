@@ -15,8 +15,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ day: args.state?.day || "MONDAY" }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({
+		day: args.state?.day || "MONDAY",
+	}));
 	return <WeekInput {...args} state={state} path="day" />;
 };
 

@@ -21,7 +21,7 @@ const options = [
 	{ text: "Option 3", value: "3" },
 ];
 
-const Template: Story['render'] = (args) => {
+const Template: Story["render"] = (args) => {
 	const state = useLocalObservable(() => ({ value: args.state?.value || "" }));
 	return <RadioGroup {...args} state={state} path="value" />;
 };

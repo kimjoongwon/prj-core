@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { CollapsibleSidebar } from "./CollapsibleSidebarLayout";
 import { Button } from "../../ui/Button/Button";
+import { CollapsibleSidebar } from "./CollapsibleSidebarLayout";
 
 const meta: Meta<typeof CollapsibleSidebar> = {
 	title: "Layout/CollapsibleSidebar",

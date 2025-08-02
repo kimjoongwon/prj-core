@@ -1,5 +1,3 @@
-import { CellContext } from "@tanstack/react-table";
-
 // SVG 폴더 아이콘 컴포넌트들
 const FolderOpenIcon = ({ className }: { className?: string }) => (
 	<svg
@@ -44,28 +42,36 @@ const DocumentIcon = ({ className }: { className?: string }) => (
 	</svg>
 );
 
-interface ExpandableCellProps<T> extends CellContext<T, unknown> {
+interface ExpandableCellProps {
+	value: string | number;
 	expandable?: boolean;
+	depth?: number;
+	canExpand?: boolean;
+	isExpanded?: boolean;
+	onToggleExpand?: () => void;
 }
 
-export const ExpandableCell = <T,>({
-	row,
-	getValue,
+export const ExpandableCell = ({
+	value,
 	expandable = true,
-}: ExpandableCellProps<T>) => {
+	depth = 0,
+	canExpand = false,
+	isExpanded = false,
+	onToggleExpand,
+}: ExpandableCellProps) => {
 	return (
 		<div
 			style={{
-				paddingLeft: expandable ? `${row.depth * 2}rem` : undefined,
+				paddingLeft: expandable ? `${depth * 2}rem` : undefined,
 			}}
 		>
 			<div className="flex items-center relative">
 				{/* 하위 항목이 있을 때만 세로 연결선 표시 */}
-				{expandable && row.depth > 0 && (
+				{expandable && depth > 0 && (
 					<div
 						className="absolute border-l border-gray-300"
 						style={{
-							left: `-${(row.depth - 1) * 2 + 1.25}rem`, // 상위 폴더 아이콘의 중앙
+							left: `-${(depth - 1) * 2 + 1.25}rem`, // 상위 폴더 아이콘의 중앙
 							top: "0rem", // 상위 폴더 아이콘의 하단에서 시작
 							height: "0.875rem", // 현재 아이콘의 중앙까지
 							width: "1px",
@@ -74,31 +80,31 @@ export const ExpandableCell = <T,>({
 				)}
 
 				{/* 수평 연결선 */}
-				{expandable && row.depth > 0 && (
+				{expandable && depth > 0 && (
 					<div
 						className="absolute border-t border-gray-300"
 						style={{
-							left: `-${(row.depth - 1) * 2 + 1.25}rem`, // 상위 폴더 중앙에서 시작
+							left: `-${(depth - 1) * 2 + 1.25}rem`, // 상위 폴더 중앙에서 시작
 							top: "0.875rem", // 아이콘 중앙 높이
-							width: `${(row.depth - 1) * 2 + 0.875}rem`, // 현재 아이콘까지의 거리
+							width: `${(depth - 1) * 2 + 0.875}rem`, // 현재 아이콘까지의 거리
 						}}
 					/>
 				)}
-				{expandable && row.getCanExpand() ? (
+				{expandable && canExpand ? (
 					<div
 						{...{
-							onClick: row.getToggleExpandedHandler(),
+							onClick: onToggleExpand,
 							style: { cursor: "pointer" },
 						}}
 						className="mr-3 flex items-center justify-center w-7 h-7 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-md transition-all duration-200 border border-yellow-200 hover:border-yellow-300"
 					>
-						{row.getIsExpanded() ? (
+						{isExpanded ? (
 							<FolderOpenIcon className="w-5 h-5" />
 						) : (
 							<FolderClosedIcon className="w-5 h-5" />
 						)}
 					</div>
-				) : expandable && !row.getCanExpand() ? (
+				) : expandable && !canExpand ? (
 					<div className="mr-3 flex items-center justify-center w-7 h-7 text-primary">
 						<DocumentIcon className="w-5 h-5" />
 					</div>
@@ -107,7 +113,7 @@ export const ExpandableCell = <T,>({
 						<DocumentIcon className="w-5 h-5" />
 					</div>
 				) : null}
-				<span>{getValue<string>()}</span>
+				<span>{String(value)}</span>
 			</div>
 		</div>
 	);

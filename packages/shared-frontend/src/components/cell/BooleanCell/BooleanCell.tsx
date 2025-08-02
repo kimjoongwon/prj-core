@@ -1,10 +1,10 @@
 import { Chip } from "@heroui/react";
-import { CellContext } from "@tanstack/react-table";
 
-export const BooleanCell = <T,>(cellContext: CellContext<T, unknown>) => {
-	const { getValue } = cellContext;
-	const value = getValue();
+interface BooleanCellProps {
+	value: boolean | null | undefined;
+}
 
+export const BooleanCell = ({ value }: BooleanCellProps) => {
 	if (value === null || value === undefined) {
 		return <p>-</p>;
 	}

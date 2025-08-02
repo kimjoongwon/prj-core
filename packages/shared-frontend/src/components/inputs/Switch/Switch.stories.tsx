@@ -15,8 +15,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ checked: args.state?.checked || false }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({
+		checked: args.state?.checked || false,
+	}));
 	return <Switch {...args} state={state} path="checked" />;
 };
 

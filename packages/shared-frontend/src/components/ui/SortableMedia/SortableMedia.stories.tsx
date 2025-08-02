@@ -1,8 +1,12 @@
+import { closestCenter, DndContext } from "@dnd-kit/core";
+import {
+	arrayMove,
+	SortableContext,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import type { Meta, StoryObj } from "@storybook/react";
-import { SortableMedia } from "./SortableMedia";
-import { DndContext, closestCenter } from "@dnd-kit/core";
-import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useState } from "react";
+import { SortableMedia } from "./SortableMedia";
 
 const meta: Meta<typeof SortableMedia> = {
 	title: "ui/SortableMedia",
@@ -51,14 +55,8 @@ const Template: Story = {
 		};
 
 		return (
-			<DndContext
-				collisionDetection={closestCenter}
-				onDragEnd={handleDragEnd}
-			>
-				<SortableContext
-					items={items}
-					strategy={verticalListSortingStrategy}
-				>
+			<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+				<SortableContext items={items} strategy={verticalListSortingStrategy}>
 					<div className="grid grid-cols-3 gap-4">
 						{items.map((item) => (
 							<SortableMedia

@@ -21,8 +21,10 @@ const options = [
 	{ text: "Tab 3", value: "3" },
 ];
 
-const Template: Story['render'] = (args) => {
-	const state = useLocalObservable(() => ({ selectedTab: args.state?.selectedTab || "1" }));
+const Template: Story["render"] = (args) => {
+	const state = useLocalObservable(() => ({
+		selectedTab: args.state?.selectedTab || "1",
+	}));
 	return <Tabs {...args} state={state} path="selectedTab" />;
 };
 

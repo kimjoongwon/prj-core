@@ -12,7 +12,7 @@ export const AdminAuthLoginPage = observer(
 
 		return (
 			<VStack fullWidth>
-				<Logo variants={"text"} />
+				<Logo />
 				<Text variant="h5">관리자 로그인</Text>
 				<LoginForm state={state.loginForm} />
 				<Button

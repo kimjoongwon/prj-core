@@ -15,10 +15,12 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const Template: Story['render'] = (args) => {
+const Template: Story["render"] = (args) => {
 	const state = useLocalObservable(() => ({ query: args.state?.query || "" }));
 	const queryState = useLocalObservable(() => ({ query: "" }));
-	return <Search {...args} state={state} path="query" queryState={queryState} />;
+	return (
+		<Search {...args} state={state} path="query" queryState={queryState} />
+	);
 };
 
 export const Default: Story = {
