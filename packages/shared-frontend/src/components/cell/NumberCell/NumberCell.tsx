@@ -3,7 +3,7 @@ interface NumberCellProps {
 }
 
 export const NumberCell = ({ value }: NumberCellProps) => {
-	if (value === null || value === undefined) {
+	if (value === null || value === undefined || value === "") {
 		return <p>-</p>;
 	}
 

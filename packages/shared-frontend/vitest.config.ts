@@ -1,14 +1,15 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
+import path from "path";
 
 export default defineConfig({
 	plugins: [react()],
 	test: {
 		environment: "jsdom",
 		globals: true,
-		typecheck: {
-			tsconfig: "./tsconfig.test.json",
-		},
-		setupFiles: [],
+		setupFiles: [path.resolve(__dirname, "./src/test/setup.ts")],
+	},
+	define: {
+		global: "globalThis",
 	},
 });
