@@ -5,8 +5,8 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService, NotBeforeError, TokenExpiredError } from "@nestjs/jwt";
-import { AuthConfig } from "@shared";
 import { Request, Response } from "express";
+import { AuthConfig } from "../config";
 
 export const Token = {
 	ACCESS: "accessToken",

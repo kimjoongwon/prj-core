@@ -13,10 +13,12 @@ import { AuthUserInterceptor } from "./auth-user.interceptor";
 // Mock ContextProvider
 jest.mock("../provider", () => ({
 	ContextProvider: {
-		setServiceId: jest.fn(),
 		setTenantId: jest.fn(),
+		setTenant: jest.fn(),
+		setSpaceId: jest.fn(),
 		setAuthUser: jest.fn(),
 		setAuthUserId: jest.fn(),
+		setAuthContext: jest.fn(),
 	},
 }));
 
@@ -66,28 +68,8 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setServiceId).not.toHaveBeenCalled();
 					expect(ContextProvider.setTenantId).not.toHaveBeenCalled();
 					expect(ContextProvider.setAuthUser).not.toHaveBeenCalled();
-					done();
-				},
-			});
-		});
-
-		it("should set serviceId when present in cookies", (done) => {
-			mockRequest.cookies = { serviceId: "test-service-id" };
-
-			const result = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setServiceId).toHaveBeenCalledWith(
-						"test-service-id",
-					);
 					done();
 				},
 			});
@@ -176,7 +158,6 @@ describe("AuthUserInterceptor", () => {
 			} as UserDto;
 
 			mockRequest.cookies = {
-				serviceId: "test-service-id",
 				tenantId: "test-tenant-id",
 			};
 			mockRequest.user = mockUser;
@@ -189,9 +170,6 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setServiceId).toHaveBeenCalledWith(
-						"test-service-id",
-					);
 					expect(ContextProvider.setTenantId).toHaveBeenCalledWith(
 						"test-tenant-id",
 					);
@@ -228,19 +206,24 @@ describe("AuthUserInterceptor", () => {
 
 			expect(() => {
 				interceptor.intercept(mockExecutionContext, mockCallHandler);
-			}).toThrow(HttpException);
+			}).toThrow("Context extraction failed");
 		});
 
 		it("should handle errors from ContextProvider", () => {
-			(ContextProvider.setServiceId as jest.Mock).mockImplementation(() => {
+			(ContextProvider.setTenantId as jest.Mock).mockImplementation(() => {
 				throw new Error("ContextProvider error");
 			});
 
-			mockRequest.cookies = { serviceId: "test-service-id" };
+			mockRequest.cookies = { tenantId: "test-tenant-id" };
 
 			expect(() => {
 				interceptor.intercept(mockExecutionContext, mockCallHandler);
-			}).toThrow(HttpException);
+			}).toThrow(
+				expect.objectContaining({
+					message: "Failed to set authentication context",
+					status: 500,
+				}),
+			);
 		});
 
 		it("should handle downstream errors and re-throw them", (done) => {

@@ -1,5 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CreateRoutineDto, Prisma, QueryRoutineDto, UpdateRoutineDto } from "@shared/schema";
+import {
+	CreateRoutineDto,
+	Prisma,
+	QueryRoutineDto,
+	UpdateRoutineDto,
+} from "@shared/schema";
 import { RoutinesRepository } from "../repository/routines.repository";
 
 @Injectable()

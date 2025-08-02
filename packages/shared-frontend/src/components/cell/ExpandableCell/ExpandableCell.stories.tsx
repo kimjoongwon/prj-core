@@ -39,7 +39,7 @@ type Story = StoryObj<typeof meta>;
 
 const ExpandableCellWithState = (props: any) => {
 	const [isExpanded, setIsExpanded] = useState(props.isExpanded || false);
-	
+
 	return (
 		<ExpandableCell
 			{...props}

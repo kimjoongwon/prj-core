@@ -6,18 +6,19 @@ import {
 	Injectable,
 	type NestInterceptor,
 } from "@nestjs/common";
-import { TenantDto, UserDto } from "@shared/schema";
+import { type TenantDto, type UserDto } from "@shared/schema";
+import { type Request } from "express";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { ContextProvider } from "../provider";
 import { AppLogger } from "../util/app-logger.util";
 
 interface AuthContext {
-	serviceId?: string;
 	tenantId?: string;
 	user?: UserDto;
 	requestId?: string;
-	currentTenant?: TenantDto; // Replace with actual type if available
+	currentTenant?: TenantDto;
+	tenantsMap?: Map<string, TenantDto>;
 }
 
 @Injectable()
@@ -53,32 +54,43 @@ export class AuthUserInterceptor implements NestInterceptor {
 		}
 	}
 
-	private extractAuthContext(request: any, requestId: string): AuthContext {
+	private extractAuthContext(request: Request, requestId: string): AuthContext {
 		try {
-			const serviceId = request.cookies?.serviceId;
 			const tenantId = request.cookies?.tenantId;
 			const user = request.user as UserDto;
-			const currentTenant = user?.tenants?.find(
-				(tenant) => tenant.id === tenantId,
-			);
+
+			// tenant 검색 성능 최적화: O(n) → O(1)
+			let tenantsMap: Map<string, TenantDto> | undefined;
+			let currentTenant: TenantDto | undefined;
+
+			if (user?.tenants && Array.isArray(user.tenants)) {
+				tenantsMap = new Map(user.tenants.map((tenant) => [tenant.id, tenant]));
+				currentTenant = tenantId ? tenantsMap.get(tenantId) : undefined;
+			}
+
+			// 로깅 최적화: slice 연산 최소화
+			const reqIdShort = requestId.slice(-8);
+			const userIdShort = user?.id?.slice(-8);
+			const tenantIdShort = tenantId?.slice(-8);
+			const spaceIdShort = currentTenant?.spaceId?.slice(-8);
 
 			// 디버깅을 위한 상세한 로깅
 			this.logger.dev("Auth context extraction", {
-				reqId: requestId.slice(-8),
+				reqId: reqIdShort,
 				hasUser: !!user,
-				userId: user?.id?.slice(-8),
-				tenantId: tenantId?.slice(-8),
+				userId: userIdShort,
+				tenantId: tenantIdShort,
 				tenantsCount: user?.tenants?.length || 0,
 				hasTenant: !!currentTenant,
-				currentTenantSpaceId: currentTenant?.spaceId?.slice(-8),
+				currentTenantSpaceId: spaceIdShort,
 			});
 
 			return {
-				serviceId,
 				tenantId,
 				user,
 				currentTenant,
 				requestId,
+				tenantsMap,
 			};
 		} catch (error) {
 			this.logger.error(
@@ -94,52 +106,26 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 	private setContextProviders(authContext: AuthContext): void {
 		try {
-			if (authContext.serviceId) {
-				ContextProvider.setServiceId(authContext.serviceId);
-			}
+			// 성능 최적화: 배치 컨텍스트 설정
+			const isValidUserAuth = !!(
+				authContext.user && this.isValidUser(authContext.user)
+			);
 
-			if (authContext.tenantId) {
-				ContextProvider.setTenantId(authContext.tenantId);
-			}
+			ContextProvider.setAuthContext({
+				user: isValidUserAuth ? authContext.user : undefined,
+				tenant: authContext.currentTenant,
+				tenantId: authContext.tenantId,
+				spaceId: authContext.currentTenant?.spaceId,
+			});
 
-			if (authContext.currentTenant) {
-				ContextProvider.setTenant(authContext.currentTenant);
-				// spaceId도 별도로 설정
-				if (authContext.currentTenant.spaceId) {
-					ContextProvider.setSpaceId(authContext.currentTenant.spaceId);
-				}
-				this.logger.dev("Tenant context set", {
-					reqId: authContext.requestId?.slice(-8),
-					tenantId: authContext.currentTenant.id?.slice(-8),
-					spaceId: authContext.currentTenant.spaceId?.slice(-8),
-				});
-			} else if (authContext.tenantId) {
-				this.logger.warn("Tenant ID exists but tenant not found", {
-					reqId: authContext.requestId?.slice(-8),
-					tenantId: authContext.tenantId?.slice(-8),
-					hasUser: !!authContext.user,
-					userTenantsCount: authContext.user?.tenants?.length || 0,
-				});
-			}
-
-			if (authContext.user && this.isValidUser(authContext.user)) {
-				ContextProvider.setAuthUser(authContext.user);
-				ContextProvider.setAuthUserId(authContext.user.id);
-				this.logger.user("User authenticated", {
-					userId: authContext.user.id,
-					tenants: authContext.user.tenants?.length || 0,
-				});
-			} else if (authContext.user) {
-				this.logger.dev("Invalid user object", {
-					reqId: authContext.requestId?.slice(-8),
-					hasId: !!authContext.user.id,
-					hasTenants: !!authContext.user.tenants,
-				});
-			}
+			// 로깅 처리
+			this.logContextResults(authContext, isValidUserAuth);
 		} catch (error) {
+			const reqIdShort = authContext.requestId?.slice(-8);
+
 			this.logger.error(
 				`Context setup failed: ${error instanceof Error ? error.message : String(error)}`,
-				`req:${authContext.requestId?.slice(-8)}`,
+				`req:${reqIdShort}`,
 			);
 			throw new HttpException(
 				"Failed to set authentication context",
@@ -148,25 +134,64 @@ export class AuthUserInterceptor implements NestInterceptor {
 		}
 	}
 
+	private logContextResults(
+		authContext: AuthContext,
+		isValidUserAuth: boolean,
+	): void {
+		const reqIdShort = authContext.requestId?.slice(-8);
+
+		if (authContext.currentTenant) {
+			const tenantIdShort = authContext.currentTenant.id?.slice(-8);
+			const spaceIdShort = authContext.currentTenant.spaceId?.slice(-8);
+
+			this.logger.dev("Tenant context set", {
+				reqId: reqIdShort,
+				tenantId: tenantIdShort,
+				spaceId: spaceIdShort,
+			});
+		} else if (authContext.tenantId) {
+			const tenantIdShort = authContext.tenantId?.slice(-8);
+
+			this.logger.warn("Tenant ID exists but tenant not found", {
+				reqId: reqIdShort,
+				tenantId: tenantIdShort,
+				hasUser: !!authContext.user,
+				userTenantsCount: authContext.user?.tenants?.length || 0,
+			});
+		}
+
+		if (isValidUserAuth && authContext.user) {
+			this.logger.user("User authenticated", {
+				userId: authContext.user.id,
+				tenants: authContext.user.tenants?.length || 0,
+			});
+		} else if (authContext.user) {
+			this.logger.dev("Invalid user object", {
+				reqId: reqIdShort,
+				hasId: !!authContext.user.id,
+				hasTenants: !!authContext.user.tenants,
+			});
+		}
+	}
+
 	private isValidUser(user: UserDto): boolean {
 		return !!(user?.id && user.tenants && Array.isArray(user.tenants));
 	}
 
 	private logRequestStart(authContext: AuthContext, requestId: string): void {
+		const reqIdShort = requestId.slice(-8);
+
 		this.logger.auth("Context initialized", {
-			reqId: requestId.slice(-8),
-			serviceId: authContext.serviceId,
+			reqId: reqIdShort,
 			tenantId: authContext.tenantId,
 			hasUser: !!authContext.user?.id,
 		});
 	}
 
 	private logRequestSuccess(requestId: string, duration: number): void {
-		this.logger.performance(
-			"Auth processing",
-			duration,
-			`req:${requestId.slice(-8)}`,
-		);
+		const reqIdShort = requestId.slice(-8);
+
+		this.logger.performance("Auth processing", duration, `req:${reqIdShort}`);
 	}
 
 	private logRequestError(
@@ -174,9 +199,11 @@ export class AuthUserInterceptor implements NestInterceptor {
 		requestId: string,
 		duration: number,
 	): void {
+		const reqIdShort = requestId.slice(-8);
+
 		this.logger.error(
 			`❌ Auth failed (${duration}ms) - ${error.message}`,
-			`req:${requestId.slice(-8)}`,
+			`req:${reqIdShort}`,
 		);
 	}
 
@@ -185,10 +212,12 @@ export class AuthUserInterceptor implements NestInterceptor {
 		requestId: string,
 		duration: number,
 	): void {
+		const reqIdShort = requestId.slice(-8);
+
 		this.logger.errorWithStack(
 			`Auth interceptor error (${duration}ms)`,
 			error,
-			`req:${requestId.slice(-8)}`,
+			`req:${reqIdShort}`,
 		);
 	}
 
@@ -206,6 +235,6 @@ export class AuthUserInterceptor implements NestInterceptor {
 	}
 
 	private generateRequestId(): string {
-		return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+		return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 	}
 }

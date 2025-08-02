@@ -1,4 +1,4 @@
-import { Tab, Tabs as HeroUITabs } from "@heroui/react";
+import { Tabs as HeroUITabs, Tab } from "@heroui/react";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { Key } from "react";

@@ -4,8 +4,8 @@ export interface MainLayoutProps {
 	children: ReactNode;
 }
 
-import { VStack } from "../../ui/VStack/VStack";
 import { observer } from "mobx-react-lite";
+import { VStack } from "../../ui/VStack/VStack";
 
 export const MainLayout = observer((props: MainLayoutProps) => {
 	const { children } = props;

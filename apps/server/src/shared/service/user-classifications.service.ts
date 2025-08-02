@@ -35,7 +35,10 @@ export class UserClassificationsService {
 		return this.repository.findUnique({ where: { id } });
 	}
 
-	updateById(id: string, updateUserClassificationDto: UpdateUserClassificationDto) {
+	updateById(
+		id: string,
+		updateUserClassificationDto: UpdateUserClassificationDto,
+	) {
 		return this.repository.update({
 			where: { id },
 			data: updateUserClassificationDto,

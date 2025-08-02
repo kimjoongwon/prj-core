@@ -22,13 +22,13 @@ export class FileAssociationsService {
 	async getManyByQuery(query: QueryFileAssociationDto) {
 		const args = query.toArgs<Prisma.FileAssociationFindManyArgs>();
 		const countArgs = query.toCountArgs<Prisma.FileAssociationCountArgs>();
-		
+
 		// Include file information like original BaseService
 		const argsWithInclude = {
 			...args,
 			include: { file: true },
 		};
-		
+
 		const fileAssociations = await this.repository.findMany(argsWithInclude);
 		const count = await this.repository.count(countArgs);
 

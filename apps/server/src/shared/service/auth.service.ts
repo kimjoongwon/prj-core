@@ -73,15 +73,13 @@ export class AuthService {
 	async signUp(signUpPayloadDto: SignUpPayloadDto) {
 		const { name, nickname, password, phone, spaceId } = signUpPayloadDto;
 
-		// USER 역할 찾기 또는 생성
-		let userRole = await this.prisma.role.findFirst({
+		const userRole = await this.prisma.role.findFirst({
 			where: { name: "USER" },
 		});
 
 		if (!userRole) {
-			userRole = await this.prisma.role.create({
-				data: { name: "USER" },
-			});
+			this.logger.error("User role not found");
+			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
 		}
 
 		const { id: userId } = await this.usersService.create({

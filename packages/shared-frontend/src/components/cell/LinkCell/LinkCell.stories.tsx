@@ -23,11 +23,18 @@ const meta: Meta<typeof LinkCell> = {
 		},
 		color: {
 			control: "select",
-			options: ["foreground", "primary", "secondary", "success", "warning", "danger"],
+			options: [
+				"foreground",
+				"primary",
+				"secondary",
+				"success",
+				"warning",
+				"danger",
+			],
 			description: "Link color theme",
 		},
 		size: {
-			control: "select", 
+			control: "select",
 			options: ["sm", "md", "lg"],
 			description: "Link size",
 		},
@@ -72,7 +79,7 @@ export const PrimaryColor: Story = {
 export const SuccessColor: Story = {
 	args: {
 		value: "Success link",
-		href: "https://example.com", 
+		href: "https://example.com",
 		color: "success",
 	},
 };
@@ -95,7 +102,7 @@ export const SmallSize: Story = {
 
 export const LargeSize: Story = {
 	args: {
-		value: "Large link", 
+		value: "Large link",
 		href: "https://example.com",
 		size: "lg",
 	},

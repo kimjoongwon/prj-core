@@ -52,6 +52,7 @@ export const WithEmptyString: Story = {
 
 export const WithLongText: Story = {
 	args: {
-		value: "This is a very long text content that might wrap to multiple lines depending on the container width",
+		value:
+			"This is a very long text content that might wrap to multiple lines depending on the container width",
 	},
 };

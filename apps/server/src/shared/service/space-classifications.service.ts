@@ -35,7 +35,10 @@ export class SpaceClassificationsService {
 		return this.repository.findUnique({ where: { id } });
 	}
 
-	updateById(id: string, updateSpaceClassificationDto: UpdateSpaceClassificationDto) {
+	updateById(
+		id: string,
+		updateSpaceClassificationDto: UpdateSpaceClassificationDto,
+	) {
 		return this.repository.update({
 			where: { id },
 			data: updateSpaceClassificationDto,

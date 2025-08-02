@@ -44,14 +44,6 @@ export class ContextProvider {
 		ContextProvider.set("tenantId", tenantId);
 	}
 
-	static setServiceId(serviceId: string): void {
-		ContextProvider.set("serviceId", serviceId);
-	}
-
-	static getServiceId(): string {
-		return ContextProvider.get("serviceId");
-	}
-
 	static getTenancyId(): string {
 		return ContextProvider.get("tenantId");
 	}
@@ -118,5 +110,32 @@ export class ContextProvider {
 	}
 	static setSpaceNumber(spaceNumber: string): void {
 		ContextProvider.set("spaceNumber", spaceNumber);
+	}
+
+	/**
+	 * 인증 컨텍스트를 배치로 설정하여 성능 최적화
+	 */
+	static setAuthContext(context: {
+		user?: UserDto;
+		tenant?: TenantDto;
+		tenantId?: string;
+		spaceId?: string;
+	}): void {
+		if (context.user) {
+			ContextProvider.set(ContextProvider.authUserKey, context.user);
+			ContextProvider.set("userId", context.user.id);
+		}
+
+		if (context.tenant) {
+			ContextProvider.set(ContextProvider.tenantKey, context.tenant);
+		}
+
+		if (context.tenantId) {
+			ContextProvider.set("tenantId", context.tenantId);
+		}
+
+		if (context.spaceId) {
+			ContextProvider.set("spaceId", context.spaceId);
+		}
 	}
 }

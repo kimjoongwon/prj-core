@@ -35,7 +35,10 @@ export class FileClassificationsService {
 		return this.repository.findUnique({ where: { id } });
 	}
 
-	updateById(id: string, updateFileClassificationDto: UpdateFileClassificationDto) {
+	updateById(
+		id: string,
+		updateFileClassificationDto: UpdateFileClassificationDto,
+	) {
 		return this.repository.update({
 			where: { id },
 			data: updateFileClassificationDto,

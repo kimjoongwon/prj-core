@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useLocalObservable } from "mobx-react-lite";
-import { Tabs } from "./Tabs";
 import { Option } from "../../../types";
+import { Tabs } from "./Tabs";
 
 const meta: Meta<typeof Tabs> = {
 	title: "Inputs/Tabs",

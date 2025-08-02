@@ -4,9 +4,38 @@
   "testEnvironment": "node",
   "testRegex": "\\.e2e-spec\\.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(t|j)s$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "module": "commonjs",
+          "target": "es2022",
+          "esModuleInterop": true,
+          "allowSyntheticDefaultImports": true,
+          "experimentalDecorators": true,
+          "emitDecoratorMetadata": true,
+          "types": ["jest", "node"],
+          "skipLibCheck": true,
+          "strict": false
+        }
+      }
+    ]
   },
   "moduleNameMapper": {
-    "^@shared$": "<rootDir>/src/shared/index"
-  }
+    "^@shared/schema$": "<rootDir>/../../packages/shared-schema/src/index.ts",
+    "^@shared/types$": "<rootDir>/../../packages/shared-types/index.ts",
+    "^@shared/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
+    "^@shared/vars$": "<rootDir>/../../packages/shared-vars/index.ts",
+    "^@shared/meta$": "<rootDir>/../../packages/shared-meta/index.ts",
+    "^@shared$": "<rootDir>/src/shared/index",
+    "^@shared/(.*)$": "<rootDir>/src/shared/$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"],
+  "testTimeout": 30000,
+  "maxWorkers": 1,
+  "forceExit": true,
+  "detectOpenHandles": true,
+  "clearMocks": true,
+  "resetMocks": true,
+  "restoreMocks": true
 }
