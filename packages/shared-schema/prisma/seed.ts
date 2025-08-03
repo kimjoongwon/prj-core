@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
-import { groundSeedData, userGroundMapping, userSeedData } from "./seed-data";
 import { GroupNames } from "../src/enum/group-names.enum";
+import { groundSeedData, userGroundMapping, userSeedData } from "./seed-data";
 
 const prisma = new PrismaClient();
 async function main() {

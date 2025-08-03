@@ -184,7 +184,9 @@ describe("앱 E2E 테스트", () => {
 
 		it("injectTenant이 false일 때 GET 요청 쿼리에 tenantId를 주입하지 않아야 함", async () => {
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-tenant-injection/debug-query-no-injection?testParam=value")
+				.get(
+					"/api/v1/test-tenant-injection/debug-query-no-injection?testParam=value",
+				)
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.expect(200);
 
@@ -198,7 +200,9 @@ describe("앱 E2E 테스트", () => {
 
 		it("GET 요청 쿼리에 tenantId를 주입하고 기능을 확인해야 함", async () => {
 			const response = await request(app.getHttpServer())
-				.get("/api/v1/test-tenant-injection/debug-query?param1=value1&param2=value2")
+				.get(
+					"/api/v1/test-tenant-injection/debug-query?param1=value1&param2=value2",
+				)
 				.set("Authorization", `Bearer ${jwtToken}`)
 				.expect(200);
 

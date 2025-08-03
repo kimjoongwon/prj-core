@@ -11,7 +11,7 @@ import { of, throwError } from "rxjs";
 import { ContextProvider } from "../provider";
 import { AuthUserInterceptor } from "./auth-user.interceptor";
 
-// Mock ContextProvider
+// Mock ContextProvider using jest.mock
 jest.mock("../provider", () => ({
 	ContextProvider: {
 		setTenantId: jest.fn(),
@@ -25,9 +25,6 @@ jest.mock("../provider", () => ({
 
 describe("AuthUserInterceptor", () => {
 	let interceptor: AuthUserInterceptor;
-	let mockExecutionContext: ExecutionContext;
-	let mockCallHandler: CallHandler;
-	let mockRequest: any;
 	let mockReflector: jest.Mocked<Reflector>;
 
 	beforeEach(async () => {
@@ -46,200 +43,204 @@ describe("AuthUserInterceptor", () => {
 		interceptor = module.get<AuthUserInterceptor>(AuthUserInterceptor);
 		mockReflector = module.get(Reflector);
 
-		// Mock request object
-		mockRequest = {
-			cookies: {},
-			headers: {},
-			user: null,
-		};
+		// Clear all mocks
+		jest.clearAllMocks();
+	});
 
-		// Mock ExecutionContext
-		mockExecutionContext = {
+	const createMockRequest = (overrides: Record<string, any> = {}) => ({
+		cookies: {},
+		headers: { host: "localhost:3000" },
+		user: null,
+		query: {},
+		body: {},
+		method: "GET",
+		url: "/test",
+		...overrides,
+	});
+
+	const createMockExecutionContext = (mockRequest: any): ExecutionContext =>
+		({
 			switchToHttp: jest.fn().mockReturnValue({
 				getRequest: jest.fn().mockReturnValue(mockRequest),
 			}),
 			getHandler: jest.fn(),
 			getClass: jest.fn(),
-		} as any;
+		}) as any;
 
-		// Mock CallHandler
-		mockCallHandler = {
-			handle: jest.fn().mockReturnValue(of("test response")),
-		};
-
-		// Clear all mocks
-		jest.clearAllMocks();
+	const createMockCallHandler = (response = "test response"): CallHandler => ({
+		handle: jest.fn().mockReturnValue(of(response)),
 	});
 
+	const createValidUser = (overrides: Partial<UserDto> = {}): UserDto =>
+		({
+			id: "user-123",
+			spaceId: "space-123",
+			email: "test@example.com",
+			name: "Test User",
+			phone: "123-456-7890",
+			password: "password",
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			tenants: [{ id: "tenant-1", name: "Test Tenant" } as any],
+			...overrides,
+		}) as UserDto;
+
 	describe("intercept", () => {
-		it("should handle request without authentication context", (done) => {
-			const result = interceptor.intercept(
+		it("요청에 인증 컨텍스트가 없을 때 정상적으로 처리한다", async () => {
+			const mockRequest = createMockRequest();
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
+
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
+			const value = await result$.toPromise();
 
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: undefined,
-						tenant: undefined,
-						tenantId: undefined,
-						spaceId: undefined,
-					});
-					done();
-				},
+			expect(value).toBe("test response");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: undefined,
+				tenant: undefined,
+				tenantId: undefined,
+				spaceId: undefined,
 			});
 		});
 
-		it("should set tenantId when present in cookies", (done) => {
-			mockRequest.cookies = { tenantId: "test-tenant-id" };
+		it("쿠키에 tenantId가 있을 때 설정한다", async () => {
+			const mockRequest = createMockRequest({
+				cookies: { tenantId: "test-tenant-id" },
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
 
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
+			const value = await result$.toPromise();
 
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: undefined,
-						tenant: undefined,
-						tenantId: "test-tenant-id",
-						spaceId: undefined,
-					});
-					done();
-				},
-			});
-		});
-
-		it("should set auth user when valid user is present", (done) => {
-			const mockUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				tenants: [{ id: "tenant-1", name: "Test Tenant" } as any],
-			} as UserDto;
-
-			mockRequest.user = mockUser;
-
-			const result = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: mockUser,
-						tenant: { id: "tenant-1", name: "Test Tenant" },
-						tenantId: "tenant-1",
-						spaceId: undefined,
-					});
-					done();
-				},
-			});
-		});
-
-		it("should not set auth user when user is invalid", (done) => {
-			mockRequest.user = { id: "user-123" }; // Missing tenants
-
-			const result = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: undefined,
-						tenant: undefined,
-						tenantId: undefined,
-						spaceId: undefined,
-					});
-					done();
-				},
-			});
-		});
-
-		it("should handle all context data together", (done) => {
-			const mockUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				tenants: [{ id: "test-tenant-id", name: "Test Tenant" } as any],
-			} as UserDto;
-
-			mockRequest.cookies = {
+			expect(value).toBe("test response");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: undefined,
+				tenant: undefined,
 				tenantId: "test-tenant-id",
-			};
-			mockRequest.user = mockUser;
-
-			const result = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: mockUser,
-						tenant: { id: "test-tenant-id", name: "Test Tenant" },
-						tenantId: "test-tenant-id",
-						spaceId: undefined,
-					});
-					done();
-				},
+				spaceId: undefined,
 			});
 		});
 
-		it("should use request-id from headers when available", (done) => {
-			mockRequest.headers = { "x-request-id": "custom-request-id" };
+		it("유효한 사용자가 있을 때 인증 사용자를 설정한다", async () => {
+			const mockUser = createValidUser();
+			const mockRequest = createMockRequest({ user: mockUser });
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
 
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
+			const value = await result$.toPromise();
 
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					done();
-				},
+			expect(value).toBe("test response");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: mockUser,
+				tenant: { id: "tenant-1", name: "Test Tenant" },
+				tenantId: "tenant-1",
+				spaceId: undefined,
 			});
 		});
 
-		it("should handle errors during context extraction", () => {
-			// Mock a problematic request that causes an error
-			mockExecutionContext.switchToHttp = jest.fn().mockImplementation(() => {
-				throw new Error("Context extraction failed");
+		it("사용자가 유효하지 않을 때 인증 사용자를 설정하지 않는다", async () => {
+			const mockRequest = createMockRequest({
+				user: { id: "user-123" }, // Missing tenants
 			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
+
+			const result$ = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+			const value = await result$.toPromise();
+
+			expect(value).toBe("test response");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: undefined,
+				tenant: undefined,
+				tenantId: undefined,
+				spaceId: undefined,
+			});
+		});
+
+		it("모든 컨텍스트 데이터를 함께 처리한다", async () => {
+			const mockUser = createValidUser({
+				tenants: [{ id: "test-tenant-id", name: "Test Tenant" } as any],
+			});
+
+			const mockRequest = createMockRequest({
+				cookies: { tenantId: "test-tenant-id" },
+				user: mockUser,
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
+
+			const result$ = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+			const value = await result$.toPromise();
+
+			expect(value).toBe("test response");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: mockUser,
+				tenant: { id: "test-tenant-id", name: "Test Tenant" },
+				tenantId: "test-tenant-id",
+				spaceId: undefined,
+			});
+		});
+
+		it("헤더에서 request-id를 사용할 수 있을 때 처리한다", async () => {
+			const mockRequest = createMockRequest({
+				headers: { "x-request-id": "custom-request-id" },
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
+
+			const result$ = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+			const value = await result$.toPromise();
+
+			expect(value).toBe("test response");
+		});
+
+		it("컨텍스트 추출 중 오류가 발생할 때 처리한다", () => {
+			const mockCallHandler = createMockCallHandler();
+			const badExecutionContext = {
+				switchToHttp: jest.fn().mockImplementation(() => {
+					throw new Error("Context extraction failed");
+				}),
+				getHandler: jest.fn(),
+				getClass: jest.fn(),
+			} as any;
 
 			expect(() => {
-				interceptor.intercept(mockExecutionContext, mockCallHandler);
+				interceptor.intercept(badExecutionContext, mockCallHandler);
 			}).toThrow("Context extraction failed");
 		});
 
-		it("should handle errors from ContextProvider", () => {
-			(ContextProvider.setAuthContext as jest.Mock).mockImplementation(() => {
-				throw new Error("ContextProvider error");
-			});
+		it("ContextProvider에서 오류가 발생할 때 처리한다", () => {
+			(ContextProvider.setAuthContext as jest.Mock).mockImplementationOnce(
+				() => {
+					throw new Error("ContextProvider error");
+				},
+			);
 
-			mockRequest.cookies = { tenantId: "test-tenant-id" };
+			const mockRequest = createMockRequest({
+				cookies: { tenantId: "test-tenant-id" },
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
 
 			expect(() => {
 				interceptor.intercept(mockExecutionContext, mockCallHandler);
@@ -251,189 +252,149 @@ describe("AuthUserInterceptor", () => {
 			);
 		});
 
-		it("should handle downstream errors and re-throw them", (done) => {
+		it("다운스트림 오류를 처리하고 다시 던진다", async () => {
 			const testError = new Error("Downstream error");
-			mockCallHandler.handle = jest
-				.fn()
-				.mockReturnValue(throwError(() => testError));
+			const mockRequest = createMockRequest();
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = {
+				handle: jest.fn().mockReturnValue(throwError(() => testError)),
+			};
 
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
 
-			result.subscribe({
-				error: (error) => {
-					expect(error).toBeInstanceOf(HttpException);
-					expect(error.getStatus()).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
-					done();
-				},
+			await expect(result$.toPromise()).rejects.toMatchObject({
+				status: HttpStatus.INTERNAL_SERVER_ERROR,
 			});
 		});
 
-		it("should preserve HttpException errors from downstream", (done) => {
+		it("다운스트림에서 HttpException 오류를 보존한다", async () => {
 			const httpError = new HttpException(
 				"Bad Request",
 				HttpStatus.BAD_REQUEST,
 			);
-			mockCallHandler.handle = jest
-				.fn()
-				.mockReturnValue(throwError(() => httpError));
+			const mockRequest = createMockRequest();
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = {
+				handle: jest.fn().mockReturnValue(throwError(() => httpError)),
+			};
 
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
 
-			result.subscribe({
-				error: (error) => {
-					expect(error).toBe(httpError);
-					expect(error.getStatus()).toBe(HttpStatus.BAD_REQUEST);
-					done();
-				},
+			await expect(result$.toPromise()).rejects.toBe(httpError);
+		});
+
+		it("Auth 옵션으로 GET 요청에 tenantId를 쿼리에 주입한다", async () => {
+			const mockUser = createValidUser({
+				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
+			});
+
+			const mockRequest = createMockRequest({
+				user: mockUser,
+				method: "GET",
+				query: {},
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
+
+			mockReflector.getAllAndOverride.mockReturnValueOnce({
+				roles: [],
+				injectTenant: true,
+			}); // for AUTH_OPTIONS_KEY
+
+			const result$ = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+			const value = await result$.toPromise();
+
+			expect(value).toBe("test response");
+			expect(mockRequest.url).toContain("tenantId=tenant-1");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: mockUser,
+				tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+				tenantId: "tenant-1",
+				spaceId: undefined,
 			});
 		});
 
-		it("should inject tenantId to query for GET requests with Auth options", (done) => {
-			const mockUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
+		it("Auth 옵션으로 POST 요청에 tenantId를 body에 주입하지 않는다", async () => {
+			const mockUser = createValidUser({
 				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
-			} as UserDto;
+			});
 
-			mockRequest.user = mockUser;
-			mockRequest.method = "GET";
-			mockRequest.query = {};
+			const mockRequest = createMockRequest({
+				user: mockUser,
+				method: "POST",
+				body: { name: "Test Category" },
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
 
-			// Mock both @InjectTenantId and Auth options
-			mockReflector.getAllAndOverride
-				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
-				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
-					roles: [],
-					injectTenant: true,
-				});
+			mockReflector.getAllAndOverride.mockReturnValueOnce({
+				roles: [],
+				injectTenant: true,
+			}); // for AUTH_OPTIONS_KEY
 
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
+			const value = await result$.toPromise();
 
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(mockRequest.query.tenantId).toBe("tenant-1");
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: mockUser,
-						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
-						tenantId: "tenant-1",
-						spaceId: undefined,
-					});
-					done();
-				},
+			expect(value).toBe("test response");
+			expect(mockRequest.body).toEqual({ name: "Test Category" });
+			expect(mockRequest.body).not.toHaveProperty("tenantId");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: mockUser,
+				tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+				tenantId: "tenant-1",
+				spaceId: undefined,
 			});
 		});
 
-		it("should NOT inject tenantId to body for POST requests with Auth options", (done) => {
-			const mockUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
+		it("Auth 옵션의 injectTenant이 false일 때 테넌트 주입을 건너뛴다", async () => {
+			const mockUser = createValidUser({
 				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
-			} as UserDto;
-
-			mockRequest.user = mockUser;
-			mockRequest.method = "POST";
-			mockRequest.body = { name: "Test Category" };
-
-			// Mock both @InjectTenantId and Auth options
-			mockReflector.getAllAndOverride
-				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
-				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
-					roles: [],
-					injectTenant: true,
-				});
-
-			const result = interceptor.intercept(
-				mockExecutionContext,
-				mockCallHandler,
-			);
-
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					expect(mockRequest.body).toEqual({ name: "Test Category" });
-					expect(mockRequest.body.tenantId).toBeUndefined();
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: mockUser,
-						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
-						tenantId: "tenant-1",
-						spaceId: undefined,
-					});
-					done();
-				},
 			});
-		});
 
-		it("should skip tenant injection when Auth options injectTenant is false", (done) => {
-			const mockUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
-			} as UserDto;
+			const mockRequest = createMockRequest({
+				user: mockUser,
+				method: "GET",
+				query: {},
+			});
+			const mockExecutionContext = createMockExecutionContext(mockRequest);
+			const mockCallHandler = createMockCallHandler();
 
-			mockRequest.user = mockUser;
-			mockRequest.method = "GET";
-			mockRequest.query = {};
+			mockReflector.getAllAndOverride.mockReturnValueOnce({
+				roles: [],
+				injectTenant: false,
+			}); // for AUTH_OPTIONS_KEY
 
-			// Mock both @InjectTenantId and Auth options
-			mockReflector.getAllAndOverride
-				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
-				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
-					roles: [],
-					injectTenant: false,
-				});
-
-			const result = interceptor.intercept(
+			const result$ = interceptor.intercept(
 				mockExecutionContext,
 				mockCallHandler,
 			);
+			const value = await result$.toPromise();
 
-			result.subscribe({
-				next: (value) => {
-					expect(value).toBe("test response");
-					// tenantId is still set in context but NOT injected to query due to injectTenant: false
-					expect(mockRequest.query.tenantId).toBeUndefined();
-					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
-						user: mockUser,
-						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
-						tenantId: "tenant-1",
-						spaceId: undefined,
-					});
-					done();
-				},
+			expect(value).toBe("test response");
+			expect(mockRequest.url).not.toContain("tenantId");
+			expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+				user: mockUser,
+				tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+				tenantId: "tenant-1",
+				spaceId: undefined,
 			});
 		});
 	});
 
 	describe("private methods", () => {
-		it("should generate unique request IDs", () => {
+		it("고유한 요청 ID를 생성한다", () => {
 			const id1 = (interceptor as any).generateRequestId();
 			const id2 = (interceptor as any).generateRequestId();
 
@@ -442,18 +403,8 @@ describe("AuthUserInterceptor", () => {
 			expect(id1).not.toBe(id2);
 		});
 
-		it("should validate user objects correctly", () => {
-			const validUser: UserDto = {
-				id: "user-123",
-				spaceId: "space-123",
-				email: "test@example.com",
-				name: "Test User",
-				phone: "123-456-7890",
-				password: "password",
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				tenants: [{ id: "tenant-1", name: "Test Tenant" } as any],
-			} as UserDto;
+		it("사용자 객체를 올바르게 검증한다", () => {
+			const validUser = createValidUser();
 
 			const invalidUsers = [
 				null,
@@ -466,13 +417,12 @@ describe("AuthUserInterceptor", () => {
 			];
 
 			expect((interceptor as any).isValidUser(validUser)).toBe(true);
-
 			invalidUsers.forEach((user) => {
 				expect((interceptor as any).isValidUser(user)).toBe(false);
 			});
 		});
 
-		it("should handle errors correctly", () => {
+		it("오류를 올바르게 처리한다", () => {
 			const httpError = new HttpException("Test Error", HttpStatus.BAD_REQUEST);
 			const regularError = new Error("Regular error");
 

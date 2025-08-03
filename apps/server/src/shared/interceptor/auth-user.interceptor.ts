@@ -15,7 +15,6 @@ import {
 	AUTH_OPTIONS_KEY,
 	type AuthOptions,
 } from "../decorator/auth.decorator";
-import { INJECT_TENANT_ID_KEY } from "../decorator/inject-tenant-id.decorator";
 import { ContextProvider } from "../provider";
 import { AppLogger } from "../util/app-logger.util";
 
@@ -43,9 +42,6 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const authContext = this.extractAuthContext(request, requestId);
 			this.logRequestStart(authContext, requestId);
 			this.setContextProviders(authContext);
-
-			// Check if @InjectTenantId decorator is present and inject tenantId to query
-			this.injectTenantIdToQuery(context, authContext);
 
 			// Check Auth options and inject tenantId to query/body
 			this.injectTenantIdFromAuthOptions(context, authContext);
@@ -242,46 +238,6 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 	private generateRequestId(): string {
 		return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-	}
-
-	private injectTenantIdToQuery(
-		context: ExecutionContext,
-		authContext: AuthContext,
-	): void {
-		try {
-			// Check if @InjectTenantId decorator is present on the handler
-			const shouldInjectTenantId = this.reflector.getAllAndOverride<boolean>(
-				INJECT_TENANT_ID_KEY,
-				[context.getHandler(), context.getClass()],
-			);
-
-			if (!shouldInjectTenantId) {
-				return;
-			}
-
-			const request = context.switchToHttp().getRequest();
-
-			// Only inject if tenantId is available and not already present in query
-			if (authContext.tenantId && !request.query.tenantId) {
-				request.query.tenantId = authContext.tenantId;
-
-				const reqIdShort = authContext.requestId?.slice(-8);
-				const tenantIdShort = authContext.tenantId?.slice(-8);
-
-				this.logger.dev("TenantId injected to query", {
-					reqId: reqIdShort,
-					tenantId: tenantIdShort,
-				});
-			}
-		} catch (error) {
-			const reqIdShort = authContext.requestId?.slice(-8);
-
-			this.logger.error(
-				`Failed to inject tenantId to query: ${error instanceof Error ? error.message : String(error)}`,
-				`req:${reqIdShort}`,
-			);
-			// Don't throw error, just log and continue
-		}
 	}
 
 	private injectTenantIdFromAuthOptions(

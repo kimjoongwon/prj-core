@@ -7,7 +7,8 @@ beforeAll(() => {
 	process.env.JWT_SECRET = "test-jwt-secret-e2e";
 	process.env.JWT_REFRESH_SECRET = "test-jwt-refresh-secret-e2e";
 	process.env.BCRYPT_SALT_ROUNDS = "10";
-	process.env.DATABASE_URL = "postgresql://postgres.REDACTED-SUPABASE-PROJECT-REF:REDACTED-SUPABASE-DB-PASSWORD-URLENCODED@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
+	process.env.DATABASE_URL =
+		"postgresql://postgres.REDACTED-SUPABASE-PROJECT-REF:REDACTED-SUPABASE-DB-PASSWORD-URLENCODED@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
 });
 
 // Global test timeout for E2E tests

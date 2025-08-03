@@ -96,9 +96,7 @@ export const createTestUserDto = (
 	} as UserDto;
 };
 
-export const createTestUserEntity = (
-	overrides: Partial<User> = {},
-): User => {
+export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 	const user = new User();
 	Object.assign(user, {
 		id: "user-test-id",
