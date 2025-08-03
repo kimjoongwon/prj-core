@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
-import { GroundsController } from "@shared";
+import { GroundsController, GroundsRepository, GroundsService } from "@shared";
 
 @Module({
 	controllers: [GroundsController],
+	providers: [GroundsService, GroundsRepository],
 })
 export class GroundsModule {}

@@ -9,6 +9,6 @@ export * from "./lib/data-time.util";
 export * from "./middleware";
 export * from "./pipe";
 export * from "./provider";
-export * from "./repository/repositories";
+export * from "./repository";
 export * from "./service/services";
 export * from "./strategy";

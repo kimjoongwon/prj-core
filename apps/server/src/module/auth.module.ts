@@ -6,6 +6,8 @@ import {
 	LocalStrategy,
 	PasswordService,
 	TokenService,
+	UsersRepository,
+	UsersService,
 } from "@shared";
 
 @Module({
@@ -15,6 +17,8 @@ import {
 		TokenService,
 		LocalStrategy,
 		JwtStrategy,
+		UsersService,
+		UsersRepository,
 	],
 	controllers: [AuthController],
 	exports: [AuthService],

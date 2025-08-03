@@ -1,7 +1,12 @@
 import { Module } from "@nestjs/common";
-import { FileAssociationsController } from "@shared";
+import {
+	FileAssociationsController,
+	FileAssociationsRepository,
+	FileAssociationsService,
+} from "@shared";
 
 @Module({
+	providers: [FileAssociationsService, FileAssociationsRepository],
 	controllers: [FileAssociationsController],
 })
 export class FileAssociationsModule {}
