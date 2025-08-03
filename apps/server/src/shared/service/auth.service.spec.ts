@@ -25,6 +25,7 @@ describe("AuthService", () => {
 	beforeEach(async () => {
 		const mockUsersService = {
 			getUnique: jest.fn(),
+			getFirst: jest.fn(),
 			create: jest.fn(),
 		};
 
@@ -147,12 +148,12 @@ describe("AuthService", () => {
 			const password = "password123";
 			const testUser = createTestUserEntity();
 
-			usersService.getUnique.mockResolvedValue(testUser);
+			usersService.getFirst.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(true);
 
 			const result = await service.validateUser(email, password);
 
-			expect(usersService.getUnique).toHaveBeenCalledWith({
+			expect(usersService.getFirst).toHaveBeenCalledWith({
 				where: { email },
 			});
 			expect(passwordService.validatePassword).toHaveBeenCalledWith(
@@ -167,7 +168,7 @@ describe("AuthService", () => {
 			const password = "wrong-password";
 			const testUser = createTestUserEntity();
 
-			usersService.getUnique.mockResolvedValue(testUser);
+			usersService.getFirst.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.validateUser(email, password)).rejects.toThrow(
@@ -183,7 +184,7 @@ describe("AuthService", () => {
 			const email = "nonexistent@example.com";
 			const password = "password123";
 
-			usersService.getUnique.mockResolvedValue(null as any);
+			usersService.getFirst.mockResolvedValue(null as any);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.validateUser(email, password)).rejects.toThrow(
@@ -231,6 +232,7 @@ describe("AuthService", () => {
 			);
 			expect(usersService.create).toHaveBeenCalledWith({
 				data: {
+					name: signUpData.name,
 					email: signUpData.email,
 					phone: signUpData.phone,
 					password: hashedPassword,
@@ -290,13 +292,13 @@ describe("AuthService", () => {
 				refreshToken: "refresh-token",
 			};
 
-			usersService.getUnique.mockResolvedValue(testUser);
+			usersService.getFirst.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(true);
 			tokenService.generateTokens.mockReturnValue(tokens);
 
 			const result = await service.login(loginData);
 
-			expect(usersService.getUnique).toHaveBeenCalledWith({
+			expect(usersService.getFirst).toHaveBeenCalledWith({
 				where: { email: loginData.email },
 				include: {
 					profiles: true,
@@ -331,13 +333,13 @@ describe("AuthService", () => {
 				password: "password123",
 			};
 
-			usersService.getUnique.mockResolvedValue(null as any);
+			usersService.getFirst.mockResolvedValue(null as any);
 
 			await expect(service.login(loginData)).rejects.toThrow(
 				UnauthorizedException,
 			);
-			expect(usersService.getUnique).toHaveBeenCalledWith({
-				where: { name: loginData.email },
+			expect(usersService.getFirst).toHaveBeenCalledWith({
+				where: { email: loginData.email },
 				include: {
 					profiles: true,
 					tenants: {
@@ -361,7 +363,7 @@ describe("AuthService", () => {
 
 			const testUser = createTestUserEntity();
 
-			usersService.getUnique.mockResolvedValue(testUser);
+			usersService.getFirst.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.login(loginData)).rejects.toThrow(
