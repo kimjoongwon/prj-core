@@ -21,7 +21,6 @@ import { CategoriesModule } from "./categories.module";
 import { ExercisesModule } from "./exercises.module";
 import { FileClassificationsModule } from "./file-classifications.module";
 import { FilesModule } from "./files.module";
-import { GlobalModule } from "./global.module";
 import { GroundsModule } from "./ground.module";
 import { GroupsModule } from "./groups.module";
 import { ProgramsModule } from "./programs.module";
@@ -40,7 +39,6 @@ import { UsersModule } from "./users.module";
 @Module({
 	imports: [
 		...modules,
-		GlobalModule,
 		CaslModule,
 		GroundsModule,
 		UserClassificationsModule,
