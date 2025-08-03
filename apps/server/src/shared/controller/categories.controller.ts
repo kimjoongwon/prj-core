@@ -25,7 +25,8 @@ import { CategoriesService } from "../service/services";
 @Controller()
 export class CategoriesController {
 	constructor(private readonly categoriesService: CategoriesService) {}
-	@Auth([])
+
+	@Auth()
 	@ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
 	@Get()
 	async getCategoriesByQuery(@Query() query: QueryCategoryDto) {

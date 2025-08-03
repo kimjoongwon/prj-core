@@ -10,7 +10,25 @@ export class CategoriesService {
 	constructor(private readonly repository: CategoriesRepository) {}
 
 	async create(args: Prisma.CategoryCreateArgs) {
-		const services = await this.repository.create(args);
+		const currentTenant = ContextProvider.getTenant();
+		if (!currentTenant) {
+			throw new Error("No tenant found in context");
+		}
+
+		// tenant 관계를 자동으로 설정
+		const createArgs = {
+			...args,
+			data: {
+				...args.data,
+				tenant: {
+					connect: {
+						id: currentTenant.id,
+					},
+				},
+			},
+		} as Prisma.CategoryCreateArgs;
+
+		const services = await this.repository.create(createArgs);
 		return services;
 	}
 

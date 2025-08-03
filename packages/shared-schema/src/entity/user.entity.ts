@@ -18,4 +18,8 @@ export class User extends AbstractEntity<UserDto> implements UserEntity {
 	profiles?: Profile[];
 	tenants?: Tenant[];
 	associations?: UserAssociation[];
+
+	getMainTenant(): Tenant | undefined {
+		return this.tenants?.find(tenant => tenant.main === true);
+	}
 }

@@ -28,7 +28,7 @@ export class RolesController {
 	constructor(private readonly service: RolesService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async createRole(@Body() createRoleDto: CreateRoleDto) {
@@ -41,7 +41,7 @@ export class RolesController {
 	}
 
 	@Get(":roleId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async getRole(@Param("roleId") roleId: string) {
@@ -54,7 +54,7 @@ export class RolesController {
 	}
 
 	@Patch(":roleId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async updateRole(
@@ -66,7 +66,7 @@ export class RolesController {
 	}
 
 	@Patch(":roleId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async removeRole(@Param("roleId") roleId: string) {
@@ -79,7 +79,7 @@ export class RolesController {
 	}
 
 	@Delete(":roleId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async deleteRole(@Param("roleId") roleId: string) {
@@ -92,7 +92,7 @@ export class RolesController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK, { isArray: true })
 	async getRolesByQuery(@Query() query: QueryRoleDto) {

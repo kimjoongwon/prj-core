@@ -4,6 +4,7 @@ import {
 	HttpException,
 	HttpStatus,
 } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 import { Test, TestingModule } from "@nestjs/testing";
 import { UserDto } from "@shared/schema";
 import { of, throwError } from "rxjs";
@@ -27,13 +28,23 @@ describe("AuthUserInterceptor", () => {
 	let mockExecutionContext: ExecutionContext;
 	let mockCallHandler: CallHandler;
 	let mockRequest: any;
+	let mockReflector: jest.Mocked<Reflector>;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [AuthUserInterceptor],
+			providers: [
+				AuthUserInterceptor,
+				{
+					provide: Reflector,
+					useValue: {
+						getAllAndOverride: jest.fn(),
+					},
+				},
+			],
 		}).compile();
 
 		interceptor = module.get<AuthUserInterceptor>(AuthUserInterceptor);
+		mockReflector = module.get(Reflector);
 
 		// Mock request object
 		mockRequest = {
@@ -47,6 +58,8 @@ describe("AuthUserInterceptor", () => {
 			switchToHttp: jest.fn().mockReturnValue({
 				getRequest: jest.fn().mockReturnValue(mockRequest),
 			}),
+			getHandler: jest.fn(),
+			getClass: jest.fn(),
 		} as any;
 
 		// Mock CallHandler
@@ -68,8 +81,12 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setTenantId).not.toHaveBeenCalled();
-					expect(ContextProvider.setAuthUser).not.toHaveBeenCalled();
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: undefined,
+						tenant: undefined,
+						tenantId: undefined,
+						spaceId: undefined,
+					});
 					done();
 				},
 			});
@@ -86,9 +103,12 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setTenantId).toHaveBeenCalledWith(
-						"test-tenant-id",
-					);
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: undefined,
+						tenant: undefined,
+						tenantId: "test-tenant-id",
+						spaceId: undefined,
+					});
 					done();
 				},
 			});
@@ -117,10 +137,12 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthUser).toHaveBeenCalledWith(mockUser);
-					expect(ContextProvider.setAuthUserId).toHaveBeenCalledWith(
-						"user-123",
-					);
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: mockUser,
+						tenant: { id: "tenant-1", name: "Test Tenant" },
+						tenantId: "tenant-1",
+						spaceId: undefined,
+					});
 					done();
 				},
 			});
@@ -137,8 +159,12 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setAuthUser).not.toHaveBeenCalled();
-					expect(ContextProvider.setAuthUserId).not.toHaveBeenCalled();
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: undefined,
+						tenant: undefined,
+						tenantId: undefined,
+						spaceId: undefined,
+					});
 					done();
 				},
 			});
@@ -154,7 +180,7 @@ describe("AuthUserInterceptor", () => {
 				password: "password",
 				createdAt: new Date(),
 				updatedAt: new Date(),
-				tenants: [{ id: "tenant-1", name: "Test Tenant" } as any],
+				tenants: [{ id: "test-tenant-id", name: "Test Tenant" } as any],
 			} as UserDto;
 
 			mockRequest.cookies = {
@@ -170,13 +196,12 @@ describe("AuthUserInterceptor", () => {
 			result.subscribe({
 				next: (value) => {
 					expect(value).toBe("test response");
-					expect(ContextProvider.setTenantId).toHaveBeenCalledWith(
-						"test-tenant-id",
-					);
-					expect(ContextProvider.setAuthUser).toHaveBeenCalledWith(mockUser);
-					expect(ContextProvider.setAuthUserId).toHaveBeenCalledWith(
-						"user-123",
-					);
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: mockUser,
+						tenant: { id: "test-tenant-id", name: "Test Tenant" },
+						tenantId: "test-tenant-id",
+						spaceId: undefined,
+					});
 					done();
 				},
 			});
@@ -210,7 +235,7 @@ describe("AuthUserInterceptor", () => {
 		});
 
 		it("should handle errors from ContextProvider", () => {
-			(ContextProvider.setTenantId as jest.Mock).mockImplementation(() => {
+			(ContextProvider.setAuthContext as jest.Mock).mockImplementation(() => {
 				throw new Error("ContextProvider error");
 			});
 
@@ -264,6 +289,143 @@ describe("AuthUserInterceptor", () => {
 				error: (error) => {
 					expect(error).toBe(httpError);
 					expect(error.getStatus()).toBe(HttpStatus.BAD_REQUEST);
+					done();
+				},
+			});
+		});
+
+		it("should inject tenantId to query for GET requests with Auth options", (done) => {
+			const mockUser: UserDto = {
+				id: "user-123",
+				spaceId: "space-123",
+				email: "test@example.com",
+				name: "Test User",
+				phone: "123-456-7890",
+				password: "password",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
+			} as UserDto;
+
+			mockRequest.user = mockUser;
+			mockRequest.method = "GET";
+			mockRequest.query = {};
+
+			// Mock both @InjectTenantId and Auth options
+			mockReflector.getAllAndOverride
+				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
+				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
+					roles: [],
+					injectTenant: true,
+				});
+
+			const result = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+
+			result.subscribe({
+				next: (value) => {
+					expect(value).toBe("test response");
+					expect(mockRequest.query.tenantId).toBe("tenant-1");
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: mockUser,
+						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+						tenantId: "tenant-1",
+						spaceId: undefined,
+					});
+					done();
+				},
+			});
+		});
+
+		it("should NOT inject tenantId to body for POST requests with Auth options", (done) => {
+			const mockUser: UserDto = {
+				id: "user-123",
+				spaceId: "space-123",
+				email: "test@example.com",
+				name: "Test User",
+				phone: "123-456-7890",
+				password: "password",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
+			} as UserDto;
+
+			mockRequest.user = mockUser;
+			mockRequest.method = "POST";
+			mockRequest.body = { name: "Test Category" };
+
+			// Mock both @InjectTenantId and Auth options
+			mockReflector.getAllAndOverride
+				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
+				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
+					roles: [],
+					injectTenant: true,
+				});
+
+			const result = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+
+			result.subscribe({
+				next: (value) => {
+					expect(value).toBe("test response");
+					expect(mockRequest.body).toEqual({ name: "Test Category" });
+					expect(mockRequest.body.tenantId).toBeUndefined();
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: mockUser,
+						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+						tenantId: "tenant-1",
+						spaceId: undefined,
+					});
+					done();
+				},
+			});
+		});
+
+		it("should skip tenant injection when Auth options injectTenant is false", (done) => {
+			const mockUser: UserDto = {
+				id: "user-123",
+				spaceId: "space-123",
+				email: "test@example.com",
+				name: "Test User",
+				phone: "123-456-7890",
+				password: "password",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				tenants: [{ id: "tenant-1", name: "Test Tenant", main: true } as any],
+			} as UserDto;
+
+			mockRequest.user = mockUser;
+			mockRequest.method = "GET";
+			mockRequest.query = {};
+
+			// Mock both @InjectTenantId and Auth options
+			mockReflector.getAllAndOverride
+				.mockReturnValueOnce(false) // for INJECT_TENANT_ID_KEY
+				.mockReturnValueOnce({       // for AUTH_OPTIONS_KEY
+					roles: [],
+					injectTenant: false,
+				});
+
+			const result = interceptor.intercept(
+				mockExecutionContext,
+				mockCallHandler,
+			);
+
+			result.subscribe({
+				next: (value) => {
+					expect(value).toBe("test response");
+					// tenantId is still set in context but NOT injected to query due to injectTenant: false
+					expect(mockRequest.query.tenantId).toBeUndefined();
+					expect(ContextProvider.setAuthContext).toHaveBeenCalledWith({
+						user: mockUser,
+						tenant: { id: "tenant-1", name: "Test Tenant", main: true },
+						tenantId: "tenant-1",
+						spaceId: undefined,
+					});
 					done();
 				},
 			});

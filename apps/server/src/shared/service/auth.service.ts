@@ -48,7 +48,9 @@ export class AuthService {
 	}
 
 	async validateUser(email: string, password: string) {
-		const user = await this.usersService.getUnique({ where: { name: email } });
+		const user = await this.usersService.getFirst({
+			where: { email },
+		});
 
 		const isPasswordValid = await this.passwordService.validatePassword(
 			password,
@@ -71,7 +73,8 @@ export class AuthService {
 	}
 
 	async signUp(signUpPayloadDto: SignUpPayloadDto) {
-		const { name, nickname, password, phone, spaceId } = signUpPayloadDto;
+		const { name, nickname, password, phone, spaceId, email } =
+			signUpPayloadDto;
 
 		const userRole = await this.prisma.role.findFirst({
 			where: { name: "USER" },
@@ -82,33 +85,42 @@ export class AuthService {
 			throw new BadRequestException("유저 역할이 존재하지 않습니다.");
 		}
 
+		// Space 생성
+		const space = await this.prisma.space.create({
+			data: {},
+		});
+
+		// 비밀번호 해싱
+		const hashedPassword = await this.passwordService.hashPassword(password);
+
 		const { id: userId } = await this.usersService.create({
 			data: {
 				name,
+				email,
 				phone,
-				password,
+				password: hashedPassword,
 				tenants: {
 					create: {
 						main: true,
-						spaceId,
+						spaceId: space.id,
 						roleId: userRole.id,
 					},
 				},
 				profiles: {
 					create: {
 						name,
-						nickname,
+						nickname: nickname || name,
 					},
 				},
-			},
+			} as any,
 		});
 
 		return this.tokenService.generateTokens({ userId });
 	}
 
 	async login({ email, password }: LoginPayloadDto) {
-		const user = await this.usersService.getUnique({
-			where: { name: email },
+		const user = await this.usersService.getFirst({
+			where: { email } as any,
 			include: {
 				profiles: true,
 				tenants: {

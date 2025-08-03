@@ -19,7 +19,7 @@ export class FilesController {
 	constructor(private readonly service: FilesService) {}
 
 	@Get(":fileId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	async getFileById(@Param("fileId") fileId: string) {
@@ -28,7 +28,7 @@ export class FilesController {
 	}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiResponseEntity(FileDto, HttpStatus.CREATED)
 	async createFile(@Body() createFileDto: CreateFileDto) {
@@ -41,7 +41,7 @@ export class FilesController {
 	}
 
 	@Patch(":fileId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	async removeFileById(@Param("fileId") fileId: string) {
@@ -54,7 +54,7 @@ export class FilesController {
 	}
 
 	@Patch(":fileId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileDto, HttpStatus.OK)
 	@ApiFile(

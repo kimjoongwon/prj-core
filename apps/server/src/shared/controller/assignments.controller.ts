@@ -28,7 +28,7 @@ export class AssignmentsController {
 	constructor(private readonly service: AssignmentsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
@@ -42,7 +42,7 @@ export class AssignmentsController {
 	}
 
 	@Get(":assignmentId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async getAssignment(@Param("assignmentId") assignmentId: string) {
@@ -56,7 +56,7 @@ export class AssignmentsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async removeAssignments(@Body() assignmentIds: string[]) {
@@ -65,7 +65,7 @@ export class AssignmentsController {
 	}
 
 	@Patch(":assignmentId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async removeAssignmentById(@Param("assignmentId") assignmentId: string) {
@@ -78,7 +78,7 @@ export class AssignmentsController {
 	}
 
 	@Delete(":assignmentId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK)
 	async deleteAssignment(@Param("assignmentId") assignmentId: string) {
@@ -91,7 +91,7 @@ export class AssignmentsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(AssignmentDto, HttpStatus.OK, { isArray: true })
 	async getAssignmentsByQuery(@Query() query: QueryAssignmentDto) {

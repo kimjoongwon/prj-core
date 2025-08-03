@@ -81,14 +81,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(payload: { userId: string; iat: number; exp: number }) {
-		this.logger.log(
+		this.logger.error(
 			`JWT validate called with payload: ${JSON.stringify(payload)}`,
 		);
 
 		try {
 			const user = await this.usersService.getUnique({
 				where: { id: payload.userId },
-				include: { tenants: true },
+				include: {
+					tenants: {
+						include: {
+							role: true,
+						},
+					},
+				},
 			});
 
 			if (!user) {
@@ -96,8 +102,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 				throw new UnauthorizedException("User not found");
 			}
 
-			this.logger.log(
-				`User found: ${user.id}, tenants: ${user.tenants?.length || 0}`,
+			this.logger.error(
+				`JWT Strategy - User found: ${user.id}, tenants: ${user.tenants?.length || 0}`,
+			);
+			this.logger.error(
+				`JWT Strategy - User tenants: ${JSON.stringify(user.tenants?.map((t) => ({ id: t.id, main: t.main })))}`,
 			);
 
 			// user 객체를 직접 반환 ({ user } 래핑하지 않음)

@@ -29,7 +29,7 @@ export class SubjectsController {
 	constructor(private readonly service: SubjectsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async createSubject(@Body() createSubjectDto: CreateSubjectDto) {
@@ -43,7 +43,7 @@ export class SubjectsController {
 	}
 
 	@Get(":subjectId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async getSubject(@Param("subjectId") subjectId: string) {
@@ -58,7 +58,7 @@ export class SubjectsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubjects(@Body() subjectIds: string[]) {
@@ -70,7 +70,7 @@ export class SubjectsController {
 	}
 
 	@Patch(":subjectId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async updateSubject(
@@ -89,7 +89,7 @@ export class SubjectsController {
 	}
 
 	@Patch(":subjectId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubject(@Param("subjectId") subjectId: string) {
@@ -102,7 +102,7 @@ export class SubjectsController {
 	}
 
 	@Delete(":subjectId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async deleteSubject(@Param("subjectId") subjectId: string) {
@@ -115,7 +115,7 @@ export class SubjectsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK, { isArray: true })
 	async getSubjectsByQuery(@Query() query: QuerySubjectDto) {

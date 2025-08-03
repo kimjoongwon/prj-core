@@ -23,9 +23,10 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 		);
 		const request = context.switchToHttp().getRequest();
 
-		this.logger.log(`JwtAuthGuard canActivate - isPublic: ${isPublic}`);
-		this.logger.log(`Request path: ${request.path}`);
-		this.logger.log(`Request method: ${request.method}`);
+		this.logger.error(`JwtAuthGuard canActivate - isPublic: ${isPublic}`);
+		this.logger.error(`Request path: ${request.path}`);
+		this.logger.error(`Request method: ${request.method}`);
+		this.logger.error(`Authorization header: ${request.headers.authorization}`);
 
 		if (isPublic) {
 			this.logger.log("Route is public, allowing access");

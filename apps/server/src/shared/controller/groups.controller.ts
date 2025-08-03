@@ -26,7 +26,7 @@ import { GroupsService } from "../service/services";
 export class GroupsController {
 	constructor(private readonly groupService: GroupsService) {}
 
-	@Auth([], { public: false })
+	@Auth()
 	@ApiResponse({
 		status: 201,
 		description: "The record has been successfully created.",

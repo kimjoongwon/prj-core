@@ -26,7 +26,7 @@ export class AppBuilderController {
 	constructor(private readonly appBuilderService: AppBuilderService) {}
 
 	@Get()
-	@Auth([], { public: true })
+	@Auth({ public: true, injectTenant: false })
 	@ApiResponseEntity(AppBuilderDto, 200)
 	async getAppBuilder(@Req() req: Request) {
 		const isAuthenticated = this.checkAuthenticationStatus(req);

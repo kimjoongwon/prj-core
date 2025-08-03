@@ -28,7 +28,7 @@ export class SpaceClassificationsController {
 	constructor(private readonly service: SpaceClassificationsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async createSpaceClassification(
@@ -45,7 +45,7 @@ export class SpaceClassificationsController {
 	}
 
 	@Get(":spaceClassification")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async getSpaceClassification(@Param("id") id: string) {
@@ -58,7 +58,7 @@ export class SpaceClassificationsController {
 	}
 
 	@Patch(":spaceClassificationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async updateSpaceClassification(
@@ -77,7 +77,7 @@ export class SpaceClassificationsController {
 	}
 
 	@Patch(":spaceClassificationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async removeSpaceClassification(@Param("id") id: string) {
@@ -90,7 +90,7 @@ export class SpaceClassificationsController {
 	}
 
 	@Delete(":spaceClassificationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK)
 	async deleteSpaceClassification(@Param("id") id: string) {
@@ -103,7 +103,7 @@ export class SpaceClassificationsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceClassificationDto, HttpStatus.OK, { isArray: true })
 	async getSpaceClassificationsByQuery(

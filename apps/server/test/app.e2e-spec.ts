@@ -1,10 +1,11 @@
-import { INestApplication } from "@nestjs/common";
+import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
 
-describe("App E2E Tests (Basic)", () => {
+describe("App E2E Tests", () => {
 	let app: INestApplication;
+	let jwtToken: string;
 
 	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -12,6 +13,16 @@ describe("App E2E Tests (Basic)", () => {
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
+
+		// ValidationPipe 전역 설정 (main.ts와 동일)
+		app.useGlobalPipes(
+			new ValidationPipe({
+				transform: true,
+				whitelist: true,
+				forbidNonWhitelisted: true, // 정확한 에러 메시지를 위해 추가
+			}),
+		);
+
 		await app.init();
 	}, 60000);
 
@@ -21,106 +32,103 @@ describe("App E2E Tests (Basic)", () => {
 		}
 	}, 30000);
 
-	describe("Basic App Health Checks", () => {
-		it("should boot application successfully", () => {
-			expect(app).toBeDefined();
-			expect(app.getHttpServer()).toBeDefined();
+	describe("Authentication", () => {
+		it("should register a new user and return JWT token", async () => {
+			const uniqueId = Date.now();
+			const userData = {
+				nickname: `testuser${uniqueId}`,
+				spaceId: "00000000-0000-0000-0000-000000000000", // 임시 UUID
+				email: `test${uniqueId}@example.com`,
+				name: `Test User ${uniqueId}`,
+				password: "password123",
+				phone: `+8210${uniqueId.toString().slice(-8)}`,
+			};
+
+			const response = await request(app.getHttpServer())
+				.post("/api/v1/auth/sign-up")
+				.send(userData)
+				.expect(201);
+
+			expect(response.body.data).toHaveProperty("accessToken");
+			expect(response.body.data.accessToken).toBeDefined();
+			expect(typeof response.body.data.accessToken).toBe("string");
 		});
 
-		it("should respond to basic endpoint probes", async () => {
-			// Test basic endpoint connectivity (these should return some response, even if 404/500)
-			const authResponse = await request(app.getHttpServer())
+		it("should login with existing user and return JWT token", async () => {
+			const uniqueId = Date.now();
+			const userData = {
+				nickname: `testuser${uniqueId}`,
+				spaceId: "00000000-0000-0000-0000-000000000000", // 임시 UUID
+				email: `test${uniqueId}@example.com`,
+				name: `Test User ${uniqueId}`,
+				password: "password123",
+				phone: `+8210${uniqueId.toString().slice(-8)}`,
+			};
+
+			await request(app.getHttpServer())
 				.post("/api/v1/auth/sign-up")
-				.send({});
+				.send(userData);
 
-			// Any response (including 500 for database issues) means the routing is working
-			expect([400, 500].includes(authResponse.status)).toBe(true);
-		});
-	});
-
-	describe("Auth Routes Structure", () => {
-		it("should have auth routes available", async () => {
-			// Test sign-up endpoint exists
-			const signUpResponse = await request(app.getHttpServer())
-				.post("/api/v1/auth/sign-up")
-				.send({});
-
-			// Should get 400 (validation error) or 500 (database error), not 404
-			expect(signUpResponse.status).not.toBe(404);
-
-			// Test login endpoint exists
 			const loginResponse = await request(app.getHttpServer())
 				.post("/api/v1/auth/login")
-				.send({});
+				.send({
+					email: userData.email,
+					password: userData.password,
+				})
+				.expect(200);
 
-			// Should get 400 (validation error) or 500 (database error), not 404
-			expect(loginResponse.status).not.toBe(404);
+			expect(loginResponse.body.data).toHaveProperty("accessToken");
+			expect(loginResponse.body.data.accessToken).toBeDefined();
+			expect(typeof loginResponse.body.data.accessToken).toBe("string");
 
-			// Test verify-token endpoint exists
-			const verifyResponse = await request(app.getHttpServer()).get(
-				"/api/v1/auth/verify-token",
-			);
-
-			// Should get 401 (unauthorized) or 500 (database error), not 404
-			expect(verifyResponse.status).not.toBe(404);
+			jwtToken = loginResponse.body.data.accessToken;
 		});
 	});
 
-	describe("API Routes Structure", () => {
-		it("should have users routes available", async () => {
-			const usersResponse = await request(app.getHttpServer()).get(
-				"/api/v1/users",
-			);
+	describe("Categories", () => {
+		it("should create a new category and return 201 with created data", async () => {
+			const categoryData = {
+				name: `Test Category ${Date.now()}`,
+				type: "User", // 기본값으로 User 타입 명시적 지정
+			};
 
-			// Should get 401 (unauthorized) or 500 (database error), not 404
-			expect(usersResponse.status).not.toBe(404);
-		});
-
-		it("should have categories routes available", async () => {
-			const categoriesResponse = await request(app.getHttpServer()).get(
-				"/api/v1/categories",
-			);
-
-			// Should get 401 (unauthorized) or 500 (database error), not 404
-			expect(categoriesResponse.status).not.toBe(404);
-
-			const createCategoryResponse = await request(app.getHttpServer())
+			const response = await request(app.getHttpServer())
 				.post("/api/v1/categories")
-				.send({});
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.send(categoryData)
+				.expect(200);
 
-			// Should get 400/401 (validation/auth error) or 500 (database error), not 404
-			expect(createCategoryResponse.status).not.toBe(404);
+			expect(response.body.data).toHaveProperty("id");
+			expect(response.body.data.name).toBe(categoryData.name);
+			expect(response.body.data).toHaveProperty("createdAt");
+			expect(response.body.data).toHaveProperty("updatedAt");
 		});
 
-		it("should have other module routes available", async () => {
-			// Test various module endpoints exist (most should be accessible, some may return 404)
-			const modules = [
-				"/api/v1/tenants",
-				"/api/v1/groups",
-				"/api/v1/spaces",
-				"/api/v1/roles",
-				"/api/v1/subjects",
-				"/api/v1/sessions",
-				"/api/v1/programs",
-				"/api/v1/routines",
-				"/api/v1/exercises",
-				"/api/v1/files",
-				"/api/v1/grounds",
-			];
+		it("should get category list and verify created category is included", async () => {
+			const categoryData = {
+				name: `Unique Category ${Date.now()}`,
+				type: "User", // 기본값으로 User 타입 명시적 지정
+			};
 
-			let successfulEndpoints = 0;
-			const totalEndpoints = modules.length;
+			const createResponse = await request(app.getHttpServer())
+				.post("/api/v1/categories")
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.send(categoryData)
+				.expect(200);
 
-			for (const endpoint of modules) {
-				const response = await request(app.getHttpServer()).get(endpoint);
-				// Count endpoints that are properly routed (not 404)
-				if (response.status !== 404) {
-					successfulEndpoints++;
-				}
-			}
+			const getResponse = await request(app.getHttpServer())
+				.get("/api/v1/categories")
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.expect(200);
 
-			// Expect at least 50% of endpoints to be properly routed
-			expect(successfulEndpoints / totalEndpoints).toBeGreaterThan(0.5);
+			expect(Array.isArray(getResponse.body.data)).toBe(true);
+
+			const createdCategory = getResponse.body.data.find(
+				(category: any) => category.id === createResponse.body.data.id,
+			);
+
+			expect(createdCategory).toBeDefined();
+			expect(createdCategory.name).toBe(categoryData.name);
 		});
 	});
 });

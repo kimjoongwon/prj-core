@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
-import { UserDto } from "@shared/schema";
+import { User, UserDto } from "@shared/schema";
 import { Request, Response } from "express";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { PrismaService } from "nestjs-prisma";
@@ -94,6 +94,41 @@ export const createTestUserDto = (
 		],
 		...overrides,
 	} as UserDto;
+};
+
+export const createTestUserEntity = (
+	overrides: Partial<User> = {},
+): User => {
+	const user = new User();
+	Object.assign(user, {
+		id: "user-test-id",
+		spaceId: "space-test-id",
+		email: "test@example.com",
+		name: "Test User",
+		phone: "010-1234-5678",
+		password: "$2b$10$hashedPassword",
+		createdAt: new Date("2024-01-01"),
+		updatedAt: new Date("2024-01-01"),
+		tenants: [
+			{
+				id: "tenant-test-id",
+				name: "Test Tenant",
+				main: true,
+				spaceId: "space-test-id",
+				roleId: "role-test-id",
+				space: {
+					id: "space-test-id",
+					name: "Test Space",
+					ground: {
+						id: "ground-test-id",
+						name: "Test Ground",
+					},
+				},
+			} as any,
+		],
+		...overrides,
+	});
+	return user;
 };
 
 export interface TestTokens {

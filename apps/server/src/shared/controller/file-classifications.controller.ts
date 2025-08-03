@@ -27,7 +27,7 @@ import { FileClassificationsService } from "../service/file-classifications.serv
 export class FileClassificationsController {
 	constructor(private readonly service: FileClassificationsService) {}
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async createFileClassification(
@@ -43,7 +43,7 @@ export class FileClassificationsController {
 		);
 	}
 	@Get(":fileClassificationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async getFileClassification(@Param("id") id: string) {
@@ -55,7 +55,7 @@ export class FileClassificationsController {
 		);
 	}
 	@Patch(":fileClassificationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async updateFileClassification(
@@ -73,7 +73,7 @@ export class FileClassificationsController {
 		);
 	}
 	@Patch(":fileClassificationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async removeFileClassification(@Param("id") id: string) {
@@ -85,7 +85,7 @@ export class FileClassificationsController {
 		);
 	}
 	@Delete(":fileClassificationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK)
 	async deleteFileClassification(@Param("id") id: string) {
@@ -97,7 +97,7 @@ export class FileClassificationsController {
 		);
 	}
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileClassificationDto, HttpStatus.OK, { isArray: true })
 	async getFileClassificationsByQuery(

@@ -20,7 +20,6 @@ export class QueryDto {
 	readonly take?: number = undefined;
 
 	toArgs<T>(rawArgs?: T) {
-		console.log("QueryDto.toArgs", this, rawArgs);
 		const args = PaginationUtil.toArgs(this);
 		const newArgs = defaultsDeep(args, {
 			orderBy: {

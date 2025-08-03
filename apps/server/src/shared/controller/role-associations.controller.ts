@@ -29,7 +29,7 @@ export class RoleAssociationsController {
 	constructor(private readonly service: RoleAssociationsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async createRoleAssociation(
@@ -45,7 +45,7 @@ export class RoleAssociationsController {
 	}
 
 	@Get(":roleAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async getRoleAssociation(
@@ -62,7 +62,7 @@ export class RoleAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociations(@Body() roleAssociationIds: string[]) {
@@ -74,7 +74,7 @@ export class RoleAssociationsController {
 	}
 
 	@Patch(":roleAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async updateRoleAssociation(
@@ -93,7 +93,7 @@ export class RoleAssociationsController {
 	}
 
 	@Patch(":roleAssociationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociation(
@@ -108,7 +108,7 @@ export class RoleAssociationsController {
 	}
 
 	@Delete(":roleAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async deleteRoleAssociation(
@@ -123,7 +123,7 @@ export class RoleAssociationsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK, { isArray: true })
 	async getRoleAssociationsByQuery(@Query() query: QueryRoleAssociationDto) {

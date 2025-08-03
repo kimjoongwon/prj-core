@@ -29,7 +29,7 @@ export class FileAssociationsController {
 	constructor(private readonly service: FileAssociationsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async createFileAssociation(
@@ -45,7 +45,7 @@ export class FileAssociationsController {
 	}
 
 	@Get(":fileAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async getFileAssociation(
@@ -62,7 +62,7 @@ export class FileAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociations(@Body() fileAssociationIds: string[]) {
@@ -74,7 +74,7 @@ export class FileAssociationsController {
 	}
 
 	@Patch(":fileAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async updateFileAssociation(
@@ -93,7 +93,7 @@ export class FileAssociationsController {
 	}
 
 	@Patch(":fileAssociationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociation(
@@ -108,7 +108,7 @@ export class FileAssociationsController {
 	}
 
 	@Delete(":fileAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async deleteFileAssociation(
@@ -123,7 +123,7 @@ export class FileAssociationsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK, { isArray: true })
 	async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {

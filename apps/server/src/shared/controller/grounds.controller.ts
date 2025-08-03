@@ -34,7 +34,7 @@ export class GroundsController {
 	constructor(private readonly groundsService: GroundsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "새로운 Ground 생성" })
 	@ApiResponse({ status: 200, description: "성공" })
@@ -51,7 +51,7 @@ export class GroundsController {
 	}
 
 	@Get(":groundId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "ID로 Ground 조회" })
 	@ApiResponse({ status: 200, description: "성공" })
@@ -74,7 +74,7 @@ export class GroundsController {
 	}
 
 	@Patch(":groundId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "ID로 Ground 수정" })
 	@ApiResponse({ status: 200, description: "성공" })
@@ -93,7 +93,7 @@ export class GroundsController {
 	}
 
 	@Patch(":groundId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "ID로 Ground 삭제 (soft delete)" })
 	@ApiResponse({ status: 200, description: "성공" })
@@ -110,7 +110,7 @@ export class GroundsController {
 	}
 
 	@Delete(":groundId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "ID로 Ground 완전 삭제 (hard delete)" })
 	@ApiResponse({ status: 200, description: "성공" })
@@ -127,7 +127,7 @@ export class GroundsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: "Ground 목록 조회" })
 	@ApiResponseEntity(GroundDto, HttpStatus.OK)
