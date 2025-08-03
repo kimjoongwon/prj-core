@@ -8,6 +8,7 @@ export class LoggerMiddleware implements NestMiddleware {
 		this.logger.log(
 			`Logging HTTP request ${req.method} ${req.url} ${res.statusCode}`,
 		);
+
 		next();
 	}
 }

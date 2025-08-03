@@ -38,11 +38,11 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 		Roles(roles),
 	];
 
-	decorators.push(UseInterceptors(AuthUserInterceptor));
-
 	if (!isPublicRoute) {
 		decorators.push(UseGuards(JwtAuthGuard));
 	}
+
+	decorators.push(UseInterceptors(AuthUserInterceptor));
 
 	return applyDecorators(...decorators);
 }
