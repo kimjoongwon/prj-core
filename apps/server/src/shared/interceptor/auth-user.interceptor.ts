@@ -90,27 +90,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 				}
 			}
 
-			// 로깅 최적화: slice 연산 최소화
-			const reqIdShort = requestId.slice(-8);
-			const userIdShort = user?.id?.slice(-8);
-			const tenantIdShort = tenantId?.slice(-8);
-			const spaceIdShort = currentTenant?.spaceId?.slice(-8);
-
 			// 디버깅을 위한 상세한 로깅
-			this.logger.error("Auth context extraction DEBUG", {
-				reqId: reqIdShort,
-				hasUser: !!user,
-				userId: userIdShort,
-				tenantId: tenantIdShort,
-				tenantsCount: user?.tenants?.length || 0,
-				hasTenant: !!currentTenant,
-				currentTenantSpaceId: spaceIdShort,
-				userTenants: user?.tenants?.map((t) => ({
-					id: t.id?.slice(-8),
-					main: t.main,
-				})),
-			});
-
 			return {
 				tenantId,
 				user,
@@ -315,37 +295,67 @@ export class AuthUserInterceptor implements NestInterceptor {
 				[context.getHandler(), context.getClass()],
 			);
 
+			const reqIdShort = authContext.requestId?.slice(-8);
+			const tenantIdShort = authContext.tenantId?.slice(-8);
+
 			// If no Auth options or injectTenant is false, skip injection
 			if (!authOptions || authOptions.injectTenant === false) {
+				this.logger.log("Skipping tenant injection", {
+					reqId: reqIdShort,
+					reason: !authOptions ? "no-auth-options" : "inject-tenant-false",
+				});
 				return;
 			}
 
 			// If tenantId is not available, skip injection
 			if (!authContext.tenantId) {
+				this.logger.log("Skipping tenant injection - no tenantId", {
+					reqId: reqIdShort,
+				});
 				return;
 			}
 
 			const request = context.switchToHttp().getRequest();
 			const method = request.method?.toUpperCase();
-			const reqIdShort = authContext.requestId?.slice(-8);
-			const tenantIdShort = authContext.tenantId?.slice(-8);
+
+			this.logger.log("Injecting tenantId based on Auth decorator", {
+				reqId: reqIdShort,
+				tenantId: tenantIdShort,
+				method,
+			});
 
 			// Inject tenantId based on HTTP method
 			if (method === "GET" || method === "DELETE") {
 				// For GET/DELETE requests, inject to query parameters
 				if (!request.query.tenantId) {
-					request.query.tenantId = authContext.tenantId;
+					// Get current URL and parse it
+					const url = new URL(request.url, `http://${request.headers.host}`);
 
-					this.logger.dev("TenantId injected to query via Auth options", {
+					// Add tenantId to search params
+					url.searchParams.set("tenantId", authContext.tenantId);
+
+					// Update the request URL
+					request.url = url.pathname + url.search;
+
+					// Delete query to force re-parsing on next access
+					delete request.query;
+
+					this.logger.log("TenantId injected to query via Auth options", {
 						reqId: reqIdShort,
 						tenantId: tenantIdShort,
+						method,
+					});
+				} else {
+					this.logger.log("TenantId already exists in query", {
+						reqId: reqIdShort,
+						existingTenantId: request.query.tenantId,
 						method,
 					});
 				}
 			} else if (method === "POST" || method === "PUT" || method === "PATCH") {
 				// For POST/PUT/PATCH requests, tenantId is handled through ContextProvider
 				// Don't inject tenantId directly to body as it conflicts with Prisma schema
-				this.logger.dev(
+				this.logger.log(
 					"TenantId available via ContextProvider for body operations",
 					{
 						reqId: reqIdShort,

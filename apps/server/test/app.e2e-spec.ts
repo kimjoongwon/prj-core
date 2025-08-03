@@ -2,14 +2,16 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
+import { TenantInjectionTestController } from "./mock-controllers/tenant-injection-test.controller";
 
-describe("App E2E Tests", () => {
+describe("앱 E2E 테스트", () => {
 	let app: INestApplication;
 	let jwtToken: string;
 
 	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
+			controllers: [TenantInjectionTestController], // 테스트용 모킹 컨트롤러 추가
 		}).compile();
 
 		app = moduleFixture.createNestApplication();
@@ -32,8 +34,8 @@ describe("App E2E Tests", () => {
 		}
 	}, 30000);
 
-	describe("Authentication", () => {
-		it("should register a new user and return JWT token", async () => {
+	describe("인증", () => {
+		it("새 사용자를 등록하고 JWT 토큰을 반환해야 함", async () => {
 			const uniqueId = Date.now();
 			const userData = {
 				nickname: `testuser${uniqueId}`,
@@ -54,7 +56,7 @@ describe("App E2E Tests", () => {
 			expect(typeof response.body.data.accessToken).toBe("string");
 		});
 
-		it("should login with existing user and return JWT token", async () => {
+		it("기존 사용자로 로그인하고 JWT 토큰을 반환해야 함", async () => {
 			const uniqueId = Date.now();
 			const userData = {
 				nickname: `testuser${uniqueId}`,
@@ -85,8 +87,8 @@ describe("App E2E Tests", () => {
 		});
 	});
 
-	describe("Categories", () => {
-		it("should create a new category and return 201 with created data", async () => {
+	describe("카테고리", () => {
+		it("새 카테고리를 생성하고 201과 생성된 데이터를 반환해야 함", async () => {
 			const categoryData = {
 				name: `Test Category ${Date.now()}`,
 				type: "User", // 기본값으로 User 타입 명시적 지정
@@ -104,7 +106,7 @@ describe("App E2E Tests", () => {
 			expect(response.body.data).toHaveProperty("updatedAt");
 		});
 
-		it("should get category list and verify created category is included", async () => {
+		it("카테고리 목록을 가져오고 생성된 카테고리가 포함되어 있는지 확인해야 함", async () => {
 			const categoryData = {
 				name: `Unique Category ${Date.now()}`,
 				type: "User", // 기본값으로 User 타입 명시적 지정
@@ -129,6 +131,121 @@ describe("App E2E Tests", () => {
 
 			expect(createdCategory).toBeDefined();
 			expect(createdCategory.name).toBe(categoryData.name);
+		});
+	});
+
+	describe("테넌트 ID 주입", () => {
+		let authToken: string;
+
+		beforeEach(async () => {
+			// Use the existing JWT token from global authentication setup
+			authToken = jwtToken;
+			expect(authToken).toBeDefined();
+		});
+
+		it("injectTenant이 true일 때(기본값) GET 요청 쿼리에 tenantId를 주입해야 함", async () => {
+			try {
+				console.log("=== Starting test ===");
+				console.log("Using JWT token:", authToken ? "present" : "missing");
+
+				const response = await request(app.getHttpServer())
+					.get("/api/v1/test-tenant-injection/debug-query?testParam=value")
+					.set("Authorization", `Bearer ${authToken}`);
+
+				console.log("Response received:");
+				console.log("Status:", response.status);
+				console.log("Body:", JSON.stringify(response.body, null, 2));
+
+				expect(response.status).toBe(200);
+
+				// Check if tenantId was injected
+				if (response.body.data.hasTenantId) {
+					expect(response.body.data.hasTenantId).toBe(true);
+					expect(response.body.data.tenantId).toBeDefined();
+					expect(typeof response.body.data.tenantId).toBe("string");
+					expect(response.body.data.receivedQuery).toEqual({
+						testParam: "value",
+						tenantId: response.body.data.tenantId,
+					});
+				} else {
+					console.log(
+						"TenantId was NOT injected. Current query:",
+						response.body.data.receivedQuery,
+					);
+					throw new Error(
+						`tenantId was not injected to query. Expected hasTenantId: true, but got: false`,
+					);
+				}
+			} catch (error) {
+				console.log("Test error:", error);
+				throw error;
+			}
+		});
+
+		it("injectTenant이 false일 때 GET 요청 쿼리에 tenantId를 주입하지 않아야 함", async () => {
+			const response = await request(app.getHttpServer())
+				.get("/api/v1/test-tenant-injection/debug-query-no-injection?testParam=value")
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.expect(200);
+
+			// Check that tenantId was not injected
+			expect(response.body.data.hasTenantId).toBe(false);
+			expect(response.body.data.tenantId).toBeUndefined();
+			expect(response.body.data.receivedQuery).toEqual({
+				testParam: "value",
+			});
+		});
+
+		it("GET 요청 쿼리에 tenantId를 주입하고 기능을 확인해야 함", async () => {
+			const response = await request(app.getHttpServer())
+				.get("/api/v1/test-tenant-injection/debug-query?param1=value1&param2=value2")
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.expect(200);
+
+			// Verify that tenantId was injected along with other parameters
+			expect(response.body.data.hasTenantId).toBe(true);
+			expect(response.body.data.tenantId).toBeDefined();
+			expect(response.body.data.receivedQuery).toEqual({
+				param1: "value1",
+				param2: "value2",
+				tenantId: response.body.data.tenantId,
+			});
+			expect(response.body.message).toBe("Debug query parameters");
+		});
+
+		it("이미 존재하는 tenantId가 쿼리에 있다면 유지해야 함", async () => {
+			const existingTenantId = "existing-tenant-id";
+			const response = await request(app.getHttpServer())
+				.get(
+					`/api/v1/test-tenant-injection/debug-query?testParam=value&tenantId=${existingTenantId}`,
+				)
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.expect(200);
+
+			// tenantId injection should not override existing tenantId
+			expect(response.body.data.hasTenantId).toBe(true);
+			expect(response.body.data.tenantId).toBe(existingTenantId);
+			expect(response.body.data.receivedQuery).toEqual({
+				testParam: "value",
+				tenantId: existingTenantId,
+			});
+		});
+
+		it("다른 쿼리 파라미터가 있어도 injectTenant이 false이면 tenantId를 주입하지 않아야 함", async () => {
+			const response = await request(app.getHttpServer())
+				.get(
+					"/api/v1/test-tenant-injection/debug-query-no-injection?param1=value1&param2=value2",
+				)
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.expect(200);
+
+			// Verify no tenantId injection
+			expect(response.body.data.hasTenantId).toBe(false);
+			expect(response.body.data.tenantId).toBeUndefined();
+			expect(response.body.data.receivedQuery).toEqual({
+				param1: "value1",
+				param2: "value2",
+			});
 		});
 	});
 });
