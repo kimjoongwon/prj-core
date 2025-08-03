@@ -1,6 +1,18 @@
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
 import { ResponseEntity } from "@shared/schema";
 import { Auth } from "../../src/shared/decorator";
+import { IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+
+class TestQueryDto {
+	@IsString()
+	@ApiProperty({ required: false })
+	testParam?: string;
+
+	@IsString()
+	@ApiProperty({ required: false })
+	tenantId?: string;
+}
 
 /**
  * 테스트 전용 모킹 컨트롤러 - 테넌트 ID 주입 기능을 테스트하기 위한 용도

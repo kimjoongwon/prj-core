@@ -66,6 +66,8 @@ export class CategoriesService {
 			spaceId: currentTenant?.spaceId?.slice(-8) || "null",
 			timestamp: new Date().toISOString(),
 		});
+
+		this.logger.debug("getManyByQuery - Query Args:", query);
 		if (!currentTenant) {
 			this.logger.warn("getManyByQuery - No tenant found in context");
 			throw new Error(

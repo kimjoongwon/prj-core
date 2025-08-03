@@ -42,13 +42,9 @@ async function bootstrap() {
 		new ValidationPipe({
 			transform: true,
 			whitelist: true, // DTO에 정의되지 않은 속성 자동 제거
-			// forbidNonWhitelisted: true,
-			// whitelist: true, // DTO에 정의되지 않은 속성 자동 제거
-			// transformOptions: {
-			//   excludeExtraneousValues: true, // class-transformer에서 @Expose()가 없는 속성 제거
-			// },
 		}),
 	);
+
 	const config = new DocumentBuilder()
 		.setVersion("1.0.0")
 		.addBearerAuth()
