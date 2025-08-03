@@ -30,7 +30,7 @@ export class TenantsController {
 	constructor(private readonly service: TenantsService) {}
 
 	@Get("my")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getMyTenants() {
@@ -44,7 +44,7 @@ export class TenantsController {
 	}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async createTenant(@Body() createTenantDto: CreateTenantDto) {
@@ -58,7 +58,7 @@ export class TenantsController {
 	}
 
 	@Get(":tenantId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async getTenantById(@Param("tenantId") tenantId: string) {
@@ -71,7 +71,7 @@ export class TenantsController {
 	}
 
 	@Patch(":tenantId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async updateTenantById(
@@ -87,7 +87,7 @@ export class TenantsController {
 	}
 
 	@Patch(":tenantId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async removeTenantById(@Param("tenantId") tenantId: string) {
@@ -100,7 +100,7 @@ export class TenantsController {
 	}
 
 	@Delete(":tenantId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK)
 	async deleteTenant(@Param("tenantId") tenantId: string) {
@@ -113,7 +113,7 @@ export class TenantsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getTenantsByQuery(@Query() query: QueryTenantDto) {

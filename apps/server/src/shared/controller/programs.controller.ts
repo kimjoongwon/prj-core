@@ -29,7 +29,7 @@ export class ProgramsController {
 	constructor(private readonly service: ProgramsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async createProgram(@Body() createProgramDto: CreateProgramDto) {
@@ -43,7 +43,7 @@ export class ProgramsController {
 	}
 
 	@Get(":programId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async getProgramById(@Param("programId") programId: string) {
@@ -56,7 +56,7 @@ export class ProgramsController {
 	}
 
 	@Patch(":programId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async updateProgramById(
@@ -72,7 +72,7 @@ export class ProgramsController {
 	}
 
 	@Patch(":programId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async removeProgramById(@Param("programId") programId: string) {
@@ -85,7 +85,7 @@ export class ProgramsController {
 	}
 
 	@Delete(":programId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK)
 	async deleteProgramById(@Param("programId") programId: string) {
@@ -98,7 +98,7 @@ export class ProgramsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(ProgramDto, HttpStatus.OK, { isArray: true })
 	async getProgramsByQuery(@Query() query: QueryProgramDto) {

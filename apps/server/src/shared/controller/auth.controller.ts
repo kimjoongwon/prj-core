@@ -88,7 +88,7 @@ export class AuthController {
 		});
 	}
 
-	@Auth([])
+	@Auth()
 	@ApiResponse({ status: HttpStatus.OK, type: TokenDto })
 	@Get("new-token")
 	async getNewToken(
@@ -127,7 +127,7 @@ export class AuthController {
 		);
 	}
 
-	@Auth([], { public: false })
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@Get("verify-token")
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
@@ -137,7 +137,7 @@ export class AuthController {
 		return new ResponseEntity(HttpStatus.OK, "토큰 유효성 검증 완료", isValid);
 	}
 
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@Post("logout")
 	@ApiResponseEntity(Boolean, HttpStatus.OK)

@@ -29,12 +29,13 @@ async function main() {
 	// Super Admin 유저 생성
 	const superAdminUser = await prisma.user.upsert({
 		where: {
-			name: "plate@gmail.com",
+			phone: "01073162347",
 		},
 		update: {},
 		create: {
-			name: "plate@gmail.com",
+			name: "Super Admin",
 			phone: "01073162347",
+			email: "admin@plate.com",
 			password: hashedPassword,
 			profiles: {
 				create: {
@@ -59,8 +60,12 @@ async function main() {
 	});
 
 	// 워크스페이스 생성
-	const _ground = await prisma.ground.create({
-		data: {
+	const _ground = await prisma.ground.upsert({
+		where: {
+			businessNo: "12345678902",
+		},
+		update: {},
+		create: {
 			name: "(주)플레이트",
 			label: "본점",
 			address: "서울시 강남구",
@@ -109,7 +114,11 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
 	// 각 그라운드 생성
-	const createdGrounds = [];
+	const createdGrounds: Array<{
+		ground: any;
+		index: number;
+		spaceId: string;
+	}> = [];
 	for (let i = 0; i < groundSeedData.length; i++) {
 		const groundData = groundSeedData[i];
 
@@ -126,10 +135,15 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 				});
 
 				// 그라운드 관리자 유저 생성
-				const adminUser = await prisma.user.create({
-					data: {
-						name: groundData.email,
+				const adminUser = await prisma.user.upsert({
+					where: {
 						phone: groundData.phone,
+					},
+					update: {},
+					create: {
+						name: `${groundData.name} 관리자`,
+						phone: groundData.phone,
+						email: groundData.email,
 						password: await hash("admin123!@#", 10),
 						profiles: {
 							create: {
@@ -141,7 +155,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 				});
 
 				// Tenant 생성 (그라운드 관리자용)
-				const _tenant = await prisma.tenant.create({
+				await prisma.tenant.create({
 					data: {
 						main: true,
 						userId: adminUser.id,
@@ -191,14 +205,18 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 		try {
 			// 유저가 이미 존재하는지 확인
 			const existingUser = await prisma.user.findFirst({
-				where: { name: userData.email },
+				where: { name: userData.profile.name },
 			});
 
 			if (!existingUser) {
 				const hashedPassword = await hash(userData.password, 10);
 
 				// 유저가 소속될 그라운드들
-				const userGrounds = [];
+				const userGrounds: Array<{
+					ground: any;
+					index: number;
+					spaceId: string;
+				}> = [];
 				for (const groundIndex of userMapping.groundIndices) {
 					const groundInfo = createdGrounds.find(
 						(g) => g.index === groundIndex,
@@ -212,8 +230,9 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 					// 유저 생성
 					const user = await prisma.user.create({
 						data: {
-							name: userData.email,
+							name: userData.profile.name,
 							phone: userData.phone,
+							email: userData.email,
 							password: hashedPassword,
 							profiles: {
 								create: {
@@ -229,7 +248,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 						const groundInfo = userGrounds[i];
 						const isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
 
-						const _tenant = await prisma.tenant.create({
+						await prisma.tenant.create({
 							data: {
 								main: isMain,
 								userId: user.id,
@@ -240,14 +259,14 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 					}
 
 					console.log(
-						`일반 유저 생성 완료: ${userData.email} (그라운드 ${userGrounds.length}개 소속)`,
+						`일반 유저 생성 완료: ${userData.profile.name} (그라운드 ${userGrounds.length}개 소속)`,
 					);
 				}
 			} else {
-				console.log(`유저 이미 존재: ${userData.email}`);
+				console.log(`유저 이미 존재: ${userData.profile.name}`);
 			}
 		} catch (error) {
-			console.error(`일반 유저 생성 실패 (${userData.email}):`, error);
+			console.error(`일반 유저 생성 실패 (${userData.profile.name}):`, error);
 		}
 	}
 

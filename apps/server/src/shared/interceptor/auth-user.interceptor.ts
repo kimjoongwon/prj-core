@@ -6,10 +6,16 @@ import {
 	Injectable,
 	type NestInterceptor,
 } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
 import { type TenantDto, type UserDto } from "@shared/schema";
 import { type Request } from "express";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
+import {
+	AUTH_OPTIONS_KEY,
+	type AuthOptions,
+} from "../decorator/auth.decorator";
+import { INJECT_TENANT_ID_KEY } from "../decorator/inject-tenant-id.decorator";
 import { ContextProvider } from "../provider";
 import { AppLogger } from "../util/app-logger.util";
 
@@ -25,6 +31,8 @@ interface AuthContext {
 export class AuthUserInterceptor implements NestInterceptor {
 	private readonly logger = new AppLogger(AuthUserInterceptor.name);
 
+	constructor(private reflector: Reflector) {}
+
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const startTime = Date.now();
 		const request = context.switchToHttp().getRequest();
@@ -35,6 +43,12 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const authContext = this.extractAuthContext(request, requestId);
 			this.logRequestStart(authContext, requestId);
 			this.setContextProviders(authContext);
+
+			// Check if @InjectTenantId decorator is present and inject tenantId to query
+			this.injectTenantIdToQuery(context, authContext);
+
+			// Check Auth options and inject tenantId to query/body
+			this.injectTenantIdFromAuthOptions(context, authContext);
 
 			return next.handle().pipe(
 				tap(() => {
@@ -56,7 +70,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 	private extractAuthContext(request: Request, requestId: string): AuthContext {
 		try {
-			const tenantId = request.cookies?.tenantId;
+			let tenantId = request.cookies?.tenantId;
 			const user = request.user as UserDto;
 
 			// tenant 검색 성능 최적화: O(n) → O(1)
@@ -65,7 +79,15 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 			if (user?.tenants && Array.isArray(user.tenants)) {
 				tenantsMap = new Map(user.tenants.map((tenant) => [tenant.id, tenant]));
-				currentTenant = tenantId ? tenantsMap.get(tenantId) : undefined;
+
+				// tenantId가 없으면 main tenant 또는 첫 번째 tenant 사용
+				if (!tenantId && user.tenants.length > 0) {
+					const mainTenant = user.tenants.find((t) => t.main);
+					currentTenant = mainTenant || user.tenants[0];
+					tenantId = currentTenant.id;
+				} else {
+					currentTenant = tenantId ? tenantsMap.get(tenantId) : undefined;
+				}
 			}
 
 			// 로깅 최적화: slice 연산 최소화
@@ -75,7 +97,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const spaceIdShort = currentTenant?.spaceId?.slice(-8);
 
 			// 디버깅을 위한 상세한 로깅
-			this.logger.dev("Auth context extraction", {
+			this.logger.error("Auth context extraction DEBUG", {
 				reqId: reqIdShort,
 				hasUser: !!user,
 				userId: userIdShort,
@@ -83,6 +105,10 @@ export class AuthUserInterceptor implements NestInterceptor {
 				tenantsCount: user?.tenants?.length || 0,
 				hasTenant: !!currentTenant,
 				currentTenantSpaceId: spaceIdShort,
+				userTenants: user?.tenants?.map((t) => ({
+					id: t.id?.slice(-8),
+					main: t.main,
+				})),
 			});
 
 			return {
@@ -236,5 +262,106 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 	private generateRequestId(): string {
 		return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+	}
+
+	private injectTenantIdToQuery(
+		context: ExecutionContext,
+		authContext: AuthContext,
+	): void {
+		try {
+			// Check if @InjectTenantId decorator is present on the handler
+			const shouldInjectTenantId = this.reflector.getAllAndOverride<boolean>(
+				INJECT_TENANT_ID_KEY,
+				[context.getHandler(), context.getClass()],
+			);
+
+			if (!shouldInjectTenantId) {
+				return;
+			}
+
+			const request = context.switchToHttp().getRequest();
+
+			// Only inject if tenantId is available and not already present in query
+			if (authContext.tenantId && !request.query.tenantId) {
+				request.query.tenantId = authContext.tenantId;
+
+				const reqIdShort = authContext.requestId?.slice(-8);
+				const tenantIdShort = authContext.tenantId?.slice(-8);
+
+				this.logger.dev("TenantId injected to query", {
+					reqId: reqIdShort,
+					tenantId: tenantIdShort,
+				});
+			}
+		} catch (error) {
+			const reqIdShort = authContext.requestId?.slice(-8);
+
+			this.logger.error(
+				`Failed to inject tenantId to query: ${error instanceof Error ? error.message : String(error)}`,
+				`req:${reqIdShort}`,
+			);
+			// Don't throw error, just log and continue
+		}
+	}
+
+	private injectTenantIdFromAuthOptions(
+		context: ExecutionContext,
+		authContext: AuthContext,
+	): void {
+		try {
+			// Get Auth options from metadata
+			const authOptions = this.reflector.getAllAndOverride<AuthOptions>(
+				AUTH_OPTIONS_KEY,
+				[context.getHandler(), context.getClass()],
+			);
+
+			// If no Auth options or injectTenant is false, skip injection
+			if (!authOptions || authOptions.injectTenant === false) {
+				return;
+			}
+
+			// If tenantId is not available, skip injection
+			if (!authContext.tenantId) {
+				return;
+			}
+
+			const request = context.switchToHttp().getRequest();
+			const method = request.method?.toUpperCase();
+			const reqIdShort = authContext.requestId?.slice(-8);
+			const tenantIdShort = authContext.tenantId?.slice(-8);
+
+			// Inject tenantId based on HTTP method
+			if (method === "GET" || method === "DELETE") {
+				// For GET/DELETE requests, inject to query parameters
+				if (!request.query.tenantId) {
+					request.query.tenantId = authContext.tenantId;
+
+					this.logger.dev("TenantId injected to query via Auth options", {
+						reqId: reqIdShort,
+						tenantId: tenantIdShort,
+						method,
+					});
+				}
+			} else if (method === "POST" || method === "PUT" || method === "PATCH") {
+				// For POST/PUT/PATCH requests, tenantId is handled through ContextProvider
+				// Don't inject tenantId directly to body as it conflicts with Prisma schema
+				this.logger.dev(
+					"TenantId available via ContextProvider for body operations",
+					{
+						reqId: reqIdShort,
+						tenantId: tenantIdShort,
+						method,
+					},
+				);
+			}
+		} catch (error) {
+			const reqIdShort = authContext.requestId?.slice(-8);
+
+			this.logger.error(
+				`Failed to inject tenantId via Auth options: ${error instanceof Error ? error.message : String(error)}`,
+				`req:${reqIdShort}`,
+			);
+			// Don't throw error, just log and continue
+		}
 	}
 }

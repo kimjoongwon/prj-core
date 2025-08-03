@@ -33,7 +33,7 @@ export class SpacesController {
 	constructor(private readonly service: SpacesService) {}
 
 	@Get("current")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getCurrentSpace(): Promise<ResponseEntity<SpaceDto>> {
@@ -107,7 +107,7 @@ export class SpacesController {
 		}
 	}
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async createSpace(@Body() createSpaceDto: CreateSpaceDto) {
@@ -120,7 +120,7 @@ export class SpacesController {
 	}
 
 	@Get(":spaceId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getSpace(@Param("spaceId") spaceId: string) {
@@ -133,7 +133,7 @@ export class SpacesController {
 	}
 
 	@Patch(":spaceId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async updateSpace(
@@ -149,7 +149,7 @@ export class SpacesController {
 	}
 
 	@Patch(":spaceId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async removeSpace(@Param("spaceId") spaceId: string) {
@@ -162,7 +162,7 @@ export class SpacesController {
 	}
 
 	@Delete(":spaceId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async deleteSpace(@Param("spaceId") spaceId: string) {
@@ -175,7 +175,7 @@ export class SpacesController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	async getSpacesByQuery(@Query() query: QuerySpaceDto) {

@@ -29,7 +29,7 @@ export class RoutinesController {
 	constructor(private readonly service: RoutinesService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async createRoutine(@Body() createRoutineDto: CreateRoutineDto) {
@@ -42,7 +42,7 @@ export class RoutinesController {
 	}
 
 	@Get(":routineId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async getRoutine(@Param("routineId") routineId: string) {
@@ -55,7 +55,7 @@ export class RoutinesController {
 	}
 
 	@Patch(":routineId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async updateRoutine(
@@ -71,7 +71,7 @@ export class RoutinesController {
 	}
 
 	@Patch(":routineId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async removeRoutine(@Param("routineId") routineId: string) {
@@ -84,7 +84,7 @@ export class RoutinesController {
 	}
 
 	@Delete(":routineId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	async deleteRoutine(@Param("routineId") routineId: string) {
@@ -97,7 +97,7 @@ export class RoutinesController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	async getRoutinesByQuery(@Query() query: QueryRoutineDto) {

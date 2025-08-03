@@ -29,7 +29,7 @@ export class SessionsController {
 	constructor(private readonly service: SessionsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async createSession(@Body() createSessionDto: CreateSessionDto) {
@@ -43,7 +43,7 @@ export class SessionsController {
 	}
 
 	@Get(":sessionId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async getSession(@Param("sessionId") sessionId: string) {
@@ -58,7 +58,7 @@ export class SessionsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSessions(@Body() sessionIds: string[]) {
@@ -70,7 +70,7 @@ export class SessionsController {
 	}
 
 	@Patch(":sessionId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async updateSession(
@@ -89,7 +89,7 @@ export class SessionsController {
 	}
 
 	@Patch(":sessionId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSession(@Param("sessionId") sessionId: string) {
@@ -102,7 +102,7 @@ export class SessionsController {
 	}
 
 	@Delete(":sessionId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async deleteSession(@Param("sessionId") sessionId: string) {
@@ -115,7 +115,7 @@ export class SessionsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK, { isArray: true })
 	async getSessionsByQuery(@Query() query: QuerySessionDto) {

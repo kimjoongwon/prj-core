@@ -56,4 +56,24 @@ export class UsersService {
 	remove(id: string) {
 		return this.update({ where: { id }, data: { removedAt: new Date() } });
 	}
+
+	async getUserWithMainTenant(userId: string) {
+		return this.repository.findUnique({
+			where: { id: userId },
+			include: {
+				tenants: {
+					where: { main: true },
+					include: {
+						space: {
+							include: {
+								ground: true,
+							},
+						},
+						role: true,
+					},
+				},
+				profiles: true,
+			},
+		});
+	}
 }

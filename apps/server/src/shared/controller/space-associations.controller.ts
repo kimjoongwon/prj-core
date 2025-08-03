@@ -29,7 +29,7 @@ export class SpaceAssociationsController {
 	constructor(private readonly service: SpaceAssociationsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async createSpaceAssociation(
@@ -47,7 +47,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Get(":spaceAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async getSpaceAssociation(
@@ -64,7 +64,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociations(@Body() spaceAssociationIds: string[]) {
@@ -76,7 +76,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch(":spaceAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async updateSpaceAssociation(
@@ -95,7 +95,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Patch(":spaceAssociationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociation(
@@ -110,7 +110,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Delete(":spaceAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async deleteSpaceAssociation(
@@ -125,7 +125,7 @@ export class SpaceAssociationsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK, { isArray: true })
 	async getSpaceAssociationsByQuery(@Query() query: QuerySpaceAssociationDto) {

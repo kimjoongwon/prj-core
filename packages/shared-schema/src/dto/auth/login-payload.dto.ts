@@ -33,7 +33,7 @@ export const loginPayloadValidations = {
 
 export class LoginPayloadDto {
 	@StringField({
-		example: "galaxy@gmail.com",
+		example: "plate@gmail.com",
 	})
 	@Expose()
 	email: string;

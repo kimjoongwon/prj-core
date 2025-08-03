@@ -6,7 +6,7 @@ import { ApiTags } from "@nestjs/swagger";
 export class UserClassificationsController {
 	// constructor(private readonly service: UserClassificationsService) {}
 	// @Post()
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
 	// async createUserClassification(@Body() createUserClassificationDto: CreateUserClassificationDto) {
@@ -18,7 +18,7 @@ export class UserClassificationsController {
 	//   );
 	// }
 	// @Get(':userClassificationId')
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
 	// async getUserClassification(@Param('id') id: string) {
@@ -30,7 +30,7 @@ export class UserClassificationsController {
 	//   );
 	// }
 	// @Patch(':userClassificationId')
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
 	// async updateUserClassification(
@@ -45,7 +45,7 @@ export class UserClassificationsController {
 	//   );
 	// }
 	// @Patch(':userClassificationId/removedAt')
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
 	// async removeUserClassification(@Param('id') id: string) {
@@ -57,7 +57,7 @@ export class UserClassificationsController {
 	//   );
 	// }
 	// @Delete(':userClassificationId')
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK)
 	// async deleteUserClassification(@Param('id') id: string) {
@@ -69,7 +69,7 @@ export class UserClassificationsController {
 	//   );
 	// }
 	// @Get()
-	// @Auth([])
+	// @Auth()
 	// @HttpCode(HttpStatus.OK)
 	// @ApiResponseEntity(UserClassificationDto, HttpStatus.OK, { isArray: true })
 	// async getUserClassificationsByQuery(@Query() query: QueryUserClassificationDto) {

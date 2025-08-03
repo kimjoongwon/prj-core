@@ -1,7 +1,8 @@
 export { AccessToken } from "./access-token.decorator";
 export { ApiResponseEntity } from "./api-response-entity.decorator";
-export { Auth } from "./auth.decorator";
+export { Auth, type AuthOptions } from "./auth.decorator";
 export { Cookies } from "./cookies.decorator";
+export { InjectTenantId } from "./inject-tenant-id.decorator";
 export {
 	BooleanField,
 	BooleanFieldOptional,
@@ -37,6 +38,7 @@ export {
 	ToLowerCase,
 	ToUpperCase,
 } from "./transform.decorators";
+export { User } from "./user.decorator";
 export {
 	IsNullable,
 	IsPassword,

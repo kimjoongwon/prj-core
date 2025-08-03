@@ -29,7 +29,7 @@ export class UserAssociationsController {
 	constructor(private readonly service: UserAssociationsService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async createUserAssociation(
@@ -45,7 +45,7 @@ export class UserAssociationsController {
 	}
 
 	@Get(":userAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async getUserAssociation(
@@ -62,7 +62,7 @@ export class UserAssociationsController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async removeUserAssociations(@Body() userAssociationIds: string[]) {
@@ -74,7 +74,7 @@ export class UserAssociationsController {
 	}
 
 	@Patch(":userAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async updateUserAssociation(
@@ -93,7 +93,7 @@ export class UserAssociationsController {
 	}
 
 	@Patch(":userAssociationId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async removeUserAssociation(
@@ -108,7 +108,7 @@ export class UserAssociationsController {
 	}
 
 	@Delete(":userAssociationId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async deleteUserAssociation(
@@ -123,7 +123,7 @@ export class UserAssociationsController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK, { isArray: true })
 	async getUserAssociationsByQuery(@Query() query: QueryUserAssociationDto) {

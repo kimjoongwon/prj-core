@@ -6,7 +6,7 @@ import { PrismaService } from "nestjs-prisma";
 import {
 	createMockJwtService,
 	createMockPrismaService,
-	createTestUserDto,
+	createTestUserEntity,
 	MockedPrismaService,
 } from "../test/test-utils";
 import { AuthService } from "./auth.service";
@@ -79,7 +79,7 @@ describe("AuthService", () => {
 		it("should return current user for valid access token", async () => {
 			const userId = "user-test-id";
 			const accessToken = "valid-access-token";
-			const testUser = createTestUserDto();
+			const testUser = createTestUserEntity();
 
 			jwtService.verify = jest.fn().mockReturnValue({ userId });
 			usersService.getUnique.mockResolvedValue(testUser);
@@ -145,7 +145,7 @@ describe("AuthService", () => {
 		it("should return user for valid credentials", async () => {
 			const email = "test@example.com";
 			const password = "password123";
-			const testUser = createTestUserDto();
+			const testUser = createTestUserEntity();
 
 			usersService.getUnique.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(true);
@@ -153,7 +153,7 @@ describe("AuthService", () => {
 			const result = await service.validateUser(email, password);
 
 			expect(usersService.getUnique).toHaveBeenCalledWith({
-				where: { name: email },
+				where: { email },
 			});
 			expect(passwordService.validatePassword).toHaveBeenCalledWith(
 				password,
@@ -165,7 +165,7 @@ describe("AuthService", () => {
 		it("should throw UnauthorizedException for invalid password", async () => {
 			const email = "test@example.com";
 			const password = "wrong-password";
-			const testUser = createTestUserDto();
+			const testUser = createTestUserEntity();
 
 			usersService.getUnique.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(false);
@@ -204,13 +204,17 @@ describe("AuthService", () => {
 			};
 
 			const userRole = { id: "role-id", name: "USER" };
+			const newSpace = { id: "new-space-id" };
 			const newUser = { id: "new-user-id" };
 			const tokens = {
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
 			};
+			const hashedPassword = "hashed-password";
 
 			prisma.role.findFirst.mockResolvedValue(userRole as any);
+			prisma.space.create.mockResolvedValue(newSpace as any);
+			passwordService.hashPassword.mockResolvedValue(hashedPassword);
 			usersService.create.mockResolvedValue(newUser as any);
 			tokenService.generateTokens.mockReturnValue(tokens);
 
@@ -219,22 +223,28 @@ describe("AuthService", () => {
 			expect(prisma.role.findFirst).toHaveBeenCalledWith({
 				where: { name: "USER" },
 			});
+			expect(prisma.space.create).toHaveBeenCalledWith({
+				data: {},
+			});
+			expect(passwordService.hashPassword).toHaveBeenCalledWith(
+				signUpData.password,
+			);
 			expect(usersService.create).toHaveBeenCalledWith({
 				data: {
-					name: signUpData.name,
+					email: signUpData.email,
 					phone: signUpData.phone,
-					password: signUpData.password,
+					password: hashedPassword,
 					tenants: {
 						create: {
 							main: true,
-							spaceId: signUpData.spaceId,
+							spaceId: newSpace.id,
 							roleId: userRole.id,
 						},
 					},
 					profiles: {
 						create: {
 							name: signUpData.name,
-							nickname: signUpData.nickname,
+							nickname: signUpData.nickname || signUpData.name,
 						},
 					},
 				},
@@ -245,7 +255,7 @@ describe("AuthService", () => {
 			expect(result).toEqual(tokens);
 		});
 
-		it("should create USER role if it does not exist", async () => {
+		it("should throw BadRequestException when USER role does not exist", async () => {
 			const signUpData: SignUpPayloadDto = {
 				name: "Test User",
 				nickname: "testuser",
@@ -255,47 +265,15 @@ describe("AuthService", () => {
 				spaceId: "space-test-id",
 			};
 
-			const newRole = { id: "new-role-id", name: "USER" };
-			const newUser = { id: "new-user-id" };
-			const tokens = {
-				accessToken: "access-token",
-				refreshToken: "refresh-token",
-			};
-
 			prisma.role.findFirst.mockResolvedValue(null);
-			prisma.role.create.mockResolvedValue(newRole as any);
-			usersService.create.mockResolvedValue(newUser as any);
-			tokenService.generateTokens.mockReturnValue(tokens);
 
-			const result = await service.signUp(signUpData);
+			await expect(service.signUp(signUpData)).rejects.toThrow(
+				BadRequestException,
+			);
 
 			expect(prisma.role.findFirst).toHaveBeenCalledWith({
 				where: { name: "USER" },
 			});
-			expect(prisma.role.create).toHaveBeenCalledWith({
-				data: { name: "USER" },
-			});
-			expect(usersService.create).toHaveBeenCalledWith({
-				data: {
-					name: signUpData.name,
-					phone: signUpData.phone,
-					password: signUpData.password,
-					tenants: {
-						create: {
-							main: true,
-							spaceId: signUpData.spaceId,
-							roleId: newRole.id,
-						},
-					},
-					profiles: {
-						create: {
-							name: signUpData.name,
-							nickname: signUpData.nickname,
-						},
-					},
-				},
-			});
-			expect(result).toEqual(tokens);
 		});
 	});
 
@@ -306,7 +284,7 @@ describe("AuthService", () => {
 				password: "password123",
 			};
 
-			const testUser = createTestUserDto();
+			const testUser = createTestUserEntity();
 			const tokens = {
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
@@ -319,7 +297,7 @@ describe("AuthService", () => {
 			const result = await service.login(loginData);
 
 			expect(usersService.getUnique).toHaveBeenCalledWith({
-				where: { name: loginData.email },
+				where: { email: loginData.email },
 				include: {
 					profiles: true,
 					tenants: {
@@ -381,7 +359,7 @@ describe("AuthService", () => {
 				password: "wrong-password",
 			};
 
-			const testUser = createTestUserDto();
+			const testUser = createTestUserEntity();
 
 			usersService.getUnique.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(false);

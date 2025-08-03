@@ -131,4 +131,19 @@ export class TenantsService {
 			},
 		});
 	}
+
+	async getDefaultTenantByUserId(userId: string): Promise<Tenant | null> {
+		return this.tenantsRepository.findFirst({
+			where: { userId, main: true },
+			include: {
+				space: {
+					include: {
+						ground: true,
+					},
+				},
+				user: true,
+				role: true,
+			},
+		});
+	}
 }

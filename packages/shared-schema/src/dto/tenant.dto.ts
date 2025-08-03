@@ -9,7 +9,7 @@ import { RoleDto, SpaceDto, UserDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 
 export class TenantDto extends AbstractDto implements Tenant {
-	@BooleanField()
+	@BooleanField({ default: false })
 	main: boolean;
 
 	@UUIDField()

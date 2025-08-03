@@ -33,7 +33,7 @@ export class UsersController {
 	constructor(private readonly service: UsersService) {}
 
 	@Post()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async createUser(@Body() createUserDto: CreateUserDto) {
@@ -48,7 +48,7 @@ export class UsersController {
 	}
 
 	@Get(":userId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async getUser(@Param("userId") userId: string) {
@@ -64,7 +64,7 @@ export class UsersController {
 	}
 
 	@Patch("removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUsers(@Body() userIds: string[]) {
@@ -73,7 +73,7 @@ export class UsersController {
 	}
 
 	@Patch(":userId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async updateUser(
@@ -92,7 +92,7 @@ export class UsersController {
 	}
 
 	@Patch(":userId/removedAt")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUser(@Param("userId") userId: string) {
@@ -105,7 +105,7 @@ export class UsersController {
 	}
 
 	@Delete(":userId")
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async deleteUser(@Param("userId") userId: string) {
@@ -118,7 +118,7 @@ export class UsersController {
 	}
 
 	@Get()
-	@Auth([])
+	@Auth()
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK, { isArray: true })
 	async getUsersByQuery(@Query() query: QueryUserDto, @Req() req: Request) {

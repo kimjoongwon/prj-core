@@ -23,9 +23,10 @@ export const userSeedData: UserSeedData[] = Array.from(
 	{ length: 50 },
 	(_, index) => {
 		const userNumber = index + 1;
+		// 01011xx 패턴으로 변경하여 Super Admin과 겹치지 않게 함
 		return {
 			email: `user-${userNumber}@gmail.com`,
-			phone: `0107316${String(userNumber).padStart(4, "0")}`,
+			phone: `0101100${String(userNumber).padStart(3, "0")}`,
 			password: "user123!@#", // 모든 일반 유저에게 동일한 비밀번호 사용
 			profile: {
 				name: `일반유저${userNumber}`,
@@ -45,7 +46,8 @@ export const groundSeedData: GroundSeedData[] = Array.from(
 			label:
 				companyNumber <= 10 ? "본점" : companyNumber <= 30 ? "지점" : "분점",
 			address: `서울시 ${getRandomDistrict()}`,
-			phone: `0207316${String(companyNumber).padStart(4, "0")}`,
+			// 02088xx 패턴으로 변경하여 다른 번호들과 겹치지 않게 함
+			phone: `0208800${String(companyNumber).padStart(3, "0")}`,
 			email: `company-${companyNumber}@gmail.com`,
 			businessNo: `${String(companyNumber).padStart(3, "0")}${String(Math.floor(Math.random() * 1000000)).padStart(6, "0")}${String(Math.floor(Math.random() * 100)).padStart(2, "0")}`,
 		};

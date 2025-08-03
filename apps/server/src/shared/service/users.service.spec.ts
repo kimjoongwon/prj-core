@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Prisma, QueryUserDto } from "@shared/schema";
 import { UsersRepository } from "../repository/users.repository";
-import { createTestUserDto } from "../test/test-utils";
+import { createTestUserEntity } from "../test/test-utils";
 import { UsersService } from "./users.service";
 
 describe("UsersService", () => {
@@ -43,7 +43,7 @@ describe("UsersService", () => {
 			const args: Prisma.UserFindUniqueArgs = {
 				where: { id: "user-test-id" },
 			};
-			const expectedUser = createTestUserDto();
+			const expectedUser = createTestUserEntity();
 
 			repository.findUnique.mockResolvedValue(expectedUser);
 
@@ -72,7 +72,7 @@ describe("UsersService", () => {
 			const args: Prisma.UserFindFirstArgs = {
 				where: { name: "test@example.com" },
 			};
-			const expectedUser = createTestUserDto();
+			const expectedUser = createTestUserEntity();
 
 			repository.findFirst.mockResolvedValue(expectedUser);
 
@@ -120,7 +120,7 @@ describe("UsersService", () => {
 			const args: Prisma.UserDeleteArgs = {
 				where: { id: "user-test-id" },
 			};
-			const deletedUser = createTestUserDto();
+			const deletedUser = createTestUserEntity();
 
 			repository.delete.mockResolvedValue(deletedUser);
 
@@ -136,11 +136,12 @@ describe("UsersService", () => {
 			const args: Prisma.UserCreateArgs = {
 				data: {
 					name: "Test User",
+					email: "test@example.com",
 					phone: "010-1234-5678",
 					password: "hashed-password",
 				},
 			};
-			const createdUser = createTestUserDto();
+			const createdUser = createTestUserEntity();
 
 			repository.create.mockResolvedValue(createdUser);
 
@@ -164,7 +165,7 @@ describe("UsersService", () => {
 				}),
 			} as unknown as QueryUserDto;
 
-			const expectedUsers = [createTestUserDto()];
+			const expectedUsers = [createTestUserEntity()];
 			const expectedCount = 1;
 
 			repository.findMany.mockResolvedValue(expectedUsers);
@@ -226,7 +227,7 @@ describe("UsersService", () => {
 				where: { id: "user-test-id" },
 				data: { name: "Updated Name" },
 			};
-			const updatedUser = createTestUserDto({ name: "Updated Name" });
+			const updatedUser = createTestUserEntity({ name: "Updated Name" });
 
 			repository.update.mockResolvedValue(updatedUser);
 
@@ -240,7 +241,7 @@ describe("UsersService", () => {
 	describe("remove", () => {
 		it("should soft delete user by updating removedAt", async () => {
 			const userId = "user-test-id";
-			const removedUser = createTestUserDto({
+			const removedUser = createTestUserEntity({
 				removedAt: expect.any(Date),
 			});
 
