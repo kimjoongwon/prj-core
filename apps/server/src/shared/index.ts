@@ -10,5 +10,5 @@ export * from "./middleware";
 export * from "./pipe";
 export * from "./provider";
 export * from "./repository";
-export * from "./service/services";
+export * from "./service";
 export * from "./strategy";

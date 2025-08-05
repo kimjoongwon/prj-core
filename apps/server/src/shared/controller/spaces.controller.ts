@@ -23,7 +23,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
 import { ContextProvider } from "../provider";
-import { SpacesService } from "../service/services";
+import { SpacesService } from "../service";
 
 @ApiTags("SPACES")
 @Controller()

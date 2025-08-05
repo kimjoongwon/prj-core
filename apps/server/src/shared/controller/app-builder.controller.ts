@@ -4,7 +4,7 @@ import { AppBuilderDto, ResponseEntity } from "@shared/schema";
 import { Request } from "express";
 import { ApiResponseEntity } from "../decorator";
 import { Auth } from "../decorator/auth.decorator";
-import { AppBuilderService } from "../service/app-builder.service";
+import { AppBuilderService } from "../service/domain/app-builder.service";
 
 // 응답 메시지 상수
 const RESPONSE_MESSAGES = {

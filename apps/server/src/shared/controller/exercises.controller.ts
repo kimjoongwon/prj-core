@@ -21,7 +21,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { ExercisesService } from "../service/exercises.service";
+import { ExercisesService } from "../service/resource/exercises.service";
 
 @ApiTags("EXERCISES")
 @Controller()

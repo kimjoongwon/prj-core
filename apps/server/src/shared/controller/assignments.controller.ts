@@ -20,7 +20,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { AssignmentsService } from "../service/assignments.service";
+import { AssignmentsService } from "../service/resource/assignments.service";
 
 @ApiTags("ASSIGNMENTS")
 @Controller()

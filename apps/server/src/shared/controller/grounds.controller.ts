@@ -26,7 +26,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { GroundsService } from "../service/grounds.service";
+import { GroundsService } from "../service/resource/grounds.service";
 
 @ApiTags("GROUNDS")
 @Controller()

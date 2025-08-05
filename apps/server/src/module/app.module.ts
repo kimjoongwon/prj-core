@@ -21,7 +21,7 @@ import { CategoriesModule } from "./categories.module";
 import { ExercisesModule } from "./exercises.module";
 import { FileClassificationsModule } from "./file-classifications.module";
 import { FilesModule } from "./files.module";
-import { GroundsModule } from "./ground.module";
+import { GroundsModule } from "./grounds.module";
 import { GroupsModule } from "./groups.module";
 import { ProgramsModule } from "./programs.module";
 import { RoleClassificationsModule } from "./role-classifications.module";

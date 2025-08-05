@@ -21,7 +21,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
 import { Auth } from "../decorator/auth.decorator";
-import { SpaceAssociationsService } from "../service/space-associations.service";
+import { SpaceAssociationsService } from "../service/resource/space-associations.service";
 
 @ApiTags("SPACE-ASSOCIATIONS")
 @Controller()

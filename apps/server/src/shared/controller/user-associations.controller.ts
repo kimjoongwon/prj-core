@@ -21,7 +21,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
 import { Auth } from "../decorator/auth.decorator";
-import { UserAssociationsService } from "../service/user-associations.service";
+import { UserAssociationsService } from "../service/resource/user-associations.service";
 
 @ApiTags("USER-ASSOCIATIONS")
 @Controller()

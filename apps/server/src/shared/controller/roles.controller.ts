@@ -20,7 +20,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { RolesService } from "../service/services";
+import { RolesService } from "../service";
 
 @ApiTags("SPACES")
 @Controller()

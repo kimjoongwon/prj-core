@@ -21,7 +21,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { TimelinesService } from "../service/timelines.service";
+import { TimelinesService } from "../service/resource/timelines.service";
 
 @ApiTags("TIMELINE")
 @Controller()

@@ -22,7 +22,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
 import { ContextProvider } from "../provider/context.provider";
-import { TenantsService } from "../service/tenants.service";
+import { TenantsService } from "../service/resource/tenants.service";
 
 @ApiTags("TENANTS")
 @Controller()

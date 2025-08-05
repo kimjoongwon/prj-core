@@ -19,7 +19,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { CategoriesService } from "../service/services";
+import { CategoriesService } from "../service";
 
 @ApiTags("CATEGORIES")
 @Controller()

@@ -9,7 +9,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { AuthConfig, ContextProvider } from "..";
-import { UsersService } from "../service/users.service";
+import { UsersService } from "../service/resource/users.service";
 
 @Global()
 @Injectable()

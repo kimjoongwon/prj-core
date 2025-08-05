@@ -23,7 +23,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { UsersService } from "../service/users.service";
+import { UsersService } from "../service/resource/users.service";
 
 @ApiTags("USERS")
 @Controller()

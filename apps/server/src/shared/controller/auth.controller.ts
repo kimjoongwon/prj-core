@@ -22,8 +22,8 @@ import { Request, Response } from "express";
 import { Auth, Public } from "../decorator";
 import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
 import { ContextProvider } from "../provider";
-import { AuthService } from "../service/auth.service";
-import { TokenService } from "../service/token.service";
+import { AuthService } from "../service/domain/auth.service";
+import { TokenService } from "../service/domain/token.service";
 
 @ApiTags("AUTH")
 @Controller()

@@ -21,7 +21,7 @@ import {
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity } from "../decorator/api-response-entity.decorator";
 import { Auth } from "../decorator/auth.decorator";
-import { FileAssociationsService } from "../service/file-associations.service";
+import { FileAssociationsService } from "../service/resource/file-associations.service";
 
 @ApiTags("FILE-ASSOCIATIONS")
 @Controller()

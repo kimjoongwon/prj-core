@@ -20,7 +20,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { FileClassificationsService } from "../service/file-classifications.service";
+import { FileClassificationsService } from "../service/resource/file-classifications.service";
 
 @ApiTags("FILE-CLASSIFICATIONS")
 @Controller()

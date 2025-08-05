@@ -12,7 +12,7 @@ import {
 import { CreateFileDto, FileDto, ResponseEntity } from "@shared/schema";
 import { ApiResponseEntity, Auth } from "../decorator";
 import { ApiFile } from "../decorator/swagger.schema";
-import { FilesService } from "../service/files.service";
+import { FilesService } from "../service/resource/files.service";
 
 @Controller()
 export class FilesController {

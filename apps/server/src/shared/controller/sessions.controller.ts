@@ -21,7 +21,7 @@ import {
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { ApiResponseEntity, Auth } from "../decorator";
-import { SessionsService } from "../service/services";
+import { SessionsService } from "../service";
 
 @ApiTags("SESSION")
 @Controller()
