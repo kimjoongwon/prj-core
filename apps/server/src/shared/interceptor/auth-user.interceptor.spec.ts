@@ -246,7 +246,7 @@ describe("AuthUserInterceptor", () => {
 				interceptor.intercept(mockExecutionContext, mockCallHandler);
 			}).toThrow(
 				expect.objectContaining({
-					message: "Failed to set authentication context",
+					message: "인증 컨텍스트 설정에 실패했습니다",
 					status: 500,
 				}),
 			);

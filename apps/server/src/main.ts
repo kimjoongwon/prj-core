@@ -20,7 +20,7 @@ async function bootstrap() {
 	const startTime = Date.now();
 	const logger = new NestLogger("Bootstrap");
 
-	logger.log("🚀 Starting server...");
+	logger.log("🚀 서버를 시작합니다...");
 
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
 		bufferLogs: true,
@@ -85,7 +85,7 @@ async function bootstrap() {
 	await app.listen(port);
 
 	const _bootTime = Date.now() - startTime;
-	logger.log("🎉 Server started successfully!");
+	logger.log("🎉 서버가 성공적으로 시작되었습니다!");
 }
 
 bootstrap();

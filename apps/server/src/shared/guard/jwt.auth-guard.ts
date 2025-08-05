@@ -23,38 +23,38 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 		);
 		const request = context.switchToHttp().getRequest();
 
-		this.logger.error(`JwtAuthGuard canActivate - isPublic: ${isPublic}`);
-		this.logger.error(`Request path: ${request.path}`);
-		this.logger.error(`Request method: ${request.method}`);
-		this.logger.error(`Authorization header: ${request.headers.authorization}`);
+		this.logger.error(`JwtAuthGuard canActivate - 공개 라우트 여부: ${isPublic}`);
+		this.logger.error(`요청 경로: ${request.path}`);
+		this.logger.error(`요청 메서드: ${request.method}`);
+		this.logger.error(`Authorization 헤더: ${request.headers.authorization}`);
 
 		if (isPublic) {
-			this.logger.log("Route is public, allowing access");
+			this.logger.log("공개 라우트입니다, 접근을 허용합니다");
 			return true;
 		}
 
-		this.logger.log("Route is protected, checking JWT");
+		this.logger.log("보호된 라우트입니다, JWT를 확인합니다");
 		return super.canActivate(context);
 	}
 
 	handleRequest(err: any, user: any, info: any) {
 		this.logger.log(
-			`JWT handleRequest - err: ${!!err}, user: ${!!user}, info: ${JSON.stringify(info)}`,
+			`JWT handleRequest - 오류: ${!!err}, 사용자: ${!!user}, 정보: ${JSON.stringify(info)}`,
 		);
 
 		if (err) {
-			this.logger.error(`JWT authentication error: ${err.message}`, err.stack);
+			this.logger.error(`JWT 인증 오류: ${err.message}`, err.stack);
 			throw err;
 		}
 
 		if (!user) {
 			this.logger.error(
-				`JWT authentication failed - no user found. Info: ${JSON.stringify(info)}`,
+				`JWT 인증 실패 - 사용자를 찾을 수 없습니다. 정보: ${JSON.stringify(info)}`,
 			);
-			throw new UnauthorizedException("Authentication failed");
+			throw new UnauthorizedException("인증에 실패했습니다");
 		}
 
-		this.logger.log(`JWT authentication successful for user: ${user.id}`);
+		this.logger.log(`사용자 ${user.id}의 JWT 인증이 성공했습니다`);
 		return user;
 	}
 }

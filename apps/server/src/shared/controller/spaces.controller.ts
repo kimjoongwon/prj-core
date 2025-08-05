@@ -37,9 +37,9 @@ export class SpacesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getCurrentSpace(): Promise<ResponseEntity<SpaceDto>> {
-		console.log("=== getCurrentSpace called ===");
+		console.log("=== getCurrentSpace 호출됨 ===");
 		const startTime = Date.now();
-		this.logger.log("🚀 getCurrentSpace API called");
+		this.logger.log("🚀 getCurrentSpace API 호출됨");
 
 		const tenant = ContextProvider.getTenant();
 		const tenantId = ContextProvider.getTenantId();
@@ -47,7 +47,7 @@ export class SpacesController {
 		const userId = ContextProvider.getAuthUserId();
 
 		// 디버깅을 위한 상세한 로깅
-		this.logger.debug("getCurrentSpace - Context info:", {
+		this.logger.debug("getCurrentSpace - 컨텍스트 정보:", {
 			hasTenant: !!tenant,
 			tenantId: tenantId?.slice(-8) || "null",
 			spaceId: spaceId?.slice(-8) || "null",
@@ -57,7 +57,7 @@ export class SpacesController {
 		});
 
 		if (!tenant) {
-			this.logger.warn("getCurrentSpace - No tenant found in context");
+			this.logger.warn("getCurrentSpace - 컨텍스트에서 테넌트를 찾을 수 없음");
 			throw new HttpException(
 				"Tenant information not found.! Please log in again.",
 				HttpStatus.UNAUTHORIZED,
@@ -79,17 +79,17 @@ export class SpacesController {
 			const space = await this.service.getCurrentSpace(tenant.spaceId);
 
 			if (!space) {
-				this.logger.warn("getCurrentSpace - Space not found:", {
+				this.logger.warn("getCurrentSpace - 스페이스를 찾을 수 없음:", {
 					spaceId: tenant.spaceId?.slice(-8),
 				});
 				throw new HttpException(
-					`Space not found with ID: ${tenant.spaceId}`,
+					`ID로 스페이스를 찾을 수 없음: ${tenant.spaceId}`,
 					HttpStatus.NOT_FOUND,
 				);
 			}
 
 			const duration = Date.now() - startTime;
-			this.logger.log("getCurrentSpace - Success:", {
+			this.logger.log("getCurrentSpace - 성공:", {
 				spaceId: space.id?.slice(-8),
 				spaceName: space.ground?.name || "no-ground",
 				duration: `${duration}ms`,
@@ -98,7 +98,7 @@ export class SpacesController {
 			return new ResponseEntity(HttpStatus.OK, "성공", space?.toDto?.());
 		} catch (error) {
 			const duration = Date.now() - startTime;
-			this.logger.error("getCurrentSpace - Error:", {
+			this.logger.error("getCurrentSpace - 오류:", {
 				error: error instanceof Error ? error.message : String(error),
 				spaceId: tenant.spaceId?.slice(-8),
 				duration: `${duration}ms`,

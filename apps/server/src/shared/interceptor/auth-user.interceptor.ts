@@ -96,11 +96,11 @@ export class AuthUserInterceptor implements NestInterceptor {
 			};
 		} catch (error) {
 			this.logger.error(
-				`Failed to extract auth context for request ${requestId}: ${error instanceof Error ? error.message : String(error)}`,
+				`요청 ${requestId}에 대한 인증 컨텍스트 추출 실패: ${error instanceof Error ? error.message : String(error)}`,
 				error instanceof Error ? error.stack : "",
 			);
 			throw new HttpException(
-				"Failed to process authentication context",
+				"인증 컨텍스트 처리에 실패했습니다",
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -126,11 +126,11 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const reqIdShort = authContext.requestId?.slice(-8);
 
 			this.logger.error(
-				`Context setup failed: ${error instanceof Error ? error.message : String(error)}`,
+				`컨텍스트 설정 실패: ${error instanceof Error ? error.message : String(error)}`,
 				`req:${reqIdShort}`,
 			);
 			throw new HttpException(
-				"Failed to set authentication context",
+				"인증 컨텍스트 설정에 실패했습니다",
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
 		}
@@ -146,7 +146,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const tenantIdShort = authContext.currentTenant.id?.slice(-8);
 			const spaceIdShort = authContext.currentTenant.spaceId?.slice(-8);
 
-			this.logger.dev("Tenant context set", {
+			this.logger.dev("테넌트 컨텍스트 설정됨", {
 				reqId: reqIdShort,
 				tenantId: tenantIdShort,
 				spaceId: spaceIdShort,
@@ -154,7 +154,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 		} else if (authContext.tenantId) {
 			const tenantIdShort = authContext.tenantId?.slice(-8);
 
-			this.logger.warn("Tenant ID exists but tenant not found", {
+			this.logger.warn("테넌트 ID는 존재하지만 테넌트를 찾을 수 없음", {
 				reqId: reqIdShort,
 				tenantId: tenantIdShort,
 				hasUser: !!authContext.user,
@@ -163,12 +163,12 @@ export class AuthUserInterceptor implements NestInterceptor {
 		}
 
 		if (isValidUserAuth && authContext.user) {
-			this.logger.user("User authenticated", {
+			this.logger.user("사용자 인증됨", {
 				userId: authContext.user.id,
 				tenants: authContext.user.tenants?.length || 0,
 			});
 		} else if (authContext.user) {
-			this.logger.dev("Invalid user object", {
+			this.logger.dev("잘못된 사용자 객체", {
 				reqId: reqIdShort,
 				hasId: !!authContext.user.id,
 				hasTenants: !!authContext.user.tenants,
@@ -183,7 +183,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 	private logRequestStart(authContext: AuthContext, requestId: string): void {
 		const reqIdShort = requestId.slice(-8);
 
-		this.logger.auth("Context initialized", {
+		this.logger.auth("컨텍스트 초기화됨", {
 			reqId: reqIdShort,
 			tenantId: authContext.tenantId,
 			hasUser: !!authContext.user?.id,
@@ -193,7 +193,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 	private logRequestSuccess(requestId: string, duration: number): void {
 		const reqIdShort = requestId.slice(-8);
 
-		this.logger.performance("Auth processing", duration, `req:${reqIdShort}`);
+		this.logger.performance("인증 처리", duration, `req:${reqIdShort}`);
 	}
 
 	private logRequestError(
@@ -204,7 +204,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 		const reqIdShort = requestId.slice(-8);
 
 		this.logger.error(
-			`❌ Auth failed (${duration}ms) - ${error.message}`,
+			`❌ 인증 실패 (${duration}ms) - ${error.message}`,
 			`req:${reqIdShort}`,
 		);
 	}
@@ -217,7 +217,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 		const reqIdShort = requestId.slice(-8);
 
 		this.logger.errorWithStack(
-			`Auth interceptor error (${duration}ms)`,
+			`인증 인터셉터 오류 (${duration}ms)`,
 			error,
 			`req:${reqIdShort}`,
 		);
@@ -228,10 +228,10 @@ export class AuthUserInterceptor implements NestInterceptor {
 			return error;
 		}
 
-		this.logger.errorWithStack("Unhandled auth error", error);
+		this.logger.errorWithStack("처리되지 않은 인증 오류", error);
 
 		return new HttpException(
-			"Internal server error during authentication processing",
+			"인증 처리 중 내부 서버 오류 발생",
 			HttpStatus.INTERNAL_SERVER_ERROR,
 		);
 	}
@@ -256,7 +256,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 			// If no Auth options or injectTenant is false, skip injection
 			if (!authOptions || authOptions.injectTenant === false) {
-				this.logger.log("Skipping tenant injection", {
+				this.logger.log("테넌트 주입 건너뛰기", {
 					reqId: reqIdShort,
 					reason: !authOptions ? "no-auth-options" : "inject-tenant-false",
 				});
@@ -265,7 +265,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 
 			// If tenantId is not available, skip injection
 			if (!authContext.tenantId) {
-				this.logger.log("Skipping tenant injection - no tenantId", {
+				this.logger.log("테넌트 주입 건너뛰기 - tenantId 없음", {
 					reqId: reqIdShort,
 				});
 				return;
@@ -274,7 +274,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const request = context.switchToHttp().getRequest();
 			const method = request.method?.toUpperCase();
 
-			this.logger.log("Injecting tenantId based on Auth decorator", {
+			this.logger.log("Auth 데코레이터에 따라 tenantId 주입", {
 				reqId: reqIdShort,
 				tenantId: tenantIdShort,
 				method,
@@ -296,13 +296,13 @@ export class AuthUserInterceptor implements NestInterceptor {
 					// Delete query to force re-parsing on next access
 					delete request.query;
 
-					this.logger.log("TenantId injected to query via Auth options", {
+					this.logger.log("Auth 옵션을 통해 쿼리에 TenantId 주입됨", {
 						reqId: reqIdShort,
 						tenantId: tenantIdShort,
 						method,
 					});
 				} else {
-					this.logger.log("TenantId already exists in query", {
+					this.logger.log("쿼리에 TenantId가 이미 존재함", {
 						reqId: reqIdShort,
 						existingTenantId: request.query.tenantId,
 						method,
@@ -312,7 +312,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 				// For POST/PUT/PATCH requests, tenantId is handled through ContextProvider
 				// Don't inject tenantId directly to body as it conflicts with Prisma schema
 				this.logger.log(
-					"TenantId available via ContextProvider for body operations",
+					"body 작업에 대해 ContextProvider를 통해 TenantId 사용 가능",
 					{
 						reqId: reqIdShort,
 						tenantId: tenantIdShort,
@@ -324,7 +324,7 @@ export class AuthUserInterceptor implements NestInterceptor {
 			const reqIdShort = authContext.requestId?.slice(-8);
 
 			this.logger.error(
-				`Failed to inject tenantId via Auth options: ${error instanceof Error ? error.message : String(error)}`,
+				`Auth 옵션을 통한 tenantId 주입 실패: ${error instanceof Error ? error.message : String(error)}`,
 				`req:${reqIdShort}`,
 			);
 			// Don't throw error, just log and continue

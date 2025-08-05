@@ -31,7 +31,7 @@ export class BaseRepository<
 	}
 
 	async create(args: CreateArgs): Promise<R> {
-		this.logger.debug(`Creating ${this.model}...`);
+		this.logger.debug(`${this.model} 생성 중...`);
 		const result = await (this.prisma as any)[this.model.toLowerCase()].create(
 			args,
 		);
@@ -41,7 +41,7 @@ export class BaseRepository<
 	}
 
 	async upsert(args: UpsertArgs): Promise<R> {
-		this.logger.debug(`Upserting ${this.model}...`);
+		this.logger.debug(`${this.model} 업서트 중...`);
 		const result = await (this.prisma as any)[this.model.toLowerCase()].upsert(
 			args,
 		);
@@ -51,7 +51,7 @@ export class BaseRepository<
 	}
 
 	async update(args: UpdateArgs): Promise<R> {
-		this.logger.debug(`Updating ${this.model}...`);
+		this.logger.debug(`${this.model} 업데이트 중...`);
 		const result = await (this.prisma as any)[this.model.toLowerCase()].update(
 			args,
 		);
@@ -61,7 +61,7 @@ export class BaseRepository<
 	}
 
 	async updateMany(args: UpdateManyArgs): Promise<Prisma.BatchPayload> {
-		this.logger.debug(`Updating many ${this.model}...`);
+		this.logger.debug(`${this.model} 다중 업데이트 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].updateMany(args);
@@ -69,7 +69,7 @@ export class BaseRepository<
 	}
 
 	async delete(args: DeleteArgs): Promise<R> {
-		this.logger.debug(`Deleting ${this.model}...`);
+		this.logger.debug(`${this.model} 삭제 중...`);
 		const result = await (this.prisma as any)[this.model.toLowerCase()].delete(
 			args,
 		);
@@ -79,7 +79,7 @@ export class BaseRepository<
 	}
 
 	async findMany(args: FindManyArgs): Promise<R[]> {
-		this.logger.debug(`Finding many ${this.model}...`);
+		this.logger.debug(`${this.model} 다중 조회 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].findMany(args);
@@ -92,7 +92,7 @@ export class BaseRepository<
 	}
 
 	async findFirst(args: FindFirstArgs): Promise<R> {
-		this.logger.debug(`Finding first ${this.model}...`);
+		this.logger.debug(`${this.model} 최초 조회 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].findFirst(args);
@@ -102,7 +102,7 @@ export class BaseRepository<
 	}
 
 	async findUnique(args: FindUniqueArgs): Promise<R> {
-		this.logger.debug(`Finding unique ${this.model}...`);
+		this.logger.debug(`${this.model} 고유 조회 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].findUnique(args);
@@ -112,7 +112,7 @@ export class BaseRepository<
 	}
 
 	async groupBy(args: GroupByArgs): Promise<any> {
-		this.logger.debug(`Grouping by ${this.model}...`);
+		this.logger.debug(`${this.model} 그룹화 중...`);
 		const result = await (this.prisma as any)[this.model.toLowerCase()].groupBy(
 			args,
 		);
@@ -120,7 +120,7 @@ export class BaseRepository<
 	}
 
 	async createManyAndReturn(args: CreateManyAndReturnArgs): Promise<R[]> {
-		this.logger.debug(`Creating many ${this.model}...`);
+		this.logger.debug(`${this.model} 다중 생성 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].createManyAndReturn(args);
@@ -133,7 +133,7 @@ export class BaseRepository<
 	}
 
 	async deleteMany(args: DeleteManyArgs): Promise<Prisma.BatchPayload> {
-		this.logger.debug(`Deleting many ${this.model}...`);
+		this.logger.debug(`${this.model} 다중 삭제 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].deleteMany(args);
@@ -141,7 +141,7 @@ export class BaseRepository<
 	}
 
 	async aggregate(args: AggregateArgs): Promise<any> {
-		this.logger.debug(`Aggregating ${this.model}...`);
+		this.logger.debug(`${this.model} 집계 중...`);
 		const result = await (this.prisma as any)[
 			this.model.toLowerCase()
 		].aggregate(args);
@@ -149,7 +149,7 @@ export class BaseRepository<
 	}
 
 	async count(args: CountArgs): Promise<number> {
-		this.logger.debug(`Counting ${this.model}...`);
+		this.logger.debug(`${this.model} 개수 세기 중...`);
 		return (this.prisma as any)[this.model.toLowerCase()].count(args);
 	}
 }
