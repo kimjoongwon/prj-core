@@ -17,16 +17,6 @@ export class AssignmentsService {
 		});
 	}
 
-	removeManyByIds(ids: string[]) {
-		return this.repository.updateMany({
-			where: {
-				id: {
-					in: ids,
-				},
-			},
-			data: { removedAt: new Date() },
-		});
-	}
 
 	create(createAssignmentDto: CreateAssignmentDto) {
 		return this.repository.create({

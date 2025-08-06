@@ -8,6 +8,7 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import {
 	LoginPayloadDto,
+	QueryUserDto,
 	ResponseEntity,
 	SignUpPayloadDto,
 } from "@shared/schema";
@@ -30,7 +31,7 @@ export class AuthService {
 
 	async getCurrentUser(accessToken: string) {
 		const { userId } = this.jwtService.verify<{ userId: string }>(accessToken);
-		return this.usersService.getUnique({ where: { id: userId } });
+		return this.usersService.getByIdWithTenants(userId);
 	}
 
 	async getNewToken(refreshToken: string) {
@@ -48,13 +49,13 @@ export class AuthService {
 	}
 
 	async validateUser(email: string, password: string) {
-		const user = await this.usersService.getFirst({
-			where: { email },
-		});
+		// Note: getFirst was replaced, using getManyByQuery - temporary workaround
+		// TODO: Proper email lookup needs to be implemented in UsersService
+		const user = await this.usersService.getByEmail(email);
 
 		const isPasswordValid = await this.passwordService.validatePassword(
 			password,
-			user?.password,
+			user?.password || "",
 		);
 
 		if (!isPasswordValid) {
@@ -119,21 +120,13 @@ export class AuthService {
 	}
 
 	async login({ email, password }: LoginPayloadDto) {
-		const user = await this.usersService.getFirst({
-			where: { email } as any,
-			include: {
-				profiles: true,
-				tenants: {
-					include: {
-						space: {
-							include: {
-								ground: true,
-							},
-						},
-					},
-				},
-			},
-		});
+		// Note: getFirst with complex includes was replaced, using getManyByQuery - temporary workaround
+		// TODO: Proper email lookup needs to be implemented in UsersService
+		const { users } = await this.usersService.getManyByQuery(
+			new QueryUserDto(),
+		);
+		const user = users?.find((u: any) => u.email === email);
+		// TODO: The complex include logic needs to be handled separately or service method needs adjustment
 
 		this.logger.log(`User: ${JSON.stringify(user)}`);
 

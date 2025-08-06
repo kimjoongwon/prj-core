@@ -51,9 +51,7 @@ export class RoleAssociationsController {
 	async getRoleAssociation(
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
-		const roleAssociation = await this.service.getUnique({
-			where: { id: roleAssociationId },
-		});
+		const roleAssociation = await this.service.getById(roleAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -66,10 +64,10 @@ export class RoleAssociationsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociations(@Body() roleAssociationIds: string[]) {
-		const roleAssociations = await this.service.updateMany({
-			where: { id: { in: roleAssociationIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = roleAssociationIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const roleAssociations = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", roleAssociations.count);
 	}
 
@@ -81,10 +79,7 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 		@Body() updateRoleAssociationDto: UpdateRoleAssociationDto,
 	) {
-		const roleAssociation = await this.service.update({
-			where: { id: roleAssociationId },
-			data: updateRoleAssociationDto,
-		});
+		const roleAssociation = await this.service.updateById(roleAssociationId, updateRoleAssociationDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -99,7 +94,7 @@ export class RoleAssociationsController {
 	async removeRoleAssociation(
 		@Param("roleAssociationId") roleAssociationId: string,
 	) {
-		const roleAssociation = await this.service.remove(roleAssociationId);
+		const roleAssociation = await this.service.removeById(roleAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

@@ -76,7 +76,7 @@ export class SpacesController {
 		}
 
 		try {
-			const space = await this.service.getCurrentSpace(tenant.spaceId);
+			const space = await this.service.getById(tenant.spaceId);
 
 			if (!space) {
 				this.logger.warn("getCurrentSpace - 스페이스를 찾을 수 없음:", {
@@ -124,7 +124,7 @@ export class SpacesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async getSpace(@Param("spaceId") spaceId: string) {
-		const space = await this.service.getUnique({ where: { id: spaceId } });
+		const space = await this.service.getById(spaceId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -140,7 +140,7 @@ export class SpacesController {
 		@Param("spaceId") spaceId: string,
 		@Body() updateSpaceDto: UpdateSpaceDto,
 	) {
-		const space = await this.service.update(spaceId, updateSpaceDto);
+		const space = await this.service.updateById(spaceId, updateSpaceDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -153,7 +153,7 @@ export class SpacesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async removeSpace(@Param("spaceId") spaceId: string) {
-		const space = await this.service.remove(spaceId);
+		const space = await this.service.removeById(spaceId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -166,7 +166,7 @@ export class SpacesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	async deleteSpace(@Param("spaceId") spaceId: string) {
-		const space = await this.service.delete(spaceId);
+		const space = await this.service.deleteById(spaceId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

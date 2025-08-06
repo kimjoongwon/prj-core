@@ -6,12 +6,8 @@ import { UsersRepository } from "../../repository/users.repository";
 export class UsersService {
 	constructor(private readonly repository: UsersRepository) {}
 
-	getUnique(args: Prisma.UserFindUniqueArgs) {
-		return this.repository.findUnique(args);
-	}
-
-	getFirst(args: Prisma.UserFindFirstArgs) {
-		return this.repository.findFirst(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
 	removeMany(ids: string[]) {
@@ -21,8 +17,8 @@ export class UsersService {
 		});
 	}
 
-	delete(args: Prisma.UserDeleteArgs) {
-		return this.repository.delete(args);
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
 	}
 
 	create(args: Prisma.UserCreateArgs) {
@@ -49,12 +45,34 @@ export class UsersService {
 		return { users, count };
 	}
 
-	update(args: Prisma.UserUpdateArgs) {
-		return this.repository.update(args);
+	updateById(id: string, data: Prisma.UserUpdateInput) {
+		return this.repository.update({ where: { id }, data });
 	}
 
-	remove(id: string) {
-		return this.update({ where: { id }, data: { removedAt: new Date() } });
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
+		});
+	}
+
+	getByIdWithTenants(id: string) {
+		return this.repository.findUnique({
+			where: { id },
+			include: {
+				tenants: {
+					include: {
+						role: true,
+						space: true,
+					},
+				},
+				profiles: true,
+			},
+		});
+	}
+
+	getByEmail(email: string) {
+		return this.repository.findFirst({ where: { email } });
 	}
 
 	async getUserWithMainTenant(userId: string) {

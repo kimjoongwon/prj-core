@@ -10,17 +10,10 @@ import { UserAssociationsRepository } from "../../repository/user-associations.r
 export class UserAssociationsService {
 	constructor(private readonly repository: UserAssociationsRepository) {}
 
-	getUnique(args: Prisma.UserAssociationFindUniqueArgs) {
-		return this.repository.findUnique(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	getFirst(args: Prisma.UserAssociationFindFirstArgs) {
-		return this.repository.findFirst(args);
-	}
-
-	updateMany(args: Prisma.UserAssociationUpdateManyArgs) {
-		return this.repository.updateMany(args);
-	}
 
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
@@ -47,11 +40,11 @@ export class UserAssociationsService {
 		};
 	}
 
-	update(args: Prisma.UserAssociationUpdateArgs) {
-		return this.repository.update(args);
+	updateById(id: string, data: Prisma.UserAssociationUpdateInput) {
+		return this.repository.update({ where: { id }, data });
 	}
 
-	remove(id: string) {
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
 			data: { removedAt: new Date() },

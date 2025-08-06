@@ -6,17 +6,10 @@ import { SubjectsRepository } from "../../repository/subjects.repository";
 export class SubjectsService {
 	constructor(private readonly repository: SubjectsRepository) {}
 
-	getUnique(args: Prisma.SubjectFindUniqueArgs) {
-		return this.repository.findUnique(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	getFirst(args: Prisma.SubjectFindFirstArgs) {
-		return this.repository.findFirst(args);
-	}
-
-	updateMany(args: Prisma.SubjectUpdateManyArgs) {
-		return this.repository.updateMany(args);
-	}
 
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
@@ -39,11 +32,11 @@ export class SubjectsService {
 		};
 	}
 
-	update(args: Prisma.SubjectUpdateArgs) {
-		return this.repository.update(args);
+	updateById(id: string, data: Prisma.SubjectUpdateInput) {
+		return this.repository.update({ where: { id }, data });
 	}
 
-	remove(id: string) {
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
 			data: { removedAt: new Date() },

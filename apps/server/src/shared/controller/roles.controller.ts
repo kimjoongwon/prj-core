@@ -32,7 +32,7 @@ export class RolesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async createRole(@Body() createRoleDto: CreateRoleDto) {
-		const role = await this.service.createRoleDto(createRoleDto);
+		const role = await this.service.create(createRoleDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -45,7 +45,7 @@ export class RolesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async getRole(@Param("roleId") roleId: string) {
-		const role = await this.service.getUnique({ where: { id: roleId } });
+		const role = await this.service.getById(roleId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -61,7 +61,7 @@ export class RolesController {
 		@Param("roleId") roleId: string,
 		@Body() updateRoleDto: UpdateRoleDto,
 	) {
-		const role = await this.service.update(roleId, updateRoleDto);
+		const role = await this.service.updateById(roleId, updateRoleDto);
 		return new ResponseEntity(HttpStatus.OK, "성공", role?.toDto?.() ?? role);
 	}
 
@@ -70,7 +70,7 @@ export class RolesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async removeRole(@Param("roleId") roleId: string) {
-		const role = await this.service.remove(roleId);
+		const role = await this.service.removeById(roleId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -83,7 +83,7 @@ export class RolesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	async deleteRole(@Param("roleId") roleId: string) {
-		const role = await this.service.delete(roleId);
+		const role = await this.service.deleteById(roleId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

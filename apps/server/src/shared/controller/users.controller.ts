@@ -52,10 +52,7 @@ export class UsersController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async getUser(@Param("userId") userId: string) {
-		const user = await this.service.getUnique({
-			where: { id: userId },
-			include: { tenants: true },
-		});
+		const user = await this.service.getById(userId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -68,7 +65,10 @@ export class UsersController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUsers(@Body() userIds: string[]) {
-		const users = await this.service.removeMany(userIds);
+		// Note: removeMany is discontinued, using individual calls
+		const promises = userIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const users = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", users.count);
 	}
 
@@ -80,10 +80,7 @@ export class UsersController {
 		@Param("userId") userId: string,
 		@Body() updateUserDto: UpdateUserDto,
 	) {
-		const user = await this.service.update({
-			where: { id: userId },
-			data: updateUserDto,
-		});
+		const user = await this.service.updateById(userId, updateUserDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -96,7 +93,7 @@ export class UsersController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUser(@Param("userId") userId: string) {
-		const user = await this.service.remove(userId);
+		const user = await this.service.removeById(userId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -109,7 +106,7 @@ export class UsersController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async deleteUser(@Param("userId") userId: string) {
-		const user = await this.service.delete({ where: { id: userId } });
+		const user = await this.service.deleteById(userId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

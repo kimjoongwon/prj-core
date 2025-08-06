@@ -51,9 +51,7 @@ export class UserAssociationsController {
 	async getUserAssociation(
 		@Param("userAssociationId") userAssociationId: string,
 	) {
-		const userAssociation = await this.service.getUnique({
-			where: { id: userAssociationId },
-		});
+		const userAssociation = await this.service.getById(userAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -66,10 +64,10 @@ export class UserAssociationsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(UserAssociationDto, HttpStatus.OK)
 	async removeUserAssociations(@Body() userAssociationIds: string[]) {
-		const userAssociations = await this.service.updateMany({
-			where: { id: { in: userAssociationIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = userAssociationIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const userAssociations = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", userAssociations.count);
 	}
 
@@ -81,10 +79,7 @@ export class UserAssociationsController {
 		@Param("userAssociationId") userAssociationId: string,
 		@Body() updateUserAssociationDto: UpdateUserAssociationDto,
 	) {
-		const userAssociation = await this.service.update({
-			where: { id: userAssociationId },
-			data: updateUserAssociationDto,
-		});
+		const userAssociation = await this.service.updateById(userAssociationId, updateUserAssociationDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -99,7 +94,7 @@ export class UserAssociationsController {
 	async removeUserAssociation(
 		@Param("userAssociationId") userAssociationId: string,
 	) {
-		const userAssociation = await this.service.remove(userAssociationId);
+		const userAssociation = await this.service.removeById(userAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

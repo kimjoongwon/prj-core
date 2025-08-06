@@ -6,17 +6,10 @@ import { SessionsRepository } from "../../repository/sessions.repository";
 export class SessionsService {
 	constructor(private readonly repository: SessionsRepository) {}
 
-	getUnique(args: Prisma.SessionFindUniqueArgs) {
-		return this.repository.findUnique(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	getFirst(args: Prisma.SessionFindFirstArgs) {
-		return this.repository.findFirst(args);
-	}
-
-	updateMany(args: Prisma.SessionUpdateManyArgs) {
-		return this.repository.updateMany(args);
-	}
 
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
@@ -39,11 +32,11 @@ export class SessionsService {
 		};
 	}
 
-	update(args: Prisma.SessionUpdateArgs) {
-		return this.repository.update(args);
+	updateById(id: string, data: Prisma.SessionUpdateInput) {
+		return this.repository.update({ where: { id }, data });
 	}
 
-	remove(id: string) {
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
 			data: { removedAt: new Date() },

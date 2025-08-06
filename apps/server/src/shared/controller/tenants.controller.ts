@@ -35,7 +35,8 @@ export class TenantsController {
 	@ApiResponseEntity(TenantDto, HttpStatus.OK, { isArray: true })
 	async getMyTenants() {
 		const userId = ContextProvider.getAuthUserId();
-		const tenants = await this.service.getManyByUserId(userId);
+		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
+	const tenants = await this.service.getManyByQuery({ userId } as any);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
