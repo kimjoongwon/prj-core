@@ -1,13 +1,15 @@
 model Role {
-  id          String       @id @default(uuid())
-  seq         Int          @unique @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime?    @updatedAt @db.Timestamptz(6)
-  removedAt   DateTime?    @db.Timestamptz(6)
-  name        Roles        @unique @default(USER)
-  abilities   Ability[]
-  assignments Assignment[]
-  tenants     Tenant[]
+  id                  String               @id @default(uuid())
+  seq                 Int                  @unique @default(autoincrement())
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt           DateTime?            @db.Timestamptz(6)
+  name                Roles                @unique @default(USER)
+  abilities           Ability[]
+  assignments         Assignment[]
+  tenants             Tenant[]
+  associations        RoleAssociation[]
+  roleClassifications RoleClassification[]
 }
 
 model RoleAssociation {
@@ -19,6 +21,7 @@ model RoleAssociation {
   roleId    String
   groupId   String
   group     Group     @relation(fields: [groupId], references: [id])
+  role      Role      @relation(fields: [roleId], references: [id])
 
   @@unique([groupId, roleId])
 }
@@ -32,6 +35,7 @@ model RoleClassification {
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
+  role       Role      @relation(fields: [roleId], references: [id])
 
   @@unique([categoryId, roleId])
 }

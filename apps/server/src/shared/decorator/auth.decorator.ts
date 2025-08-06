@@ -14,6 +14,8 @@ import { RolesGuard } from "../guard/roles.guard";
 
 export interface AuthOptions {
 	roles?: $Enums.Roles[];
+	groups?: string[];
+	categories?: string[];
 	public?: boolean;
 	injectTenant?: boolean;
 }
@@ -25,6 +27,8 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 		roles = ["USER"], // 기본값: USER 역할
 		public: isPublicRoute = false, // 기본값: false (비공개 라우트)
 		injectTenant = true, // 기본값: true (tenantId 자동 주입)
+		groups = [], // 역할 그룹
+		categories = [], // 역할 카테고리
 	} = options;
 
 	const decorators = [
