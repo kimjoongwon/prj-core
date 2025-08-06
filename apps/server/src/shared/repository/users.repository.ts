@@ -25,4 +25,12 @@ export class UsersRepository extends BaseRepository<
 	constructor(prisma: PrismaService) {
 		super(prisma, "User");
 	}
+
+	test() {
+		return this.findFirst({
+			where: {
+				removedAt: null,
+			},
+		});
+	}
 }

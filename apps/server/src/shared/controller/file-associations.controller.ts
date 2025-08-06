@@ -51,9 +51,7 @@ export class FileAssociationsController {
 	async getFileAssociation(
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
-		const fileAssociation = await this.service.getUnique({
-			where: { id: fileAssociationId },
-		});
+		const fileAssociation = await this.service.getById(fileAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -66,11 +64,10 @@ export class FileAssociationsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociations(@Body() fileAssociationIds: string[]) {
-		const fileAssociations = await this.service.updateMany({
-			where: { id: { in: fileAssociationIds } },
-			data: { removedAt: new Date() },
-		});
-		return new ResponseEntity(HttpStatus.OK, "성공", fileAssociations.count);
+		// Process each ID individually since updateMany is discontinued
+		const promises = fileAssociationIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		return new ResponseEntity(HttpStatus.OK, "성공", results.length);
 	}
 
 	@Patch(":fileAssociationId")
@@ -81,10 +78,7 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 		@Body() updateFileAssociationDto: UpdateFileAssociationDto,
 	) {
-		const fileAssociation = await this.service.update({
-			where: { id: fileAssociationId },
-			data: updateFileAssociationDto,
-		});
+		const fileAssociation = await this.service.updateById(fileAssociationId, updateFileAssociationDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -99,7 +93,7 @@ export class FileAssociationsController {
 	async removeFileAssociation(
 		@Param("fileAssociationId") fileAssociationId: string,
 	) {
-		const fileAssociation = await this.service.remove(fileAssociationId);
+		const fileAssociation = await this.service.removeById(fileAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -128,7 +122,7 @@ export class FileAssociationsController {
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK, { isArray: true })
 	async getFileAssociationsByQuery(@Query() query: QueryFileAssociationDto) {
 		const { fileAssociations, count } =
-			await this.service.getFileAssociationsByQuery(query);
+			await this.service.getManyByQuery(query);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

@@ -30,47 +30,25 @@ export class GroupsService {
 		};
 	}
 
-	get(id: string) {
-		return this.repository.findUnique({
-			where: { id },
-		});
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	update(id: string, updateDto: UpdateGroupDto) {
+	updateById(id: string, updateDto: UpdateGroupDto) {
 		return this.repository.update({
-			where: {
-				id: id,
-			},
+			where: { id },
 			data: updateDto,
 		});
 	}
 
-	updateMany(ids: string[], updateDto: UpdateGroupDto) {
-		return this.repository.updateMany({
-			where: { id: { in: ids } },
-			data: updateDto,
-		});
-	}
-
-	remove(id: string) {
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
-			data: {
-				removedAt: new Date(),
-			},
-		});
-	}
-
-	removeMany(ids: string[]) {
-		return this.repository.updateMany({
-			where: { id: { in: ids } },
 			data: { removedAt: new Date() },
 		});
 	}
 
-	delete(id: string) {
-		return this.repository.delete({
-			where: { id },
-		});
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
 	}
 }

@@ -32,18 +32,8 @@ export class CategoriesService {
 		return services;
 	}
 
-	getFirst(args: Prisma.CategoryFindFirstArgs) {
-		return this.repository.findFirst(args);
-	}
-
-	getUnique(args: Prisma.CategoryFindUniqueArgs) {
-		return this.repository.findUnique(args);
-	}
-
-	findCategoryById(id: string) {
-		return this.repository.findUnique({
-			where: { id },
-		});
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
 	updateById(id: string, updateCategoryDto: UpdateCategoryDto) {
@@ -53,9 +43,14 @@ export class CategoriesService {
 		});
 	}
 
-	deleteById(categoryId: string) {
-		return this.repository.delete({
-			where: { id: categoryId },
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
+
+	removeById(id: string) {
+		return this.repository.update({
+			where: { id },
+			data: { removedAt: new Date() },
 		});
 	}
 

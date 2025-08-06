@@ -117,33 +117,4 @@ export class TenantsService {
 		};
 	}
 
-	getManyByUserId(userId: string): Promise<Tenant[]> {
-		return this.tenantsRepository.findMany({
-			where: { userId },
-			include: {
-				space: {
-					include: {
-						ground: true,
-					},
-				},
-				user: true,
-				role: true,
-			},
-		});
-	}
-
-	async getDefaultTenantByUserId(userId: string): Promise<Tenant | null> {
-		return this.tenantsRepository.findFirst({
-			where: { userId, main: true },
-			include: {
-				space: {
-					include: {
-						ground: true,
-					},
-				},
-				user: true,
-				role: true,
-			},
-		});
-	}
 }

@@ -86,16 +86,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		);
 
 		try {
-			const user = await this.usersService.getUnique({
-				where: { id: payload.userId },
-				include: {
-					tenants: {
-						include: {
-							role: true,
-						},
-					},
-				},
-			});
+			// Get user with tenant information for JWT validation
+			const user = await this.usersService.getByIdWithTenants(payload.userId);
 
 			if (!user) {
 				this.logger.error(`사용자 ID로 사용자를 찾을 수 없음: ${payload.userId}`);

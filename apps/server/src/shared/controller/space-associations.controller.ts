@@ -53,9 +53,7 @@ export class SpaceAssociationsController {
 	async getSpaceAssociation(
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
-		const spaceAssociation = await this.service.getUnique({
-			where: { id: spaceAssociationId },
-		});
+		const spaceAssociation = await this.service.getById(spaceAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -68,10 +66,10 @@ export class SpaceAssociationsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociations(@Body() spaceAssociationIds: string[]) {
-		const spaceAssociations = await this.service.updateMany({
-			where: { id: { in: spaceAssociationIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = spaceAssociationIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const spaceAssociations = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", spaceAssociations.count);
 	}
 
@@ -83,10 +81,7 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 		@Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto,
 	) {
-		const spaceAssociation = await this.service.update({
-			where: { id: spaceAssociationId },
-			data: updateSpaceAssociationDto,
-		});
+		const spaceAssociation = await this.service.updateById(spaceAssociationId, updateSpaceAssociationDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -101,7 +96,7 @@ export class SpaceAssociationsController {
 	async removeSpaceAssociation(
 		@Param("spaceAssociationId") spaceAssociationId: string,
 	) {
-		const spaceAssociation = await this.service.remove(spaceAssociationId);
+		const spaceAssociation = await this.service.removeById(spaceAssociationId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

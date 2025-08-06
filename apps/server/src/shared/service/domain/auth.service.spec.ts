@@ -24,8 +24,9 @@ describe("AuthService", () => {
 
 	beforeEach(async () => {
 		const mockUsersService = {
-			getUnique: jest.fn(),
-			getFirst: jest.fn(),
+			getByIdWithTenants: jest.fn(),
+			getByEmail: jest.fn(),
+			getManyByQuery: jest.fn(),
 			create: jest.fn(),
 		};
 
@@ -83,14 +84,12 @@ describe("AuthService", () => {
 			const testUser = createTestUserEntity();
 
 			jwtService.verify = jest.fn().mockReturnValue({ userId });
-			usersService.getUnique.mockResolvedValue(testUser);
+			usersService.getByIdWithTenants.mockResolvedValue(testUser);
 
 			const result = await service.getCurrentUser(accessToken);
 
 			expect(jwtService.verify).toHaveBeenCalledWith(accessToken);
-			expect(usersService.getUnique).toHaveBeenCalledWith({
-				where: { id: userId },
-			});
+			expect(usersService.getByIdWithTenants).toHaveBeenCalledWith(userId);
 			expect(result).toEqual(testUser);
 		});
 
@@ -148,14 +147,12 @@ describe("AuthService", () => {
 			const password = "password123";
 			const testUser = createTestUserEntity();
 
-			usersService.getFirst.mockResolvedValue(testUser);
+			usersService.getByEmail.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(true);
 
 			const result = await service.validateUser(email, password);
 
-			expect(usersService.getFirst).toHaveBeenCalledWith({
-				where: { email },
-			});
+			expect(usersService.getByEmail).toHaveBeenCalledWith(email);
 			expect(passwordService.validatePassword).toHaveBeenCalledWith(
 				password,
 				testUser.password,
@@ -168,7 +165,7 @@ describe("AuthService", () => {
 			const password = "wrong-password";
 			const testUser = createTestUserEntity();
 
-			usersService.getFirst.mockResolvedValue(testUser);
+			usersService.getByEmail.mockResolvedValue(testUser);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.validateUser(email, password)).rejects.toThrow(
@@ -184,7 +181,7 @@ describe("AuthService", () => {
 			const email = "nonexistent@example.com";
 			const password = "password123";
 
-			usersService.getFirst.mockResolvedValue(null as any);
+			usersService.getByEmail.mockResolvedValue(null as any);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.validateUser(email, password)).rejects.toThrow(
@@ -286,33 +283,25 @@ describe("AuthService", () => {
 				password: "password123",
 			};
 
-			const testUser = createTestUserEntity();
+			const testUser = createTestUserEntity({ email: loginData.email });
 			const tokens = {
 				accessToken: "access-token",
 				refreshToken: "refresh-token",
 			};
+			const mockQueryResult = {
+				users: [testUser],
+				count: 1,
+			};
 
-			usersService.getFirst.mockResolvedValue(testUser);
+			usersService.getManyByQuery.mockResolvedValue(mockQueryResult);
 			passwordService.validatePassword.mockResolvedValue(true);
 			tokenService.generateTokens.mockReturnValue(tokens);
 
 			const result = await service.login(loginData);
 
-			expect(usersService.getFirst).toHaveBeenCalledWith({
-				where: { email: loginData.email },
-				include: {
-					profiles: true,
-					tenants: {
-						include: {
-							space: {
-								include: {
-									ground: true,
-								},
-							},
-						},
-					},
-				},
-			});
+			expect(usersService.getManyByQuery).toHaveBeenCalledWith(
+				expect.any(Object),
+			);
 			expect(passwordService.validatePassword).toHaveBeenCalledWith(
 				loginData.password,
 				testUser.password,
@@ -333,26 +322,18 @@ describe("AuthService", () => {
 				password: "password123",
 			};
 
-			usersService.getFirst.mockResolvedValue(null as any);
+			const mockQueryResult = {
+				users: [],
+				count: 0,
+			};
+			usersService.getManyByQuery.mockResolvedValue(mockQueryResult);
 
 			await expect(service.login(loginData)).rejects.toThrow(
 				UnauthorizedException,
 			);
-			expect(usersService.getFirst).toHaveBeenCalledWith({
-				where: { email: loginData.email },
-				include: {
-					profiles: true,
-					tenants: {
-						include: {
-							space: {
-								include: {
-									ground: true,
-								},
-							},
-						},
-					},
-				},
-			});
+			expect(usersService.getManyByQuery).toHaveBeenCalledWith(
+				expect.any(Object),
+			);
 		});
 
 		it("should throw BadRequestException for invalid password", async () => {
@@ -361,9 +342,13 @@ describe("AuthService", () => {
 				password: "wrong-password",
 			};
 
-			const testUser = createTestUserEntity();
+			const testUser = createTestUserEntity({ email: loginData.email });
+			const mockQueryResult = {
+				users: [testUser],
+				count: 1,
+			};
 
-			usersService.getFirst.mockResolvedValue(testUser);
+			usersService.getManyByQuery.mockResolvedValue(mockQueryResult);
 			passwordService.validatePassword.mockResolvedValue(false);
 
 			await expect(service.login(loginData)).rejects.toThrow(

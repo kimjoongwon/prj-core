@@ -47,9 +47,7 @@ export class SubjectsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async getSubject(@Param("subjectId") subjectId: string) {
-		const subject = await this.service.getUnique({
-			where: { id: subjectId },
-		});
+		const subject = await this.service.getById(subjectId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -62,10 +60,10 @@ export class SubjectsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubjects(@Body() subjectIds: string[]) {
-		const subjects = await this.service.updateMany({
-			where: { id: { in: subjectIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = subjectIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const subjects = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", subjects.count);
 	}
 
@@ -77,10 +75,7 @@ export class SubjectsController {
 		@Param("subjectId") subjectId: string,
 		@Body() updateSubjectDto: UpdateSubjectDto,
 	) {
-		const subject = await this.service.update({
-			where: { id: subjectId },
-			data: updateSubjectDto,
-		});
+		const subject = await this.service.updateById(subjectId, updateSubjectDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -93,7 +88,7 @@ export class SubjectsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubject(@Param("subjectId") subjectId: string) {
-		const subject = await this.service.remove(subjectId);
+		const subject = await this.service.removeById(subjectId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

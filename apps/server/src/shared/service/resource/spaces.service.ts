@@ -21,39 +21,26 @@ export class SpacesService {
 		return space;
 	}
 
-	update(spaceId: string, updateSpaceDto: UpdateSpaceDto) {
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
+	}
+
+	updateById(id: string, updateSpaceDto: UpdateSpaceDto) {
 		return this.repository.update({
-			where: { id: spaceId },
+			where: { id },
 			data: updateSpaceDto,
 		});
 	}
 
-	getUnique(args: Prisma.SpaceFindUniqueArgs) {
-		return this.repository.findUnique(args);
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
 	}
 
-	getFirst(spaceId: string) {
-		return this.repository.findFirst({
-			where: { id: spaceId },
-		});
-	}
-
-	remove(spaceId: string) {
+	removeById(id: string) {
 		return this.repository.update({
-			where: { id: spaceId },
+			where: { id },
 			data: { removedAt: new Date() },
 		});
-	}
-
-	removeMany(spaceIds: string[]) {
-		return this.repository.updateMany({
-			where: { id: { in: spaceIds } },
-			data: { removedAt: new Date() },
-		});
-	}
-
-	delete(spaceId: string) {
-		return this.repository.delete({ where: { id: spaceId } });
 	}
 
 	async getManyByQuery(query: QuerySpaceDto) {
@@ -66,12 +53,4 @@ export class SpacesService {
 		};
 	}
 
-	getCurrentSpace(spaceId: string) {
-		return this.repository.findUnique({
-			where: { id: spaceId },
-			include: {
-				ground: true,
-			},
-		});
-	}
 }

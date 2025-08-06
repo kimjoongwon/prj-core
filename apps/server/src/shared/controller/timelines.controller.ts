@@ -47,9 +47,7 @@ export class TimelinesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async getTimeline(@Param("timelineId") timelineId: string) {
-		const timeline = await this.service.getUnique({
-			where: { id: timelineId },
-		});
+		const timeline = await this.service.getById(timelineId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -62,10 +60,10 @@ export class TimelinesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimelines(@Body() timelineIds: string[]) {
-		const timelines = await this.service.updateMany({
-			where: { id: { in: timelineIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = timelineIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const timelines = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", timelines.count);
 	}
 
@@ -77,10 +75,7 @@ export class TimelinesController {
 		@Param("timelineId") timelineId: string,
 		@Body() updateTimelineDto: UpdateTimelineDto,
 	) {
-		const timeline = await this.service.update({
-			where: { id: timelineId },
-			data: updateTimelineDto,
-		});
+		const timeline = await this.service.updateById(timelineId, updateTimelineDto as any);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -93,7 +88,7 @@ export class TimelinesController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimeline(@Param("timelineId") timelineId: string) {
-		const timeline = await this.service.remove(timelineId);
+		const timeline = await this.service.removeById(timelineId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

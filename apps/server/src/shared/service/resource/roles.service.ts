@@ -6,32 +6,15 @@ import { RolesRepository } from "../../repository/role.repository";
 export class RolesService {
 	constructor(private readonly repository: RolesRepository) {}
 
-	getUnique(args: Prisma.RoleFindUniqueArgs) {
-		return this.repository.findUnique(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	getFirst(id: string) {
-		return this.repository.findFirst({ where: { id } });
-	}
-
-	removeMany(ids: string[]) {
-		return this.repository.updateMany({
-			where: {
-				id: {
-					in: ids,
-				},
-			},
-			data: {
-				removedAt: new Date(),
-			},
-		});
-	}
-
-	delete(id: string) {
+	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
 	}
 
-	createRoleDto(createRoleDto: CreateRoleDto) {
+	create(createRoleDto: CreateRoleDto) {
 		return this.repository.create({
 			data: {
 				name: createRoleDto.name,
@@ -48,14 +31,14 @@ export class RolesService {
 		};
 	}
 
-	update(roleId: string, updateRoleDto: UpdateRoleDto) {
+	updateById(id: string, updateRoleDto: UpdateRoleDto) {
 		return this.repository.update({
-			where: { id: roleId },
+			where: { id },
 			data: updateRoleDto,
 		});
 	}
 
-	remove(id: string) {
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
 			data: { removedAt: new Date() },

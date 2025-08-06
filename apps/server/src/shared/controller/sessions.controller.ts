@@ -47,9 +47,7 @@ export class SessionsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async getSession(@Param("sessionId") sessionId: string) {
-		const session = await this.service.getUnique({
-			where: { id: sessionId },
-		});
+		const session = await this.service.getById(sessionId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -62,10 +60,10 @@ export class SessionsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSessions(@Body() sessionIds: string[]) {
-		const sessions = await this.service.updateMany({
-			where: { id: { in: sessionIds } },
-			data: { removedAt: new Date() },
-		});
+		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
+		const promises = sessionIds.map(id => this.service.removeById(id));
+		const results = await Promise.all(promises);
+		const sessions = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", sessions.count);
 	}
 
@@ -77,10 +75,7 @@ export class SessionsController {
 		@Param("sessionId") sessionId: string,
 		@Body() updateSessionDto: UpdateSessionDto,
 	) {
-		const session = await this.service.update({
-			where: { id: sessionId },
-			data: updateSessionDto,
-		});
+		const session = await this.service.updateById(sessionId, updateSessionDto);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",
@@ -93,7 +88,7 @@ export class SessionsController {
 	@HttpCode(HttpStatus.OK)
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSession(@Param("sessionId") sessionId: string) {
-		const session = await this.service.remove(sessionId);
+		const session = await this.service.removeById(sessionId);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

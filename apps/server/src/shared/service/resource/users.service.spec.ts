@@ -38,47 +38,47 @@ describe("UsersService", () => {
 		expect(service).toBeDefined();
 	});
 
-	describe("getUnique", () => {
+	describe("getById", () => {
 		it("should call repository.findUnique with correct args", async () => {
-			const args: Prisma.UserFindUniqueArgs = {
-				where: { id: "user-test-id" },
-			};
+			const userId = "user-test-id";
 			const expectedUser = createTestUserEntity();
 
 			repository.findUnique.mockResolvedValue(expectedUser);
 
-			const result = await service.getUnique(args);
+			const result = await service.getById(userId);
 
-			expect(repository.findUnique).toHaveBeenCalledWith(args);
+			expect(repository.findUnique).toHaveBeenCalledWith({
+				where: { id: userId },
+			});
 			expect(result).toEqual(expectedUser);
 		});
 
 		it("should return null when user is not found", async () => {
-			const args: Prisma.UserFindUniqueArgs = {
-				where: { id: "non-existent-id" },
-			};
+			const userId = "non-existent-id";
 
 			repository.findUnique.mockResolvedValue(null as any);
 
-			const result = await service.getUnique(args);
+			const result = await service.getById(userId);
 
-			expect(repository.findUnique).toHaveBeenCalledWith(args);
+			expect(repository.findUnique).toHaveBeenCalledWith({
+				where: { id: userId },
+			});
 			expect(result).toBeNull();
 		});
 	});
 
-	describe("getFirst", () => {
+	describe("getByEmail", () => {
 		it("should call repository.findFirst with correct args", async () => {
-			const args: Prisma.UserFindFirstArgs = {
-				where: { name: "test@example.com" },
-			};
+			const email = "test@example.com";
 			const expectedUser = createTestUserEntity();
 
 			repository.findFirst.mockResolvedValue(expectedUser);
 
-			const result = await service.getFirst(args);
+			const result = await service.getByEmail(email);
 
-			expect(repository.findFirst).toHaveBeenCalledWith(args);
+			expect(repository.findFirst).toHaveBeenCalledWith({
+				where: { email },
+			});
 			expect(result).toEqual(expectedUser);
 		});
 	});
@@ -115,18 +115,18 @@ describe("UsersService", () => {
 		});
 	});
 
-	describe("delete", () => {
+	describe("deleteById", () => {
 		it("should call repository.delete with correct args", async () => {
-			const args: Prisma.UserDeleteArgs = {
-				where: { id: "user-test-id" },
-			};
+			const userId = "user-test-id";
 			const deletedUser = createTestUserEntity();
 
 			repository.delete.mockResolvedValue(deletedUser);
 
-			const result = await service.delete(args);
+			const result = await service.deleteById(userId);
 
-			expect(repository.delete).toHaveBeenCalledWith(args);
+			expect(repository.delete).toHaveBeenCalledWith({
+				where: { id: userId },
+			});
 			expect(result).toEqual(deletedUser);
 		});
 	});
@@ -221,24 +221,25 @@ describe("UsersService", () => {
 		});
 	});
 
-	describe("update", () => {
+	describe("updateById", () => {
 		it("should call repository.update with correct args", async () => {
-			const args: Prisma.UserUpdateArgs = {
-				where: { id: "user-test-id" },
-				data: { name: "Updated Name" },
-			};
+			const userId = "user-test-id";
+			const updateData = { name: "Updated Name" };
 			const updatedUser = createTestUserEntity({ name: "Updated Name" });
 
 			repository.update.mockResolvedValue(updatedUser);
 
-			const result = await service.update(args);
+			const result = await service.updateById(userId, updateData);
 
-			expect(repository.update).toHaveBeenCalledWith(args);
+			expect(repository.update).toHaveBeenCalledWith({
+				where: { id: userId },
+				data: updateData,
+			});
 			expect(result).toEqual(updatedUser);
 		});
 	});
 
-	describe("remove", () => {
+	describe("removeById", () => {
 		it("should soft delete user by updating removedAt", async () => {
 			const userId = "user-test-id";
 			const removedUser = createTestUserEntity({
@@ -247,7 +248,7 @@ describe("UsersService", () => {
 
 			repository.update.mockResolvedValue(removedUser);
 
-			const result = await service.remove(userId);
+			const result = await service.removeById(userId);
 
 			expect(repository.update).toHaveBeenCalledWith({
 				where: { id: userId },

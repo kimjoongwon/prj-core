@@ -3,28 +3,13 @@ import {
 	CreateSpaceAssociationDto,
 	Prisma,
 	QuerySpaceAssociationDto,
+	UpdateSpaceAssociationDto,
 } from "@shared/schema";
 import { SpaceAssociationsRepository } from "../../repository/space-associations.repository";
 
 @Injectable()
 export class SpaceAssociationsService {
 	constructor(private readonly repository: SpaceAssociationsRepository) {}
-
-	getUnique(args: Prisma.SpaceAssociationFindUniqueArgs) {
-		return this.repository.findUnique(args);
-	}
-
-	getFirst(args: Prisma.SpaceAssociationFindFirstArgs) {
-		return this.repository.findFirst(args);
-	}
-
-	updateMany(args: Prisma.SpaceAssociationUpdateManyArgs) {
-		return this.repository.updateMany(args);
-	}
-
-	deleteById(id: string) {
-		return this.repository.delete({ where: { id } });
-	}
 
 	create(createSpaceAssociationDto: CreateSpaceAssociationDto) {
 		return this.repository.create({
@@ -46,11 +31,22 @@ export class SpaceAssociationsService {
 		};
 	}
 
-	update(args: Prisma.SpaceAssociationUpdateArgs) {
-		return this.repository.update(args);
+	getById(id: string) {
+		return this.repository.findUnique({ where: { id } });
 	}
 
-	remove(id: string) {
+	updateById(id: string, updateSpaceAssociationDto: UpdateSpaceAssociationDto) {
+		return this.repository.update({
+			where: { id },
+			data: updateSpaceAssociationDto,
+		});
+	}
+
+	deleteById(id: string) {
+		return this.repository.delete({ where: { id } });
+	}
+
+	removeById(id: string) {
 		return this.repository.update({
 			where: { id },
 			data: { removedAt: new Date() },
