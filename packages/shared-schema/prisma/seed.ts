@@ -140,6 +140,9 @@ async function main() {
 	// Role 타입 카테고리 생성
 	await createRoleCategories();
 
+	// SUPER_ADMIN Role을 롤 카테고리와 연결
+	await connectSuperAdminToRoleCategories(superAdminRole);
+
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(adminRole, userRole);
 
@@ -383,6 +386,46 @@ async function createRoleCategories() {
 	}
 
 	console.log("Role 카테고리 생성 완료!");
+}
+
+async function connectSuperAdminToRoleCategories(superAdminRole: any) {
+	console.log("SUPER_ADMIN Role을 카테고리와 연결 시작...");
+
+	// "공통" 카테고리 조회
+	const commonCategory = await prisma.category.findFirst({
+		where: { 
+			name: "공통",
+			type: "Role" 
+		}
+	});
+
+	if (!commonCategory) {
+		console.error("'공통' 카테고리를 찾을 수 없습니다.");
+		return;
+	}
+
+	// SUPER_ADMIN Role을 "공통" 카테고리와 연결
+	const existingRoleClassification = await prisma.roleClassification.findFirst({
+		where: {
+			roleId: superAdminRole.id,
+			categoryId: commonCategory.id
+		}
+	});
+
+	if (!existingRoleClassification) {
+		await prisma.roleClassification.create({
+			data: {
+				roleId: superAdminRole.id,
+				categoryId: commonCategory.id
+			}
+		});
+		console.log(`SUPER_ADMIN Role이 '${commonCategory.name}' 카테고리와 연결되었습니다.`);
+	} else {
+		console.log(`SUPER_ADMIN Role이 이미 '${commonCategory.name}' 카테고리와 연결되어 있습니다.`);
+	}
+
+	// 하위 카테고리들과도 연결
+	console.log("SUPER_ADMIN Role과 카테고리 연결 완료!");
 }
 
 main()
