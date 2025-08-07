@@ -14,6 +14,7 @@ import { CaslModule } from "nest-casl";
 
 import { LoggerMiddleware } from "@shared";
 // Feature modules
+// test commit
 import { modules } from "../main.config";
 import { AppBuilderModule } from "./app-builder.module";
 import { AuthModule } from "./auth.module";
