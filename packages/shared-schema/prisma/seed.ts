@@ -46,18 +46,35 @@ async function main() {
 		},
 	});
 
-	// Space 생성
-	const superAdminSpace = await prisma.space.create({
-		data: {
+	// Space 생성 (기존 Space가 있는지 확인)
+	let superAdminSpace = await prisma.space.findFirst({
+		where: {
 			tenants: {
-				create: {
-					main: true,
+				some: {
 					userId: superAdminUser.id,
 					roleId: superAdminRole.id,
+					main: true,
 				},
 			},
 		},
 	});
+
+	if (!superAdminSpace) {
+		superAdminSpace = await prisma.space.create({
+			data: {
+				tenants: {
+					create: {
+						main: true,
+						userId: superAdminUser.id,
+						roleId: superAdminRole.id,
+					},
+				},
+			},
+		});
+		console.log("Super Admin Space 생성 완료");
+	} else {
+		console.log("Super Admin Space 이미 존재");
+	}
 
 	// 워크스페이스 생성
 	const _ground = await prisma.ground.upsert({
@@ -89,20 +106,39 @@ async function main() {
 	//   },
 	// });
 
-	spaceGroupSeed.forEach(async (group) => {
-		const existGroup = await prisma.group.findFirst({
-			where: { name: group.name },
-		});
-		if (!existGroup) {
-			await prisma.group.create({
-				data: {
-					tenant: { connect: { seq: 1 } },
+	// Group 생성을 위한 tenant 조회
+	const firstTenant = await prisma.tenant.findFirst({
+		where: { seq: 1 },
+	});
+
+	if (firstTenant) {
+		for (const group of spaceGroupSeed) {
+			const existingGroup = await prisma.group.findFirst({
+				where: {
 					name: group.name,
-					type: "Space",
+					tenantId: firstTenant.id,
 				},
 			});
+
+			if (!existingGroup) {
+				await prisma.group.create({
+					data: {
+						tenantId: firstTenant.id,
+						name: group.name,
+						type: "Space",
+					},
+				});
+				console.log(`Group 생성 완료: ${group.name}`);
+			} else {
+				console.log(`Group 이미 존재: ${group.name}`);
+			}
 		}
-	});
+	} else {
+		console.error("seq=1인 tenant를 찾을 수 없어 Group을 생성할 수 없습니다.");
+	}
+
+	// Role 타입 카테고리 생성
+	await createRoleCategories();
 
 	// 일반 유저들과 그라운드 생성
 	await createRegularUsersAndGrounds(adminRole, userRole);
@@ -129,10 +165,20 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 			});
 
 			if (!existingGround) {
-				// 먼저 Space 생성
-				const space = await prisma.space.create({
-					data: {},
+				// Space 생성 (businessNo 기반으로 기존 확인)
+				let space = await prisma.space.findFirst({
+					where: {
+						ground: {
+							name: groundData.name,
+						},
+					},
 				});
+
+				if (!space) {
+					space = await prisma.space.create({
+						data: {},
+					});
+				}
 
 				// 그라운드 관리자 유저 생성
 				const adminUser = await prisma.user.upsert({
@@ -154,15 +200,25 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 					},
 				});
 
-				// Tenant 생성 (그라운드 관리자용)
-				await prisma.tenant.create({
-					data: {
-						main: true,
+				// Tenant 생성 (그라운드 관리자용) - 중복 확인
+				const existingTenant = await prisma.tenant.findFirst({
+					where: {
 						userId: adminUser.id,
 						spaceId: space.id,
 						roleId: adminRole.id,
 					},
 				});
+
+				if (!existingTenant) {
+					await prisma.tenant.create({
+						data: {
+							main: true,
+							userId: adminUser.id,
+							spaceId: space.id,
+							roleId: adminRole.id,
+						},
+					});
+				}
 
 				// 그라운드 생성
 				const ground = await prisma.ground.create({
@@ -243,19 +299,29 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 						},
 					});
 
-					// 각 그라운드에 대한 Tenant 생성
+					// 각 그라운드에 대한 Tenant 생성 (중복 확인)
 					for (let i = 0; i < userGrounds.length; i++) {
 						const groundInfo = userGrounds[i];
 						const isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
 
-						await prisma.tenant.create({
-							data: {
-								main: isMain,
+						const existingUserTenant = await prisma.tenant.findFirst({
+							where: {
 								userId: user.id,
 								spaceId: groundInfo.spaceId,
-								roleId: userRole.id, // 기존에 생성된 userRole 사용
+								roleId: userRole.id,
 							},
 						});
+
+						if (!existingUserTenant) {
+							await prisma.tenant.create({
+								data: {
+									main: isMain,
+									userId: user.id,
+									spaceId: groundInfo.spaceId,
+									roleId: userRole.id,
+								},
+							});
+						}
 					}
 
 					console.log(
@@ -272,6 +338,53 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 
 	console.log("일반 유저들과 그라운드 생성 완료!");
 }
+
+async function createRoleCategories() {
+	console.log("Role 카테고리 생성 시작...");
+
+	// seq=1인 tenant 조회
+	const tenant = await prisma.tenant.findFirst({
+		where: { seq: 1 },
+	});
+
+	if (!tenant) {
+		console.error("seq=1인 tenant를 찾을 수 없습니다.");
+		return;
+	}
+
+	// 최상위 카테고리 '공통' 생성
+	const parentCategory = await prisma.category.upsert({
+		where: { name: "공통" },
+		update: {},
+		create: {
+			name: "공통",
+			type: "Role",
+			tenantId: tenant.id,
+		},
+	});
+
+	console.log(`최상위 카테고리 생성 완료: ${parentCategory.name}`);
+
+	// 하위 카테고리들 생성
+	const subCategories = ["유저", "운영자", "트레이너"];
+
+	for (const categoryName of subCategories) {
+		const category = await prisma.category.upsert({
+			where: { name: categoryName },
+			update: {},
+			create: {
+				name: categoryName,
+				type: "Role",
+				parentId: parentCategory.id,
+				tenantId: tenant.id,
+			},
+		});
+		console.log(`하위 카테고리 생성 완료: ${category.name}`);
+	}
+
+	console.log("Role 카테고리 생성 완료!");
+}
+
 main()
 	.then(async () => {
 		await prisma.$disconnect();

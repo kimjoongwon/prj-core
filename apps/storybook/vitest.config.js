@@ -42,7 +42,6 @@ export default defineConfig({
           alias: {
             "@shared/frontend": path.resolve(dirname, "../../packages/shared-frontend"),
             "@shared/types": path.resolve(dirname, "../../packages/shared-types"),
-            "@shared/meta": path.resolve(dirname, "../../packages/shared-meta"),
           },
         },
       },

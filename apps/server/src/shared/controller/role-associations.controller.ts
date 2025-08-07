@@ -65,7 +65,9 @@ export class RoleAssociationsController {
 	@ApiResponseEntity(RoleAssociationDto, HttpStatus.OK)
 	async removeRoleAssociations(@Body() roleAssociationIds: string[]) {
 		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = roleAssociationIds.map(id => this.service.removeById(id));
+		const promises = roleAssociationIds.map((id) =>
+			this.service.removeById(id),
+		);
 		const results = await Promise.all(promises);
 		const roleAssociations = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", roleAssociations.count);
@@ -79,7 +81,10 @@ export class RoleAssociationsController {
 		@Param("roleAssociationId") roleAssociationId: string,
 		@Body() updateRoleAssociationDto: UpdateRoleAssociationDto,
 	) {
-		const roleAssociation = await this.service.updateById(roleAssociationId, updateRoleAssociationDto);
+		const roleAssociation = await this.service.updateById(
+			roleAssociationId,
+			updateRoleAssociationDto,
+		);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

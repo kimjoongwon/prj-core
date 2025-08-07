@@ -7,9 +7,9 @@ model Role {
   name                Roles                @unique @default(USER)
   abilities           Ability[]
   assignments         Assignment[]
-  tenants             Tenant[]
   associations        RoleAssociation[]
   roleClassifications RoleClassification[]
+  tenants             Tenant[]
 }
 
 model RoleAssociation {

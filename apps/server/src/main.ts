@@ -1,4 +1,5 @@
-import { Logger as NestLogger, ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
+import { Logger } from "nestjs-pino";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import {
@@ -10,29 +11,25 @@ import {
 import cookieParser = require("cookie-parser");
 
 import { AppModule } from "./module/app.module";
-import {
-	AllExceptionsFilter,
-	logConfig,
-	PrismaClientExceptionFilter,
-} from "./shared";
+import { AllExceptionsFilter, PrismaClientExceptionFilter } from "@shared";
+
+declare const module: any;
 
 async function bootstrap() {
-	const startTime = Date.now();
-	const logger = new NestLogger("Bootstrap");
-
-	logger.log("🚀 서버를 시작합니다...");
-
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
 		bufferLogs: true,
-		logger: logConfig.level,
 	});
+
 	const httpAdapterHost = app.get(HttpAdapterHost);
+
+	app.useLogger(app.get(Logger));
 
 	// Cookie parser 미들웨어 추가
 	app.use(cookieParser());
 
 	// app.useLogger(app.get(Logger));
 	app.set("query parser", "extended");
+
 	app.useGlobalFilters(
 		new AllExceptionsFilter(httpAdapterHost.httpAdapter),
 		new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
@@ -55,10 +52,7 @@ async function bootstrap() {
 			methodKey,
 	};
 
-	// @ts-ignore
 	const document = SwaggerModule.createDocument(app, config, options);
-
-	// @ts-ignore
 	SwaggerModule.setup("api", app, document);
 
 	app.enableCors({
@@ -84,8 +78,10 @@ async function bootstrap() {
 	const port = 3005;
 	await app.listen(port);
 
-	const _bootTime = Date.now() - startTime;
-	logger.log("🎉 서버가 성공적으로 시작되었습니다!");
+	if (module.hot) {
+		module.hot.accept();
+		module.hot.dispose(() => app.close());
+	}
 }
 
 bootstrap();

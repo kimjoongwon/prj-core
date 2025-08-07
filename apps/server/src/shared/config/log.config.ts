@@ -1,4 +1,5 @@
 import { LogLevel } from "@nestjs/common";
+import { registerAs } from "@nestjs/config";
 
 export interface LogConfig {
 	level: LogLevel[];
@@ -8,7 +9,7 @@ export interface LogConfig {
 	prettyPrint: boolean;
 }
 
-export const getLogConfig = (): LogConfig => {
+const getLogConfig = (): LogConfig => {
 	const isDevelopment = process.env.NODE_ENV !== "production";
 	const isTest = process.env.NODE_ENV === "test";
 
@@ -43,3 +44,5 @@ export const getLogConfig = (): LogConfig => {
 };
 
 export const logConfig = getLogConfig();
+
+export default registerAs<LogConfig>("log", () => getLogConfig());

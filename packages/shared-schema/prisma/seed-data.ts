@@ -86,6 +86,32 @@ function getRandomDistrict(): string {
 	return districts[Math.floor(Math.random() * districts.length)];
 }
 
+// Role 타입 카테고리 시드 데이터
+export interface CategorySeedData {
+	name: string;
+	type: "Role" | "Space" | "File" | "User";
+	parentId?: string;
+}
+
+export const roleCategorySeedData: CategorySeedData[] = [
+	{
+		name: "공통",
+		type: "Role",
+	},
+	{
+		name: "유저",
+		type: "Role",
+	},
+	{
+		name: "운영자",
+		type: "Role",
+	},
+	{
+		name: "트레이너",
+		type: "Role",
+	},
+];
+
 // 유저와 그라운드 매핑 (각 유저는 1-3개의 그라운드에 소속)
 export const userGroundMapping: {
 	userIndex: number;

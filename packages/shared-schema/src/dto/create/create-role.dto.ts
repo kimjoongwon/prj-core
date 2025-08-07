@@ -5,6 +5,8 @@ import { RoleDto } from "../role.dto";
 
 export class CreateRoleDto extends OmitType(RoleDto, [
 	...COMMON_ENTITY_FIELDS,
+	"classifications",
+	"associations",
 ]) {
 	@UUIDField()
 	serviceId: string;

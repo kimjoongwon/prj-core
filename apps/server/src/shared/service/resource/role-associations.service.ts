@@ -3,8 +3,9 @@ import {
 	CreateRoleAssociationDto,
 	Prisma,
 	QueryRoleAssociationDto,
+	UpdateRoleAssociationDto,
 } from "@shared/schema";
-import { RoleAssociationsRepository } from "../../repository/role-associations.repository";
+import { RoleAssociationsRepository } from "../../repository";
 
 @Injectable()
 export class RoleAssociationsService {
@@ -13,7 +14,6 @@ export class RoleAssociationsService {
 	getById(id: string) {
 		return this.repository.findUnique({ where: { id } });
 	}
-
 
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
@@ -39,7 +39,7 @@ export class RoleAssociationsService {
 		};
 	}
 
-	updateById(id: string, data: Prisma.RoleAssociationUpdateInput) {
+	updateById(id: string, data: UpdateRoleAssociationDto) {
 		return this.repository.update({ where: { id }, data });
 	}
 

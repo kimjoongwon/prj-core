@@ -90,7 +90,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			const user = await this.usersService.getByIdWithTenants(payload.userId);
 
 			if (!user) {
-				this.logger.error(`사용자 ID로 사용자를 찾을 수 없음: ${payload.userId}`);
+				this.logger.error(
+					`사용자 ID로 사용자를 찾을 수 없음: ${payload.userId}`,
+				);
 				throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 			}
 

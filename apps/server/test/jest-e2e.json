@@ -26,7 +26,6 @@
     "^@shared/types$": "<rootDir>/../../packages/shared-types/index.ts",
     "^@shared/utils$": "<rootDir>/../../packages/shared-utils/index.ts",
     "^@shared/vars$": "<rootDir>/../../packages/shared-vars/index.ts",
-    "^@shared/meta$": "<rootDir>/../../packages/shared-meta/index.ts",
     "^@shared$": "<rootDir>/src/shared/index",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1"
   },

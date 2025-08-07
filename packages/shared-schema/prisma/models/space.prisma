@@ -4,10 +4,10 @@ model Space {
   createdAt       DateTime              @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime?             @updatedAt @db.Timestamptz(6)
   removedAt       DateTime?             @db.Timestamptz(6)
-  tenants         Tenant[]
-  classifications SpaceClassification[]
-  associations    SpaceAssociation[]
   ground          Ground?
+  associations    SpaceAssociation[]
+  classifications SpaceClassification[]
+  tenants         Tenant[]
 }
 
 model SpaceClassification {

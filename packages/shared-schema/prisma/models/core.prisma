@@ -11,9 +11,9 @@ model Category {
   parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
   children             Category[]            @relation("CategoryToCategory")
   tenant               Tenant                @relation(fields: [tenantId], references: [id])
+  fileClassifications  FileClassification[]
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
-  fileClassifications  FileClassification[]
   userClassifications  UserClassification[]
 }
 
@@ -27,11 +27,11 @@ model Group {
   type              GroupTypes         @default(User)
   label             String?
   tenantId          String
+  fileAssociations  FileAssociation[]
   tenant            Tenant             @relation(fields: [tenantId], references: [id])
-  userAssociations  UserAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
-  fileAssociations  FileAssociation[]
+  userAssociations  UserAssociation[]
 }
 
 model Exercise {

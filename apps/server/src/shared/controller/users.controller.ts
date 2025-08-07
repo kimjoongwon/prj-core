@@ -66,7 +66,7 @@ export class UsersController {
 	@ApiResponseEntity(UserDto, HttpStatus.OK)
 	async removeUsers(@Body() userIds: string[]) {
 		// Note: removeMany is discontinued, using individual calls
-		const promises = userIds.map(id => this.service.removeById(id));
+		const promises = userIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const users = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", users.count);
