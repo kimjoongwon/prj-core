@@ -7,6 +7,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { UserDto, $Enums } from "@shared/schema";
 import { isEmpty } from "lodash";
+import { Roles } from "../decorator/roles.decorator";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -14,7 +15,7 @@ export class RolesGuard implements CanActivate {
 
 	canActivate(context: ExecutionContext): boolean {
 		const roles = this.reflector.get<$Enums.Roles[]>(
-			"roles",
+			Roles,
 			context.getHandler(),
 		);
 

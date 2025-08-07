@@ -10,6 +10,8 @@ import { JwtAuthGuard } from "../guard";
 import { AuthUserInterceptor } from "../interceptor";
 import { PublicRoute } from "./public-route.decorator";
 import { Roles } from "./roles.decorator";
+import { RoleCategories } from "./role-categories.decorator";
+import { RoleGroups } from "./role-groups.decorator";
 import { RolesGuard } from "../guard/roles.guard";
 
 export interface AuthOptions {
@@ -41,6 +43,14 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 		PublicRoute(isPublicRoute),
 		Roles(roles),
 	];
+
+	if (groups.length > 0) {
+		decorators.push(RoleGroups(groups));
+	}
+
+	if (categories.length > 0) {
+		decorators.push(RoleCategories(categories));
+	}
 
 	if (!isPublicRoute) {
 		decorators.push(UseGuards(JwtAuthGuard));

@@ -1,5 +1,7 @@
 export * from "./category-names.enum";
+export * from "./category-types.enum";
 export * from "./group-names.enum";
+export * from "./group-types.enum";
 export * from "./recurring-day-of-week.enum";
 export * from "./repeat-cycle-types.enum";
 export * from "./session-types.enum";
