@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: <explanation>
 import {
 	CanActivate,
 	ExecutionContext,
@@ -5,7 +6,8 @@ import {
 	ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { UserDto } from "@shared/schema";
+import { UserDto, Category } from "@shared/schema";
+import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
 
 @Injectable()
@@ -44,17 +46,34 @@ export class RoleCategoryGuard implements CanActivate {
 			throw new ForbiddenException("테넌트에 역할이 할당되지 않았습니다.");
 		}
 
-		// Check if the user's role belongs to any of the required role categories
-		const userRoleCategories =
-			tenant.role.classifications?.map((cl) => cl.category?.name) || [];
+		// Extract category hierarchy names (parents and children) using entity methods
+		let userCategoryHierarchy: string[] = [];
 
+		if (tenant.role.classification?.category) {
+			const categoryEntity = plainToInstance(
+				Category,
+				tenant.role.classification.category,
+			);
+
+			// Get parent names (current category + all ancestors)
+			const parentNames = categoryEntity.getAllParentNames();
+
+			// Get children names (all descendants)
+			const childrenNames = categoryEntity.getAllChildrenNames();
+
+			// Combine both hierarchies (remove duplicates with Set)
+			userCategoryHierarchy = [...new Set([...parentNames, ...childrenNames])];
+		}
+
+		// Check if any of the user's category hierarchy matches required role categories
 		const hasRequiredRoleCategory = roleCategories.some((requiredCategory) =>
-			userRoleCategories.includes(requiredCategory),
+			userCategoryHierarchy.includes(requiredCategory),
 		);
 
 		if (!hasRequiredRoleCategory) {
 			throw new ForbiddenException(
-				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.join(", ")}. 현재 사용자의 역할 카테고리: ${userRoleCategories.join(", ")}`,
+				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.join(", ")}.
+				현재 사용자의 역할 카테고리 계층: ${userCategoryHierarchy.join(" → ")}`,
 			);
 		}
 

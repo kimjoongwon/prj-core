@@ -5,7 +5,7 @@ import {
 	UseInterceptors,
 } from "@nestjs/common";
 import { ApiCookieAuth, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { $Enums } from "@shared/schema";
+import { $Enums, RoleCategoryNames } from "@shared/schema";
 import { JwtAuthGuard } from "../guard";
 import { AuthUserInterceptor } from "../interceptor";
 import { PublicRoute } from "./public-route.decorator";
@@ -13,11 +13,12 @@ import { Roles } from "./roles.decorator";
 import { RoleCategories } from "./role-categories.decorator";
 import { RoleGroups } from "./role-groups.decorator";
 import { RolesGuard } from "../guard/roles.guard";
+import { RoleCategoryGuard } from "../guard/role-category.guard";
 
 export interface AuthOptions {
 	roles?: $Enums.Roles[];
 	groups?: string[];
-	categories?: string[];
+	categories?: RoleCategoryNames[];
 	public?: boolean;
 	injectTenant?: boolean;
 }
@@ -55,6 +56,10 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 	if (!isPublicRoute) {
 		decorators.push(UseGuards(JwtAuthGuard));
 		decorators.push(UseGuards(RolesGuard));
+
+		if (categories.length > 0) {
+			decorators.push(UseGuards(RoleCategoryGuard));
+		}
 	}
 
 	decorators.push(UseInterceptors(AuthUserInterceptor));

@@ -43,4 +43,30 @@ export class TenantInjectionTestController {
 			},
 		);
 	}
+
+	@Auth({ categories: ["공통"] })
+	@Get("test-role-category-common")
+	async testRoleCategoryCommon() {
+		return new ResponseEntity(
+			HttpStatus.OK,
+			"Role category guard test - 공통 카테고리 접근 성공",
+			{
+				message: "공통 카테고리 권한으로 접근 성공",
+				categoryRequired: ["공통"],
+			},
+		);
+	}
+
+	@Auth({ categories: ["관리자"] })
+	@Get("test-role-category-admin")
+	async testRoleCategoryAdmin() {
+		return new ResponseEntity(
+			HttpStatus.OK,
+			"Role category guard test - 관리자 카테고리 접근 성공",
+			{
+				message: "관리자 카테고리 권한으로 접근 성공",
+				categoryRequired: ["관리자"],
+			},
+		);
+	}
 }

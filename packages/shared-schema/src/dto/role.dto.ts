@@ -8,8 +8,8 @@ export class RoleDto extends AbstractDto implements Role {
 	@EnumField(() => $Enums.Roles)
 	name: $Enums.Roles;
 
-	@ClassField(() => RoleClassificationDto, { nullable: true, isArray: true })
-	classifications?: RoleClassificationDto[];
+	@ClassField(() => RoleClassificationDto, { nullable: true })
+	classification?: RoleClassificationDto;
 
 	@ClassField(() => RoleAssociationDto, { nullable: true, isArray: true })
 	associations?: RoleAssociationDto[];

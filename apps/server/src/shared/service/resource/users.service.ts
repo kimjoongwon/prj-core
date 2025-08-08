@@ -62,7 +62,27 @@ export class UsersService {
 			include: {
 				tenants: {
 					include: {
-						role: true,
+						role: {
+							include: {
+								classification: {
+									include: {
+										category: {
+											include: {
+												parent: {
+													include: {
+														parent: {
+															include: {
+																parent: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 						space: true,
 					},
 				},
@@ -72,7 +92,38 @@ export class UsersService {
 	}
 
 	getByEmail(email: string) {
-		return this.repository.findFirst({ where: { email } });
+		return this.repository.findUnique({
+			where: { email },
+			include: {
+				tenants: {
+					include: {
+						role: {
+							include: {
+								classification: {
+									include: {
+										category: {
+											include: {
+												parent: {
+													include: {
+														parent: {
+															include: {
+																parent: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+						space: true,
+					},
+				},
+				profiles: true,
+			},
+		});
 	}
 
 	async getUserWithMainTenant(userId: string) {
