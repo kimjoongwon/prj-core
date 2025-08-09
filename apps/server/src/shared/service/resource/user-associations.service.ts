@@ -3,6 +3,7 @@ import {
 	CreateUserAssociationDto,
 	Prisma,
 	QueryUserAssociationDto,
+	UpdateUserAssociationDto,
 } from "@shared/schema";
 import { UserAssociationsRepository } from "../../repository/user-associations.repository";
 
@@ -13,7 +14,6 @@ export class UserAssociationsService {
 	getById(id: string) {
 		return this.repository.findUnique({ where: { id } });
 	}
-
 
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
@@ -40,7 +40,7 @@ export class UserAssociationsService {
 		};
 	}
 
-	updateById(id: string, data: Prisma.UserAssociationUpdateInput) {
+	updateById(id: string, data: UpdateUserAssociationDto) {
 		return this.repository.update({ where: { id }, data });
 	}
 

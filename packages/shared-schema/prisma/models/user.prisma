@@ -1,28 +1,31 @@
+model User {
+  id             String              @id @default(uuid())
+  seq            Int                 @unique @default(autoincrement())
+  updatedAt      DateTime?           @updatedAt @db.Timestamptz(6)
+  createdAt      DateTime            @default(now()) @db.Timestamptz(6)
+  removedAt      DateTime?           @db.Timestamptz(6)
+  phone          String              @unique
+  name           String              @unique
+  email          String              @unique
+  password       String
+  profiles       Profile[]
+  tenants        Tenant[]
+  classification UserClassification?
+  associations   UserAssociation[]
+}
+
 model UserClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
   categoryId String
-  userId     String
+  userId     String    @unique
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)
   category   Category  @relation(fields: [categoryId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
 
   @@unique([categoryId, userId])
-}
-
-model User {
-  id        String    @id @default(uuid())
-  seq       Int       @unique @default(autoincrement())
-  updatedAt DateTime? @updatedAt @db.Timestamptz(6)
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  removedAt DateTime? @db.Timestamptz(6)
-  phone     String    @unique
-  name      String    @unique
-  email     String    @unique
-  password  String
-  profiles  Profile[]
-  tenants   Tenant[]
 }
 
 model UserAssociation {
@@ -34,6 +37,7 @@ model UserAssociation {
   userId    String
   groupId   String
   group     Group     @relation(fields: [groupId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 }
 
 model Profile {

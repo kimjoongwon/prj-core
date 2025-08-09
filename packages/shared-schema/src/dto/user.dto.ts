@@ -8,7 +8,7 @@ import {
 	StringField,
 	UUIDField,
 } from "../decorator/field.decorators";
-import { ProfileDto } from ".";
+import { ProfileDto, UserClassificationDto } from ".";
 import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";
 import { UserAssociationDto } from "./user-association.dto";
@@ -30,16 +30,17 @@ export class UserDto extends AbstractDto implements User {
 	@PasswordField({ description: ResponseExcludedField })
 	password!: string;
 
-	@ClassField(() => ProfileDto, { each: true, required: false, swagger: false })
+	@ClassField(() => ProfileDto, { each: true, required: false })
 	profiles?: ProfileDto[];
 
-	@ClassField(() => TenantDto, { each: true, required: false, swagger: false })
+	@ClassField(() => TenantDto, { each: true, required: false })
 	tenants?: TenantDto[];
 
 	@ClassField(() => UserAssociationDto, {
-		each: true,
 		required: false,
-		swagger: false,
 	})
 	associations?: UserAssociationDto[];
+
+	@ClassField(() => UserClassificationDto, { required: false })
+	classification?: UserClassificationDto;
 }

@@ -16,15 +16,12 @@ export class SpaceDto extends AbstractDto implements Space {
 
 	@ClassField(() => SpaceClassificationDto, {
 		required: false,
-		swagger: false,
-		isArray: true,
 	})
-	spaceClassifications?: SpaceClassificationDto[];
+	spaceClassification?: SpaceClassificationDto;
 
 	@ClassField(() => SpaceAssociationDto, {
 		required: false,
-		swagger: false,
-		isArray: true,
+		each: true,
 	})
 	spaceAssociations?: SpaceAssociationDto[];
 

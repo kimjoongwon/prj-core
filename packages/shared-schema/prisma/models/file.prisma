@@ -1,27 +1,27 @@
 model File {
-  id              String               @id @default(uuid())
-  seq             Int                  @unique @default(autoincrement())
-  name            String
-  size            Int
-  parentId        String?
-  mimeType        String
-  url             String
-  tenantId        String
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime?            @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?            @db.Timestamptz(6)
-  parent          File?                @relation("FileParent", fields: [parentId], references: [id])
-  children        File[]               @relation("FileParent")
-  tenant          Tenant               @relation(fields: [tenantId], references: [id])
-  associations    FileAssociation[]
-  classifications FileClassification[]
+  id             String              @id @default(uuid())
+  seq            Int                 @unique @default(autoincrement())
+  name           String
+  size           Int
+  parentId       String?
+  mimeType       String
+  url            String
+  tenantId       String
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime?           @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?           @db.Timestamptz(6)
+  parent         File?               @relation("FileParent", fields: [parentId], references: [id])
+  children       File[]              @relation("FileParent")
+  tenant         Tenant              @relation(fields: [tenantId], references: [id])
+  associations   FileAssociation[]
+  classification FileClassification?
 }
 
 model FileClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
   categoryId String
-  fileId     String
+  fileId     String    @unique
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)

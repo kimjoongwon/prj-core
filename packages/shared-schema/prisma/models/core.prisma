@@ -27,8 +27,8 @@ model Group {
   type              GroupTypes         @default(User)
   label             String?
   tenantId          String
-  fileAssociations  FileAssociation[]
   tenant            Tenant             @relation(fields: [tenantId], references: [id])
+  fileAssociations  FileAssociation[]
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
@@ -45,8 +45,8 @@ model Exercise {
   taskId      String    @unique
   description String?
   imageFileId String?
-  name        String
   videoFileId String?
+  name        String
   task        Task      @relation(fields: [taskId], references: [id])
 }
 
