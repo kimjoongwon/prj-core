@@ -1,30 +1,33 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 import { GroupNames } from "../src/enum/group-names.enum";
-import { groundSeedData, userGroundMapping, userSeedData } from "./seed-data";
+import { RoleGroupNames } from "../src/enum/role-group-names.enum";
+import { RoleCategoryNames } from "../src/enum/role-category-names.enum";
+import {
+	groundSeedData,
+	userGroundMapping,
+	userSeedData,
+	roleCategorySeedData,
+	roleSeedData,
+	roleClassificationSeedData,
+	roleGroupSeedData,
+	roleAssociationSeedData,
+} from "./seed-data";
 
 const prisma = new PrismaClient();
 async function main() {
 	const hashedPassword = await hash("rkdmf12!@", 10);
 
-	// 먼저 Role들을 생성
-	const superAdminRole = await prisma.role.upsert({
-		where: { name: "SUPER_ADMIN" },
-		update: {},
-		create: { name: "SUPER_ADMIN" },
-	});
-
-	const adminRole = await prisma.role.upsert({
-		where: { name: "ADMIN" },
-		update: {},
-		create: { name: "ADMIN" },
-	});
-
-	const userRole = await prisma.role.upsert({
-		where: { name: "USER" },
-		update: {},
-		create: { name: "USER" },
-	});
+	// Role들을 seed-data.ts 기반으로 생성
+	const roles: Record<string, any> = {};
+	for (const roleData of roleSeedData) {
+		roles[roleData.name] = await prisma.role.upsert({
+			where: { name: roleData.name },
+			update: {},
+			create: { name: roleData.name },
+		});
+		console.log(`Role 생성 완료: ${roleData.name}`);
+	}
 
 	// Super Admin 유저 생성
 	const superAdminUser = await prisma.user.upsert({
@@ -52,7 +55,7 @@ async function main() {
 			tenants: {
 				some: {
 					userId: superAdminUser.id,
-					roleId: superAdminRole.id,
+					roleId: roles.SUPER_ADMIN.id,
 					main: true,
 				},
 			},
@@ -66,7 +69,7 @@ async function main() {
 					create: {
 						main: true,
 						userId: superAdminUser.id,
-						roleId: superAdminRole.id,
+						roleId: roles.SUPER_ADMIN.id,
 					},
 				},
 			},
@@ -140,17 +143,27 @@ async function main() {
 	// Role 타입 카테고리 생성
 	await createRoleCategories();
 
-	// SUPER_ADMIN Role을 롤 카테고리와 연결
-	await connectSuperAdminToRoleCategories(superAdminRole);
+	// Role과 Category 연결 (RoleClassification)
+	await createRoleClassifications(roles);
+
+	// Role 관련 Group 생성 및 RoleAssociation 연결
+	await createRoleGroupsAndAssociations(roles);
 
 	// 일반 유저들과 그라운드 생성
-	await createRegularUsersAndGrounds(adminRole, userRole);
+	await createRegularUsersAndGrounds(roles.ADMIN, roles.USER);
 
 	console.log({ superAdminUser });
 }
 
 async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
+
+	// 모든 Role 조회 (seed-data의 role 필드 사용을 위해)
+	const allRoles = await prisma.role.findMany();
+	const roleMap: Record<string, any> = {};
+	for (const role of allRoles) {
+		roleMap[role.name] = role;
+	}
 
 	// 각 그라운드 생성
 	const createdGrounds: Array<{
@@ -303,6 +316,9 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 					});
 
 					// 각 그라운드에 대한 Tenant 생성 (중복 확인)
+					// userData.role 또는 기본값 "USER" 사용
+					const assignedRole = roleMap[userData.role || "USER"];
+
 					for (let i = 0; i < userGrounds.length; i++) {
 						const groundInfo = userGrounds[i];
 						const isMain = i === 0; // 첫 번째 그라운드를 메인으로 설정
@@ -311,7 +327,7 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 							where: {
 								userId: user.id,
 								spaceId: groundInfo.spaceId,
-								roleId: userRole.id,
+								roleId: assignedRole.id,
 							},
 						});
 
@@ -321,14 +337,14 @@ async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
 									main: isMain,
 									userId: user.id,
 									spaceId: groundInfo.spaceId,
-									roleId: userRole.id,
+									roleId: assignedRole.id,
 								},
 							});
 						}
 					}
 
 					console.log(
-						`일반 유저 생성 완료: ${userData.profile.name} (그라운드 ${userGrounds.length}개 소속)`,
+						`유저 생성 완료: ${userData.profile.name} [${userData.role || "USER"}] (그라운드 ${userGrounds.length}개 소속)`,
 					);
 				}
 			} else {
@@ -355,77 +371,170 @@ async function createRoleCategories() {
 		return;
 	}
 
-	// 최상위 카테고리 '공통' 생성
-	const parentCategory = await prisma.category.upsert({
-		where: { name: "공통" },
-		update: {},
-		create: {
-			name: "공통",
-			type: "Role",
-			tenantId: tenant.id,
-		},
-	});
-
-	console.log(`최상위 카테고리 생성 완료: ${parentCategory.name}`);
-
-	// 하위 카테고리들 생성
-	const subCategories = ["유저", "운영자", "트레이너"];
-
-	for (const categoryName of subCategories) {
+	// seed-data.ts의 roleCategorySeedData 기반으로 카테고리 생성
+	for (const categoryData of roleCategorySeedData) {
+		const roleCategoryEnum = categoryData.roleCategoryEnum;
+		
 		const category = await prisma.category.upsert({
-			where: { name: categoryName },
+			where: { name: roleCategoryEnum.name },
 			update: {},
 			create: {
-				name: categoryName,
-				type: "Role",
-				parentId: parentCategory.id,
+				name: roleCategoryEnum.name, // enum의 name 속성 사용
+				type: categoryData.type as any,
 				tenantId: tenant.id,
+				// parentId는 나중에 별도로 설정 (현재는 평면 구조)
 			},
 		});
-		console.log(`하위 카테고리 생성 완료: ${category.name}`);
+		console.log(`카테고리 생성 완료: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`);
 	}
 
 	console.log("Role 카테고리 생성 완료!");
 }
 
-async function connectSuperAdminToRoleCategories(superAdminRole: any) {
-	console.log("SUPER_ADMIN Role을 카테고리와 연결 시작...");
+async function createRoleClassifications(roles: Record<string, any>) {
+	console.log("Role과 Category 연결 (RoleClassification) 시작...");
 
-	// "공통" 카테고리 조회
-	const commonCategory = await prisma.category.findFirst({
-		where: { 
-			name: "공통",
-			type: "Role" 
+	for (const classificationData of roleClassificationSeedData) {
+		// 해당 Role 찾기
+		const role = roles[classificationData.roleName];
+		if (!role) {
+			console.error(`Role을 찾을 수 없습니다: ${classificationData.roleName}`);
+			continue;
 		}
+
+		// 해당 Category 찾기 (enum 사용)
+		const roleCategoryEnum = classificationData.roleCategoryEnum;
+		const category = await prisma.category.findFirst({
+			where: {
+				name: roleCategoryEnum.name, // enum의 name 속성 사용
+				type: "Role",
+			},
+		});
+
+		if (!category) {
+			console.error(
+				`Category를 찾을 수 없습니다: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`,
+			);
+			continue;
+		}
+
+		// RoleClassification 생성 (중복 확인)
+		const existingRoleClassification =
+			await prisma.roleClassification.findFirst({
+				where: {
+					roleId: role.id,
+					categoryId: category.id,
+				},
+			});
+
+		if (!existingRoleClassification) {
+			await prisma.roleClassification.create({
+				data: {
+					roleId: role.id,
+					categoryId: category.id,
+				},
+			});
+			console.log(
+				`RoleClassification 생성: ${classificationData.roleName} ↔ ${roleCategoryEnum.code}`,
+			);
+		} else {
+			console.log(
+				`RoleClassification 이미 존재: ${classificationData.roleName} ↔ ${roleCategoryEnum.code}`,
+			);
+		}
+	}
+
+	console.log("Role과 Category 연결 완료!");
+}
+
+async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
+	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 시작...");
+
+	// seq=1인 tenant 조회 (Group 생성에 필요)
+	const tenant = await prisma.tenant.findFirst({
+		where: { seq: 1 },
 	});
 
-	if (!commonCategory) {
-		console.error("'공통' 카테고리를 찾을 수 없습니다.");
+	if (!tenant) {
+		console.error("seq=1인 tenant를 찾을 수 없습니다.");
 		return;
 	}
 
-	// SUPER_ADMIN Role을 "공통" 카테고리와 연결
-	const existingRoleClassification = await prisma.roleClassification.findFirst({
-		where: {
-			roleId: superAdminRole.id,
-			categoryId: commonCategory.id
-		}
-	});
-
-	if (!existingRoleClassification) {
-		await prisma.roleClassification.create({
-			data: {
-				roleId: superAdminRole.id,
-				categoryId: commonCategory.id
-			}
+	// Role용 Group들 생성 (RoleGroupSeedData 기반)
+	const groups: Record<string, any> = {};
+	for (const groupData of roleGroupSeedData) {
+		const roleGroupEnum = groupData.roleGroupEnum;
+		
+		// 기존 Group이 있는지 확인
+		let group = await prisma.group.findFirst({
+			where: {
+				name: roleGroupEnum.name, // enum의 name 속성 사용
+				type: "Role",
+				tenantId: tenant.id,
+			},
 		});
-		console.log(`SUPER_ADMIN Role이 '${commonCategory.name}' 카테고리와 연결되었습니다.`);
-	} else {
-		console.log(`SUPER_ADMIN Role이 이미 '${commonCategory.name}' 카테고리와 연결되어 있습니다.`);
+
+		if (!group) {
+			group = await prisma.group.create({
+				data: {
+					name: roleGroupEnum.name, // enum의 name 속성 사용
+					type: "Role", // GroupTypes.Role
+					tenantId: tenant.id,
+				},
+			});
+			console.log(
+				`Role Group 생성 완료: ${roleGroupEnum.code} - ${roleGroupEnum.name}`,
+			);
+		} else {
+			console.log(
+				`Role Group 이미 존재: ${roleGroupEnum.code} - ${roleGroupEnum.name}`,
+			);
+		}
+
+		groups[roleGroupEnum.code] = group; // enum의 code로 키 설정
 	}
 
-	// 하위 카테고리들과도 연결
-	console.log("SUPER_ADMIN Role과 카테고리 연결 완료!");
+	// RoleAssociation 생성 (Role과 Group 연결)
+	for (const associationData of roleAssociationSeedData) {
+		const role = roles[associationData.roleName];
+		const group = groups[associationData.roleGroupEnum.code]; // enum의 code 사용
+
+		if (!role) {
+			console.error(`Role을 찾을 수 없습니다: ${associationData.roleName}`);
+			continue;
+		}
+
+		if (!group) {
+			console.error(`Group을 찾을 수 없습니다: ${associationData.roleGroupEnum.code}`);
+			continue;
+		}
+
+		// RoleAssociation 생성 (중복 확인)
+		const existingAssociation = await prisma.roleAssociation.findFirst({
+			where: {
+				roleId: role.id,
+				groupId: group.id,
+			},
+		});
+
+		if (!existingAssociation) {
+			await prisma.roleAssociation.create({
+				data: {
+					roleId: role.id,
+					groupId: group.id,
+				},
+			});
+			console.log(
+				`RoleAssociation 생성: ${associationData.roleName} ↔ ${associationData.roleGroupEnum.code}`,
+			);
+		} else {
+			console.log(
+				`RoleAssociation 이미 존재: ${associationData.roleName} ↔ ${associationData.roleGroupEnum.code}`,
+			);
+		}
+	}
+
+	console.log("Role 관련 Group 생성 및 RoleAssociation 연결 완료!");
 }
 
 main()

@@ -1,3 +1,7 @@
+// Enum imports
+import { RoleCategoryNames } from "../src/enum/role-category-names.enum";
+import { RoleGroupNames } from "../src/enum/role-group-names.enum";
+
 // 시드 데이터를 위한 메타데이터
 export interface UserSeedData {
 	email: string;
@@ -7,6 +11,7 @@ export interface UserSeedData {
 		name: string;
 		nickname: string;
 	};
+	role?: "USER" | "ADMIN" | "SUPER_ADMIN";
 }
 
 export interface GroundSeedData {
@@ -18,27 +23,52 @@ export interface GroundSeedData {
 	businessNo: string;
 }
 
-// 50명의 일반 유저 데이터
-export const userSeedData: UserSeedData[] = Array.from(
-	{ length: 50 },
-	(_, index) => {
+// 10명의 다양한 역할 유저 데이터 (SUPER_ADMIN 1명, ADMIN 3명, USER 6명)
+export const userSeedData: UserSeedData[] = [
+	// SUPER_ADMIN 1명
+	{
+		email: "super-admin@gmail.com",
+		phone: "01011000001",
+		password: "superadmin123!@#",
+		profile: {
+			name: "슈퍼관리자",
+			nickname: "슈퍼관리자",
+		},
+		role: "SUPER_ADMIN",
+	},
+	// ADMIN 3명
+	...Array.from({ length: 3 }, (_, index) => {
+		const adminNumber = index + 1;
+		return {
+			email: `admin-${adminNumber}@gmail.com`,
+			phone: `010110000${adminNumber + 1}`,
+			password: "admin123!@#",
+			profile: {
+				name: `관리자${adminNumber}`,
+				nickname: `관리자${adminNumber}`,
+			},
+			role: "ADMIN" as const,
+		};
+	}),
+	// USER 6명
+	...Array.from({ length: 6 }, (_, index) => {
 		const userNumber = index + 1;
-		// 01011xx 패턴으로 변경하여 Super Admin과 겹치지 않게 함
 		return {
 			email: `user-${userNumber}@gmail.com`,
-			phone: `0101100${String(userNumber).padStart(3, "0")}`,
-			password: "user123!@#", // 모든 일반 유저에게 동일한 비밀번호 사용
+			phone: `010110000${userNumber + 4}`,
+			password: "user123!@#",
 			profile: {
 				name: `일반유저${userNumber}`,
 				nickname: `유저${userNumber}`,
 			},
+			role: "USER" as const,
 		};
-	},
-);
+	}),
+];
 
 // 다양한 그라운드 데이터 (50개)
 export const groundSeedData: GroundSeedData[] = Array.from(
-	{ length: 50 },
+	{ length: 10 },
 	(_, index) => {
 		const companyNumber = index + 1;
 		return {
@@ -86,29 +116,108 @@ function getRandomDistrict(): string {
 	return districts[Math.floor(Math.random() * districts.length)];
 }
 
-// Role 타입 카테고리 시드 데이터
+// Role 타입 카테고리 시드 데이터 (RoleCategoryNames enum 활용)
 export interface CategorySeedData {
-	name: string;
+	roleCategoryEnum: RoleCategoryNames;
 	type: "Role" | "Space" | "File" | "User";
 	parentId?: string;
 }
 
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
-		name: "공통",
+		roleCategoryEnum: RoleCategoryNames.COMMON,
 		type: "Role",
 	},
 	{
-		name: "유저",
+		roleCategoryEnum: RoleCategoryNames.USER,
 		type: "Role",
 	},
 	{
-		name: "운영자",
+		roleCategoryEnum: RoleCategoryNames.ADMIN,
 		type: "Role",
 	},
 	{
-		name: "트레이너",
+		roleCategoryEnum: RoleCategoryNames.MANAGER,
 		type: "Role",
+	},
+];
+
+// Role 시드 데이터 (role.prisma의 Role 모델에 대응)
+export interface RoleSeedData {
+	name: "USER" | "ADMIN" | "SUPER_ADMIN";
+}
+
+export const roleSeedData: RoleSeedData[] = [
+	{
+		name: "SUPER_ADMIN",
+	},
+	{
+		name: "ADMIN",
+	},
+	{
+		name: "USER",
+	},
+];
+
+// RoleClassification 시드 데이터 (Role과 Category type="Role" 연결)
+// role.prisma의 RoleClassification 모델: categoryId, roleId로 연결
+
+export interface RoleClassificationSeedData {
+	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	roleCategoryEnum: RoleCategoryNames; // RoleCategoryNames enum 사용
+}
+
+export const roleClassificationSeedData: RoleClassificationSeedData[] = [
+	{
+		roleName: "SUPER_ADMIN",
+		roleCategoryEnum: RoleCategoryNames.COMMON, // "공통" 카테고리
+	},
+	{
+		roleName: "ADMIN",
+		roleCategoryEnum: RoleCategoryNames.ADMIN, // "운영자" 카테고리
+	},
+	{
+		roleName: "USER",
+		roleCategoryEnum: RoleCategoryNames.USER, // "유저" 카테고리
+	},
+];
+
+// Role Group 시드 데이터 (RoleGroupNames enum 활용)
+
+export interface RoleGroupSeedData {
+	roleGroupEnum: RoleGroupNames;
+}
+
+export const roleGroupSeedData: RoleGroupSeedData[] = [
+	{
+		roleGroupEnum: RoleGroupNames.NORMAL,
+	},
+	{
+		roleGroupEnum: RoleGroupNames.VIP,
+	},
+];
+
+// Role과 Group 연결 (RoleAssociation) 시드 데이터
+export interface RoleAssociationSeedData {
+	roleName: "USER" | "ADMIN" | "SUPER_ADMIN";
+	roleGroupEnum: RoleGroupNames;
+}
+
+export const roleAssociationSeedData: RoleAssociationSeedData[] = [
+	// SUPER_ADMIN은 VIP 그룹
+	{
+		roleName: "SUPER_ADMIN",
+		roleGroupEnum: RoleGroupNames.VIP,
+	},
+	// ADMIN은 VIP 그룹
+	{
+		roleName: "ADMIN",
+		roleGroupEnum: RoleGroupNames.VIP,
+	},
+	// USER는 NORMAL 그룹
+	{
+		roleName: "USER",
+		roleGroupEnum: RoleGroupNames.NORMAL,
 	},
 ];
 
@@ -116,12 +225,12 @@ export const roleCategorySeedData: CategorySeedData[] = [
 export const userGroundMapping: {
 	userIndex: number;
 	groundIndices: number[];
-}[] = Array.from({ length: 50 }, (_, userIndex) => {
+}[] = Array.from({ length: 10 }, (_, userIndex) => {
 	const numGrounds = Math.floor(Math.random() * 3) + 1; // 1-3개 그라운드
 	const groundIndices: number[] = [];
 
 	while (groundIndices.length < numGrounds) {
-		const randomGroundIndex = Math.floor(Math.random() * 50);
+		const randomGroundIndex = Math.floor(Math.random() * 10);
 		if (!groundIndices.includes(randomGroundIndex)) {
 			groundIndices.push(randomGroundIndex);
 		}

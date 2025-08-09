@@ -1,5 +1,5 @@
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
-import { ResponseEntity } from "@shared/schema";
+import { ResponseEntity, RoleCategoryNames } from "@shared/schema";
 import { Auth } from "../../src/shared/decorator";
 import { IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
@@ -44,7 +44,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ categories: ["공통"] })
+	@Auth({ categories: [RoleCategoryNames.COMMON] })
 	@Get("test-role-category-common")
 	async testRoleCategoryCommon() {
 		return new ResponseEntity(
@@ -57,7 +57,7 @@ export class TenantInjectionTestController {
 		);
 	}
 
-	@Auth({ categories: ["관리자"] })
+	@Auth({ categories: [RoleCategoryNames.ADMIN] })
 	@Get("test-role-category-admin")
 	async testRoleCategoryAdmin() {
 		return new ResponseEntity(
@@ -66,6 +66,32 @@ export class TenantInjectionTestController {
 			{
 				message: "관리자 카테고리 권한으로 접근 성공",
 				categoryRequired: ["관리자"],
+			},
+		);
+	}
+
+	@Auth({ groups: ["일반"] })
+	@Get("test-role-group-normal")
+	async testRoleGroupNormal() {
+		return new ResponseEntity(
+			HttpStatus.OK,
+			"Role group guard test - 일반 그룹 접근 성공",
+			{
+				message: "일반 그룹 권한으로 접근 성공",
+				groupRequired: ["일반"],
+			},
+		);
+	}
+
+	@Auth({ groups: ["VIP"] })
+	@Get("test-role-group-vip")
+	async testRoleGroupVIP() {
+		return new ResponseEntity(
+			HttpStatus.OK,
+			"Role group guard test - VIP 그룹 접근 성공",
+			{
+				message: "VIP 그룹 권한으로 접근 성공",
+				groupRequired: ["VIP"],
 			},
 		);
 	}

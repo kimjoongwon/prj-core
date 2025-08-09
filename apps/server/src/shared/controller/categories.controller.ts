@@ -16,7 +16,6 @@ import {
 	CreateCategoryDto,
 	QueryCategoryDto,
 	ResponseEntity,
-	RoleCategoryNames,
 	UpdateCategoryDto,
 } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
@@ -28,9 +27,7 @@ import { CategoriesService } from "../service";
 export class CategoriesController {
 	constructor(private readonly categoriesService: CategoriesService) {}
 
-	@Auth({
-		categories: [RoleCategoryNames.USER],
-	})
+	@Auth()
 	@ApiResponseEntity(CategoryDto, HttpStatus.OK, { isArray: true })
 	@Get()
 	async getCategoriesByQuery(@Query() query: QueryCategoryDto) {

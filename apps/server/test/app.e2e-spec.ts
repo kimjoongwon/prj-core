@@ -269,4 +269,38 @@ describe("앱 E2E 테스트", () => {
 			expect(response.body.message).toContain("현재 사용자의 역할 카테고리 계층");
 		});
 	});
+
+	describe("Role Group 권한 테스트", () => {
+		let authToken: string;
+
+		beforeEach(async () => {
+			// Use the existing JWT token from global authentication setup
+			authToken = jwtToken;
+			expect(authToken).toBeDefined();
+		});
+
+		it("Role Group Guard가 제대로 작동하는지 테스트 - 일반 그룹 접근 테스트", async () => {
+			const response = await request(app.getHttpServer())
+				.get("/api/v1/test-tenant-injection/test-role-group-normal")
+				.set("Authorization", `Bearer ${authToken}`)
+				.expect(403);
+
+			expect(response.body).toHaveProperty("message");
+			expect(response.body.message).toContain("다음 역할 그룹 중 하나에 속해야 합니다");
+			expect(response.body.message).toContain("일반");
+			expect(response.body.message).toContain("현재 사용자의 역할 그룹");
+		});
+
+		it("Role Group Guard가 제대로 작동하는지 테스트 - VIP 그룹 접근 테스트", async () => {
+			const response = await request(app.getHttpServer())
+				.get("/api/v1/test-tenant-injection/test-role-group-vip")
+				.set("Authorization", `Bearer ${authToken}`)
+				.expect(403);
+
+			expect(response.body).toHaveProperty("message");
+			expect(response.body.message).toContain("다음 역할 그룹 중 하나에 속해야 합니다");
+			expect(response.body.message).toContain("VIP");
+			expect(response.body.message).toContain("현재 사용자의 역할 그룹");
+		});
+	});
 });

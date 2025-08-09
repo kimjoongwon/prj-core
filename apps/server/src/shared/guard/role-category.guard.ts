@@ -6,7 +6,7 @@ import {
 	ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { UserDto, Category } from "@shared/schema";
+import { UserDto, Category, RoleCategoryNames } from "@shared/schema";
 import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
 
@@ -15,7 +15,7 @@ export class RoleCategoryGuard implements CanActivate {
 	constructor(private readonly reflector: Reflector) {}
 
 	canActivate(context: ExecutionContext): boolean {
-		const roleCategories = this.reflector.get<string[]>(
+		const roleCategories = this.reflector.get<RoleCategoryNames[]>(
 			"roleCategories",
 			context.getHandler(),
 		);
@@ -67,12 +67,12 @@ export class RoleCategoryGuard implements CanActivate {
 
 		// Check if any of the user's category hierarchy matches required role categories
 		const hasRequiredRoleCategory = roleCategories.some((requiredCategory) =>
-			userCategoryHierarchy.includes(requiredCategory),
+			userCategoryHierarchy.includes(requiredCategory.name),
 		);
 
 		if (!hasRequiredRoleCategory) {
 			throw new ForbiddenException(
-				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.join(", ")}.
+				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.map(category => category.name).join(", ")}.
 				현재 사용자의 역할 카테고리 계층: ${userCategoryHierarchy.join(" → ")}`,
 			);
 		}

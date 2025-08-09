@@ -14,6 +14,7 @@ import { RoleCategories } from "./role-categories.decorator";
 import { RoleGroups } from "./role-groups.decorator";
 import { RolesGuard } from "../guard/roles.guard";
 import { RoleCategoryGuard } from "../guard/role-category.guard";
+import { RoleGroupGuard } from "../guard/role-group.guard";
 
 export interface AuthOptions {
 	roles?: $Enums.Roles[];
@@ -59,6 +60,10 @@ export function Auth(options: AuthOptions = {}): MethodDecorator {
 
 		if (categories.length > 0) {
 			decorators.push(UseGuards(RoleCategoryGuard));
+		}
+
+		if (groups.length > 0) {
+			decorators.push(UseGuards(RoleGroupGuard));
 		}
 	}
 
