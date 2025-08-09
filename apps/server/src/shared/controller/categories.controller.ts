@@ -12,7 +12,6 @@ import {
 import { ApiTags } from "@nestjs/swagger";
 import {
 	CategoryDto,
-	CategoryNames,
 	CreateCategoryDto,
 	QueryCategoryDto,
 	ResponseEntity,

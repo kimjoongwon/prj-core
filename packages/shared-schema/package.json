@@ -4,14 +4,7 @@
   "private": true,
   "description": "Shared schema, DTOs and entities for the core project",
   "main": "./src/index.ts",
-  "files": [
-    "dist/**/*",
-    "prisma/**/*"
-  ],
   "scripts": {
-    "build": "pnpm run generate && tsup",
-    "dev": "pnpm run generate && NODE_ENV=development tsup",
-    "start:dev": "pnpm run generate:safe && tsup --watch",
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
     "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
@@ -30,7 +23,7 @@
     "seed": "ts-node prisma/seed.ts",
     "schema": "./prisma"
   },
-  "dependencies": {
+  "devDependencies": {
     "@shared/types": "workspace:*",
     "@prisma/client": "^6.11.1",
     "bcrypt": "^6.0.0",
@@ -38,13 +31,10 @@
     "@nestjs/swagger": "^11.2.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "reflect-metadata": "^0.2.2",
     "ts-jenum": "^2.2.2",
     "lodash": "^4.17.21",
     "libphonenumber-js": "^1.12.10",
-    "remeda": "^2.26.0"
-  },
-  "devDependencies": {
+    "remeda": "^2.26.0",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^24.0.14",
     "@types/lodash": "^4.17.20",
@@ -52,7 +42,6 @@
     "prisma": "^6.11.1",
     "ts-node": "^10.9.2",
     "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   },
   "exports": {
