@@ -8,12 +8,9 @@ import {
 	SwaggerModule,
 } from "@nestjs/swagger";
 
-import cookieParser = require("cookie-parser");
-
 import { AppModule } from "./module/app.module";
 import { AllExceptionsFilter, PrismaClientExceptionFilter } from "@shared";
-
-declare const module: any;
+import cookieParser from "cookie-parser";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -26,10 +23,8 @@ async function bootstrap() {
 
 	// Cookie parser 미들웨어 추가
 	app.use(cookieParser());
-
 	// app.useLogger(app.get(Logger));
 	app.set("query parser", "extended");
-
 	app.useGlobalFilters(
 		new AllExceptionsFilter(httpAdapterHost.httpAdapter),
 		new PrismaClientExceptionFilter(httpAdapterHost.httpAdapter),
@@ -77,11 +72,6 @@ async function bootstrap() {
 
 	const port = 3005;
 	await app.listen(port);
-
-	if (module.hot) {
-		module.hot.accept();
-		module.hot.dispose(() => app.close());
-	}
 }
 
 bootstrap();
