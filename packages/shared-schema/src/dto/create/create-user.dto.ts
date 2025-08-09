@@ -7,4 +7,5 @@ export class CreateUserDto extends OmitType(UserDto, [
 	"associations",
 	"tenants",
 	"profiles",
+	"classification",
 ]) {}

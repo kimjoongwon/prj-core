@@ -1,6 +1,6 @@
-import { UserClassification } from "@prisma/client";
 import { ClassField, UUIDFieldOptional } from "../decorator";
-import { AbstractDto, UserDto } from ".";
+import { AbstractDto, CategoryDto, UserDto } from ".";
+import { UserClassification } from "../entity/user-classification.entity";
 
 export class UserClassificationDto
 	extends AbstractDto
@@ -14,4 +14,7 @@ export class UserClassificationDto
 
 	@ClassField(() => UserDto, { required: false })
 	user?: UserDto[];
+
+	@ClassField(() => CategoryDto, { required: false })
+	category?: CategoryDto;
 }

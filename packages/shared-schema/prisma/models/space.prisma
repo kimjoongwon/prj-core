@@ -1,20 +1,20 @@
 model Space {
-  id              String                @id @default(uuid())
-  seq             Int                   @unique @default(autoincrement())
-  createdAt       DateTime              @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime?             @updatedAt @db.Timestamptz(6)
-  removedAt       DateTime?             @db.Timestamptz(6)
-  ground          Ground?
-  associations    SpaceAssociation[]
-  classifications SpaceClassification[]
-  tenants         Tenant[]
+  id             String               @id @default(uuid())
+  seq            Int                  @unique @default(autoincrement())
+  createdAt      DateTime             @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime?            @updatedAt @db.Timestamptz(6)
+  removedAt      DateTime?            @db.Timestamptz(6)
+  ground         Ground?
+  associations   SpaceAssociation[]
+  classification SpaceClassification?
+  tenants        Tenant[]
 }
 
 model SpaceClassification {
   id         String    @id @default(uuid())
   seq        Int       @unique @default(autoincrement())
   categoryId String
-  spaceId    String
+  spaceId    String    @unique
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt @db.Timestamptz(6)
   removedAt  DateTime? @db.Timestamptz(6)

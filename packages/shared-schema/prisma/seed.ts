@@ -374,7 +374,7 @@ async function createRoleCategories() {
 	// seed-data.ts의 roleCategorySeedData 기반으로 카테고리 생성
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
-		
+
 		const category = await prisma.category.upsert({
 			where: { name: roleCategoryEnum.name },
 			update: {},
@@ -385,7 +385,9 @@ async function createRoleCategories() {
 				// parentId는 나중에 별도로 설정 (현재는 평면 구조)
 			},
 		});
-		console.log(`카테고리 생성 완료: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`);
+		console.log(
+			`카테고리 생성 완료: ${roleCategoryEnum.code} - ${roleCategoryEnum.name}`,
+		);
 	}
 
 	console.log("Role 카테고리 생성 완료!");
@@ -464,7 +466,7 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 	const groups: Record<string, any> = {};
 	for (const groupData of roleGroupSeedData) {
 		const roleGroupEnum = groupData.roleGroupEnum;
-		
+
 		// 기존 Group이 있는지 확인
 		let group = await prisma.group.findFirst({
 			where: {
@@ -505,7 +507,9 @@ async function createRoleGroupsAndAssociations(roles: Record<string, any>) {
 		}
 
 		if (!group) {
-			console.error(`Group을 찾을 수 없습니다: ${associationData.roleGroupEnum.code}`);
+			console.error(
+				`Group을 찾을 수 없습니다: ${associationData.roleGroupEnum.code}`,
+			);
 			continue;
 		}
 

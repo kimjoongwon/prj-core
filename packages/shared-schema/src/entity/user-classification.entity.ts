@@ -1,8 +1,4 @@
-import {
-	Category,
-	User,
-	UserClassification as UserClassificationEntity,
-} from "@prisma/client";
+import { UserClassification as UserClassificationEntity } from "@prisma/client";
 import { UseDto } from "../decorator/use-dto.decorator";
 import { UserClassificationDto } from "../dto";
 import { AbstractEntity } from "./abstract.entity";
@@ -14,7 +10,4 @@ export class UserClassification
 {
 	categoryId: string;
 	userId: string;
-
-	category?: Category;
-	user?: User;
 }

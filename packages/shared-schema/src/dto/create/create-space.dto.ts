@@ -4,8 +4,8 @@ import { SpaceDto } from "../space.dto";
 
 export class CreateSpaceDto extends OmitType(SpaceDto, [
 	...COMMON_ENTITY_FIELDS,
-	"tenants",
-	"spaceClassifications",
+	"spaceClassification",
 	"spaceAssociations",
 	"ground",
+	"tenants",
 ]) {}
