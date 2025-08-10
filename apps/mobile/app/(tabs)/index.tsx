@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, Alert } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -108,7 +108,6 @@ export default function TabOneScreen() {
 						</Button>
 					</View>
 				</View>
-
 
 				<View
 					style={styles.separator}
