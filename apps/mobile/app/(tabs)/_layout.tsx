@@ -29,8 +29,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Buttons',
+          tabBarIcon: ({ color }) => <TabBarIcon name="hand-pointer-o" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -47,6 +47,20 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="input"
+        options={{
+          title: 'Inputs',
+          tabBarIcon: ({ color }) => <TabBarIcon name="edit" color={color} />,
+        }}
+      />
+      {/* <Tabs.Screen
+        name="storybook"
+        options={{
+          title: 'Storybook',
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+        }}
+      /> */}
       <Tabs.Screen
         name="two"
         options={{
