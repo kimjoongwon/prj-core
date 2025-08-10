@@ -11,6 +11,7 @@ import {
 	Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../src/providers/theme-provider";
 
 export type InputVariant = "flat" | "bordered" | "underlined" | "faded";
 export type InputColor =
@@ -43,189 +44,6 @@ export interface InputProps extends Omit<TextInputProps, "style"> {
 	labelStyle?: TextStyle;
 	className?: string;
 }
-
-const colors = {
-	default: {
-		flat: {
-			bg: "#f4f4f5",
-			border: "#e4e4e7",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#52525b",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#e4e4e7",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#52525b",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#e4e4e7",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#52525b",
-		},
-		faded: {
-			bg: "#f4f4f5",
-			border: "#e4e4e7",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#52525b",
-		},
-	},
-	primary: {
-		flat: {
-			bg: "#f0f9ff",
-			border: "#0070f3",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#0070f3",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#0070f3",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#0070f3",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#0070f3",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#0070f3",
-		},
-		faded: {
-			bg: "#f0f9ff",
-			border: "#bae6fd",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#0070f3",
-		},
-	},
-	secondary: {
-		flat: {
-			bg: "#faf5ff",
-			border: "#7c3aed",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#7c3aed",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#7c3aed",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#7c3aed",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#7c3aed",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#7c3aed",
-		},
-		faded: {
-			bg: "#faf5ff",
-			border: "#ddd6fe",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#7c3aed",
-		},
-	},
-	success: {
-		flat: {
-			bg: "#f0fdf4",
-			border: "#17c964",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#17c964",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#17c964",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#17c964",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#17c964",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#17c964",
-		},
-		faded: {
-			bg: "#f0fdf4",
-			border: "#bbf7d0",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#17c964",
-		},
-	},
-	warning: {
-		flat: {
-			bg: "#fffbeb",
-			border: "#f5a524",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f5a524",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#f5a524",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f5a524",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#f5a524",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f5a524",
-		},
-		faded: {
-			bg: "#fffbeb",
-			border: "#fed7aa",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f5a524",
-		},
-	},
-	danger: {
-		flat: {
-			bg: "#fef2f2",
-			border: "#f31260",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f31260",
-		},
-		bordered: {
-			bg: "transparent",
-			border: "#f31260",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f31260",
-		},
-		underlined: {
-			bg: "transparent",
-			border: "#f31260",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f31260",
-		},
-		faded: {
-			bg: "#fef2f2",
-			border: "#fecaca",
-			text: "#18181b",
-			placeholder: "#71717a",
-			label: "#f31260",
-		},
-	},
-};
 
 const sizes = {
 	sm: {
@@ -270,11 +88,60 @@ export const Input: React.FC<InputProps> = ({
 	onChangeText,
 	...props
 }) => {
+	const { theme } = useTheme();
 	const [isFocused, setIsFocused] = useState(false);
 	const [inputValue, setInputValue] = useState(value || "");
 	const animatedLabelPosition = useRef(new Animated.Value(value ? 1 : 0)).current;
 	
-	const colorScheme = colors[isInvalid ? "danger" : color][variant];
+	// Theme-based color function
+	const getColorScheme = (color: InputColor, variant: InputVariant) => {
+		const colorTokens = theme.colors[isInvalid ? "danger" : color] || theme.colors.default;
+		
+		switch (variant) {
+			case "flat":
+				return {
+					bg: colorTokens[100],
+					border: isFocused ? colorTokens.DEFAULT : colorTokens[200],
+					text: theme.colors.foreground,
+					placeholder: colorTokens[400],
+					label: colorTokens.DEFAULT,
+				};
+			case "bordered":
+				return {
+					bg: "transparent",
+					border: isFocused ? colorTokens.DEFAULT : colorTokens[300],
+					text: theme.colors.foreground,
+					placeholder: colorTokens[400],
+					label: colorTokens.DEFAULT,
+				};
+			case "underlined":
+				return {
+					bg: "transparent",
+					border: isFocused ? colorTokens.DEFAULT : colorTokens[300],
+					text: theme.colors.foreground,
+					placeholder: colorTokens[400],
+					label: colorTokens.DEFAULT,
+				};
+			case "faded":
+				return {
+					bg: colorTokens[50],
+					border: isFocused ? colorTokens.DEFAULT : colorTokens[200],
+					text: theme.colors.foreground,
+					placeholder: colorTokens[400],
+					label: colorTokens.DEFAULT,
+				};
+			default:
+				return {
+					bg: colorTokens[100],
+					border: colorTokens[300],
+					text: theme.colors.foreground,
+					placeholder: colorTokens[400],
+					label: colorTokens.DEFAULT,
+				};
+		}
+	};
+
+	const colorScheme = getColorScheme(color, variant);
 	const sizeConfig = sizes[size];
 
 	const handleFocus = (e: any) => {

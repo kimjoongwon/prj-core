@@ -9,6 +9,7 @@ import {
 	TextStyle,
 	TouchableOpacityProps,
 } from "react-native";
+import { useTheme } from "../../src/providers/theme-provider";
 
 export type ButtonVariant =
 	| "solid"
@@ -42,63 +43,6 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, "style"> {
 	style?: ViewStyle;
 	textStyle?: TextStyle;
 }
-
-const colors = {
-	default: {
-		solid: { bg: "#e4e4e7", text: "#18181b", border: "#e4e4e7" },
-		bordered: { bg: "transparent", text: "#71717a", border: "#d4d4d8" },
-		light: { bg: "#f4f4f5", text: "#52525b", border: "transparent" },
-		flat: { bg: "#f4f4f5", text: "#52525b", border: "transparent" },
-		faded: { bg: "#f4f4f5", text: "#52525b", border: "#e4e4e7" },
-		shadow: { bg: "#e4e4e7", text: "#18181b", border: "#e4e4e7" },
-		ghost: { bg: "transparent", text: "#71717a", border: "transparent" },
-	},
-	primary: {
-		solid: { bg: "#0070f3", text: "#ffffff", border: "#0070f3" },
-		bordered: { bg: "transparent", text: "#0070f3", border: "#0070f3" },
-		light: { bg: "#f0f9ff", text: "#0284c7", border: "transparent" },
-		flat: { bg: "#e0f2fe", text: "#0369a1", border: "transparent" },
-		faded: { bg: "#f0f9ff", text: "#0284c7", border: "#bae6fd" },
-		shadow: { bg: "#0070f3", text: "#ffffff", border: "#0070f3" },
-		ghost: { bg: "transparent", text: "#0070f3", border: "transparent" },
-	},
-	secondary: {
-		solid: { bg: "#7c3aed", text: "#ffffff", border: "#7c3aed" },
-		bordered: { bg: "transparent", text: "#7c3aed", border: "#7c3aed" },
-		light: { bg: "#faf5ff", text: "#8b5cf6", border: "transparent" },
-		flat: { bg: "#f3e8ff", text: "#7c3aed", border: "transparent" },
-		faded: { bg: "#faf5ff", text: "#8b5cf6", border: "#ddd6fe" },
-		shadow: { bg: "#7c3aed", text: "#ffffff", border: "#7c3aed" },
-		ghost: { bg: "transparent", text: "#7c3aed", border: "transparent" },
-	},
-	success: {
-		solid: { bg: "#17c964", text: "#ffffff", border: "#17c964" },
-		bordered: { bg: "transparent", text: "#17c964", border: "#17c964" },
-		light: { bg: "#f0fdf4", text: "#16a34a", border: "transparent" },
-		flat: { bg: "#dcfce7", text: "#15803d", border: "transparent" },
-		faded: { bg: "#f0fdf4", text: "#16a34a", border: "#bbf7d0" },
-		shadow: { bg: "#17c964", text: "#ffffff", border: "#17c964" },
-		ghost: { bg: "transparent", text: "#17c964", border: "transparent" },
-	},
-	warning: {
-		solid: { bg: "#f5a524", text: "#ffffff", border: "#f5a524" },
-		bordered: { bg: "transparent", text: "#f59e0b", border: "#f59e0b" },
-		light: { bg: "#fffbeb", text: "#d97706", border: "transparent" },
-		flat: { bg: "#fef3c7", text: "#b45309", border: "transparent" },
-		faded: { bg: "#fffbeb", text: "#d97706", border: "#fed7aa" },
-		shadow: { bg: "#f5a524", text: "#ffffff", border: "#f5a524" },
-		ghost: { bg: "transparent", text: "#f59e0b", border: "transparent" },
-	},
-	danger: {
-		solid: { bg: "#f31260", text: "#ffffff", border: "#f31260" },
-		bordered: { bg: "transparent", text: "#f31260", border: "#f31260" },
-		light: { bg: "#fef2f2", text: "#dc2626", border: "transparent" },
-		flat: { bg: "#fee2e2", text: "#b91c1c", border: "transparent" },
-		faded: { bg: "#fef2f2", text: "#dc2626", border: "#fecaca" },
-		shadow: { bg: "#f31260", text: "#ffffff", border: "#f31260" },
-		ghost: { bg: "transparent", text: "#f31260", border: "transparent" },
-	},
-};
 
 const sizes = {
 	sm: {
@@ -145,7 +89,65 @@ export const Button: React.FC<ButtonProps> = ({
 	onPress,
 	...props
 }) => {
-	const colorScheme = colors[color][variant];
+	const { theme } = useTheme();
+	
+	// Theme-based color function
+	const getColorScheme = (color: ButtonColor, variant: ButtonVariant) => {
+		const colorTokens = theme.colors[color] || theme.colors.default;
+		
+		switch (variant) {
+			case "solid":
+				return {
+					bg: colorTokens.DEFAULT,
+					text: colorTokens.foreground,
+					border: colorTokens.DEFAULT,
+				};
+			case "bordered":
+				return {
+					bg: "transparent",
+					text: colorTokens.DEFAULT,
+					border: colorTokens.DEFAULT,
+				};
+			case "light":
+				return {
+					bg: colorTokens[100],
+					text: colorTokens[700],
+					border: "transparent",
+				};
+			case "flat":
+				return {
+					bg: colorTokens[100],
+					text: colorTokens[800],
+					border: "transparent",
+				};
+			case "faded":
+				return {
+					bg: colorTokens[50],
+					text: colorTokens[700],
+					border: colorTokens[200],
+				};
+			case "shadow":
+				return {
+					bg: colorTokens.DEFAULT,
+					text: colorTokens.foreground,
+					border: colorTokens.DEFAULT,
+				};
+			case "ghost":
+				return {
+					bg: "transparent",
+					text: colorTokens.DEFAULT,
+					border: "transparent",
+				};
+			default:
+				return {
+					bg: colorTokens.DEFAULT,
+					text: colorTokens.foreground,
+					border: colorTokens.DEFAULT,
+				};
+		}
+	};
+
+	const colorScheme = getColorScheme(color, variant);
 	const sizeConfig = sizes[size];
 	const borderRadius = radiusValues[radius];
 
@@ -160,7 +162,7 @@ export const Button: React.FC<ButtonProps> = ({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		opacity: isDisabled ? 0.5 : 1,
+		opacity: isDisabled ? parseFloat(theme.layout.disabledOpacity) : 1,
 		// Add shadow for shadow variant
 		...(variant === "shadow" && {
 			shadowColor: colorScheme.bg,
