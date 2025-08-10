@@ -1,8 +1,8 @@
 import {
 	CanActivate,
 	ExecutionContext,
-	Injectable,
 	ForbiddenException,
+	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { UserDto } from "@shared/schema";

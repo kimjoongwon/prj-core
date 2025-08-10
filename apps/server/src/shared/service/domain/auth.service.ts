@@ -13,9 +13,9 @@ import {
 	SignUpPayloadDto,
 } from "@shared/schema";
 import { PrismaService } from "nestjs-prisma";
+import { UsersService } from "../resource/users.service";
 import { PasswordService } from "./password.service";
 import { TokenService } from "./token.service";
-import { UsersService } from "../resource/users.service";
 
 @Injectable()
 export class AuthService {

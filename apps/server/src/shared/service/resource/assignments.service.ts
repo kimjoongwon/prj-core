@@ -17,7 +17,6 @@ export class AssignmentsService {
 		});
 	}
 
-
 	create(createAssignmentDto: CreateAssignmentDto) {
 		return this.repository.create({
 			data: createAssignmentDto,

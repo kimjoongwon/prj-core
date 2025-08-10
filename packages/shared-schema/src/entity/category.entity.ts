@@ -42,7 +42,7 @@ export class Category
 	 */
 	getAllChildrenNames(): string[] {
 		const childrenNames: string[] = [];
-		
+
 		const collectChildrenNames = (category: Category) => {
 			if (category.children && category.children.length > 0) {
 				for (const child of category.children) {

@@ -10,7 +10,6 @@ export class SessionsService {
 		return this.repository.findUnique({ where: { id } });
 	}
 
-
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
 	}

@@ -1,10 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {
-	CreateSpaceDto,
-	Prisma,
-	QuerySpaceDto,
-	UpdateSpaceDto,
-} from "@shared/schema";
+import { CreateSpaceDto, QuerySpaceDto, UpdateSpaceDto } from "@shared/schema";
 import { SpacesRepository } from "../../repository/spaces.repository";
 
 @Injectable()
@@ -52,5 +47,4 @@ export class SpacesService {
 			spaces,
 		};
 	}
-
 }

@@ -72,7 +72,7 @@ export class RoleCategoryGuard implements CanActivate {
 
 		if (!hasRequiredRoleCategory) {
 			throw new ForbiddenException(
-				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.map(category => category.name).join(", ")}.
+				`이 작업을 수행하려면 다음 역할 카테고리 중 하나에 속해야 합니다: ${roleCategories.map((category) => category.name).join(", ")}.
 				현재 사용자의 역할 카테고리 계층: ${userCategoryHierarchy.join(" → ")}`,
 			);
 		}

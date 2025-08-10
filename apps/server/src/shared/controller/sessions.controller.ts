@@ -61,7 +61,7 @@ export class SessionsController {
 	@ApiResponseEntity(SessionDto, HttpStatus.OK)
 	async removeSessions(@Body() sessionIds: string[]) {
 		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = sessionIds.map(id => this.service.removeById(id));
+		const promises = sessionIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const sessions = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", sessions.count);

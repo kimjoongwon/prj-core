@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { ClsModule } from "nestjs-cls";
+import { LoggerModule } from "nestjs-pino";
 import { PrismaModule } from "nestjs-prisma";
 import {
 	AuthConfig,
@@ -13,7 +14,6 @@ import {
 	logConfigFactory,
 	smtpConfig,
 } from "./shared";
-import { LoggerModule } from "nestjs-pino";
 
 export const modules: (DynamicModule | Promise<DynamicModule>)[] = [
 	ConfigModule.forRoot({

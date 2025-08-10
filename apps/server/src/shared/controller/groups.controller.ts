@@ -82,7 +82,7 @@ export class GroupsController {
 	@Patch(":groupIds")
 	async removeGroups(@Param("groupIds") ids: string[]) {
 		// Note: removeMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = ids.map(id => this.groupService.removeById(id));
+		const promises = ids.map((id) => this.groupService.removeById(id));
 		const results = await Promise.all(promises);
 		const groups = { count: results.length };
 		return new ResponseEntity(
