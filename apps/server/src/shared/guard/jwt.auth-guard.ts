@@ -23,7 +23,9 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
 		);
 		const request = context.switchToHttp().getRequest();
 
-		this.logger.error(`JwtAuthGuard canActivate - 공개 라우트 여부: ${isPublic}`);
+		this.logger.error(
+			`JwtAuthGuard canActivate - 공개 라우트 여부: ${isPublic}`,
+		);
 		this.logger.error(`요청 경로: ${request.path}`);
 		this.logger.error(`요청 메서드: ${request.method}`);
 		this.logger.error(`Authorization 헤더: ${request.headers.authorization}`);

@@ -1,11 +1,11 @@
 import {
 	CanActivate,
 	ExecutionContext,
-	Injectable,
 	ForbiddenException,
+	Injectable,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { UserDto, $Enums } from "@shared/schema";
+import { $Enums, UserDto } from "@shared/schema";
 import { isEmpty } from "lodash";
 import { Roles } from "../decorator/roles.decorator";
 

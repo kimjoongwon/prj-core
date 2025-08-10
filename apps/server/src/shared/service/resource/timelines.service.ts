@@ -10,7 +10,6 @@ export class TimelinesService {
 		return this.repository.findUnique({ where: { id } });
 	}
 
-
 	deleteById(id: string) {
 		return this.repository.delete({ where: { id } });
 	}

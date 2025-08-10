@@ -36,7 +36,7 @@ export class TenantsController {
 	async getMyTenants() {
 		const userId = ContextProvider.getAuthUserId();
 		// Note: getManyByUserId was replaced with getManyByQuery, may need adjustment
-	const tenants = await this.service.getManyByQuery({ userId } as any);
+		const tenants = await this.service.getManyByQuery({ userId } as any);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

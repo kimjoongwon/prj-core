@@ -1,6 +1,6 @@
 import { ClassField, UUIDFieldOptional } from "../decorator";
-import { AbstractDto, CategoryDto, UserDto } from ".";
 import { UserClassification } from "../entity/user-classification.entity";
+import { AbstractDto, CategoryDto, UserDto } from ".";
 
 export class UserClassificationDto
 	extends AbstractDto

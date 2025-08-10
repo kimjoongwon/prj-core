@@ -9,10 +9,10 @@ import {
 	createTestUserEntity,
 	MockedPrismaService,
 } from "../../test/test-utils";
+import { UsersService } from "../resource/users.service";
 import { AuthService } from "./auth.service";
 import { PasswordService } from "./password.service";
 import { TokenService } from "./token.service";
-import { UsersService } from "../resource/users.service";
 
 describe("AuthService", () => {
 	let service: AuthService;

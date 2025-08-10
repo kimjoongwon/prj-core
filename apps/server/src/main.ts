@@ -1,5 +1,4 @@
 import { ValidationPipe } from "@nestjs/common";
-import { Logger } from "nestjs-pino";
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import {
@@ -7,10 +6,10 @@ import {
 	SwaggerDocumentOptions,
 	SwaggerModule,
 } from "@nestjs/swagger";
-
-import { AppModule } from "./module/app.module";
 import { AllExceptionsFilter, PrismaClientExceptionFilter } from "@shared";
 import cookieParser from "cookie-parser";
+import { Logger } from "nestjs-pino";
+import { AppModule } from "./module/app.module";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {

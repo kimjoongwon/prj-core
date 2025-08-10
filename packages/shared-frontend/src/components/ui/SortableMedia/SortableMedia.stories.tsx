@@ -40,7 +40,7 @@ const mediaItems = [
 ];
 
 const Template: Story = {
-	render: (args) => {
+	render: (_args) => {
 		const [items, setItems] = useState(mediaItems);
 
 		const handleDragEnd = (event: any) => {

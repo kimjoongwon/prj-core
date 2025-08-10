@@ -27,7 +27,7 @@ export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;
 @Injectable()
 export class PoliciesGuard implements CanActivate {
 	constructor(
-		private reflector: Reflector,
+		_reflector: Reflector,
 		// private caslAbilityFactory: CaslAbilityFactory,
 	) {}
 

@@ -65,7 +65,9 @@ export class FileAssociationsController {
 	@ApiResponseEntity(FileAssociationDto, HttpStatus.OK)
 	async removeFileAssociations(@Body() fileAssociationIds: string[]) {
 		// Process each ID individually since updateMany is discontinued
-		const promises = fileAssociationIds.map(id => this.service.removeById(id));
+		const promises = fileAssociationIds.map((id) =>
+			this.service.removeById(id),
+		);
 		const results = await Promise.all(promises);
 		return new ResponseEntity(HttpStatus.OK, "성공", results.length);
 	}
@@ -78,7 +80,10 @@ export class FileAssociationsController {
 		@Param("fileAssociationId") fileAssociationId: string,
 		@Body() updateFileAssociationDto: UpdateFileAssociationDto,
 	) {
-		const fileAssociation = await this.service.updateById(fileAssociationId, updateFileAssociationDto);
+		const fileAssociation = await this.service.updateById(
+			fileAssociationId,
+			updateFileAssociationDto,
+		);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

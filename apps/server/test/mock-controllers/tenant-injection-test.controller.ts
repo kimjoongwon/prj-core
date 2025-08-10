@@ -1,8 +1,8 @@
 import { Controller, Get, HttpStatus, Query } from "@nestjs/common";
-import { ResponseEntity, RoleCategoryNames } from "@shared/schema";
-import { Auth } from "../../src/shared/decorator";
-import { IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { ResponseEntity, RoleCategoryNames } from "@shared/schema";
+import { IsString } from "class-validator";
+import { Auth } from "../../src/shared/decorator";
 
 class TestQueryDto {
 	@IsString()

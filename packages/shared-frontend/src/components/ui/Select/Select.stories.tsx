@@ -316,7 +316,7 @@ export const FormExample: Story = {
 		state: {},
 		path: "selectedValue",
 	},
-	render: (args) => (
+	render: (_args) => (
 		<div className="max-w-md p-6 bg-white border rounded-lg shadow">
 			<h3 className="text-lg font-semibold mb-4">User Information</h3>
 			<div className="flex flex-col gap-4">

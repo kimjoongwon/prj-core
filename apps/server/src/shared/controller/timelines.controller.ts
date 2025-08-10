@@ -61,7 +61,7 @@ export class TimelinesController {
 	@ApiResponseEntity(TimelineDto, HttpStatus.OK)
 	async removeTimelines(@Body() timelineIds: string[]) {
 		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = timelineIds.map(id => this.service.removeById(id));
+		const promises = timelineIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const timelines = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", timelines.count);
@@ -75,7 +75,10 @@ export class TimelinesController {
 		@Param("timelineId") timelineId: string,
 		@Body() updateTimelineDto: UpdateTimelineDto,
 	) {
-		const timeline = await this.service.updateById(timelineId, updateTimelineDto as any);
+		const timeline = await this.service.updateById(
+			timelineId,
+			updateTimelineDto as any,
+		);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

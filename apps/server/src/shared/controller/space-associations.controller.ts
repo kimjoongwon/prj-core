@@ -67,7 +67,9 @@ export class SpaceAssociationsController {
 	@ApiResponseEntity(SpaceAssociationDto, HttpStatus.OK)
 	async removeSpaceAssociations(@Body() spaceAssociationIds: string[]) {
 		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = spaceAssociationIds.map(id => this.service.removeById(id));
+		const promises = spaceAssociationIds.map((id) =>
+			this.service.removeById(id),
+		);
 		const results = await Promise.all(promises);
 		const spaceAssociations = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", spaceAssociations.count);
@@ -81,7 +83,10 @@ export class SpaceAssociationsController {
 		@Param("spaceAssociationId") spaceAssociationId: string,
 		@Body() updateSpaceAssociationDto: UpdateSpaceAssociationDto,
 	) {
-		const spaceAssociation = await this.service.updateById(spaceAssociationId, updateSpaceAssociationDto);
+		const spaceAssociation = await this.service.updateById(
+			spaceAssociationId,
+			updateSpaceAssociationDto,
+		);
 		return new ResponseEntity(
 			HttpStatus.OK,
 			"성공",

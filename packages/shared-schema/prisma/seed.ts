@@ -1,17 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 import { GroupNames } from "../src/enum/group-names.enum";
-import { RoleGroupNames } from "../src/enum/role-group-names.enum";
-import { RoleCategoryNames } from "../src/enum/role-category-names.enum";
 import {
 	groundSeedData,
-	userGroundMapping,
-	userSeedData,
+	roleAssociationSeedData,
 	roleCategorySeedData,
-	roleSeedData,
 	roleClassificationSeedData,
 	roleGroupSeedData,
-	roleAssociationSeedData,
+	roleSeedData,
+	userGroundMapping,
+	userSeedData,
 } from "./seed-data";
 
 const prisma = new PrismaClient();
@@ -155,7 +153,7 @@ async function main() {
 	console.log({ superAdminUser });
 }
 
-async function createRegularUsersAndGrounds(adminRole: any, userRole: any) {
+async function createRegularUsersAndGrounds(adminRole: any, _userRole: any) {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
 	// 모든 Role 조회 (seed-data의 role 필드 사용을 위해)

@@ -61,7 +61,7 @@ export class SubjectsController {
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	async removeSubjects(@Body() subjectIds: string[]) {
 		// Note: updateMany is discontinued, this endpoint may need to be updated to handle individual calls
-		const promises = subjectIds.map(id => this.service.removeById(id));
+		const promises = subjectIds.map((id) => this.service.removeById(id));
 		const results = await Promise.all(promises);
 		const subjects = { count: results.length };
 		return new ResponseEntity(HttpStatus.OK, "성공", subjects.count);
