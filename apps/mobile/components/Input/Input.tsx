@@ -11,7 +11,7 @@ import {
 	Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../../src/providers/theme-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 export type InputVariant = "flat" | "bordered" | "underlined" | "faded";
 export type InputColor =
@@ -91,12 +91,15 @@ export const Input: React.FC<InputProps> = ({
 	const { theme } = useTheme();
 	const [isFocused, setIsFocused] = useState(false);
 	const [inputValue, setInputValue] = useState(value || "");
-	const animatedLabelPosition = useRef(new Animated.Value(value ? 1 : 0)).current;
-	
+	const animatedLabelPosition = useRef(
+		new Animated.Value(value ? 1 : 0),
+	).current;
+
 	// Theme-based color function
 	const getColorScheme = (color: InputColor, variant: InputVariant) => {
-		const colorTokens = theme.colors[isInvalid ? "danger" : color] || theme.colors.default;
-		
+		const colorTokens =
+			theme.colors[isInvalid ? "danger" : color] || theme.colors.default;
+
 		switch (variant) {
 			case "flat":
 				return {
@@ -296,13 +299,18 @@ export const Input: React.FC<InputProps> = ({
 			flex: 1,
 			fontSize: sizeConfig.fontSize,
 			color: colorScheme.text,
-			paddingTop: labelPlacement === "inside" && (label && (isFocused || inputValue)) ? 16 : 0,
+			paddingTop:
+				labelPlacement === "inside" && label && (isFocused || inputValue)
+					? 16
+					: 0,
 		};
 
 		return (
 			<View style={[containerStyle, style]}>
-				{startContent && <View style={styles.contentContainer}>{startContent}</View>}
-				
+				{startContent && (
+					<View style={styles.contentContainer}>{startContent}</View>
+				)}
+
 				<TextInput
 					{...props}
 					style={[inputTextStyle, inputStyle]}
@@ -312,7 +320,9 @@ export const Input: React.FC<InputProps> = ({
 					onBlur={handleBlur}
 					editable={!isDisabled && !isReadOnly}
 					placeholderTextColor={colorScheme.placeholder}
-					placeholder={labelPlacement === "inside" ? undefined : props.placeholder}
+					placeholder={
+						labelPlacement === "inside" ? undefined : props.placeholder
+					}
 				/>
 
 				{isClearable && inputValue.length > 0 && (
@@ -321,7 +331,9 @@ export const Input: React.FC<InputProps> = ({
 					</TouchableOpacity>
 				)}
 
-				{endContent && <View style={styles.contentContainer}>{endContent}</View>}
+				{endContent && (
+					<View style={styles.contentContainer}>{endContent}</View>
+				)}
 			</View>
 		);
 	};
@@ -335,7 +347,9 @@ export const Input: React.FC<InputProps> = ({
 					{description && !errorMessage && (
 						<Text style={styles.description}>{description}</Text>
 					)}
-					{errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
+					{errorMessage && (
+						<Text style={styles.errorMessage}>{errorMessage}</Text>
+					)}
 				</View>
 			</View>
 		);

@@ -9,7 +9,7 @@ import {
 	TextStyle,
 	TouchableOpacityProps,
 } from "react-native";
-import { useTheme } from "../../src/providers/theme-provider";
+import { useTheme } from "../../providers/theme-provider";
 
 export type ButtonVariant =
 	| "solid"

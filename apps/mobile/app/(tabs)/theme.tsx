@@ -1,10 +1,5 @@
-import { View } from 'react-native';
-import { ThemeExample } from '../../src/components/ThemeExample';
+import { View } from "react-native";
 
 export default function ThemeExampleScreen() {
-  return (
-    <View style={{ flex: 1 }}>
-      <ThemeExample />
-    </View>
-  );
+	return <View style={{ flex: 1 }}></View>;
 }
