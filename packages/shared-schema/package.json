@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "description": "Shared schema, DTOs and entities for the core project",
-  "main": "./src/index.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate": "prisma generate",
+    "build": "tsup",
+    "start:dev": "tsup --watch",
     "generate:safe": "prisma generate || echo 'Prisma generate failed, continuing...'",
     "db:push": "prisma db push",
     "db:pull": "prisma db pull",
