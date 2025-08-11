@@ -50,6 +50,9 @@ catalog:
   class-variance-authority: ^0.7.1
   lucide-react: ^0.533.0
   nuqs: ^2.4.3
+  # Prisma 관련
+  "@prisma/client": ^6.11.1
+  prisma: "6.11.1"
   # 스토리북
   storybook: ^9.0.18
   "@storybook/addon-docs": ^9.0.18

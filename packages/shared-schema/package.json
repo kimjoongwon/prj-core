@@ -39,7 +39,7 @@
     "@types/node": "catalog:",
     "@types/lodash": "^4.17.20",
     "concurrently": "^9.2.0",
-    "prisma": "^6.11.1",
+    "prisma": "catalog:",
     "ts-node": "^10.9.2",
     "tsup": "catalog:",
     "vitest": "catalog:"
