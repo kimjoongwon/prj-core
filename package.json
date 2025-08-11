@@ -1,26 +1,25 @@
 {
-	"name": "core",
-	"private": true,
-	"version": "0.0.0",
-	"packageManager": "pnpm@10.13.1",
-	"scripts": {
-		"build": "turbo build",
-		"clean": "turbo clean",
-		"start:dev": "turbo start:dev --no-cache  --continue",
-		"lint": "turbo lint",
-		"lint:fix": "turbo lint:fix",
-		"format": "turbo format",
-		"test": "turbo test"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "2.1.4"
-	},
-	"pnpm": {
-		"overrides": {
-			"react": "19.0.0",
-			"react-dom": "19.0.0",
-			"@types/react": "~19.0.10",
-			"@types/react-dom": "~19.0.6"
-		}
-	}
+  "name": "core",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.13.1",
+  "scripts": {
+    "build": "turbo build",
+    "clean": "turbo clean",
+    "start:dev": "turbo start:dev --no-cache  --continue",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "vite": "catalog:",
+    "@vitejs/plugin-react-swc": "catalog:",
+    "vitest": "catalog:",
+    "@vitest/ui": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "typescript": "catalog:",
+    "@types/node": "catalog:"
+  }
 }

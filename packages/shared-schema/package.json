@@ -34,15 +34,15 @@
     "ts-jenum": "^2.2.2",
     "lodash": "^4.17.21",
     "libphonenumber-js": "^1.12.10",
-    "remeda": "^2.26.0",
+    "remeda": "catalog:",
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^24.0.14",
+    "@types/node": "catalog:",
     "@types/lodash": "^4.17.20",
     "concurrently": "^9.2.0",
     "prisma": "^6.11.1",
     "ts-node": "^10.9.2",
-    "tsup": "^8.5.0",
-    "vitest": "^3.2.4"
+    "tsup": "catalog:",
+    "vitest": "catalog:"
   },
   "exports": {
     ".": {
