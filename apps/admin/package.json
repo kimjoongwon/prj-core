@@ -49,7 +49,6 @@
     "valtio": "^2.1.5"
   },
   "devDependencies": {
-    "@shared/types": "workspace:*",
     "@shared/typescript-config": "workspace:*",
     "@storybook/addon-docs": "catalog:",
     "@storybook/addon-onboarding": "^9.0.18",

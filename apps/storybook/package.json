@@ -28,7 +28,6 @@
     "react-router-dom": "^7.7.1"
   },
   "devDependencies": {
-    "@shared/types": "workspace:*",
     "@chromatic-com/storybook": "^4.0.1",
     "@storybook/addon-a11y": "^9.0.18",
     "@storybook/addon-docs": "catalog:",

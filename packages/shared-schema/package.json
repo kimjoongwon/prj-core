@@ -24,7 +24,6 @@
     "schema": "./prisma"
   },
   "devDependencies": {
-    "@shared/types": "workspace:*",
     "@prisma/client": "^6.11.1",
     "bcrypt": "^6.0.0",
     "@nestjs/common": "^11.1.3",

@@ -6,7 +6,6 @@ module.exports = {
   moduleFileExtensions: ["ts", "js", "json"],
   moduleNameMapper: {
     "^@shared/schema$": "<rootDir>/../../../packages/shared-schema/src",
-    "^@shared/types$": "<rootDir>/../../../packages/shared-types/src", 
     "^@shared/utils$": "<rootDir>/../../../packages/shared-utils/src",
     "^@shared/vars$": "<rootDir>/../../../packages/shared-vars/src",
     "^@shared$": "<rootDir>/shared/index",
@@ -29,7 +28,6 @@ module.exports = {
           paths: {
             "@shared": ["./shared/index"],
             "@shared/*": ["./shared/*"],
-            "@shared/types": ["../../packages/shared-types/src"],
             "@shared/schema": ["../../packages/shared-schema/src"],
             "@shared/utils": ["../../packages/shared-utils/src"],
             "@shared/vars": ["../../packages/shared-vars/src"],

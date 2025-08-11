@@ -10,7 +10,6 @@
     "paths": {
       "@shared/*": ["./src/shared/*"],
       "@shared": ["./src/shared/index"],
-      "@shared/types": ["../packages/shared-types/src"],
       "@shared/schema": ["../packages/shared-schema/src"],
       "@shared/utils": ["../packages/shared-utils/src"],
       "@shared/vars": ["../packages/shared-vars/src"]

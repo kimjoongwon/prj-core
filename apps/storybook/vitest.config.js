@@ -5,7 +5,9 @@ import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 
 const dirname =
-  typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+  typeof __dirname !== "undefined"
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
@@ -40,8 +42,10 @@ export default defineConfig({
         },
         resolve: {
           alias: {
-            "@shared/frontend": path.resolve(dirname, "../../packages/shared-frontend"),
-            "@shared/types": path.resolve(dirname, "../../packages/shared-types"),
+            "@shared/frontend": path.resolve(
+              dirname,
+              "../../packages/shared-frontend"
+            ),
           },
         },
       },
