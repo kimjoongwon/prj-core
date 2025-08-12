@@ -89,11 +89,13 @@ export const Button: React.FC<ButtonProps> = ({
 	onPress,
 	...props
 }) => {
-	const { theme } = useTheme();
+	const { theme, isDark } = useTheme();
+	console.log("isDark", isDark);
 
-	// Theme-based color function
+	// Theme-based color function with enhanced dark/light mode support
 	const getColorScheme = (color: ButtonColor, variant: ButtonVariant) => {
 		const colorTokens = theme.colors[color] || theme.colors.default;
+		const { isDark } = useTheme();
 
 		switch (variant) {
 			case "solid":
@@ -110,21 +112,21 @@ export const Button: React.FC<ButtonProps> = ({
 				};
 			case "light":
 				return {
-					bg: colorTokens[100],
-					text: colorTokens[700],
+					bg: isDark ? colorTokens[200] : colorTokens[100],
+					text: isDark ? colorTokens[900] : colorTokens[700],
 					border: "transparent",
 				};
 			case "flat":
 				return {
-					bg: colorTokens[100],
-					text: colorTokens[800],
+					bg: isDark ? colorTokens[300] : colorTokens[100],
+					text: isDark ? colorTokens[900] : colorTokens[800],
 					border: "transparent",
 				};
 			case "faded":
 				return {
-					bg: colorTokens[50],
-					text: colorTokens[700],
-					border: colorTokens[200],
+					bg: isDark ? colorTokens[100] : colorTokens[50],
+					text: isDark ? colorTokens[800] : colorTokens[700],
+					border: isDark ? colorTokens[300] : colorTokens[200],
 				};
 			case "shadow":
 				return {
@@ -151,33 +153,64 @@ export const Button: React.FC<ButtonProps> = ({
 	const sizeConfig = sizes[size];
 	const borderRadius = radiusValues[radius];
 
+	// Enhanced button style with better disabled/loading state support
+	const getDisabledStyle = () => {
+		if (!isDisabled && !isLoading) return {};
+
+		return {
+			backgroundColor: isDark
+				? theme.colors.default[600]
+				: theme.colors.default[300],
+			borderColor: isDark
+				? theme.colors.default[600]
+				: theme.colors.default[300],
+		};
+	};
+
 	const buttonStyle: ViewStyle = {
 		height: sizeConfig.height,
 		paddingHorizontal: isIconOnly ? 0 : sizeConfig.paddingHorizontal,
 		width: isIconOnly ? sizeConfig.height : undefined,
-		backgroundColor: colorScheme.bg,
-		borderColor: colorScheme.border,
+		backgroundColor:
+			isDisabled || isLoading
+				? getDisabledStyle().backgroundColor
+				: colorScheme.bg,
+		borderColor:
+			isDisabled || isLoading
+				? getDisabledStyle().borderColor
+				: colorScheme.border,
 		borderWidth: variant === "bordered" || variant === "faded" ? 1 : 0,
 		borderRadius,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
-		opacity: isDisabled ? parseFloat(theme.layout.disabledOpacity) : 1,
-		// Add shadow for shadow variant
-		...(variant === "shadow" && {
-			shadowColor: colorScheme.bg,
-			shadowOffset: {
-				width: 0,
-				height: 4,
-			},
-			shadowOpacity: 0.3,
-			shadowRadius: 4,
-			elevation: 8,
-		}),
+		opacity:
+			isDisabled || isLoading ? parseFloat(theme.layout.disabledOpacity) : 1,
+		// Add shadow for shadow variant with theme-aware shadow color
+		...(variant === "shadow" &&
+			!isDisabled &&
+			!isLoading && {
+				shadowColor: isDark ? "#000000" : colorScheme.bg,
+				shadowOffset: {
+					width: 0,
+					height: 4,
+				},
+				shadowOpacity: isDark ? 0.8 : 0.3,
+				shadowRadius: 4,
+				elevation: 8,
+			}),
+	};
+
+	// Enhanced text style with theme-aware disabled/loading state
+	const getTextColor = () => {
+		if (isDisabled || isLoading) {
+			return isDark ? theme.colors.default[400] : theme.colors.default[500];
+		}
+		return colorScheme.text;
 	};
 
 	const textStyleConfig: TextStyle = {
-		color: colorScheme.text,
+		color: getTextColor(),
 		fontSize: sizeConfig.fontSize,
 		fontWeight: "500",
 		textAlign: "center",
@@ -191,7 +224,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 	const renderContent = () => {
 		if (isLoading) {
-			return <ActivityIndicator size="small" color={colorScheme.text} />;
+			return <ActivityIndicator size="small" color={getTextColor()} />;
 		}
 
 		return (
