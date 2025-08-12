@@ -1,5 +1,5 @@
 // Export all domain services
-export * from "./domain";
+export * from "./domains";
 
 // Export all resource services
-export * from "./resource";
+export * from "./resources";
