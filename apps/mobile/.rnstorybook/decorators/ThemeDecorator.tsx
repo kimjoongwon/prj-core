@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
 	},
 	toggleButtonContainer: {
 		position: "absolute",
-		top: 0,
-		left: 0,
+		bottom: 20,
+		right: 20,
 		zIndex: 9999,
 	},
 });
