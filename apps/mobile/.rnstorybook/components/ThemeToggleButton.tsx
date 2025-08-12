@@ -21,7 +21,7 @@ export const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = ({
   const isDark = currentTheme === 'dark';
 
   return (
-    <View style={[styles.container, { top: insets.top + 16 }]}>
+    <View style={[styles.container, { bottom: insets.bottom + 16 }]}>
       <TouchableOpacity
         style={[
           styles.button,
@@ -49,7 +49,7 @@ export const ThemeToggleButton: React.FC<ThemeToggleButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 16,
+    right: 16,
     zIndex: 9999,
   },
   button: {
