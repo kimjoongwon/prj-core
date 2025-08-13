@@ -1,8 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useState, useMemo, useCallback, forwardRef, useRef, useImperativeHandle, useEffect } from "react";
 import {
-	Animated,
-	StyleSheet,
 	Text,
 	TextInput,
 	TextInputProps,
@@ -11,7 +9,20 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
+import Animated, { 
+	useSharedValue, 
+	useAnimatedStyle, 
+	withTiming,
+	interpolate
+} from "react-native-reanimated";
 import { useTheme } from "../providers/theme-provider";
+import {
+	sizes,
+	styles,
+	baseContainerStyles,
+	variantStyles,
+	labelStyles,
+} from "./Input.styles";
 
 export type InputVariant = "flat" | "bordered" | "underlined" | "faded";
 export type InputColor =
@@ -45,28 +56,13 @@ export interface InputProps extends Omit<TextInputProps, "style"> {
 	className?: string;
 }
 
-const sizes = {
-	sm: {
-		height: 32,
-		paddingHorizontal: 12,
-		fontSize: 14,
-		labelFontSize: 12,
-	},
-	md: {
-		height: 40,
-		paddingHorizontal: 16,
-		fontSize: 14,
-		labelFontSize: 14,
-	},
-	lg: {
-		height: 48,
-		paddingHorizontal: 20,
-		fontSize: 16,
-		labelFontSize: 16,
-	},
-};
+export interface InputRef {
+	focus: () => void;
+	blur: () => void;
+	clear: () => void;
+}
 
-export const Input: React.FC<InputProps> = ({
+export const Input = forwardRef<InputRef, InputProps>(({
 	variant = "flat",
 	color = "default",
 	size = "md",
@@ -87,23 +83,32 @@ export const Input: React.FC<InputProps> = ({
 	value,
 	onChangeText,
 	...props
-}) => {
+}, ref) => {
 	const { theme } = useTheme();
 	const [isFocused, setIsFocused] = useState(false);
 	const [inputValue, setInputValue] = useState(value || "");
-	const animatedLabelPosition = useRef(
-		new Animated.Value(value ? 1 : 0),
-	).current;
+	const animatedLabelPosition = useSharedValue((value || "").length > 0 ? 1 : 0);
 
-	// Theme-based color function
-	const getColorScheme = (color: InputColor, variant: InputVariant) => {
+	// Sync external value with internal state
+	useEffect(() => {
+		if (value !== undefined && value !== inputValue) {
+			setInputValue(value);
+			if (labelPlacement === "inside") {
+				animatedLabelPosition.value = withTiming(value.length > 0 ? 1 : 0, { duration: 200 });
+			}
+		}
+	}, [value, inputValue, labelPlacement, animatedLabelPosition]);
+	const inputRef = useRef<TextInput>(null);
+
+	// Memoized color scheme for performance
+	const colorScheme = useMemo(() => {
 		const colorTokens =
 			theme.colors[isInvalid ? "danger" : color] || theme.colors.default;
 
 		switch (variant) {
 			case "flat":
 				return {
-					bg: colorTokens[100],
+					bg: theme.colors.content3.DEFAULT,
 					border: isFocused ? colorTokens.DEFAULT : colorTokens[200],
 					text: theme.colors.foreground,
 					placeholder: colorTokens[400],
@@ -111,7 +116,7 @@ export const Input: React.FC<InputProps> = ({
 				};
 			case "bordered":
 				return {
-					bg: "transparent",
+					bg: theme.colors.content3.DEFAULT,
 					border: isFocused ? colorTokens.DEFAULT : colorTokens[300],
 					text: theme.colors.foreground,
 					placeholder: colorTokens[400],
@@ -119,7 +124,7 @@ export const Input: React.FC<InputProps> = ({
 				};
 			case "underlined":
 				return {
-					bg: "transparent",
+					bg: theme.colors.content3.DEFAULT,
 					border: isFocused ? colorTokens.DEFAULT : colorTokens[300],
 					text: theme.colors.foreground,
 					placeholder: colorTokens[400],
@@ -127,7 +132,7 @@ export const Input: React.FC<InputProps> = ({
 				};
 			case "faded":
 				return {
-					bg: colorTokens[50],
+					bg: theme.colors.content3.DEFAULT,
 					border: isFocused ? colorTokens.DEFAULT : colorTokens[200],
 					text: theme.colors.foreground,
 					placeholder: colorTokens[400],
@@ -135,139 +140,169 @@ export const Input: React.FC<InputProps> = ({
 				};
 			default:
 				return {
-					bg: colorTokens[100],
+					bg: theme.colors.content3.DEFAULT,
 					border: colorTokens[300],
 					text: theme.colors.foreground,
 					placeholder: colorTokens[400],
 					label: colorTokens.DEFAULT,
 				};
 		}
-	};
+	}, [color, variant, isFocused, isInvalid, theme.colors]);
 
-	const colorScheme = getColorScheme(color, variant);
-	const sizeConfig = sizes[size];
+	const sizeConfig = useMemo(() => sizes[size], [size]);
 
-	const handleFocus = (e: any) => {
+	const handleFocus = useCallback((e: any) => {
 		setIsFocused(true);
 		if (labelPlacement === "inside") {
-			Animated.timing(animatedLabelPosition, {
-				toValue: 1,
-				duration: 200,
-				useNativeDriver: false,
-			}).start();
+			animatedLabelPosition.value = withTiming(1, { duration: 200 });
 		}
 		props.onFocus?.(e);
-	};
+	}, [labelPlacement, animatedLabelPosition, props]);
 
-	const handleBlur = (e: any) => {
+	const handleBlur = useCallback((e: any) => {
 		setIsFocused(false);
-		if (labelPlacement === "inside" && !inputValue) {
-			Animated.timing(animatedLabelPosition, {
-				toValue: 0,
-				duration: 200,
-				useNativeDriver: false,
-			}).start();
+		if (labelPlacement === "inside" && !inputValue && !value) {
+			animatedLabelPosition.value = withTiming(0, { duration: 200 });
 		}
 		props.onBlur?.(e);
-	};
+	}, [labelPlacement, inputValue, value, animatedLabelPosition, props]);
 
-	const handleChangeText = (text: string) => {
+	const handleChangeText = useCallback((text: string) => {
 		setInputValue(text);
 		onChangeText?.(text);
-	};
+	}, [onChangeText]);
 
-	const handleClear = () => {
+	const handleClear = useCallback(() => {
 		setInputValue("");
 		onChangeText?.("");
 		if (labelPlacement === "inside") {
-			Animated.timing(animatedLabelPosition, {
-				toValue: 0,
-				duration: 200,
-				useNativeDriver: false,
-			}).start();
+			animatedLabelPosition.value = withTiming(0, { duration: 200 });
 		}
-	};
+	}, [onChangeText, labelPlacement, animatedLabelPosition]);
 
-	const getContainerStyle = (): ViewStyle => {
+	// Expose methods through ref
+	useImperativeHandle(ref, () => ({
+		focus: () => inputRef.current?.focus(),
+		blur: () => inputRef.current?.blur(),
+		clear: handleClear,
+	}), [handleClear]);
+
+	// Memoized container style for performance
+	const containerStyle = useMemo((): ViewStyle => {
 		const baseStyle: ViewStyle = {
+			...baseContainerStyles.base,
 			height: sizeConfig.height,
 			paddingHorizontal: sizeConfig.paddingHorizontal,
 			backgroundColor: colorScheme.bg,
-			borderRadius: 8,
-			flexDirection: "row",
-			alignItems: "center",
-			opacity: isDisabled ? 0.5 : 1,
 		};
+
+		if (isDisabled) {
+			Object.assign(baseStyle, baseContainerStyles.disabled);
+		}
 
 		switch (variant) {
 			case "bordered":
 				return {
 					...baseStyle,
-					borderWidth: isFocused ? 2 : 1,
+					...variantStyles.bordered,
+					...(isFocused ? variantStyles.borderedFocused : {}),
 					borderColor: isFocused ? colorScheme.border : "#e4e4e7",
 				};
 			case "underlined":
 				return {
 					...baseStyle,
-					backgroundColor: "transparent",
-					borderRadius: 0,
-					borderBottomWidth: isFocused ? 2 : 1,
+					...variantStyles.underlined,
+					...(isFocused ? variantStyles.underlinedFocused : {}),
 					borderBottomColor: isFocused ? colorScheme.border : "#e4e4e7",
-					paddingHorizontal: 0,
 				};
 			case "faded":
 				return {
 					...baseStyle,
-					borderWidth: 1,
+					...variantStyles.faded,
 					borderColor: colorScheme.border,
 				};
 			default:
-				return baseStyle;
+				return {
+					...baseStyle,
+					...variantStyles.flat,
+				};
 		}
-	};
+	}, [sizeConfig, colorScheme, isDisabled, variant, isFocused]);
 
-	const getLabelStyle = (): TextStyle[] => {
+	// Memoized label styles for performance
+	const labelStyleMemo = useMemo(() => {
+		const colorTokens = theme.colors[isInvalid ? "danger" : color] || theme.colors.default;
+		
+		// 라벨 색상 로직: 포커스 시에만 색상 변경
+		let labelColor: string;
+		if (isFocused) {
+			// 포커스 시 더 진한 색상 (700 단계)
+			labelColor = colorTokens[700];
+		} else {
+			// 기본 상태는 테마의 default 600 색상 (더 진한 회색)
+			labelColor = theme.colors.default[600];
+		}
+
 		const baseStyle: TextStyle = {
-			color: isFocused ? colorScheme.label : "#71717a",
-			fontWeight: "500",
+			...labelStyles.base,
+			color: labelColor,
 		};
+
+		if (labelPlacement === "outside") {
+			return [
+				baseStyle,
+				labelStyles.outside,
+				{ fontSize: sizeConfig.labelFontSize },
+				labelStyle,
+			].filter(Boolean) as TextStyle[];
+		}
 
 		if (labelPlacement === "inside") {
 			return [
 				baseStyle,
+				labelStyles.insideAbsolute,
 				{
-					position: "absolute",
 					left: sizeConfig.paddingHorizontal + (startContent ? 24 : 0),
-					fontSize: animatedLabelPosition.interpolate({
-						inputRange: [0, 1],
-						outputRange: [sizeConfig.fontSize, sizeConfig.labelFontSize],
-					}),
-					top: animatedLabelPosition.interpolate({
-						inputRange: [0, 1],
-						outputRange: [sizeConfig.height / 2 - sizeConfig.fontSize / 2, 4],
-					}),
 				},
 				labelStyle,
-			];
+			].filter(Boolean) as TextStyle[];
 		}
 
-		return [
-			baseStyle,
-			{
-				fontSize: sizeConfig.labelFontSize,
-				marginBottom: 4,
-			},
-			labelStyle,
-		];
-	};
+		return [baseStyle, labelStyle].filter(Boolean) as TextStyle[];
+	}, [
+		isFocused,
+		isInvalid,
+		color,
+		theme.colors,
+		labelPlacement,
+		sizeConfig,
+		startContent,
+		labelStyle,
+	]);
 
-	const renderLabel = () => {
+	// Animated styles for inside labels
+	const animatedLabelStyle = useAnimatedStyle(() => {
+		return {
+			fontSize: interpolate(
+				animatedLabelPosition.value,
+				[0, 1],
+				[sizeConfig.fontSize, sizeConfig.labelFontSize]
+			),
+			top: interpolate(
+				animatedLabelPosition.value,
+				[0, 1],
+				[sizeConfig.height / 2 - sizeConfig.fontSize / 2, 4]
+			),
+		};
+	}, [sizeConfig]);
+
+	const renderLabel = useCallback(() => {
 		if (!label) return null;
 
 		if (labelPlacement === "outside-left") {
 			return (
 				<View style={styles.outsideLeftLabelContainer}>
-					<Text style={getLabelStyle()}>
+					<Text style={labelStyleMemo}>
 						{label}
 						{isRequired && <Text style={styles.requiredStar}> *</Text>}
 					</Text>
@@ -277,7 +312,7 @@ export const Input: React.FC<InputProps> = ({
 
 		if (labelPlacement === "outside") {
 			return (
-				<Text style={getLabelStyle()}>
+				<Text style={labelStyleMemo}>
 					{label}
 					{isRequired && <Text style={styles.requiredStar}> *</Text>}
 				</Text>
@@ -286,16 +321,19 @@ export const Input: React.FC<InputProps> = ({
 
 		// Inside label (animated)
 		return (
-			<Animated.Text style={getLabelStyle()}>
+			<Animated.Text 
+				style={[labelStyleMemo, animatedLabelStyle]}
+				pointerEvents="none"
+			>
 				{label}
 				{isRequired && <Text style={styles.requiredStar}> *</Text>}
 			</Animated.Text>
 		);
-	};
+	}, [label, labelPlacement, labelStyleMemo, animatedLabelStyle, isRequired]);
 
-	const renderInput = () => {
-		const containerStyle = getContainerStyle();
-		const inputTextStyle: TextStyle = {
+	// Memoized input text style for performance
+	const inputTextStyle = useMemo(
+		(): TextStyle => ({
 			flex: 1,
 			fontSize: sizeConfig.fontSize,
 			color: colorScheme.text,
@@ -303,15 +341,44 @@ export const Input: React.FC<InputProps> = ({
 				labelPlacement === "inside" && label && (isFocused || inputValue)
 					? 16
 					: 0,
-		};
+		}),
+		[
+			sizeConfig.fontSize,
+			colorScheme.text,
+			labelPlacement,
+			label,
+			isFocused,
+			inputValue,
+		],
+	);
 
+	const handleContainerPress = useCallback(() => {
+		if (!isDisabled && !isReadOnly) {
+			// Focus the TextInput
+			inputRef.current?.focus();
+			
+			// Ensure focus state is set immediately for label animation
+			if (labelPlacement === "inside" && !isFocused) {
+				setIsFocused(true);
+				animatedLabelPosition.value = withTiming(1, { duration: 200 });
+			}
+		}
+	}, [isDisabled, isReadOnly, labelPlacement, animatedLabelPosition, isFocused]);
+
+	const renderInput = useCallback(() => {
 		return (
-			<View style={[containerStyle, style]}>
+			<TouchableOpacity 
+				style={[containerStyle, style]}
+				onPress={handleContainerPress}
+				activeOpacity={0.8}
+				disabled={isDisabled || isReadOnly}
+			>
 				{startContent && (
 					<View style={styles.contentContainer}>{startContent}</View>
 				)}
 
 				<TextInput
+					ref={inputRef}
 					{...props}
 					style={[inputTextStyle, inputStyle]}
 					value={inputValue}
@@ -334,9 +401,28 @@ export const Input: React.FC<InputProps> = ({
 				{endContent && (
 					<View style={styles.contentContainer}>{endContent}</View>
 				)}
-			</View>
+			</TouchableOpacity>
 		);
-	};
+	}, [
+		containerStyle,
+		style,
+		handleContainerPress,
+		startContent,
+		inputTextStyle,
+		inputStyle,
+		props,
+		inputValue,
+		handleChangeText,
+		handleFocus,
+		handleBlur,
+		isDisabled,
+		isReadOnly,
+		colorScheme.placeholder,
+		labelPlacement,
+		isClearable,
+		handleClear,
+		endContent,
+	]);
 
 	if (labelPlacement === "outside-left") {
 		return (
@@ -368,47 +454,8 @@ export const Input: React.FC<InputProps> = ({
 			{errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
 		</View>
 	);
-};
-
-const styles = StyleSheet.create({
-	container: {
-		width: "100%",
-	},
-	inputWrapper: {
-		position: "relative",
-	},
-	contentContainer: {
-		marginHorizontal: 4,
-	},
-	clearButton: {
-		padding: 4,
-	},
-	requiredStar: {
-		color: "#f31260",
-	},
-	description: {
-		fontSize: 12,
-		color: "#71717a",
-		marginTop: 4,
-	},
-	errorMessage: {
-		fontSize: 12,
-		color: "#f31260",
-		marginTop: 4,
-	},
-	outsideLeftContainer: {
-		flexDirection: "row",
-		alignItems: "flex-start",
-		width: "100%",
-	},
-	outsideLeftLabelContainer: {
-		width: 100,
-		marginRight: 12,
-		paddingTop: 8,
-	},
-	outsideLeftInputContainer: {
-		flex: 1,
-	},
 });
+
+Input.displayName = "Input";
 
 export default Input;
