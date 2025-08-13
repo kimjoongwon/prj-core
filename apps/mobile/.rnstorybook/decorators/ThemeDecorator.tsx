@@ -2,9 +2,29 @@ import { useState } from "react";
 import type { Decorator } from "@storybook/react";
 import { View, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ThemeProvider } from "../../src/components/providers/theme-provider";
+import { ThemeProvider, useTheme } from "../../src/components/providers/theme-provider";
 import type { ThemeMode } from "../../src/components/providers/theme-provider";
 import { ThemeToggleButton } from "../components/ThemeToggleButton";
+
+const ThemedBackground: React.FC<{ 
+	children: React.ReactNode; 
+	onToggle: () => void; 
+	currentTheme: ThemeMode;
+}> = ({ children, onToggle, currentTheme }) => {
+	const { theme } = useTheme();
+
+	return (
+		<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+			{children}
+			<View style={[styles.toggleButtonContainer]}>
+				<ThemeToggleButton
+					onToggle={onToggle}
+					currentTheme={currentTheme}
+				/>
+			</View>
+		</View>
+	);
+};
 
 const StorybookThemeWrapper: React.FC<{ children: React.ReactNode }> = ({
 	children,
@@ -17,15 +37,9 @@ const StorybookThemeWrapper: React.FC<{ children: React.ReactNode }> = ({
 
 	return (
 		<ThemeProvider key={currentTheme} initialTheme={currentTheme}>
-			<View style={styles.container}>
+			<ThemedBackground onToggle={toggleTheme} currentTheme={currentTheme}>
 				{children}
-				<View style={[styles.toggleButtonContainer]}>
-					<ThemeToggleButton
-						onToggle={toggleTheme}
-						currentTheme={currentTheme}
-					/>
-				</View>
-			</View>
+			</ThemedBackground>
 		</ThemeProvider>
 	);
 };
