@@ -4,7 +4,7 @@ import {
 	TextProps as RNTextProps,
 	TextStyle,
 } from "react-native";
-import { useTheme } from "../providers/theme-provider";
+import { useTheme } from "@/src/components";
 
 export type TextVariant =
 	| "h1"
@@ -27,68 +27,68 @@ export type TextColor =
 	| "danger"
 	| "default";
 
-export interface TextProps extends RNTextProps {
+export interface TextProps extends Omit<RNTextProps, "style"> {
 	children?: React.ReactNode;
 	variant?: TextVariant;
 	color?: TextColor;
-	style?: TextStyle;
+	style?: TextStyle | TextStyle[];
 }
 
 // 타이포그래피 스타일 정의
-const variantStyles: Record<TextVariant, TextStyle> = {
+const getVariantStyles = (fonts: any): Record<TextVariant, TextStyle> => ({
 	h1: {
 		fontSize: 32,
-		fontWeight: "bold",
+		fontFamily: fonts.bold,
 		lineHeight: 40,
 	},
 	h2: {
 		fontSize: 28,
-		fontWeight: "bold",
+		fontFamily: fonts.bold,
 		lineHeight: 36,
 	},
 	h3: {
 		fontSize: 24,
-		fontWeight: "600",
+		fontFamily: fonts.semiBold,
 		lineHeight: 32,
 	},
 	h4: {
 		fontSize: 20,
-		fontWeight: "600",
+		fontFamily: fonts.semiBold,
 		lineHeight: 28,
 	},
 	h5: {
 		fontSize: 18,
-		fontWeight: "600",
+		fontFamily: fonts.semiBold,
 		lineHeight: 24,
 	},
 	h6: {
 		fontSize: 16,
-		fontWeight: "600",
+		fontFamily: fonts.semiBold,
 		lineHeight: 22,
 	},
 	body1: {
 		fontSize: 16,
-		fontWeight: "400",
+		fontFamily: fonts.regular,
 		lineHeight: 24,
 	},
 	body2: {
 		fontSize: 14,
-		fontWeight: "400",
+		fontFamily: fonts.regular,
 		lineHeight: 20,
 	},
 	caption: {
 		fontSize: 12,
-		fontWeight: "400",
+		fontFamily: fonts.regular,
 		lineHeight: 16,
 	},
 	overline: {
 		fontSize: 10,
-		fontWeight: "500",
+		fontFamily: fonts.medium,
 		lineHeight: 14,
 		textTransform: "uppercase",
 		letterSpacing: 1.5,
 	},
-};
+});
 
 export const Text: React.FC<TextProps> = ({
 	children,
@@ -121,6 +121,7 @@ export const Text: React.FC<TextProps> = ({
 		}
 	};
 
+	const variantStyles = getVariantStyles(theme.fonts);
 	const textStyle: TextStyle = {
 		...variantStyles[variant],
 		color: getTextColor(),

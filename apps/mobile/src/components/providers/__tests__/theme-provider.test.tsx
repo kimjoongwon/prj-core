@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Text } from "../../Text";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
 // 테스트용 컴포넌트
