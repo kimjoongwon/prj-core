@@ -8,6 +8,7 @@ const main: StorybookConfig = {
   addons: [
     '@storybook/addon-ondevice-controls', 
     '@storybook/addon-ondevice-actions'
+    // '@storybook/addon-ondevice-interactions' // 추후 interaction testing 시 활성화
   ],
 };
 

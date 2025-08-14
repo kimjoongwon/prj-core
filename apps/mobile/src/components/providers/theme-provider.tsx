@@ -1,341 +1,376 @@
 import React, {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
+	createContext,
+	ReactNode,
+	useCallback,
+	useContext,
+	useState,
 } from "react";
 import { useColorScheme } from "react-native";
 
 // 색상 타입 정의
 interface ColorScale {
-  50: string;
-  100: string;
-  200: string;
-  300: string;
-  400: string;
-  500: string;
-  600: string;
-  700: string;
-  800: string;
-  900: string;
-  foreground: string;
-  DEFAULT: string;
+	50: string;
+	100: string;
+	200: string;
+	300: string;
+	400: string;
+	500: string;
+	600: string;
+	700: string;
+	800: string;
+	900: string;
+	foreground: string;
+	DEFAULT: string;
 }
 
 interface ContentColor {
-  DEFAULT: string;
-  foreground: string;
+	DEFAULT: string;
+	foreground: string;
 }
 
 interface ThemeColors {
-  default: ColorScale;
-  primary: ColorScale;
-  secondary: ColorScale;
-  success: ColorScale;
-  warning: ColorScale;
-  danger: ColorScale;
-  background: string;
-  foreground: string;
-  content1: ContentColor;
-  content2: ContentColor;
-  content3: ContentColor;
-  content4: ContentColor;
-  focus: string;
-  overlay: string;
+	default: ColorScale;
+	primary: ColorScale;
+	secondary: ColorScale;
+	success: ColorScale;
+	warning: ColorScale;
+	danger: ColorScale;
+	background: string;
+	foreground: string;
+	content1: ContentColor;
+	content2: ContentColor;
+	content3: ContentColor;
+	content4: ContentColor;
+	focus: string;
+	overlay: string;
+}
+
+interface FontFamily {
+	thin: string;
+	extraLight: string;
+	light: string;
+	regular: string;
+	medium: string;
+	semiBold: string;
+	bold: string;
+	extraBold: string;
+	black: string;
 }
 
 interface Theme {
-  colors: ThemeColors;
-  layout: {
-    disabledOpacity: string;
-  };
+	colors: ThemeColors;
+	fonts: FontFamily;
+	layout: {
+		disabledOpacity: string;
+	};
 }
 
 type ThemeMode = "light" | "dark";
 
 interface ThemeContextValue {
-  theme: Theme;
-  isDark: boolean;
-  toggleTheme: () => void;
-  setTheme: (mode: ThemeMode) => void;
+	theme: Theme;
+	isDark: boolean;
+	toggleTheme: () => void;
+	setTheme: (mode: ThemeMode) => void;
 }
 
 // 라이트 테마 정의
 const lightTheme: Theme = {
-  colors: {
-    default: {
-      50: "#fafafa",
-      100: "#f2f2f3",
-      200: "#ebebec",
-      300: "#e3e3e6",
-      400: "#dcdcdf",
-      500: "#d4d4d8",
-      600: "#afafb2",
-      700: "#8a8a8c",
-      800: "#656567",
-      900: "#404041",
-      foreground: "#000",
-      DEFAULT: "#d4d4d8",
-    },
-    primary: {
-      50: "#dfedfd",
-      100: "#b3d4fa",
-      200: "#86bbf7",
-      300: "#59a1f4",
-      400: "#2d88f1",
-      500: "#006fee",
-      600: "#005cc4",
-      700: "#00489b",
-      800: "#003571",
-      900: "#002147",
-      foreground: "#fff",
-      DEFAULT: "#006fee",
-    },
-    secondary: {
-      50: "#eee4f8",
-      100: "#d7bfef",
-      200: "#bf99e5",
-      300: "#a773db",
-      400: "#904ed2",
-      500: "#7828c8",
-      600: "#6321a5",
-      700: "#4e1a82",
-      800: "#39135f",
-      900: "#240c3c",
-      foreground: "#fff",
-      DEFAULT: "#7828c8",
-    },
-    success: {
-      50: "#e2f8ec",
-      100: "#b9efd1",
-      200: "#91e5b5",
-      300: "#68dc9a",
-      400: "#40d27f",
-      500: "#17c964",
-      600: "#13a653",
-      700: "#0f8341",
-      800: "#0b5f30",
-      900: "#073c1e",
-      foreground: "#000",
-      DEFAULT: "#17c964",
-    },
-    warning: {
-      50: "#fef4e4",
-      100: "#fce4bd",
-      200: "#fad497",
-      300: "#f9c571",
-      400: "#f7b54a",
-      500: "#f5a524",
-      600: "#ca881e",
-      700: "#9f6b17",
-      800: "#744e11",
-      900: "#4a320b",
-      foreground: "#000",
-      DEFAULT: "#f5a524",
-    },
-    danger: {
-      50: "#fee1eb",
-      100: "#fbb8cf",
-      200: "#f98eb3",
-      300: "#f76598",
-      400: "#f53b7c",
-      500: "#f31260",
-      600: "#c80f4f",
-      700: "#9e0c3e",
-      800: "#73092e",
-      900: "#49051d",
-      foreground: "#000",
-      DEFAULT: "#f31260",
-    },
-    background: "#ffffff",
-    foreground: "#000000",
-    content1: {
-      DEFAULT: "#ffffff",
-      foreground: "#000",
-    },
-    content2: {
-      DEFAULT: "#f4f4f5",
-      foreground: "#000",
-    },
-    content3: {
-      DEFAULT: "#e4e4e7",
-      foreground: "#000",
-    },
-    content4: {
-      DEFAULT: "#d4d4d8",
-      foreground: "#000",
-    },
-    focus: "#006FEE",
-    overlay: "#000000",
-  },
-  layout: {
-    disabledOpacity: "0.5",
-  },
+	colors: {
+		default: {
+			50: "#fafafa",
+			100: "#f2f2f3",
+			200: "#ebebec",
+			300: "#e3e3e6",
+			400: "#dcdcdf",
+			500: "#d4d4d8",
+			600: "#afafb2",
+			700: "#8a8a8c",
+			800: "#656567",
+			900: "#404041",
+			foreground: "#000",
+			DEFAULT: "#d4d4d8",
+		},
+		primary: {
+			50: "#dfedfd",
+			100: "#b3d4fa",
+			200: "#86bbf7",
+			300: "#59a1f4",
+			400: "#2d88f1",
+			500: "#006fee",
+			600: "#005cc4",
+			700: "#00489b",
+			800: "#003571",
+			900: "#002147",
+			foreground: "#fff",
+			DEFAULT: "#006fee",
+		},
+		secondary: {
+			50: "#eee4f8",
+			100: "#d7bfef",
+			200: "#bf99e5",
+			300: "#a773db",
+			400: "#904ed2",
+			500: "#7828c8",
+			600: "#6321a5",
+			700: "#4e1a82",
+			800: "#39135f",
+			900: "#240c3c",
+			foreground: "#fff",
+			DEFAULT: "#7828c8",
+		},
+		success: {
+			50: "#e2f8ec",
+			100: "#b9efd1",
+			200: "#91e5b5",
+			300: "#68dc9a",
+			400: "#40d27f",
+			500: "#17c964",
+			600: "#13a653",
+			700: "#0f8341",
+			800: "#0b5f30",
+			900: "#073c1e",
+			foreground: "#000",
+			DEFAULT: "#17c964",
+		},
+		warning: {
+			50: "#fef4e4",
+			100: "#fce4bd",
+			200: "#fad497",
+			300: "#f9c571",
+			400: "#f7b54a",
+			500: "#f5a524",
+			600: "#ca881e",
+			700: "#9f6b17",
+			800: "#744e11",
+			900: "#4a320b",
+			foreground: "#000",
+			DEFAULT: "#f5a524",
+		},
+		danger: {
+			50: "#fee1eb",
+			100: "#fbb8cf",
+			200: "#f98eb3",
+			300: "#f76598",
+			400: "#f53b7c",
+			500: "#f31260",
+			600: "#c80f4f",
+			700: "#9e0c3e",
+			800: "#73092e",
+			900: "#49051d",
+			foreground: "#000",
+			DEFAULT: "#f31260",
+		},
+		background: "#ffffff",
+		foreground: "#000000",
+		content1: {
+			DEFAULT: "#ffffff",
+			foreground: "#000",
+		},
+		content2: {
+			DEFAULT: "#f4f4f5",
+			foreground: "#000",
+		},
+		content3: {
+			DEFAULT: "#e4e4e7",
+			foreground: "#000",
+		},
+		content4: {
+			DEFAULT: "#d4d4d8",
+			foreground: "#000",
+		},
+		focus: "#006FEE",
+		overlay: "#000000",
+	},
+	fonts: {
+		thin: "Pretendard-Thin",
+		extraLight: "Pretendard-ExtraLight",
+		light: "Pretendard-Light",
+		regular: "Pretendard-Regular",
+		medium: "Pretendard-Medium",
+		semiBold: "Pretendard-SemiBold",
+		bold: "Pretendard-Bold",
+		extraBold: "Pretendard-ExtraBold",
+		black: "Pretendard-Black",
+	},
+	layout: {
+		disabledOpacity: "0.5",
+	},
 };
 
 // 다크 테마 정의
 const darkTheme: Theme = {
-  colors: {
-    default: {
-      50: "#0d0d0e",
-      100: "#19191c",
-      200: "#26262a",
-      300: "#323238",
-      400: "#3f3f46",
-      500: "#65656b",
-      600: "#8c8c90",
-      700: "#b2b2b5",
-      800: "#d9d9da",
-      900: "#ffffff",
-      foreground: "#fff",
-      DEFAULT: "#3f3f46",
-    },
-    primary: {
-      50: "#002147",
-      100: "#003571",
-      200: "#00489b",
-      300: "#005cc4",
-      400: "#006fee",
-      500: "#2d88f1",
-      600: "#59a1f4",
-      700: "#86bbf7",
-      800: "#b3d4fa",
-      900: "#dfedfd",
-      foreground: "#fff",
-      DEFAULT: "#006fee",
-    },
-    secondary: {
-      50: "#240c3c",
-      100: "#39135f",
-      200: "#4e1a82",
-      300: "#6321a5",
-      400: "#7828c8",
-      500: "#904ed2",
-      600: "#a773db",
-      700: "#bf99e5",
-      800: "#d7bfef",
-      900: "#eee4f8",
-      foreground: "#fff",
-      DEFAULT: "#7828c8",
-    },
-    success: {
-      50: "#073c1e",
-      100: "#0b5f30",
-      200: "#0f8341",
-      300: "#13a653",
-      400: "#17c964",
-      500: "#40d27f",
-      600: "#68dc9a",
-      700: "#91e5b5",
-      800: "#b9efd1",
-      900: "#e2f8ec",
-      foreground: "#000",
-      DEFAULT: "#17c964",
-    },
-    warning: {
-      50: "#4a320b",
-      100: "#744e11",
-      200: "#9f6b17",
-      300: "#ca881e",
-      400: "#f5a524",
-      500: "#f7b54a",
-      600: "#f9c571",
-      700: "#fad497",
-      800: "#fce4bd",
-      900: "#fef4e4",
-      foreground: "#000",
-      DEFAULT: "#f5a524",
-    },
-    danger: {
-      50: "#49051d",
-      100: "#73092e",
-      200: "#9e0c3e",
-      300: "#c80f4f",
-      400: "#f31260",
-      500: "#f53b7c",
-      600: "#f76598",
-      700: "#f98eb3",
-      800: "#fbb8cf",
-      900: "#fee1eb",
-      foreground: "#000",
-      DEFAULT: "#f31260",
-    },
-    background: "#000000",
-    foreground: "#ffffff",
-    content1: {
-      DEFAULT: "#18181b",
-      foreground: "#fff",
-    },
-    content2: {
-      DEFAULT: "#27272a",
-      foreground: "#fff",
-    },
-    content3: {
-      DEFAULT: "#3f3f46",
-      foreground: "#fff",
-    },
-    content4: {
-      DEFAULT: "#52525b",
-      foreground: "#fff",
-    },
-    focus: "#006FEE",
-    overlay: "#ffffff",
-  },
-  layout: {
-    disabledOpacity: "0.5",
-  },
+	colors: {
+		default: {
+			50: "#0d0d0e",
+			100: "#19191c",
+			200: "#26262a",
+			300: "#323238",
+			400: "#3f3f46",
+			500: "#65656b",
+			600: "#8c8c90",
+			700: "#b2b2b5",
+			800: "#d9d9da",
+			900: "#ffffff",
+			foreground: "#fff",
+			DEFAULT: "#3f3f46",
+		},
+		primary: {
+			50: "#002147",
+			100: "#003571",
+			200: "#00489b",
+			300: "#005cc4",
+			400: "#006fee",
+			500: "#2d88f1",
+			600: "#59a1f4",
+			700: "#86bbf7",
+			800: "#b3d4fa",
+			900: "#dfedfd",
+			foreground: "#fff",
+			DEFAULT: "#006fee",
+		},
+		secondary: {
+			50: "#240c3c",
+			100: "#39135f",
+			200: "#4e1a82",
+			300: "#6321a5",
+			400: "#7828c8",
+			500: "#904ed2",
+			600: "#a773db",
+			700: "#bf99e5",
+			800: "#d7bfef",
+			900: "#eee4f8",
+			foreground: "#fff",
+			DEFAULT: "#7828c8",
+		},
+		success: {
+			50: "#073c1e",
+			100: "#0b5f30",
+			200: "#0f8341",
+			300: "#13a653",
+			400: "#17c964",
+			500: "#40d27f",
+			600: "#68dc9a",
+			700: "#91e5b5",
+			800: "#b9efd1",
+			900: "#e2f8ec",
+			foreground: "#000",
+			DEFAULT: "#17c964",
+		},
+		warning: {
+			50: "#4a320b",
+			100: "#744e11",
+			200: "#9f6b17",
+			300: "#ca881e",
+			400: "#f5a524",
+			500: "#f7b54a",
+			600: "#f9c571",
+			700: "#fad497",
+			800: "#fce4bd",
+			900: "#fef4e4",
+			foreground: "#000",
+			DEFAULT: "#f5a524",
+		},
+		danger: {
+			50: "#49051d",
+			100: "#73092e",
+			200: "#9e0c3e",
+			300: "#c80f4f",
+			400: "#f31260",
+			500: "#f53b7c",
+			600: "#f76598",
+			700: "#f98eb3",
+			800: "#fbb8cf",
+			900: "#fee1eb",
+			foreground: "#000",
+			DEFAULT: "#f31260",
+		},
+		background: "#000000",
+		foreground: "#ffffff",
+		content1: {
+			DEFAULT: "#18181b",
+			foreground: "#fff",
+		},
+		content2: {
+			DEFAULT: "#27272a",
+			foreground: "#fff",
+		},
+		content3: {
+			DEFAULT: "#3f3f46",
+			foreground: "#fff",
+		},
+		content4: {
+			DEFAULT: "#52525b",
+			foreground: "#fff",
+		},
+		focus: "#006FEE",
+		overlay: "#ffffff",
+	},
+	fonts: {
+		thin: "Pretendard-Thin",
+		extraLight: "Pretendard-ExtraLight",
+		light: "Pretendard-Light",
+		regular: "Pretendard-Regular",
+		medium: "Pretendard-Medium",
+		semiBold: "Pretendard-SemiBold",
+		bold: "Pretendard-Bold",
+		extraBold: "Pretendard-ExtraBold",
+		black: "Pretendard-Black",
+	},
+	layout: {
+		disabledOpacity: "0.5",
+	},
 };
 
 // Theme Context 생성
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 interface ThemeProviderProps {
-  children: ReactNode;
-  initialTheme?: ThemeMode;
+	children: ReactNode;
+	initialTheme?: ThemeMode;
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
-  children,
-  initialTheme,
+	children,
+	initialTheme,
 }) => {
-  const systemColorScheme = useColorScheme();
+	const systemColorScheme = useColorScheme();
 
-  // 초기 테마 설정: initialTheme이 있으면 사용, 없으면 시스템 설정을 따름
-  const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => {
-    if (initialTheme) return initialTheme;
-    return systemColorScheme === "dark" ? "dark" : "light";
-  });
+	// 초기 테마 설정: initialTheme이 있으면 사용, 없으면 시스템 설정을 따름
+	const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => {
+		if (initialTheme) return initialTheme;
+		return systemColorScheme === "dark" ? "dark" : "light";
+	});
 
-  const theme = currentTheme === "dark" ? darkTheme : lightTheme;
-  const isDark = currentTheme === "dark";
+	const theme = currentTheme === "dark" ? darkTheme : lightTheme;
+	const isDark = currentTheme === "dark";
 
-  const toggleTheme = useCallback(() => {
-    setCurrentTheme((prev) => (prev === "light" ? "dark" : "light"));
-  }, []);
+	const toggleTheme = useCallback(() => {
+		setCurrentTheme((prev) => (prev === "light" ? "dark" : "light"));
+	}, []);
 
-  const setTheme = useCallback((mode: ThemeMode) => {
-    setCurrentTheme(mode);
-  }, []);
+	const setTheme = useCallback((mode: ThemeMode) => {
+		setCurrentTheme(mode);
+	}, []);
 
-  const value: ThemeContextValue = {
-    theme,
-    isDark,
-    toggleTheme,
-    setTheme,
-  };
+	const value: ThemeContextValue = {
+		theme,
+		isDark,
+		toggleTheme,
+		setTheme,
+	};
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+	return (
+		<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+	);
 };
 
 export const useTheme = (): ThemeContextValue => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
+	const context = useContext(ThemeContext);
+	if (context === undefined) {
+		throw new Error("useTheme must be used within a ThemeProvider");
+	}
+	return context;
 };
 
 // 타입들을 export

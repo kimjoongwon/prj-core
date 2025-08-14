@@ -2,14 +2,13 @@ import React from "react";
 import {
 	ActivityIndicator,
 	StyleSheet,
-	Text,
 	TextStyle,
 	TouchableOpacity,
 	TouchableOpacityProps,
 	View,
 	ViewStyle,
 } from "react-native";
-import { useTheme } from "../providers/theme-provider";
+import { useTheme, Text } from "@/src/components";
 
 export type ButtonVariant =
 	| "solid"
@@ -90,7 +89,6 @@ export const Button: React.FC<ButtonProps> = ({
 	...props
 }) => {
 	const { theme, isDark } = useTheme();
-	console.log("isDark", isDark);
 
 	// Theme-based color function with enhanced dark/light mode support
 	const getColorScheme = (color: ButtonColor, variant: ButtonVariant) => {
@@ -238,7 +236,7 @@ export const Button: React.FC<ButtonProps> = ({
 				)}
 
 				{children && !isIconOnly && (
-					<Text style={[textStyleConfig, textStyle]} numberOfLines={1}>
+					<Text style={[textStyleConfig, textStyle || {}]} numberOfLines={1}>
 						{children}
 					</Text>
 				)}
