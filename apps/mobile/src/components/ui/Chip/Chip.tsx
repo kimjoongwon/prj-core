@@ -1,15 +1,15 @@
 import React from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
-import { Text } from "../Text";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 	withSpring,
 	withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "@/src/components";
 import { ChipProps } from "./types";
 import { styles, sizes, radiusValues } from "./Chip.styles";
+import { useTheme } from "../../providers/theme-provider";
+import { Text } from "../Text";
 
 export const Chip: React.FC<ChipProps> = ({
 	children,

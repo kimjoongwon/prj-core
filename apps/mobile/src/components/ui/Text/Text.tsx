@@ -4,7 +4,7 @@ import {
 	TextProps as RNTextProps,
 	TextStyle,
 } from "react-native";
-import { useTheme } from "@/src/components";
+import { useTheme } from "../../providers/theme-provider";
 
 export type TextVariant =
 	| "h1"

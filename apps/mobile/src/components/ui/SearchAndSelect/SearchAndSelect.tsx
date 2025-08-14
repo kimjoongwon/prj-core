@@ -15,11 +15,11 @@ import Animated, {
 	FadeOutUp,
 } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "@/src/components";
 import { Chip } from "../Chip";
 import { ListItem } from "../ListItem";
 import { SearchAndSelectProps, BaseSearchItem } from "./types";
 import { styles } from "./SearchAndSelect.styles";
+import { useTheme } from "../../providers/theme-provider";
 
 export const SearchAndSelect = <T extends BaseSearchItem = BaseSearchItem>(
 	props: SearchAndSelectProps<T>,

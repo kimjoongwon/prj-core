@@ -8,9 +8,9 @@ import Animated, {
 	interpolateColor,
 	interpolate,
 } from "react-native-reanimated";
-import { useTheme } from "@/src/components";
 import { ListItemProps, BaseListItem } from "./types";
 import { styles, sizes } from "./ListItem.styles";
+import { useTheme } from "../../providers/theme-provider";
 
 export const ListItem = <T extends BaseListItem = BaseListItem>(
 	props: ListItemProps<T>,
