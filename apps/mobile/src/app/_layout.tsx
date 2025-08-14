@@ -18,7 +18,8 @@ export {
 
 export const unstable_settings = {
 	// Ensure that reloading on `/modal` keeps a back button present.
-	initialRouteName: "(tabs)",
+	initialRouteName:
+		process.env.EXPO_PUBLIC_STORYBOOK === "1" ? "storybook" : "(tabs)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -90,6 +91,7 @@ function NavigationWrapper() {
 				</Stack.Protected>
 
 				<Stack.Protected guard={true}>
+					<Stack.Screen name="storybook" options={{ headerShown: false }} />
 					<Stack.Screen
 						name="login"
 						options={{ title: "로그인", headerShown: true }}
