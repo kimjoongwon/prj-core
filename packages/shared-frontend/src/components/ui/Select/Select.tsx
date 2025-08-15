@@ -5,7 +5,7 @@ import {
 } from "@heroui/react";
 import { cloneDeep, get } from "lodash-es";
 import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps, Option } from "../../../types";
 
 interface SelectProps<T>
@@ -23,7 +23,7 @@ export const Select = observer(<T extends object>(props: SelectProps<T>) => {
 		_options?.find((option) => option.value === get(state, path))?.value ||
 		value;
 
-	const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useFormField({ initialValue, state, path });
 
 	return (
 		<NextSelect

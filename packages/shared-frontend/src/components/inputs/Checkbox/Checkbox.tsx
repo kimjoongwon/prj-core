@@ -5,7 +5,7 @@ import {
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks/useMobxHookForm";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps } from "../../../types";
 import { Text } from "../../ui/Text/Text";
 
@@ -14,7 +14,7 @@ export interface CheckboxProps<T> extends MobxProps<T>, NextUICheckboxProps {}
 function BaseCheckbox<T extends object>(props: CheckboxProps<T>) {
 	const { path = "", state = {}, ...rest } = props;
 
-	const { localState } = useMobxHookForm(get(state, path), state, path);
+	const { localState } = useFormField({ initialValue: get(state, path), state: state, path: path });
 
 	const onChange = action((e: React.ChangeEvent<HTMLInputElement>) => {
 		localState.value = e.target.checked;

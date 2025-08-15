@@ -6,7 +6,7 @@ import {
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps } from "../../../types";
 
 interface RadioOption {
@@ -37,7 +37,7 @@ function _RadioGroup<T extends object>(props: CocRadioGroupProps<T>) {
 	const initialValue: any =
 		options?.find((option) => option.value === get(state, path))?.value || "";
 
-	const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useFormField({ initialValue, state, path });
 
 	const onChangeValue = action((checked: string) => {
 		localState.value = checked;

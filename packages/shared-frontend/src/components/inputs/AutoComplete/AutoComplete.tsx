@@ -1,6 +1,10 @@
 import type { AutocompleteProps } from "@heroui/react";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import type { MobxProps } from "../../../types";
+import { get } from "lodash-es";
+import { action } from "mobx";
+import { observer } from "mobx-react-lite";
+import { useFormField } from "@shared/hooks";
 
 export interface BaseAutoCompleteProps<T>
 	extends Omit<
@@ -12,11 +16,6 @@ export interface BaseAutoCompleteProps<T>
 			"children"
 		>,
 		MobxProps<T> {}
-
-import { get } from "lodash-es";
-import { action } from "mobx";
-import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks";
 
 export const AutoComplete = observer(
 	<T extends object>(props: BaseAutoCompleteProps<T>) => {
@@ -32,7 +31,7 @@ export const AutoComplete = observer(
 			? [...defaultItems]?.find((item) => item.key === get(state, path))
 			: "";
 
-		const { localState } = useMobxHookForm(initialValue, state, path);
+		const { localState } = useFormField({ initialValue, state, path });
 
 		const handleSelectionChange: AutocompleteProps["onSelectionChange"] =
 			action((key) => {

@@ -1,7 +1,7 @@
 import { Chip } from "@heroui/chip";
 import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import type { RecurringDayOfTheWeek } from "../../../types";
 import { HStack, Text, VStack } from "../../ui";
 
@@ -14,7 +14,7 @@ export interface WeekInputProps {
 export const WeekInput = observer((props: WeekInputProps) => {
 	const { state, path, disabled, ...rest } = props;
 	const initialValue = get(state, path);
-	const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useFormField({ initialValue, state, path });
 
 	const handleChange = (value: RecurringDayOfTheWeek) => {
 		localState.value = value;
