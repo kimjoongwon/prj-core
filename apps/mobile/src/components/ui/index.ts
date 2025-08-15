@@ -1,7 +1,9 @@
 export { Button } from "./Button";
 export { Card } from "./Card";
+export { Checkbox } from "./Checkbox";
 export { Chip } from "./Chip";
 export { Input } from "./Input";
 export { ListItem } from "./ListItem";
+export { RadioGroup } from "./RadioGroup";
 export { SearchAndSelect } from "./SearchAndSelect";
 export { Text } from "./Text";
