@@ -3,7 +3,17 @@ import { reaction } from "mobx";
 import { useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 
-export const useMobxHookForm = (initialValue: any, state: any, path: any) => {
+export interface UseFormFieldOptions {
+	initialValue: any;
+	state: any;
+	path: string;
+}
+
+export const useFormField = ({
+	initialValue,
+	state,
+	path,
+}: UseFormFieldOptions) => {
 	const localState = useLocalObservable(() => ({
 		value: initialValue,
 	}));

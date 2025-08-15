@@ -5,7 +5,7 @@ import {
 import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps } from "../../../types";
 
 export interface SwitchProps<T> extends NextUISwitchProps, MobxProps<T> {}
@@ -15,7 +15,7 @@ export const Switch = observer(<T extends object>(props: SwitchProps<T>) => {
 
 	const initialValue = get(state, path);
 
-	const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useFormField({ initialValue, state, path });
 
 	const onChange = action((isSelected: boolean) => {
 		localState.value = isSelected;

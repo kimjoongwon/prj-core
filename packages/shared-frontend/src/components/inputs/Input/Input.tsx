@@ -6,7 +6,7 @@ import { get } from "lodash-es";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { ChangeEventHandler } from "react";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import { MobxProps, Validation } from "../../../types";
 
 export type InputProps<T> = MobxProps<T> &
@@ -29,7 +29,7 @@ export const Input = observer(<T extends object>(props: InputProps<T>) => {
 
 	const initialValue = get(state, path) || "";
 
-	const { localState } = useMobxHookForm(initialValue, state, path);
+	const { localState } = useFormField({ initialValue, state, path });
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> | undefined = action(
 		(e) => {

@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
 import { v4 } from "uuid";
-import { useMobxHookForm } from "../../../hooks/useMobxHookForm";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps } from "../../../types";
 import { Chip } from "../../ui/Chip/Chip";
 
@@ -25,7 +25,7 @@ export const ChipSelect = observer(
 			return Array.isArray(currentValue) ? currentValue : [];
 		}, [state, path, selectionMode]);
 
-		const { localState } = useMobxHookForm(initialValue, state, path);
+		const { localState } = useFormField({ initialValue, state, path });
 
 		const handleChipPress = (value: string) => {
 			if (selectionMode === "none") return;

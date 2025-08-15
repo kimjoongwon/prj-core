@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { action, makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 import { v4 } from "uuid";
-import { useMobxHookForm } from "../../../hooks";
+import { useFormField } from "@shared/hooks";
 import type { MobxProps } from "../../../types";
 
 export interface FileUploaderProps<T = any> extends MobxProps<T> {
@@ -51,7 +51,7 @@ export const FileUploader = observer(
 		fullWidth,
 	}: FileUploaderProps<T>) => {
 		const initialValue = get(state, path);
-		const { localState } = useMobxHookForm(initialValue, state, path);
+		const { localState } = useFormField({ initialValue, state, path });
 
 		const handleFileUpload = action(
 			(e: React.ChangeEvent<HTMLInputElement>) => {
