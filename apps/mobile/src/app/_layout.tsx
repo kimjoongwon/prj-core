@@ -91,11 +91,11 @@ function NavigationWrapper() {
 				</Stack.Protected>
 
 				<Stack.Protected guard={true}>
-					<Stack.Screen name="storybook" options={{ headerShown: false }} />
 					<Stack.Screen
 						name="login"
 						options={{ title: "로그인", headerShown: true }}
 					/>
+					<Stack.Screen name="storybook" options={{ headerShown: false }} />
 				</Stack.Protected>
 			</Stack>
 		</NavigationThemeProvider>
