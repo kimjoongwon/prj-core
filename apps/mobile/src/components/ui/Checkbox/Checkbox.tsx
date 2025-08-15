@@ -27,7 +27,7 @@ import {
 	styles,
 } from "./Checkbox.styles";
 
-export const Checkbox = forwardRef<CheckboxRef, CheckboxProps>(
+export const Checkbox = forwardRef<CheckboxRef, CheckboxProps<any>>(
 	(
 		{
 			children,

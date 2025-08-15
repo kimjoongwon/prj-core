@@ -1,1 +1,1 @@
-export * from "./src/useFormField";
+export * from "./src/index.js";

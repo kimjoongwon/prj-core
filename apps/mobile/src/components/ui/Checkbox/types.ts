@@ -10,7 +10,12 @@ export type CheckboxColor =
 	| "danger";
 export type CheckboxRadius = "none" | "sm" | "md" | "lg" | "full";
 
-export interface CheckboxProps extends Omit<PressableProps, "style"> {
+export interface MobxProps<T> {
+	state?: T;
+	path?: string;
+}
+
+export interface CheckboxProps<T = any> extends Omit<PressableProps, "style">, MobxProps<T> {
 	children?: React.ReactNode;
 	size?: CheckboxSize;
 	color?: CheckboxColor;
